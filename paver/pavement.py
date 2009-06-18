@@ -153,7 +153,7 @@ def geoexplorer():
     geoexplorer_path = path.joinpath(download_path,path("geoexplorer"))
     geoexplorer_build = path.joinpath(geoexplorer_path,path("build"))
     def build_min():
-        sh("jsbuild -u -o ../script/ -v -s GeoExplorer.js  geoexplorer-all.cfg" )        
+        sh("jsbuild -u -o ..\script\ -v -s GeoExplorer.js  geoexplorer-all.cfg" )        
     with pushd(geoexplorer_build): 
         build_min() 
     
