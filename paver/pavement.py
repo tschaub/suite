@@ -260,7 +260,7 @@ def installer():
     '''
     Right now this only makes a installer folder in the source dir
     '''
-    osmkdir(path.joinpath(source_path,path('installer')))
+    os.mkdir(path.joinpath(source_path,path('installer')))
 
 @task
 @needs(["dir_layout"])
