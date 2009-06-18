@@ -153,8 +153,7 @@ def geoexplorer():
     geoexplorer_path = path.joinpath(download_path,path("geoexplorer"))
     geoexplorer_build = path.joinpath(geoexplorer_path,path("build"))
     def build_min():
-        pass 
-      #  sh("jsbuild -u -o ..\script\ -v -s GeoExplorer.js  geoexplorer-all.cfg" )        
+        sh("jsbuild -u -o ../script/ -v -s GeoExplorer.js  geoexplorer-all.cfg" )        
     with pushd(geoexplorer_build): 
         build_min() 
     
@@ -242,14 +241,16 @@ def docs():
                     info("Build docs for %s" % doc) 
                     app_doc = path(doc)
                     with pushd(app_doc):
-                        # hack need to fix 
-                        if doc == 'geoxt':
-                            sh("sphinx-build -bhtml . build")
-                        else: 
-                            sh("sphinx -bhtml source build")
+                        sh("make html")
     def move(): 
         for doc in config.options(section): 
-            doc_path = path.joinpath(download_path,docs_path,doc,path('build'),path('html'))
+            # hack, this sucks 
+            if doc == "geoserver": 
+                doc_path = path.joinpath(download_path,docs_path,doc,path('build'),path('html'))
+            if doc == "geoext": 
+                doc_path = path.joinpath(download_path,docs_path,doc,path('_build'),path('html'))
+            else: 
+                doc_path = path.joinpath(download_path,docs_path,doc,path('build'),path('html'))
             shutil.copytree(doc_path,path.joinpath(source_path,path("%s_doc"% doc)))            
     build()
     move()
@@ -259,9 +260,7 @@ def installer():
     '''
     Right now this only makes a installer folder in the source dir
     '''
-    installer = path.joinpath(source_path,path('installer'))
-    if not installer.exists(): 
-        os.mkdir(installer)
+    os.mkdir(path.joinpath(source_path,path('installer')))
 
 @task
 @needs(["dir_layout"])
