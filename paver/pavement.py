@@ -110,7 +110,6 @@ def download_bin():
                 pass
 
 @task
-@needs(["download_bin"])
 def unpack_geoserver(): 
     version = config.get("version","geoserver")
     geoserver_vs = path(version)
@@ -128,6 +127,10 @@ def unpack_geoserver():
         os.rename(geoserver_vs,geoserver)
         os.remove(geoserverZIP)
 
+@task
+def move_java(): 
+    java_path = path.joinpath(download_path,'sun-java.exe')
+    shutil.copy(java_path,source_path)
 
 
 @task 
@@ -143,15 +146,39 @@ def download_source():
             svn.checkout(url,software)
 
 @task 
-def build_geoexplorer(): 
+def geoexplorer(): 
     ''' 
     This builds GeoExplorer and puts in source
     ''' 
     geoexplorer_path = path.joinpath(download_path,path("geoexplorer"))
-#    geoexplorer_path = 
-    with pushd(geoexplorer_path): 
-        
-        
+    geoexplorer_build = path.joinpath(geoexplorer_path,path("build"))
+    def build_min():
+        sh("jsbuild -u -o ../script/ -v -s GeoExplorer.js  geoexplorer-all.cfg" )        
+    with pushd(geoexplorer_build): 
+        build_min() 
+    
+    def move(): 
+        ''' 
+        Move all of the GeoExplorer file into a folder in source ... 
+        we need 
+           - index.html 
+           - script/ 
+           - debug.html ? 
+           - 
+        ''' 
+        ge_final = path.joinpath(source_path,path("geoexplorer"))
+        # make the geoexplorer folder
+        if not ge_final.exists():
+            os.mkdir(ge_final)
+        shutil.copy(path.joinpath(geoexplorer_path,'index.html'),ge_final)
+        shutil.copy(path.joinpath(geoexplorer_path,'debug.html'),ge_final)
+        shutil.copy(path.joinpath(geoexplorer_path,'embed.html'),ge_final)
+        shutil.copy(path.joinpath(geoexplorer_path,'license.txt'),ge_final)
+        shutil.copy(path.joinpath(geoexplorer_path,'about.html'),ge_final)
+        shutil.copytree(path.joinpath(geoexplorer_path,'script'),path.joinpath(ge_final,'script'))
+        shutil.copytree(path.joinpath(geoexplorer_path,'externals'),path.joinpath(ge_final,'externals'))
+        shutil.copytree(path.joinpath(geoexplorer_path,'theme'),path.joinpath(ge_final,'theme'))
+    move()
 
 
 @task
@@ -202,23 +229,38 @@ def download_docs():
     
 
 @task 
-@needs(["download_docs"])
-def build_docs():
+def docs():
     ''' 
     This builds the OpenGeo Documentation
     ''' 
-    with pushd(download_path):
-        with pushd(docs_path):
-            section = "docs" 
-            for doc in config.options(section): 
-                info("Build docs for %s" % doc) 
-                app_doc = path(doc) 
-                with pushd(app_doc):
-                    if doc == "geoserver": 
-                        info("Something special for GeoServer")                        
-                    else:
+    section = "docs" 
+    def build():
+        with pushd(download_path):
+            with pushd(docs_path):
+                for doc in config.options(section): 
+                    info("Build docs for %s" % doc) 
+                    app_doc = path(doc)
+                    with pushd(app_doc):
                         sh("make html")
-    
+    def move(): 
+        for doc in config.options(section): 
+            # hack, this sucks 
+            if doc == "geoserver": 
+                doc_path = path.joinpath(download_path,docs_path,doc,path('build'),path('html'))
+            if doc == "geoext": 
+                doc_path = path.joinpath(download_path,docs_path,doc,path('_build'),path('html'))
+            else: 
+                doc_path = path.joinpath(download_path,docs_path,doc,path('build'),path('html'))
+            shutil.copytree(doc_path,path.joinpath(source_path,path("%s_doc"% doc)))            
+    build()
+    move()
+
+@task
+def installer(): 
+    '''
+    Right now this only makes a installer folder in the source dir
+    '''
+    osmkdir(path.joinpath(source_path,path('installer')))
 
 @task
 @needs(["dir_layout"])
@@ -236,10 +278,21 @@ def download_all():
     call_task("dir_layout")
     call_task("download_bin")
     call_task("download_source")
-    call_task("dl_gs_plugins")
-    call_task("build_docs")
+    call_task("geoserver_plugins")
     
 
+@task 
+def build_all(): 
+    info("Building all of the OpenGeo Stack")
+    call_task("dir_layout")
+    call_task("download_bin")
+    call_task("installer")
+    call_task("download_source")
+    call_task("move_java")
+    call_task("geoexplorer")
+    call_task("geoserver_plugins")
+    call_task("download_docs")
+    call_task("docs")
 
 
 
