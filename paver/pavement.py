@@ -153,7 +153,8 @@ def geoexplorer():
     geoexplorer_path = path.joinpath(download_path,path("geoexplorer"))
     geoexplorer_build = path.joinpath(geoexplorer_path,path("build"))
     def build_min():
-        sh("jsbuild -u -o ../script/ -v -s GeoExplorer.js  geoexplorer-all.cfg" )        
+        pass 
+      #  sh("jsbuild -u -o ..\script\ -v -s GeoExplorer.js  geoexplorer-all.cfg" )        
     with pushd(geoexplorer_build): 
         build_min() 
     
@@ -260,7 +261,9 @@ def installer():
     '''
     Right now this only makes a installer folder in the source dir
     '''
-    os.mkdir(path.joinpath(source_path,path('installer')))
+    installer = path.joinpath(source_path,path('installer'))
+    if not installer.exists(): 
+        os.mkdir(installer)
 
 @task
 @needs(["dir_layout"])
