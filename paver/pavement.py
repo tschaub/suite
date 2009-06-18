@@ -242,16 +242,14 @@ def docs():
                     info("Build docs for %s" % doc) 
                     app_doc = path(doc)
                     with pushd(app_doc):
-                        sh("make html")
+                        # hack need to fix 
+                        if doc == 'geoxt':
+                            sh("sphinx-build -bhtml . build")
+                        else: 
+                            sh("sphinx -bhtml source build")
     def move(): 
         for doc in config.options(section): 
-            # hack, this sucks 
-            if doc == "geoserver": 
-                doc_path = path.joinpath(download_path,docs_path,doc,path('build'),path('html'))
-            if doc == "geoext": 
-                doc_path = path.joinpath(download_path,docs_path,doc,path('_build'),path('html'))
-            else: 
-                doc_path = path.joinpath(download_path,docs_path,doc,path('build'),path('html'))
+            doc_path = path.joinpath(download_path,docs_path,doc,path('build'),path('html'))
             shutil.copytree(doc_path,path.joinpath(source_path,path("%s_doc"% doc)))            
     build()
     move()
