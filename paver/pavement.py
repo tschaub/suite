@@ -147,32 +147,29 @@ def download_source():
 
 @task 
 def geoexplorer(): 
+
     ''' 
     This builds GeoExplorer and puts in source
     ''' 
     geoexplorer_path = path.joinpath(download_path,path("geoexplorer"))
     geoexplorer_build = path.joinpath(geoexplorer_path,path("build"))
+    gx_build = path('GeoExplorer.js')
     def build_min():
-        sh("jsbuild -u -o ..\script\ -v -s GeoExplorer.js  geoexplorer-all.cfg" )        
+        sh("jsbuild %s  geoexplorer-all.cfg" % gx_build) 
     with pushd(geoexplorer_build): 
+        if gx_build.exists(): 
+            os.remove(gx_build)
         build_min() 
-    
+    shutil.copy(path.joinpath(geoexplorer_build,gx_build),path.joinpath(geoexplorer_path,'script'))
     def move(): 
         ''' 
         Move all of the GeoExplorer file into a folder in source ... 
-        we need 
-           - index.html 
-           - script/ 
-           - debug.html ? 
-           - 
         ''' 
         ge_final = path.joinpath(source_path,path("geoexplorer"))
-        # make the geoexplorer folder
         if ge_final.exists():
             shutil.rmtree(ge_final)
         shutil.copytree(geoexplorer_path,ge_final)
     move()
-
 
 @task
 def geoserver_plugins(): 
