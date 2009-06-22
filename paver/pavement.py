@@ -146,7 +146,7 @@ def download_source():
             svn.checkout(url,software)
 
 @task 
-def geoexplorer(): 
+def gx(): 
 
     ''' 
     This builds GeoExplorer and puts in source
@@ -167,7 +167,12 @@ def geoexplorer():
         ''' 
         ge_final = path.joinpath(source_path,path("geoexplorer"))
         if ge_final.exists():
-            shutil.rmtree(ge_final)
+            # hack to get around windows not playing well with svn. 
+            # i hope to fix this 
+            if sys.platform == 'win32': 
+                sh("rd /S /Q %s" % ge_final ) 
+            else:
+                shutil.rmtree(ge_final)
         shutil.copytree(geoexplorer_path,ge_final)
     move()
 
@@ -248,6 +253,7 @@ def installer():
     Right now this only makes a installer folder in the source dir
     '''
     os.mkdir(path.joinpath(source_path,path('installer')))
+    os.mkdir(path.joinpath(source_path,path('integration_docs')))
 
 @task
 @needs(["dir_layout"])
@@ -276,7 +282,8 @@ def build_all():
     call_task("installer")
     call_task("download_source")
     call_task("move_java")
-    call_task("geoexplorer")
+    call_task("gx")
+    call_task("unpack_geoserver")
     call_task("geoserver_plugins")
     call_task("download_docs")
     call_task("docs")
