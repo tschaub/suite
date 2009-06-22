@@ -168,16 +168,9 @@ def geoexplorer():
         ''' 
         ge_final = path.joinpath(source_path,path("geoexplorer"))
         # make the geoexplorer folder
-        if not ge_final.exists():
-            os.mkdir(ge_final)
-        shutil.copy(path.joinpath(geoexplorer_path,'index.html'),ge_final)
-        shutil.copy(path.joinpath(geoexplorer_path,'debug.html'),ge_final)
-        shutil.copy(path.joinpath(geoexplorer_path,'embed.html'),ge_final)
-        shutil.copy(path.joinpath(geoexplorer_path,'license.txt'),ge_final)
-        shutil.copy(path.joinpath(geoexplorer_path,'about.html'),ge_final)
-        shutil.copytree(path.joinpath(geoexplorer_path,'script'),path.joinpath(ge_final,'script'))
-        shutil.copytree(path.joinpath(geoexplorer_path,'externals'),path.joinpath(ge_final,'externals'))
-        shutil.copytree(path.joinpath(geoexplorer_path,'theme'),path.joinpath(ge_final,'theme'))
+        if ge_final.exists():
+            shutil.rmtree(ge_final)
+        shutil.copytree(geoexplorer_path,ge_final)
     move()
 
 
