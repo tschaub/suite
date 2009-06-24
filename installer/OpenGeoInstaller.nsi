@@ -1,6 +1,7 @@
 ; OpenGeo Suite Windows installer creation file.
 
 ; Define your application name
+!define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
 !define APPNAMEANDVERSION "OpenGeo Suite v0.1"
 
@@ -11,11 +12,11 @@ CRCCheck on
 ; Main Install settings
 Name "${APPNAMEANDVERSION}"
 InstallDir "$PROGRAMFILES\${APPNAMEANDVERSION}"
-InstallDirRegKey HKLM "Software\${APPNAME}" ""
+InstallDirRegKey HKLM "Software\${COMPANYNAME}\${APPNAME}" ""
 OutFile "OpenGeoSuite-v0.1.exe"
 
 ; This is the gray text on the bottom left of the installer.
- BrandingText "${APPNAMEANDVERSION}"
+BandingText " "
 
 ; Expand the Show details button during the install
 ShowInstDetails nevershow
@@ -30,7 +31,6 @@ ShowInstDetails nevershow
 ; Might be the same as !define
 Var JavaHome
 Var STARTMENU_FOLDER
-
 	
 ; Install options page headers
 LangString TEXT_READY_TITLE ${LANG_ENGLISH} "Ready to Install"
@@ -50,7 +50,7 @@ LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be ins
 
 ;Start Menu Folder Page Configuration
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM" 
-!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${APPNAME}" 
+!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${COMPANYNAME}\${APPNAME}" 
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
 
 ; "Are you sure you wish to cancel" popup.
@@ -62,7 +62,7 @@ LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be ins
 	Click Next to continue."
 
 ; What to do when done
-!define MUI_FINISHPAGE_RUN "hi"
+!define MUI_FINISHPAGE_RUN
 !define MUI_FINISHPAGE_RUN_TEXT "Launch the OpenGeo Data Importer"
 !define MUI_FINISHPAGE_RUN_FUNCTION "RunLink"
 
@@ -79,6 +79,7 @@ FunctionEnd
 
 !insertmacro MUI_PAGE_WELCOME                                 ; Hello
 Page custom CheckUserType                                     ; Die if not admin
+Page custom PriorInstall                                      ; Check to see if previously installed
 !insertmacro MUI_PAGE_LICENSE "..\geoserver\LICENSE.txt"      ; Show license NEEDS TO INCLUDE ALL SOFTWARE!
 ;!insertmacro MUI_PAGE_COMPONENTS                              ; List of stuff to install
 !insertmacro MUI_PAGE_DIRECTORY                               ; Where to install
@@ -88,6 +89,7 @@ Page custom GetJRE                                            ; Check for JRE
 Page custom Ready                                             ; Ready to install page
 !insertmacro MUI_PAGE_INSTFILES                               ; Actually do the install
 !insertmacro MUI_PAGE_FINISH                                  ; Done
+
 
 ; Uninstall Page order
 !insertmacro MUI_UNPAGE_CONFIRM   ; Are you sure you wish to uninstall?
@@ -126,6 +128,20 @@ Function .onInit
 
 FunctionEnd
 
+
+Function PriorInstall
+
+  ClearErrors
+  ReadRegStr $R0 HKLM "Software\${COMPANYNAME}" ""
+  IfErrors NoPriorInstall
+  ClearErrors
+  MessageBox MB_ICONSTOP "Setup has found an existing installation of the OpenGeo Suite on your machine.  Please uninstall this version before running Setup."
+  Abort
+
+  NoPriorInstall:
+
+FunctionEnd
+  
 
 ; Check the user type, and quit if it's not an administrator.
 ; Taken from Examples/UserInfo that ships with NSIS.
@@ -239,7 +255,29 @@ Function Ready
 
 FunctionEnd
 
+; Abstracting Uninstall to a function so it can be called from multiple places
+Function Uninst
 
+;  Push GEOSERVER_DATA_DIR
+;  Call un.DeleteEnvStr
+
+	;Remove from registry...
+	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAMEANDVERSION}"
+	DeleteRegKey HKLM "SOFTWARE\${COMPANYNAME}"
+
+	; Delete self
+	Delete "$INSTDIR\uninstall.exe"
+	
+	; Remove service
+    nsExec::Exec "$INSTDIR\GeoServer\wrapper\wrapper.exe -r wrapper.conf"
+
+	; Delete Shortcuts
+	RMDir /r "$SMPROGRAMS\${APPNAMEANDVERSION}"
+
+	; Clean up
+	RMDir /r "$INSTDIR\"
+
+FunctionEnd
 
 ; Install Java if necessary
 Section -Prerequisites
@@ -301,14 +339,16 @@ Section "GeoServer" Section1
     CreateDirectory $INSTDIR\GeoServer\wrapper\lib
     File /a /oname=wrapper\lib\wrapper.dll wrapper.dll
     File /a /oname=wrapper\lib\wrapper.jar wrapper.jar
-	File /r ..\geoserver\data_dir  ; CHANGE TO CUSTOM DATADIR?
 	File /r ..\geoserver\bin 
 	File /r ..\geoserver\etc 
 	File /r ..\geoserver\lib 
-	File /r ..\geoserver\logs 
 	File /r ..\geoserver\resources 
     !insertmacro DisplayImage "slide_6_geoext.bmp"
-	File /r ..\geoserver\webapps 
+	File /r ..\geoserver\webapps
+    ; writable files to %APPDATA% 
+   	SetOutPath "$APPDATA\OpenGeo\GeoServer"
+	File /r ..\data_dir  ; CHANGE TO CUSTOM DATADIR?
+	File /r ..\geoserver\logs
 	
 	; New users.properties file is created here
 	;Delete "$DataDir\security\users.properties"
@@ -318,7 +358,7 @@ Section "GeoServer" Section1
 
     ; Write GEOSERVER_DATA_DIR environment variable
     Push "GEOSERVER_DATA_DIR"           ; name
-    Push "$INSTDIR\GeoServer\data_dir"  ; value
+    Push "$APPDATA\OpenGeo\GeoServer\data_dir"  ; value
     Call WriteEnvStr
 
 	
@@ -344,34 +384,34 @@ Section "GeoServer" Section1
 	
 SectionEnd
 
-Section "GeoExplorer" Section2
-
-   ; Set Section properties
-   SetOverwrite on
-
-   ; Set Section Files and Shortcuts
-   SetOutPath "$INSTDIR\"
-   File wrappertest.jar
-
-    ; See http://nsis.sourceforge.net/ModernUI_Mod_to_Display_Images_while_installing_files
-    !insertmacro DisplayImage "side_left.bmp"
-
-SectionEnd
-
-Section "Documentation" Section3
-
-   ; Set Section properties
-   SetOverwrite on
-
-   ; Set Section Files and Shortcuts
-   SetOutPath "$INSTDIR\"
-   File wrappertest.jar
-
-    ; See http://nsis.sourceforge.net/ModernUI_Mod_to_Display_Images_while_installing_files
-    !insertmacro DisplayImage "side_left.bmp"
-
-
-SectionEnd
+;Section "GeoExplorer" Section2
+;
+;   ; Set Section properties
+;   SetOverwrite on
+;
+;   ; Set Section Files and Shortcuts
+;   SetOutPath "$INSTDIR\"
+;   File wrappertest.jar
+;
+;    ; See http://nsis.sourceforge.net/ModernUI_Mod_to_Display_Images_while_installing_files
+;    !insertmacro DisplayImage "side_left.bmp"
+;
+;SectionEnd
+;
+;Section "Documentation" Section3
+;
+;   ; Set Section properties
+;   SetOverwrite on
+;
+;   ; Set Section Files and Shortcuts
+;   SetOutPath "$INSTDIR\"
+;   File wrappertest.jar
+;
+;    ; See http://nsis.sourceforge.net/ModernUI_Mod_to_Display_Images_while_installing_files
+;    !insertmacro DisplayImage "side_left.bmp"
+;
+;
+;SectionEnd
 
 
 ; Modern install component descriptions
@@ -386,10 +426,11 @@ SectionEnd
 ; What happens at the end of the install.
 Section -FinishSection
 
-	WriteRegStr HKLM "Software\${APPNAME}" "" "$INSTDIR"
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAMEANDVERSION}" "DisplayName" "${APPNAMEANDVERSION}"
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAMEANDVERSION}" "UninstallString" "$INSTDIR\uninstall.exe"
-	WriteUninstaller "$INSTDIR\uninstall.exe"
+  ; Reg Keys
+  WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" "" "$INSTDIR"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAMEANDVERSION}" "DisplayName" "${APPNAMEANDVERSION}"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAMEANDVERSION}" "UninstallString" "$INSTDIR\uninstall.exe"
+  WriteUninstaller "$INSTDIR\uninstall.exe"
 
 SectionEnd
 
@@ -554,24 +595,7 @@ FunctionEnd
 ;Uninstall section
 Section Uninstall
 
-  Push GEOSERVER_DATA_DIR
-  Call un.DeleteEnvStr
-
-	;Remove from registry...
-	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAMEANDVERSION}"
-	DeleteRegKey HKLM "SOFTWARE\${APPNAME}"
-
-	; Delete self
-	Delete "$INSTDIR\uninstall.exe"
-	
-	; Remove service
-    nsExec::Exec "$INSTDIR\GeoServer\wrapper\wrapper.exe -r wrapper.conf"
-
-	; Delete Shortcuts
-	RMDir /r "$SMPROGRAMS\${APPNAMEANDVERSION}"
-
-	; Clean up
-	RMDir /r "$INSTDIR\"
+   Call Uninst
 
 SectionEnd
 
