@@ -7,7 +7,7 @@ from paver.easy import path, sh, info, pushd
 from paver.easy import task 
 from paver import svn 
 import os, zipfile 
-from  shutil import copytree, rmtree , copy
+from  shutil import copytree,rmtree , copy
 
 
 setup(
@@ -177,11 +177,11 @@ def gx():
             else:
                 rmtree(ge_final)
         os.mkdir(ge_final)
-        copy(path.joinpath(geoexplorer_path,'index.html'),ge_final)
-        copy(path.joinpath(geoexplorer_path,'embed.html'),ge_final)
+        copy(path.joinpath(geoexplorer_path,'debug.html'),ge_final)
+#        copy(path.joinpath(geoexplorer_path,'embed.html'),ge_final)
         copy(path.joinpath(geoexplorer_path,'license.txt'),ge_final)
         copy(path.joinpath(geoexplorer_path,'about.html'),ge_final)
-        copytree(path.joinpath(geoexplorer_path,'script'),path.joinpath(ge_final,'script'),ignore=ignore_patterns('.svn'))
+        copytree(path.joinpath(geoexplorer_path,'script'),path.joinpath(ge_final,'script'))
         copytree(path.joinpath(geoexplorer_path,'externals'),path.joinpath(ge_final,'externals'))
         copytree(path.joinpath(geoexplorer_path,'theme'),path.joinpath(ge_final,'theme'))        
     move()
