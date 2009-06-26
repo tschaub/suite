@@ -1,4 +1,3 @@
-
 from __future__ import with_statement
 
 from paver.easy import *
@@ -173,7 +172,14 @@ def gx():
                 sh("rd /S /Q %s" % ge_final ) 
             else:
                 shutil.rmtree(ge_final)
-        shutil.copytree(geoexplorer_path,ge_final)
+        os.mkdir(ge_final)
+        shutil.copy(path.joinpath(geoexplorer_path,'index.html'),ge_final)
+        shutil.copy(path.joinpath(geoexplorer_path,'embed.html'),ge_final)
+        shutil.copy(path.joinpath(geoexplorer_path,'license.txt'),ge_final)
+        shutil.copy(path.joinpath(geoexplorer_path,'about.html'),ge_final)
+        shutil.copytree(path.joinpath(geoexplorer_path,'script'),path.joinpath(ge_final,'script'))
+        shutil.copytree(path.joinpath(geoexplorer_path,'externals'),path.joinpath(ge_final,'externals'))
+        shutil.copytree(path.joinpath(geoexplorer_path,'theme'),path.joinpath(ge_final,'theme'))        
     move()
 
 @task
@@ -248,21 +254,40 @@ def docs():
     move()
 
 @task
-def installer(): 
+def source_dirs(): 
     '''
-    Right now this only makes a installer folder in the source dir
+    Right now this only makes a integration_docs folder in the source dir
+    This is a sub as we need to download the source these docs. To be done 
+    
     '''
-    os.mkdir(path.joinpath(source_path,path('installer')))
     os.mkdir(path.joinpath(source_path,path('integration_docs')))
 
 @task
 @needs(["dir_layout"])
-def download_data(): 
+def data_dir(): 
     '''
     This download the data from GeoServer? Maybe 
-    and downloads the styles from the rest api 
+    and downloads the styles from the rest API
     '''
-    pass 
+    data_dir = path("data_dir")
+    styles_path =  path.joinpath(data_dir,path("medford"))
+    gs_url = "http://localhost:8080/geoserver/"
+    url = "http://svn.opengeo.org/vulcan/trunk/medford/"
+    def styles(url):
+        with pushd(data_dir): 
+            svn.checkout(url,'medford')
+    def data(): 
+        info("Uploading all styles")
+        slds = styles_path.files("*.sld")
+        for sld in slds:
+            name = sld.strip("data_dir/medford/")
+            sh("""
+               curl -u admin:geoserver -XPUT -H 'Content-type: application/vnd.ogc.sld+xml' -d @ %s http://localhost:8080/geoserver/rest/styles/%s                    
+                  """ % (sld,name))
+
+#   styles(url)
+    data()
+
 
 
 @task
@@ -279,7 +304,7 @@ def build_all():
     info("Building all of the OpenGeo Stack")
     call_task("dir_layout")
     call_task("download_bin")
-    call_task("installer")
+    call_task("source_dirs")
     call_task("download_source")
     call_task("move_java")
     call_task("gx")
