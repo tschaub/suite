@@ -158,7 +158,7 @@ def gx():
     geoexplorer_build = path.joinpath(geoexplorer_path,path("build"))
     gx_build = path('GeoExplorer.js')
     def build_min():
-        sh("jsbuild %s  geoexplorer-all.cfg" % gx_build) 
+        sh("jsbuild %s  build.cfg" % gx_build) 
     with pushd(geoexplorer_build): 
         if gx_build.exists(): 
             os.remove(gx_build)
