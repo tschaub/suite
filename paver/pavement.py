@@ -7,7 +7,7 @@ from paver.easy import path, sh, info, pushd
 from paver.easy import task 
 from paver import svn 
 import os, zipfile 
-#from  shutil import copytree,rmtree , copy
+from  shutil import copytree, rmtree , copy
 
 
 setup(
