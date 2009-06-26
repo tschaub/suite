@@ -76,7 +76,11 @@ LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be ins
 
 ; Launch a shortcut after install
 Function RunLink
+  ClearErrors
   ExecShell "" "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Web Admin Page.lnk"
+  IfErrors 0 +2
+    MessageBox MB_OK "Unhelpful debug message:  FYI, the browser could not be launched.  Now we need to figure out why."
+  ClearErrors
 FunctionEnd
 
 
@@ -89,7 +93,7 @@ FunctionEnd
 !insertmacro MUI_PAGE_WELCOME                                 ; Hello
 Page custom CheckUserType                                     ; Die if not admin
 Page custom PriorInstall                                      ; Check to see if previously installed
-!insertmacro MUI_PAGE_LICENSE "..\geoserver\LICENSE.txt"      ; Show license NEEDS TO INCLUDE ALL SOFTWARE!
+!insertmacro MUI_PAGE_LICENSE "license.txt"                   ; Show license NEEDS TO INCLUDE ALL SOFTWARE!
 ;!insertmacro MUI_PAGE_COMPONENTS                              ; List of stuff to install
 !insertmacro MUI_PAGE_DIRECTORY                               ; Where to install
 !insertmacro MUI_PAGE_STARTMENU Application $STARTMENU_FOLDER ; Start menu location
@@ -338,8 +342,9 @@ Section "GeoServer" Section1
     CreateDirectory $CommonAppData\OpenGeo
     CreateDirectory $CommonAppData\OpenGeo\GeoServer
    	SetOutPath "$CommonAppData\OpenGeo\GeoServer"
-	File /r ..\data_dir  ; CHANGE TO CUSTOM DATADIR?
-	File /r ..\geoserver\logs
+	;File /r ..\data_dir            ; Custom data_dir
+	File /r ..\geoserver\data_dir   ; Default data_dir
+    File /r ..\geoserver\logs
 	
 	; New users.properties file is created here
 	;Delete "$DataDir\security\users.properties"
@@ -384,7 +389,7 @@ Section "GeoServer" Section1
                                   "/S=1" $1
     ${textreplace::ReplaceInFile} "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
                                   "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
-                                  "[wrapperlogpath]" "$CommonAppData\OpenGeo\GeoServer\logs" \ 
+                                  "[wrapperlogpath]" "$CommonAppData\OpenGeo\GeoServer\logs\" \ 
                                   "/S=1" $1
 
    
@@ -420,10 +425,9 @@ Section "GeoExplorer" Section2
   !insertmacro DisplayImage "slide_6_geoext.bmp"
 
   ; Set Section Files and Shortcuts
-  ReadEnvStr $R0 GEOSERVER_DATA_DIR
-  SetOutPath "$R0\www"
-  File /r ..\geoexplorer
-  File /a geoext.ico
+  SetOutPath "$CommonAppData\OpenGeo\GeoServer\data_dir\www"
+  File /r /x .svn ..\geoexplorer
+  File /a /oname=geoexplorer\geoext.ico geoext.ico
 
 ; index.html, embed.html, about.html, license/readme
 ; theme/ script/ externals/ 
@@ -431,26 +435,28 @@ Section "GeoExplorer" Section2
   ; Shortcuts
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer\GeoExplorer.lnk" \
-		         "http://localhost:8080/geoserver/www/geoexplorer/index.html" \
-                 "$R0\www\geoserver.ico" 0
+		         "http://localhost:8080/geoserver/www/geoexplorer/debug.html" \
+                 "$CommonAppData\OpenGeo\GeoServer\data_dir\www\geoexplorer\geoext.ico"
 
 SectionEnd
-;
-;Section "Documentation" Section3
-;
-;   ; Set Section properties
-;   SetOverwrite on
-;
-;   ; Set Section Files and Shortcuts
-;   SetOutPath "$INSTDIR\"
-;   File wrappertest.jar
-;
-;    ; See http://nsis.sourceforge.net/ModernUI_Mod_to_Display_Images_while_installing_files
-;    !insertmacro DisplayImage "side_left.bmp"
-;
-;
-;SectionEnd
+ 
+Section "GeoServer Documentation" Section3
 
+  ; Set Section properties
+  SetOverwrite on
+
+  ; Set Section Files and Shortcuts
+  SetOutPath "$INSTDIR\GeoServer"
+  File /r ..\geoserver_doc
+  Rename "$INSTDIR\GeoServer\geoserver_doc" "$INSTDIR\GeoServer\docs"
+
+  ; Shortcuts
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Documentation.lnk" \
+		         "$INSTDIR\GeoServer\docs\index.html"
+
+  ;!insertmacro DisplayImage "side_left.bmp"
+
+SectionEnd
 
 ; Modern install component descriptions
 ; Yes, this needs needs to go after the install sections. 
