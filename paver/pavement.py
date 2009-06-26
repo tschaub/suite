@@ -181,6 +181,7 @@ def gx():
 #        copy(path.joinpath(geoexplorer_path,'embed.html'),ge_final)
         copy(path.joinpath(geoexplorer_path,'license.txt'),ge_final)
         copy(path.joinpath(geoexplorer_path,'about.html'),ge_final)
+        copytree(path.joinpath(geoexplorer_path,'lib'),path.joinpath(ge_final,'lib'))
         copytree(path.joinpath(geoexplorer_path,'script'),path.joinpath(ge_final,'script'))
         copytree(path.joinpath(geoexplorer_path,'externals'),path.joinpath(ge_final,'externals'))
         copytree(path.joinpath(geoexplorer_path,'theme'),path.joinpath(ge_final,'theme'))        
