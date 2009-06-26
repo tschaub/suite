@@ -261,8 +261,8 @@ def source_dirs():
     
     '''
     interDocs = path.joinpath(source_path,path('integration_docs'))
-    if not inter-docs.exitis():
-        os.mkdir(inter-docs)
+    if not interDocs.exitis():
+        os.mkdir(interDocs)
 
 @task
 @needs(["dir_layout"])
