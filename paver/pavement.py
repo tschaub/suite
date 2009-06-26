@@ -260,7 +260,9 @@ def source_dirs():
     This is a sub as we need to download the source these docs. To be done 
     
     '''
-    os.mkdir(path.joinpath(source_path,path('integration_docs')))
+    interDocs = path.joinpath(source_path,path('integration_docs'))
+    if not inter-docs.exitis():
+        os.mkdir(inter-docs)
 
 @task
 @needs(["dir_layout"])
