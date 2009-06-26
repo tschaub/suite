@@ -8,7 +8,7 @@ from paver.easy import task
 from paver import svn 
 import os, zipfile 
 from  shutil import copytree,rmtree , copy
-import shutil.ignore_patterns as ignore_patterns
+
 
 setup(
     name="builder",
