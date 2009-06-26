@@ -7,7 +7,8 @@ from paver.easy import path, sh, info, pushd
 from paver.easy import task 
 from paver import svn 
 import os, zipfile 
-import shutil
+from  shutil import copytree,rmtree , copy
+import shutil.ignore_patterns as ignore_patterns
 
 setup(
     name="builder",
@@ -78,12 +79,15 @@ def dir_layout():
             os.mkdir(_dir)
 
 @task 
-def clean_dir(): 
+def clean(): 
     info("Cleaning Installer Layout") 
     for _dir in config.options("files"): 
         _dir=path(config.get("files",_dir))
         if _dir.exists():
-            shutil.rmtree(_dir)
+            if sys.platform == 'win32': 
+                sh("rd /S /Q %s" % _dir )
+            else:
+                rmtree(_dir)
     
 
 @task 
@@ -116,12 +120,12 @@ def unpack_geoserver():
     geoserverZIP = "%s-bin.zip" % version
     geoserverSRC = path.joinpath(download_path,geoserverZIP)
     info("Moving GeoServer into %s" % source_path)
-    shutil.copy(geoserverSRC,source_path)
+    copy(geoserverSRC,source_path)
     with pushd(source_path):
         if geoserver_vs.exists():
-            shutil.rmtree(geoserver_vs)
+            rmtree(geoserver_vs)
         if geoserver.exists():
-            shutil.rmtree(geoserver)
+            rmtree(geoserver)
         unzip_file(geoserverZIP)
         os.rename(geoserver_vs,geoserver)
         os.remove(geoserverZIP)
@@ -129,7 +133,7 @@ def unpack_geoserver():
 @task
 def move_java(): 
     java_path = path.joinpath(download_path,'sun-java.exe')
-    shutil.copy(java_path,source_path)
+    copy(java_path,source_path)
 
 
 @task 
@@ -159,7 +163,7 @@ def gx():
         if gx_build.exists(): 
             os.remove(gx_build)
         build_min() 
-    shutil.copy(path.joinpath(geoexplorer_build,gx_build),path.joinpath(geoexplorer_path,'script'))
+    copy(path.joinpath(geoexplorer_build,gx_build),path.joinpath(geoexplorer_path,'script'))
     def move(): 
         ''' 
         Move all of the GeoExplorer file into a folder in source ... 
@@ -171,15 +175,15 @@ def gx():
             if sys.platform == 'win32': 
                 sh("rd /S /Q %s" % ge_final ) 
             else:
-                shutil.rmtree(ge_final)
+                rmtree(ge_final)
         os.mkdir(ge_final)
-        shutil.copy(path.joinpath(geoexplorer_path,'index.html'),ge_final)
-        shutil.copy(path.joinpath(geoexplorer_path,'embed.html'),ge_final)
-        shutil.copy(path.joinpath(geoexplorer_path,'license.txt'),ge_final)
-        shutil.copy(path.joinpath(geoexplorer_path,'about.html'),ge_final)
-        shutil.copytree(path.joinpath(geoexplorer_path,'script'),path.joinpath(ge_final,'script'))
-        shutil.copytree(path.joinpath(geoexplorer_path,'externals'),path.joinpath(ge_final,'externals'))
-        shutil.copytree(path.joinpath(geoexplorer_path,'theme'),path.joinpath(ge_final,'theme'))        
+        copy(path.joinpath(geoexplorer_path,'index.html'),ge_final)
+        copy(path.joinpath(geoexplorer_path,'embed.html'),ge_final)
+        copy(path.joinpath(geoexplorer_path,'license.txt'),ge_final)
+        copy(path.joinpath(geoexplorer_path,'about.html'),ge_final)
+        copytree(path.joinpath(geoexplorer_path,'script'),path.joinpath(ge_final,'script'),ignore=ignore_patterns('.svn'))
+        copytree(path.joinpath(geoexplorer_path,'externals'),path.joinpath(ge_final,'externals'))
+        copytree(path.joinpath(geoexplorer_path,'theme'),path.joinpath(ge_final,'theme'))        
     move()
 
 @task
@@ -207,7 +211,7 @@ def geoserver_plugins():
         info("Moving GeoServer Plugins")
         dest = path.joinpath(source_path,path("geoserver_plugins"))
         src = path.joinpath(download_path,plugin_path)
-        shutil.copytree(src,dest) 
+        copytree(src,dest) 
 
     download()
     move()
@@ -236,6 +240,7 @@ def docs():
     ''' 
     section = "docs" 
     def build():
+        # fix 
         with pushd(download_path):
             with pushd(docs_path):
                 for doc in config.options(section): 
@@ -249,7 +254,7 @@ def docs():
     def move(): 
         for doc in config.options(section): 
             doc_path = path.joinpath(download_path,docs_path,doc,path('html'))
-            shutil.copytree(doc_path,path.joinpath(source_path,path("%s_doc"% doc)))            
+            copytree(doc_path,path.joinpath(source_path,path("%s_doc"% doc)))            
     build()
     move()
 
