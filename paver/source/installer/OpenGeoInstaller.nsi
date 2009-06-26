@@ -23,14 +23,22 @@ ShowInstDetails nevershow
 
 ; Includes
 !include "MUI.nsh" ; Modern interface settings
-!include "StrFunc.nsh"
-; See http://nsis.sourceforge.net/ModernUI_Mod_to_Display_Images_while_installing_files
-!include "Image.nsh" ; For graphics during the install MUST DOWNLOAD SEPARATELY!
+!include "StrFunc.nsh" ; String functions
 !include "x64.nsh" ; To check for 64 bit OS
+
+; WARNING!!! These plugins need to be installed spearately
+; See http://nsis.sourceforge.net/ModernUI_Mod_to_Display_Images_while_installing_files
+!include "Image.nsh" ; For graphics during the install 
+; http://nsis.sourceforge.net/TextReplace_plugin
+!include "TextReplace.nsh" ; For text replacing
+; AccessControl plugin needed as well for permissions changes
+; See: http://nsis.sourceforge.net/AccessControl_plug-in
+
 
 ; Might be the same as !define
 Var JavaHome
 Var STARTMENU_FOLDER
+Var CommonAppData
 	
 ; Install options page headers
 LangString TEXT_READY_TITLE ${LANG_ENGLISH} "Ready to Install"
@@ -76,6 +84,7 @@ FunctionEnd
 
 ; Install Page order
 ; This is the main list of installer things to do
+
 
 !insertmacro MUI_PAGE_WELCOME                                 ; Hello
 Page custom CheckUserType                                     ; Die if not admin
@@ -125,6 +134,10 @@ Function .onInit
   MessageBox MB_ICONSTOP "Sorry, this installer is only supported on 32 bit systems."
   Quit
   ${EndIf}
+
+  ; Get the Common App Data path
+  ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders" "Common AppData"
+  StrCpy $CommonAppData $R0
 
 FunctionEnd
 
@@ -255,30 +268,6 @@ Function Ready
 
 FunctionEnd
 
-; Abstracting Uninstall to a function so it can be called from multiple places
-Function un.inst
-
-;  Push GEOSERVER_DATA_DIR
-;  Call un.DeleteEnvStr
-
-	;Remove from registry...
-	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAMEANDVERSION}"
-	DeleteRegKey HKLM "SOFTWARE\${COMPANYNAME}"
-
-	; Delete self
-	Delete "$INSTDIR\uninstall.exe"
-	
-	; Remove service
-    nsExec::Exec "$INSTDIR\GeoServer\wrapper\wrapper.exe -r wrapper.conf"
-
-	; Delete Shortcuts
-	RMDir /r "$SMPROGRAMS\${APPNAMEANDVERSION}"
-
-	; Clean up
-	RMDir /r "$INSTDIR\"
-
-FunctionEnd
-
 ; Install Java if necessary
 Section -Prerequisites
 
@@ -325,6 +314,7 @@ Section "GeoServer" Section1
 
 
 	; Set Section Files and Shortcuts
+    CreateDirectory $INSTDIR\GeoServer
 	SetOutPath "$INSTDIR\GeoServer"
 	File /a /oname=start.jar ..\geoserver\start.jar
 	File /a /oname=GPL.txt ..\geoserver\GPL.txt
@@ -344,8 +334,10 @@ Section "GeoServer" Section1
 	File /r ..\geoserver\lib 
 	File /r ..\geoserver\resources 
 	File /r ..\geoserver\webapps
-    ; writable files to %APPDATA% 
-   	SetOutPath "$APPDATA\OpenGeo\GeoServer"
+    ; writable files to $CommonAppData (a la DocsSettings\AllUsers\AppData 
+    CreateDirectory $CommonAppData\OpenGeo
+    CreateDirectory $CommonAppData\OpenGeo\GeoServer
+   	SetOutPath "$CommonAppData\OpenGeo\GeoServer"
 	File /r ..\data_dir  ; CHANGE TO CUSTOM DATADIR?
 	File /r ..\geoserver\logs
 	
@@ -355,22 +347,49 @@ Section "GeoServer" Section1
 	;FileWrite $R9 "$6=$7,ROLE_ADMINISTRATOR"
     ;FileClose $R9
 
-    ; New logging.xml file is created here
-    ; This is done to be able to put an environment variable in this file
-    Delete "$APPDATA\OpenGeo\GeoServer\data_dir\logging.xml"
-    FileOpen $R3 "$APPDATA\OpenGeo\GeoServer\data_dir\logging.xml" w
-    FileWrite $R3 "<logging>"
-    FileWrite $R3 "   <level>DEFAULT_LOGGING.properties</level>"
-    FileWrite $R3 "   <location>$APPDATA%\OpenGeo\GeoServer\geoserver.log</location>"
-    FileWrite $R3 "   <stdOutLogging>true</stdOutLogging>"
-    FileWrite $R3 "</logging>"
-    FileClose $R3
-
     ; Write GEOSERVER_DATA_DIR environment variable
-    Push "GEOSERVER_DATA_DIR"           ; name
-    Push "$APPDATA\OpenGeo\GeoServer\data_dir"  ; value
+    ; Unclear if we still need to do this, now that we hard code into the wrapper,
+    Push "GEOSERVER_DATA_DIR"                         ; name
+    Push "$CommonAppData\OpenGeo\GeoServer\data_dir"  ; value
     Call WriteEnvStr
 
+    ; logging.xml file is deleted/recreated here
+    Delete data_dir\logging.xml
+    FileOpen $9 data_dir\logging.xml w ;Opens a Empty File an fills it
+    FileWrite $9 "<logging>$\r$\n"
+    FileWrite $9 "<level>DEFAULT_LOGGING.properties</level>$\r$\n"
+    FileWrite $9 "$CommonAppData\OpenGeo\GeoServer\logs\geoserver.log</location>$\r$\n"
+    FileWrite $9 "<stdOutLogging>true</stdOutLogging>$\r$\n"
+    FileWrite $9 "</logging>$\r$\n"
+    FileClose $9 ;Closes the filled file
+    ;; Replacing the [changeme] tag with the specific path to geoserver.log
+    ;${textreplace::ReplaceInFile} "$CommonAppData\OpenGeo\GeoServer\data_dir\logging.xml" \
+    ;                              "$CommonAppData\OpenGeo\GeoServer\data_dir\logging.xml" \
+    ;                              "[path]" "$CommonAppData\OpenGeo\GeoServer\logs\" \
+    ;                              "/S=1" $0
+
+    ; wrapper.conf is customized here
+    ; since we can't use environment variables (running as NetworkService)
+    ${textreplace::ReplaceInFile} "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
+                                  "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
+                                  "[javapath]" "$JavaHome" \ 
+                                  "/S=1" $1
+    ${textreplace::ReplaceInFile} "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
+                                  "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
+                                  "[datadirpath]" "$CommonAppData\OpenGeo\GeoServer\data_dir" \ 
+                                  "/S=1" $1
+    ${textreplace::ReplaceInFile} "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
+                                  "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
+                                  "[jettylogpath]" "$CommonAppData\OpenGeo\GeoServer\logs" \ 
+                                  "/S=1" $1
+    ${textreplace::ReplaceInFile} "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
+                                  "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
+                                  "[wrapperlogpath]" "$CommonAppData\OpenGeo\GeoServer\logs" \ 
+                                  "/S=1" $1
+
+   
+    ; Give permission for NetworkService to be able to read/write to data_dir and logs
+    AccessControl::GrantOnFile "$CommonAppData\OpenGeo" "NT AUTHORITY\NetworkService" "FullAccess"
 	
 	; Install the service (i)
     ; and start it (t)
@@ -381,7 +400,6 @@ Section "GeoServer" Section1
        ;Create shortcuts
        CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
        CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer"
-       SetOutPath "$INSTDIR"
        CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Homepage.lnk" \
 		               "http://geoserver.org"
        CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Web Admin Page.lnk" \
@@ -394,19 +412,29 @@ Section "GeoServer" Section1
 	
 SectionEnd
 
-;Section "GeoExplorer" Section2
-;
-;   ; Set Section properties
-;   SetOverwrite on
-;
-;   ; Set Section Files and Shortcuts
-;   SetOutPath "$INSTDIR\"
-;   File wrappertest.jar
-;
-;    ; See http://nsis.sourceforge.net/ModernUI_Mod_to_Display_Images_while_installing_files
-;    !insertmacro DisplayImage "side_left.bmp"
-;
-;SectionEnd
+Section "GeoExplorer" Section2
+
+  ; Set Section properties
+  SetOverwrite on
+
+  !insertmacro DisplayImage "slide_6_geoext.bmp"
+
+  ; Set Section Files and Shortcuts
+  ReadEnvStr $R0 GEOSERVER_DATA_DIR
+  SetOutPath "$R0\www"
+  File /r ..\geoexplorer
+  File /a geoext.ico
+
+; index.html, embed.html, about.html, license/readme
+; theme/ script/ externals/ 
+
+  ; Shortcuts
+  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer\GeoExplorer.lnk" \
+		         "http://localhost:8080/geoserver/www/geoexplorer/index.html" \
+                 "$R0\www\geoserver.ico" 0
+
+SectionEnd
 ;
 ;Section "Documentation" Section3
 ;
@@ -609,5 +637,28 @@ Section Uninstall
 
 SectionEnd
 
+; Abstracting Uninstall to a function so it can be called from multiple places
+Function un.inst
+
+;  Push GEOSERVER_DATA_DIR
+;  Call un.DeleteEnvStr
+
+	;Remove from registry...
+	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAMEANDVERSION}"
+	DeleteRegKey HKLM "SOFTWARE\${COMPANYNAME}"
+
+	; Delete self
+	Delete "$INSTDIR\uninstall.exe"
+	
+	; Remove service
+    nsExec::Exec "$INSTDIR\GeoServer\wrapper\wrapper.exe -r wrapper.conf"
+
+	; Delete Shortcuts
+	RMDir /r "$SMPROGRAMS\${APPNAMEANDVERSION}"
+
+	; Clean up
+	RMDir /r "$INSTDIR\"
+
+FunctionEnd
 
 ; eof
