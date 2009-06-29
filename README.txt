@@ -1,9 +1,23 @@
 Description of svn contents:
 
-buildscripts - Contains paver + NSIS scripts required to download all artifacts
-medford - Styles for medford data/demo
-opengeosphinxtheme - Sphinx theme that is branded to look like OpenGeo
-README.txt - This.
+buildscripts
+   - Contains paver + NSIS scripts required to download all artifacts
+
+installerdocs
+   - Documentation source for installation full Suite installation.
+     Requires Sphinx.
+
+integrationdocs
+   - Documentation source for full Suite. Requires Sphinx.
+
+medford
+   - Styles for Medford data/demo
+
+opengeosphinxtheme
+   - Sphinx theme that is branded to look like OpenGeo.
+
+README.txt
+   - This document.
 
 
 Instructions:
@@ -18,4 +32,4 @@ Instructions:
 
      (requires makensis)
 
-This should output an .EXE file.  Voilà.
+This should output an .EXE file.  Voila.
