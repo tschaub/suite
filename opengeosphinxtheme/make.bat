@@ -20,6 +20,7 @@ if "%1" == "help" (
 	echo.  htmlhelp  to make HTML files and a HTML help project
 	echo.  qthelp    to make HTML files and a qthelp project
 	echo.  latex     to make LaTeX files, you can set PAPER=a4 or PAPER=letter
+	echo.  text      to make plain text files 
 	echo.  changes   to make an overview over all changed/added/deprecated items
 	echo.  linkcheck to check all external links for integrity
 	echo.  doctest   to run all doctests embedded in the documentation if enabled
@@ -73,9 +74,9 @@ if "%1" == "qthelp" (
 	echo.
 	echo.Build finished; now you can run "qcollectiongenerator" with the ^
 .qhcp project file in build/qthelp, like this:
-	echo.^> qcollectiongenerator build\qthelp\OpenGeo Sphinx Theme.qhcp
+	echo.^> qcollectiongenerator build\qthelp\OpenGeoSuiteInstallation.qhcp
 	echo.To view the help file:
-	echo.^> assistant -collectionFile build\qthelp\OpenGeo Sphinx Theme.ghc
+	echo.^> assistant -collectionFile build\qthelp\OpenGeoSuiteInstallation.ghc
 	goto end
 )
 
@@ -83,6 +84,13 @@ if "%1" == "latex" (
 	%SPHINXBUILD% -b latex %ALLSPHINXOPTS% build/latex
 	echo.
 	echo.Build finished; the LaTeX files are in build/latex.
+	goto end
+)
+
+if "%1" == "text" (
+	%SPHINXBUILD% -b text %ALLSPHINXOPTS% build/text
+	echo.
+	echo.Build finished. The text files are in build/text.
 	goto end
 )
 
@@ -108,5 +116,6 @@ if "%1" == "doctest" (
 results in build/doctest/output.txt.
 	goto end
 )
+
 
 :end
