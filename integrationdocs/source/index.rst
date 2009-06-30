@@ -9,4 +9,5 @@ Welcome to the OpenGeo Suite!  The OpenGeo Suite is a free, fully-featured web m
 
    whatis.rst
    howtouse.rst
+   builtindemos.rst
    moreinfo.rst
