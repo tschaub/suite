@@ -3,7 +3,7 @@
 ; Define your application name
 !define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
-!define APPNAMEANDVERSION "OpenGeo Suite v0.2"
+!define APPNAMEANDVERSION "OpenGeo Suite v0.3"
 
 ;Compression options
 CRCCheck on
@@ -13,18 +13,21 @@ CRCCheck on
 Name "${APPNAMEANDVERSION}"
 InstallDir "$PROGRAMFILES\${APPNAMEANDVERSION}"
 InstallDirRegKey HKLM "Software\${COMPANYNAME}\${APPNAME}" ""
-OutFile "OpenGeoSuite-v0.2.exe"
+OutFile "OpenGeoSuite-v0.3beta.exe"
 
 ; This is the gray text on the bottom left of the installer.
 BrandingText " "
 
-; Expand the Show details button during the install
+; Hide the "Show details" button during the install
 ShowInstDetails nevershow
 
 ; Includes
 !include "MUI.nsh" ; Modern interface settings
 !include "StrFunc.nsh" ; String functions
 !include "x64.nsh" ; To check for 64 bit OS
+!include "LogicLib.nsh" ; For Radio buttons page
+!include "nsDialogs.nsh" ; Ditto
+
 
 ; WARNING!!! These plugins need to be installed spearately
 ; See http://nsis.sourceforge.net/ModernUI_Mod_to_Display_Images_while_installing_files
@@ -35,14 +38,23 @@ ShowInstDetails nevershow
 ; See: http://nsis.sourceforge.net/AccessControl_plug-in
 
 
+
+
 ; Might be the same as !define
 Var JavaHome
 Var STARTMENU_FOLDER
 Var CommonAppData
+Var Manual
+Var Service
+Var IsManual
+
+
 	
 ; Install options page headers
 LangString TEXT_READY_TITLE ${LANG_ENGLISH} "Ready to Install"
 LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be installed."
+LangString TEXT_TYPE_TITLE ${LANG_ENGLISH} "Type of Installation"
+LangString TEXT_TYPE_SUBTITLE ${LANG_ENGLISH} "Select the type of installation."
 
 ;No credscheck for now
 ;LangString TEXT_CREDS_TITLE ${LANG_ENGLISH} "GeoServer Administrator"
@@ -71,15 +83,27 @@ LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be ins
 
 ; What to do when done
 !define MUI_FINISHPAGE_RUN
-!define MUI_FINISHPAGE_RUN_TEXT "Launch the OpenGeo Data Importer"
-!define MUI_FINISHPAGE_RUN_FUNCTION "RunLink"
+!define MUI_FINISHPAGE_RUN_TEXT "Start GeoServer and launch the Data Importer"
+!define MUI_FINISHPAGE_RUN_FUNCTION "RunStuff"
 
 ; Launch a shortcut after install
-Function RunLink
+Function RunStuff
+
+  ${If} $IsManual == 0 ; i.e. only if service install
+	; Run the service (t)
+    nsExec::Exec "$INSTDIR\GeoServer\wrapper\wrapper.exe -t wrapper.conf"
+  ${EndIf}
+  ${If} $IsManual == 1 ; i.e. only if manual install
+    ExecShell "open" "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Start GeoServer.lnk"
+    IfErrors 0 +2
+      MessageBox MB_ICONSTOP "Unhelpful debug message (especially for funky_c):  FYI, the browser could not be launched.  Now we need to figure out why."
+    ClearErrors
+  ${EndIf}
+  Sleep 10000
   ClearErrors
-  ExecShell "" "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Web Admin Page.lnk"
+  ExecShell "open" "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Web Admin Page.lnk"
   IfErrors 0 +2
-    MessageBox MB_OK "Unhelpful debug message:  FYI, the browser could not be launched.  Now we need to figure out why."
+    MessageBox MB_OK "Unhelpful debug message (especially for funky_c):  FYI, the browser could not be launched.  Now we need to figure out why.  Darn you, Vista."
   ClearErrors
 FunctionEnd
 
@@ -88,7 +112,6 @@ FunctionEnd
 
 ; Install Page order
 ; This is the main list of installer things to do
-
 
 !insertmacro MUI_PAGE_WELCOME                                 ; Hello
 Page custom CheckUserType                                     ; Die if not admin
@@ -99,6 +122,7 @@ Page custom PriorInstall                                      ; Check to see if 
 !insertmacro MUI_PAGE_STARTMENU Application $STARTMENU_FOLDER ; Start menu location
 Page custom GetJRE                                            ; Check for JRE
 ;Page custom CredsCheck                                        ; Will set admin/password (if new install)
+Page custom InstallType InstallTypeTest                       ; Install manually or as a service?
 Page custom Ready                                             ; Ready to install page
 !insertmacro MUI_PAGE_INSTFILES                               ; Actually do the install
 !insertmacro MUI_PAGE_FINISH                                  ; Done
@@ -142,6 +166,47 @@ Function .onInit
   ; Get the Common App Data path
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders" "Common AppData"
   StrCpy $CommonAppData $R0
+
+  ;Set $IsManual at the onset, to allow for memory of radio boxes in next section
+  StrCpy $IsManual 1
+
+FunctionEnd
+
+
+; Will build a page with radio buttons for manual vs service selection
+Function InstallType
+
+  nsDialogs::Create 1018
+  !insertmacro MUI_HEADER_TEXT "$(TEXT_TYPE_TITLE)" "$(TEXT_TYPE_SUBTITLE)"
+
+  ;Syntax: ${NSD_*} x y width height text
+  ${NSD_CreateLabel} 0 0 100% 24u 'Select the type of installation for the OpenGeo Suite.  If you are unsure of which option to pick, select the "Run manually" option.'
+  ${NSD_CreateRadioButton} 10 28u 50% 12u "Run manually"
+  Pop $Manual
+
+  ${NSD_CreateLabel} 10 44u 100% 24u "For evaulating the OpenGeo Suite.  Software will be installed as standalone applications."
+  ${NSD_CreateRadioButton} 10 72u 50% 12u "Install as a service"
+  Pop $Service
+
+  ${If} $IsManual == 1
+    ${NSD_Check} $Manual ; Default
+  ${Else}
+    ${NSD_Check} $Service
+  ${EndIf}
+
+  ${NSD_CreateLabel} 10 88u 100% 24u "For system administrators who wish to integrate GeoServer with Windows Services."
+
+  nsDialogs::Show
+
+FunctionEnd
+
+
+; Records the final state of manual vs service
+Function InstallTypeTest
+
+  ${NSD_GetState} $Manual $IsManual
+  ; $IsManual = 1 -> Run manually
+  ; $IsManual = 0 -> Run as service
 
 FunctionEnd
 
@@ -203,8 +268,8 @@ Function GetJRE
   ; look for %JAVA_HOME%
   ClearErrors
   ReadEnvStr $R0 JAVA_HOME
-  StrCpy $R0 "$R0\bin\${JAVAEXE}"
-  IfErrors 0 JreFound  
+  StrCpy $R3 "$R0\bin\${JAVAEXE}"
+  IfErrors 0 JREFound  
 
   ; look for registry key 
   ClearErrors
@@ -213,18 +278,19 @@ Function GetJRE
   StrCpy $R2 "$R0\bin\${JAVAEXE}"
   IfErrors 0 JreFound
 
-  ; Can't find Java, will install 
+  ; Can't find Java, will install later
   StrCpy $JavaHome "NoJava"
   Goto Skip
   
-  JreFound:
+  JREFound:
     StrCpy $JavaHome $R0
+
     ;MessageBox MB_OK "Java found here: $JavaHome"
 
     ; Write JAVA_HOME environment variable
-    Push "JAVA_HOME"           ; name
-    Push "$JavaHome"          ; value
-    Call WriteEnvStr
+    ;Push "JAVA_HOME"           ; name
+    ;Push "$JavaHome"          ; value
+    ;Call WriteEnvStr
 
   Skip:
  
@@ -250,24 +316,36 @@ FunctionEnd
 ; One final page to review options
 Function Ready
 
+  StrCpy $8 "OpenGeo Suite install directory:\
+             \r\n     $INSTDIR\r\n\r\n"
+
+  StrCmp $IsManual 1 Manual Service
+
+  Manual:
+    StrCpy $8 "$8GeoServer installation type:\
+               \r\n     Manual\r\n\r\n"
+    Goto Java
+  Service:
+    StrCpy $8 "$8GeoServer installation type:\
+               \r\n     Service\r\n\r\n"
+    Goto Java
+ 
+  Java:
+
   StrCmp $JavaHome "NoJava" NoJava YesJava
   NoJava:
-    StrCpy $8 "Java Runtime Environment (JRE):\
+    StrCpy $8 "$8Java Runtime Environment (JRE):\
                \r\n     (will be installed as part of Setup)"
     Goto Continue
   YesJava:
-    StrCpy $8 "Java Runtime Environment (JRE):\
+    StrCpy $8 "$8Java Runtime Environment (JRE):\
                \r\n     $JavaHome"
     Goto Continue
-               
+
   Continue:
 
-  ; Big long string with all the settings
-  StrCpy $9 "OpenGeo Suite install directory:\
-             \r\n     $INSTDIR\r\n\r\n$8" 
-
   !insertmacro MUI_HEADER_TEXT "$(TEXT_READY_TITLE)" "$(TEXT_READY_SUBTITLE)"
-  !insertmacro MUI_INSTALLOPTIONS_WRITE "ready.ini" "Field 2" "Text" $9
+  !insertmacro MUI_INSTALLOPTIONS_WRITE "ready.ini" "Field 2" "Text" $8
   !insertmacro MUI_INSTALLOPTIONS_DISPLAY "ready.ini"
 
 FunctionEnd
@@ -275,14 +353,13 @@ FunctionEnd
 ; Install Java if necessary
 Section -Prerequisites
 
-  !insertmacro DisplayImage "slide_1_suite.bmp"
-
-  SetOutPath $TEMP
   StrCmp $JavaHome "NoJava" Prereq NoPrereq
 
   Prereq:
+    !insertmacro DisplayImage "slide_1_suite.bmp"
     MessageBox MB_OK "Please wait while Setup launches the Sun Java Runtime Environment (JRE) installer.  \
                       When the JRE is successfully installed, Setup will continue."
+    SetOutPath $TEMP
     File /a ..\sun-java.exe
 
     ; reloading graphic on purpose, can get undrawn if minimized
@@ -307,44 +384,49 @@ SectionEnd
 ; The main install section
 Section "GeoServer" Section1
 	
-	; Makes this install mandatory
-	SectionIn RO
+  ; Makes this install mandatory
+  SectionIn RO
 
-	; Set Section properties
-	SetOverwrite on
+  ; Set Section properties
+  SetOverwrite on
+
+  !insertmacro DisplayImage "slide_3_geoserver.bmp"
+
+  ; Set Section Files and Shortcuts
+  CreateDirectory $INSTDIR\GeoServer
+  SetOutPath "$INSTDIR\GeoServer"
+  File /a /oname=start.jar ..\geoserver\start.jar
+  File /a /oname=GPL.txt ..\geoserver\GPL.txt
+  File /a /oname=LICENSE.txt ..\geoserver\LICENSE.txt
+  File /a /oname=README.txt ..\geoserver\README.txt
+  File /a /oname=RUNNING.txt ..\geoserver\RUNNING.txt 
+  File /a geoserver.ico
+  File /r ..\geoserver\bin 
+  File /r ..\geoserver\etc 
+  File /r ..\geoserver\lib 
+  File /r ..\geoserver\resources 
+  File /r ..\geoserver\webapps
+  ; writable files to $CommonAppData (a la DocsSettings\AllUsers\AppData 
+  CreateDirectory $CommonAppData\OpenGeo
+  CreateDirectory $CommonAppData\OpenGeo\GeoServer
+  SetOutPath "$CommonAppData\OpenGeo\GeoServer"
+  ;File /r ..\data_dir            ; Custom data_dir
+  File /r /x logging.xml ..\geoserver\data_dir   ; Default data_dir
+  File /r ..\geoserver\logs
+  SetOutPath "$CommonAppData\OpenGeo\GeoServer\data_dir"
+  File /a logging.xml
 
 
-    !insertmacro DisplayImage "slide_3_geoserver.bmp"
-
-
-	; Set Section Files and Shortcuts
-    CreateDirectory $INSTDIR\GeoServer
-	SetOutPath "$INSTDIR\GeoServer"
-	File /a /oname=start.jar ..\geoserver\start.jar
-	File /a /oname=GPL.txt ..\geoserver\GPL.txt
-	File /a /oname=LICENSE.txt ..\geoserver\LICENSE.txt
-	File /a /oname=README.txt ..\geoserver\README.txt
-	File /a /oname=RUNNING.txt ..\geoserver\RUNNING.txt 
-    File /a geoserver.ico
+  ${If} $IsManual == 0 ; i.e. only if service install
+    SetOutPath $INSTDIR\GeoServer
     CreateDirectory $INSTDIR\GeoServer\wrapper
-	File /a /oname=wrapper\wrapper.exe wrapper.exe
-	File /a /oname=wrapper\wrapper-server-license.txt wrapper-server-license.txt
+    File /a /oname=wrapper\wrapper.exe wrapper.exe
+    File /a /oname=wrapper\wrapper-server-license.txt wrapper-server-license.txt
     File /a /oname=wrapper\wrapper.conf wrapper.conf
     CreateDirectory $INSTDIR\GeoServer\wrapper\lib
     File /a /oname=wrapper\lib\wrapper.dll wrapper.dll
     File /a /oname=wrapper\lib\wrapper.jar wrapper.jar
-	File /r ..\geoserver\bin 
-	File /r ..\geoserver\etc 
-	File /r ..\geoserver\lib 
-	File /r ..\geoserver\resources 
-	File /r ..\geoserver\webapps
-    ; writable files to $CommonAppData (a la DocsSettings\AllUsers\AppData 
-    CreateDirectory $CommonAppData\OpenGeo
-    CreateDirectory $CommonAppData\OpenGeo\GeoServer
-   	SetOutPath "$CommonAppData\OpenGeo\GeoServer"
-	;File /r ..\data_dir            ; Custom data_dir
-	File /r ..\geoserver\data_dir   ; Default data_dir
-    File /r ..\geoserver\logs
+  ${EndIf}
 	
 	; New users.properties file is created here
 	;Delete "$DataDir\security\users.properties"
@@ -352,26 +434,30 @@ Section "GeoServer" Section1
 	;FileWrite $R9 "$6=$7,ROLE_ADMINISTRATOR"
     ;FileClose $R9
 
-    ; Write GEOSERVER_DATA_DIR environment variable
-    ; Unclear if we still need to do this, now that we hard code into the wrapper,
-    Push "GEOSERVER_DATA_DIR"                         ; name
-    Push "$CommonAppData\OpenGeo\GeoServer\data_dir"  ; value
-    Call WriteEnvStr
+  ; Write GEOSERVER_DATA_DIR environment variable
+  ; Unclear if we still need to do this, now that we hard code into the wrapper,
+  Push "GEOSERVER_DATA_DIR"                         ; name
+  Push "$CommonAppData\OpenGeo\GeoServer\data_dir"  ; value
+  Call WriteEnvStr
 
-    ; logging.xml file is deleted/recreated here
-    Delete data_dir\logging.xml
-    FileOpen $9 data_dir\logging.xml w ;Opens a Empty File an fills it
-    FileWrite $9 "<logging>$\r$\n"
-    FileWrite $9 "<level>DEFAULT_LOGGING.properties</level>$\r$\n"
-    FileWrite $9 "$CommonAppData\OpenGeo\GeoServer\logs\geoserver.log</location>$\r$\n"
-    FileWrite $9 "<stdOutLogging>true</stdOutLogging>$\r$\n"
-    FileWrite $9 "</logging>$\r$\n"
-    FileClose $9 ;Closes the filled file
-    ;; Replacing the [changeme] tag with the specific path to geoserver.log
-    ;${textreplace::ReplaceInFile} "$CommonAppData\OpenGeo\GeoServer\data_dir\logging.xml" \
-    ;                              "$CommonAppData\OpenGeo\GeoServer\data_dir\logging.xml" \
-    ;                              "[path]" "$CommonAppData\OpenGeo\GeoServer\logs\" \
-    ;                              "/S=1" $0
+  ; logging.xml file is deleted/recreated here
+  SetOutPath "$CommonAppData\OpenGeo\GeoServer"
+
+;  FileOpen $9 data_dir\logging.xml w ;Opens a Empty File and fills it
+;  FileWrite $9 "<logging>$\r$\n"
+;  FileWrite $9 "<level>DEFAULT_LOGGING.properties</level>$\r$\n"
+;  FileWrite $9 "$CommonAppData\OpenGeo\GeoServer\logs\geoserver.log</location>$\r$\n"
+;  FileWrite $9 "<stdOutLogging>true</stdOutLogging>$\r$\n"
+;  FileWrite $9 "</logging>$\r$\n"
+;  FileClose $9 ;Closes the filled file
+
+  ; Replacing the [changeme] tag with the specific path to geoserver.log
+  ${textreplace::ReplaceInFile} "$CommonAppData\OpenGeo\GeoServer\data_dir\logging.xml" \
+                                "$CommonAppData\OpenGeo\GeoServer\data_dir\logging.xml" \
+                                "[gslogpath]" "$CommonAppData\OpenGeo\GeoServer\logs" \
+                                "/S=1" $0
+  
+  ${If} $IsManual == 0 ; i.e. only if service install
 
     ; wrapper.conf is customized here
     ; since we can't use environment variables (running as NetworkService)
@@ -391,27 +477,44 @@ Section "GeoServer" Section1
                                   "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
                                   "[wrapperlogpath]" "$CommonAppData\OpenGeo\GeoServer\logs\" \ 
                                   "/S=1" $1
-
-   
+  
     ; Give permission for NetworkService to be able to read/write to data_dir and logs
     AccessControl::GrantOnFile "$CommonAppData\OpenGeo" "NT AUTHORITY\NetworkService" "FullAccess"
 	
 	; Install the service (i)
-    ; and start it (t)
-    nsExec::Exec "$INSTDIR\GeoServer\wrapper\wrapper.exe -it wrapper.conf"
+    nsExec::Exec "$INSTDIR\GeoServer\wrapper\wrapper.exe -i wrapper.conf"
 
-    !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+  ${EndIf}
 
-       ;Create shortcuts
-       CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
-       CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer"
-       CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Homepage.lnk" \
-		               "http://geoserver.org"
-       CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Web Admin Page.lnk" \
-		               "http://localhost:8080/geoserver/web"
-       CreateShortCut '$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Start GeoServer.lnk' '"$INSTDIR\GeoServer\wrapper\wrapper.exe"' '"-t" "wrapper.conf"' '$INSTDIR\GeoServer\geoserver.ico' 0
-       CreateShortCut '$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Stop GeoServer.lnk'  '"$INSTDIR\GeoServer\wrapper\wrapper.exe"' '"-p" "wrapper.conf"' '$INSTDIR\GeoServer\geoserver.ico' 0
-       CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
+
+  ;Create shortcuts
+  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
+  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Web Admin Page.lnk" \
+                 "http://localhost:8080/geoserver/web"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+
+;This is what worked:
+;"C:\Program Files\Java\jre6\bin\java.exe" -DGEOSERVER_DATA_DIR="%GEOSERVER_DATA_DIR%" -Xmx300m -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -Djetty.logs="C:\Documents and Settings\All Users\Application Data\OpenGeo\GeoServer\logs" -jar start.jar
+
+
+  ; Different Start/Stop shortcuts depending on service/manual
+  ${If} $IsManual == 0 ; i.e. only if service install
+    CreateShortCut '$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Start GeoServer.lnk' '"$INSTDIR\GeoServer\wrapper\wrapper.exe"' '"-t" "wrapper.conf"' '$INSTDIR\GeoServer\geoserver.ico' 0
+    CreateShortCut '$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Stop GeoServer.lnk' '"$INSTDIR\GeoServer\wrapper\wrapper.exe"' '"-p" "wrapper.conf"' '$INSTDIR\GeoServer\geoserver.ico' 0
+  ${EndIf}
+  ${If} $IsManual == 1 ; i.e. only if manual install
+
+    SetOutPath "$INSTDIR\GeoServer"
+
+    ;CreateShortCut '$SMPROGRAMS\$STARTMENU_FOLDER\Test.lnk' 'cmd.exe' '%1' '"$INSTDIR\GeoServer\geoserver.ico"' 0 SW_SHOWNORMAL
+
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Start GeoServer.lnk" "$JavaHome\bin\java.exe" '-DGEOSERVER_DATA_DIR="%GEOSERVER_DATA_DIR%" -Xmx300m -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -Djetty.logs="$CommonAppData\OpenGeo\GeoServer\logs" -jar start.jar' "$INSTDIR\GeoServer\geoserver.ico" 0 SW_SHOWNORMAL
+
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Stop GeoServer.lnk" "$JavaHome\bin\java.exe" '-DSTOP.PORT=8079 -DSTOP.KEY=geoserver -jar start.jar --stop' "$INSTDIR\GeoServer\geoserver.ico" 0 SW_SHOWMINIMIZED
+
+  ${EndIf}
 
     !insertmacro MUI_STARTMENU_WRITE_END
 	
