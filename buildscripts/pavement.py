@@ -235,6 +235,7 @@ def download_docs():
     
 
 @task 
+@needs(['download_docs'])
 def docs():
     ''' 
     This builds the OpenGeo Documentation
@@ -251,7 +252,7 @@ def docs():
                     with pushd(app_doc):
                         if doc == 'geoext':                             
                             sh("sphinx-build -bhtml . html")
-                        if doc == 'geoserver':
+                        else:
                             sh("sphinx-build -bhtml source html")
 
     def move(): 
