@@ -28,7 +28,6 @@ ShowInstDetails nevershow
 !include "LogicLib.nsh" ; For Radio buttons page
 !include "nsDialogs.nsh" ; Ditto
 
-
 ; WARNING!!! These plugins need to be installed spearately
 ; See http://nsis.sourceforge.net/ModernUI_Mod_to_Display_Images_while_installing_files
 !include "Image.nsh" ; For graphics during the install 
@@ -38,8 +37,6 @@ ShowInstDetails nevershow
 ; See: http://nsis.sourceforge.net/AccessControl_plug-in
 
 
-
-
 ; Might be the same as !define
 Var JavaHome
 Var STARTMENU_FOLDER
@@ -47,7 +44,6 @@ Var CommonAppData
 Var Manual
 Var Service
 Var IsManual
-
 
 	
 ; Install options page headers
@@ -95,16 +91,22 @@ Function RunStuff
   ${EndIf}
   ${If} $IsManual == 1 ; i.e. only if manual install
     ExecShell "open" "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Start GeoServer.lnk"
+    ClearErrors
     IfErrors 0 +2
-      MessageBox MB_ICONSTOP "Unhelpful debug message (especially for funky_c):  FYI, the browser could not be launched.  Now we need to figure out why."
+      MessageBox MB_ICONSTOP "Browser start didn't work.  This is a Vista issue we still need to fix."
     ClearErrors
   ${EndIf}
-  Sleep 10000
+
+  ;Script to check if GeoServer has finished launching.  Checks for a response on port 8080
+  ;We could delete this file after it's finished running, as it's no longer needed...
+  ExecWait $TEMP\gscheck.bat
+
   ClearErrors
-  ExecShell "open" "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Web Admin Page.lnk"
+  ExecShell "open" "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Data Importer.lnk"
   IfErrors 0 +2
-    MessageBox MB_OK "Unhelpful debug message (especially for funky_c):  FYI, the browser could not be launched.  Now we need to figure out why.  Darn you, Vista."
+    MessageBox MB_ICONSTOP "Browser start didn't work.  This is a Vista issue we still need to fix."
   ClearErrors
+
 FunctionEnd
 
 
@@ -194,7 +196,7 @@ Function InstallType
     ${NSD_Check} $Service
   ${EndIf}
 
-  ${NSD_CreateLabel} 10 88u 100% 24u "For system administrators who wish to integrate GeoServer with Windows Services."
+  ${NSD_CreateLabel} 10 88u 100% 24u "For system administrators who wish to integrate GeoServer with Windows Services.  Runs in a restricted account for greater security."
 
   nsDialogs::Show
 
@@ -401,7 +403,7 @@ Section "GeoServer" Section1
   File /a /oname=README.txt ..\geoserver\README.txt
   File /a /oname=RUNNING.txt ..\geoserver\RUNNING.txt 
   File /a geoserver.ico
-  File /r ..\geoserver\bin 
+  ;File /r ..\geoserver\bin   ;Don't need it, making our own
   File /r ..\geoserver\etc 
   File /r ..\geoserver\lib 
   File /r ..\geoserver\resources 
@@ -415,6 +417,8 @@ Section "GeoServer" Section1
   File /r ..\geoserver\logs
   SetOutPath "$CommonAppData\OpenGeo\GeoServer\data_dir"
   File /a logging.xml
+  SetOutPath "$TEMP"
+  File /a gscheck.bat
 
 
   ${If} $IsManual == 0 ; i.e. only if service install
@@ -436,9 +440,11 @@ Section "GeoServer" Section1
 
   ; Write GEOSERVER_DATA_DIR environment variable
   ; Unclear if we still need to do this, now that we hard code into the wrapper,
-  Push "GEOSERVER_DATA_DIR"                         ; name
+  Push GEOSERVER_DATA_DIR                         ; name
   Push "$CommonAppData\OpenGeo\GeoServer\data_dir"  ; value
   Call WriteEnvStr
+
+  
 
   ; logging.xml file is deleted/recreated here
   SetOutPath "$CommonAppData\OpenGeo\GeoServer"
@@ -493,10 +499,10 @@ Section "GeoServer" Section1
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Web Admin Page.lnk" \
                  "http://localhost:8080/geoserver/web"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Data Importer.lnk" \
+                 "http://localhost:8080/geoserver/web/?wicket:bookmarkablePage=:org.geoserver.web.importer.ImportPage"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
 
-;This is what worked:
-;"C:\Program Files\Java\jre6\bin\java.exe" -DGEOSERVER_DATA_DIR="%GEOSERVER_DATA_DIR%" -Xmx300m -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -Djetty.logs="C:\Documents and Settings\All Users\Application Data\OpenGeo\GeoServer\logs" -jar start.jar
 
 
   ; Different Start/Stop shortcuts depending on service/manual
@@ -508,11 +514,22 @@ Section "GeoServer" Section1
 
     SetOutPath "$INSTDIR\GeoServer"
 
-    ;CreateShortCut '$SMPROGRAMS\$STARTMENU_FOLDER\Test.lnk' 'cmd.exe' '%1' '"$INSTDIR\GeoServer\geoserver.ico"' 0 SW_SHOWNORMAL
+    FileOpen $9 startgs.bat w ;Opens a Empty File and fills it
+    FileWrite $9 'call "$JavaHome\bin\java.exe" -DGEOSERVER_DATA_DIR="$CommonAppData\OpenGeo\GeoServer\data_dir" -Xmx300m -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -Djetty.logs="$CommonAppData\OpenGeo\GeoServer\logs" -jar start.jar'
+    FileClose $9 ;Closes the filled file
 
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Start GeoServer.lnk" "$JavaHome\bin\java.exe" '-DGEOSERVER_DATA_DIR="%GEOSERVER_DATA_DIR%" -Xmx300m -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -Djetty.logs="$CommonAppData\OpenGeo\GeoServer\logs" -jar start.jar' "$INSTDIR\GeoServer\geoserver.ico" 0 SW_SHOWNORMAL
+    FileOpen $9 stopgs.bat w ;
+    FileWrite $9 'call "$JavaHome\bin\java.exe" -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -jar start.jar --stop'
+    FileClose $9
 
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Stop GeoServer.lnk" "$JavaHome\bin\java.exe" '-DSTOP.PORT=8079 -DSTOP.KEY=geoserver -jar start.jar --stop' "$INSTDIR\GeoServer\geoserver.ico" 0 SW_SHOWMINIMIZED
+    
+    ;CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Start GeoServer.lnk" "$JavaHome\bin\java.exe" '-DGEOSERVER_DATA_DIR="%GEOSERVER_DATA_DIR%" -Xmx300m -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -Djetty.logs="$CommonAppData\OpenGeo\GeoServer\logs" -jar start.jar' "$INSTDIR\GeoServer\geoserver.ico" 0 SW_SHOWNORMAL
+
+    ;CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Stop GeoServer.lnk" "$JavaHome\bin\java.exe" '-DSTOP.PORT=8079 -DSTOP.KEY=geoserver -jar start.jar --stop' "$INSTDIR\GeoServer\geoserver.ico" 0 SW_SHOWMINIMIZED
+
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Start GeoServer.lnk" "$INSTDIR\GeoServer\startgs.bat" "" "$INSTDIR\GeoServer\geoserver.ico" 0 SW_SHOWNORMAL
+
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Stop GeoServer.lnk" "$INSTDIR\GeoServer\stopgs.bat" "" "$INSTDIR\GeoServer\geoserver.ico" 0 SW_SHOWMINIMIZED
 
   ${EndIf}
 
@@ -520,29 +537,30 @@ Section "GeoServer" Section1
 	
 SectionEnd
 
-Section "GeoExplorer" Section2
-
-  ; Set Section properties
-  SetOverwrite on
-
-  !insertmacro DisplayImage "slide_6_geoext.bmp"
-
-  ; Set Section Files and Shortcuts
-  SetOutPath "$CommonAppData\OpenGeo\GeoServer\data_dir\www"
-  File /r /x .svn ..\geoexplorer
-  File /a /oname=geoexplorer\geoext.ico geoext.ico
-
-; index.html, embed.html, about.html, license/readme
-; theme/ script/ externals/ 
-
-  ; Shortcuts
-  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer"
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer\GeoExplorer.lnk" \
-		         "http://localhost:8080/geoserver/www/geoexplorer/debug.html" \
-                 "$CommonAppData\OpenGeo\GeoServer\data_dir\www\geoexplorer\geoext.ico"
-
-SectionEnd
+;Section "GeoExplorer" Section2
+;
+;  ; Set Section properties
+;  SetOverwrite on
+;
+;  !insertmacro DisplayImage "slide_6_geoext.bmp"
+;
+;  ; Set Section Files and Shortcuts
+;  SetOutPath "$CommonAppData\OpenGeo\GeoServer\data_dir\www"
+;  File /r /x .svn ..\geoexplorer
+;  File /a /oname=geoexplorer\geoext.ico geoext.ico
+;
+;; index.html, embed.html, about.html, license/readme
+;; theme/ script/ externals/ 
+;
+;  ; Shortcuts
+;  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer"
+;  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer\GeoExplorer.lnk" \
+;		         "http://localhost:8080/geoserver/www/geoexplorer/debug.html" \
+;                 "$CommonAppData\OpenGeo\GeoServer\data_dir\www\geoexplorer\geoext.ico"
+;
+;SectionEnd
  
+
 Section "GeoServer Documentation" Section3
 
   ; Set Section properties
@@ -596,8 +614,10 @@ SectionEnd
       !define WriteEnvStr_RegKey \
        'HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"'
     !else
-			; This is hacked to set a System var, not a user var
-      !define WriteEnvStr_RegKey  'HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"'
+			; System var
+      ;!define WriteEnvStr_RegKey  'HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"'
+            ; User var
+      !define WriteEnvStr_RegKey  'HKCU "Environment"'
     !endif
   !endif
 
