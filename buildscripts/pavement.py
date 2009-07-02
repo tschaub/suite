@@ -244,14 +244,16 @@ def docs():
         # fix 
         with pushd(download_path):
             with pushd(docs_path):
+                svn.checkout('http://svn.codehaus.org/geoserver/trunk/doc/theme/','theme')
                 for doc in config.options(section): 
                     info("Build docs for %s" % doc) 
                     app_doc = path(doc)
                     with pushd(app_doc):
                         if doc == 'geoext':                             
                             sh("sphinx-build -bhtml . html")
-                        else: 
+                        if doc == 'geoserver':
                             sh("sphinx-build -bhtml source html")
+
     def move(): 
         for doc in config.options(section): 
             doc_path = path.joinpath(download_path,docs_path,doc,path('html'))
