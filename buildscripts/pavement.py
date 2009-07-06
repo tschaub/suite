@@ -108,16 +108,16 @@ def download_bin():
                 sh("curl -o sun-java.exe \"%s\" " % url) 
             if software == 'geoserver':
                 version = config.get("version","geoserver")
-                sh("curl -O %s%s-bin.zip" % (geoserverURL,version))
+                sh("curl -O %s%s.zip" % (geoserverURL,version))
             else: 
                 pass
 
 @task
 def unpack_geoserver(): 
     version = config.get("version","geoserver")
-    geoserver_vs = path(version)
+    geoserver_vs = path('geoserver-2.0-beta1')    
     geoserver = path("geoserver")
-    geoserverZIP = "%s-bin.zip" % version
+    geoserverZIP = "%s.zip" % version
     geoserverSRC = path.joinpath(download_path,geoserverZIP)
     info("Moving GeoServer into %s" % source_path)
     copy(geoserverSRC,source_path)
@@ -320,7 +320,7 @@ def build_all():
     call_task("move_java")
     call_task("gx")
     call_task("unpack_geoserver")
-    call_task("geoserver_plugins")
+#    call_task("geoserver_plugins")
     call_task("download_docs")
     call_task("docs")
 
