@@ -156,18 +156,13 @@ def gx():
     ''' 
     geoexplorer_path = path.joinpath(download_path,path("geoexplorer"))
     geoexplorer_build = path.joinpath(geoexplorer_path,path("build"))
-    gx_build = path('GeoExplorer.js')
     def build_min():
-        sh("jsbuild %s  build.cfg" % gx_build) 
+        sh("ant dist") 
     with pushd(geoexplorer_build): 
-        if gx_build.exists(): 
-            os.remove(gx_build)
         build_min() 
-    copy(path.joinpath(geoexplorer_build,gx_build),path.joinpath(geoexplorer_path,'script'))
+    copytree(path.joinpath(geoexplorer_build,'GeoExplorer'),path.joinpath(path.joinpath(source_path,'GeoExplorer')))
+'''
     def move(): 
-        ''' 
-        Move all of the GeoExplorer file into a folder in source ... 
-        ''' 
         ge_final = path.joinpath(source_path,path("geoexplorer"))
         if ge_final.exists():
             # hack to get around windows not playing well with svn. 
@@ -178,7 +173,7 @@ def gx():
                 rmtree(ge_final)
         os.mkdir(ge_final)
         copy(path.joinpath(geoexplorer_path,'debug.html'),ge_final)
-#        copy(path.joinpath(geoexplorer_path,'embed.html'),ge_final)
+        copy(path.joinpath(geoexplorer_path,'embed.html'),ge_final)
         copy(path.joinpath(geoexplorer_path,'license.txt'),ge_final)
         copy(path.joinpath(geoexplorer_path,'about.html'),ge_final)
         copytree(path.joinpath(geoexplorer_path,'lib'),path.joinpath(ge_final,'lib'))
@@ -186,7 +181,7 @@ def gx():
         copytree(path.joinpath(geoexplorer_path,'externals'),path.joinpath(ge_final,'externals'))
         copytree(path.joinpath(geoexplorer_path,'theme'),path.joinpath(ge_final,'theme'))        
     move()
-
+'''
 @task
 def geoserver_plugins(): 
     '''
