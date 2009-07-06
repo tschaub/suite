@@ -310,7 +310,7 @@ def build_all():
     info("Building all of the OpenGeo Stack")
     call_task("dir_layout")
     call_task("download_bin")
-    call_task("source_dirs")
+#    call_task("source_dirs")
     call_task("download_source")
     call_task("move_java")
     call_task("gx")

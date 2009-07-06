@@ -1,0 +1,191 @@
+{%- set breadcrumbdelim = breadcrumbdelim is not defined and ' &raquo;' or breadcrumbdelim %}
+{%- set reldelim = reldelim is not defined and '|' or reldelim %}
+
+{%- macro breadcrumbs() %}
+<ul id="breadcrumbs">
+  {% if pagename == 'index' %} 
+  <li>Home</li>
+  {%- else %}
+  <li><a href="{{ pathto('index') }}">Home</a>{{ breadcrumbdelim }}</li>
+  {%- for parent in parents %}
+    <li><a href="{{ parent.link|e }}" accesskey="U">{{ parent.title }}</a>{{ breadcrumbdelim }}</li>
+  {%- endfor %}
+  <li>{{ title|striptags }}</li>
+  {%- endif %}
+</ul>
+{%- endmacro %}
+{%- macro rellinkbar() %}
+<ul id="relatedlinks" class="selfclear">
+  {%- for rellink in rellinks %}
+  <li{% if loop.first %} class="first"{% endif %}>
+    <a href="{{ pathto(rellink[0]) }}" title="{{ rellink[1]|striptags }}"
+       accesskey="{{ rellink[2] }}">{{ rellink[3] }}</a>
+    {%- if not loop.first %}{{ reldelim }}{% endif %}</li>
+  {%- endfor %}
+  {%- block relbaritems %}{% endblock %}
+</ul>
+{%- endmacro %}
+
+{%- macro sidebar() %}
+  {%- if builder != 'htmlhelp' %}
+  <div id="sidebar" class="inner-sidebar">
+    {%- if display_toc %}
+      {%- block sidebartoc %}
+      <div id="toc" class="section">
+        <h4>Table Of Contents</h4>
+        {{ toc }}
+        <div class="section-footer"></div>
+      </div>
+      {%- endblock %}
+    {%- endif %}
+      {%- block sidebarrel %}
+        {%- if (prev or next) %}
+        <div class="section">
+          <h4>Continue Reading</h4>
+          <ul>
+          {%- if prev %}
+            <li>Previous: <a href="{{ prev.link|e }}" title="previous chapter">{{ prev.title }}</a></li>
+          {%- endif %}
+          {%- if next %}
+            <li>Next: <a href="{{ next.link|e }}" title="next chapter">{{ next.title }}</a></li>
+          {%- endif %}
+          </ul>
+        </div>
+        {%- endif %}
+      {%- endblock %}
+      {%- if sourcename %}
+        <div class="section">
+        <h4>This Page</h4>
+        <ul class="this-page-menu">
+        {%- if builder == 'web' %}
+          <li><a href="#comments">Comments ({{ comments|length }} so far)</a></li>
+          <li><a href="{{ pathto('@edit/' + sourcename)|e }}">Suggest Change</a></li>
+          <li><a href="{{ pathto('@source/' + sourcename)|e }}">Show Source</a></li>
+        {%- elif builder == 'html' %}
+          <li><a href="{{ pathto('_sources/' + sourcename, true)|e }}">Show Source</a></li>
+        {%- endif %}
+        </ul>
+        </div>
+      {%- endif %}
+      {%- if customsidebar %}
+      {{ rendertemplate(customsidebar) }}
+      {%- endif %}
+      {%- block sidebarsearch %}{%- endblock %}
+  </div><!-- /#sidebar -->
+  {%- endif %}
+{%- endmacro -%}
+{%- block doctype -%}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+{%- endblock %}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  {{ metatags }}
+  {%- if not embedded %}
+    {%- set titlesuffix = " &mdash; "|safe + docstitle|e %}
+  {%- else %}
+    {%- set titlesuffix = "" %}
+  {%- endif %}
+  <title>{{ title|striptags }}{{ titlesuffix }}</title>
+  {%- block basecss %}
+  <style type="text/css" media="all">@import url({{ pathto('_static/css/reset.css', 1) }}); @import url({{ pathto('_static/css/generic.css', 1) }});</style>
+  <style type="text/css" media="print">@import url({{ pathto('_static/css/print.css', 1) }}) print;</style>
+  <style type="text/css" media="screen">
+  /*<![CDATA[*/
+  @import'style.css';
+  /*]]>*/
+  </style>
+  <!--[if lt IE 7]>
+    <style type="text/css" media="all"> @import url({{ pathto('_static/css/ie.css', 1) }}); </style>
+    <script defer type="text/javascript" src="{{ pathto('_static/js/pngfix.js', 1) }}"></script>
+  <![endif]-->
+  {%- endblock %}
+  {%- if builder == 'web' %}
+  <link rel="stylesheet" href="{{ pathto('index') }}?do=stylesheet{%
+    if in_admin_panel %}&admin=yes{% endif %}" type="text/css" />
+  {%- for link, type, title in page_links %}
+  <link rel="alternate" type="{{ type|e(true) }}" title="{{ title|e(true) }}" href="{{ link|e(true) }}" />
+  {%- endfor %}
+  {%- else %}
+  <link rel="stylesheet" href="{{ pathto('_static/' + style, 1) }}" type="text/css" />
+  <link rel="stylesheet" href="{{ pathto('_static/pygments.css', 1) }}" type="text/css" />
+  {%- endif %}
+  {%- if builder != 'htmlhelp' %}
+  <script type="text/javascript">
+    var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '{{ pathto("", 1) }}',
+        VERSION:     '{{ release }}',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '{{ file_suffix }}'
+    };
+  </script>
+  <script type="text/javascript" src="{{ pathto('_static/jquery.js', 1) }}"></script>
+  <script type="text/javascript" src="{{ pathto('_static/doctools.js', 1) }}"></script>
+  {%- if use_opensearch %}
+  <link rel="search" type="application/opensearchdescription+xml"
+        title="Search within {{ docstitle }}"
+        href="{{ pathto('_static/opensearch.xml', 1) }}"/>
+  {%- endif %}
+  {%- if favicon %}
+  <link rel="shortcut icon" href="{{ pathto('_static/' + favicon, 1) }}"/>
+  {%- endif %}
+  {%- endif %}
+  {%- block linktags %}
+      {%- if hasdoc('about') %}
+      <link rel="author" title="{{ _('About these documents') }}" href="{{ pathto('about') }}" />
+      {%- endif %}
+      {%- if hasdoc('genindex') %}
+      <link rel="index" title="{{ _('Index') }}" href="{{ pathto('genindex') }}" />
+      {%- endif %}
+      {%- if hasdoc('search') %}
+      <link rel="search" title="{{ _('Search') }}" href="{{ pathto('search') }}" />
+      {%- endif %}
+      {%- if hasdoc('copyright') %}
+      <link rel="copyright" title="{{ _('Copyright') }}" href="{{ pathto('copyright') }}" />
+      {%- endif %}
+      <link rel="top" title="{{ docstitle|e }}" href="{{ pathto('index') }}" />
+      {%- if parents %}
+      <link rel="up" title="{{ parents[-1].title|striptags }}" href="{{ parents[-1].link|e }}" />
+      {%- endif %}
+      {%- if next %}
+      <link rel="next" title="{{ next.title|striptags }}" href="{{ next.link|e }}" />
+      {%- endif %}
+      {%- if prev %}
+      <link rel="prev" title="{{ prev.title|striptags }}" href="{{ prev.link|e }}" />
+      {%- endif %}
+  {%- endblock %}
+{%- block extrahead %}{% endblock %}
+</head>
+<body class="{{pagename}}">
+  <div id="container">
+    <div id="canvas">
+    {%- block header %}
+      <div id="header" class="selfclear">
+        <h1><a href="{{ pathto('index') }}">{{ shorttitle }}</a></h1>
+      </div><!-- /#header -->
+    {%- endblock %}
+    <div class="content">
+      {%- block breadcrumbbar %}{{ breadcrumbs() }}{% endblock %}
+      <div class="main full-width">   
+      {%- block rellinkbar %}{{ rellinkbar() }}{% endblock %}
+      {%- block document %}
+        <div class="column-view">
+          {% block body %}
+            {{ body }}
+          {% endblock %}
+        </div>
+      {%- endblock %}
+      {%- block sidebar %}{{ sidebar() }}{% endblock %}
+      </div><!-- /.main -->
+    </div><!-- /.content -->
+  </div><!-- /#canvas -->
+  {%- block footer %}
+    <div id="footer">
+      <h5><a href="http://opengeo.org" class="opengeo-logo">OpenGeo</a></h5>
+      <span id="footer-topp">The geospatial division of <a href="http://theopenplanningproject.org">The Open Planning Project</a></span>
+    </div><!-- /#footer -->
+  </div><!-- /#container -->
+  {%- endblock %}
+  </body>
+</html>
