@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <title>GeoExplorer</title>
+        
+        <!-- IE 8 Compatibility -->
+        <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+        
+        <!-- Ext resources -->
+        <link rel="stylesheet" type="text/css" href="http://extjs.cachefly.net/ext-2.2.1/resources/css/ext-all.css" />
+        <link rel="stylesheet" type="text/css" href="http://extjs.cachefly.net/ext-2.2.1/resources/css/xtheme-gray.css" />
+        <script type="text/javascript" src="http://extjs.cachefly.net/ext-2.2.1/adapter/ext/ext-base.js"></script>
+        <script type="text/javascript" src="http://extjs.cachefly.net/ext-2.2.1/ext-all.js"></script>
+
+        <!-- OpenLayers resources -->
+        <link rel="stylesheet" type="text/css" href="theme/ol/style.css" />
+        <script type="text/javascript" src="script/OpenLayers.js"></script>
+
+        <!-- GeoExt resources -->
+        <link rel="stylesheet" type="text/css" href="theme/gx/css/geoext-all-debug.css" />
+        <link rel="stylesheet" type="text/css" href="theme/gx/css/gxtheme-gray.css" />
+        <script type="text/javascript" src="script/GeoExt.js"></script> 
+
+        <!-- GeoExplorer resources -->
+        <link rel="stylesheet" type="text/css" href="theme/app/geoexplorer.css" />
+        <!--[if IE]><link rel="stylesheet" type="text/css" href="theme/app/ie.css"/><![endif]-->        
+        <script type="text/javascript" src="script/GeoExplorer.js"></script>
+        <script type="text/javascript" src="script/ux.js"></script>
+
+        <script>
+            Ext.BLANK_IMAGE_URL = "theme/app/img/blank.gif";
+            var app = new GeoExplorer.Full({
+                //proxy: "/proxy/?url=",
+                about: {
+                    title: "GeoExplorer Demo Map",
+                    "abstract": "This is a demonstration of GeoExplorer, " +
+                        "an application for assmebling and publishing web " +
+                        "based maps.  After adding layer to the map, find " +
+                        "the 'Publish Map' button above to embed this map " +
+                        "in any web page.",
+                    contact: "For more information, contact <a href='http://opengeo.org'>OpenGeo</a>."
+                },
+                wms: {
+                    "demo": "/geoserver/ows/"
+                },
+                map: {
+                    center: [-96.7, 37.6],
+                    zoom: 4
+                }
+            });
+        </script>
+
+    </head>
+    <body>
+    </body>
+</html>

@@ -13,7 +13,7 @@ CRCCheck on
 Name "${APPNAMEANDVERSION}"
 InstallDir "$PROGRAMFILES\${APPNAMEANDVERSION}"
 InstallDirRegKey HKLM "Software\${COMPANYNAME}\${APPNAME}" ""
-OutFile "OpenGeoSuite-v0.3beta.exe"
+OutFile "OpenGeoSuite-v0.3.exe"
 
 ; This is the gray text on the bottom left of the installer.
 BrandingText " "
@@ -93,7 +93,7 @@ Function RunStuff
     ExecShell "open" "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Start GeoServer.lnk"
     ClearErrors
     IfErrors 0 +2
-      MessageBox MB_ICONSTOP "Browser start didn't work.  This is a Vista issue we still need to fix."
+      MessageBox MB_ICONSTOP "Unable to open browser.  Please use the Start Menu to manually start the application."
     ClearErrors
   ${EndIf}
 
@@ -104,7 +104,7 @@ Function RunStuff
   ClearErrors
   ExecShell "open" "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Data Importer.lnk"
   IfErrors 0 +2
-    MessageBox MB_ICONSTOP "Browser start didn't work.  This is a Vista issue we still need to fix."
+    MessageBox MB_ICONSTOP "Unable to open browser.  Please use the Start Menu to manually start the application."
   ClearErrors
 
 FunctionEnd
@@ -537,31 +537,34 @@ Section "GeoServer" Section1
 	
 SectionEnd
 
-;Section "GeoExplorer" Section2
-;
-;  ; Set Section properties
-;  SetOverwrite on
-;
-;  !insertmacro DisplayImage "slide_6_geoext.bmp"
-;
-;  ; Set Section Files and Shortcuts
-;  SetOutPath "$CommonAppData\OpenGeo\GeoServer\data_dir\www"
-;  File /r /x .svn ..\geoexplorer
-;  File /a /oname=geoexplorer\geoext.ico geoext.ico
-;
-;; index.html, embed.html, about.html, license/readme
-;; theme/ script/ externals/ 
-;
-;  ; Shortcuts
-;  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer"
-;  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer\GeoExplorer.lnk" \
-;		         "http://localhost:8080/geoserver/www/geoexplorer/debug.html" \
-;                 "$CommonAppData\OpenGeo\GeoServer\data_dir\www\geoexplorer\geoext.ico"
-;
-;SectionEnd
- 
+Section "GeoExplorer" Section2
+
+  ; Set Section properties
+  SetOverwrite on
+
+  !insertmacro DisplayImage "slide_6_geoext.bmp"
+
+  ; Set Section Files and Shortcuts
+  SetOutPath "$CommonAppData\OpenGeo\GeoServer\data_dir\www"
+  File /r /x .svn ..\geoexplorer
+  File /a /oname=geoexplorer\geoext.ico geoext.ico
+  ; Next few lines are for a custom index.html (for looking at local host + no proxy)
+  SetOutPath "$CommonAppData\OpenGeo\GeoServer\data_dir\www\GeoExplorer"
+  Delete index.html
+  File /a gxindex.html
+  Rename gxindex.html index.html
+
+  ; Shortcuts
+  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer\GeoExplorer.lnk" \
+		         "http://localhost:8080/geoserver/www/geoexplorer/index.html" \
+                 "$CommonAppData\OpenGeo\GeoServer\data_dir\www\geoexplorer\geoext.ico"
+
+SectionEnd
 
 Section "GeoServer Documentation" Section3
+
+  !insertmacro DisplayImage "slide_1_suite.bmp"
 
   ; Set Section properties
   SetOverwrite on
@@ -575,9 +578,43 @@ Section "GeoServer Documentation" Section3
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Documentation.lnk" \
 		         "$INSTDIR\GeoServer\docs\index.html"
 
-  ;!insertmacro DisplayImage "side_left.bmp"
+SectionEnd
+
+Section "GeoExplorer Documentation" Section4
+
+  !insertmacro DisplayImage "slide_1_suite.bmp"
+
+  ; Set Section properties
+  SetOverwrite on
+
+  ; Set Section Files and Shortcuts
+  CreateDirectory "$INSTDIR\GeoExplorer"
+  SetOutPath "$INSTDIR\GeoExplorer"
+  File /r ..\geoexplorer_doc
+  Rename "$INSTDIR\GeoExplorer\geoexplorer_doc" "$INSTDIR\GeoExplorer\docs"
+
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer\GeoExplorer Documentation.lnk" \
+		         "$INSTDIR\GeoExplorer\docs\index.html"
 
 SectionEnd
+
+Section "Getting Started" Section5
+
+  !insertmacro DisplayImage "slide_1_suite.bmp"
+
+  ; Set Section properties
+  SetOverwrite on
+
+  ; Set Section Files and Shortcuts
+  SetOutPath "$INSTDIR"
+  File /r ..\integrationdocs_doc
+  Rename "$INSTDIR\integrationdocs_doc" "$INSTDIR\Getting Started"
+
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Getting Started.lnk" \
+		         "$INSTDIR\Getting Started\index.html"
+
+SectionEnd
+
 
 ; Modern install component descriptions
 ; Yes, this needs needs to go after the install sections. 
