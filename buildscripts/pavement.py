@@ -250,7 +250,7 @@ def docs():
                     info("Build docs for %s" % doc) 
                     app_doc = path(doc)
                     with pushd(app_doc):
-                        if doc == 'geoext':                             
+                        if doc == 'geoexplorer':                             
                             sh("sphinx-build -bhtml . html")
                         else:
                             sh("sphinx-build -bhtml source html")
