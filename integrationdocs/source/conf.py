@@ -25,7 +25,7 @@ import sys, os
 extensions = ['sphinx.ext.intersphinx', 'sphinx.ext.todo', 'sphinx.ext.coverage']
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['../../opengeosphinxtheme/source/_templates']
+templates_path = ['./_templates']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
