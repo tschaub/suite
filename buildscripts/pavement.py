@@ -296,8 +296,7 @@ def data_dir():
 
 @task 
 def styler(): 
-    geoserver_path = path.joinpath(source_path,'geoserver','data_dir','www')
-    with pushd(geoserver_path):
+    with pushd(source_path):
         svn.checkout('http://svn.opengeo.org/geoext/apps/styler2/trunk/','styler')
 
 @task
