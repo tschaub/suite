@@ -294,7 +294,11 @@ def data_dir():
 #   styles(url)
     data()
 
-
+@task 
+def styler(): 
+    geoserver_path = path.joinpath(source_path,'geoserver','data_dir','www')
+    with pushd(geoserver_path):
+        svn.checkout('http://svn.opengeo.org/geoext/apps/styler2/trunk/','styler')
 
 @task
 def download_all(): 
@@ -310,12 +314,11 @@ def build_all():
     info("Building all of the OpenGeo Stack")
     call_task("dir_layout")
     call_task("download_bin")
-#    call_task("source_dirs")
     call_task("download_source")
     call_task("move_java")
     call_task("gx")
     call_task("unpack_geoserver")
-#    call_task("geoserver_plugins")
+    call_task("styler")
     call_task("download_docs")
     call_task("docs")
 
