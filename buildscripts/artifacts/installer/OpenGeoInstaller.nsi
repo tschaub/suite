@@ -1,32 +1,36 @@
-; OpenGeo Suite Windows installer creation file.
+; OpenGeo Suite Windows installer creation file
 
 ; Define your application name
 !define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
-!define APPNAMEANDVERSION "OpenGeo Suite v0.3"
+!define VERSION "0.4"
+!define LONGVERSION "0.4.0.0" ; must be a.b.c.d
+!define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
 
-;Compression options
-CRCCheck on
-;SetCompressor /SOLID lzma
 
 ; Main Install settings
 Name "${APPNAMEANDVERSION}"
 InstallDir "$PROGRAMFILES\${APPNAMEANDVERSION}"
 InstallDirRegKey HKLM "Software\${COMPANYNAME}\${APPNAME}" ""
-OutFile "OpenGeoSuite-v0.3.exe"
+OutFile "OpenGeoSuite-0.4beta.exe"
+
+;Compression options
+CRCCheck on
 
 ; This is the gray text on the bottom left of the installer.
 BrandingText " "
 
-; Hide the "Show details" button during the install
+; Hide the "Show details" button during the install/uninstall
 ShowInstDetails nevershow
+ShowUninstDetails nevershow
 
 ; Includes
 !include "MUI.nsh" ; Modern interface settings
 !include "StrFunc.nsh" ; String functions
 !include "x64.nsh" ; To check for 64 bit OS
-!include "LogicLib.nsh" ; For Radio buttons page
-!include "nsDialogs.nsh" ; Ditto
+!include "LogicLib.nsh" ; ${If} ${Case} etc.
+!include "nsDialogs.nsh" ; For Installer Type page (Radio buttons)
+!include "WordFunc.nsh" ; For VersionCompare
 
 ; WARNING!!! These plugins need to be installed spearately
 ; See http://nsis.sourceforge.net/ModernUI_Mod_to_Display_Images_while_installing_files
@@ -36,7 +40,6 @@ ShowInstDetails nevershow
 ; AccessControl plugin needed as well for permissions changes
 ; See: http://nsis.sourceforge.net/AccessControl_plug-in
 
-
 ; Might be the same as !define
 Var JavaHome
 Var STARTMENU_FOLDER
@@ -45,16 +48,21 @@ Var Manual
 Var Service
 Var IsManual
 
-	
+; Version Information (Version tab for EXE)
+VIProductVersion ${LONGVERSION}
+VIAddVersionKey ProductName "${APPNAME}"
+VIAddVersionKey CompanyName "OpenGeo"
+VIAddVersionKey LegalCopyright "Copyright (c) 1999 - 2009 OpenGeo"
+VIAddVersionKey FileDescription "OpenGeo Suite Installer"
+VIAddVersionKey ProductVersion "${VERSION}"
+VIAddVersionKey FileVersion "${VERSION}"
+VIAddVersionKey Comments "http://opengeo.org"
+
 ; Install options page headers
 LangString TEXT_READY_TITLE ${LANG_ENGLISH} "Ready to Install"
 LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be installed."
 LangString TEXT_TYPE_TITLE ${LANG_ENGLISH} "Type of Installation"
 LangString TEXT_TYPE_SUBTITLE ${LANG_ENGLISH} "Select the type of installation."
-
-;No credscheck for now
-;LangString TEXT_CREDS_TITLE ${LANG_ENGLISH} "GeoServer Administrator"
-;LangString TEXT_CREDS_SUBTITLE ${LANG_ENGLISH} "Set administrator credentials"
 
 ;Interface Settings
 !define MUI_ICON "opengeo.ico"
@@ -73,9 +81,9 @@ LangString TEXT_TYPE_SUBTITLE ${LANG_ENGLISH} "Select the type of installation."
 !define MUI_ABORTWARNING
 
 ; Optional welcome text here
-  !define MUI_WELCOMEPAGE_TEXT "Welcome to the OpenGeo Suite.\r\n\r\n\
-	It is recommended that you close all other applications before starting Setup.\r\n\r\n\
-	Click Next to continue."
+!define MUI_WELCOMEPAGE_TEXT "Welcome to the OpenGeo Suite.\r\n\r\n\
+                              It is recommended that you close all other applications before starting Setup.\r\n\r\n\
+	                          Click Next to continue."
 
 ; What to do when done
 !define MUI_FINISHPAGE_RUN
@@ -91,10 +99,6 @@ Function RunStuff
   ${EndIf}
   ${If} $IsManual == 1 ; i.e. only if manual install
     ExecShell "open" "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Start GeoServer.lnk"
-    ClearErrors
-    IfErrors 0 +2
-      MessageBox MB_ICONSTOP "Unable to open browser.  Please use the Start Menu to manually start the application."
-    ClearErrors
   ${EndIf}
 
   ;Script to check if GeoServer has finished launching.  Checks for a response on port 8080
@@ -110,11 +114,8 @@ Function RunStuff
 FunctionEnd
 
 
-
-
 ; Install Page order
 ; This is the main list of installer things to do
-
 !insertmacro MUI_PAGE_WELCOME                                 ; Hello
 Page custom CheckUserType                                     ; Die if not admin
 Page custom PriorInstall                                      ; Check to see if previously installed
@@ -123,23 +124,19 @@ Page custom PriorInstall                                      ; Check to see if 
 !insertmacro MUI_PAGE_DIRECTORY                               ; Where to install
 !insertmacro MUI_PAGE_STARTMENU Application $STARTMENU_FOLDER ; Start menu location
 Page custom GetJRE                                            ; Check for JRE
-;Page custom CredsCheck                                        ; Will set admin/password (if new install)
 Page custom InstallType InstallTypeTest                       ; Install manually or as a service?
 Page custom Ready                                             ; Ready to install page
 !insertmacro MUI_PAGE_INSTFILES                               ; Actually do the install
 !insertmacro MUI_PAGE_FINISH                                  ; Done
 
-
 ; Uninstall Page order
 !insertmacro MUI_UNPAGE_CONFIRM   ; Are you sure you wish to uninstall?
 !insertmacro MUI_UNPAGE_INSTFILES ; Do the uninstall
-!insertmacro MUI_UNPAGE_FINISH    ; Done
+;!insertmacro MUI_UNPAGE_FINISH    ; Done
 
 ; Set languages (first is default language)
 !insertmacro MUI_LANGUAGE "English"
 !insertmacro MUI_RESERVEFILE_LANGDLL
-
-
 
 
 ; Startup tasks
@@ -155,7 +152,6 @@ Function .onInit
   Delete $TEMP\spltmp.bmp
 	
   ; Extract install options from .ini files
-  ;!insertmacro MUI_INSTALLOPTIONS_EXTRACT "creds.ini"
   !insertmacro MUI_INSTALLOPTIONS_EXTRACT "ready.ini"
 		
   ; Tests for 32/64 bit system
@@ -213,14 +209,46 @@ Function InstallTypeTest
 FunctionEnd
 
 
+; Checks for existing versions
 Function PriorInstall
 
   ClearErrors
-  ReadRegStr $R0 HKLM "Software\${COMPANYNAME}" ""
+  ReadRegStr $R0 HKLM "Software\${COMPANYNAME}\${APPNAME}" ""
   IfErrors NoPriorInstall
   ClearErrors
-  MessageBox MB_ICONSTOP "Setup has found an existing installation of the OpenGeo Suite on your machine.  Please uninstall this version before running Setup."
-  Abort
+  ReadRegStr $R1 HKLM "Software\${COMPANYNAME}\${APPNAME}" "CurrentVersion"
+  IfErrors CorruptedReg ; Can't find the version!
+ 
+  ${VersionCompare} $R1 ${VERSION} $R2 ; 0 if =, 1 if <, 2 if >
+  ${Switch} $R2
+    ${Case} 0 ; Same version
+    MessageBox MB_ICONSTOP "Setup has found an existing installation of the OpenGeo Suite \
+                            on your machine. If you wish to reinstall the OpenGeo Suite,\
+                            please uninstall it first and then run this installer again."
+    Goto Fail
+    ${Case} 1 ; Upgrading
+    MessageBox MB_ICONSTOP "Setup has found an existing installation of the OpenGeo Suite \
+                            on your machine.  Please uninstall this version first before \
+                            running Setup."
+    Goto Fail
+    ${Case} 2 ; Downgrading
+    MessageBox MB_ICONSTOP "Setup has found an existing installation of the OpenGeo Suite \
+                            on your machine that is newer than the one you are trying to \
+                            install.  Please uninstall this newer version first before \
+                            running Setup."
+    Goto Fail 
+  ${EndSwitch}
+
+  CorruptedReg:
+    MessageBox MB_ICONSTOP "Setup is unable to determine the existing version of the OpenGeo \
+                            Suite installed on your machine.  This may be due to a corrupted \
+                            registry.  If you feel you have received this message in error, \
+                            please contact OpenGeo at inquiry@opengeo.org."
+    Goto Fail
+
+  Fail:
+    MessageBox MB_OK "Setup will now exit."
+    Quit
 
   NoPriorInstall:
 
@@ -257,28 +285,28 @@ Function GetJRE
 
 ;  Returns the full path of a valid java.exe
 ;  Looks in:
-;  * JAVA_HOME environment variable
 ;  * Registry
+;  * JAVA_HOME environment variable
  
-  Push $R0
-  Push $R1
+;  Push $R0
+;  Push $R1
  
   ; use javaw.exe to avoid dosbox.
   ; use java.exe to keep stdout/stderr
   !define JAVAEXE "java.exe"
 
-  ; look for %JAVA_HOME%
-  ClearErrors
-  ReadEnvStr $R0 JAVA_HOME
-  StrCpy $R3 "$R0\bin\${JAVAEXE}"
-  IfErrors 0 JREFound  
 
   ; look for registry key 
   ClearErrors
   ReadRegStr $R1 HKLM "SOFTWARE\JavaSoft\Java Runtime Environment" "CurrentVersion"
   ReadRegStr $R0 HKLM "SOFTWARE\JavaSoft\Java Runtime Environment\$R1" "JavaHome"
-  StrCpy $R2 "$R0\bin\${JAVAEXE}"
-  IfErrors 0 JreFound
+  IfFileExists "$R0\bin\${JAVAEXE}" JreFound
+
+
+  ; look for %JAVA_HOME%
+  ClearErrors
+  ReadEnvStr $R0 JAVA_HOME
+  IfFileExists "$R0\bin\${JAVAEXE}" JREFound  
 
   ; Can't find Java, will install later
   StrCpy $JavaHome "NoJava"
@@ -287,32 +315,9 @@ Function GetJRE
   JREFound:
     StrCpy $JavaHome $R0
 
-    ;MessageBox MB_OK "Java found here: $JavaHome"
-
-    ; Write JAVA_HOME environment variable
-    ;Push "JAVA_HOME"           ; name
-    ;Push "$JavaHome"          ; value
-    ;Call WriteEnvStr
-
   Skip:
  
 FunctionEnd
-
-
-; Page for setting admin username/password
-;Function CredsCheck
-;
-;  ; New data directory, so can set credentials without harming existing setup
-;	
-;	!insertmacro MUI_HEADER_TEXT "$(TEXT_CREDS_TITLE)" "$(TEXT_CREDS_SUBTITLE)"
-;    !insertmacro MUI_INSTALLOPTIONS_DISPLAY "creds.ini"
-;		
-;    ; Username (admin) to $6
-;	!insertmacro MUI_INSTALLOPTIONS_READ $6 "creds.ini" "Field 3" "State"
-;    ; Password (geoserver) to $7
-;    !insertmacro MUI_INSTALLOPTIONS_READ $7 "creds.ini" "Field 5" "State"	
-;	
-;FunctionEnd
 
 
 ; One final page to review options
@@ -351,6 +356,7 @@ Function Ready
   !insertmacro MUI_INSTALLOPTIONS_DISPLAY "ready.ini"
 
 FunctionEnd
+
 
 ; Install Java if necessary
 Section -Prerequisites
@@ -419,6 +425,8 @@ Section "GeoServer" Section1
   File /a logging.xml
   SetOutPath "$TEMP"
   File /a gscheck.bat
+  SetOutPath "$INSTDIR"
+  File /a opengeo.ico
 
 
   ${If} $IsManual == 0 ; i.e. only if service install
@@ -432,30 +440,21 @@ Section "GeoServer" Section1
     File /a /oname=wrapper\lib\wrapper.jar wrapper.jar
   ${EndIf}
 	
-	; New users.properties file is created here
-	;Delete "$DataDir\security\users.properties"
-    ;FileOpen $R9 "$DataDir\security\users.properties" w
-	;FileWrite $R9 "$6=$7,ROLE_ADMINISTRATOR"
-    ;FileClose $R9
 
   ; Write GEOSERVER_DATA_DIR environment variable
-  ; Unclear if we still need to do this, now that we hard code into the wrapper,
-  Push GEOSERVER_DATA_DIR                         ; name
-  Push "$CommonAppData\OpenGeo\GeoServer\data_dir"  ; value
-  Call WriteEnvStr
 
-  
+  ; Unclear if we still need to do this, now that we hard code into the wrapper,
+    ;Push GEOSERVER_DATA_DIR                         ; name
+    ;Push "$CommonAppData\OpenGeo\GeoServer\data_dir"  ; value
+    ;Call WriteEnvStr
+  WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "GEOSERVER_DATA_DIR" "$CommonAppData\OpenGeo\GeoServer\data_dir"
+  ; Make sure Windows knows about the change (not quite sure what this does)
+  SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
+
 
   ; logging.xml file is deleted/recreated here
-  SetOutPath "$CommonAppData\OpenGeo\GeoServer"
 
-;  FileOpen $9 data_dir\logging.xml w ;Opens a Empty File and fills it
-;  FileWrite $9 "<logging>$\r$\n"
-;  FileWrite $9 "<level>DEFAULT_LOGGING.properties</level>$\r$\n"
-;  FileWrite $9 "$CommonAppData\OpenGeo\GeoServer\logs\geoserver.log</location>$\r$\n"
-;  FileWrite $9 "<stdOutLogging>true</stdOutLogging>$\r$\n"
-;  FileWrite $9 "</logging>$\r$\n"
-;  FileClose $9 ;Closes the filled file
+  SetOutPath "$CommonAppData\OpenGeo\GeoServer"
 
   ; Replacing the [changeme] tag with the specific path to geoserver.log
   ${textreplace::ReplaceInFile} "$CommonAppData\OpenGeo\GeoServer\data_dir\logging.xml" \
@@ -464,7 +463,6 @@ Section "GeoServer" Section1
                                 "/S=1" $0
   
   ${If} $IsManual == 0 ; i.e. only if service install
-
     ; wrapper.conf is customized here
     ; since we can't use environment variables (running as NetworkService)
     ${textreplace::ReplaceInFile} "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
@@ -483,10 +481,8 @@ Section "GeoServer" Section1
                                   "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
                                   "[wrapperlogpath]" "$CommonAppData\OpenGeo\GeoServer\logs\" \ 
                                   "/S=1" $1
-  
     ; Give permission for NetworkService to be able to read/write to data_dir and logs
     AccessControl::GrantOnFile "$CommonAppData\OpenGeo" "NT AUTHORITY\NetworkService" "FullAccess"
-	
 	; Install the service (i)
     nsExec::Exec "$INSTDIR\GeoServer\wrapper\wrapper.exe -i wrapper.conf"
 
@@ -520,14 +516,10 @@ Section "GeoServer" Section1
 
     FileOpen $9 stopgs.bat w ;
     FileWrite $9 'call "$JavaHome\bin\java.exe" -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -jar start.jar --stop'
+    ;FileWrite $9 '$\r$\npause'
     FileClose $9
 
-    
-    ;CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Start GeoServer.lnk" "$JavaHome\bin\java.exe" '-DGEOSERVER_DATA_DIR="%GEOSERVER_DATA_DIR%" -Xmx300m -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -Djetty.logs="$CommonAppData\OpenGeo\GeoServer\logs" -jar start.jar' "$INSTDIR\GeoServer\geoserver.ico" 0 SW_SHOWNORMAL
-
-    ;CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Stop GeoServer.lnk" "$JavaHome\bin\java.exe" '-DSTOP.PORT=8079 -DSTOP.KEY=geoserver -jar start.jar --stop' "$INSTDIR\GeoServer\geoserver.ico" 0 SW_SHOWMINIMIZED
-
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Start GeoServer.lnk" "$INSTDIR\GeoServer\startgs.bat" "" "$INSTDIR\GeoServer\geoserver.ico" 0 SW_SHOWNORMAL
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Start GeoServer.lnk" "$INSTDIR\GeoServer\startgs.bat" "" "$INSTDIR\GeoServer\geoserver.ico" 0 SW_SHOWMINIMIZED
 
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Stop GeoServer.lnk" "$INSTDIR\GeoServer\stopgs.bat" "" "$INSTDIR\GeoServer\geoserver.ico" 0 SW_SHOWMINIMIZED
 
@@ -629,202 +621,129 @@ SectionEnd
 Section -FinishSection
 
   ; Reg Keys
-  WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" "" "$INSTDIR"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAMEANDVERSION}" "DisplayName" "${APPNAMEANDVERSION}"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAMEANDVERSION}" "UninstallString" "$INSTDIR\uninstall.exe"
+  WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}" "" "$INSTDIR"
+  WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}" "CurrentVersion" "${VERSION}"
+
+  !define UNINSTALLREGPATH "Software\Microsoft\Windows\CurrentVersion\Uninstall"
+  WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "DisplayName" "${APPNAMEANDVERSION}"
+  WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "UninstallString" "$INSTDIR\uninstall.exe"
+  WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "InstallLocation" "$INSTDIR"
+  WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "DisplayIcon" "$INSTDIR\opengeo.ico"
+  ; Next two keys are to display "Remove" instead of "Modify/Remove". 
+  WriteRegDWORD HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "NoModify" "1"
+  WriteRegDWORD HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "NoRepair" "1"
+
+  ; This regkey will be needed for uninstall
+  ${If} $IsManual == 0 ; i.e. only if service install
+    WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}" "InstallType" "Service"
+  ${EndIf}
+  ${If} $IsManual == 1 ; i.e. only if manual install
+    WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}" "InstallType" "Manual"
+  ${EndIf}
+
   WriteUninstaller "$INSTDIR\uninstall.exe"
 
 SectionEnd
 
 
-
-
-; ----------------------------------
-; Environment Variable stuff (start)
-
-!ifndef _WriteEnvStr_nsh
-  !define _WriteEnvStr_nsh
-  !include WinMessages.nsh
- 
-  !ifndef WriteEnvStr_RegKey
-    !ifdef ALL_USERS
-      !define WriteEnvStr_RegKey \
-       'HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"'
-    !else
-			; System var
-      ;!define WriteEnvStr_RegKey  'HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"'
-            ; User var
-      !define WriteEnvStr_RegKey  'HKCU "Environment"'
-    !endif
-  !endif
-
-
-# WriteEnvStr - Writes an environment variable
-# Note: Win9x systems requires reboot
-#
-# Example:
-#  Push "HOMEDIR"           # name
-#  Push "C:\New Home Dir\"  # value
-#  Call WriteEnvStr
-Function WriteEnvStr
-  Exch $1 ; $1 has environment variable value
-  Exch
-  Exch $0 ; $0 has environment variable name
-  Push $2
- 
-  Call IsNT
-  Pop $2
-  StrCmp $2 1 WriteEnvStr_NT
-    ; Not on NT
-    StrCpy $2 $WINDIR 2 ; Copy drive of windows (c:)
-    FileOpen $2 "$2\autoexec.bat" a
-    FileSeek $2 0 END
-    FileWrite $2 "$\r$\nSET $0=$1$\r$\n"
-    FileClose $2
-    SetRebootFlag true
-    Goto WriteEnvStr_done
- 
-  WriteEnvStr_NT:
-      WriteRegExpandStr ${WriteEnvStr_RegKey} $0 $1
-      SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} \
-        0 "STR:Environment" /TIMEOUT=5000
- 
-  WriteEnvStr_done:
-    Pop $2
-    Pop $0
-    Pop $1
-FunctionEnd
-
- 
-# un.DeleteEnvStr - Removes an environment variable
-# Note: Win9x systems requires reboot
-#
-# Example:
-#  Push "HOMEDIR"           # name
-#  Call un.DeleteEnvStr
-Function un.DeleteEnvStr
-  Exch $0 ; $0 now has the name of the variable
-  Push $1
-  Push $2
-  Push $3
-  Push $4
-  Push $5
- 
-  Call un.IsNT
-  Pop $1
-  StrCmp $1 1 DeleteEnvStr_NT
-    ; Not on NT
-    StrCpy $1 $WINDIR 2
-    FileOpen $1 "$1\autoexec.bat" r
-    GetTempFileName $4
-    FileOpen $2 $4 w
-    StrCpy $0 "SET $0="
-    SetRebootFlag true
- 
-    DeleteEnvStr_dosLoop:
-      FileRead $1 $3
-      StrLen $5 $0
-      StrCpy $5 $3 $5
-      StrCmp $5 $0 DeleteEnvStr_dosLoop
-      StrCmp $5 "" DeleteEnvStr_dosLoopEnd
-      FileWrite $2 $3
-      Goto DeleteEnvStr_dosLoop
- 
-    DeleteEnvStr_dosLoopEnd:
-      FileClose $2
-      FileClose $1
-      StrCpy $1 $WINDIR 2
-      Delete "$1\autoexec.bat"
-      CopyFiles /SILENT $4 "$1\autoexec.bat"
-      Delete $4
-      Goto DeleteEnvStr_done
- 
-  DeleteEnvStr_NT:
-    DeleteRegValue ${WriteEnvStr_RegKey} $0
-    SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} \
-      0 "STR:Environment" /TIMEOUT=5000
- 
-  DeleteEnvStr_done:
-    Pop $5
-    Pop $4
-    Pop $3
-    Pop $2
-    Pop $1
-    Pop $0
-FunctionEnd
- 
-!ifndef IsNT_KiCHiK
-!define IsNT_KiCHiK
- 
-;---------------------------------------
- 
-# [un.]IsNT - Pushes 1 if running on NT, 0 if not
-#
-# Example:
-#   Call IsNT
-#   Pop $0
-#   StrCmp $0 1 +3
-#     MessageBox MB_OK "Not running on NT!"
-#     Goto +2
-#     MessageBox MB_OK "Running on NT!"
-#
-!macro IsNT UN
-Function ${UN}IsNT
-  Push $0
-  ReadRegStr $0 HKLM \
-    "SOFTWARE\Microsoft\Windows NT\CurrentVersion" CurrentVersion
-  StrCmp $0 "" 0 IsNT_yes
-  ; we are not NT.
-  Pop $0
-  Push 0
-  Return
- 
-  IsNT_yes:
-    ; NT!!!
-    Pop $0
-    Push 1
-FunctionEnd
-!macroend
-!insertmacro IsNT ""
-!insertmacro IsNT "un."
- 
-!endif ; IsNT_KiCHiK
- 
-!endif ; _WriteEnvStr_nsh 
-
-; Environment Variable stuff (end)
-; ----------------------------------
-
-
-;Uninstall section
+; Uninstall section
 Section Uninstall
 
-   Call un.inst
+  ; First check if registry info is intact, otherwise install will fail
+  ReadRegStr $0 HKLM "Software\${COMPANYNAME}\${APPNAME}\" ""
+  ${If} $0 == ""
+    MessageBox MB_ICONSTOP "Debug message: No regkey found!"
+    Goto Fail
+  ${EndIf}
+
+  ; Check for service/manual
+  ReadRegStr $0 HKLM "Software\${COMPANYNAME}\${APPNAME}" "InstallType"
+  ${If} $0 == ""
+    MessageBox MB_ICONSTOP "Debug message: No install type found!  Was this a service or manual install?"
+    Goto Fail
+  ${ElseIf} $0 == "Manual"
+    ; Stop GeoServer
+    SetOutPath "$INSTDIR\GeoServer"
+    Exec "$INSTDIR\GeoServer\stopgs.bat"
+    ; Wait for Start GeoServer window to go away
+    Sleep 3000
+  ${ElseIf} $0 == "Service"
+    ; Stop and remove service
+    nsExec::Exec "$INSTDIR\GeoServer\wrapper\wrapper.exe -r wrapper.conf"
+  ${Else}
+    MessageBox MB_ICONSTOP "Debug message: Wrong InstallType found!"
+    Goto Fail
+  ${EndIf}
+
+  ; Get the Common App Data path
+  ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders" "Common AppData"
+  StrCpy $CommonAppData $R0
+
+  ; Check if user wants to remove the data dir
+  MessageBox MB_YESNO|MB_ICONQUESTION "Do you want to remove your GeoServer data directory?  (If you have anything you want to keep, click No.)" IDYES DelDataDir IDNO NoDelDataDir
+
+  DelDataDir:
+
+    ; Have to move out of the directory to delete it
+    SetOutPath $TEMP
+    ; Remove env var
+    DeleteRegValue HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "GEOSERVER_DATA_DIR"
+    ; Make sure Windows knows about the change (not quite sure what this does)
+    SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
+
+    ; Delete whole $CommonAppData directory (including logs)!
+    RMDir /r "$CommonAppData\OpenGeo\data_dir"
+    RMDir /r "$CommonAppData\OpenGeo\logs"
+    RMDir /r "$CommonAppData\OpenGeo"
+;    Sleep 2000
+
+  Goto Continue
+
+  NoDelDataDir:
+
+    ; Can't delete something we're inside!
+    SetOutPath $PROGRAMFILES
+    ; Just delete logs from CommonAppData
+    RMDir /r "$CommonAppData\OpenGeo\GeoServer\logs"
+
+  Goto Continue
+
+  Continue:
+
+    ; Remove all reg entries
+    DeleteRegKey HKLM "Software\${COMPANYNAME}"
+    DeleteRegKey HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}"
+
+    ; Delete self
+    Delete "$INSTDIR\uninstall.exe"
+	
+    ; Delete Shortcuts
+    RMDir /r "$SMPROGRAMS\${APPNAMEANDVERSION}"
+
+	; Delete all!
+    RMDir /r "$INSTDIR\GeoServer"
+    RMDir /r "$INSTDIR\GeoExplorer"
+    Delete "$INSTDIR\*.*"
+    Sleep 2000
+
+  Try:
+    RMDir /r "$INSTDIR"
+    IfFileExists "$INSTDIR" Warn Succeed
+
+  Warn:
+    MessageBox MB_RETRYCANCEL "Setup is having trouble removing all files and folders from:$\r$\n   $INSTDIR\$\r$\nPlease make sure no files are open in this directory and close all browser windows.  To try again, click Retry." IDRETRY Try IDCANCEL GiveUp
+
+  GiveUp:
+    MessageBox MB_ICONINFORMATION "WARNING: Some files and folders could not be removed from:$\r$\n   $INSTDIR\$\r$\nYou will have to manually remove these files and folders."
+    Goto Succeed
+
+  Fail:
+    MessageBox MB_OK "Could not uninstall.  This may be due to a corrupted registry entry.  If you feel you have reached this message in error, please contact OpenGeo at inquiry@opengeo.org."
+    Quit
+
+  Succeed:
 
 SectionEnd
 
-; Abstracting Uninstall to a function so it can be called from multiple places
-Function un.inst
 
-;  Push GEOSERVER_DATA_DIR
-;  Call un.DeleteEnvStr
-
-	;Remove from registry...
-	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAMEANDVERSION}"
-	DeleteRegKey HKLM "SOFTWARE\${COMPANYNAME}"
-
-	; Delete self
-	Delete "$INSTDIR\uninstall.exe"
-	
-	; Remove service
-    nsExec::Exec "$INSTDIR\GeoServer\wrapper\wrapper.exe -r wrapper.conf"
-
-	; Delete Shortcuts
-	RMDir /r "$SMPROGRAMS\${APPNAMEANDVERSION}"
-
-	; Clean up
-	RMDir /r "$INSTDIR\"
-
-FunctionEnd
-
-; eof
+; The End
