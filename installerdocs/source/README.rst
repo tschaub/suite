@@ -100,6 +100,8 @@ Installation
 
    .. note:: With the exception of the initial running of the Data Importer after installation, GeoServer will always need to be started and stopped manually.  To start or stop GeoServer, please use the shortcuts in the :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoServer` folder.
 
+For more information, please see the document titled **Getting Started**, which is available in the Start Menu at :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Getting Started`.
+
 
 Upgrading
 ---------
