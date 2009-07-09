@@ -296,8 +296,18 @@ def data_dir():
 
 @task 
 def styler(): 
-    with pushd(source_path):
+    styler_download = path.joinpath(download_path,'styler')
+    styler_source = path.joinpath(source_path,'styler')
+    with pushd(download_path):
         svn.checkout('http://svn.opengeo.org/geoext/apps/styler2/trunk/','styler')
+        with pushd(path('styler')):
+            sh('jsbuild   build.cfg')
+    if not styler_source.exists():
+        os.mkdir(styler_source)
+    copy(path.joinpath(styler_download,'index.html'),styler_source)
+    copytree(path.joinpath(styler_download,'script'),path.joinpath(styler_source,'script'))
+    copytree(path.joinpath(styler_download,'theme'),path.joinpath(styler_source,'theme'))
+                       
 
 @task
 def download_all(): 
