@@ -57,6 +57,18 @@ Installation
 
       *The Start Menu folder to be created*
 
+#. You can install the OpenGeo Suite in one of two ways.
+  
+   * :guilabel:`Run manually` - GeoServer is run like a standard application.  This is useful for evaluating the software. 
+   * :guilabel:`Install as a service` - This integrates GeoServer with Windows Services.  This is more secure, and is the preferred method of running in a production environment.
+
+   If you are not sure which selection to choose, select :guilabel:`Run manually`.
+
+   .. figure:: img/installtype.png
+      :align: center
+
+      *Select Manual or Service installation*
+
 #. Review all the information and click :guilabel:`Back` to make any changes.  Click :guilabel:`Install` to perform the installation.
 
    .. figure:: img/ready.png
