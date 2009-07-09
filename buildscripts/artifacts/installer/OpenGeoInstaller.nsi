@@ -3,7 +3,7 @@
 ; Define your application name
 !define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
-!define VERSION "0.4"
+!define VERSION "1.0"
 !define LONGVERSION "0.4.0.0" ; must be a.b.c.d
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
 
@@ -23,6 +23,9 @@ BrandingText " "
 ; Hide the "Show details" button during the install/uninstall
 ShowInstDetails nevershow
 ShowUninstDetails nevershow
+
+; For Vista
+RequestExecutionLevel admin
 
 ; Includes
 !include "MUI.nsh" ; Modern interface settings
@@ -108,7 +111,7 @@ Function RunStuff
   ClearErrors
   ExecShell "open" "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Data Importer.lnk"
   IfErrors 0 +2
-    MessageBox MB_ICONSTOP "Unable to open browser.  Please use the Start Menu to manually start the application."
+    MessageBox MB_ICONSTOP "Unable to start GeoServer or open browser.  Please use the Start Menu to manually start the application."
   ClearErrors
 
 FunctionEnd
@@ -122,6 +125,7 @@ Page custom PriorInstall                                      ; Check to see if 
 !insertmacro MUI_PAGE_LICENSE "license.txt"                   ; Show license NEEDS TO INCLUDE ALL SOFTWARE!
 ;!insertmacro MUI_PAGE_COMPONENTS                              ; List of stuff to install
 !insertmacro MUI_PAGE_DIRECTORY                               ; Where to install
+;Page custom DirectoryCheck                                   ; Check for bad location
 !insertmacro MUI_PAGE_STARTMENU Application $STARTMENU_FOLDER ; Start menu location
 Page custom GetJRE                                            ; Check for JRE
 Page custom InstallType InstallTypeTest                       ; Install manually or as a service?
@@ -170,42 +174,27 @@ Function .onInit
 
 FunctionEnd
 
+; Check the user type, and quit if it's not an administrator.
+; Taken from Examples/UserInfo that ships with NSIS.
+Function CheckUserType
+  ClearErrors
+  UserInfo::GetName
+  IfErrors Win9x
+  Pop $0
+  UserInfo::GetAccountType
+  Pop $1
+  StrCmp $1 "Admin" Admin NoAdmin
 
-; Will build a page with radio buttons for manual vs service selection
-Function InstallType
+  NoAdmin:
+    MessageBox MB_ICONSTOP "Sorry, you must have administrative rights in order to install the OpenGeo Suite."
+    Quit
 
-  nsDialogs::Create 1018
-  !insertmacro MUI_HEADER_TEXT "$(TEXT_TYPE_TITLE)" "$(TEXT_TYPE_SUBTITLE)"
-
-  ;Syntax: ${NSD_*} x y width height text
-  ${NSD_CreateLabel} 0 0 100% 24u 'Select the type of installation for the OpenGeo Suite.  If you are unsure of which option to pick, select the "Run manually" option.'
-  ${NSD_CreateRadioButton} 10 28u 50% 12u "Run manually"
-  Pop $Manual
-
-  ${NSD_CreateLabel} 10 44u 100% 24u "For evaulating the OpenGeo Suite.  Software will be installed as standalone applications."
-  ${NSD_CreateRadioButton} 10 72u 50% 12u "Install as a service"
-  Pop $Service
-
-  ${If} $IsManual == 1
-    ${NSD_Check} $Manual ; Default
-  ${Else}
-    ${NSD_Check} $Service
-  ${EndIf}
-
-  ${NSD_CreateLabel} 10 88u 100% 24u "For system administrators who wish to integrate GeoServer with Windows Services.  Runs in a restricted account for greater security."
-
-  nsDialogs::Show
-
-FunctionEnd
-
-
-; Records the final state of manual vs service
-Function InstallTypeTest
-
-  ${NSD_GetState} $Manual $IsManual
-  ; $IsManual = 1 -> Run manually
-  ; $IsManual = 0 -> Run as service
-
+  Win9x:
+    MessageBox MB_ICONSTOP "Sorry, this installer is not supported on Windows 9x/ME."
+    Quit
+		
+  Admin:
+	
 FunctionEnd
 
 
@@ -223,7 +212,7 @@ Function PriorInstall
   ${Switch} $R2
     ${Case} 0 ; Same version
     MessageBox MB_ICONSTOP "Setup has found an existing installation of the OpenGeo Suite \
-                            on your machine. If you wish to reinstall the OpenGeo Suite,\
+                            on your machine. If you wish to reinstall the OpenGeo Suite, \
                             please uninstall it first and then run this installer again."
     Goto Fail
     ${Case} 1 ; Upgrading
@@ -255,27 +244,41 @@ Function PriorInstall
 FunctionEnd
   
 
-; Check the user type, and quit if it's not an administrator.
-; Taken from Examples/UserInfo that ships with NSIS.
-Function CheckUserType
-  ClearErrors
-  UserInfo::GetName
-  IfErrors Win9x
-  Pop $0
-  UserInfo::GetAccountType
-  Pop $1
-  StrCmp $1 "Admin" Admin NoAdmin
+; Will build a page with radio buttons for manual vs service selection
+Function InstallType
 
-  NoAdmin:
-    MessageBox MB_ICONSTOP "Sorry, you must have administrative rights in order to install the OpenGeo Suite."
-    Quit
+  nsDialogs::Create 1018
+  !insertmacro MUI_HEADER_TEXT "$(TEXT_TYPE_TITLE)" "$(TEXT_TYPE_SUBTITLE)"
 
-  Win9x:
-    MessageBox MB_ICONSTOP "Sorry, this installer is not supported on Windows 9x/ME."
-    Quit
-		
-  Admin:
-	
+  ;Syntax: ${NSD_*} x y width height text
+  ${NSD_CreateLabel} 0 0 90% 24u 'Select the type of installation for the OpenGeo Suite.  If you are unsure of which option to pick, select the "Run manually" option.'
+  ${NSD_CreateRadioButton} 10 28u 50% 12u "Run manually"
+  Pop $Manual
+
+  ${NSD_CreateLabel} 10 44u 90% 24u "For evaulating the OpenGeo Suite.  Software will be installed as a standalone application."
+  ${NSD_CreateRadioButton} 10 72u 50% 12u "Install as a service"
+  Pop $Service
+
+  ${If} $IsManual == 1
+    ${NSD_Check} $Manual ; Default
+  ${Else}
+    ${NSD_Check} $Service
+  ${EndIf}
+
+  ${NSD_CreateLabel} 10 88u 100% 24u "For system administrators who wish to integrate GeoServer with Windows Services.  Runs in a restricted account for greater security."
+
+  nsDialogs::Show
+
+FunctionEnd
+
+
+; Records the final state of manual vs service
+Function InstallTypeTest
+
+  ${NSD_GetState} $Manual $IsManual
+  ; $IsManual = 1 -> Run manually
+  ; $IsManual = 0 -> Run as service
+
 FunctionEnd
 
 
@@ -283,20 +286,12 @@ FunctionEnd
 ; Lovingly ripped off from http://nsis.sourceforge.net/Java_Launcher
 Function GetJRE
 
-;  Returns the full path of a valid java.exe
-;  Looks in:
-;  * Registry
-;  * JAVA_HOME environment variable
- 
-;  Push $R0
-;  Push $R1
- 
   ; use javaw.exe to avoid dosbox.
   ; use java.exe to keep stdout/stderr
   !define JAVAEXE "java.exe"
 
 
-  ; look for registry key 
+  ; look in registry 
   ClearErrors
   ReadRegStr $R1 HKLM "SOFTWARE\JavaSoft\Java Runtime Environment" "CurrentVersion"
   ReadRegStr $R0 HKLM "SOFTWARE\JavaSoft\Java Runtime Environment\$R1" "JavaHome"
@@ -319,6 +314,31 @@ Function GetJRE
  
 FunctionEnd
 
+/*; This is a test to warn about installing in a stupid directory
+Function DirectoryCheck
+
+
+; This is a flag to prevent duplicate warning messages when using Back
+
+  ; Filter out reserved directories
+  StrCpy $0 $INSTDIR "" 2 ; get rid of c:
+  ${WordReplace} $0 "\" "" "+" $0
+  ${WordReplace} $0 "program files" "" "+" $0
+  ${WordReplace} $0 "windows" "" "+" $0
+
+  ; If nothing is left, user is installing to a bad directory
+  StrCmp $0 "" BadDir GoodDir
+  
+  BadDir:
+    
+    MessageBox MB_ICONSTOP "You have chosen to install into the following directory:\
+                            $\r$\n   $INSTDIR\$\r$\n\
+                            To avoid potentially disastrous consequences, please go back \
+                            and select a different directory."
+  GoodDir:
+
+FunctionEnd
+*/
 
 ; One final page to review options
 Function Ready
@@ -554,7 +574,28 @@ Section "GeoExplorer" Section2
 
 SectionEnd
 
-Section "GeoServer Documentation" Section3
+/*Section "Styler" Section3
+
+  ; Set Section properties
+  SetOverwrite on
+
+  !insertmacro DisplayImage "slide_6_geoext.bmp"
+
+  ; Set Section Files and Shortcuts
+  SetOutPath "$CommonAppData\OpenGeo\GeoServer\data_dir\www"
+  File /r /x .svn ..\styler
+  File /a /oname=styler\geoext.ico geoext.ico
+
+  ; Shortcuts
+  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\Styler"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Styler\Styler.lnk" \
+		         "http://localhost:8080/geoserver/www/styler/index.html" \
+                 "$CommonAppData\OpenGeo\GeoServer\data_dir\www\styler\geoext.ico"
+
+SectionEnd
+*/
+
+Section "GeoServer Documentation" Section4
 
   !insertmacro DisplayImage "slide_1_suite.bmp"
 
@@ -563,7 +604,7 @@ Section "GeoServer Documentation" Section3
 
   ; Set Section Files and Shortcuts
   SetOutPath "$INSTDIR\GeoServer"
-  File /r ..\geoserver_doc
+  File /r /x .svn ..\geoserver_doc
   Rename "$INSTDIR\GeoServer\geoserver_doc" "$INSTDIR\GeoServer\docs"
 
   ; Shortcuts
@@ -572,7 +613,7 @@ Section "GeoServer Documentation" Section3
 
 SectionEnd
 
-Section "GeoExplorer Documentation" Section4
+Section "GeoExplorer Documentation" Section5
 
   !insertmacro DisplayImage "slide_1_suite.bmp"
 
@@ -582,7 +623,7 @@ Section "GeoExplorer Documentation" Section4
   ; Set Section Files and Shortcuts
   CreateDirectory "$INSTDIR\GeoExplorer"
   SetOutPath "$INSTDIR\GeoExplorer"
-  File /r ..\geoexplorer_doc
+  File /r /x .svn ..\geoexplorer_doc
   Rename "$INSTDIR\GeoExplorer\geoexplorer_doc" "$INSTDIR\GeoExplorer\docs"
 
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer\GeoExplorer Documentation.lnk" \
@@ -590,7 +631,7 @@ Section "GeoExplorer Documentation" Section4
 
 SectionEnd
 
-Section "Getting Started" Section5
+Section "Getting Started" Section6
 
   !insertmacro DisplayImage "slide_1_suite.bmp"
 
@@ -599,7 +640,7 @@ Section "Getting Started" Section5
 
   ; Set Section Files and Shortcuts
   SetOutPath "$INSTDIR"
-  File /r ..\integrationdocs_doc
+  File /r /x .svn ..\integrationdocs_doc
   Rename "$INSTDIR\integrationdocs_doc" "$INSTDIR\Getting Started"
 
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Getting Started.lnk" \
@@ -607,15 +648,14 @@ Section "Getting Started" Section5
 
 SectionEnd
 
-
-; Modern install component descriptions
+/*; Modern install component descriptions
 ; Yes, this needs needs to go after the install sections. 
-; !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-;	!insertmacro MUI_DESCRIPTION_TEXT ${Section1} "Installs Geoserver core components"
-;	!insertmacro MUI_DESCRIPTION_TEXT ${Section2} "Installs GeoExplorer"
-;	!insertmacro MUI_DESCRIPTION_TEXT ${Section3} "Installs documentation"
-; !insertmacro MUI_FUNCTION_DESCRIPTION_END
-
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section1} "Installs Geoserver core components"
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section2} "Installs GeoExplorer"
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section3} "Installs documentation"
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
+*/
 
 ; What happens at the end of the install.
 Section -FinishSection
@@ -629,6 +669,8 @@ Section -FinishSection
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "UninstallString" "$INSTDIR\uninstall.exe"
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "InstallLocation" "$INSTDIR"
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "DisplayIcon" "$INSTDIR\opengeo.ico"
+  WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "Publisher" "OpenGeo"
+
   ; Next two keys are to display "Remove" instead of "Modify/Remove". 
   WriteRegDWORD HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "NoModify" "1"
   WriteRegDWORD HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "NoRepair" "1"
@@ -680,7 +722,7 @@ Section Uninstall
   StrCpy $CommonAppData $R0
 
   ; Check if user wants to remove the data dir
-  MessageBox MB_YESNO|MB_ICONQUESTION "Do you want to remove your GeoServer data directory?  (If you have anything you want to keep, click No.)" IDYES DelDataDir IDNO NoDelDataDir
+  MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 "Do you want to remove your GeoServer data directory?  (If you have anything you want to keep, click No.)" IDYES DelDataDir IDNO NoDelDataDir
 
   DelDataDir:
 
@@ -695,7 +737,6 @@ Section Uninstall
     RMDir /r "$CommonAppData\OpenGeo\data_dir"
     RMDir /r "$CommonAppData\OpenGeo\logs"
     RMDir /r "$CommonAppData\OpenGeo"
-;    Sleep 2000
 
   Goto Continue
 
@@ -718,16 +759,16 @@ Section Uninstall
     Delete "$INSTDIR\uninstall.exe"
 	
     ; Delete Shortcuts
-    RMDir /r "$SMPROGRAMS\${APPNAMEANDVERSION}"
+    RMDir /r "$SMPROGRAMS\$STARTMENU_FOLDER"
 
 	; Delete all!
     RMDir /r "$INSTDIR\GeoServer"
     RMDir /r "$INSTDIR\GeoExplorer"
+    RMDir /r "$INSTDIR\Getting Started"
     Delete "$INSTDIR\*.*"
-    Sleep 2000
 
   Try:
-    RMDir /r "$INSTDIR"
+    RMDir "$INSTDIR"
     IfFileExists "$INSTDIR" Warn Succeed
 
   Warn:
