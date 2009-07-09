@@ -296,6 +296,9 @@ def data_dir():
 
 @task 
 def styler(): 
+    ''' 
+    This downloads the Styler 
+    ''' 
     styler_download = path.joinpath(download_path,'styler')
     styler_source = path.joinpath(source_path,'styler')
     with pushd(download_path):
@@ -307,6 +310,7 @@ def styler():
     copy(path.joinpath(styler_download,'index.html'),styler_source)
     copytree(path.joinpath(styler_download,'script'),path.joinpath(styler_source,'script'))
     copytree(path.joinpath(styler_download,'theme'),path.joinpath(styler_source,'theme'))
+    copytree(path.joinpath(styler_download,'externals'),path.joinpath(styler_source,'externals'))
                        
 
 @task
