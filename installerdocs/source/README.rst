@@ -17,7 +17,7 @@ The OpenGeo Suite has the following system requirements:
    * - **Memory**   
      - 512MB minimum (1GB recommended)
    * - **Disk space**
-     - 120MB minimum (plus extra space for your data)
+     - 150MB minimum (plus extra space for your data)
    * - **Browser**
      - Any modern web browser is supported
    * - **Permissions**
