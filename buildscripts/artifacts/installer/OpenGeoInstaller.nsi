@@ -3,7 +3,7 @@
 ; Define your application name
 !define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
-!define VERSION "1.0"
+!define VERSION "0.4"
 !define LONGVERSION "0.4.0.0" ; must be a.b.c.d
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
 
@@ -12,7 +12,7 @@
 Name "${APPNAMEANDVERSION}"
 InstallDir "$PROGRAMFILES\${APPNAMEANDVERSION}"
 InstallDirRegKey HKLM "Software\${COMPANYNAME}\${APPNAME}" ""
-OutFile "OpenGeoSuite-0.4beta.exe"
+OutFile "OpenGeoSuite-0.4.exe"
 
 ;Compression options
 CRCCheck on
@@ -41,7 +41,7 @@ RequestExecutionLevel admin
 ; http://nsis.sourceforge.net/TextReplace_plugin
 !include "TextReplace.nsh" ; For text replacing
 ; AccessControl plugin needed as well for permissions changes
-; See: http://nsis.sourceforge.net/AccessControl_plug-in
+; See http://nsis.sourceforge.net/AccessControl_plug-in
 
 ; Might be the same as !define
 Var JavaHome
@@ -106,7 +106,10 @@ Function RunStuff
 
   ;Script to check if GeoServer has finished launching.  Checks for a response on port 8080
   ;We could delete this file after it's finished running, as it's no longer needed...
+  SetOutPath "$TEMP"
+  File /a gscheck.bat
   ExecWait $TEMP\gscheck.bat
+  Delete $TEMP\gscheck.bat
 
   ClearErrors
   ExecShell "open" "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Data Importer.lnk"
@@ -122,7 +125,7 @@ FunctionEnd
 !insertmacro MUI_PAGE_WELCOME                                 ; Hello
 Page custom CheckUserType                                     ; Die if not admin
 Page custom PriorInstall                                      ; Check to see if previously installed
-!insertmacro MUI_PAGE_LICENSE "license.txt"                   ; Show license NEEDS TO INCLUDE ALL SOFTWARE!
+!insertmacro MUI_PAGE_LICENSE "license.txt"                   ; Show license
 ;!insertmacro MUI_PAGE_COMPONENTS                              ; List of stuff to install
 !insertmacro MUI_PAGE_DIRECTORY                               ; Where to install
 ;Page custom DirectoryCheck                                   ; Check for bad location
@@ -148,8 +151,10 @@ Function .onInit
 	
   ; Splash screen
   SetOutPath $TEMP
-  File /oname=spltmp.bmp "splash.bmp"
-  advsplash::show 2000 500 500 -1 $TEMP\spltmp
+; File /oname=spltmp.bmp "splash.bmp" ; normal splash
+; advsplash::show 2000 500 500 -1 $TEMP\spltmp 
+  File /oname=spltmp.bmp "splashtransparent.bmp" ; transparent splash
+  advsplash::show 2500 500 500 0xEC008C $TEMP\spltmp
 	;advsplash::show Delay FadeIn FadeOut KeyColor FileName
   Pop $0 ; $0 has '1' if the user closed the splash screen early,
          ;    has '0' if everything closed normally, and '-1' if some error occurred.
@@ -251,7 +256,7 @@ Function InstallType
   !insertmacro MUI_HEADER_TEXT "$(TEXT_TYPE_TITLE)" "$(TEXT_TYPE_SUBTITLE)"
 
   ;Syntax: ${NSD_*} x y width height text
-  ${NSD_CreateLabel} 0 0 90% 24u 'Select the type of installation for the OpenGeo Suite.  If you are unsure of which option to pick, select the "Run manually" option.'
+  ${NSD_CreateLabel} 0 0 100% 24u 'Select the type of installation for the OpenGeo Suite.  If you are unsure of which option to select, choose the "Run manually" option.'
   ${NSD_CreateRadioButton} 10 28u 50% 12u "Run manually"
   Pop $Manual
 
@@ -265,7 +270,7 @@ Function InstallType
     ${NSD_Check} $Service
   ${EndIf}
 
-  ${NSD_CreateLabel} 10 88u 100% 24u "For system administrators who wish to integrate GeoServer with Windows Services.  Runs in a restricted account for greater security."
+  ${NSD_CreateLabel} 10 88u 90% 24u "For system administrators who wish to integrate with Windows Services.  GeoServer will run in a restricted account for greater security."
 
   nsDialogs::Show
 
@@ -349,11 +354,11 @@ Function Ready
   StrCmp $IsManual 1 Manual Service
 
   Manual:
-    StrCpy $8 "$8GeoServer installation type:\
+    StrCpy $8 "$8Installation type:\
                \r\n     Manual\r\n\r\n"
     Goto Java
   Service:
-    StrCpy $8 "$8GeoServer installation type:\
+    StrCpy $8 "$8Installation type:\
                \r\n     Service\r\n\r\n"
     Goto Java
  
@@ -443,8 +448,6 @@ Section "GeoServer" Section1
   File /r ..\geoserver\logs
   SetOutPath "$CommonAppData\OpenGeo\GeoServer\data_dir"
   File /a logging.xml
-  SetOutPath "$TEMP"
-  File /a gscheck.bat
   SetOutPath "$INSTDIR"
   File /a opengeo.ico
 
@@ -574,7 +577,7 @@ Section "GeoExplorer" Section2
 
 SectionEnd
 
-/*Section "Styler" Section3
+Section "Styler" Section3
 
   ; Set Section properties
   SetOverwrite on
@@ -593,7 +596,6 @@ SectionEnd
                  "$CommonAppData\OpenGeo\GeoServer\data_dir\www\styler\geoext.ico"
 
 SectionEnd
-*/
 
 Section "GeoServer Documentation" Section4
 
@@ -670,6 +672,7 @@ Section -FinishSection
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "InstallLocation" "$INSTDIR"
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "DisplayIcon" "$INSTDIR\opengeo.ico"
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "Publisher" "OpenGeo"
+  WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "HelpLink" "http://opengeo.org"
 
   ; Next two keys are to display "Remove" instead of "Modify/Remove". 
   WriteRegDWORD HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "NoModify" "1"
