@@ -272,27 +272,14 @@ def source_dirs():
 @needs(["dir_layout"])
 def data_dir(): 
     '''
-    This download the data from GeoServer? Maybe 
-    and downloads the styles from the rest API
-    '''
-    data_dir = path("data_dir")
-    styles_path =  path.joinpath(data_dir,path("medford"))
-    gs_url = "http://localhost:8080/geoserver/"
-    url = "http://svn.opengeo.org/vulcan/trunk/medford/"
-    def styles(url):
-        with pushd(data_dir): 
-            svn.checkout(url,'medford')
-    def data(): 
-        info("Uploading all styles")
-        slds = styles_path.files("*.sld")
-        for sld in slds:
-            name = sld.strip("data_dir/medford/")
-            sh("""
-               curl -u admin:geoserver -XPUT -H 'Content-type: application/vnd.ogc.sld+xml' -d @ %s http://localhost:8080/geoserver/rest/styles/%s                    
-                  """ % (sld,name))
+    Download a zip file and moved into the GeoServer folder.
 
-#   styles(url)
-    data()
+    '''
+    with pushd(download_path):
+        sh('curl -O http://data.opengeo.org/data.zip')
+        unzip_file('data.zip')
+    rmtree(path.joinpath(source_path,'geoserver','data_dir'))
+    copytree(path.joinpath(download_path,'data'),path.joinpath(source_path,'geoserver','data_dir'))
 
 @task 
 def styler(): 
