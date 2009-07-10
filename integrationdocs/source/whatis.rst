@@ -7,9 +7,13 @@ The OpenGeo Suite is a free, fully-featured web mapping environment that's easy 
 
 This package includes the following components:
 
-GeoServer - A software server that allows users to share and edit geospatial data.
-GeoExplorer - An extension to GeoServer that allows for creating a browser-based mapping application
-GeoServer Data Importer - An extension to GeoServer that allows for bulk importing of shapefiles.
+* **GeoServer** - A software server that allows users to share and edit geospatial data.
+* **GeoServer Data Importer** - An extension to GeoServer that allows for bulk importing of shapefiles.
+* **Styler** - Allows for graphical styling of geospatial layers.
+* **GeoExplorer** - Allows for creating a browser-based mapping application from saved layers.
+
+Styler and GeoExplorer are applications based on `GeoExt <http://geoext.org>`_.
+
 
 
 

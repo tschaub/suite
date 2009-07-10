@@ -3,50 +3,80 @@
 How to Use
 ==========
 
-This section will deatil the steps necessary to go from simple shapefiles to a finished web map.
+This section will detail the steps necessary to go from simple shapefiles to a finished web map.
 
 Import Your Data
 ----------------
 
-This version of GeoServer comes with some data built in.  (See the section on :ref:`builtindemos` for more information.)  But to make your web application, it is necessary to first load your own data into GeoServer.  GeoServer comes with an importer application to make this process easy.
+The OpenGeo Suite comes with some data built in to GeoServer.  (See the section on :ref:`builtindemos` for more information.)  But to make *your* web application, you will need to first load your data into GeoServer.  GeoServer comes with an importer application to make this process easy.
 
 #. First, start GeoServer if it is not already started.  You can do this by going to the :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoServer --> Start GeoServer`
 
-   .. todo: Screenshot for starting GS
+#. Open the GeoServer Data Importer.  You can do this by going to the :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoServer --> GeoServer Data Importer`.
 
-#. Navigate to the GeoServer Admin Page.  You can do this by going to the :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoServer --> GeoServer Web Admin` or by opening a web browser and navigating to http://localhost:8080/geoserver/web .
+   .. note:: You can also navigate to the Data Importer from the main web admin page by first logging in and then clicking on the :guilabel:`Importer` link on the left side of the screen.  You will need to be logged in for that option to appear.
 
-   .. todo: Screenshot for starting GS Admin
+#. Your browser will open to the GeoServer login screen.  The default username and password is ``admin`` and ``geoserver``.  Click :guilabel:`Login` when done.
 
-#. Log in to GeoServer.  You can do this in the top right corner of the screen.  The default username and password is ``admin`` and ``geoserver``.  Click :guilabel:`Submit` when done.
+   .. figure:: img/login.png
+      :align: center
 
-   .. todo: Screenshot for logging in
+      *Logging in to the GeoServer web admin interface*
 
-#. Once logged in, you should see a link on the left side of the screen for :guilabel:`Importer`.  Click that link to launch the Data Importer.
+#. On the next screen, enter a name for the project in the :guilabel:`Project prefix` box.  This name can be up to 10 characters, and may not contain spaces.
 
-   .. todo: Screenshot for Importer link
+   .. note:: The :guilabel:`Project prefix` will be prefixed to the name of every shapefile you import into GeoServer.  For example, if you import a file named :file:`roads.shp`, and enter a prefix of ``usa``, the resulting layer in GeoServer will be called ``usa:roads``.
 
-#. On the Mass Layer Importer screen, enter a name for the project in teh :guilabel:`Project Name` box.  This name can be up to 10 characters, and may not contain spaces.  In the box named :guilabel:`Directory`, type in the path to a directory that contains the shapefiles that you want to import.
+   .. figure:: img/importerblank.png
+      :align: center
 
-   .. todo: Figure out the specifics of importing.
+      *The Data Importer main page*
 
-#. When done, click :guilabel:`Import`.
+#. In the :guilabel:`Directory` box, enter the path to a directory that contains the shapefiles you wish to import.  You can also click :guilabel:`Browse...` to navigate to the folder.
 
-#. You will see a progress bar indicating that the shapefiles are being loaded into GeoServer.  When finished, a list of the shapefiles will be displayed, along with their details and whether they imported successfully.
+   .. figure:: img/browse.png
+      :align: center
 
-#. If you would like to see a preview of how each layer looks, click the :guilabel:`Preview` button next to the layers you wish to view.  When finished click :guilabel:`Finish`.
+      *Browsing for shapefiles on your local machine*
+
+   .. warning:: If you installed GeoServer as a **Service**, GeoServer will not have access to any folders outside of the data directory, so you will need to copy the shapefiles into that first and then Browse to it.  The GeoServer data directory is located at the following path:
+
+      **Windows XP**: ``C:\Program Files\All Users\Application Data\OpenGeo\GeoServer\data_dir``
+
+      **Windows Vista**: ``C:\ProgData\OpenGeo\GeoServer\data_dir``
+
+#. When done, click :guilabel:`Import data`.
+
+   .. figure:: img/importerfilledin.png
+      :align: center
+
+      *The Data Importer with project information entered*
+
+#. You will see a progress bar indicating that the shapefiles are being loaded into GeoServer.
+
+   .. figure:: img/progressbar.png
+      :align: center
+
+      *The Data Importer showing the progress of the import*
+
+#. When finished, a list of the shapefiles will be displayed, along with details and errors (if any).  Each shapefile will correspond to a layer.
+
+   .. figure:: img/results.png
+      :align: center
+
+      *The Data Importer results page*
+
+#. If you would like to see a preview of how a layer looks, click the :guilabel:`Preview` button next to that layer.  When finished you may close the browser.  Your data is now loaded into GeoServer.  If you wish to import more shapefiles from other directories, you may repeat this process.
 
 
 Style Your Data
 ---------------
 
-Your data will at first be styled with generic styles.  You can customize each layer's style using the Styler application.
+You can customize each the style of each layer using the Styler application.
 
-#. Open up the Styler application.  You can do this by going to the :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Styler` or by opening a web browser and navigating to http://localhost:8080/geoserver/www/styler .
+#. Run Styler.  You can do this by going to the :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Styler --> Styler` or by opening a web browser and navigating to http://localhost:8080/geoserver/www/styler .
 
-   .. note:: GeoServer must be turned on for Styler to work.
-
-   .. todo:: Are these instructions for Styler correct?
+   .. note:: GeoServer must be started for Styler to work.
 
    .. todo:: Screenshot for Styler
 
@@ -60,9 +90,9 @@ Your data will at first be styled with generic styles.  You can customize each l
 Create Your Map
 ---------------
 
-Now that you have your data imported and styled, you can now put it all together into a map.  GeoExplorer allows creation of web mapping applications based on data served through GeoServer.
+Now that you have your data imported and styled, you can now organize your layers and compose them into a finished map.  GeoExplorer allows creation of web mapping applications based on layers served through GeoServer.
 
-#. Open up GeoExplorer.  You can do this by going to the :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoExplorer` or by opening a web browser and navigating to http://localhost:8080/geoserver/www/GeoExplorer .
+#. Run GeoExplorer.  You can do this by going to the :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoExplorer --> GeoExplorer` or by opening a web browser and navigating to http://localhost:8080/geoserver/www/GeoExplorer .
 
    .. todo:: Screenshot of GX
 
