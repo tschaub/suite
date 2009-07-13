@@ -279,7 +279,7 @@ def data_dir():
         sh('curl -O http://data.opengeo.org/data.zip')
         unzip_file('data.zip')
     rmtree(path.joinpath(source_path,'geoserver','data_dir'))
-    copytree(path.joinpath(download_path,'data'),path.joinpath(source_path,'geoserver','data_dir'))
+    copytree(path.joinpath(download_path,'data'),path.joinpath(source_path))
 
 @task 
 def styler(): 
@@ -317,8 +317,10 @@ def build_all():
     call_task("download_source")
     call_task("move_java")
     call_task("gx")
+    call_task("data_dir")
     call_task("unpack_geoserver")
     call_task("styler")
+    call_task("data_dir")
     call_task("download_docs")
     call_task("docs")
 
