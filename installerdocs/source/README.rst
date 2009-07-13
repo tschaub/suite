@@ -146,3 +146,8 @@ Credits
 All text content created by OpenGeo and licensed under the `Creative Commons Share-Alike license <http://creativecommons.org/licenses/by-sa/3.0>`_.
 
 All code is copyrighted by their respective owners.
+
+For More Information
+--------------------
+
+Please visit http://opengeo.org or email inquiry@opengeo.org .
