@@ -278,8 +278,7 @@ def data_dir():
     with pushd(download_path):
         sh('curl -O http://data.opengeo.org/data.zip')
         unzip_file('data.zip')
-    rmtree(path.joinpath(source_path,'geoserver','data_dir'))
-    copytree(path.joinpath(download_path,'data'),path.joinpath(source_path))
+    copytree(path.joinpath(download_path,'data'),path.joinpath(source_path,'data_dir'))
 
 @task 
 def styler(): 
