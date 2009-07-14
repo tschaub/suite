@@ -112,12 +112,11 @@ def download_bin():
             if software == 'java': 
                 # This is a hack, the Java download was a pain in the ass 
                 # I need to add an .exe to the end of the file 
-                info("We are downloading Java and it sucks.")
+                info("Downloading Java")
                 urlgrab(url,'sun-java.exe',progress_obj=text_progress_meter())
-                sh("curl -o sun-java.exe \"%s\" " % url) 
             if software == 'geoserver':
                 version = config.get("version","geoserver")
-                sh("curl -O %s%s.zip" % (geoserverURL,version))
+                urlgrab(url,'geoserver.zip',progress_obj=text_progress_meter())
             else: 
                 pass
 
@@ -126,7 +125,7 @@ def unpack_geoserver():
     version = config.get("version","geoserver")
     geoserver_vs = path('geoserver-2.0-beta1')    
     geoserver = path("geoserver")
-    geoserverZIP = "%s.zip" % version
+    geoserverZIP = "geoserver.zip" 
     geoserverSRC = path.joinpath(download_path,geoserverZIP)
     info("Moving GeoServer into %s" % source_path)
     copy(geoserverSRC,source_path)
@@ -209,9 +208,12 @@ def geoserver_plugins():
                     plugin = config.get(section,plugin)
                     version = config.get("version","geoserver")
                     info("download geoserver plugins")
-                    sh("curl -O %s%s-%s" % (geoserverURL,version,plugin))
+                    pluginURL = "%s%s-%s" % (geoserverURL,version,plugin)
+                    info(pluginURL)
                     pluginZIP = "%s-%s" % (version,plugin)
-                    unzip_file(pluginZIP)
+# This is broken, needs fixing Jul 14 
+#                    urlgrab(pluginURL,pluginZIP,progress_obj=text_progress_meter())
+ #                   unzip_file(pluginZIP)
     def move():
         info("Moving GeoServer Plugins")
         dest = path.joinpath(source_path,path("geoserver_plugins"))
