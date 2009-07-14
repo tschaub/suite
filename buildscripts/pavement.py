@@ -112,7 +112,6 @@ def download_bin():
             if software == 'java': 
                 # This is a hack, the Java download was a pain in the ass 
                 # I need to add an .exe to the end of the file 
-                info("Downloading Java")
                 urlgrab(url,'sun-java.exe',progress_obj=text_progress_meter())
             if software == 'geoserver':
                 version = config.get("version","geoserver")
@@ -295,6 +294,9 @@ def data_dir():
         info('unziping data.zip')
         unzip_file('data.zip')
     info("moved data_dir into %s" % source_path)
+    if path.joinpath(source_path,'data_dir').exists():
+        info("removing old data_dir")
+        rmtree(path.joinpath(source_path,'data_dir'))
     copytree(path.joinpath(download_path,'data'),path.joinpath(source_path,'data_dir'))
 
 @task 
