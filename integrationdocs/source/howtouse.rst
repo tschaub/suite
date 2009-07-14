@@ -39,11 +39,9 @@ The OpenGeo Suite comes with some data built in to GeoServer.  (See the section 
 
       *Browsing for shapefiles on your local machine*
 
-   .. warning:: If you installed GeoServer as a **Service**, GeoServer will not have access to any folders outside of the data directory, so you will need to copy the shapefiles into that first and then Browse to it.  The GeoServer data directory is located at the following path:
+   .. warning:: If you installed GeoServer as a **Service**, GeoServer will not be able to read any folders outside of the existing data directory.  You must explicitly grant read access to the folder that contains teh shapefiles for the user "NETWORK SERVICE".
 
-      **Windows XP**: ``C:\Program Files\All Users\Application Data\OpenGeo\GeoServer\data_dir``
-
-      **Windows Vista**: ``C:\ProgData\OpenGeo\GeoServer\data_dir``
+      For more information on how to grant permissions, please see the following article:  http://www.microsoft.com/windowsxp/using/security/learnmore/accesscontrol.mspx
 
 #. When done, click :guilabel:`Import data`.
 
@@ -69,23 +67,93 @@ The OpenGeo Suite comes with some data built in to GeoServer.  (See the section 
 #. If you would like to see a preview of how a layer looks, click the :guilabel:`Preview` button next to that layer.  When finished you may close the browser.  Your data is now loaded into GeoServer.  If you wish to import more shapefiles from other directories, you may repeat this process.
 
 
-Style Your Data
----------------
+Style Your Data (advanced)
+--------------------------
 
-You can customize each the style of each layer using the Styler application.
+By default, all layers of the same geometry type (points, lines, polygons) will have the same style.  You can customize these styles in the GeoServer web admin interface.  A knowledge of SLD (Styled Layer Descriptors) is required.  Future versions of this software will include **Styler**, a GUI styling application. 
 
-#. Run Styler.  You can do this by going to the :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Styler --> Styler` or by opening a web browser and navigating to http://localhost:8080/geoserver/www/styler .
+.. note:: For more information on SLDs, please see the **Styling** section of the GeoServer documentation.
 
-   .. note:: GeoServer must be started for Styler to work.
+These instructions will change the color of the default point style (called "point") and save as a different style.  If you do not wish to change any styles, you may skip to the next section, :ref:`createyourmap`, below.
 
-   .. todo:: Screenshot for Styler
+#. Open the GeoServer Web Admin if it is not already open.  You can do this by going to the :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoServer --> GeoServer Web Admin` or by opening a browser and navigating to http://localhost:8080/geoserver/web/ .
 
-#. ...
+#. If you are not already logged in, do so.  (The upper right of the screen will say "Logged in as admin" if you are logged in.)  The default username and password is ``admin`` and ``geoserver``.
 
-#. Profit!
+#. Click the :guilabel:`Styles` link on the left side of the screen.
 
-   .. todo:: Flesh Styler instructions out.
+   .. figure:: img/styles.png
+      :align: center
 
+      *The Styles section allows the viewing and editing of styles*
+
+#. A list of the styles known to GeoServer is displayed.  Click :guilabel:`Add a new style`.
+
+   .. figure:: img/listofstyles.png
+      :align: center
+
+      *The list of styles*
+
+#. By default, the :guilabel:`point` style is populated in the style field.  Type in "pointgreen" in the :guilabel:`Name` field.  On line 20 of the style, replace "#FF0000" with "#00FF00" .  This will make the style identical to the default point style, except with a green point instead of a read point.
+
+   .. figure:: img/pointgreen.png
+      :align: center
+
+      *Creating a style based off of the default point style*
+ 
+#. When done, click :guilabel:`Submit`.
+
+   .. figure:: img/stylesubmit.png
+      :align: center
+
+      *Submitting a new style*
+
+#. The style "pointgreen" will be shown in the style list now.  To associate this style with an existing layer, click on the "Layers" link on the left side of the admin screen.
+
+   .. figure:: img/layers.png
+      :align: center
+
+      *The Layers section allows layers to be configured*
+
+#. In the list of layers, select the layer to associate with the newly created style.
+
+   .. warning:: You must match the geometry type to the layer.  This example creates a point style, which can only be applied to a point layer.  If you mismatch the layer with the style, the layer will not display, and errors may occur.
+
+   .. figure:: img/layerslist.png
+      :align: center
+
+      *The list of layers*
+
+#. The next screen shows the information associated with that layer.  Click on the :guilabel:`Publishing` tab.
+
+   .. figure:: img/layeredit.png
+      :align: center
+
+      *Configuring a layer*
+
+#. Scroll down to the :guilabel:`Default style` dropdown box and select the "pointblue" style.
+
+   .. figure:: img/styleselect.png
+      :align: center
+
+      *Selecting another style*
+
+#. When done scroll to the bottom and click :guilabel:`Save`.
+
+#. If you wish to preview how the layer looks with the new style, click on :guilabel:`Layer Preview` on the left side of the web admin screen, scroll down to the layer, and then click on the :guilabel:`Openlayers` link next to the layer.
+
+   .. figure:: img/layerpreview1.png
+      :align: center
+
+      *The Layer Preview page*
+
+   .. figure:: img/layerpreview2.png
+      :align: center
+
+      *The Layer Preview page*
+
+
+.. _createyourmap:
 
 Create Your Map
 ---------------
@@ -96,19 +164,45 @@ Now that you have your data imported and styled, you can now organize your layer
 
    .. todo:: Screenshot of GX
 
-#. ...
+#. By default, you will see a basemap of the world.  To add your layers, click on the green plus icon in the top left corner of the screen.
 
-#. More profit!
+   .. todo:: Screenshot of plus
 
-   .. todo:: Flesh GX instructions out.
+#. A list of layers from GeoServer will be displayed.  Select the layers you wish to add, then click :guilabel:`Add layers`.  (You can use Ctrl-click to select multiple layers.)  Click :guilabel:`Done` when finished.
+
+   .. todo:: Screenshot of Add layers
+
+#. The layers will be added to the map.  Use the toolbar at the top of the screen to compose your map.
+
+   .. todo:: Screenshot of something
+
+   .. note:: For more information on GeoExplorer, please see the included GeoExplorer Documentation. 
+
 
 Export Your Map
 ---------------
 
-After you have created the map to look just as you like it, you can save the map position into a bookmarkable shortcut.
+After you have created the map and customized it to look just as you like it, you can save/export the map via a bookmarkable shortcut.
 
-#. ...
+#. Click on the :guilabel:`Bookmark` icon.
 
-#. Even more profit!
+   .. todo:: Screenshot of bookmark icon
 
-   .. todo:: Flesh export instructions out.
+#. A URL will be displayed.  Copy and save this URL to regenerate this map at aleter time.
+
+   .. todo:: Screenshot of URL
+ 
+You can also embed your map in a webpage.
+
+#. Click on the :guilabel:`Export Map` icon. 
+
+   .. todo:: Screenshot of Export Map icon
+
+#. In the dialog box that follows, select the layers that you wish to include in this embedded map.  Click :guilabel:`Next` when done.
+
+   .. todo:: Screenshot of Export Map box
+
+#. The next screen will show HTML code that can be pasted into a webpage in order to embed the map.
+
+   .. todo:: Screenshot of Export Map HTML
+
