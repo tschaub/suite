@@ -8,7 +8,7 @@ from paver.easy import task
 from paver import svn 
 import os, zipfile 
 from  shutil import copytree,rmtree , copy
-
+import urllib 
 
 setup(
     name="builder",
@@ -276,7 +276,9 @@ def data_dir():
 
     '''
     with pushd(download_path):
-        sh('curl -O http://data.opengeo.org/data.zip')
+        info('downloading data.zip')
+        urllib.urlretrieve('http://data.opengeo.org/data.zip','data.zip')
+        info('unziping data.zip')
         unzip_file('data.zip')
     copytree(path.joinpath(download_path,'data'),path.joinpath(source_path,'data_dir'))
 
