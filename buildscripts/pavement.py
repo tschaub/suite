@@ -7,8 +7,11 @@ from paver.easy import path, sh, info, pushd
 from paver.easy import task 
 from paver import svn 
 import os, zipfile 
-from  shutil import copytree,rmtree , copy
-import urllib 
+from  shutil import copytree,rmtree , copy, rmtree
+import urlgrabber.grabber
+from urlgrabber.grabber import urlgrab
+from urlgrabber.progress import text_progress_meter
+
 
 setup(
     name="builder",
@@ -19,6 +22,7 @@ setup(
     author_email="iwillig@opengeo.org",
     install_requires=[
         "JSTools>=0.1.2",
+        "urlgrabber",
         "Sphinx",
         "OWSLib"], 
     
@@ -65,7 +69,11 @@ def unzip_file(file):
 
 
 @task
-#@needs(["setuptools.develop"])
+@needs(["setuptools.develop"])
+def develop(): 
+    pass 
+
+@task 
 def auto(): 
     pass 
 
@@ -105,6 +113,7 @@ def download_bin():
                 # This is a hack, the Java download was a pain in the ass 
                 # I need to add an .exe to the end of the file 
                 info("We are downloading Java and it sucks.")
+                urlgrab(url,'sun-java.exe',progress_obj=text_progress_meter())
                 sh("curl -o sun-java.exe \"%s\" " % url) 
             if software == 'geoserver':
                 version = config.get("version","geoserver")
@@ -276,10 +285,14 @@ def data_dir():
 
     '''
     with pushd(download_path):
+        if path('data.zip').exists():
+            os.remove('data.zip')
+            rmtree('data')
         info('downloading data.zip')
-        urllib.urlretrieve('http://data.opengeo.org/data.zip','data.zip')
+        urlgrab('http://data.opengeo.org/data.zip','data.zip',progress_obj=text_progress_meter())
         info('unziping data.zip')
         unzip_file('data.zip')
+    info("moved data_dir into %s" % source_path)
     copytree(path.joinpath(download_path,'data'),path.joinpath(source_path,'data_dir'))
 
 @task 
