@@ -335,7 +335,6 @@ def build_all():
     call_task("download_source")
     call_task("move_java")
     call_task("gx")
-    call_task("data_dir")
     call_task("unpack_geoserver")
     '''call_task("styler")'''
     call_task("data_dir")
