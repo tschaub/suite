@@ -337,7 +337,7 @@ def build_all():
     call_task("gx")
     call_task("data_dir")
     call_task("unpack_geoserver")
-    call_task("styler")
+    '''call_task("styler")'''
     call_task("data_dir")
     call_task("download_docs")
     call_task("docs")
