@@ -29,7 +29,7 @@ Build the OpenGeo Suite installer:
 
        paver build_all
 
-   * In the buildscripts\installer directory, run
+   * In the buildscripts\artifacts\installer directory, run
 
      makensis OpenGeoInstaller.nsi (for CLI build)
      or
