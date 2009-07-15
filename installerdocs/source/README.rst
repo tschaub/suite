@@ -9,19 +9,11 @@ Prerequisites
 
 The OpenGeo Suite has the following system requirements:
 
-.. list-table::
-   :widths: 20 80
-
-   * - **Operating System**
-     - Windows XP, Vista, Server 2000, Server 2003, Server 2008 (all 32 bit)
-   * - **Memory**   
-     - 512MB minimum (1GB recommended)
-   * - **Disk space**
-     - 150MB minimum (plus extra space for your data)
-   * - **Browser**
-     - Any modern web browser is supported (Internet Explorer 7+, Firefox 2+, Chrome 1+)
-   * - **Permissions**
-     - Administrative rights
+* **Operating System**: Windows XP, Vista, Server 2000, Server 2003, Server 2008 (all 32 bit)
+* **Memory**: 512MB minimum (1GB recommended)
+* **Disk space**: 250MB minimum (plus extra space for your data)
+* **Browser**: Any modern web browser is supported (Internet Explorer 7+, Firefox 2+, Chrome 1+)
+* **Permissions**: Administrative rights
 
 
 Installation
