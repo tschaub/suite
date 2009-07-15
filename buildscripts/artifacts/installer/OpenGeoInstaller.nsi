@@ -11,7 +11,7 @@
 ; Main Install settings
 Name "${APPNAMEANDVERSION}"
 InstallDir "$PROGRAMFILES\${APPNAMEANDVERSION}"
-InstallDirRegKey HKLM "Software\${COMPANYNAME}\${APPNAME}" ""
+InstallDirRegKey HKLM "Software\${COMPANYNAME}\${APPNAME}\${VERSION}" ""
 OutFile "OpenGeoSuite-0.5beta.exe"
 
 ;Compression options
@@ -78,7 +78,7 @@ LangString TEXT_TYPE_SUBTITLE ${LANG_ENGLISH} "Select the type of installation."
 
 ;Start Menu Folder Page Configuration
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM" 
-!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${COMPANYNAME}\${APPNAME}" 
+!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${COMPANYNAME}\${APPNAME}\${VERSION}" 
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
 
 ; "Are you sure you wish to cancel" popup.
@@ -107,10 +107,10 @@ Function RunStuff
 
   ;Script to check if GeoServer has finished launching.  Checks for a response on port 8080
   ;We could delete this file after it's finished running, as it's no longer needed...
-  SetOutPath "$TEMP"
+  SetOutPath "$INSTDIR"
   File /a gscheck.bat
-  ExecWait $TEMP\gscheck.bat
-  Delete $TEMP\gscheck.bat
+  ExecWait $INSTDIR\gscheck.bat
+  ;Delete $INSTDIR\gscheck.bat
 
   ClearErrors
   ExecShell "open" "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Data Importer.lnk"
@@ -602,6 +602,7 @@ Section "GeoExplorer" Section2
 
 SectionEnd
 
+/* No Styler yet
 Section "Styler" Section3
 
   ; Set Section properties
@@ -621,6 +622,7 @@ Section "Styler" Section3
                  "$CommonAppData\OpenGeo\GeoServer\data_dir\www\styler\geoext.ico"
 
 SectionEnd
+*/
 
 Section "GeoServer Documentation" Section4
 
@@ -688,7 +690,9 @@ SectionEnd
 Section -FinishSection
 
   ; Reg Keys
-  WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}" "" "$INSTDIR"
+
+  WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}\${VERSION}" "" "$INSTDIR"
+  WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}" "" "OpenGeo Suite"
   WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}" "CurrentVersion" "${VERSION}"
 
   !define UNINSTALLREGPATH "Software\Microsoft\Windows\CurrentVersion\Uninstall"
@@ -698,17 +702,15 @@ Section -FinishSection
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "DisplayIcon" "$INSTDIR\opengeo.ico"
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "Publisher" "OpenGeo"
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "HelpLink" "http://opengeo.org"
-
-  ; Next two keys are to display "Remove" instead of "Modify/Remove". 
   WriteRegDWORD HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "NoModify" "1"
   WriteRegDWORD HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "NoRepair" "1"
 
   ; This regkey will be needed for uninstall
   ${If} $IsManual == 0 ; i.e. only if service install
-    WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}" "InstallType" "Service"
+    WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}\${VERSION}" "InstallType" "Service"
   ${EndIf}
   ${If} $IsManual == 1 ; i.e. only if manual install
-    WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}" "InstallType" "Manual"
+    WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}\${VERSION}" "InstallType" "Manual"
   ${EndIf}
 
   WriteUninstaller "$INSTDIR\uninstall.exe"
@@ -720,14 +722,14 @@ SectionEnd
 Section Uninstall
 
   ; First check if registry info is intact, otherwise install will fail
-  ReadRegStr $0 HKLM "Software\${COMPANYNAME}\${APPNAME}\" ""
+  ReadRegStr $0 HKLM "Software\${COMPANYNAME}\${APPNAME}\${VERSION}" ""
   ${If} $0 == ""
     MessageBox MB_ICONSTOP "Debug message: No regkey found!"
     Goto Fail
   ${EndIf}
 
   ; Check for service/manual
-  ReadRegStr $0 HKLM "Software\${COMPANYNAME}\${APPNAME}" "InstallType"
+  ReadRegStr $0 HKLM "Software\${COMPANYNAME}\${APPNAME}\${VERSION}" "InstallType"
   ${If} $0 == ""
     MessageBox MB_ICONSTOP "Debug message: No install type found!  Was this a service or manual install?"
     Goto Fail
@@ -780,7 +782,7 @@ Section Uninstall
   Continue:
 
     ; Remove all reg entries
-    DeleteRegKey HKLM "Software\${COMPANYNAME}"
+    DeleteRegKey HKLM "Software\${COMPANYNAME}\${APPNAME}\${VERSION}"
     DeleteRegKey HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}"
 
     ; Delete self
