@@ -1,14 +1,16 @@
 Description of svn contents:
 
 buildscripts
-   - Contains paver + NSIS scripts required to download all artifacts
+   - Contains scripts required to download all required artifacts
+   - Requires paver (python) + NSIS
 
 installerdocs
-   - Documentation source for installation full Suite installation.
+   - Documentation source for installation full Suite installation
      Requires Sphinx.
 
 integrationdocs
-   - Documentation source for full Suite. Requires Sphinx.
+   - Documentation source for full Suite aka "Getting Started"
+   - Requires Sphinx.
 
 medford
    - Styles for Medford data/demo
@@ -20,16 +22,18 @@ README.txt
    - This document.
 
 
-Instructions:
+
+Build the OpenGeo Suite installer:
 
    * In the buildscripts directory, run the command
 
        paver build_all
 
-     (requires python/paver)
+   * In the buildscripts\installer directory, run
 
-   * In the buildscripts/installer, run OpenGeoInstaller.nsi
+     makensis OpenGeoInstaller.nsi (for CLI build)
+     or
+     makensisw OpenGeoInstaller.nsi (for GUI build)
 
-     (requires makensis)
 
 This should output an .EXE file.  Voila.
