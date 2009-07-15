@@ -67,8 +67,8 @@ The OpenGeo Suite comes with some data built in to GeoServer.  (See the section 
 #. If you would like to see a preview of how a layer looks, click the :guilabel:`Preview` button next to that layer.  When finished you may close the browser.  Your data is now loaded into GeoServer.  If you wish to import more shapefiles from other directories, you may repeat this process.
 
 
-Style Your Data (advanced)
---------------------------
+Style Your Data
+---------------
 
 By default, all layers of the same geometry type (points, lines, polygons) will have the same style.  You can customize these styles in the GeoServer web admin interface.  A knowledge of SLD (Styled Layer Descriptors) is required.  Future versions of this software will include **Styler**, a GUI styling application. 
 

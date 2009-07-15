@@ -3,25 +3,37 @@
 For More Information
 ====================
 
-
+Below are some links to various resources to help you use the OpenGeo Suite.
 
 GeoServer
 ---------
 
-GeoServer is a gigantic piece of software, and has its own documentation.
+**Homepage**
 
-   .. todo:: Add link to GS Documentation
+   http://geoserver.org
+
+**Documentation**
+
+   http://docs.opengeo.org
+
+   Also included locally at :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoServer --> GeoServer Documentation`
 
 GeoExplorer
 -----------
 
-GeoExplorer is a less gigantic piece of software, and will have its own documentation eventually.
+**Homepage**
 
-   .. todo:: Add link to GX Documentation
+   http://geoserver.org
+
+**Documentation**
+
+   Included locally at :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoExplorer --> GeoExplorer Documentation`
 
 OpenGeo
 -------
 
-Expert service straight from the developers.
+OpenGeo, a social enterprise, provides support and services around GeoServer, OpenLayers, PostGIS, GeoWebCache, and GeoExt.  OpenGeo is the geospatial division of The Open Planning Project, a 503(c)(3) organization.
 
-   .. todo:: Add sales-y stuff
+   http://opengeo.org
+
+   http://openplans.org
