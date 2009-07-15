@@ -27,13 +27,13 @@ Build the OpenGeo Suite installer:
 
    * In the buildscripts directory, run the command
 
-       paver build_all
+        paver build_all
 
    * In the buildscripts\artifacts\installer directory, run
 
-     makensis OpenGeoInstaller.nsi (for CLI build)
+        makensis OpenGeoInstaller.nsi (for CLI build)
      or
-     makensisw OpenGeoInstaller.nsi (for GUI build)
+        makensisw OpenGeoInstaller.nsi (for GUI build)
 
 
-This should output an .EXE file.  Voila.
+This should output an .EXE file.
