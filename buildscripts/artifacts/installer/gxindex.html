@@ -30,6 +30,7 @@
         <script>
             Ext.BLANK_IMAGE_URL = "theme/app/img/blank.gif";
             var app = new GeoExplorer.Full({
+                alignToGrid: true,
                 //proxy: "/proxy/?url=",
                 about: {
                     title: "GeoExplorer Demo Map",
@@ -44,6 +45,12 @@
                     "demo": "/geoserver/ows/"
                 },
                 map: {
+                    layers: [{
+                        name: "World",
+                        title: "World",
+                        wms: "demo",
+                        group: "background"
+                    }],
                     center: [-96.7, 37.6],
                     zoom: 4
                 }

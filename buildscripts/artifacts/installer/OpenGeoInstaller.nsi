@@ -107,9 +107,9 @@ Function RunStuff
 
   ;Script to check if GeoServer has finished launching.  Checks for a response on port 8080
   ;We could delete this file after it's finished running, as it's no longer needed...
-  SetOutPath "$INSTDIR"
+  SetOutPath "$INSTDIR\OpenGeo\GeoServer"
   File /a gscheck.bat
-  ExecWait $INSTDIR\gscheck.bat
+  ExecWait $INSTDIR\OpenGeo\GeoServer\gscheck.bat
   ;Delete $INSTDIR\gscheck.bat
 
   ClearErrors
@@ -469,8 +469,8 @@ Section "GeoServer" Section1
   CreateDirectory $CommonAppData\OpenGeo
   CreateDirectory $CommonAppData\OpenGeo\GeoServer
   SetOutPath "$CommonAppData\OpenGeo\GeoServer"
-  ;File /r ..\data_dir                           ; Custom data_dir
-  File /r /x logging.xml ..\geoserver\data_dir   ; Default data_dir
+  File /r /x logging.xml ..\data_dir              ; Custom data_dir
+  ;File /r /x logging.xml ..\geoserver\data_dir    ; Default data_dir
   SetOutPath "$CommonAppData\OpenGeo\GeoServer\data_dir"
   File /a logging.xml
   
