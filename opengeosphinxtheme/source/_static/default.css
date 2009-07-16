@@ -341,7 +341,7 @@ font-size: 1em;
 
 .content h1 {
 font-family: Univers,Helvetica,Verdana,Arial,sans-serif;
-font-weight: bold;
+font-weight: bold;ing
 font-size: 2em;
 }
 
@@ -524,6 +524,17 @@ p.admonition-title:after {
 content: ":";
 }
 
+div.warning p + p,
+div.admonition p + p,
+div.note p + p {
+margin-top: 0;
+}
+
+div.warning p.last,
+div.admonition p.last,
+div.note p.last {
+margin-bottom: 0;
+}
 
 table.docutils {
 border: 0;
