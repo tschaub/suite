@@ -314,6 +314,7 @@ color: #231d17;
 .column-view {
 width: 465px;
 float: left;
+margin-bottom: 0.5em;
 }
 
 .full-width {
@@ -376,8 +377,8 @@ color: #26b2dd;
 }
 
 .content #relatedlinks {
-margin: 0;
 padding: 0;
+text-transform: capitalize;
 }
 
 .content #relatedlinks li {
@@ -396,7 +397,6 @@ padding: 0 0.5em;
 .content #relatedlinks li.first a {
 padding: 0 0 0 0.5em;
 }
-
 
 .content abbr, 
 .content acronym {
@@ -717,6 +717,7 @@ float: right;
 .inner-sidebar {
 width: 260px;
 margin-left: 1em;
+margin-top: 1em;
 float: left;
 font: normal normal normal 1em/1.2em Helvetica, verdana, sans-serif;
 color: #231d17;

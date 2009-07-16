@@ -25,7 +25,6 @@
   {%- block relbaritems %}{% endblock %}
 </ul>
 {%- endmacro %}
-
 {%- macro sidebar() %}
   {%- if builder != 'htmlhelp' %}
   <div id="sidebar" class="inner-sidebar">
@@ -168,12 +167,12 @@
     <div class="content">
       {%- block breadcrumbbar %}{{ breadcrumbs() }}{% endblock %}
       <div class="main full-width">   
-      {%- block rellinkbar %}{{ rellinkbar() }}{% endblock %}
       {%- block document %}
         <div class="column-view">
           {% block body %}
             {{ body }}
           {% endblock %}
+          {%- block rellinkbar %}{{ rellinkbar() }}{% endblock %}
         </div>
       {%- endblock %}
       {%- block sidebar %}{{ sidebar() }}{% endblock %}
