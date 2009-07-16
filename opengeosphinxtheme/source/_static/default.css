@@ -341,7 +341,8 @@ font-size: 1em;
 
 .content h1 {
 font-family: Univers,Helvetica,Verdana,Arial,sans-serif;
-font-weight: lighter;
+font-weight: bold;
+font-size: 2em;
 }
 
 .content ul#breadcrumbs {
