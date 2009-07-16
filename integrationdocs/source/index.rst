@@ -8,6 +8,6 @@ Welcome to the OpenGeo Suite!  The OpenGeo Suite is a free, fully-featured web m
    :maxdepth: 2
 
    whatis.rst
-   howtouse.rst
+   howtouse/index.rst
    builtindemos.rst
    moreinfo.rst
