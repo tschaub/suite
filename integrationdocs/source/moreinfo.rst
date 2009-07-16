@@ -1,7 +1,7 @@
 .. _moreinfo:
 
-For More Information
-====================
+More Information
+================
 
 Below are some links to various resources to help you use the OpenGeo Suite.
 
@@ -14,7 +14,7 @@ GeoServer
 
 **Documentation**
 
-   http://docs.opengeo.org
+   http://docs.geoserver.org
 
    Also included locally at :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoServer --> GeoServer Documentation`
 
@@ -23,7 +23,7 @@ GeoExplorer
 
 **Homepage**
 
-   http://geoserver.org
+   GeoExplorer is a component of GeoExt, available at http://geoext.org .
 
 **Documentation**
 

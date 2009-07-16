@@ -18,9 +18,9 @@ The OpenGeo Suite comes with some data built in to GeoServer.  (See the section 
 
       *Logging in to the GeoServer web admin interface*
 
-#. On the next screen, enter a name for the project in the :guilabel:`Project prefix` box.  This name can be up to 10 characters, and may not contain spaces.
+#. On the next screen, enter a name for the project in the :guilabel:`Project prefix` box.  This name can be up to ten characters in length, and may not contain spaces.
 
-   .. note:: The :guilabel:`Project prefix` will be prefixed to the name of every shapefile you import into GeoServer.  For example, if you import a file named :file:`roads.shp`, and enter a prefix of ``usa``, the resulting layer in GeoServer will be called ``usa:roads``.
+   .. note:: The :guilabel:`Project prefix` will be prefixed to the name of every shapefile you import into GeoServer.  For example, if you import a shapefile named :file:`roads.shp`, and enter a prefix of ``usa``, the resulting layer in GeoServer will be called ``usa:roads``.
 
    .. figure:: img/importerblank.png
       :align: center
@@ -34,7 +34,7 @@ The OpenGeo Suite comes with some data built in to GeoServer.  (See the section 
 
       *Browsing for shapefiles on your local machine*
 
-   .. warning:: If you installed GeoServer as a **Service**, GeoServer will not be able to read any folders outside of the existing data directory.  You must explicitly grant read access to the folder that contains teh shapefiles for the user "NETWORK SERVICE".
+   .. warning:: If you installed GeoServer as a **Service**, GeoServer will not be able to read any folders outside of the existing data directory.  You must explicitly grant read access to the folder that contains the shapefiles for the user "NETWORK SERVICE".
 
       For more information on how to grant permissions, please see the following article:  http://www.microsoft.com/windowsxp/using/security/learnmore/accesscontrol.mspx
 
@@ -59,4 +59,6 @@ The OpenGeo Suite comes with some data built in to GeoServer.  (See the section 
 
       *The Data Importer results page*
 
-#. If you would like to see a preview of how a layer looks, click the :guilabel:`Preview` button next to that layer.  When finished you may close the browser.  Your data is now loaded into GeoServer.  If you wish to import more shapefiles from other directories, you may repeat this process.
+#. If you would like to see a preview of how a layer looks, click the :guilabel:`Preview` button next to that layer.  When finished you may close the browser.  Your data is now loaded into GeoServer.
+
+If you wish to import more shapefiles from other directories, you may repeat this process.

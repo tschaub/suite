@@ -3,10 +3,12 @@
 Publish Your Map
 ================
 
-Bookmark
---------
+After you have created and composed your map, you can publish it via either a URL bookmark or by embedding it in a webpage.
 
-After you have created the map and customized it to look just as you like it, you can save/export the map via a bookmarkable shortcut.
+URL Bookmark
+------------
+
+To generate a URL bookmark:
 
 #. Click on the :guilabel:`Bookmark` icon.
 
@@ -25,7 +27,7 @@ After you have created the map and customized it to look just as you like it, yo
 Embedded HTML
 -------------
 
-You can also embed your map in a webpage.
+To embed your map in a web page:
 
 #. Click on the :guilabel:`Publish Map` icon.
 
@@ -34,14 +36,14 @@ You can also embed your map in a webpage.
 
       *The Publish Map button will generate a block of HTML*
 
-#. In the dialog box that follows, select the layers that you wish to include in this embedded map.  (Normally, you would not need to change anything here.)  Click :guilabel:`Next` when done.
+#. In the dialog box that follows, select the layers that you wish to include in this embedded map.  (If you have already composed your map, you do not need to change anything here.)  Click :guilabel:`Next` to continue.
 
    .. figure:: img/exportmapdialog1.png
       :align: center
 
       *Selecting the layers for the map export*
 
-#. The next screen will show HTML code that can be pasted into a webpage in order to embed the map.  You can change the values for the map size in the Map Size pulldown box, or by changing the width and height values.  The changes will automatically be reflected in the HTML.
+#. The next screen will show HTML code that can be copied and included in a web page to embed the map.  You can change the values for the map size in the :guilabel:`Map Size` pulldown box, or by changing the :guilabel:`Height` and :guilabel:`Width` values.  The changes will automatically be reflected in the HTML.
 
    .. figure:: img/exportmapdialog2.png
       :align: center
