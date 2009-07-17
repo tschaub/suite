@@ -34,9 +34,7 @@ The OpenGeo Suite comes with some data built in to GeoServer.  (See the section 
 
       *Browsing for shapefiles on your local machine*
 
-   .. warning:: If you installed GeoServer as a **Service**, GeoServer will not be able to read any folders outside of the existing data directory.  You must explicitly grant read access to the folder that contains the shapefiles for the user "NETWORK SERVICE".
-
-      For more information on how to grant permissions, please see the following article:  http://www.microsoft.com/windowsxp/using/security/learnmore/accesscontrol.mspx
+   .. warning:: If you installed GeoServer as a **Service**, GeoServer will not be able to read any folders outside of the existing data directory.  You must explicitly grant read access to the folder that contains the shapefiles for the user "NETWORK SERVICE".  For more information on how to grant permissions, please see the following article:  http://www.microsoft.com/windowsxp/using/security/learnmore/accesscontrol.mspx
 
 #. When done, click :guilabel:`Import data`.
 
@@ -60,5 +58,7 @@ The OpenGeo Suite comes with some data built in to GeoServer.  (See the section 
       *The Data Importer results page*
 
 #. If you would like to see a preview of how a layer looks, click the :guilabel:`Preview` button next to that layer.  When finished you may close the browser.  Your data is now loaded into GeoServer.
+
+#. If you would like to view a layer's data and publishing configuration, click the layer :guilabel:`Name`.
 
 If you wish to import more shapefiles from other directories, you may repeat this process.
