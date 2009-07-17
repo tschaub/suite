@@ -12,10 +12,10 @@ The city of Medford, Oregon has generously shared some of their municipal data, 
 
 You can use GeoExplorer to view the included layers.  Go to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoExplorer --> GeoExplorer Documentation` or http://localhost:8080/geoserver/www/GeoExplorer/ to load GeoExplorer.  See the section on :ref:`composeyourmap` for information on loading the layers in GeoExplorer, or see the full GeoExplorer Documentation at :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoExplorer --> GeoExplorer Documentation`.
 
-   .. figure:: img/medford.png
-      :align: center
+.. figure:: img/medford.png
+   :align: center
 
-      *Zoning data for Medford as seen through GeoExplorer*
+   *Zoning data for Medford as seen through GeoExplorer*
 
 Base Map
 --------
