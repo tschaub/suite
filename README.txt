@@ -4,19 +4,22 @@ buildscripts
    - Contains scripts required to download all required artifacts
    - Requires paver (python) + NSIS
 
-installerdocs
-   - Documentation source for installation full Suite installation
-     Requires Sphinx.
+docs
 
-integrationdocs
-   - Documentation source for full Suite aka "Getting Started"
-   - Requires Sphinx.
+   - installerdocs
+      - Documentation source for installation full Suite installation
+      - Requires Sphinx.
+
+   - integrationdocs
+      - Documentation source for full Suite aka "Getting Started"
+      - Requires Sphinx.
+
+   - opengeotheme
+     - Sphinx theme that is branded to look like OpenGeo.
+       (Common to both of the above projects) 
 
 medford
    - Styles for Medford data/demo
-
-opengeosphinxtheme
-   - Sphinx theme that is branded to look like OpenGeo.
 
 README.txt
    - This document.
