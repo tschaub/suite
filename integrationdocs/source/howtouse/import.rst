@@ -3,13 +3,13 @@
 Import Your Data
 ================
 
-The OpenGeo Suite comes with some data built in to GeoServer.  (See the section on :ref:`builtindemos` for more information.)  But to make *your* web application, you will need to first load your data into GeoServer.  GeoServer comes with an importer application to make this process easy.
+The OpenGeo Suite comes with some data built in to GeoServer.  (See the section on :ref:`builtindemos` for more information.)  But to make *your* web map, you will need to first load your data into GeoServer.  GeoServer comes with an importer application to make this process easy.
 
 #. First, start GeoServer if it is not already started.  You can do this by going to the :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoServer --> Start GeoServer`
 
 #. Open the GeoServer Data Importer.  You can do this by going to the :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoServer --> GeoServer Data Importer`.
 
-   .. note:: You can also navigate to the Data Importer from the main web admin page by first logging in and then clicking on the :guilabel:`Importer` link on the left side of the screen.  You will need to be logged in for that option to appear.
+   .. note:: You can also navigate to the Data Importer from the GeoServier web admin page when you are logged into GeoServer.  Log into GeoServer on from the top menu and then click on the :guilabel:`Importer` link on the left side of the screen.  
 
 #. Your browser will open to the GeoServer login screen.  The default username and password is ``admin`` and ``geoserver``.  Click :guilabel:`Login` when done.
 
@@ -20,7 +20,7 @@ The OpenGeo Suite comes with some data built in to GeoServer.  (See the section 
 
 #. On the next screen, enter a name for the project in the :guilabel:`Project prefix` box.  This name can be up to ten characters in length, and may not contain spaces.
 
-   .. note:: The :guilabel:`Project prefix` will be prefixed to the name of every shapefile you import into GeoServer.  For example, if you import a shapefile named :file:`roads.shp`, and enter a prefix of ``usa``, the resulting layer in GeoServer will be called ``usa:roads``.
+   .. note:: The :guilabel:`Project prefix` will be placed before the name of every shapefile you import into GeoServer.  For example, if you import a shapefile named :file:`roads.shp`, and enter a prefix of ``usa``, the resulting layer in GeoServer will be called ``usa:roads``.
 
    .. figure:: img/importerblank.png
       :align: center

@@ -1,7 +1,7 @@
 The OpenGeo Suite
 =================
 
-Welcome to the OpenGeo Suite!  The OpenGeo Suite is a free, fully-featured web mapping environment that's easy to install, configure, and use, allowing you to create maps quickly and easily.
+Welcome to the OpenGeo Suite!  The OpenGeo Suite is a free, fully-featured web mapping environment that's easy to install, configure, and use.  With the OpenGeo you can quickly and easily create your own maps.
 
 
 .. toctree::
