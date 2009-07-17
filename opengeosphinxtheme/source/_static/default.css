@@ -312,13 +312,13 @@ color: #231d17;
 }
 
 .column-view {
-width: 465px;
+width: 500px;
 float: left;
 margin-bottom: 0.5em;
 }
 
 .full-width {
-width: 740px;
+width: 765px;
 }
 
 .main p {
@@ -409,7 +409,8 @@ border: 1px solid #888;
 -webkit-box-shadow: 0.33em 0.33em 0.17em #888, 0.33em 0.33em 1em rgba(0,0,0,0.3);
 -o-box-shadow: 0.33em 0.33em 0.17em #888, 0.33em 0.33em 1em rgba(0,0,0,0.3);
 -moz-box-shadow: 0.33em 0.33em 0.17em #888, 0.33em 0.33em 1em rgba(0,0,0,0.3);
-box-shadow: 0.33em 0.33em 0.17em #888, 0.33em 0.33em 1em rgba(0,0,0,0.3); 
+box-shadow: 0.33em 0.33em 0.17em #888, 0.33em 0.33em 1em rgba(0,0,0,0.3);
+max-width: 100%;
 }
 
 
