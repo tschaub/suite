@@ -251,7 +251,7 @@ def docs():
         with pushd(download_path):
             with pushd(docs_path):
                 svn.checkout('http://svn.codehaus.org/geoserver/trunk/doc/theme/','theme')
-                svn.checkout('http://svn.opengeo.org/vulcan/trunk/opengeosphinxtheme/','opengeo_theme')
+                svn.checkout('http://svn.opengeo.org/vulcan/trunk/docs/opengeotheme/','opengeotheme')
                 for doc in config.options(section): 
                     info("Build docs for %s" % doc) 
                     app_doc = path(doc)
