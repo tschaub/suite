@@ -134,7 +134,7 @@ def unpack_geoserver():
         if geoserver.exists():
             rmtree(geoserver)
         unzip_file(geoserverZIP)
-        os.rename(geoserver_vs,geoserver)
+#        os.rename(geoserver_vs,geoserver)
         os.remove(geoserverZIP)
 
 @task
@@ -212,7 +212,7 @@ def geoserver_plugins():
                     pluginZIP = "%s-%s" % (version,plugin)
 # This is broken, needs fixing Jul 14 
 #                    urlgrab(pluginURL,pluginZIP,progress_obj=text_progress_meter())
- #                   unzip_file(pluginZIP)
+#                   unzip_file(pluginZIP)
     def move():
         info("Moving GeoServer Plugins")
         dest = path.joinpath(source_path,path("geoserver_plugins"))
@@ -250,7 +250,7 @@ def docs():
         # fix 
         with pushd(download_path):
             with pushd(docs_path):
-                svn.checkout('http://svn.codehaus.org/geoserver/trunk/doc/theme/','theme')
+                svn.checkout('http://svn.codehaus.org/geoserver/trunk/doc/en/theme/','theme')
                 svn.checkout('http://svn.opengeo.org/vulcan/trunk/docs/opengeotheme/','opengeotheme')
                 for doc in config.options(section): 
                     info("Build docs for %s" % doc) 
@@ -286,17 +286,15 @@ def data_dir():
     Download a zip file and moved into the GeoServer folder.
 
     '''
+    data_medford = 'data_medford.zip'
     with pushd(download_path):
         if path('data.zip').exists():
             os.remove('data.zip')
             rmtree('data')
-        info('downloading data.zip')
-        urlgrab('http://data.opengeo.org/data.zip','data.zip',progress_obj=text_progress_meter())
-        info('unziping data.zip')
-        unzip_file('data.zip')
+        urlgrab('http://data.opengeo.org/data_dirs/data_medford.zip',data_medford,progress_obj=text_progress_meter())
+        unzip_file(data_medford)
     info("moved data_dir into %s" % source_path)
     if path.joinpath(source_path,'data_dir').exists():
-        info("removing old data_dir")
         rmtree(path.joinpath(source_path,'data_dir'))
     copytree(path.joinpath(download_path,'data'),path.joinpath(source_path,'data_dir'))
 
@@ -318,6 +316,12 @@ def styler():
     copytree(path.joinpath(styler_download,'theme'),path.joinpath(styler_source,'theme'))
     copytree(path.joinpath(styler_download,'externals'),path.joinpath(styler_source,'externals'))
                        
+@task 
+def cleanup(): 
+    ''' 
+    Cleans up download folder after the script is down 
+    ''' 
+    rmtree(download_path)
 
 @task
 def download_all(): 
@@ -337,10 +341,10 @@ def build_all():
     call_task("move_java")
     call_task("gx")
     call_task("unpack_geoserver")
-    '''call_task("styler")'''
     call_task("data_dir")
     call_task("download_docs")
     call_task("docs")
+    call_task("cleanup")
 
 
 
