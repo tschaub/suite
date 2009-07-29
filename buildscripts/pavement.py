@@ -344,7 +344,7 @@ def build_all():
     call_task("data_dir")
     call_task("download_docs")
     call_task("docs")
-    call_task("cleanup")
+    '''call_task("cleanup")'''
 
 
 
