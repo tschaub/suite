@@ -122,7 +122,7 @@ def download_bin():
 @task
 def unpack_geoserver(): 
     version = config.get("version","geoserver")
-    geoserver_vs = path('geoserver-2.0-beta1')    
+    geoserver_vs = path('geoserver-2.0-beta2')    
     geoserver = path("geoserver")
     geoserverZIP = "geoserver.zip" 
     geoserverSRC = path.joinpath(download_path,geoserverZIP)
@@ -134,7 +134,7 @@ def unpack_geoserver():
         if geoserver.exists():
             rmtree(geoserver)
         unzip_file(geoserverZIP)
-#        os.rename(geoserver_vs,geoserver)
+        os.rename(geoserver_vs,geoserver)
         os.remove(geoserverZIP)
 
 @task
