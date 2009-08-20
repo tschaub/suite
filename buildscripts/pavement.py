@@ -127,6 +127,7 @@ def download_bin(options):
                 # This is a hack, the Java download was a pain in the ass 
                 # I need to add an .exe to the end of the file 
                 urlgrab(url,'sun-java.exe',progress_obj=text_progress_meter())
+
             if software == 'geoserver':
                 version = config.get("version","geoserver")
                 if url.startswith("http://$user:$password@"):
@@ -349,11 +350,10 @@ def download_all():
     call_task("geoserver_plugins")
     
 
-@task 
+@task
+@needs(["dir_layout","download_bin"])
 def build_all(): 
     info("Building all of the OpenGeo Stack")
-    call_task("dir_layout")
-    call_task("download_bin")
     call_task("download_source")
     call_task("move_java")
     call_task("gx")
@@ -361,7 +361,10 @@ def build_all():
     call_task("data_dir")
     call_task("download_docs")
     call_task("docs")
-    '''call_task("cleanup")'''
+    try:
+        call_task("cleanup")
+    except Exception, e:
+        info(e)
 
 
 
