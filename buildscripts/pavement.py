@@ -11,7 +11,10 @@ from  shutil import copytree,rmtree , copy, rmtree
 import urlgrabber.grabber
 from urlgrabber.grabber import urlgrab
 from urlgrabber.progress import text_progress_meter
+import string
+import sys
 
+#http://user:pass@foo.org/bar
 
 setup(
     name="builder",
@@ -47,6 +50,7 @@ builder = path("builder")
 if not builder.exists(): 
     os.mkdir(builder)
 
+#@@ use auto and options rather than module globals
 config = ConfigParser.RawConfigParser()
 config.read("config.ini")
 download_path = path(config.get("files","downloads")) 
@@ -96,13 +100,23 @@ def clean():
                 sh("rd /S /Q %s" % _dir )
             else:
                 rmtree(_dir)
-    
+
+def url_with_basic_auth(url, authstr):
+    auth = dict()
+    auth['user'], auth['password'] = authstr.split(':')
+    return string.Template(url).substitute(auth)
 
 @task 
 @needs(["dir_layout"])
-def download_bin(): 
+@cmdopts([
+    ('auth=', 'a', 'username:password')
+])
+def download_bin(options): 
     '''
     Downloads the binary files
+
+    takes -a --auth username:password
+    for geoserver download from hudson
     '''
     with pushd(download_path) as download: 
         section = "bin_software"
@@ -115,9 +129,12 @@ def download_bin():
                 urlgrab(url,'sun-java.exe',progress_obj=text_progress_meter())
             if software == 'geoserver':
                 version = config.get("version","geoserver")
+                if url.startswith("http://$user:$password@"):
+                    if not options.download_bin.auth:
+                        info("%s requires you set -a user:pw to download" %url)
+                        sys.exit()
+                    url = url_with_basic_auth(url, options.download_bin.auth)
                 urlgrab(url,'geoserver.zip',progress_obj=text_progress_meter())
-            else: 
-                pass
 
 @task
 def unpack_geoserver(): 
