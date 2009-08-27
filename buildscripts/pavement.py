@@ -302,15 +302,14 @@ def source_dirs():
 def data_dir(): 
     '''
     Download a zip file and moved into the GeoServer folder.
-
     '''
-    data_medford = 'data_medford.zip'
+    vulcan_datadir = 'vulcan_datadir.zip'
     with pushd(download_path):
         if path('data.zip').exists():
             os.remove('data.zip')
             rmtree('data')
-        urlgrab('http://data.opengeo.org/data_dirs/data_medford.zip',data_medford,progress_obj=text_progress_meter())
-        unzip_file(data_medford)
+        urlgrab('http://data.opengeo.org/data_dirs/vulcan_datadir.zip',vulcan_datadir,progress_obj=text_progress_meter())
+        unzip_file(vulcan_datadir)
     info("moved data_dir into %s" % source_path)
     if path.joinpath(source_path,'data_dir').exists():
         rmtree(path.joinpath(source_path,'data_dir'))
@@ -359,6 +358,7 @@ def build_all():
     call_task("gx")
     call_task("unpack_geoserver")
     call_task("data_dir")
+    call_task("styler")
     call_task("download_docs")
     call_task("docs")
 '''

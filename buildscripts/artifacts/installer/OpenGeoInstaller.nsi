@@ -51,6 +51,8 @@ Var Manual
 Var Service
 Var IsManual
 Var OldDataDir
+Var GSUsername
+Var GSPassword
 
 ; Version Information (Version tab for EXE)
 VIProductVersion ${LONGVERSION}
@@ -67,6 +69,8 @@ LangString TEXT_READY_TITLE ${LANG_ENGLISH} "Ready to Install"
 LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be installed."
 LangString TEXT_TYPE_TITLE ${LANG_ENGLISH} "Type of Installation"
 LangString TEXT_TYPE_SUBTITLE ${LANG_ENGLISH} "Select the type of installation."
+LangString TEXT_CREDS_TITLE ${LANG_ENGLISH} "GeoServer Administrator"
+LangString TEXT_CREDS_SUBTITLE ${LANG_ENGLISH} "Set administrator credentials"
 
 ;Interface Settings
 !define MUI_ICON "opengeo.ico"
@@ -133,6 +137,7 @@ Page custom PriorInstall                                      ; Check to see if 
 Page custom GetJRE                                            ; Check for JRE
 Page custom PriorDataDir                                      ; Check to see if datadir exists
 Page custom InstallType InstallTypeTest                       ; Install manually or as a service?
+Page custom Creds CredsLeave                                  ; Set GeoServer admin credentials
 Page custom Ready                                             ; Ready to install page
 !insertmacro MUI_PAGE_INSTFILES                               ; Actually do the install
 !insertmacro MUI_PAGE_FINISH                                  ; Done
@@ -347,6 +352,44 @@ Function PriorDataDir
 FunctionEnd 
 
 
+; Will build a page with radio buttons for manual vs service selection
+Function Creds
+
+  nsDialogs::Create 1018
+  !insertmacro MUI_HEADER_TEXT "$(TEXT_CREDS_TITLE)" "$(TEXT_CREDS_SUBTITLE)"
+
+  ; Populate defaults on first display
+  StrCmp $GSUsername "" 0 +2
+    StrCpy $GSUsername "admin"
+  StrCmp $GSPassword "" 0 +2
+    StrCpy $GSPassword "geoserver"
+
+  ;Syntax: ${NSD_*} x y width height text
+  ${NSD_CreateLabel} 0 10u 100% 36u "GeoServer requires a username and password in order to edit its configuration.  Please enter a username and password in each of the below fields, or leave unchanged or blank to accept the defaults."
+  ${NSD_CreateLabel} 20u 50u 40u 14u "Username"  
+  ${NSD_CreateText} 70u 48u 50u 14u $GSUsername
+  Pop $GSUsername
+  ${NSD_CreateLabel} 20u 70u 40u 14u "Password" 
+  ${NSD_CreateText} 70u 68u 50u 14u $GSPassword
+  Pop $GSPassword
+
+  nsDialogs::Show
+
+FunctionEnd
+
+Function CredsLeave
+
+  ${NSD_GetText} $GSUsername $GSUsername ; converts numeric string into text
+  ${NSD_GetText} $GSPassword $GSPassword ; ditto
+
+  ; If user blanked username/password, use defaults anyway!
+  StrCmp $GSUsername "" 0 +2
+    StrCpy $GSUsername "admin"
+  StrCmp $GSPassword "" 0 +2
+    StrCpy $GSPassword "geoserver"
+
+FunctionEnd
+
 ; One final page to review options
 Function Ready
 
@@ -469,10 +512,12 @@ Section "GeoServer" Section1
   CreateDirectory $CommonAppData\OpenGeo
   CreateDirectory $CommonAppData\OpenGeo\GeoServer
   SetOutPath "$CommonAppData\OpenGeo\GeoServer"
-  File /r /x logging.xml ..\data_dir              ; Custom data_dir
+  File /r /x logging.xml /x security\users.properties ..\data_dir              ; Custom data_dir
   ;File /r /x logging.xml ..\geoserver\data_dir    ; Default data_dir
   SetOutPath "$CommonAppData\OpenGeo\GeoServer\data_dir"
   File /a logging.xml
+  SetOutPath "$CommonAppData\OpenGeo\GeoServer\data_dir\security"
+  File /a users.properties
   
   SkipDataDirCopy:
 
@@ -499,6 +544,17 @@ Section "GeoServer" Section1
   ; Make sure Windows knows about the change (not quite sure what this does)
   SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
 
+  ; Write new username and password
+  SetOutPath "$CommonAppData\OpenGeo\GeoServer\data_dir\security"
+  ${textreplace::ReplaceInFile} "$CommonAppData\OpenGeo\GeoServer\data_dir\security\users.properties" \
+                                "$CommonAppData\OpenGeo\GeoServer\data_dir\security\users.properties" \
+                                "[gsusername]" "$GSUsername" \
+                                "/S=1" $0
+  ${textreplace::ReplaceInFile} "$CommonAppData\OpenGeo\GeoServer\data_dir\security\users.properties" \
+                                "$CommonAppData\OpenGeo\GeoServer\data_dir\security\users.properties" \
+                                "[gspassword]" "$GSPassword" \
+                                "/S=1" $0
+  
 
   StrCmp $OldDataDir 1 SkipLogEdit 0 
   ; logging.xml file is deleted/recreated here
@@ -545,8 +601,9 @@ Section "GeoServer" Section1
                  "http://localhost:8080/geoserver/web"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Data Importer.lnk" \
                  "http://localhost:8080/geoserver/web/?wicket:bookmarkablePage=:org.geoserver.web.importer.ImportPage"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Data Directory.lnk" \
+                 "$CommonAppData\OpenGeo\GeoServer\data_dir"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
-
 
 
   ; Different Start/Stop shortcuts depending on service/manual
@@ -602,7 +659,7 @@ Section "GeoExplorer" Section2
 
 SectionEnd
 
-/* No Styler yet
+
 Section "Styler" Section3
 
   ; Set Section properties
@@ -622,7 +679,7 @@ Section "Styler" Section3
                  "$CommonAppData\OpenGeo\GeoServer\data_dir\www\styler\geoext.ico"
 
 SectionEnd
-*/
+
 
 Section "GeoServer Documentation" Section4
 
