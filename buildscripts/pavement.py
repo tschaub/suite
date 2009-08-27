@@ -140,7 +140,7 @@ def download_bin(options):
 @task
 def unpack_geoserver(): 
     version = config.get("version","geoserver")
-    geoserver_vs = path('geoserver-2.0-beta2')    
+    geoserver_vs = path('geoserver-2.0-SNAPSHOT')    
     geoserver = path("geoserver")
     geoserverZIP = "geoserver.zip" 
     geoserverSRC = path.joinpath(download_path,geoserverZIP)
@@ -361,10 +361,11 @@ def build_all():
     call_task("data_dir")
     call_task("download_docs")
     call_task("docs")
+'''
     try:
         call_task("cleanup")
     except Exception, e:
         info(e)
-
+'''
 
 
