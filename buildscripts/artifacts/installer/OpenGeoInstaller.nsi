@@ -53,6 +53,8 @@ Var IsManual
 Var OldDataDir
 Var GSUsername
 Var GSPassword
+Var GSUsernameTemp
+Var GSPasswordTemp
 
 ; Version Information (Version tab for EXE)
 VIProductVersion ${LONGVERSION}
@@ -356,23 +358,25 @@ Function Creds
   !insertmacro MUI_HEADER_TEXT "$(TEXT_CREDS_TITLE)" "$(TEXT_CREDS_SUBTITLE)"
 
   ; This needs to be done at the beginning too to avoid clobbering these variables back into numbers
-  ${NSD_GetText} $GSUsername $GSUsername ; converts numeric string into text...
-  ${NSD_GetText} $GSPassword $GSPassword ; ...and then saves into the same variable
+  ;${NSD_GetText} $GSUsernameTemp $GSUsername ; converts numeric string into text...
+  ;${NSD_GetText} $GSPasswordTemp $GSPassword ; ...and then saves into the same variable
 
-  ; Populate defaults on first display
-  StrCmp $GSUsername "" 0 +2
+  ; Populate defaults on first display, and reset if user blanked eitehr username/password
+  StrCmp $GSUsername "" 0 +3
     StrCpy $GSUsername "admin"
-  StrCmp $GSPassword "" 0 +2
+    StrCpy $GSPassword "geoserver"
+  StrCmp $GSPassword "" 0 +3
+    StrCpy $GSUsername "admin"
     StrCpy $GSPassword "geoserver"
 
   ;Syntax: ${NSD_*} x y width height text
-  ${NSD_CreateLabel} 0 10u 100% 36u "GeoServer requires a username and password in order to edit its configuration.  Please enter a username and password in each of the below fields, or leave unchanged or blank to accept the defaults."
+  ${NSD_CreateLabel} 0 10u 100% 36u "GeoServer requires a username and password in order to edit its configuration.  Please enter a username and password in each of the below fields, or leave unchanged or blank to accept the defaults.  Neither the username nor password can be blank."
   ${NSD_CreateLabel} 20u 50u 40u 14u "Username"  
   ${NSD_CreateText} 70u 48u 50u 14u $GSUsername
-  Pop $GSUsername
+  Pop $GSUsernameTemp
   ${NSD_CreateLabel} 20u 70u 40u 14u "Password" 
   ${NSD_CreateText} 70u 68u 50u 14u $GSPassword
-  Pop $GSPassword
+  Pop $GSPasswordTemp
 
   nsDialogs::Show
 
@@ -381,13 +385,15 @@ FunctionEnd
 ; Second half of Creds function
 Function CredsLeave
 
-  ${NSD_GetText} $GSUsername $GSUsername ; converts numeric string into text...
-  ${NSD_GetText} $GSPassword $GSPassword ; ...and then saves into the same variable
+  ${NSD_GetText} $GSUsernameTemp $GSUsername ; converts numeric string into text...
+  ${NSD_GetText} $GSPasswordTemp $GSPassword ; ...and then saves into the same variable
 
-  ; If user blanked username/password, use defaults anyway!
-  StrCmp $GSUsername "" 0 +2
+  ; If user blanked either username/password, use defaults anyway!
+  StrCmp $GSUsername "" 0 +3
     StrCpy $GSUsername "admin"
-  StrCmp $GSPassword "" 0 +2
+    StrCpy $GSPassword "geoserver"
+  StrCmp $GSPassword "" 0 +3
+    StrCpy $GSUsername "admin"
     StrCpy $GSPassword "geoserver"
 
 FunctionEnd
