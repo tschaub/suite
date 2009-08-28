@@ -12,7 +12,7 @@
 Name "${APPNAMEANDVERSION}"
 InstallDir "$PROGRAMFILES\${APPNAMEANDVERSION}"
 InstallDirRegKey HKLM "Software\${COMPANYNAME}\${APPNAME}\${VERSION}" ""
-OutFile "OpenGeoSuite-0.7beta.exe"
+OutFile "OpenGeoSuite-0.7.exe"
 
 ;Compression options
 CRCCheck on
@@ -65,12 +65,12 @@ VIAddVersionKey FileVersion "${VERSION}"
 VIAddVersionKey Comments "http://opengeo.org"
 
 ; Install options page headers
-LangString TEXT_READY_TITLE ${LANG_ENGLISH} "Ready to Install"
-LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be installed."
 LangString TEXT_TYPE_TITLE ${LANG_ENGLISH} "Type of Installation"
 LangString TEXT_TYPE_SUBTITLE ${LANG_ENGLISH} "Select the type of installation."
 LangString TEXT_CREDS_TITLE ${LANG_ENGLISH} "GeoServer Administrator"
 LangString TEXT_CREDS_SUBTITLE ${LANG_ENGLISH} "Set administrator credentials"
+LangString TEXT_READY_TITLE ${LANG_ENGLISH} "Ready to Install"
+LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be installed."
 
 ;Interface Settings
 !define MUI_ICON "opengeo.ico"
@@ -131,7 +131,7 @@ FunctionEnd
 Page custom CheckUserType                                     ; Die if not admin
 Page custom PriorInstall                                      ; Check to see if previously installed
 !insertmacro MUI_PAGE_LICENSE "license.txt"                   ; Show license
-;!insertmacro MUI_PAGE_COMPONENTS                              ; List of stuff to install
+!insertmacro MUI_PAGE_COMPONENTS                              ; List of stuff to install
 !insertmacro MUI_PAGE_DIRECTORY                               ; Where to install
 !insertmacro MUI_PAGE_STARTMENU Application $STARTMENU_FOLDER ; Start menu location
 Page custom GetJRE                                            ; Check for JRE
@@ -166,9 +166,6 @@ Function .onInit
          ;    has '0' if everything closed normally, and '-1' if some error occurred.
   Delete $TEMP\spltmp.bmp
 	
-  ; Extract install options from .ini files
-  !insertmacro MUI_INSTALLOPTIONS_EXTRACT "ready.ini"
-		
   ; Tests for 32/64 bit system
   ; Bombs out if 64 bit
   ${If} ${RunningX64}
@@ -352,11 +349,15 @@ Function PriorDataDir
 FunctionEnd 
 
 
-; Will build a page with radio buttons for manual vs service selection
+; Will build a page to input default GS admin creds
 Function Creds
 
   nsDialogs::Create 1018
   !insertmacro MUI_HEADER_TEXT "$(TEXT_CREDS_TITLE)" "$(TEXT_CREDS_SUBTITLE)"
+
+  ; This needs to be done at the beginning too to avoid clobbering these variables back into numbers
+  ${NSD_GetText} $GSUsername $GSUsername ; converts numeric string into text...
+  ${NSD_GetText} $GSPassword $GSPassword ; ...and then saves into the same variable
 
   ; Populate defaults on first display
   StrCmp $GSUsername "" 0 +2
@@ -377,10 +378,11 @@ Function Creds
 
 FunctionEnd
 
+; Second half of Creds function
 Function CredsLeave
 
-  ${NSD_GetText} $GSUsername $GSUsername ; converts numeric string into text
-  ${NSD_GetText} $GSPassword $GSPassword ; ditto
+  ${NSD_GetText} $GSUsername $GSUsername ; converts numeric string into text...
+  ${NSD_GetText} $GSPassword $GSPassword ; ...and then saves into the same variable
 
   ; If user blanked username/password, use defaults anyway!
   StrCmp $GSUsername "" 0 +2
@@ -390,40 +392,43 @@ Function CredsLeave
 
 FunctionEnd
 
-; One final page to review options
+; Last page before install
 Function Ready
 
-  StrCpy $8 "OpenGeo Suite install directory:\
-             \r\n     $INSTDIR\r\n\r\n"
+  nsDialogs::Create 1018
+  !insertmacro MUI_HEADER_TEXT "$(TEXT_READY_TITLE)" "$(TEXT_READY_SUBTITLE)"
 
-  StrCmp $IsManual 1 Manual Service
+  ;Syntax: ${NSD_*} x y width height text
+  ${NSD_CreateLabel} 0 0 100% 24u "Please review the settings below and click the Back button if changes need to be made.  Click the Install button to continue."
 
-  Manual:
-    StrCpy $8 "$8Installation type:\
-               \r\n     Manual\r\n\r\n"
-    Goto Java
-  Service:
-    StrCpy $8 "$8Installation type:\
-               \r\n     Service\r\n\r\n"
-    Goto Java
- 
-  Java:
+  ${NSD_CreateLabel} 20u 25u 75% 12u "OpenGeo Suite install directory:"
+  ${NSD_CreateLabel} 30u 33u 70% 12u "$INSTDIR"
 
+  ${NSD_CreateLabel} 20u 45u 75% 12u "Java Runtime Environment (JRE):"
   StrCmp $JavaHome "NoJava" NoJava YesJava
   NoJava:
-    StrCpy $8 "$8Java Runtime Environment (JRE):\
-               \r\n     (will be installed as part of Setup)"
+    ${NSD_CreateLabel} 30u 53u 70% 12u "[will be installed during Setup]"
     Goto Continue
   YesJava:
-    StrCpy $8 "$8Java Runtime Environment (JRE):\
-               \r\n     $JavaHome"
+    ${NSD_CreateLabel} 30u 53u 70% 12u "$JavaHome"
     Goto Continue
 
   Continue:
 
-  !insertmacro MUI_HEADER_TEXT "$(TEXT_READY_TITLE)" "$(TEXT_READY_SUBTITLE)"
-  !insertmacro MUI_INSTALLOPTIONS_WRITE "ready.ini" "Field 2" "Text" $8
-  !insertmacro MUI_INSTALLOPTIONS_DISPLAY "ready.ini"
+  ${NSD_CreateLabel} 20u 65u 75% 12u "GeoServer installation:"
+  StrCmp $IsManual 1 Manual Service
+  Manual:
+    ${NSD_CreateLabel} 30u 73u 70% 12u "Run manually"
+    Goto Creds
+  Service:
+    ${NSD_CreateLabel} 30u 73u 70% 12u "Installed as a service"
+    Goto Creds
+
+  Creds:
+  ${NSD_CreateLabel} 20u 85u 75% 12u "GeoServer username and password:"
+  ${NSD_CreateLabel} 30u 93u 70% 12u "$GSUsername : $GSPassword"
+   
+  nsDialogs::Show
 
 FunctionEnd
 
@@ -460,7 +465,9 @@ Section -Prerequisites
 SectionEnd
 
 ; The main install section
-Section "GeoServer" Section1
+
+SectionGroup "GeoServer" Section1
+Section "GeoServer Core" Section1a
 	
   ; Makes this install mandatory
   SectionIn RO
@@ -634,7 +641,29 @@ Section "GeoServer" Section1
 	
 SectionEnd
 
-Section "GeoExplorer" Section2
+Section "GeoServer Documentation" Section1b
+
+  !insertmacro DisplayImage "slide_3_geoserver.bmp"
+
+  ; Set Section properties
+  SetOverwrite on
+
+  ; Set Section Files and Shortcuts
+  SetOutPath "$INSTDIR\GeoServer"
+  File /r /x .svn ..\geoserver_doc
+  Rename "$INSTDIR\GeoServer\geoserver_doc" "$INSTDIR\GeoServer\docs"
+
+  ; Shortcuts
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Documentation.lnk" \
+		         "$INSTDIR\GeoServer\docs\index.html"
+
+SectionEnd
+
+SectionGroupEnd
+
+
+SectionGroup "GeoExplorer" Section2
+Section "GeoExplorer Application" Section2a
 
   ; Set Section properties
   SetOverwrite on
@@ -659,6 +688,26 @@ Section "GeoExplorer" Section2
 
 SectionEnd
 
+Section "GeoExplorer Documentation" Section2b
+
+  !insertmacro DisplayImage "slide_6_geoext.bmp"
+
+  ; Set Section properties
+  SetOverwrite on
+
+  ; Set Section Files and Shortcuts
+  CreateDirectory "$INSTDIR\GeoExplorer"
+  SetOutPath "$INSTDIR\GeoExplorer"
+  File /r /x .svn ..\geoexplorer_doc
+  Rename "$INSTDIR\GeoExplorer\geoexplorer_doc" "$INSTDIR\GeoExplorer\docs"
+
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer\GeoExplorer Documentation.lnk" \
+		         "$INSTDIR\GeoExplorer\docs\index.html"
+
+SectionEnd
+
+SectionGroupEnd
+
 
 Section "Styler" Section3
 
@@ -681,43 +730,7 @@ Section "Styler" Section3
 SectionEnd
 
 
-Section "GeoServer Documentation" Section4
-
-  !insertmacro DisplayImage "slide_1_suite.bmp"
-
-  ; Set Section properties
-  SetOverwrite on
-
-  ; Set Section Files and Shortcuts
-  SetOutPath "$INSTDIR\GeoServer"
-  File /r /x .svn ..\geoserver_doc
-  Rename "$INSTDIR\GeoServer\geoserver_doc" "$INSTDIR\GeoServer\docs"
-
-  ; Shortcuts
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Documentation.lnk" \
-		         "$INSTDIR\GeoServer\docs\index.html"
-
-SectionEnd
-
-Section "GeoExplorer Documentation" Section5
-
-  !insertmacro DisplayImage "slide_1_suite.bmp"
-
-  ; Set Section properties
-  SetOverwrite on
-
-  ; Set Section Files and Shortcuts
-  CreateDirectory "$INSTDIR\GeoExplorer"
-  SetOutPath "$INSTDIR\GeoExplorer"
-  File /r /x .svn ..\geoexplorer_doc
-  Rename "$INSTDIR\GeoExplorer\geoexplorer_doc" "$INSTDIR\GeoExplorer\docs"
-
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer\GeoExplorer Documentation.lnk" \
-		         "$INSTDIR\GeoExplorer\docs\index.html"
-
-SectionEnd
-
-Section "Getting Started" Section6
+Section "-Getting Started" SectionH1 ;dash means hidden
 
   !insertmacro DisplayImage "slide_1_suite.bmp"
 
@@ -734,14 +747,19 @@ Section "Getting Started" Section6
 
 SectionEnd
 
-/*; Modern install component descriptions
+; Modern install component descriptions
 ; Yes, this needs needs to go after the install sections. 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section1} "Installs Geoserver core components"
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section2} "Installs GeoExplorer"
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section3} "Installs documentation"
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section1} "Installs GeoServer, a spatial data server"
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section1a} "Installs GeoServer core components"
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section1b} "Includes GeoServer User Manual"
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section2} "Installs GeoExplorer, a graphical map editor"
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section2a} "Installs GeoExplorer application"
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section2b} "Includes GeoExplorer documentation"
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section3} "Installs Styler, a graphical map style editor"
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionH1} "Quickstart guide on the OpenGeo Suite"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
-*/
+
 
 ; What happens at the end of the install.
 Section -FinishSection
