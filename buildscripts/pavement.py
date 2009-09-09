@@ -63,6 +63,8 @@ source_path = path(config.get("files","source"))
 def unzip_file(file):     
     zip = zipfile.ZipFile(file)
     for zipFile in zip.namelist(): 
+        info(zipFile)
+
         if zipFile.endswith('/'): 
             os.mkdir(zipFile)
         else: 
@@ -124,9 +126,7 @@ def download_bin(options):
             info("Downloading %s" % software)
             url = config.get(section,software)
             if software == 'java': 
-                # This is a hack, the Java download was a pain in the ass 
-                # I need to add an .exe to the end of the file 
-                urlgrab(url,'sun-java.exe',progress_obj=text_progress_meter())
+                urlgrab(url,'jre.zip',progress_obj=text_progress_meter())
 
             if software == 'geoserver':
                 version = config.get("version","geoserver")
@@ -156,9 +156,18 @@ def unpack_geoserver():
         os.remove(geoserverZIP)
 
 @task
-def move_java(): 
-    java_path = path.joinpath(download_path,'sun-java.exe')
-    copy(java_path,source_path)
+def unpack_java(): 
+    java = path("jre")
+    javaZIP = "jre.zip" 
+    javaSRC = path.joinpath(download_path,javaZIP)
+    info("Moving JRE into %s" % source_path)
+    copy(javaSRC,source_path)
+    with pushd(source_path):
+        if java.exists():
+            rmtree(java)
+        os.mkdir(java) # I wonder why this was necessary
+        unzip_file(javaZIP)
+        os.remove(javaZIP)
 
 
 @task 
@@ -308,7 +317,7 @@ def data_dir():
         if path('data.zip').exists():
             os.remove('data.zip')
             rmtree('data')
-        urlgrab('http://data.opengeo.org/data_dirs/vulcan_datadir.zip',vulcan_datadir,progress_obj=text_progress_meter())
+        urlgrab('http://data.opengeo.org/vulcan/vulcan_datadir.zip',vulcan_datadir,progress_obj=text_progress_meter())
         unzip_file(vulcan_datadir)
     info("moved data_dir into %s" % source_path)
     if path.joinpath(source_path,'data_dir').exists():
@@ -354,7 +363,7 @@ def download_all():
 def build_all(): 
     info("Building all of the OpenGeo Stack")
     call_task("download_source")
-    call_task("move_java")
+    call_task("unpack_java")
     call_task("gx")
     call_task("unpack_geoserver")
     call_task("data_dir")
