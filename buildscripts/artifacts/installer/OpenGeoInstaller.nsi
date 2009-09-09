@@ -3,16 +3,16 @@
 ; Define your application name
 !define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
-!define VERSION "0.7"
-!define LONGVERSION "0.7.0.0" ; must be a.b.c.d
+!define VERSION "0.8"
+!define LONGVERSION "0.8.0.0" ; must be a.b.c.d
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
 
 
 ; Main Install settings
 Name "${APPNAMEANDVERSION}"
-InstallDir "$PROGRAMFILES\${APPNAMEANDVERSION}"
-InstallDirRegKey HKLM "Software\${COMPANYNAME}\${APPNAME}\${VERSION}" ""
-OutFile "OpenGeoSuite-0.7.exe"
+InstallDir "$PROGRAMFILES\${COMPANYNAME}\${APPNAMEANDVERSION}"
+InstallDirRegKey HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" ""
+OutFile "OpenGeoSuite-0.8beta.exe"
 
 ;Compression options
 CRCCheck on
@@ -50,13 +50,13 @@ Var CommonAppData
 Var Manual
 Var Service
 Var IsManual
-Var OldDataDir
 Var GSUsername
 Var GSPassword
 Var GSUsernameTemp
 Var GSPasswordTemp
+Var DataDirPath
 
-; Version Information (Version tab for EXE)
+; Version Information (Version tab for EXE properties)
 VIProductVersion ${LONGVERSION}
 VIAddVersionKey ProductName "${APPNAME}"
 VIAddVersionKey CompanyName "OpenGeo"
@@ -66,15 +66,15 @@ VIAddVersionKey ProductVersion "${VERSION}"
 VIAddVersionKey FileVersion "${VERSION}"
 VIAddVersionKey Comments "http://opengeo.org"
 
-; Install options page headers
+; Page headers for pages
 LangString TEXT_TYPE_TITLE ${LANG_ENGLISH} "Type of Installation"
 LangString TEXT_TYPE_SUBTITLE ${LANG_ENGLISH} "Select the type of installation."
 LangString TEXT_CREDS_TITLE ${LANG_ENGLISH} "GeoServer Administrator"
-LangString TEXT_CREDS_SUBTITLE ${LANG_ENGLISH} "Set administrator credentials"
+LangString TEXT_CREDS_SUBTITLE ${LANG_ENGLISH} "Set administrator credentials."
 LangString TEXT_READY_TITLE ${LANG_ENGLISH} "Ready to Install"
 LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be installed."
 
-;Interface Settings
+; Interface Settings
 !define MUI_ICON "opengeo.ico"
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\win-uninstall.ico"
 !define MUI_HEADERIMAGE
@@ -82,12 +82,12 @@ LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be ins
 !define MUI_HEADERIMAGE_BITMAP header.bmp
 !define MUI_WELCOMEFINISHPAGE_BITMAP side_left.bmp
 
-;Start Menu Folder Page Configuration
+; Start Menu Folder Page Configuration
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM" 
-!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${COMPANYNAME}\${APPNAME}\${VERSION}" 
+!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" 
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
 
-; "Are you sure you wish to cancel" popup.
+; "Are you sure you wish to cancel" dialog.
 !define MUI_ABORTWARNING
 
 ; Optional welcome text here
@@ -113,10 +113,10 @@ Function RunStuff
 
   ;Script to check if GeoServer has finished launching.  Checks for a response on port 8080
   ;We could delete this file after it's finished running, as it's no longer needed...
-  SetOutPath "$INSTDIR\OpenGeo\GeoServer"
+  SetOutPath "$INSTDIR\GeoServer"
   File /a gscheck.bat
-  ExecWait $INSTDIR\OpenGeo\GeoServer\gscheck.bat
-  ;Delete $INSTDIR\gscheck.bat
+  ExecWait $INSTDIR\GeoServer\gscheck.bat
+  ;Delete $INSTDIR\GeoServer\gscheck.bat
 
   ClearErrors
   ExecShell "open" "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Data Importer.lnk"
@@ -128,7 +128,7 @@ FunctionEnd
 
 
 ; Install Page order
-; This is the main list of installer things to do
+; This is the main list of installer pages
 !insertmacro MUI_PAGE_WELCOME                                 ; Hello
 Page custom CheckUserType                                     ; Die if not admin
 Page custom PriorInstall                                      ; Check to see if previously installed
@@ -137,7 +137,6 @@ Page custom PriorInstall                                      ; Check to see if 
 !insertmacro MUI_PAGE_DIRECTORY                               ; Where to install
 !insertmacro MUI_PAGE_STARTMENU Application $STARTMENU_FOLDER ; Start menu location
 Page custom GetJRE                                            ; Check for JRE
-Page custom PriorDataDir                                      ; Check to see if datadir exists
 Page custom InstallType InstallTypeTest                       ; Install manually or as a service?
 Page custom Creds CredsLeave                                  ; Set GeoServer admin credentials
 Page custom Ready                                             ; Ready to install page
@@ -212,47 +211,27 @@ FunctionEnd
 Function PriorInstall
 
   ClearErrors
-  ReadRegStr $R0 HKLM "Software\${COMPANYNAME}\${APPNAME}" ""
-  IfErrors NoPriorInstall
+
+  ; Is this version already installed?
+  ReadRegStr $R1 HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" "InstallDir"
+  IfErrors NoPriorInstall ; This specific version is not installed
+
   ClearErrors
-  ReadRegStr $R1 HKLM "Software\${COMPANYNAME}\${APPNAME}" "CurrentVersion"
-  IfErrors CorruptedReg ; Can't find the version!
- 
-  ${VersionCompare} $R1 ${VERSION} $R2 ; 0 if =, 1 if <, 2 if >
-  ${Switch} $R2
-    ${Case} 0 ; Same version
-    MessageBox MB_ICONSTOP "Setup has found an existing installation of the OpenGeo Suite \
-                            on your machine. If you wish to reinstall the OpenGeo Suite, \
-                            please uninstall it first and then run this installer again."
-    Goto Fail
-    ${Case} 1 ; Upgrading
-    MessageBox MB_ICONSTOP "Setup has found an existing installation of the OpenGeo Suite \
-                            on your machine.  Please uninstall this version first before \
-                            running Setup."
-    Goto Fail
-    ${Case} 2 ; Downgrading
-    MessageBox MB_ICONSTOP "Setup has found an existing installation of the OpenGeo Suite \
-                            on your machine that is newer than the one you are trying to \
-                            install.  Please uninstall this newer version first before \
-                            running Setup."
-    Goto Fail 
-  ${EndSwitch}
+  ; Fail!  This exact version is installed!
 
-  CorruptedReg:
-    MessageBox MB_ICONSTOP "Setup is unable to determine the existing version of the OpenGeo \
-                            Suite installed on your machine.  This may be due to a corrupted \
-                            registry.  If you feel you have received this message in error, \
-                            please contact OpenGeo at inquiry@opengeo.org."
-    Goto Fail
-
-  Fail:
-    MessageBox MB_OK "Setup will now exit."
+    MessageBox MB_ICONSTOP "Setup has found this version (${VERSION}) of the OpenGeo Suite \
+                            installed on your machine.  If you wish to reinstall the \
+                            OpenGeo Suite, please uninstall first.  After you have \
+                            uninstalled, you may run Setup again.$\r$\n$\r$\nPlease note that \
+                            it is also possible to run different versions of the OpenGeo Suite \
+                            on your machine simultaneously."
+    MessageBox MB_OK "Setup will now exit..."
     Quit
 
-  NoPriorInstall:
+NoPriorInstall:
+ClearErrors
 
 FunctionEnd
-  
 
 
 ; Will build a page with radio buttons for manual vs service selection
@@ -326,34 +305,10 @@ Function GetJRE
 FunctionEnd
 
 
-; Check for existing data dir from previous install
-Function PriorDataDir
-
-  StrCpy $OldDataDir 0
-  IfFileExists $CommonAppData\OpenGeo\GeoServer\data_dir\*.* 0 Done
-  MessageBox MB_YESNO|MB_ICONQUESTION "Setup found a GeoServer data directory from a \
-                                       previous installation.  Would you like to reuse \
-                                       this directory?  (WARNING: Selecting No will \
-                                       overwrite this directory.)" \
-                                       IDYES KeepOldDataDir IDNO OverwriteOldDataDir
-
-  KeepOldDataDir:
-  StrCpy $OldDataDir 1 ; = keep
-  Goto Done
-
-  OverwriteOldDataDir:
-  StrCpy $OldDataDir 2 ; = destroy   
-  
-  Goto Done
-
-  Done:
-
-FunctionEnd 
-
-
 ; Will build a page to input default GS admin creds
 Function Creds
 
+  
   nsDialogs::Create 1018
   !insertmacro MUI_HEADER_TEXT "$(TEXT_CREDS_TITLE)" "$(TEXT_CREDS_SUBTITLE)"
 
@@ -380,10 +335,14 @@ Function Creds
 
   nsDialogs::Show
 
+
 FunctionEnd
 
 ; Second half of Creds function
 Function CredsLeave
+
+  ; No need to see this page if keeping old data dir
+  ;StrCmp $OldDataDir 1 SkipCredsLeave 0 ; if = 1, keep old data dir and skip
 
   ${NSD_GetText} $GSUsernameTemp $GSUsername ; converts numeric string into text...
   ${NSD_GetText} $GSPasswordTemp $GSPassword ; ...and then saves into the same variable
@@ -396,10 +355,13 @@ Function CredsLeave
     StrCpy $GSUsername "admin"
     StrCpy $GSPassword "geoserver"
 
+;SkipCredsLeave:
+
 FunctionEnd
 
 ; Last page before install
 Function Ready
+
 
   nsDialogs::Create 1018
   !insertmacro MUI_HEADER_TEXT "$(TEXT_READY_TITLE)" "$(TEXT_READY_SUBTITLE)"
@@ -420,7 +382,7 @@ Function Ready
     Goto Continue
 
   Continue:
-
+  ; Install type
   ${NSD_CreateLabel} 20u 65u 75% 12u "GeoServer installation:"
   StrCmp $IsManual 1 Manual Service
   Manual:
@@ -431,9 +393,18 @@ Function Ready
     Goto Creds
 
   Creds:
-  ${NSD_CreateLabel} 20u 85u 75% 12u "GeoServer username and password:"
-  ${NSD_CreateLabel} 30u 93u 70% 12u "$GSUsername : $GSPassword"
-   
+
+    ${NSD_CreateLabel} 20u 85u 75% 12u "GeoServer username and password:"
+    ${NSD_CreateLabel} 30u 93u 70% 12u "$GSUsername : $GSPassword"
+    Goto AlmostDone
+
+  AlmostDone:   
+
+
+
+    ${NSD_CreateLabel} 20u 105u 75% 12u "Data and configuration will be stored here:"
+    ${NSD_CreateLabel} 30u 113u 80% 12u "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
+
   nsDialogs::Show
 
 FunctionEnd
@@ -473,20 +444,21 @@ SectionEnd
 ; The main install section
 
 SectionGroup "GeoServer" Section1
+
 Section "GeoServer Core" Section1a
 	
-  ; Makes this install mandatory
-  SectionIn RO
+  SectionIn RO  ; Makes this install mandatory
 
-  ; Set Section properties
-  SetOverwrite on
+  SetOverwrite on   ; Set Section properties
 
   !insertmacro DisplayImage "slide_3_geoserver.bmp"
 
-  ; Set Section Files and Shortcuts
+
+
+  ; Copy basic GeoServer files and folders
   CreateDirectory $INSTDIR\GeoServer
   SetOutPath "$INSTDIR\GeoServer"
-  File /a /oname=start.jar ..\geoserver\start.jar
+  File /a /oname=start.jar ..\geoserver\start.jar 
   File /a /oname=GPL.txt ..\geoserver\GPL.txt
   File /a /oname=LICENSE.txt ..\geoserver\LICENSE.txt
   File /a /oname=README.txt ..\geoserver\README.txt
@@ -499,87 +471,65 @@ Section "GeoServer Core" Section1a
   File /r ..\geoserver\webapps
 
 
-  ; Check if we want to overwrite datadir
-  ${Switch} $OldDataDir
-    ${Case} 1 ; keep old data dir
-      Goto SkipDataDirCopy
-    ${Case} 2 ; destroy old data dir
-      Try:
-        RMDir /r $CommonAppData\OpenGeo\GeoServer\data_dir
-        IfFileExists "$CommonAppData\OpenGeo\GeoServer\data_dir" Warn Succeed
-      Warn:
-        MessageBox MB_RETRYCANCEL "Setup is having trouble removing the previous \
-                                   GeoServer data directory.  Please make sure \
-                                   no files are open in this directory and close \
-                                   all browser windows.  To try again, click \
-                                   Retry." IDRETRY Try IDCANCEL GiveUp
-      GiveUp:
-        MessageBox MB_ICONINFORMATION "WARNING: Your previous GeoServer data directory \
-                                       could not be completely deleted.  Setup will \
-                                       attempt to overwrite with the default data \
-                                       directory, but some corruption of data may \ 
-                                       occur."
-      Succeed:
-  ${EndSwitch}
 
-  CreateDirectory $CommonAppData\OpenGeo
-  CreateDirectory $CommonAppData\OpenGeo\GeoServer
-  SetOutPath "$CommonAppData\OpenGeo\GeoServer"
-  File /r /x logging.xml /x security\users.properties ..\data_dir              ; Custom data_dir
-  ;File /r /x logging.xml ..\geoserver\data_dir    ; Default data_dir
-  SetOutPath "$CommonAppData\OpenGeo\GeoServer\data_dir"
+  ; data_dir specific artifacts copied here
+
+  CreateDirectory "$CommonAppData\${COMPANYNAME}"
+  CreateDirectory "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
+  SetOutPath "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
+  File /r /x logging.xml /x security\users.properties ..\data_dir    ; Custom data_dir
+ ; Next line is lame, but I can't figure out where this directory is being created
+  RMDir /r "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\geoserver"
+
+
+  StrCpy $DataDirPath "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\data_dir"
+  SetOutPath "$DataDirPath"
   File /a logging.xml
-  SetOutPath "$CommonAppData\OpenGeo\GeoServer\data_dir\security"
-  File /a users.properties
-  
-  SkipDataDirCopy:
+  ; Replacing the [gslogpath] tag with the specific path to geoserver.log
+  ${textreplace::ReplaceInFile} "$DataDirPath\logging.xml" \
+                                "$DataDirPath\logging.xml" \
+                                "[gslogpath]" "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs" \
+                                "/S=1" $0
 
-  SetOutPath "$CommonAppData\OpenGeo\GeoServer"
+  SetOutPath "$DataDirPath\security"
+  File /a users.properties
+  ; Overwrite username and password in users.properties
+  ${textreplace::ReplaceInFile} "$DataDirPath\security\users.properties" \
+                                "$DataDirPath\security\users.properties" \
+                                "[gsusername]" "$GSUsername" \
+                                "/S=1" $0
+  ${textreplace::ReplaceInFile} "$DataDirPath\security\users.properties" \
+                                "$DataDirPath\security\users.properties" \
+                                "[gspassword]" "$GSPassword" \
+                                "/S=1" $0
+
+
+
+  ; All options will continue from here
+
+  SetOutPath "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
   File /r ..\geoserver\logs
   SetOutPath "$INSTDIR"
   File /a opengeo.ico
 
+
+
+  ; NOT USING ENV VAR!
+  ; Write GEOSERVER_DATA_DIR environment variable
+  ;WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "GEOSERVER_DATA_DIR" "$CommonAppData\OpenGeo\GeoServer\data_dir"
+  ; Make sure Windows knows about the change (not quite sure what this does)
+  ;SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
 
   ${If} $IsManual == 0 ; i.e. only if service install
     SetOutPath $INSTDIR\GeoServer
     CreateDirectory $INSTDIR\GeoServer\wrapper
     File /a /oname=wrapper\wrapper.exe wrapper.exe
     File /a /oname=wrapper\wrapper-server-license.txt wrapper-server-license.txt
-    File /a /oname=wrapper\wrapper.conf wrapper.conf
     CreateDirectory $INSTDIR\GeoServer\wrapper\lib
     File /a /oname=wrapper\lib\wrapper.dll wrapper.dll
     File /a /oname=wrapper\lib\wrapper.jar wrapper.jar
-  ${EndIf}
-	
 
-  ; Write GEOSERVER_DATA_DIR environment variable
-  WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "GEOSERVER_DATA_DIR" "$CommonAppData\OpenGeo\GeoServer\data_dir"
-  ; Make sure Windows knows about the change (not quite sure what this does)
-  SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
-
-  ; Write new username and password
-  SetOutPath "$CommonAppData\OpenGeo\GeoServer\data_dir\security"
-  ${textreplace::ReplaceInFile} "$CommonAppData\OpenGeo\GeoServer\data_dir\security\users.properties" \
-                                "$CommonAppData\OpenGeo\GeoServer\data_dir\security\users.properties" \
-                                "[gsusername]" "$GSUsername" \
-                                "/S=1" $0
-  ${textreplace::ReplaceInFile} "$CommonAppData\OpenGeo\GeoServer\data_dir\security\users.properties" \
-                                "$CommonAppData\OpenGeo\GeoServer\data_dir\security\users.properties" \
-                                "[gspassword]" "$GSPassword" \
-                                "/S=1" $0
-  
-
-  StrCmp $OldDataDir 1 SkipLogEdit 0 
-  ; logging.xml file is deleted/recreated here
-  SetOutPath "$CommonAppData\OpenGeo\GeoServer"
-  ; Replacing the [gslogpath] tag with the specific path to geoserver.log
-  ${textreplace::ReplaceInFile} "$CommonAppData\OpenGeo\GeoServer\data_dir\logging.xml" \
-                                "$CommonAppData\OpenGeo\GeoServer\data_dir\logging.xml" \
-                                "[gslogpath]" "$CommonAppData\OpenGeo\GeoServer\logs" \
-                                "/S=1" $0
-  SkipLogEdit:
-  
-  ${If} $IsManual == 0 ; i.e. only if service install
+    File /a /oname=wrapper\wrapper.conf wrapper.conf
     ; wrapper.conf is customized here
     ; since we can't use environment variables (running as NetworkService)
     ${textreplace::ReplaceInFile} "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
@@ -588,18 +538,21 @@ Section "GeoServer Core" Section1a
                                   "/S=1" $1
     ${textreplace::ReplaceInFile} "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
                                   "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
-                                  "[datadirpath]" "$CommonAppData\OpenGeo\GeoServer\data_dir" \ 
+                                  "[datadirpath]" "$DataDirPath" \ 
                                   "/S=1" $1
     ${textreplace::ReplaceInFile} "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
                                   "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
-                                  "[jettylogpath]" "$CommonAppData\OpenGeo\GeoServer\logs" \ 
+                                  "[jettylogpath]" "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs" \ 
                                   "/S=1" $1
     ${textreplace::ReplaceInFile} "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
                                   "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
-                                  "[wrapperlogpath]" "$CommonAppData\OpenGeo\GeoServer\logs\" \ 
+                                  "[wrapperlogpath]" "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs\" \ 
                                   "/S=1" $1
+
+
+
     ; Give permission for NetworkService to be able to read/write to data_dir and logs
-    AccessControl::GrantOnFile "$CommonAppData\OpenGeo" "NT AUTHORITY\NetworkService" "FullAccess"
+    AccessControl::GrantOnFile "$CommonAppData\${COMPANYNAME}" "NT AUTHORITY\NetworkService" "FullAccess"
 	; Install the service (i)
     nsExec::Exec "$INSTDIR\GeoServer\wrapper\wrapper.exe -i wrapper.conf"
 
@@ -615,27 +568,29 @@ Section "GeoServer Core" Section1a
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Data Importer.lnk" \
                  "http://localhost:8080/geoserver/web/?wicket:bookmarkablePage=:org.geoserver.web.importer.ImportPage"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Data Directory.lnk" \
-                 "$CommonAppData\OpenGeo\GeoServer\data_dir"
+                 "$DataDirPath"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
 
 
-  ; Different Start/Stop shortcuts depending on service/manual
+  ; Create Start/Stop shortcuts
+  ; Different shortcuts depending on install type
+
   ${If} $IsManual == 0 ; i.e. only if service install
     CreateShortCut '$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Start GeoServer.lnk' '"$INSTDIR\GeoServer\wrapper\wrapper.exe"' '"-t" "wrapper.conf"' '$INSTDIR\GeoServer\geoserver.ico' 0
     CreateShortCut '$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Stop GeoServer.lnk' '"$INSTDIR\GeoServer\wrapper\wrapper.exe"' '"-p" "wrapper.conf"' '$INSTDIR\GeoServer\geoserver.ico' 0
   ${EndIf}
+
   ${If} $IsManual == 1 ; i.e. only if manual install
 
     SetOutPath "$INSTDIR\GeoServer"
 
-    FileOpen $9 startgs.bat w ;Opens a Empty File and fills it
-    FileWrite $9 'call "$JavaHome\bin\java.exe" -DGEOSERVER_DATA_DIR="$CommonAppData\OpenGeo\GeoServer\data_dir" -Xmx300m -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -Djetty.logs="$CommonAppData\OpenGeo\GeoServer\logs" -jar start.jar'
-    FileClose $9 ;Closes the filled file
+    FileOpen $9 startgs.bat w ; Opens a Empty File and fills it
+    FileWrite $9 'call "$JavaHome\bin\java.exe" -DGEOSERVER_DATA_DIR="$DataDirPath" -Xmx300m -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -Djetty.logs="$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs" -jar start.jar'
+    FileClose $9 ; Closes the file
 
-    FileOpen $9 stopgs.bat w ;
+    FileOpen $9 stopgs.bat w ; Opens a Empty File and fills it
     FileWrite $9 'call "$JavaHome\bin\java.exe" -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -jar start.jar --stop'
-    ;FileWrite $9 '$\r$\npause'
-    FileClose $9
+    FileClose $9 ; Closes the file
 
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Start GeoServer.lnk" "$INSTDIR\GeoServer\startgs.bat" "" "$INSTDIR\GeoServer\geoserver.ico" 0 SW_SHOWMINIMIZED
 
@@ -643,8 +598,9 @@ Section "GeoServer Core" Section1a
 
   ${EndIf}
 
-    !insertmacro MUI_STARTMENU_WRITE_END
+  !insertmacro MUI_STARTMENU_WRITE_END
 	
+
 SectionEnd
 
 Section "GeoServer Documentation" Section1b
@@ -677,11 +633,11 @@ Section "GeoExplorer Application" Section2a
   !insertmacro DisplayImage "slide_6_geoext.bmp"
 
   ; Set Section Files and Shortcuts
-  SetOutPath "$CommonAppData\OpenGeo\GeoServer\data_dir\www"
+  SetOutPath "$DataDirPath\www"
   File /r /x .svn ..\geoexplorer
   File /a /oname=geoexplorer\geoext.ico geoext.ico
   ; Next few lines are for a custom index.html (for looking at local host + no proxy)
-  SetOutPath "$CommonAppData\OpenGeo\GeoServer\data_dir\www\GeoExplorer"
+  SetOutPath "$DataDirPath\www\GeoExplorer"
   Delete index.html
   File /a gxindex.html
   Rename gxindex.html index.html
@@ -690,7 +646,7 @@ Section "GeoExplorer Application" Section2a
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer\GeoExplorer.lnk" \
 		         "http://localhost:8080/geoserver/www/geoexplorer/index.html" \
-                 "$CommonAppData\OpenGeo\GeoServer\data_dir\www\geoexplorer\geoext.ico"
+                 "$DataDirPath\www\geoexplorer\geoext.ico"
 
 SectionEnd
 
@@ -723,7 +679,7 @@ Section "Styler" Section3
   !insertmacro DisplayImage "slide_6_geoext.bmp"
 
   ; Set Section Files and Shortcuts
-  SetOutPath "$CommonAppData\OpenGeo\GeoServer\data_dir\www"
+  SetOutPath "$DataDirPath\www"
   File /r /x .svn ..\styler
   File /a /oname=styler\geoext.ico geoext.ico
 
@@ -731,7 +687,7 @@ Section "Styler" Section3
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\Styler"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Styler\Styler.lnk" \
 		         "http://localhost:8080/geoserver/www/styler/index.html" \
-                 "$CommonAppData\OpenGeo\GeoServer\data_dir\www\styler\geoext.ico"
+                 "$DataDirPath\www\styler\geoext.ico"
 
 SectionEnd
 
@@ -772,9 +728,21 @@ Section -FinishSection
 
   ; Reg Keys
 
-  WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}\${VERSION}" "" "$INSTDIR"
-  WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}" "" "OpenGeo Suite"
-  WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}" "CurrentVersion" "${VERSION}"
+  WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" "" ""
+  WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" "InstallDir" "$INSTDIR"
+
+  ; This regkey will be needed for uninstall
+  ${If} $IsManual == 0 ; i.e. only if service install
+    WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" "InstallType" "Service"
+  ${EndIf}
+  ${If} $IsManual == 1 ; i.e. only if manual install
+    WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" "InstallType" "Manual"
+  ${EndIf}  
+
+  ; OLD! v0.7 and before
+  ;WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}\${VERSION}" "" "$INSTDIR"
+  ;WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}" "" "OpenGeo Suite"
+  ;WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}" "CurrentVersion" "${VERSION}"
 
   !define UNINSTALLREGPATH "Software\Microsoft\Windows\CurrentVersion\Uninstall"
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "DisplayName" "${APPNAMEANDVERSION}"
@@ -786,14 +754,6 @@ Section -FinishSection
   WriteRegDWORD HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "NoModify" "1"
   WriteRegDWORD HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "NoRepair" "1"
 
-  ; This regkey will be needed for uninstall
-  ${If} $IsManual == 0 ; i.e. only if service install
-    WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}\${VERSION}" "InstallType" "Service"
-  ${EndIf}
-  ${If} $IsManual == 1 ; i.e. only if manual install
-    WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}\${VERSION}" "InstallType" "Manual"
-  ${EndIf}
-
   WriteUninstaller "$INSTDIR\uninstall.exe"
 
 SectionEnd
@@ -803,14 +763,14 @@ SectionEnd
 Section Uninstall
 
   ; First check if registry info is intact, otherwise install will fail
-  ReadRegStr $0 HKLM "Software\${COMPANYNAME}\${APPNAME}\${VERSION}" ""
+  ReadRegStr $0 HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" "InstallDir"
   ${If} $0 == ""
     MessageBox MB_ICONSTOP "Debug message: No regkey found!"
     Goto Fail
   ${EndIf}
 
   ; Check for service/manual
-  ReadRegStr $0 HKLM "Software\${COMPANYNAME}\${APPNAME}\${VERSION}" "InstallType"
+  ReadRegStr $0 HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" "InstallType"
   ${If} $0 == ""
     MessageBox MB_ICONSTOP "Debug message: No install type found!  Was this a service or manual install?"
     Goto Fail
@@ -819,7 +779,7 @@ Section Uninstall
     SetOutPath "$INSTDIR\GeoServer"
     Exec "$INSTDIR\GeoServer\stopgs.bat"
     ; Wait for Start GeoServer window to go away
-    Sleep 3000
+    Sleep 5000
   ${ElseIf} $0 == "Service"
     ; Stop and remove service
     nsExec::Exec "$INSTDIR\GeoServer\wrapper\wrapper.exe -r wrapper.conf"
@@ -832,38 +792,42 @@ Section Uninstall
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders" "Common AppData"
   StrCpy $CommonAppData $R0
 
-  ; Check if user wants to remove the data dir
-  MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 "Do you want to remove your GeoServer data directory?  (If you have anything you want to keep, click No.)" IDYES DelDataDir IDNO NoDelDataDir
+;  ; Check if user wants to remove the data dir
+;  MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 "Do you want to remove your GeoServer data directory?  (If you have anything you want to keep, click No.)" IDYES DelDataDir IDNO NoDelDataDir
 
-  DelDataDir:
+;  DelDataDir:
 
     ; Have to move out of the directory to delete it
     SetOutPath $TEMP
     ; Remove env var
-    DeleteRegValue HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "GEOSERVER_DATA_DIR"
+    ;DeleteRegValue HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "GEOSERVER_DATA_DIR"
     ; Make sure Windows knows about the change (not quite sure what this does)
-    SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
+    ;SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
 
     ; Delete whole $CommonAppData directory (including logs)!
-    RMDir /r "$CommonAppData\OpenGeo\data_dir"
-    RMDir /r "$CommonAppData\OpenGeo\logs"
-    RMDir /r "$CommonAppData\OpenGeo"
+    RMDir /r "$DataDirPath"
+    RMDir /r "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs"
+    RMDir /r "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
+    RMDir "$CommonAppData\${COMPANYNAME}"  ; Only delete if not empty!!!!!
+
+ 
 
   Goto Continue
 
-  NoDelDataDir:
-
-    ; Can't delete something we're inside!
-    SetOutPath $PROGRAMFILES
-    ; Just delete logs from CommonAppData
-    RMDir /r "$CommonAppData\OpenGeo\GeoServer\logs"
-
-  Goto Continue
+;  NoDelDataDir:
+;
+;    ; Can't delete something we're inside!
+;    SetOutPath $PROGRAMFILES
+;    ; Just delete logs from CommonAppData
+;    RMDir /r "$CommonAppData\OpenGeo\GeoServer\logs"
+;
+;  Goto Continue
 
   Continue:
 
     ; Remove all reg entries
-    DeleteRegKey HKLM "Software\${COMPANYNAME}\${APPNAME}\${VERSION}"
+    DeleteRegKey HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}"
+    DeleteRegKey /ifempty HKLM "Software\${COMPANYNAME}"
     DeleteRegKey HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}"
 
     ; Delete self
@@ -873,27 +837,30 @@ Section Uninstall
     RMDir /r "$SMPROGRAMS\$STARTMENU_FOLDER"
 
 	; Delete all!
+
+
+  Try:
     RMDir /r "$INSTDIR\GeoServer"
     RMDir /r "$INSTDIR\GeoExplorer"
     RMDir /r "$INSTDIR\Getting Started"
     Delete "$INSTDIR\*.*"
-
-  Try:
     RMDir "$INSTDIR"
     IfFileExists "$INSTDIR" Warn Succeed
 
   Warn:
-    MessageBox MB_RETRYCANCEL "Setup is having trouble removing all files and folders from:$\r$\n   $INSTDIR\$\r$\nPlease make sure no files are open in this directory and close all browser windows.  To try again, click Retry." IDRETRY Try IDCANCEL GiveUp
+    MessageBox MB_RETRYCANCEL "Setup is having trouble removing all files and folders from:$\r$\n   $INSTDIR\$\r$\nPlease make sure no files are open in this directory and close all browser windows.  You can also manually delete this folder if you choose.  To try again, click Retry." IDRETRY Try IDCANCEL GiveUp
 
   GiveUp:
     MessageBox MB_ICONINFORMATION "WARNING: Some files and folders could not be removed from:$\r$\n   $INSTDIR\$\r$\nYou will have to manually remove these files and folders."
     Goto Succeed
 
   Fail:
-    MessageBox MB_OK "Could not uninstall.  This may be due to a corrupted registry entry.  If you feel you have reached this message in error, please contact OpenGeo at inquiry@opengeo.org."
+    MessageBox MB_OK "Could not uninstall cleanly.  This may be due to a corrupted registry entry.  If you feel you have reached this message in error, please contact OpenGeo at inquiry@opengeo.org."
     Quit
 
   Succeed:
+
+  RMDir "$PROGRAMFILES\${COMPANYNAME}"
 
 SectionEnd
 
