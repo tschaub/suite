@@ -1,4 +1,5 @@
 from __future__ import with_statement
+# from paver.virtual import bootstrap
 
 from paver.easy import *
 from paver.setuputils import setup
@@ -16,6 +17,8 @@ import sys
 
 #http://user:pass@foo.org/bar
 
+
+'''
 setup(
     name="builder",
     packages=['builder'],
@@ -31,6 +34,27 @@ setup(
     
 )
 '''
+
+options(
+    sphinx=Bunch(
+        builddir="_build"
+    ),
+    virtualenv=Bunch(
+        script_name="vulcan_virtualenv",
+        packages_to_install=["JSTools>=0.1.2","urlgrabber","Sphinx"],
+        paver_command_line="after_envsetup"
+    ),
+
+)
+
+
+@task
+def after_envsetup():
+    info("envsetup done!")
+
+
+
+'''
 This is how mike wants source to look 
 ===================================== 
 installer\
@@ -44,6 +68,11 @@ sun-java.exe
 
 '''
 
+
+'''
+"options"
+
+'''
 
 
 builder = path("builder")
@@ -64,7 +93,6 @@ def unzip_file(file):
     zip = zipfile.ZipFile(file)
     for zipFile in zip.namelist(): 
         info(zipFile)
-
         if zipFile.endswith('/'): 
             os.mkdir(zipFile)
         else: 
@@ -74,10 +102,7 @@ def unzip_file(file):
 
 
 
-@task
-@needs(["setuptools.develop"])
-def develop(): 
-    pass 
+
 
 @task 
 def auto(): 
@@ -85,7 +110,10 @@ def auto():
 
 
 @task 
-def dir_layout(): 
+def dir_layout(options): 
+    '''
+    Creates directory layout
+    '''
     info("Build Installer Layout")
     for _dir in config.options("files"): 
         _dir=path(config.get("files",_dir))
@@ -93,7 +121,8 @@ def dir_layout():
             os.mkdir(_dir)
 
 @task 
-def clean(): 
+
+def clean():
     info("Cleaning Installer Layout") 
     for _dir in config.options("files"): 
         _dir=path(config.get("files",_dir))
@@ -104,9 +133,13 @@ def clean():
                 rmtree(_dir)
 
 def url_with_basic_auth(url, authstr):
+    '''
+    Split user:password into strings
+    '''
     auth = dict()
     auth['user'], auth['password'] = authstr.split(':')
     return string.Template(url).substitute(auth)
+
 
 @task 
 @needs(["dir_layout"])
@@ -139,6 +172,10 @@ def download_bin(options):
 
 @task
 def unpack_geoserver(): 
+    '''
+    Unzips geoserver.zip and copies into artifacts
+    Note to Ivan: Fix this and everything else
+    '''
     version = config.get("version","geoserver")
     geoserver_vs = path('geoserver-2.0-SNAPSHOT')    
     geoserver = path("geoserver")
@@ -157,6 +194,9 @@ def unpack_geoserver():
 
 @task
 def unpack_java(): 
+    '''
+    Unzips jre.zip into jre\
+    '''
     java = path("jre")
     javaZIP = "jre.zip" 
     javaSRC = path.joinpath(download_path,javaZIP)
@@ -195,27 +235,8 @@ def gx():
     with pushd(geoexplorer_build): 
         build_min() 
     copytree(path.joinpath(geoexplorer_build,'GeoExplorer'),path.joinpath(path.joinpath(source_path,'GeoExplorer')))
-'''
-    def move(): 
-        ge_final = path.joinpath(source_path,path("geoexplorer"))
-        if ge_final.exists():
-            # hack to get around windows not playing well with svn. 
-            # i hope to fix this 
-            if sys.platform == 'win32': 
-                sh("rd /S /Q %s" % ge_final ) 
-            else:
-                rmtree(ge_final)
-        os.mkdir(ge_final)
-        copy(path.joinpath(geoexplorer_path,'debug.html'),ge_final)
-        copy(path.joinpath(geoexplorer_path,'embed.html'),ge_final)
-        copy(path.joinpath(geoexplorer_path,'license.txt'),ge_final)
-        copy(path.joinpath(geoexplorer_path,'about.html'),ge_final)
-        copytree(path.joinpath(geoexplorer_path,'lib'),path.joinpath(ge_final,'lib'))
-        copytree(path.joinpath(geoexplorer_path,'script'),path.joinpath(ge_final,'script'))
-        copytree(path.joinpath(geoexplorer_path,'externals'),path.joinpath(ge_final,'externals'))
-        copytree(path.joinpath(geoexplorer_path,'theme'),path.joinpath(ge_final,'theme'))        
-    move()
-'''
+
+
 @task
 def geoserver_plugins(): 
     '''
@@ -300,7 +321,6 @@ def source_dirs():
     '''
     Right now this only makes a integration_docs folder in the source dir
     This is a sub as we need to download the source these docs. To be done 
-    
     '''
     interDocs = path.joinpath(source_path,path('integration_docs'))
     if not interDocs.exists():
@@ -328,6 +348,7 @@ def data_dir():
 def styler(): 
     ''' 
     This downloads the Styler 
+    Note to Ivan: Put this in the config.ini?
     ''' 
     styler_download = path.joinpath(download_path,'styler')
     styler_source = path.joinpath(source_path,'styler')
@@ -345,17 +366,10 @@ def styler():
 @task 
 def cleanup(): 
     ''' 
-    Cleans up download folder after the script is down 
+    Cleans up download folder after the script is done
     ''' 
     rmtree(download_path)
 
-@task
-def download_all(): 
-    info("Download OpenGeo Suite plus dependencies")
-    call_task("dir_layout")
-    call_task("download_bin")
-    call_task("download_source")
-    call_task("geoserver_plugins")
     
 
 @task
