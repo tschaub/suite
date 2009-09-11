@@ -44,7 +44,6 @@ RequestExecutionLevel admin
 ; See http://nsis.sourceforge.net/AccessControl_plug-in
 
 ; Might be the same as !define
-Var JavaHome
 Var STARTMENU_FOLDER
 Var CommonAppData
 Var Manual
@@ -136,7 +135,6 @@ Page custom PriorInstall                                      ; Check to see if 
 !insertmacro MUI_PAGE_COMPONENTS                              ; List of stuff to install
 !insertmacro MUI_PAGE_DIRECTORY                               ; Where to install
 !insertmacro MUI_PAGE_STARTMENU Application $STARTMENU_FOLDER ; Start menu location
-Page custom GetJRE                                            ; Check for JRE
 Page custom InstallType InstallTypeTest                       ; Install manually or as a service?
 Page custom Creds CredsLeave                                  ; Set GeoServer admin credentials
 Page custom Ready                                             ; Ready to install page
@@ -272,39 +270,6 @@ Function InstallTypeTest
 FunctionEnd
 
 
-; Find Java on the system
-; Lovingly ripped off from http://nsis.sourceforge.net/Java_Launcher
-Function GetJRE
-
-  ; use javaw.exe to avoid dosbox.
-  ; use java.exe to keep stdout/stderr
-  !define JAVAEXE "java.exe"
-
-
-  ; look in registry 
-  ClearErrors
-  ReadRegStr $R1 HKLM "SOFTWARE\JavaSoft\Java Runtime Environment" "CurrentVersion"
-  ReadRegStr $R0 HKLM "SOFTWARE\JavaSoft\Java Runtime Environment\$R1" "JavaHome"
-  IfFileExists "$R0\bin\${JAVAEXE}" JreFound
-
-
-  ; look for %JAVA_HOME%
-  ClearErrors
-  ReadEnvStr $R0 JAVA_HOME
-  IfFileExists "$R0\bin\${JAVAEXE}" JREFound  
-
-  ; Can't find Java, will install later
-  StrCpy $JavaHome "NoJava"
-  Goto Skip
-  
-  JREFound:
-    StrCpy $JavaHome $R0
-
-  Skip:
- 
-FunctionEnd
-
-
 ; Will build a page to input default GS admin creds
 Function Creds
 
@@ -335,14 +300,11 @@ Function Creds
 
   nsDialogs::Show
 
-
 FunctionEnd
 
 ; Second half of Creds function
 Function CredsLeave
 
-  ; No need to see this page if keeping old data dir
-  ;StrCmp $OldDataDir 1 SkipCredsLeave 0 ; if = 1, keep old data dir and skip
 
   ${NSD_GetText} $GSUsernameTemp $GSUsername ; converts numeric string into text...
   ${NSD_GetText} $GSPasswordTemp $GSPassword ; ...and then saves into the same variable
@@ -355,13 +317,11 @@ Function CredsLeave
     StrCpy $GSUsername "admin"
     StrCpy $GSPassword "geoserver"
 
-;SkipCredsLeave:
 
 FunctionEnd
 
 ; Last page before install
 Function Ready
-
 
   nsDialogs::Create 1018
   !insertmacro MUI_HEADER_TEXT "$(TEXT_READY_TITLE)" "$(TEXT_READY_SUBTITLE)"
@@ -372,72 +332,33 @@ Function Ready
   ${NSD_CreateLabel} 20u 25u 75% 12u "OpenGeo Suite install directory:"
   ${NSD_CreateLabel} 30u 33u 70% 12u "$INSTDIR"
 
-  ${NSD_CreateLabel} 20u 45u 75% 12u "Java Runtime Environment (JRE):"
-  StrCmp $JavaHome "NoJava" NoJava YesJava
-  NoJava:
-    ${NSD_CreateLabel} 30u 53u 70% 12u "[will be installed during Setup]"
-    Goto Continue
-  YesJava:
-    ${NSD_CreateLabel} 30u 53u 70% 12u "$JavaHome"
-    Goto Continue
-
-  Continue:
   ; Install type
-  ${NSD_CreateLabel} 20u 65u 75% 12u "GeoServer installation:"
+  ${NSD_CreateLabel} 20u 45u 75% 12u "GeoServer installation:"
   StrCmp $IsManual 1 Manual Service
   Manual:
-    ${NSD_CreateLabel} 30u 73u 70% 12u "Run manually"
+    ${NSD_CreateLabel} 30u 53u 70% 12u "Run manually"
     Goto Creds
   Service:
-    ${NSD_CreateLabel} 30u 73u 70% 12u "Installed as a service"
+    ${NSD_CreateLabel} 30u 53u 70% 12u "Installed as a service"
     Goto Creds
 
   Creds:
 
-    ${NSD_CreateLabel} 20u 85u 75% 12u "GeoServer username and password:"
-    ${NSD_CreateLabel} 30u 93u 70% 12u "$GSUsername : $GSPassword"
-    Goto AlmostDone
+    ${NSD_CreateLabel} 20u 65u 75% 12u "GeoServer username and password:"
+    ${NSD_CreateLabel} 30u 73u 70% 12u "$GSUsername : $GSPassword"
 
-  AlmostDone:   
-
-
-
-    ${NSD_CreateLabel} 20u 105u 75% 12u "Data and configuration will be stored here:"
-    ${NSD_CreateLabel} 30u 113u 80% 12u "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
+    ${NSD_CreateLabel} 20u 85u 75% 12u "Data and configuration will be stored here:"
+    ${NSD_CreateLabel} 30u 93u 80% 12u "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
 
   nsDialogs::Show
 
 FunctionEnd
 
 
-; Install Java if necessary
+; Install Prerequisites if necessary
 Section -Prerequisites
 
-  StrCmp $JavaHome "NoJava" Prereq NoPrereq
-
-  Prereq:
-    !insertmacro DisplayImage "slide_1_suite.bmp"
-    MessageBox MB_OK "Please wait while Setup launches the Sun Java Runtime Environment (JRE) installer.  \
-                      When the JRE is successfully installed, Setup will continue."
-    SetOutPath $TEMP
-    File /a ..\sun-java.exe
-
-    ; reloading graphic on purpose, can get undrawn if minimized
-    !insertmacro DisplayImage "slide_1_suite.bmp"
-
-    ExecWait $TEMP\sun-java.exe $0
-    Delete $TEMP\sun-java.exe
-    StrCmp $0 "0" JavaSuccess JavaFail
-    JavaFail:
-      MessageBox MB_ICONSTOP "Sorry, the Java Runtime Environment (JRE) was not successfully installed.\
-                              A JRE is required for the OpenGeo Suite.  Please run this installer again, \
-                              and if you continue to have difficulties, please contact OpenGeo at \
-                              inquiry@opengeo.org."
-      Quit
-    JavaSuccess:
-      Call GetJRE
-
-  NoPrereq:
+; No prereqs.
 
 SectionEnd
 
@@ -449,13 +370,11 @@ Section "GeoServer Core" Section1a
 	
   SectionIn RO  ; Makes this install mandatory
 
-  SetOverwrite on   ; Set Section properties
+  SetOverwrite on  ; Set Section properties
 
   !insertmacro DisplayImage "slide_3_geoserver.bmp"
 
-
-
-  ; Copy basic GeoServer files and folders
+  ; Copy GeoServer (minus data_dir)
   CreateDirectory $INSTDIR\GeoServer
   SetOutPath "$INSTDIR\GeoServer"
   File /a /oname=start.jar ..\geoserver\start.jar 
@@ -464,16 +383,15 @@ Section "GeoServer Core" Section1a
   File /a /oname=README.txt ..\geoserver\README.txt
   File /a /oname=RUNNING.txt ..\geoserver\RUNNING.txt 
   File /a geoserver.ico
-  ;File /r ..\geoserver\bin   ;Don't need it, making our own
   File /r ..\geoserver\etc 
-  File /r ..\geoserver\lib 
   File /r ..\geoserver\resources 
-  File /r ..\geoserver\webapps
+  File /r /x jai*.* ..\geoserver\webapps ; excludes JAI
+  File /r /x jai*.* ..\geoserver\lib ; ugh, copies WEB-INF\lib too
 
+  ; Copy our own JRE (which includes native JAI)
+  File /r ..\jre
 
-
-  ; data_dir specific artifacts copied here
-
+  ; Copy data_dir
   CreateDirectory "$CommonAppData\${COMPANYNAME}"
   CreateDirectory "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
   SetOutPath "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
@@ -505,14 +423,11 @@ Section "GeoServer Core" Section1a
 
 
 
-  ; All options will continue from here
-
+  ; Continuing on...
   SetOutPath "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
   File /r ..\geoserver\logs
   SetOutPath "$INSTDIR"
   File /a opengeo.ico
-
-
 
   ; NOT USING ENV VAR!
   ; Write GEOSERVER_DATA_DIR environment variable
@@ -534,7 +449,7 @@ Section "GeoServer Core" Section1a
     ; since we can't use environment variables (running as NetworkService)
     ${textreplace::ReplaceInFile} "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
                                   "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
-                                  "[javapath]" "$JavaHome" \ 
+                                  "[javapath]" "$INSTDIR\GeoServer\jre" \ 
                                   "/S=1" $1
     ${textreplace::ReplaceInFile} "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
                                   "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
@@ -585,11 +500,11 @@ Section "GeoServer Core" Section1a
     SetOutPath "$INSTDIR\GeoServer"
 
     FileOpen $9 startgs.bat w ; Opens a Empty File and fills it
-    FileWrite $9 'call "$JavaHome\bin\java.exe" -DGEOSERVER_DATA_DIR="$DataDirPath" -Xmx300m -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -Djetty.logs="$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs" -jar start.jar'
+    FileWrite $9 'call "$INSTDIR\GeoServer\jre\bin\java.exe" -DGEOSERVER_DATA_DIR="$DataDirPath" -Xmx300m -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -Djetty.logs="$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs" -jar start.jar'
     FileClose $9 ; Closes the file
 
     FileOpen $9 stopgs.bat w ; Opens a Empty File and fills it
-    FileWrite $9 'call "$JavaHome\bin\java.exe" -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -jar start.jar --stop'
+    FileWrite $9 'call "$INSTDIR\GeoServer\jre\bin\java.exe" -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -jar start.jar --stop'
     FileClose $9 ; Closes the file
 
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Start GeoServer.lnk" "$INSTDIR\GeoServer\startgs.bat" "" "$INSTDIR\GeoServer\geoserver.ico" 0 SW_SHOWMINIMIZED
