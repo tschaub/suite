@@ -141,7 +141,6 @@ def unpack_java():
     with pushd(source_path):
         if java.exists():
             rmtree(java)
-        #os.mkdir(java) # I wonder why this was necessary
         unzip_file(javaZIP)
         os.remove(javaZIP)
 
@@ -150,7 +149,6 @@ def unpack_java():
 def unpack_geoserver(): 
     '''
     Unzips geoserver.zip and copies into artifacts
-    Note to Ivan: Fix this and everything else
     '''
     geoserver_vs = path(config.get("version","geoserver"))
     geoserver = path("geoserver")
@@ -181,9 +179,6 @@ def download_source():
             url = config.get(section,software)
             svn.checkout(url,software)
 
-
-
-
 @task 
 def gx(): 
     ''' 
@@ -196,11 +191,6 @@ def gx():
     with pushd(geoexplorer_build): 
         build_min() 
     copytree(path.joinpath(geoexplorer_build,'GeoExplorer'),path.joinpath(path.joinpath(source_path,'GeoExplorer')))
-
-
-
-
-
 
 
 
@@ -223,16 +213,15 @@ def unpack_datadir():
 def styler(): 
     ''' 
     This downloads the Styler 
-    Note to Ivan: Put this in the config.ini?
     ''' 
     styler_download = path.joinpath(download_path,'styler')
     styler_source = path.joinpath(source_path,'styler')
-    with pushd(download_path):
-        svn.checkout('http://svn.opengeo.org/geoext/apps/styler2/trunk/','styler')
-        with pushd(path('styler')):
-            sh('jsbuild   build.cfg')
-    if not styler_source.exists():
-        os.mkdir(styler_source)
+#    import pdb 
+#    pdb.set_trace()
+    with pushd(styler_download):
+    	sh('jsbuild   build.cfg')
+    # if styler_source ... maybe we should remove it before we do anything.... i hate my life....  
+    os.mkdir(styler_source)
     copy(path.joinpath(styler_download,'index.html'),styler_source)
     copytree(path.joinpath(styler_download,'script'),path.joinpath(styler_source,'script'))
     copytree(path.joinpath(styler_download,'theme'),path.joinpath(styler_source,'theme'))
