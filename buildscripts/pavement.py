@@ -62,11 +62,11 @@ options(
 @needs(["dir_layout","download_bin"])
 def build_all(): 
     info("Building all of the OpenGeo Stack")
-    call_task("download_source")
     call_task("unpack_java")
-    call_task("gx")
     call_task("unpack_geoserver")
-    #call_task("data_dir")
+    call_task("unpack_datadir")
+    call_task("download_source")
+    call_task("gx")
     call_task("styler")
     call_task("download_docs")
     call_task("docs")
@@ -129,14 +129,42 @@ def download_bin(options):
 
 
 @task
-def after_envsetup():
-    info("envsetup done!")
+def unpack_java(): 
+    '''
+    Unzips jre.zip into jre\
+    '''
+    java = path("jre")
+    javaZIP = "jre.zip" 
+    javaSRC = path.joinpath(download_path,javaZIP)
+    info("Moving JRE into %s" % source_path)
+    copy(javaSRC,source_path)
+    with pushd(source_path):
+        if java.exists():
+            rmtree(java)
+        #os.mkdir(java) # I wonder why this was necessary
+        unzip_file(javaZIP)
+        os.remove(javaZIP)
 
-   
 
-
-
-
+@task
+def unpack_geoserver(): 
+    '''
+    Unzips geoserver.zip and copies into artifacts
+    Note to Ivan: Fix this and everything else
+    '''
+    geoserver_vs = path(config.get("version","geoserver"))
+    geoserver = path("geoserver")
+    geoserverSRC = path.joinpath(download_path,"geoserver.zip")
+    info("Moving GeoServer into %s" % source_path)
+    copy(geoserverSRC,source_path)
+    with pushd(source_path):
+        if geoserver_vs.exists():
+            rmtree(geoserver_vs)
+        if geoserver.exists():
+            rmtree(geoserver)
+        unzip_file("geoserver.zip")
+        os.rename(geoserver_vs,geoserver)
+        os.remove("geoserver.zip")
 
 
 
@@ -152,26 +180,6 @@ def download_source():
             info("Checking out source of %s " % software)
             url = config.get(section,software)
             svn.checkout(url,software)
-
-
-
-@task
-def unpack_java(): 
-    '''
-    Unzips jre.zip into jre\
-    '''
-    java = path("jre")
-    javaZIP = "jre.zip" 
-    javaSRC = path.joinpath(download_path,javaZIP)
-    info("Moving JRE into %s" % source_path)
-    copy(javaSRC,source_path)
-    with pushd(source_path):
-        if java.exists():
-            rmtree(java)
-        os.mkdir(java) # I wonder why this was necessary
-        unzip_file(javaZIP)
-        os.remove(javaZIP)
-
 
 
 
@@ -191,27 +199,6 @@ def gx():
 
 
 
-@task
-def unpack_geoserver(): 
-    '''
-    Unzips geoserver.zip and copies into artifacts
-    Note to Ivan: Fix this and everything else
-    '''
-    version = config.get("version","geoserver")
-    geoserver_vs = path('geoserver-2.0-SNAPSHOT')    
-    geoserver = path("geoserver")
-    geoserverZIP = "geoserver.zip" 
-    geoserverSRC = path.joinpath(download_path,geoserverZIP)
-    info("Moving GeoServer into %s" % source_path)
-    copy(geoserverSRC,source_path)
-    with pushd(source_path):
-        if geoserver_vs.exists():
-            rmtree(geoserver_vs)
-        if geoserver.exists():
-            rmtree(geoserver)
-        unzip_file(geoserverZIP)
-        os.rename(geoserver_vs,geoserver)
-        os.remove(geoserverZIP)
 
 
 
@@ -219,21 +206,16 @@ def unpack_geoserver():
 
 @task
 @needs(["dir_layout"])
-def data_dir(): 
+def unpack_datadir(): 
     '''
-    Download a zip file and moved into the GeoServer folder.
+    Unzips data_dir.zip into data_dir/
     '''
-    vulcan_datadir = 'vulcan_datadir.zip'
-    with pushd(download_path):
-        if path('data.zip').exists():
-            os.remove('data.zip')
-            rmtree('data')
-        urlgrab('http://data.opengeo.org/vulcan/vulcan_datadir.zip',vulcan_datadir,progress_obj=text_progress_meter())
-        unzip_file(vulcan_datadir)
-    info("moved data_dir into %s" % source_path)
+    vulcan_datadir = path.joinpath(download_path,"data_dir.zip")
+    info("Moving data_dir into %s" % source_path)
+    unzip_file(vulcan_datadir)
     if path.joinpath(source_path,'data_dir').exists():
         rmtree(path.joinpath(source_path,'data_dir'))
-    copytree(path.joinpath(download_path,'data'),path.joinpath(source_path,'data_dir'))
+    copytree(path.joinpath(download_path,'data_dir'),path.joinpath(source_path,'data_dir'))
 
 
 
@@ -313,13 +295,17 @@ def docs():
 def unzip_file(file):     
     zip = zipfile.ZipFile(file)
     for zipFile in zip.namelist(): 
-        info(zipFile)
+        #info(zipFile)
         if zipFile.endswith('/'): 
             os.mkdir(zipFile)
         else: 
             outfile = open(zipFile, 'wb')
             outfile.write(zip.read(zipFile))
             outfile.close()
+
+
+
+
 
 
 
