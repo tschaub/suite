@@ -59,7 +59,7 @@ options(
 
 
 @task
-@needs(["dir_layout","download_bin"])
+@needs(["dir_layout","download_bin","download"])
 def build_all(): 
     info("Building all of the OpenGeo Stack")
     call_task("unpack_java")
@@ -111,12 +111,9 @@ def download_bin(options):
             url = config.get(section,software)
             if software == 'java': 
                 urlgrab(url,'jre.zip',progress_obj=text_progress_meter())
-
             if software == 'datadir': 
                 urlgrab(url,'data_dir.zip',progress_obj=text_progress_meter())
-
             if software == 'geoserver':
-                #version = config.get("version","geoserver")
                 if url.startswith("http://$user:$password@"):
                     if not options.download_bin.auth:
                         info("%s requires you set -a user:pw to download" %url)
@@ -177,7 +174,7 @@ def download_source():
         for software in config.options(section): 
             info("Checking out source of %s " % software)
             url = config.get(section,software)
-            svn.checkout(url,software)
+            svn.export(url,software)
 
 @task 
 def gx(): 
@@ -220,7 +217,6 @@ def styler():
 #    pdb.set_trace()
     with pushd(styler_download):
     	sh('jsbuild   build.cfg')
-    # if styler_source ... maybe we should remove it before we do anything.... i hate my life....  
     os.mkdir(styler_source)
     copy(path.joinpath(styler_download,'index.html'),styler_source)
     copytree(path.joinpath(styler_download,'script'),path.joinpath(styler_source,'script'))
@@ -243,7 +239,7 @@ def download_docs():
             for doc in config.options(section): 
                 info("Download Docs for %s" % doc) 
                 url = config.get(section,doc) 
-                svn.checkout(url,doc)
+                svn.export(url,doc)
 
 
 
@@ -259,8 +255,8 @@ def docs():
         # fix 
         with pushd(download_path):
             with pushd(docs_path):
-                svn.checkout('http://svn.codehaus.org/geoserver/trunk/doc/en/theme/','theme')
-                svn.checkout('http://svn.opengeo.org/vulcan/trunk/docs/opengeotheme/','opengeotheme')
+                svn.export('http://svn.codehaus.org/geoserver/trunk/doc/en/theme/','theme')
+                svn.export('http://svn.opengeo.org/vulcan/trunk/docs/opengeotheme/','opengeotheme')
                 for doc in config.options(section): 
                     info("Build docs for %s" % doc) 
                     app_doc = path(doc)
@@ -340,9 +336,8 @@ def cleanup():
     ''' 
     rmtree(download_path)
 
- 
 
-
+import pdb
 @task
 def geoserver_plugins(): 
     '''
@@ -350,31 +345,37 @@ def geoserver_plugins():
     plugins being downloaded. 
 
     '''
-    def download():
-        with pushd(download_path):
-            if not plugin_path.exists(): 
-                os.mkdir(plugin_path) 
-            with pushd(plugin_path):                
-                section = "geoserver_plugins_urls"
-                for plugin in config.options(section): 
-                    info("Downloading GeoServer2.0 Plugins %s" % plugin)
-                    plugin = config.get(section,plugin)
-                    version = config.get("version","geoserver")
-                    info("download geoserver plugins")
-                    pluginURL = "%s%s-%s" % (geoserverURL,version,plugin)
-                    info(pluginURL)
-                    pluginZIP = "%s-%s" % (version,plugin)
-# This is broken, needs fixing Jul 14 
-#                    urlgrab(pluginURL,pluginZIP,progress_obj=text_progress_meter())
-#                   unzip_file(pluginZIP)
-    def move():
-        info("Moving GeoServer Plugins")
+@task
+def download(options):
+    ''' 
+    needs auth 
+    ''' 
+    plugin_path = path.joinpath(download_path,"geoserver_plugins") 
+    if not plugin_path.exists(): 
+        os.mkdir(path.joinpath(plugin_path)) 
+    with pushd(plugin_path): 
+        for plugin in config.options("extensions"):
+            base_url = "vulcan.opengeo.org/builds/ext-latest/"
+            url = "http://$user:$password@%s%s-%s-plugin.zip" % (base_url,config.get("version","geoserver"),plugin)
+            if not options.auth:
+                info("%s requires you set -a user:pw to download" %url)
+                sys.exit()
+            url = url_with_basic_auth(url, options.auth)
+            plugin_zip = "%s.zip" % (plugin)
+            urlgrab(url,plugin_zip,progress_obj=text_progress_meter())
+
+
+
+               
+
+
+@task
+def move():
+	info("Moving GeoServer Plugins")
         dest = path.joinpath(source_path,path("geoserver_plugins"))
         src = path.joinpath(download_path,plugin_path)
         copytree(src,dest) 
-
-    download()
-    move()
+    
 
     
 
