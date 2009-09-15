@@ -15,10 +15,19 @@ from urlgrabber.progress import text_progress_meter
 import string
 import sys
 
-#http://user:pass@foo.org/bar
 
+#@@ use auto and options rather than module globals
+config = ConfigParser.RawConfigParser()
+config.read("config.ini")
+download_path = path(config.get("files","downloads")) 
+docs_path = path("documentation")
+plugin_path = path("geoserver_plugins")
+source_path = path(config.get("files","source"))
 
-'''
+builder = path("builder")
+if not builder.exists(): 
+    os.mkdir(builder)
+
 setup(
     name="builder",
     packages=['builder'],
@@ -33,8 +42,8 @@ setup(
         "OWSLib"], 
     
 )
-'''
 
+'''
 options(
     sphinx=Bunch(
         builddir="_build"
@@ -46,67 +55,27 @@ options(
     ),
 
 )
+'''
 
 
 @task
-def after_envsetup():
-    info("envsetup done!")
-
-
-
+@needs(["dir_layout","download_bin"])
+def build_all(): 
+    info("Building all of the OpenGeo Stack")
+    call_task("download_source")
+    call_task("unpack_java")
+    call_task("gx")
+    call_task("unpack_geoserver")
+    #call_task("data_dir")
+    call_task("styler")
+    call_task("download_docs")
+    call_task("docs")
 '''
-This is how mike wants source to look 
-===================================== 
-installer\
-geoserver\
-geoserver_plugins\[plugins]\  -> right now this is messed up 
-geoexplorer\
-geoserver_docs\
-geoexplorer_docs\
-integration_docs\
-sun-java.exe
-
+    try:
+        call_task("cleanup")
+    except Exception, e:
+        info(e)
 '''
-
-
-'''
-"options"
-
-'''
-
-
-builder = path("builder")
-if not builder.exists(): 
-    os.mkdir(builder)
-
-#@@ use auto and options rather than module globals
-config = ConfigParser.RawConfigParser()
-config.read("config.ini")
-download_path = path(config.get("files","downloads")) 
-docs_path = path("documentation")
-geoserverURL=path(config.get("urls","sourceforgeGS"))
-plugin_path = path("geoserver_plugins")
-source_path = path(config.get("files","source"))
-
-
-def unzip_file(file):     
-    zip = zipfile.ZipFile(file)
-    for zipFile in zip.namelist(): 
-        info(zipFile)
-        if zipFile.endswith('/'): 
-            os.mkdir(zipFile)
-        else: 
-            outfile = open(zipFile, 'wb')
-            outfile.write(zip.read(zipFile))
-            outfile.close()
-
-
-
-
-
-@task 
-def auto(): 
-    pass 
 
 
 @task 
@@ -120,25 +89,7 @@ def dir_layout(options):
         if not _dir.exists(): 
             os.mkdir(_dir)
 
-@task 
 
-def clean():
-    info("Cleaning Installer Layout") 
-    for _dir in config.options("files"): 
-        _dir=path(config.get("files",_dir))
-        if _dir.exists():
-            if sys.platform == 'win32': 
-                sh("rd /S /Q %s" % _dir )
-            else:
-                rmtree(_dir)
-
-def url_with_basic_auth(url, authstr):
-    '''
-    Split user:password into strings
-    '''
-    auth = dict()
-    auth['user'], auth['password'] = authstr.split(':')
-    return string.Template(url).substitute(auth)
 
 
 @task 
@@ -161,14 +112,84 @@ def download_bin(options):
             if software == 'java': 
                 urlgrab(url,'jre.zip',progress_obj=text_progress_meter())
 
+            if software == 'datadir': 
+                urlgrab(url,'data_dir.zip',progress_obj=text_progress_meter())
+
             if software == 'geoserver':
-                version = config.get("version","geoserver")
+                #version = config.get("version","geoserver")
                 if url.startswith("http://$user:$password@"):
                     if not options.download_bin.auth:
                         info("%s requires you set -a user:pw to download" %url)
                         sys.exit()
                     url = url_with_basic_auth(url, options.download_bin.auth)
                 urlgrab(url,'geoserver.zip',progress_obj=text_progress_meter())
+
+
+
+
+
+@task
+def after_envsetup():
+    info("envsetup done!")
+
+   
+
+
+
+
+
+
+
+
+@task 
+def download_source(): 
+    '''
+    Checks out the source code for different OpenGeo Projects
+    '''
+    with pushd(download_path) as download: 
+        section = "svn_software"
+        for software in config.options(section): 
+            info("Checking out source of %s " % software)
+            url = config.get(section,software)
+            svn.checkout(url,software)
+
+
+
+@task
+def unpack_java(): 
+    '''
+    Unzips jre.zip into jre\
+    '''
+    java = path("jre")
+    javaZIP = "jre.zip" 
+    javaSRC = path.joinpath(download_path,javaZIP)
+    info("Moving JRE into %s" % source_path)
+    copy(javaSRC,source_path)
+    with pushd(source_path):
+        if java.exists():
+            rmtree(java)
+        os.mkdir(java) # I wonder why this was necessary
+        unzip_file(javaZIP)
+        os.remove(javaZIP)
+
+
+
+
+
+@task 
+def gx(): 
+    ''' 
+    This builds GeoExplorer and puts in source
+    ''' 
+    geoexplorer_path = path.joinpath(download_path,path("geoexplorer"))
+    geoexplorer_build = path.joinpath(geoexplorer_path,path("build"))
+    def build_min():
+        sh("ant dist") 
+    with pushd(geoexplorer_build): 
+        build_min() 
+    copytree(path.joinpath(geoexplorer_build,'GeoExplorer'),path.joinpath(path.joinpath(source_path,'GeoExplorer')))
+
+
 
 @task
 def unpack_geoserver(): 
@@ -192,49 +213,159 @@ def unpack_geoserver():
         os.rename(geoserver_vs,geoserver)
         os.remove(geoserverZIP)
 
+
+
+
+
 @task
-def unpack_java(): 
+@needs(["dir_layout"])
+def data_dir(): 
     '''
-    Unzips jre.zip into jre\
+    Download a zip file and moved into the GeoServer folder.
     '''
-    java = path("jre")
-    javaZIP = "jre.zip" 
-    javaSRC = path.joinpath(download_path,javaZIP)
-    info("Moving JRE into %s" % source_path)
-    copy(javaSRC,source_path)
-    with pushd(source_path):
-        if java.exists():
-            rmtree(java)
-        os.mkdir(java) # I wonder why this was necessary
-        unzip_file(javaZIP)
-        os.remove(javaZIP)
+    vulcan_datadir = 'vulcan_datadir.zip'
+    with pushd(download_path):
+        if path('data.zip').exists():
+            os.remove('data.zip')
+            rmtree('data')
+        urlgrab('http://data.opengeo.org/vulcan/vulcan_datadir.zip',vulcan_datadir,progress_obj=text_progress_meter())
+        unzip_file(vulcan_datadir)
+    info("moved data_dir into %s" % source_path)
+    if path.joinpath(source_path,'data_dir').exists():
+        rmtree(path.joinpath(source_path,'data_dir'))
+    copytree(path.joinpath(download_path,'data'),path.joinpath(source_path,'data_dir'))
+
+
+
+@task 
+def styler(): 
+    ''' 
+    This downloads the Styler 
+    Note to Ivan: Put this in the config.ini?
+    ''' 
+    styler_download = path.joinpath(download_path,'styler')
+    styler_source = path.joinpath(source_path,'styler')
+    with pushd(download_path):
+        svn.checkout('http://svn.opengeo.org/geoext/apps/styler2/trunk/','styler')
+        with pushd(path('styler')):
+            sh('jsbuild   build.cfg')
+    if not styler_source.exists():
+        os.mkdir(styler_source)
+    copy(path.joinpath(styler_download,'index.html'),styler_source)
+    copytree(path.joinpath(styler_download,'script'),path.joinpath(styler_source,'script'))
+    copytree(path.joinpath(styler_download,'theme'),path.joinpath(styler_source,'theme'))
+    copytree(path.joinpath(styler_download,'externals'),path.joinpath(styler_source,'externals'))
+
+
 
 
 @task 
-def download_source(): 
+def download_docs(): 
     '''
-    Checks out the source code for different OpenGeo Projects
+    This downloads the OpenGeo Documentation
     '''
-    with pushd(download_path) as download: 
-        section = "svn_software"
-        for software in config.options(section): 
-            info("Checking out source of %s " % software)
-            url = config.get(section,software)
-            svn.checkout(url,software)
+    with pushd(download_path) as download:
+        if not docs_path.exists(): 
+            os.mkdir(docs_path)
+        with pushd(docs_path):
+            section = "docs" 
+            for doc in config.options(section): 
+                info("Download Docs for %s" % doc) 
+                url = config.get(section,doc) 
+                svn.checkout(url,doc)
+
+
+
 
 @task 
-def gx(): 
+@needs(['download_docs'])
+def docs():
+    ''' 
+    This builds the OpenGeo Documentation
+    ''' 
+    section = "docs" 
+    def build():
+        # fix 
+        with pushd(download_path):
+            with pushd(docs_path):
+                svn.checkout('http://svn.codehaus.org/geoserver/trunk/doc/en/theme/','theme')
+                svn.checkout('http://svn.opengeo.org/vulcan/trunk/docs/opengeotheme/','opengeotheme')
+                for doc in config.options(section): 
+                    info("Build docs for %s" % doc) 
+                    app_doc = path(doc)
+                    with pushd(app_doc):
+                        if doc == 'geoexplorer':                             
+                            sh("sphinx-build -bhtml . html")
+                        else:
+                            sh("sphinx-build -bhtml source html")
 
+    def move(): 
+        for doc in config.options(section): 
+            doc_path = path.joinpath(download_path,docs_path,doc,path('html'))
+            copytree(doc_path,path.joinpath(source_path,path("%s_doc"% doc)))            
+    build()
+    move()
+
+
+
+
+# misc functions
+def unzip_file(file):     
+    zip = zipfile.ZipFile(file)
+    for zipFile in zip.namelist(): 
+        info(zipFile)
+        if zipFile.endswith('/'): 
+            os.mkdir(zipFile)
+        else: 
+            outfile = open(zipFile, 'wb')
+            outfile.write(zip.read(zipFile))
+            outfile.close()
+
+
+
+def url_with_basic_auth(url, authstr):
+    '''
+    Split user:password into strings
+    '''
+    auth = dict()
+    auth['user'], auth['password'] = authstr.split(':')
+    return string.Template(url).substitute(auth)
+
+
+
+# misc functions (end)
+
+# misc tasks
+@task
+def auto(): 
+    pass 
+
+
+
+
+
+@task 
+def clean():
+    info("Cleaning Installer Layout") 
+    for _dir in config.options("files"): 
+        _dir=path(config.get("files",_dir))
+        if _dir.exists():
+            if sys.platform == 'win32': 
+                sh("rd /S /Q %s" % _dir )
+            else:
+                rmtree(_dir)
+
+
+
+
+@task 
+def cleanup(): 
     ''' 
-    This builds GeoExplorer and puts in source
+    Cleans up download folder after the script is done
     ''' 
-    geoexplorer_path = path.joinpath(download_path,path("geoexplorer"))
-    geoexplorer_build = path.joinpath(geoexplorer_path,path("build"))
-    def build_min():
-        sh("ant dist") 
-    with pushd(geoexplorer_build): 
-        build_min() 
-    copytree(path.joinpath(geoexplorer_build,'GeoExplorer'),path.joinpath(path.joinpath(source_path,'GeoExplorer')))
+    rmtree(download_path)
+
+ 
 
 
 @task
@@ -270,51 +401,10 @@ def geoserver_plugins():
     download()
     move()
 
-
-@task 
-def download_docs(): 
-    '''
-    This downloads the OpenGeo Documentation
-    '''
-    with pushd(download_path) as download:
-        if not docs_path.exists(): 
-            os.mkdir(docs_path)
-        with pushd(docs_path):
-            section = "docs" 
-            for doc in config.options(section): 
-                info("Download Docs for %s" % doc) 
-                url = config.get(section,doc) 
-                svn.checkout(url,doc)
     
 
-@task 
-@needs(['download_docs'])
-def docs():
-    ''' 
-    This builds the OpenGeo Documentation
-    ''' 
-    section = "docs" 
-    def build():
-        # fix 
-        with pushd(download_path):
-            with pushd(docs_path):
-                svn.checkout('http://svn.codehaus.org/geoserver/trunk/doc/en/theme/','theme')
-                svn.checkout('http://svn.opengeo.org/vulcan/trunk/docs/opengeotheme/','opengeotheme')
-                for doc in config.options(section): 
-                    info("Build docs for %s" % doc) 
-                    app_doc = path(doc)
-                    with pushd(app_doc):
-                        if doc == 'geoexplorer':                             
-                            sh("sphinx-build -bhtml . html")
-                        else:
-                            sh("sphinx-build -bhtml source html")
 
-    def move(): 
-        for doc in config.options(section): 
-            doc_path = path.joinpath(download_path,docs_path,doc,path('html'))
-            copytree(doc_path,path.joinpath(source_path,path("%s_doc"% doc)))            
-    build()
-    move()
+
 
 @task
 def source_dirs(): 
@@ -326,69 +416,6 @@ def source_dirs():
     if not interDocs.exists():
         os.mkdir(interDocs)
 
-@task
-@needs(["dir_layout"])
-def data_dir(): 
-    '''
-    Download a zip file and moved into the GeoServer folder.
-    '''
-    vulcan_datadir = 'vulcan_datadir.zip'
-    with pushd(download_path):
-        if path('data.zip').exists():
-            os.remove('data.zip')
-            rmtree('data')
-        urlgrab('http://data.opengeo.org/vulcan/vulcan_datadir.zip',vulcan_datadir,progress_obj=text_progress_meter())
-        unzip_file(vulcan_datadir)
-    info("moved data_dir into %s" % source_path)
-    if path.joinpath(source_path,'data_dir').exists():
-        rmtree(path.joinpath(source_path,'data_dir'))
-    copytree(path.joinpath(download_path,'data'),path.joinpath(source_path,'data_dir'))
-
-@task 
-def styler(): 
-    ''' 
-    This downloads the Styler 
-    Note to Ivan: Put this in the config.ini?
-    ''' 
-    styler_download = path.joinpath(download_path,'styler')
-    styler_source = path.joinpath(source_path,'styler')
-    with pushd(download_path):
-        svn.checkout('http://svn.opengeo.org/geoext/apps/styler2/trunk/','styler')
-        with pushd(path('styler')):
-            sh('jsbuild   build.cfg')
-    if not styler_source.exists():
-        os.mkdir(styler_source)
-    copy(path.joinpath(styler_download,'index.html'),styler_source)
-    copytree(path.joinpath(styler_download,'script'),path.joinpath(styler_source,'script'))
-    copytree(path.joinpath(styler_download,'theme'),path.joinpath(styler_source,'theme'))
-    copytree(path.joinpath(styler_download,'externals'),path.joinpath(styler_source,'externals'))
                        
-@task 
-def cleanup(): 
-    ''' 
-    Cleans up download folder after the script is done
-    ''' 
-    rmtree(download_path)
-
-    
-
-@task
-@needs(["dir_layout","download_bin"])
-def build_all(): 
-    info("Building all of the OpenGeo Stack")
-    call_task("download_source")
-    call_task("unpack_java")
-    call_task("gx")
-    call_task("unpack_geoserver")
-    call_task("data_dir")
-    call_task("styler")
-    call_task("download_docs")
-    call_task("docs")
-'''
-    try:
-        call_task("cleanup")
-    except Exception, e:
-        info(e)
-'''
 
 
