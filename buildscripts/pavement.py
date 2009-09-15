@@ -212,11 +212,11 @@ def unpack_datadir():
     '''
     vulcan_datadir = path.joinpath(download_path,"data_dir.zip")
     info("Moving data_dir into %s" % source_path)
-    unzip_file(vulcan_datadir)
-    if path.joinpath(source_path,'data_dir').exists():
-        rmtree(path.joinpath(source_path,'data_dir'))
-    copytree(path.joinpath(download_path,'data_dir'),path.joinpath(source_path,'data_dir'))
-
+    copy(path.joinpath(download_path,'data_dir.zip'),source_path)
+    with pushd(source_path):
+	unzip_file("data_dir.zip")
+	os.rename("data","data_dir")
+        os.remove("data_dir.zip")
 
 
 @task 
