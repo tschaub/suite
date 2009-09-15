@@ -1,0 +1,112 @@
+<html>
+<head>
+    <title>Scale Slider</title>
+    <link rel="stylesheet" type="text/css" href="../externals/ext/resources/css/ext-all.css" />
+    <link rel="stylesheet" type="text/css" href="../externals/ext/resources/css/xtheme-gray.css" />
+    <link rel="stylesheet" type="text/css" href="../externals/openlayers/theme/default/style.css" />
+    <link rel="stylesheet" type="text/css" href="../theme/css/styler.css" />
+    <style type="text/css">
+        .x-window-body {
+            background-color: white;
+        }
+        #mapcontainer {
+            width: 400px;
+            height: 200px;
+        }
+        .gx-scaleslider {
+            top: 30px;
+        }
+        .gx-map-control {
+            z-index: 1000;
+            position: absolute;
+            left: 9px;
+        }
+        .zoomin {
+            top: 10px;
+        }
+        .zoomout {
+            top: 130px;
+        }
+    </style>
+    <script type="text/javascript" src="../externals/ext/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="../externals/ext/ext-all.js"></script>
+    <script type="text/javascript" src="../script/OpenLayers.js"></script>
+    <script type="text/javascript" src="../externals/core/lib/GeoExt/widgets/map/MapPanel.js"></script>
+    <script type="text/javascript" src="../lib/Styler/widgets/tips/SliderTip.js"></script>
+    <script type="text/javascript" src="../lib/Styler/widgets/tips/ScaleSliderTip.js"></script>
+    <script type="text/javascript" src="../lib/Styler/widgets/ScaleSlider.js"></script>
+    <script>
+    OpenLayers.ImgPath = "../externals/openlayers/img/";
+    var map;
+    Ext.onReady(function() {
+        var mapContainer = new Ext.Panel({
+            renderTo: "mapcontainer",
+            layout: "column",
+            items: [{
+                id: "mappanel",
+                xtype: "gx_mappanel",
+                mapOptions: {
+                    controls: [
+                        new OpenLayers.Control.Navigation()
+                    ]
+                },
+                layers: [
+                    new OpenLayers.Layer.WMS( "OpenLayers WMS",
+                        "http://labs.metacarta.com/wms/vmap0",
+                        {layers: 'basic'} )
+                ],
+                items: [{
+                    xtype: "button",
+                    cls: "gx-map-control zoomin",
+                    text: "+",
+                    handler: function() {
+                        map.zoomIn();
+                    }
+                }, {
+                    xtype: "button",
+                    cls: "gx-map-control zoomout",
+                    text: "-",
+                    handler: function() {
+                        map.zoomOut();
+                    }
+                }]
+            }]
+        });
+        map = Ext.getCmp("mappanel").map;
+        var scaleSlider = new Styler.ScaleSlider({
+            width: 120,
+            renderTo: "slider",
+            map: map,
+            plugins: new Styler.ScaleSliderTip()
+        });
+        
+        new Styler.ScaleSlider({
+            height: 100,
+            vertical: true,
+            map: map,
+            plugins: new Styler.ScaleSliderTip({
+                template: "Scale: 1 : {scale}"
+            })
+        }).addToMap();
+    });
+    </script>
+</head>
+<body>
+    <div id="panel"></div>
+    <h1>Styler.ScaleSlider</h1>
+    <p>The ScaleSlider is a replacement for the ZoomPanel, using an Ext.Slider.
+    It is also possible to add a special tooltip plugin, ScaleSliderTip, which
+    will show the zoom level, scale and resolution while dragging the slider
+    (the content is configurable of course).
+    The slider can either live outside the map for usage in other Ext components,
+    or we can use the addToMap() method to add it to the map as if it were a
+    map control.</p>
+    <p>Below we have the slider on the map with a custom tip:</p>
+
+    <div id="mapcontainer"></div>
+    <br/>
+    <p>Here we have another slider, connected to the same map, but living
+    outside and with the default tip:</p>
+    <div id="slider"></div>
+</body>
+</html>

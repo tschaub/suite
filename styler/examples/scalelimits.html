@@ -1,0 +1,38 @@
+<html>
+<head>
+    <title>Scale Limits</title>
+    <link rel="stylesheet" type="text/css" href="../externals/ext/resources/css/ext-all.css" />
+    <link rel="stylesheet" type="text/css" href="../externals/ext/resources/css/xtheme-gray.css" />
+    <link rel="stylesheet" type="text/css" href="../theme/css/styler.css" />
+    <style type="text/css">
+    </style>
+    <script type="text/javascript" src="../externals/ext/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="../externals/ext/ext-all.js"></script>
+    <script type="text/javascript" src="../script/OpenLayers.js"></script>
+    <script type="text/javascript" src="../lib/Styler/widgets/tips/MultiSliderTip.js"></script>
+    <script type="text/javascript" src="../lib/Styler/widgets/MultiSlider.js"></script>
+    <script type="text/javascript" src="../lib/Styler/widgets/ScaleLimitPanel.js"></script>
+    <script>
+
+    Ext.onReady(function() {
+        
+        new Ext.Panel({
+            renderTo: "panel",
+            border: false,
+            items: [{
+                xtype: "gx_scalelimitpanel",
+                scaleSliderTemplate: "{zoomType} Zoom Level: {zoom}"
+            }]
+        });
+        
+    });
+
+    </script>
+</head>
+<body>
+
+    <h3>Scale Limit Panel</h3>
+    <div id="panel"></div>
+
+</body>
+</html>

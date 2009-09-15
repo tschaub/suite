@@ -1,0 +1,199 @@
+<html>
+<head>
+    <title>Feature Renderer</title>
+    <link rel="stylesheet" type="text/css" href="../externals/ext/resources/css/ext-all.css" />
+    <link rel="stylesheet" type="text/css" href="../externals/ext/resources/css/xtheme-gray.css" />
+    <link rel="stylesheet" type="text/css" href="../theme/css/styler.css" />
+    <style type="text/css">
+        .x-window-body {
+            background-color: white;
+        }
+        #swatches {
+            padding: 1em;
+        }
+        #swatches td {
+            border: 1px solid #ccc;
+            text-align: center;
+            padding: 0.5em;
+        }
+        #wkt {
+            width: 400px;
+            height: 100px;
+        }
+        #symbolizer {
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+    <script type="text/javascript" src="../externals/ext/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="../externals/ext/ext-all.js"></script>
+    <script type="text/javascript" src="../script/OpenLayers.js"></script>
+    <script type="text/javascript" src="../lib/Styler/widgets/FeatureRenderer.js"></script>
+    <script>
+    
+    var blue = {
+        fillColor: "blue",
+        fillOpacity: 0.25,
+        strokeColor: "blue",
+        strokeWidth: 2,
+        pointRadius: 5
+    };
+    
+    var custom = {
+        point: {
+            graphicName: "star",
+            pointRadius: 8,
+            fillColor: "yellow",
+            strokeColor: "red",
+            strokeWidth: 1
+        },
+        line: {
+            strokeColor: "#669900",
+            strokeWidth: 3
+        },
+        poly: {
+            fillColor: "olive",
+            fillOpacity: 0.25,
+            strokeColor: "#666666",
+            strokeWidth: 2,
+            strokeDashstyle: "dot"
+        }
+    };
+
+    var configs = [{
+        symbolType: "point",
+        renderTo: "point_default"
+    }, {
+        symbolType: "line",
+        renderTo: "line_default"
+    }, {
+        symbolType: "polygon",
+        renderTo: "poly_default"
+    }, {
+        symbolType: "point",
+        symbolizer: blue,
+        renderTo: "point_blue"
+    }, {
+        symbolType: "line",
+        symbolizer: blue,
+        renderTo: "line_blue"
+    }, {
+        symbolType: "polygon",
+        symbolizer: blue,
+        renderTo: "poly_blue"
+    }, {
+        symbolType: "point",
+        symbolizer: custom.point,
+        renderTo: "point_custom"
+    }, {
+        symbolType: "line",
+        symbolizer: custom.line,
+        renderTo: "line_custom"
+    }, {
+        symbolType: "polygon",
+        symbolizer: custom.poly,
+        renderTo: "poly_custom"
+    }];
+    
+    Ext.onReady(function() {        
+        for(var i=0; i<configs.length; ++i) {
+            new Styler.FeatureRenderer(configs[i]);
+        }
+        
+        $("render").onclick = render;
+        
+    });
+    
+    var format = new OpenLayers.Format.WKT();
+    var renderer, win;
+    function render() {
+        var wkt = $("wkt").value;
+        var feature;
+        try {
+            feature = format.read(wkt)
+        } catch(err) {
+            $("wkt").value = "Bad WKT: " + err;
+        }
+        var symbolizer;
+        try {
+            symbolizer = eval("(" + $("symbolizer").value + ")");
+        } catch(err) {
+            $("symbolizer").value = "Bad symbolizer: " + err;
+        }
+        if(feature && symbolizer) {
+            if(!win) {
+                renderer = new Styler.FeatureRenderer({
+                    feature: feature,
+                    symbolizer: symbolizer,
+                    width: 150,
+                    style: {margin: 4}
+                });
+                win = new Ext.Window({
+                    closeAction: "hide",
+                    items: [renderer]
+                });
+            } else {
+                renderer.update({
+                    feature: feature,
+                    symbolizer: symbolizer
+                });
+            }
+            win.show();
+        }
+    }
+
+    </script>
+</head>
+<body>
+    <div id="panel"></div>
+    <h1>Styler.FeatureRenderer</h1>
+    <p>The FeatureRenderer renderers arbitrary OpenLayers.Feature.Vector objects
+    given a symbolizer.  The FeatureRenderer component can be used anywhere a box
+    component is used.</p>
+
+    <h2>Geometry Types</h2>
+    <p>If the feature renderer is not given a feature, it can be configured to
+    render a default feature based on geometry type alone.</p>
+    <table id="swatches">
+        <tbody>
+            <tr><td>&nbsp;</td><td>point</td><td>line</td><td>polygon</td></tr>
+            <tr>
+                <td>default</td>
+                <td id="point_default"></td>
+                <td id="line_default"></td>
+                <td id="poly_default"></td>
+            </tr><tr>
+                <td>blue</td>
+                <td id="point_blue"></td>
+                <td id="line_blue"></td>
+                <td id="poly_blue"></td>
+            </tr><tr>
+                <td>custom</td>
+                <td id="point_custom"></td>
+                <td id="line_custom"></td>
+                <td id="poly_custom"></td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h2>Custom Feature Rendering</h2>
+    <p>You can render any OpenLayers.Feature.Vector object with a FeatureRenderer.
+    Use the inputs below to modify the well-known text and symbolizer.  These
+    will be used to render a feature in a new window.</p><br>
+    <label for="wkt">Geometry Well-Known Text</label><br>
+    <textarea id="wkt">
+POLYGON((1 30, -33 10, -39 -21, 1 -41, 23 -22, 27 15, 1 30), (0 10, -14 0, -4 -24, 12 -8, 0 10))
+    </textarea><br><br>
+    <label for="symbolizer">Feature Symbolizer</label><br>
+    <textarea id="symbolizer">
+{
+    fillColor: "yellow",
+    fillOpacity: 1,
+    strokeColor: "blue",
+    strokeWidth: 1,
+    pointRadius: 5
+}
+    </textarea><br>
+    <button id="render">render</button>
+</body>
+</html>

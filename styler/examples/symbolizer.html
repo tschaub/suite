@@ -1,0 +1,216 @@
+<html>
+<head>
+    <title>Symbolizer Components</title>
+    <link rel="stylesheet" type="text/css" href="../externals/ext/resources/css/ext-all.css" />
+    <link rel="stylesheet" type="text/css" href="../externals/ux/colorpicker/color-picker.ux.css" />
+    <link rel="stylesheet" type="text/css" href="../externals/ext/resources/css/xtheme-gray.css" />
+    <link rel="stylesheet" type="text/css" href="../theme/css/styler.css" />
+    <style type="text/css">
+        #swatches {
+            padding: 1em;
+        }
+        #swatches td {
+            border: 1px solid #ccc;
+            text-align: center;
+            padding: 0.5em;
+        }
+    </style>
+    <script type="text/javascript" src="../externals/ext/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="../externals/ext/ext-all.js"></script>
+    <script type="text/javascript" src="../script/OpenLayers.js"></script>
+    <script type="text/javascript" src="../lib/Styler/widgets/tips/SliderTip.js"></script>
+    <script type="text/javascript" src="../lib/Styler/widgets/form/ColorField.js"></script>
+    <script type="text/javascript" src="../lib/Styler/widgets/FillSymbolizer.js"></script>
+    <script type="text/javascript" src="../lib/Styler/widgets/StrokeSymbolizer.js"></script>
+    <script type="text/javascript" src="../lib/Styler/widgets/PointSymbolizer.js"></script>
+    <script type="text/javascript" src="../lib/Styler/widgets/LineSymbolizer.js"></script>
+    <script type="text/javascript" src="../lib/Styler/widgets/PolygonSymbolizer.js"></script>
+    <script type="text/javascript" src="../lib/Styler/widgets/FeatureRenderer.js"></script>
+    <script type="text/javascript" src="../lib/Styler/ColorManager.js"></script>
+    <script type="text/javascript" src="../externals/ux/colorpicker/color-picker.ux.js"></script>
+    <script>
+
+    var symbolizer = {
+        Point: {
+            graphicName: "star",
+            pointRadius: 8,
+            fillColor: "yellow",
+            strokeColor: "red",
+            strokeWidth: 1
+        },
+        Line: {
+            strokeColor: "#669900",
+            strokeWidth: 3
+        },
+        Polygon: {
+            fillColor: "olive",
+            fillOpacity: 0.25,
+            strokeColor: "#666666",
+            strokeWidth: 2,
+            strokeDashstyle: "dot"
+        }
+    };
+
+    
+    Ext.onReady(function() {
+        new Styler.FillSymbolizer({
+            renderTo: "fill",
+            labelAlign: "right",
+            labelWidth: 50,
+            width: 190
+        });
+
+        new Styler.StrokeSymbolizer({
+            renderTo: "stroke",
+            labelAlign: "right",
+            labelWidth: 50,
+            width: 190
+        });
+
+
+        // create line swatch that opens line symbolizer in new window when clicked
+        var lineWin;
+        var lineSwatch = new Styler.FeatureRenderer({
+            symbolType: "Line",
+            symbolizer: symbolizer["Line"],
+            renderTo: "line",
+            listeners: {
+                click: function(renderer) {
+                    if(!lineWin) {
+                        lineWin = new Ext.Window({
+                            title: "Line Symbolizer",
+                            plain: true,
+                            closeAction: "hide",
+                            items: [{
+                                xtype: "gx_linesymbolizer",
+                                symbolizer: renderer.symbolizer,
+                                bodyStyle: {padding: 10},
+                                border: false,
+                                defaults: {
+                                    labelWidth: 50,
+                                    labelAlign: "right"
+                                },
+                                listeners: {
+                                    change: function(symbolizer) {
+                                        lineSwatch.setSymbolizer(symbolizer);
+                                    }
+                                }
+                            }]
+                        });
+                    }
+                    lineWin.show();
+                }
+            }
+        });
+
+        // create poly swatch that opens polygon symbolizer in new window when clicked
+        var polyWin;
+        var polySwatch = new Styler.FeatureRenderer({
+            symbolType: "Polygon",
+            symbolizer: symbolizer["Polygon"],
+            renderTo: "polygon",
+            listeners: {
+                click: function(renderer) {
+                    if(!polyWin) {
+                        polyWin = new Ext.Window({
+                            title: "Polygon Symbolizer",
+                            plain: true,
+                            closeAction: "hide",
+                            items: [{
+                                xtype: "gx_polygonsymbolizer",
+                                symbolizer: renderer.symbolizer,
+                                bodyStyle: {padding: 10},
+                                border: false,
+                                defaults: {
+                                    labelWidth: 50,
+                                    labelAlign: "right"
+                                },
+                                listeners: {
+                                    change: function(symbolizer) {
+                                        polySwatch.setSymbolizer(symbolizer);
+                                    }
+                                }
+                            }]
+                        });
+                    }
+                    polyWin.show();
+                }
+            }
+        });
+
+        // create point swatch that opens point symbolizer in new window when clicked
+        var pointWin;
+        var pointSwatch = new Styler.FeatureRenderer({
+            symbolType: "Point",
+            symbolizer: symbolizer["Point"],
+            renderTo: "point",
+            listeners: {
+                click: function(renderer) {
+                    if(!pointWin) {
+                        pointWin = new Ext.Window({
+                            title: "Point Symbolizer",
+                            shadow: false,
+                            plain: true,
+                            closeAction: "hide",
+                            items: [{
+                                xtype: "gx_pointsymbolizer",
+                                symbolizer: renderer.symbolizer,
+                                pointGraphics: [
+                                    {display: "circle", value: "circle", mark: true, preview: "../theme/img/circle.gif"},
+                                    {display: "square", value: "square", mark: true, preview: "../theme/img/square.gif"},
+                                    {display: "triangle", value: "triangle", mark: true, preview: "../theme/img/triangle.gif"},
+                                    {display: "star", value: "star", mark: true, preview: "../theme/img/star.gif"},
+                                    {display: "cross", value: "cross", mark: true, preview: "../theme/img/cross.gif"},
+                                    {display: "x", value: "x", mark: true, preview: "../theme/img/x.gif"},
+                                    {display: "magnifier", value: "../theme/img/magnifier.png", preview: "../theme/img/magnifier.png"},
+                                    {display: "external"}
+                                ],
+                                bodyStyle: {padding: 10},
+                                border: false,
+                                labelWidth: 50,
+                                labelAlign: "right",
+                                defaults: {
+                                    labelWidth: 50,
+                                    labelAlign: "right"
+                                },
+                                listeners: {
+                                    change: function(symbolizer) {
+                                        pointSwatch.setSymbolizer(symbolizer);
+                                    }
+                                }
+                            }]
+                        });
+                    }
+                    pointWin.show();
+                }
+            }
+        });
+
+    });
+
+    </script>
+</head>
+<body>
+
+    <h3>Basic symbolizer fill form</h3>
+    <div id="fill"></div>
+
+    <h3>Basic symbolizer stroke form</h3>
+    <div id="stroke"></div>
+
+    <h3>Point, Line, and Polygon symbolizers</h3>
+    <p>Click the swatches to open symbolizer windows.</p>
+    <table id="swatches">
+        <tbody>
+            <tr><td>point</td><td>line</td><td>polygon</td></tr>
+            <tr>
+                <td id="point"></td>
+                <td id="line"></td>
+                <td id="polygon"></td>
+            </tr>
+        </tbody>
+    </table>
+
+
+</body>
+</html>
