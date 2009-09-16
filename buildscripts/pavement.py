@@ -57,6 +57,27 @@ options(
 )
 '''
 
+'''
+Hi Mike, should do break these tasks into two meta sections. 
+
+  1. Download 
+    a. Download major software 
+    b. Export svn based software
+    c. This part of this script leaves everything in state where you
+	 can run build with out the net.
+ 
+  2. Build   
+    a. Unpacks all zips and non svn software.
+    b. Builds all Javascript software with ant and jsbuild. 
+    c. Moves everything into $source 
+
+Its important to keep the two task different. One should be able to
+	build everything without having to download everything.   
+
+
+'''
+
+
 
 @task
 @needs(["dir_layout","download_bin","download"])
@@ -122,7 +143,7 @@ def download_bin(options):
 @task
 def unpack_java(): 
     '''
-    Unzips jre.zip into jre\
+    Unzips jre.zip into jre
     '''
     java = path("jre")
     javaZIP = "jre.zip" 
@@ -208,18 +229,18 @@ def styler():
     ''' 
     This builds styler 
     ''' 
-    styler_download = path.joinpath(download_path,'styler')
-    styler_source = path.joinpath(source_path,'styler')
-#    import pdb 
-#    pdb.set_trace()
-    with pushd(styler_download):
-    	sh('jsbuild   build.cfg')
+    base_path =  path(os.getcwd().strip("buildscripts"))    
+    styler_path = path.joinpath(base_path,"styler") 
+    styler_source = path.joinpath(source_path,"styler")
+    with pushd(styler_path):
+	sh('jsbuild build.cfg -o script')
     os.mkdir(styler_source)
-    copy(path.joinpath(styler_download,'index.html'),styler_source)
-    copytree(path.joinpath(styler_download,'script'),path.joinpath(styler_source,'script'))
-    copytree(path.joinpath(styler_download,'theme'),path.joinpath(styler_source,'theme'))
-    copytree(path.joinpath(styler_download,'externals'),path.joinpath(styler_source,'externals'))
+    copy(path.joinpath(styler_path,'index.html'),styler_source)
+    copytree(path.joinpath(styler_path,'script'),path.joinpath(styler_source,'script'))
+    copytree(path.joinpath(styler_path,'theme'),path.joinpath(styler_source,'theme'))
+    copytree(path.joinpath(styler_path,'externals'),path.joinpath(styler_source,'externals'))
 
+    print "i this now"
 
 
 
