@@ -7,6 +7,18 @@ questions please contact Ivan Willig iwillig@opengeo.org
 
 Each system is ordered by importance. 
 
+Software packages
+------------------ 
+We want to install most or all of the software that is currently installed 
+by the Windows Vulcan?   
+
+1. geoserver
+   Should we install a **war** or a **bin** 
+2. geoext
+3. postgis ? 
+4.  
+
+
 RPM's - Red Hat Sytem
 ----------------------
 
