@@ -70,12 +70,6 @@ def build_all():
     call_task("styler")
     call_task("download_docs")
     call_task("docs")
-'''
-    try:
-        call_task("cleanup")
-    except Exception, e:
-        info(e)
-'''
 
 
 @task 
@@ -164,6 +158,24 @@ def unpack_geoserver():
 
 
 
+@task
+@needs(["dir_layout"])
+def unpack_datadir(): 
+    '''
+    Unzips data_dir.zip into data_dir/
+    '''
+    vulcan_datadir = path.joinpath(download_path,"data_dir.zip")
+    info("Moving data_dir into %s" % source_path)
+    copy(path.joinpath(download_path,'data_dir.zip'),source_path)
+    with pushd(source_path):
+	unzip_file("data_dir.zip")
+	os.rename("data","data_dir")
+        os.remove("data_dir.zip")
+
+
+
+
+
 @task 
 def download_source(): 
     '''
@@ -191,25 +203,10 @@ def gx():
 
 
 
-@task
-@needs(["dir_layout"])
-def unpack_datadir(): 
-    '''
-    Unzips data_dir.zip into data_dir/
-    '''
-    vulcan_datadir = path.joinpath(download_path,"data_dir.zip")
-    info("Moving data_dir into %s" % source_path)
-    copy(path.joinpath(download_path,'data_dir.zip'),source_path)
-    with pushd(source_path):
-	unzip_file("data_dir.zip")
-	os.rename("data","data_dir")
-        os.remove("data_dir.zip")
-
-
 @task 
 def styler(): 
     ''' 
-    This downloads the Styler 
+    This builds styler 
     ''' 
     styler_download = path.joinpath(download_path,'styler')
     styler_source = path.joinpath(source_path,'styler')
@@ -378,7 +375,6 @@ def move():
     
 
     
-
 
 
 
