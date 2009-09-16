@@ -348,7 +348,7 @@ Function Ready
     ${NSD_CreateLabel} 30u 73u 70% 12u "$GSUsername : $GSPassword"
 
     ${NSD_CreateLabel} 20u 85u 75% 12u "Data and configuration will be stored here:"
-    ${NSD_CreateLabel} 30u 93u 80% 12u "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
+    ${NSD_CreateLabel} 30u 93u 80% 20u "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
 
   nsDialogs::Show
 
@@ -377,25 +377,25 @@ Section "GeoServer Core" Section1a
   ; Copy GeoServer (minus data_dir)
   CreateDirectory $INSTDIR\GeoServer
   SetOutPath "$INSTDIR\GeoServer"
-  File /a /oname=start.jar ..\geoserver\start.jar 
-  File /a /oname=GPL.txt ..\geoserver\GPL.txt
-  File /a /oname=LICENSE.txt ..\geoserver\LICENSE.txt
-  File /a /oname=README.txt ..\geoserver\README.txt
-  File /a /oname=RUNNING.txt ..\geoserver\RUNNING.txt 
+  File /a /oname=start.jar ..\artifacts\geoserver\start.jar 
+  File /a /oname=GPL.txt ..\artifacts\geoserver\GPL.txt
+  File /a /oname=LICENSE.txt ..\artifacts\geoserver\LICENSE.txt
+  File /a /oname=README.txt ..\artifacts\geoserver\README.txt
+  File /a /oname=RUNNING.txt ..\artifacts\geoserver\RUNNING.txt 
   File /a geoserver.ico
-  File /r ..\geoserver\etc 
-  File /r ..\geoserver\resources 
-  File /r /x jai*.* ..\geoserver\webapps ; excludes JAI
-  File /r /x jai*.* ..\geoserver\lib ; ugh, copies WEB-INF\lib too
+  File /r ..\artifacts\geoserver\etc 
+  File /r ..\artifacts\geoserver\resources 
+  File /r /x jai*.* ..\artifacts\geoserver\webapps ; excludes JAI
+  File /r /x jai*.* ..\artifacts\geoserver\lib ; ugh, copies WEB-INF\lib too
 
   ; Copy our own JRE (which includes native JAI)
-  File /r ..\jre
+  File /r ..\artifacts\jre
 
   ; Copy data_dir
   CreateDirectory "$CommonAppData\${COMPANYNAME}"
   CreateDirectory "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
   SetOutPath "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
-  File /r /x logging.xml /x security\users.properties ..\data_dir    ; Custom data_dir
+  File /r /x logging.xml /x security\users.properties ..\artifacts\data_dir    ; Custom data_dir
  ; Next line is lame, but I can't figure out where this directory is being created
   RMDir /r "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\geoserver"
 
@@ -425,7 +425,7 @@ Section "GeoServer Core" Section1a
 
   ; Continuing on...
   SetOutPath "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
-  File /r ..\geoserver\logs
+  File /r ..\artifacts\geoserver\logs
   SetOutPath "$INSTDIR"
   File /a opengeo.ico
 
@@ -527,7 +527,7 @@ Section "GeoServer Documentation" Section1b
 
   ; Set Section Files and Shortcuts
   SetOutPath "$INSTDIR\GeoServer"
-  File /r /x .svn ..\geoserver_doc
+  File /r /x .svn ..\artifacts\geoserver_doc
   Rename "$INSTDIR\GeoServer\geoserver_doc" "$INSTDIR\GeoServer\docs"
 
   ; Shortcuts
@@ -549,7 +549,7 @@ Section "GeoExplorer Application" Section2a
 
   ; Set Section Files and Shortcuts
   SetOutPath "$DataDirPath\www"
-  File /r /x .svn ..\geoexplorer
+  File /r /x .svn ..\artifacts\geoexplorer
   File /a /oname=geoexplorer\geoext.ico geoext.ico
   ; Next few lines are for a custom index.html (for looking at local host + no proxy)
   SetOutPath "$DataDirPath\www\GeoExplorer"
@@ -575,7 +575,7 @@ Section "GeoExplorer Documentation" Section2b
   ; Set Section Files and Shortcuts
   CreateDirectory "$INSTDIR\GeoExplorer"
   SetOutPath "$INSTDIR\GeoExplorer"
-  File /r /x .svn ..\geoexplorer_doc
+  File /r /x .svn ..\artifacts\geoexplorer_doc
   Rename "$INSTDIR\GeoExplorer\geoexplorer_doc" "$INSTDIR\GeoExplorer\docs"
 
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer\GeoExplorer Documentation.lnk" \
@@ -595,7 +595,7 @@ Section "Styler" Section3
 
   ; Set Section Files and Shortcuts
   SetOutPath "$DataDirPath\www"
-  File /r /x .svn ..\styler
+  File /r /x .svn ..\artifacts\styler
   File /a /oname=styler\geoext.ico geoext.ico
 
   ; Shortcuts
@@ -616,7 +616,7 @@ Section "-Getting Started" SectionH1 ;dash means hidden
 
   ; Set Section Files and Shortcuts
   SetOutPath "$INSTDIR"
-  File /r /x .svn ..\integrationdocs_doc
+  File /r /x .svn ..\artifacts\integrationdocs_doc
   Rename "$INSTDIR\integrationdocs_doc" "$INSTDIR\Getting Started"
 
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Getting Started.lnk" \
