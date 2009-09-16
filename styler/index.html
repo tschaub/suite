@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <title>Styler</title>
-        <script src='http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAeDjUod8ItM9dBg5_lz0esxTnme5EwnLVtEDGnh-lFVzRJhbdQhQBX5VH8Rb3adNACjSR5kaCLQuBmw'></script>
+        <script src='http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1'></script>
         <link rel="stylesheet" type="text/css" href="externals/ext/resources/css/ext-all.css" />
         <link rel="stylesheet" type="text/css" href="externals/ux/colorpicker/color-picker.ux.css" />
         <link rel="stylesheet" type="text/css" href="externals/ext/resources/css/xtheme-gray.css" />
@@ -21,9 +21,9 @@
             Ext.onReady(function() {
                 window.styler = new Styler({
                     baseLayers: [
-                        new OpenLayers.Layer.Google(
-                            "Google Physical",
-                            {type: G_PHYSICAL_MAP, sphericalMercator: true}
+                        new OpenLayers.Layer.VirtualEarth(
+                            "Imagery",
+                            {type: VEMapStyle.Aerial, sphericalMercator: true}
                         )
                     ]
                 });
