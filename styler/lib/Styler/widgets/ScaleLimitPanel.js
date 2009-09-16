@@ -164,7 +164,7 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
             value: Math.round(this.maxScaleDenominator),
             disabled: !this.limitMaxScale,
             listeners: {
-                valid: function(field) {
+                change: function(field) {
                     var value = Number(field.getValue());
                     var limit = Math.round(this.maxScaleLimit);
                     if(value > limit) {
@@ -186,7 +186,7 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
             value: Math.round(this.minScaleDenominator),
             disabled: !this.limitMinScale,
             listeners: {
-                valid: function(field) {
+                change: function(field) {
                     var value = Number(field.getValue());
                     var limit = Math.round(this.minScaleLimit);
                     if(value < limit) {
