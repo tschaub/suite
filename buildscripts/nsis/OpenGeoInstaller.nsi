@@ -536,6 +536,21 @@ Section "GeoServer Documentation" Section1b
 
 SectionEnd
 
+SectionGroup "GeoServer Extensions" Section1c
+
+Section "H2" Section1c1
+
+SetOutPath "$INSTDIR\GeoServer\webapps\geoserver\WEB-INF\lib"
+File /a ..\artifacts\geoserver_plugins\h2\*.*
+
+SectionEnd
+
+Section "Foo" Section1c2
+
+SectionEnd
+
+SectionGroupEnd
+
 SectionGroupEnd
 
 
@@ -630,6 +645,9 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${Section1} "Installs GeoServer, a spatial data server"
   !insertmacro MUI_DESCRIPTION_TEXT ${Section1a} "Installs GeoServer core components"
   !insertmacro MUI_DESCRIPTION_TEXT ${Section1b} "Includes GeoServer User Manual"
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section1c} "Includes GeoServer Extensions"
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section1c1} "Adds support for H2 databases"
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section1c2} "Adds support for Foo"
   !insertmacro MUI_DESCRIPTION_TEXT ${Section2} "Installs GeoExplorer, a graphical map editor"
   !insertmacro MUI_DESCRIPTION_TEXT ${Section2a} "Installs GeoExplorer application"
   !insertmacro MUI_DESCRIPTION_TEXT ${Section2b} "Includes GeoExplorer documentation"
