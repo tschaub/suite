@@ -109,9 +109,6 @@ def dir_layout(options):
 
 @task 
 @needs(["dir_layout"])
-@cmdopts([
-    ('auth=', 'a', 'username:password')
-])
 def download_bin(options): 
     '''
     Downloads the binary files
@@ -129,11 +126,6 @@ def download_bin(options):
             if software == 'datadir': 
                 urlgrab(url,'data_dir.zip',progress_obj=text_progress_meter())
             if software == 'geoserver':
-                if url.startswith("http://$user:$password@"):
-                    if not options.download_bin.auth:
-                        info("%s requires you set -a user:pw to download" %url)
-                        sys.exit()
-                    url = url_with_basic_auth(url, options.download_bin.auth)
                 urlgrab(url,'geoserver.zip',progress_obj=text_progress_meter())
 
 
@@ -232,6 +224,9 @@ def styler():
     base_path =  path(os.getcwd().strip("buildscripts"))    
     styler_path = path.joinpath(base_path,"styler") 
     styler_source = path.joinpath(source_path,"styler")
+    script_path = path.joinpath(styler_path,"script")
+    if not script_path.exists(): 
+     	os.mkdir(script_path)
     with pushd(styler_path):
 	sh('jsbuild build.cfg -o script')
     os.mkdir(styler_source)
@@ -240,7 +235,6 @@ def styler():
     copytree(path.joinpath(styler_path,'theme'),path.joinpath(styler_source,'theme'))
     copytree(path.joinpath(styler_path,'externals'),path.joinpath(styler_source,'externals'))
 
-    print "i this now"
 
 
 
@@ -374,11 +368,7 @@ def download(options):
     with pushd(plugin_path): 
         for plugin in config.options("extensions"):
             base_url = "vulcan.opengeo.org/builds/ext-latest/"
-            url = "http://$user:$password@%s%s-%s-plugin.zip" % (base_url,config.get("version","geoserver"),plugin)
-            if not options.auth:
-                info("%s requires you set -a user:pw to download" %url)
-                sys.exit()
-            url = url_with_basic_auth(url, options.auth)
+            url = "http://%s%s-%s-plugin.zip" % (base_url,config.get("version","geoserver"),plugin)
             plugin_zip = "%s.zip" % (plugin)
             urlgrab(url,plugin_zip,progress_obj=text_progress_meter())
 
