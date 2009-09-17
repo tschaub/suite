@@ -76,9 +76,12 @@ Hi Mike, should do break these tasks into two meta sections.
 Its important to keep the two task different. One should be able to
 	build everything without having to download everything.   
 
-
 '''
 
+
+'''
+Hi Ivan, that's a very good idea.
+'''
 
 
 @task
@@ -88,6 +91,7 @@ def build_all():
     call_task("unpack_java")
     call_task("unpack_geoserver")
     call_task("unpack_datadir")
+    call_task("unpack_gdal")
     call_task("download_source")
     call_task("download_plugin")
     call_task("unpack_plugin")
@@ -131,9 +135,8 @@ def download_bin(options):
                 urlgrab(url,'data_dir.zip',progress_obj=text_progress_meter())
             if software == 'geoserver':
                 urlgrab(url,'geoserver.zip',progress_obj=text_progress_meter())
-
-
-
+            if software == 'gdal':
+                urlgrab(url,'gdal.zip',progress_obj=text_progress_meter())
 
 
 @task
@@ -190,6 +193,22 @@ def unpack_datadir():
         os.remove("data_dir.zip")
 
 
+
+
+@task
+@needs(["dir_layout"])
+def unpack_gdal(): 
+    '''
+    Unzips gdal.zip into into gdal/ !!!
+    '''
+ 
+    gdal_dest_path = path.joinpath(source_path,"gdal")
+    info("Moving gdal into %s" % source_path)
+    os.mkdir(gdal_dest_path)
+    copy(path.joinpath(download_path,'gdal.zip'),gdal_dest_path)
+    with pushd(gdal_dest_path):
+      unzip_file("gdal.zip")
+      os.remove("gdal.zip")
 
 
 
@@ -307,17 +326,17 @@ def unzip_file(file):
 
 
 
-def url_with_basic_auth(url, authstr):
-    '''
-    Split user:password into strings
-    '''
-    auth = dict()
-    auth['user'], auth['password'] = authstr.split(':')
-
-@task
-def auto(): 
-    pass 
-
+#def url_with_basic_auth(url, authstr):
+#    '''
+#    Split user:password into strings
+#    '''
+#    auth = dict()
+#    auth['user'], auth['password'] = authstr.split(':')
+#
+#@task
+#def auto(): 
+#    pass 
+#
 
 
 

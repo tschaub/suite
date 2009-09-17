@@ -32,16 +32,25 @@ RequestExecutionLevel admin
 !include "StrFunc.nsh" ; String functions
 !include "x64.nsh" ; To check for 64 bit OS
 !include "LogicLib.nsh" ; ${If} ${Case} etc.
-!include "nsDialogs.nsh" ; For Installer Type page (Radio buttons)
+!include "nsDialogs.nsh" ; For Custom page layouts (Radio buttons etc)
 !include "WordFunc.nsh" ; For VersionCompare
 
 ; WARNING!!! These plugins need to be installed spearately
+
+
 ; See http://nsis.sourceforge.net/ModernUI_Mod_to_Display_Images_while_installing_files
 !include "Image.nsh" ; For graphics during the install 
+
 ; http://nsis.sourceforge.net/TextReplace_plugin
 !include "TextReplace.nsh" ; For text replacing
+
 ; AccessControl plugin needed as well for permissions changes
 ; See http://nsis.sourceforge.net/AccessControl_plug-in
+
+; See http://nsis.sourceforge.net/Dialogs_plug-in
+; Needs Dialogs.dll!
+!include "defines.nsh" ; For nice UI-file/folder dialogs
+
 
 ; Might be the same as !define
 Var STARTMENU_FOLDER
@@ -54,6 +63,7 @@ Var GSPassword
 Var GSUsernameTemp
 Var GSPasswordTemp
 Var DataDirPath
+Var FolderName
 
 ; Version Information (Version tab for EXE properties)
 VIProductVersion ${LONGVERSION}
@@ -129,6 +139,7 @@ FunctionEnd
 ; Install Page order
 ; This is the main list of installer pages
 !insertmacro MUI_PAGE_WELCOME                                 ; Hello
+;Page custom FileStuff FileStuffLeave                                    
 Page custom CheckUserType                                     ; Die if not admin
 Page custom PriorInstall                                      ; Check to see if previously installed
 !insertmacro MUI_PAGE_LICENSE "license.txt"                   ; Show license
@@ -179,7 +190,50 @@ Function .onInit
   ;Set $IsManual at the onset, to allow for memory of radio boxes in next section
   StrCpy $IsManual 1
 
+  StrCpy $FolderName $EXEDIR
+
 FunctionEnd
+
+/*
+Function FileStuff
+
+
+  nsDialogs::Create 1018
+  ;!insertmacro MUI_HEADER_TEXT "$(TEXT_TYPE_TITLE)" "$(TEXT_TYPE_SUBTITLE)"
+
+   ;Syntax: ${NSD_*} x y width height text
+   ${NSD_CreateLabel} 0 0 100% 24u "Setup needs to know the location of a folder.  Please select the folder or type it into the box below."
+
+   ${NSD_CreateText} 10u 50u 200u 15u "$FolderName"
+   Pop $R9 
+
+   ${NSD_CreateBrowseButton} 220u 50u 60u 15u "Browse..."
+   Pop $R1
+   ${NSD_OnClick} $R1 FolderSpawn
+    
+  nsDialogs::Show
+
+FunctionEnd
+
+Function FolderSpawn
+
+MessageBox MB_OK $R1
+
+  nsDialogs::SelectFolderDialog "Please select a folder..." $EXEDIR
+  Pop $R2
+  StrCpy $FolderName $R2
+  ${NSD_SetText} $R9 $FolderName
+
+FunctionEnd
+
+Function FileStuffLeave
+
+   ${NSD_GetText} $R9 $FolderName
+
+  MessageBox MB_OK "$FolderName"
+
+FunctionEnd
+*/
 
 ; Check the user type, and quit if it's not an administrator.
 ; Taken from Examples/UserInfo that ships with NSIS.
@@ -538,18 +592,35 @@ SectionEnd
 
 SectionGroup "GeoServer Extensions" Section1c
 
-Section "H2" Section1c1
+  Section "GDAL" Section1c1
 
-SetOutPath "$INSTDIR\GeoServer\webapps\geoserver\WEB-INF\lib"
-File /a ..\artifacts\geoserver_plugins\h2\*.*
+    SetOutPath "$INSTDIR\GeoServer\jre\bin"
+    File /a ..\artifacts\gdal\*.*
 
-SectionEnd
+  SectionEnd
 
-Section "Foo" Section1c2
+  Section "H2" Section1c2
 
-SectionEnd
+    SetOutPath "$INSTDIR\GeoServer\webapps\geoserver\WEB-INF\lib"
+    File /a ..\artifacts\geoserver_plugins\h2\*.*
 
-SectionGroupEnd
+  SectionEnd
+
+  Section "Image Pyramid" Section1c3
+
+    SetOutPath "$INSTDIR\GeoServer\webapps\geoserver\WEB-INF\lib"
+    File /a ..\artifacts\geoserver_plugins\pyramid\*.*
+
+  SectionEnd
+
+  Section "Oracle" Section1c4
+
+    SetOutPath "$INSTDIR\GeoServer\webapps\geoserver\WEB-INF\lib"
+    File /a ..\artifacts\geoserver_plugins\oracle\*.*
+
+  SectionEnd
+
+  SectionGroupEnd
 
 SectionGroupEnd
 
@@ -642,17 +713,19 @@ SectionEnd
 ; Modern install component descriptions
 ; Yes, this needs needs to go after the install sections. 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section1} "Installs GeoServer, a spatial data server"
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section1a} "Installs GeoServer core components"
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section1b} "Includes GeoServer User Manual"
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section1c} "Includes GeoServer Extensions"
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section1c1} "Adds support for H2 databases"
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section1c2} "Adds support for Foo"
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section2} "Installs GeoExplorer, a graphical map editor"
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section2a} "Installs GeoExplorer application"
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section2b} "Includes GeoExplorer documentation"
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section3} "Installs Styler, a graphical map style editor"
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionH1} "Quickstart guide on the OpenGeo Suite"
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section1} "Installs GeoServer, a spatial data server."
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section1a} "Installs GeoServer core components."
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section1b} "Includes GeoServer User Manual."
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section1c} "Includes GeoServer Extensions."
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section1c1} "Adds support for GDAL image formats."
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section1c2} "Adds support for H2 databases."
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section1c3} "Adds support for image pyramid stores."
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section1c4} "Adds support for Oracle databases."
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section2} "Installs GeoExplorer, a graphical map editor."
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section2a} "Installs GeoExplorer application."
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section2b} "Includes GeoExplorer documentation."
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section3} "Installs Styler, a graphical map style editor."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionH1} "Quickstart guide on the OpenGeo Suite."
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
