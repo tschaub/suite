@@ -8,7 +8,7 @@ from paver.easy import path, sh, info, pushd
 from paver.easy import task 
 from paver import svn 
 import os, zipfile 
-from  shutil import copytree,rmtree , copy, rmtree
+from  shutil import copytree,rmtree , copy, rmtree, move
 import urlgrabber.grabber
 from urlgrabber.grabber import urlgrab
 from urlgrabber.progress import text_progress_meter
@@ -17,12 +17,14 @@ import sys
 
 
 #@@ use auto and options rather than module globals
+# Bad Ivan, you must fix this mess
 config = ConfigParser.RawConfigParser()
 config.read("config.ini")
 download_path = path(config.get("files","downloads")) 
 docs_path = path("documentation")
-plugin_path = path("geoserver_plugins")
 source_path = path(config.get("files","source"))
+plugin_path = path.joinpath(download_path,"geoserver_plugins") 
+
 
 builder = path("builder")
 if not builder.exists(): 
@@ -80,13 +82,15 @@ Its important to keep the two task different. One should be able to
 
 
 @task
-@needs(["dir_layout","download_bin","download"])
+@needs(["dir_layout","download_bin"])
 def build_all(): 
     info("Building all of the OpenGeo Stack")
     call_task("unpack_java")
     call_task("unpack_geoserver")
     call_task("unpack_datadir")
     call_task("download_source")
+    call_task("download_plugin")
+    call_task("unpack_plugin")
     call_task("gx")
     call_task("styler")
     call_task("download_docs")
@@ -288,7 +292,6 @@ def docs():
 
 
 
-# misc functions
 def unzip_file(file):     
     zip = zipfile.ZipFile(file)
     for zipFile in zip.namelist(): 
@@ -304,21 +307,13 @@ def unzip_file(file):
 
 
 
-
-
 def url_with_basic_auth(url, authstr):
     '''
     Split user:password into strings
     '''
     auth = dict()
     auth['user'], auth['password'] = authstr.split(':')
-    return string.Template(url).substitute(auth)
 
-
-
-# misc functions (end)
-
-# misc tasks
 @task
 def auto(): 
     pass 
@@ -349,18 +344,10 @@ def cleanup():
     rmtree(download_path)
 
 
-import pdb
 @task
-def geoserver_plugins(): 
+def download_plugin(options):
     '''
-    Downloads GeoServer Plug-ins, see config file for a list of
-    plugins being downloaded. 
-
-    '''
-@task
-def download(options):
-    ''' 
-    needs auth 
+    Downloading GeoServer Plugins 
     ''' 
     plugin_path = path.joinpath(download_path,"geoserver_plugins") 
     if not plugin_path.exists(): 
@@ -373,21 +360,26 @@ def download(options):
             urlgrab(url,plugin_zip,progress_obj=text_progress_meter())
 
 
-
-               
-
-
 @task
-def move():
-	info("Moving GeoServer Plugins")
-        dest = path.joinpath(source_path,path("geoserver_plugins"))
-        src = path.joinpath(download_path,plugin_path)
-        copytree(src,dest) 
-    
+def unpack_plugin():
+    # copy to source 
+    des_path = path.joinpath(source_path,"geoserver_plugins")
+    if des_path.exists(): 
+	rmtree(des_path)
+    copytree(plugin_path,path.joinpath(source_path,"geoserver_plugins"))     
+    # unzip in source
+    with pushd(des_path): 
+	for plugin in config.options("extensions"): 
+		print "unpacking %s " % plugin
+                plugin_zip = "%s.zip" % plugin
+                os.mkdir(path(plugin))
+		move(plugin_zip,path(plugin))
+		with pushd(path(plugin)): 
+			unzip_file(plugin_zip)
+                        os.remove(plugin_zip)
+    # remove zips
 
     
-
-
 
 @task
 def source_dirs(): 
