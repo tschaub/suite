@@ -340,10 +340,11 @@ var Styler = Ext.extend(Ext.util.Observable, {
     createLayers: function() {
         var layerList = this.layerList;
         var layers = this.baseLayers.slice();
+        var num = layerList.length;
         var offset = this.baseLayers.length;
-        var selected = offset;
+        var selected = offset + num - 1;  // activate the last/top layer by default
         var selectedName = OpenLayers.Util.getParameters(window.location.href).layer;
-        for(var i=0, num=layerList.length; i<num; ++i) {
+        for(var i=0; i<num; ++i) {
             if (layerList[i].name === selectedName) {
                 selected = i + offset;
             }
