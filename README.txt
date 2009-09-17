@@ -21,6 +21,9 @@ docs
 medford
    - Styles for Medford data/demo
 
+geoserver
+   - Custom modules and custom webapp overlay for Vulcan
+
 README.txt
    - This document.
 
