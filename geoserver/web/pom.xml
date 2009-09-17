@@ -16,6 +16,7 @@
   <name>Vulcan custom Web Modules</name>
   
   <modules>
+    <module>demo</module>
     <module>app</module>
   </modules>
 

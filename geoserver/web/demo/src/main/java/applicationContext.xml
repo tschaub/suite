@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+  <!-- tries to replace the specified extension -->
+  <bean id="layerListDemo2" class="org.geoserver.web.MenuPageInfo" depends-on="demoRequests">
+    <property name="id" value="layerListDemo"/>
+    <property name="titleKey" value="VulcanMapPreviewPage.title"/>
+    <property name="descriptionKey" value="VulcanMapPreviewPage.description"/>
+    <property name="componentClass" value="org.geoserver.web.demo.VulcanMapPreviewPage"/>
+  </bean>
+</beans>
