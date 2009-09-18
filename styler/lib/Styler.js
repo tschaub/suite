@@ -73,6 +73,9 @@ var Styler = Ext.extend(Ext.util.Observable, {
 
         );
         
+        this.initialConfig = Ext.apply({}, config);
+        Ext.apply(this, config);
+        
         var baseLayers = [new OpenLayers.Layer("None", {isBaseLayer: true})];
         this.baseLayers = baseLayers.concat(config.baseLayers || []);
         
@@ -238,7 +241,8 @@ var Styler = Ext.extend(Ext.util.Observable, {
                 theme: null,
                 maxResolution: 156543.0339,
                 maxExtent: new OpenLayers.Bounds(-20037508.34, -20037508.34,
-                                                 20037508.34, 20037508.34)
+                                                 20037508.34, 20037508.34),
+                numZoomLevels: this.numZoomLevels || 20
             },
             items: [{
                 xtype: "gx_zoomslider",
