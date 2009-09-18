@@ -10,12 +10,12 @@ import static org.geoserver.web.demo.VulcanPreviewProvider.*;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.geoserver.web.GeoServerBasePage;
 import org.geoserver.web.wicket.GeoServerTablePanel;
-import org.geoserver.web.wicket.SimpleExternalLink;
 import org.geoserver.web.wicket.GeoServerDataProvider.Property;
 
 /**
@@ -47,14 +47,20 @@ public class VulcanMapPreviewPage extends GeoServerBasePage {
                     return new Label(id, property.getModel(itemModel));
                 } else if (property == OL) {
                     final String olUrl = layer.getWmsLink() + "&format=application/openlayers";
-                    return new SimpleExternalLink(id, new Model(olUrl), new Model("OpenLayers"));
+                    Fragment f = new Fragment(id, "newpagelink", VulcanMapPreviewPage.this);
+                    f.add(new ExternalLink("link", new Model(olUrl), new Model("OpenLayers")));
+                    return f;
                 } else if (property == GE) {
                     final String kmlUrl = "../wms/kml?layers=" + layer.getName();
-                    return new SimpleExternalLink(id, new Model(kmlUrl), new Model("Google Earth"));
+                    Fragment f = new Fragment(id, "exlink", VulcanMapPreviewPage.this);
+                    f.add(new ExternalLink("link", new Model(kmlUrl),  new Model("Google Earth")));
+                    return f;
                 } else if (property == STYLER) {
                     // openlayers preview
                     final String stylerUrl = "../www/styler/index.html?layer=" + urlEncode(layer.getName());
-                    return new SimpleExternalLink(id, new Model(stylerUrl), new Model("Styler"));
+                    Fragment f = new Fragment(id, "newpagelink", VulcanMapPreviewPage.this);
+                    f.add(new ExternalLink("link", new Model(stylerUrl),  new Model("Styler")));
+                    return f;
                 }
                 
                 return null;
