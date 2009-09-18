@@ -3,7 +3,6 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <title>Styler</title>
-        <script src='http://dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=6.1'></script>
         <link rel="stylesheet" type="text/css" href="externals/ext/resources/css/ext-all.css" />
         <link rel="stylesheet" type="text/css" href="externals/ux/colorpicker/color-picker.ux.css" />
         <link rel="stylesheet" type="text/css" href="externals/ext/resources/css/xtheme-gray.css" />
@@ -21,9 +20,10 @@
             Ext.onReady(function() {
                 window.styler = new Styler({
                     baseLayers: [
-                        new OpenLayers.Layer.VirtualEarth(
-                            "Imagery",
-                            {type: VEMapStyle.Aerial, sphericalMercator: true}
+                        new OpenLayers.Layer.OSM(
+                            "Open Street Map",
+                            "http://tile.openstreetmap.org/${z}/${x}/${y}.png",
+                            {numZoomLevels: 19}
                         )
                     ]
                 });
