@@ -19,7 +19,7 @@ import org.geoserver.web.wicket.GeoServerDataProvider;
  * @author Andrea Aime - OpenGeo
  */
 @SuppressWarnings("serial")
-public class VulcanPreviewProvider extends GeoServerDataProvider<PreviewLayer> {
+public class OpenGeoPreviewProvider extends GeoServerDataProvider<PreviewLayer> {
     public static final Property<PreviewLayer> TYPE = new BeanProperty<PreviewLayer>("type", "type");
 
     public static final Property<PreviewLayer> NAME = new BeanProperty<PreviewLayer>("name", "name");

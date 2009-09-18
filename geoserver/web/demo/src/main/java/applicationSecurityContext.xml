@@ -6,8 +6,8 @@
   <!-- tries to replace the specified extension -->
   <bean id="layerListDemo2" class="org.geoserver.web.MenuPageInfo" depends-on="demoRequests">
     <property name="id" value="layerListDemo"/>
-    <property name="titleKey" value="VulcanMapPreviewPage.title"/>
-    <property name="descriptionKey" value="VulcanMapPreviewPage.description"/>
-    <property name="componentClass" value="org.geoserver.web.demo.VulcanMapPreviewPage"/>
+    <property name="titleKey" value="OpenGeoMapPreviewPage.title"/>
+    <property name="descriptionKey" value="OpenGeoMapPreviewPage.description"/>
+    <property name="componentClass" value="org.geoserver.web.demo.OpenGeoMapPreviewPage"/>
   </bean>
 </beans>

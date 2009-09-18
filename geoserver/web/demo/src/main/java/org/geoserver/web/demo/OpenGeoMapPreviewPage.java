@@ -5,7 +5,7 @@
 package org.geoserver.web.demo;
 
 import static org.geoserver.ows.util.ResponseUtils.*;
-import static org.geoserver.web.demo.VulcanPreviewProvider.*;
+import static org.geoserver.web.demo.OpenGeoPreviewProvider.*;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
@@ -22,13 +22,13 @@ import org.geoserver.web.wicket.GeoServerDataProvider.Property;
  * Shows a paged list of the available layers and points to previews in various formats
  */
 @SuppressWarnings("serial")
-public class VulcanMapPreviewPage extends GeoServerBasePage {
+public class OpenGeoMapPreviewPage extends GeoServerBasePage {
 
-    VulcanPreviewProvider provider = new VulcanPreviewProvider();
+    OpenGeoPreviewProvider provider = new OpenGeoPreviewProvider();
 
     GeoServerTablePanel<PreviewLayer> table;
 
-    public VulcanMapPreviewPage() {
+    public OpenGeoMapPreviewPage() {
         // build the table
         table = new GeoServerTablePanel<PreviewLayer>("table", provider) {
 
@@ -38,7 +38,7 @@ public class VulcanMapPreviewPage extends GeoServerBasePage {
                 PreviewLayer layer = (PreviewLayer) itemModel.getObject();
 
                 if (property == TYPE) {
-                    Fragment f = new Fragment(id, "iconFragment", VulcanMapPreviewPage.this);
+                    Fragment f = new Fragment(id, "iconFragment", OpenGeoMapPreviewPage.this);
                     f.add(new Image("layerIcon", layer.getTypeSpecificIcon()));
                     return f;
                 } else if (property == NAME) {
@@ -47,18 +47,18 @@ public class VulcanMapPreviewPage extends GeoServerBasePage {
                     return new Label(id, property.getModel(itemModel));
                 } else if (property == OL) {
                     final String olUrl = layer.getWmsLink() + "&format=application/openlayers";
-                    Fragment f = new Fragment(id, "newpagelink", VulcanMapPreviewPage.this);
+                    Fragment f = new Fragment(id, "newpagelink", OpenGeoMapPreviewPage.this);
                     f.add(new ExternalLink("link", new Model(olUrl), new Model("OpenLayers")));
                     return f;
                 } else if (property == GE) {
                     final String kmlUrl = "../wms/kml?layers=" + layer.getName();
-                    Fragment f = new Fragment(id, "exlink", VulcanMapPreviewPage.this);
+                    Fragment f = new Fragment(id, "exlink", OpenGeoMapPreviewPage.this);
                     f.add(new ExternalLink("link", new Model(kmlUrl),  new Model("Google Earth")));
                     return f;
                 } else if (property == STYLER) {
                     // openlayers preview
                     final String stylerUrl = "../www/styler/index.html?layer=" + urlEncode(layer.getName());
-                    Fragment f = new Fragment(id, "newpagelink", VulcanMapPreviewPage.this);
+                    Fragment f = new Fragment(id, "newpagelink", OpenGeoMapPreviewPage.this);
                     f.add(new ExternalLink("link", new Model(stylerUrl),  new Model("Styler")));
                     return f;
                 }
