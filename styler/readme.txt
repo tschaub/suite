@@ -12,5 +12,10 @@ Using
 -----------------------
 
 Copy (or link) the entire directory in a place that
-a web server can publish it and enjoy.
+in the GeoServer $DATA_DIR/www/styler folder, and then
+access it from:
+http://host:port/geoserver/www/styler/index.html
+
+In order for styler to work the GeoSErver RESTConfig extension
+will have to be installed as well
 
