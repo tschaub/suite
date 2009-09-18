@@ -12,7 +12,7 @@
 Name "${APPNAMEANDVERSION}"
 InstallDir "$PROGRAMFILES\${COMPANYNAME}\${APPNAMEANDVERSION}"
 InstallDirRegKey HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" ""
-OutFile "OpenGeoSuite-0.8beta.exe"
+OutFile "OpenGeoSuite-0.8.exe"
 
 ;Compression options
 CRCCheck on
@@ -629,6 +629,9 @@ SectionGroup "GeoExplorer" Section2
 Section "GeoExplorer Application" Section2a
 
   ; Set Section properties
+
+  SectionIn RO ; mandatroy
+
   SetOverwrite on
 
   !insertmacro DisplayImage "slide_6_geoext.bmp"
@@ -674,6 +677,8 @@ SectionGroupEnd
 
 Section "Styler" Section3
 
+  SectionIn RO ; mandatory
+
   ; Set Section properties
   SetOverwrite on
 
@@ -681,7 +686,8 @@ Section "Styler" Section3
 
   ; Set Section Files and Shortcuts
   SetOutPath "$DataDirPath\www"
-  File /r /x .svn ..\artifacts\styler
+  ;File /r /x .svn ..\artifacts\styler
+  File /r /x .svn /x tmp /x prop-base /x props /x text-base ..\artifacts\styler ; Just to make sure
   File /a /oname=styler\geoext.ico geoext.ico
 
   ; Shortcuts
