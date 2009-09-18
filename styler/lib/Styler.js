@@ -230,6 +230,7 @@ var Styler = Ext.extend(Ext.util.Observable, {
             border: true,
             region: "center",
             map: {
+                allOverlays: false,
                 controls: [
                     new OpenLayers.Control.Navigation(),
                     new OpenLayers.Control.PanPanel(),
