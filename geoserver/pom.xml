@@ -77,6 +77,12 @@
     <artifactId>importer</artifactId>
     <version>${gs.version}</version>
    </dependency>
+   <dependency>
+    <groupId>org.geoserver.extension</groupId>
+    <artifactId>restconfig</artifactId>
+    <version>${gs.version}</version>
+   </dependency>
+
 
    <dependency>
     <groupId>org.mortbay.jetty</groupId>
