@@ -1,0 +1,55 @@
+/*-----------------------
+Color Overrides
+-----------------------*/
+
+h1, h2, h3, h4, h5, h6, a, 
+.button-group a, .button-group button, input.btnTxt {
+color: #3366CC; /* was #0076A1 */
+}
+
+.button-group a:hover, .button-group button:hover, input.btnTxt:hover {
+color: #0A2742; /* was #004f6c */
+}
+
+thead th {
+border-color: #3366CC; /* was #0076A1 */
+}
+
+.paginator a:hover {
+background: #3366CC; /* was #0076A1 */
+}
+
+/*-----------------------
+Themed Layout
+-----------------------*/
+
+#header h2 a {
+background-image: url('../img_opengeo/logo.png');
+}
+
+#main {
+border-top: 2px solid #8a7d79;
+background-image: url('../img_opengeo/main-bg.png');
+}
+
+#main .wrap {
+background-image: url('../img_opengeo/main-wrap-bg.png');
+}
+
+#page {
+background-image: url('../img_opengeo/page-bg.png');
+}
+
+.page-header {
+background-image: url('../img_opengeo/page-header-bg.png');
+}
+
+#navigation {
+padding-bottom: 32px;
+background: url('../img_opengeo/powered-by.png') no-repeat bottom left;
+}
+
+.navigation-tab-single, .navigation-tab-header,
+.navigation-tab-single a, .navigation-tab-header a, .navigation-tab-content a {
+color: #291C17; /* was #0076A1 */
+}

@@ -17,6 +17,7 @@
   
   <modules>
     <module>demo</module>
+    <module>theme</module>
     <module>app</module>
   </modules>
 
