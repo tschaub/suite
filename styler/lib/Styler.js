@@ -232,7 +232,7 @@ var Styler = Ext.extend(Ext.util.Observable, {
             map: {
                 allOverlays: false,
                 controls: [
-                    new OpenLayers.Control.Navigation(),
+                    new OpenLayers.Control.Navigation({zoomWheelEnabled: false}),
                     new OpenLayers.Control.PanPanel(),
                     new OpenLayers.Control.ZoomPanel(),
                     this.getFeatureControl
@@ -367,14 +367,10 @@ var Styler = Ext.extend(Ext.util.Observable, {
                     layers: layerList[i].name,
                     styles: layerList[i].styles[0].name,
                     transparent: true,
-                    tiled: true,
-                    tilesorigin: [
-                        maxExtent.left,
-                        maxExtent.bottom
-                    ],
                     format: "image/png"
                 }, {
                     isBaseLayer: false,
+                    buffer: 0,
                     displayOutsideMaxExtent: true,
                     visibility: false,
                     alpha: OpenLayers.Util.alphaHack(), 
