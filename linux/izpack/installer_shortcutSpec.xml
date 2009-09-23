@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<shortcuts>
+    <skipIfNotSupported/>
+    <programGroup defaultName="OpenGeo" location="applications"/>
+    <shortcut applications="yes" desktop="yes" initialState="noShow"
+        name="GeoServer" programGroup="no" startMenu="no" startup="no" target="$INSTALL_PATH/geoserver/bin/startup.sh"/>
+</shortcuts>

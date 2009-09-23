@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  <title>Getting Started &mdash; GeoExplorer v0.2 documentation</title>
+  <link rel="stylesheet" href="_static/blueprint/screen.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="_static/blueprint/print.css" type="text/css" media="print" /> 
+  <!--[if IE]>
+  <link rel="stylesheet" href="_static/blueprint/ie.css" type="text/css" media="screen, projection" />
+  <![endif]-->
+  <link rel="stylesheet" href="_static/default.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <script type="text/javascript">
+    var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.2',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html'
+    };
+  </script>
+  <script type="text/javascript" src="_static/jquery.js"></script>
+  <script type="text/javascript" src="_static/doctools.js"></script>
+  <script type="text/javascript" src="_static/searchtools.js"></script>
+  <script type="text/javascript" src="searchindex.js"></script>
+      <link rel="top" title="GeoExplorer v0.2 documentation" href="index.html" />
+      <link rel="next" title="Working With GeoExplorer" href="working-with-geoexplorer.html" />
+      <link rel="prev" title="GeoExplorer" href="index.html" />
+</head>
+<body class="getting-started">
+  <div id="header" class="selfclear">
+    <div class="wrap selfclear">
+      <div id="logo"><a href="index.html">GeoExplorer v0.2 documentation</a></div>
+      <ul id="top-nav">
+<!-- 
+        <li class="first"><a href="http://geoserver.org/display/GEOS/What+is+Geoserver">About</a></li>
+        <li><a href="http://blog.geoserver.org/">Blog</a></li>
+        <li><a href="http://geoserver.org/display/GEOSDOC/FAQ">FAQ</a></li>
+        <li><a href="http://geoserver.org/display/GEOS/Download">Download</a></li>
+        <li><a href="index.html">Documentation</a></li>
+ -->
+      </ul>
+        <form id="quick-search" action="search.html" method="get">
+          <fieldset>
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+            <input id="quick-search-query" type="text" name="q" accessKey="q" name="searchQuery.queryString" size="25" value="Search Documentation&hellip;" size="20" tabindex="3" onblur="if(this.value=='') this.value='Search Documentation&hellip;';" onfocus="if(this.value=='Search Documentation&hellip;') this.value='';" />
+            <input id="quick-search-submit" type="image" value="Search" src="_static/chrome/search_icon_green.png" />
+          </fieldset>
+        </form>
+    </div><!-- /.wrap -->
+  </div><!-- /#header -->
+  <div id="main">
+    <div class="wrap selfclear">
+      <div id="content">
+<ul id="breadcrumbs">
+     
+  <li><a href="index.html">Home</a> &raquo;</li>
+  <li>Getting Started</li>
+</ul>
+<ul id="relatedlinks" class="selfclear">
+  <li class="first">
+    <a href="working-with-geoexplorer.html" title="Working With GeoExplorer"
+       accesskey="N">next</a></li>
+  <li>
+    <a href="index.html" title="GeoExplorer"
+       accesskey="P">previous</a>|</li>
+</ul>
+        
+  <div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installing-geoexplorer-on-your-server">
+<h2>Installing GeoExplorer on your server<a class="headerlink" href="#installing-geoexplorer-on-your-server" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to install GeoExplorer is to use the Vulcan Installer. This
+will install GeoServer, GeoExplorer and the required proxy. Once GeoServer is
+started, GeoExplorer can be accessed at
+<a class="reference external" href="http://localhost:8080/geoserver/www/GeoExplorer/index.html">http://localhost:8080/geoserver/www/GeoExplorer/index.html</a>.</p>
+<p>But GeoExplorer will run on any HTTP server, like Apache. All that needs to be
+done is unpack GeoExplorer to a web accessible path on your server. There is
+only server side requirement: an OGC service proxy. If you have Python
+installed, you can e.g. use the OpenGeo python proxy:
+<a class="reference external" href="http://svn.opengeo.org/util/proxy/proxy.py">http://svn.opengeo.org/util/proxy/proxy.py</a>. Information on how to configure
+Apache to use that proxy are included in the file.</p>
+</div>
+<div class="section" id="initial-configuration">
+<h2>Initial Configuration<a class="headerlink" href="#initial-configuration" title="Permalink to this headline">¶</a></h2>
+<p>Once installed, GeoExplorer will work out of the box, configured to use
+<a class="reference external" href="http://demo.opengeo.org/geoserver/ows">http://demo.opengeo.org/geoserver/ows</a> as WMS. Starting from here, layers and
+WMS servers can be added and configured as described in the <a class="reference external" href="working-with-geoexplorer.html"><em>Working With
+GeoExplorer</em></a> documentation.</p>
+<p>If, however, you want to provide a customized application builder, here is how
+to configure it:</p>
+<p>The startup WMS or additional WMS servers can be configured by modifying
+GeoExplorer/index.html:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">wms</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">&quot;demo&quot;</span><span class="o">:</span> <span class="s2">&quot;http://demo.opengeo.org/geoserver/ows/&quot;</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p>&#8220;demo&#8221; is the key used to reference the WMS in the layer configuration (see
+below). More servers can be added easily, e.g. by changing the above to</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">wms</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">&quot;demo&quot;</span><span class="o">:</span> <span class="s2">&quot;http://demo.opengeo.org/geoserver/ows/&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;terraserver&quot;</span><span class="o">:</span> <span class="s2">&quot;http://terraserver-usa.com/ogccapabilities.ashx&quot;</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p>Two layers will be loaded by default:</p>
+<blockquote>
+<ul class="simple">
+<li>Global Imagery (topp:bluemarble) as base layer</li>
+<li>USA Population (topp:states) as overlay</li>
+</ul>
+</blockquote>
+<p>The layers to be loaded at startup can be configured in GeoExplorer/index.html:</p>
+<div class="highlight-javascript"><div class="highlight"><pre><span class="nx">map</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">layers</span><span class="o">:</span> <span class="p">[{</span>
+        <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;topp:bluemarble&quot;</span><span class="p">,</span>
+        <span class="nx">title</span><span class="o">:</span> <span class="s2">&quot;Global Imagery&quot;</span><span class="p">,</span>
+        <span class="nx">wms</span><span class="o">:</span> <span class="s2">&quot;demo&quot;</span><span class="p">,</span>
+        <span class="nx">group</span><span class="o">:</span> <span class="s2">&quot;background&quot;</span>
+    <span class="p">},</span> <span class="p">{</span>
+        <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;topp:states&quot;</span><span class="p">,</span>
+        <span class="nx">wms</span><span class="o">:</span> <span class="s2">&quot;demo&quot;</span><span class="p">,</span>
+        <span class="nx">visibility</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="p">}],</span>
+    <span class="nx">center</span><span class="o">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">96.7</span><span class="p">,</span> <span class="mf">37.6</span><span class="p">],</span>
+    <span class="nx">zoom</span><span class="o">:</span> <span class="mi">4</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">name</span></tt> property of the layers (e.g. &#8220;topp:states&#8221; in the above snippet)
+are the layer names from the Capabilities document of the
+WMS (see
+<a class="reference external" href="http://demo.opengeo.org/geoserver/ows/?SERVICE=WMS&amp;REQUEST=GetCapabilities">http://demo.opengeo.org/geoserver/ows/?SERVICE=WMS&amp;REQUEST=GetCapabilities</a>
+for a complete example):</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;Layer</span> <span class="na">queryable=</span><span class="s">&quot;1&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;Name&gt;</span>topp:states<span class="nt">&lt;/Name&gt;</span>
+  <span class="nt">&lt;Title&gt;</span>USA Population<span class="nt">&lt;/Title&gt;</span>
+  <span class="nt">&lt;Abstract&gt;</span>This is some census data on the states.<span class="nt">&lt;/Abstract&gt;</span>
+  <span class="nt">&lt;KeywordList&gt;</span>
+    <span class="nt">&lt;Keyword&gt;</span>census<span class="nt">&lt;/Keyword&gt;</span>
+    <span class="nt">&lt;Keyword&gt;</span>united<span class="nt">&lt;/Keyword&gt;</span>
+    <span class="nt">&lt;Keyword&gt;</span>boundaries<span class="nt">&lt;/Keyword&gt;</span>
+    <span class="nt">&lt;Keyword&gt;</span>state<span class="nt">&lt;/Keyword&gt;</span>
+    <span class="nt">&lt;Keyword&gt;</span>states<span class="nt">&lt;/Keyword&gt;</span>
+  <span class="nt">&lt;/KeywordList&gt;</span>
+  <span class="nt">&lt;SRS&gt;</span>EPSG:4326<span class="nt">&lt;/SRS&gt;</span>
+  <span class="nt">&lt;LatLonBoundingBox</span> <span class="na">minx=</span><span class="s">&quot;-125.30903773&quot;</span> <span class="na">miny=</span><span class="s">&quot;7.705448770000002&quot;</span> <span class="na">maxx=</span><span class="s">&quot;-66.39223326999999&quot;</span> <span class="na">maxy=</span><span class="s">&quot;66.62225323&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;BoundingBox</span> <span class="na">SRS=</span><span class="s">&quot;EPSG:4326&quot;</span> <span class="na">minx=</span><span class="s">&quot;-124.73142200000001&quot;</span> <span class="na">miny=</span><span class="s">&quot;24.955967&quot;</span> <span class="na">maxx=</span><span class="s">&quot;-66.969849&quot;</span> <span class="na">maxy=</span><span class="s">&quot;49.371735&quot;</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;Style&gt;</span>
+    <span class="nt">&lt;Name&gt;</span>population<span class="nt">&lt;/Name&gt;</span>
+    <span class="nt">&lt;Title&gt;</span>Population in the United States<span class="nt">&lt;/Title&gt;</span>
+    <span class="nt">&lt;Abstract&gt;</span>A sample filter that filters the United States into three
+  categories of population, drawn in different colors<span class="nt">&lt;/Abstract&gt;</span>
+    <span class="nt">&lt;LegendURL</span> <span class="na">width=</span><span class="s">&quot;20&quot;</span> <span class="na">height=</span><span class="s">&quot;20&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;Format&gt;</span>image/png<span class="nt">&lt;/Format&gt;</span>
+      <span class="nt">&lt;OnlineResource</span> <span class="na">xmlns:xlink=</span><span class="s">&quot;http://www.w3.org/1999/xlink&quot;</span> <span class="na">xlink:type=</span><span class="s">&quot;simple&quot;</span> <span class="na">xlink:href=</span><span class="s">&quot;http://demo.opengeo.org/geoserver/wms/GetLegendGraphic?VERSION=1.0.0&amp;amp;FORMAT=image/png&amp;amp;WIDTH=20&amp;amp;HEIGHT=20&amp;amp;LAYER=topp:states&quot;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/LegendURL&gt;</span>
+  <span class="nt">&lt;/Style&gt;</span>
+<span class="nt">&lt;/Layer&gt;</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">title</span></tt> property is optional. By default, the title from the
+Capabilities document will be used.</p>
+<p>The <tt class="docutils literal"><span class="pre">wms</span></tt> property tells the application on which server to find the layer.
+If we would like to add a layer from the &#8220;terraserver&#8221; WMS that we configured
+above, we would simply set <tt class="docutils literal"><span class="pre">wms</span></tt> to &#8220;terraserver&#8221;.</p>
+<p>Layers that should not be visible when loading the application, but shown in
+the layer tree, can be configured with the <tt class="docutils literal"><span class="pre">visibility</span></tt> property set to
+false.</p>
+<p>Layers with the <tt class="docutils literal"><span class="pre">group</span></tt> property set to &#8220;background&#8221; will be base layers.
+Only one base layer can be visible at a time.</p>
+<p>The <tt class="docutils literal"><span class="pre">center</span></tt> and <tt class="docutils literal"><span class="pre">zoom</span></tt> properties are also optional. If not provided,
+the map extent will be set to the LatLonBoundingBox specified in the
+Capabilities document. For a configuration with more than one layers, the
+extent will be taken from the first layer in the &#8220;background&#8221; group, or the
+first layer if there are no layers in the &#8220;background&#8221; group.</p>
+</div>
+</div>
+
+
+      </div><!-- /#content> -->
+  <div id="sidebar" class="contrast">
+      <div id="toc" class="section">
+        <h3 class="pngfix">Table Of Contents</h3>
+        <ul>
+<li><a class="reference external" href="">Getting Started</a><ul>
+<li><a class="reference external" href="#installing-geoexplorer-on-your-server">Installing GeoExplorer on your server</a></li>
+<li><a class="reference external" href="#initial-configuration">Initial Configuration</a></li>
+</ul>
+</li>
+</ul>
+
+        <div class="section-footer"></div>
+      </div>
+        <div class="section">
+          <h3>Continue Reading</h3>
+          <ul>
+            <li>Previous: <a href="index.html" title="previous chapter">GeoExplorer</a></li>
+            <li>Next: <a href="working-with-geoexplorer.html" title="next chapter">Working With GeoExplorer</a></li>
+          </ul>
+        </div>
+        <div class="section">
+        <h3>This Page</h3>
+        <ul class="this-page-menu">
+          <li><a href="_sources/getting-started.txt">Show Source</a></li>
+        </ul>
+        </div>
+      <div class="section">
+        <a href="http://geoserver.org/display/GEOSDOC/Documentation" title="We're still porting content over to our new documentation. If it's not here, try the legacy GeoServer documentation">Legacy Documentation</a>
+      </div>
+  </div><!-- /#sidebar -->
+  </div><!-- /.wrap> -->
+</div><!-- /#main -->
+<div id="footer">
+  <div class="wrap">
+    &copy; Copyright 2009 OpenGeo.
+    Last updated on Sep 21, 2009.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div><!-- /.wrap> -->
+</div><!-- /#footer -->
+  </body>
+</html>

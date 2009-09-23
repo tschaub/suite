@@ -1,0 +1,14 @@
+Package: geoserver
+Version: 2.0-1
+Architecture: i386
+Maintainer: Ivan Willig <iwillig@opengeo.org>
+Installed-Size: 62832
+Depends: sun-java6-jdk
+Section: geoserver
+Priority: extra
+Homepage: http://geoserver.org
+Description: GeoServer is an opensource Web Mapping Server
+  GeoServer is an open source software server written in Java that
+  allows users to share and edit geospatial data. Designed for
+  interoperability, it publishes data from any major spatial data source
+  using open standards.

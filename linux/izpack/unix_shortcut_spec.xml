@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+  <shortcuts> 
+	<skipIfNotSupported />
+ 	 <programGroup defaultName="OpenGeo"
+ 	 location="applications"/>
+	<shortcut 
+		name="Start GeoServer" 
+	   	programGroup="yes" 
+		startMenu="yes" 
+		startup="no"
+		target="$INSTALL_PATH/geoserver/bin/startup.sh"
+		commandLine="" 
+		iconFile="$INSTALL_PATH/geoserver.icon"
+		applications="no" 
+		iconIdex="0" 
+		type="Application"
+		encoding="UTF-8" 
+		terminal="true">
+		<createForPack name="GeoServer" />
+	 </shortcut>	
+   </shortcuts>
+ 
