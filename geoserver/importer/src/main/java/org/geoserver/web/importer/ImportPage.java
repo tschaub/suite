@@ -15,7 +15,6 @@ import java.util.logging.Level;
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
@@ -42,8 +41,6 @@ import org.geoserver.web.wicket.browser.GeoServerFileChooser;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.directory.DirectoryDataStoreFactory;
-
-import antlr.debug.GuessingEvent;
 
 /**
  * Sets up the import process and starts it up delegating the progress to {@link ImportProgressPage}

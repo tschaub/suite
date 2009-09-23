@@ -11,6 +11,11 @@
         <span wicket:id="rollback"></span>
     </div>
     
+    <div class="button-group selfclear" style="margin-top: 2em">
+        <wicket:message key="previewDescription"/>
+        <a href="#" wicket:id="previewLink"><wicket:message key="preview"/></a>
+    </div>
+    
     
     <wicket:fragment wicket:id="iconFragment">
         <img wicket:id="icon" />
@@ -21,7 +26,7 @@
     </wicket:fragment>
     
     <wicket:fragment wicket:id="preview">
-      <a href="#" wicket:id="preview">Preview</a>&nbsp;
+      <a href="#" wicket:id="preview" target="_blank">Preview</a>&nbsp;
     </wicket:fragment>
 </wicket:extend>
 </body>

@@ -14,11 +14,12 @@ import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ResourceReference;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -34,6 +35,7 @@ import org.geoserver.importer.LayerSummary;
 import org.geoserver.web.CatalogIconFactory;
 import org.geoserver.web.GeoServerSecuredPage;
 import org.geoserver.web.data.resource.ResourceConfigurationPage;
+import org.geoserver.web.demo.OpenGeoMapPreviewPage;
 import org.geoserver.web.demo.PreviewLayer;
 import org.geoserver.web.wicket.ConfirmationAjaxLink;
 import org.geoserver.web.wicket.GeoServerTablePanel;
@@ -116,16 +118,11 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
                 } else if(property == COMMANDS) {
                     Fragment f = new Fragment(id, "preview", ImportSummaryPage.this);
 
-                    ExternalLink link = new ExternalLink("preview", "#");
-                    if(layerSummary.getStatus().successful()) {
-                        // TODO: move the preview link generation ability to some utility object
-                        PreviewLayer preview = new PreviewLayer(layer);
-                        String url = "window.open(\"" + preview.getWmsLink() + "&format=application/openlayers\")";
-                        link.add(new AttributeAppender("onclick", new Model(url), ";"));
-                    } else {
-                        link.setEnabled(false);
+                    ExternalLink preview = new ExternalLink("preview", new PreviewLayer(layer).getWmsLink() + "&format=application/openlayers");
+                    if(!layerSummary.getStatus().successful()) {
+                        preview.setEnabled(false);
                     }
-                    f.add(link);
+                    f.add(preview);
                     
                     return f;
                 }
@@ -166,6 +163,9 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
                 setResponsePage(ImportPage.class, new PageParameters("afterCleanup=true"));
             }
         });
+        
+        // the link to the preview page
+        add(new BookmarkablePageLink("previewLink", OpenGeoMapPreviewPage.class));
     }
     
     Link editLink(final LayerSummary layerSummary) {
