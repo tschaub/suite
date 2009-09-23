@@ -4,7 +4,7 @@ Color Overrides
 
 h1, h2, h3, h4, h5, h6, a, 
 .button-group a, .button-group button, input.btnTxt {
-color: #3366CC; /* was #0076A1 */
+color: #103F6B; /* was #0076A1 */
 }
 
 .button-group a:hover, .button-group button:hover, input.btnTxt:hover {
@@ -12,11 +12,11 @@ color: #0A2742; /* was #004f6c */
 }
 
 thead th {
-border-color: #3366CC; /* was #0076A1 */
+border-color: #103F6B; /* was #0076A1 */
 }
 
 .paginator a:hover {
-background: #3366CC; /* was #0076A1 */
+background: #103F6B; /* was #0076A1 */
 }
 
 /*-----------------------
