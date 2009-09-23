@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
@@ -25,6 +26,7 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.validator.AbstractValidator;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
+import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.CatalogBuilder;
 import org.geoserver.catalog.DataStoreInfo;
 import org.geoserver.catalog.NamespaceInfo;
@@ -41,6 +43,8 @@ import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.directory.DirectoryDataStoreFactory;
 
+import antlr.debug.GuessingEvent;
+
 /**
  * Sets up the import process and starts it up delegating the progress to {@link ImportProgressPage}
  */
@@ -53,6 +57,10 @@ public class ImportPage extends GeoServerSecuredPage {
     GeoServerDialog dialog;
 
     private TextField dirField;
+
+    private TextField projectField;
+
+    private Form form;
     
    
     public ImportPage(PageParameters params) {
@@ -60,17 +68,20 @@ public class ImportPage extends GeoServerSecuredPage {
             info(new ParamResourceModel("rollbackSuccessful", this).getString());
         add(dialog = new GeoServerDialog("dialog"));
         
-        Form form = new Form("form", new CompoundPropertyModel(this));
+        // prefill project name
+        project = getProjectNameFromPrefix("ogs");
+        
+        form = new Form("form", new CompoundPropertyModel(this));
         add(form);
 
         dirField = new TextField("directory");
         dirField.add(new DirectoryValidator());
         dirField.setRequired(true);
         dirField.setOutputMarkupId(true);
-        // dirField.setEnabled(false);
         form.add(dirField);
         form.add(chooserButton(form));
-        TextField projectField = new TextField("project");
+        projectField = new TextField("project");
+        projectField.setOutputMarkupId(true);
         projectField.setRequired(true);
         projectField.add(new ProjectValidator());
         projectField.add(new PatternValidator("\\w+"));
@@ -111,6 +122,7 @@ public class ImportPage extends GeoServerSecuredPage {
                         directory = ((File) chooser.getModelObject()).getAbsolutePath();
                         // clear the raw input of the field won't show the new model value
                         dirField.clearInput();
+                        
                         target.addComponent(dirField);
                         return true;
                     }
@@ -203,6 +215,45 @@ public class ImportPage extends GeoServerSecuredPage {
     
     String buildDatastoreNamespace() {
         return "http://www.geoserver.org/" + project;
+    }
+    
+    /**
+     * Tries to figure out a free project name from a prefix (was meant to work
+     * for a random directory name but could not hook it up properly to both
+     * dialog navigation and manual directory field filling so I just gave up). 
+     * @param prefix
+     * @return
+     */
+    String getProjectNameFromPrefix(String prefix) {
+        String name = new File(prefix).getName();
+        if(name.length() > 6) {
+            name = name.substring(0, 6);
+        }
+        
+        Catalog catalog = getCatalog();
+        String candidate = name;
+        for(int i = 1; i < 100; i++) {
+            if(catalog.getWorkspaceByName(candidate) == null)
+                return candidate;
+            
+            if(catalog.getDataStoreByName(candidate, candidate) == null)
+                return candidate;
+            
+            // build a 6 chars version with a number at the end
+            if(i < 10) {
+                if(prefix.length() == 6)
+                    candidate = prefix.substring(0, 5) + i;
+                else
+                    candidate = prefix + i;
+            } else {
+                if(prefix.length() > 4)
+                    candidate = prefix.substring(0, 4) + i;
+                else
+                    candidate = prefix + i;
+            }
+        }
+        
+        return null;
     }
 
     static class DirectoryValidator extends AbstractValidator {
