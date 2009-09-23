@@ -503,8 +503,9 @@
  </reporting>
 
  <modules>
-  <module>web</module>
+  <module>importer</module>
   <module>release</module>
+  <module>web</module>
  </modules>
 
  <properties>

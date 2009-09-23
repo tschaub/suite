@@ -21,10 +21,6 @@
       <artifactId>web-app</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.geoserver</groupId>
-      <artifactId>importer</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.geoserver.extension</groupId>
       <artifactId>restconfig</artifactId>
     </dependency>
@@ -33,6 +29,11 @@
     <dependency>
       <groupId>org.opengeo.vulcan.web</groupId>
       <artifactId>vulcan-demo</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opengeo.vulcan</groupId>
+      <artifactId>vulcan-importer</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
