@@ -3,8 +3,8 @@
 ; Define your application name
 !define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
-!define VERSION "0.8"
-!define LONGVERSION "0.8.0.0" ; must be a.b.c.d
+!define VERSION "0.9"
+!define LONGVERSION "0.9.0.0" ; must be a.b.c.d
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
 
 
@@ -12,7 +12,7 @@
 Name "${APPNAMEANDVERSION}"
 InstallDir "$PROGRAMFILES\${COMPANYNAME}\${APPNAMEANDVERSION}"
 InstallDirRegKey HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" ""
-OutFile "OpenGeoSuite-0.8.exe"
+OutFile "OpenGeoSuite-0.9beta.exe"
 
 ;Compression options
 CRCCheck on
