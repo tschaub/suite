@@ -9,35 +9,36 @@ Ext.onReady(function() {
     		activeGroup: 0,
     		items: [{
     			mainItem: 0,
+    			defaults: {border: false},
     			items: [{
                     title: "Dashboard",
                     tabTip: "OpenGeo Suite Dashboard",
-                    layout: "fit",
-                    items: [{html: "Dashboard Here", border: false, cls: "app-dash-panel"}]
+                    cls: "dash-panel",
+                    autoLoad: "dash/main.html"
                 }, {
     				title: "GeoServer",
                     tabTip: "Manage GeoServer",
-                    layout: "fit",
-    				items: [{html: "GeoServer Here", border: false, cls: "app-dash-panel"}]
+                    cls: "dash-panel",
+                    autoLoad: "dash/geoserver.html"
     			}, {
     				title: "GeoExplorer",
                     tabTip: "Manage GeoExplorer",
-                    layout: "fit",
-    				items: [{html: "GeoExplorer Here", border: false, cls: "app-dash-panel"}]
+                    cls: "dash-panel",
+                    autoLoad: "dash/geoexplorer.html"
     			}, {
     				title: "Styler",
                     tabTip: "Manage Styler",
-                    layout: "fit",
-    				items: [{html: "Styler Here", border: false, cls: "app-dash-panel"}]
+                    cls: "dash-panel",
+                    autoLoad: "dash/styler.html"
     			}]
             }, {
                 items: [{
                     title: "Configuration",
                     iconCls: "x-icon-configuration",
                     tabTip: "Configuration Information",
-                    html: "Config Here",
+                    html: "Any sort of configuration information can go here.  Where stuff is installed, versions, etc.",
                     border: false,
-                    cls: "app-dash-panel"
+                    cls: "dash-panel"
                 }]
             }]
 		}]

@@ -1,6 +1,49 @@
 body {
     font-family: tahoma, arial, sans-serif;
 }
-.app-dash-panel {
+
+.dash-panel {
+    padding: 20px;
+}
+.dash-panel-body {
+    width: 100%;
+}
+
+.dash-panel-body h1 {
+    font-size: 20;
+}
+.dash-panel-body h2 {
+    font-size: 18px;
+}
+.dash-panel-body h3 {
+    font-size: 16px;
+}
+.dash-panel-body h4 {
+    font-size: 12px;
+}
+
+.dash-panel-content {
+    margin: 0 200px 0 0;
+}
+.dash-panel-content-item {
+    margin-bottom: 10px;
+}
+
+.dash-panel-tasks {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    width: 200px;
+}
+.dash-panel-tasks ul {
+    list-style: disc;
+    padding: 10px 0;
+}
+.dash-panel-tasks ul li {
+    margin-left: 10px;
+}
+
+.quick-links li {
+    display: inline;
     padding: 10px;
 }
