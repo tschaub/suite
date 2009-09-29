@@ -606,12 +606,12 @@ SectionGroup "GeoServer Extensions" Section1c
 
   SectionEnd
 
-  Section "Image Pyramid" Section1c3
-
-    SetOutPath "$INSTDIR\GeoServer\webapps\geoserver\WEB-INF\lib"
-    File /a ..\artifacts\geoserver_plugins\pyramid\*.*
-
-  SectionEnd
+;  Section "Image Pyramid" Section1c3
+;
+;    SetOutPath "$INSTDIR\GeoServer\webapps\geoserver\WEB-INF\lib"
+;    File /a ..\artifacts\geoserver_plugins\pyramid\*.*
+;
+;  SectionEnd
 
   Section "Oracle" Section1c4
 
@@ -686,8 +686,8 @@ Section "Styler" Section3
 
   ; Set Section Files and Shortcuts
   SetOutPath "$DataDirPath\www"
-  ;File /r /x .svn ..\artifacts\styler
-  File /r /x .svn /x tmp /x prop-base /x props /x text-base ..\artifacts\styler ; Just to make sure
+  File /r /x .svn ..\artifacts\styler
+  ;File /r /x .svn /x tmp /x prop-base /x props /x text-base ..\artifacts\styler ; Just to make sure
   File /a /oname=styler\geoext.ico geoext.ico
 
   ; Shortcuts
@@ -725,7 +725,7 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${Section1c} "Includes GeoServer Extensions."
   !insertmacro MUI_DESCRIPTION_TEXT ${Section1c1} "Adds support for GDAL image formats."
   !insertmacro MUI_DESCRIPTION_TEXT ${Section1c2} "Adds support for H2 databases."
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section1c3} "Adds support for image pyramid stores."
+  ;!insertmacro MUI_DESCRIPTION_TEXT ${Section1c3} "Adds support for image pyramid stores."
   !insertmacro MUI_DESCRIPTION_TEXT ${Section1c4} "Adds support for Oracle databases."
   !insertmacro MUI_DESCRIPTION_TEXT ${Section2} "Installs GeoExplorer, a graphical map editor."
   !insertmacro MUI_DESCRIPTION_TEXT ${Section2a} "Installs GeoExplorer application."
