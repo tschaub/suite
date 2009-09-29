@@ -1,1 +1,4 @@
-Place your change log text here.  This file will be incorporated with your app at package time.
+Pre-Release
+-----------
+
+Getting dashboard set up as a Titanium app.
