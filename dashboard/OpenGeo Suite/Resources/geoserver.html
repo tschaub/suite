@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <script>
+            var env = Titanium.API.getEnvironment();
+            var gsStartPath = "/Users/tschaub/projects/geoserver/geoserver-2.0-RC1/bin/startup.sh";
+
+            var outPipe = Titanium.Process.createPipe();
+            outPipe.attach({
+                write: function(msg) {
+                    document.getElementById("out").innerHTML += msg;
+                }
+            });
+            
+            var errPipe = Titanium.Process.createPipe();
+            errPipe.attach({
+                write: function(msg) {
+                    document.getElementById("err").innerHTML += msg;
+                }
+            });
+
+            var process = Titanium.Process.createProcess({
+                args: [env["SHELL"], gsStartPath],
+                stdout: outPipe,
+                stderr: errPipe
+            });
+
+            process.setOnExit(function() {
+                document.getElementById("status").innerHTML = "done";
+            });
+
+            var launch = function() {
+                document.getElementById("status").innerHTML = "running";
+                process.launch();
+            };
+
+        </script>
+    </head>
+    <body>
+        <a onclick="javascript: launch(); return false;" href="#">Start GeoServer</a><br>
+        Status:
+        <span id="status"></span><br>
+        Output:
+        <pre id="out"></pre>
+        Errors:
+        <pre id="err"></pre>
+    </body>
+</html>
