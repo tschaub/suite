@@ -14,22 +14,22 @@ Ext.onReady(function() {
                     title: "Dashboard",
                     tabTip: "OpenGeo Suite Dashboard",
                     cls: "dash-panel",
-                    autoLoad: "dash/main.html"
+                    html: main_content
                 }, {
     				title: "GeoServer",
                     tabTip: "Manage GeoServer",
                     cls: "dash-panel",
-                    autoLoad: "dash/geoserver.html"
+                    html: geoserver_content
     			}, {
     				title: "GeoExplorer",
                     tabTip: "Manage GeoExplorer",
                     cls: "dash-panel",
-                    autoLoad: "dash/geoexplorer.html"
+                    html: geoexplorer_content
     			}, {
     				title: "Styler",
                     tabTip: "Manage Styler",
                     cls: "dash-panel",
-                    autoLoad: "dash/styler.html"
+                    html: styler_content
     			}]
             }, {
                 items: [{
@@ -44,3 +44,17 @@ Ext.onReady(function() {
 		}]
     });
 });
+
+// until I figure out what is up with Titanium.Network.createHTTPClient()
+// resorting to this ugliness:
+var main_content = 
+'<div class="dash-panel-body"><div class="dash-panel-content"><div class="dash-panel-content-item"><h1>GeoServer</h1><ul class="quick-links"><li>Admin</li><li>Docs</li><li>More...</li><ul></div><div class="dash-panel-content-item"><h1>GeoExplorer</h1><ul class="quick-links"><li>Docs</li><li>More...</li><ul></div></div><div class="dash-panel-tasks"><h2>Common Tasks</h2><ul><li>Import Layers</li><li>Style Layers</li></ul><h3>Documentation</h3><ul><li>GeoServer</li><li>GeoExplorer</li><li>Styler</li></ul></div></div>';
+
+var geoserver_content = 
+'<div class="dash-panel-body"><h1>GeoServer</h1><p>Describe GeoServer here.</p></div>';
+
+var geoexplorer_content =
+'<div class="dash-panel-body"><h1>GeoExplorer</h1><p>Describe GeoExplorer here.</p></div>';
+
+var styler_content =
+'<div class="dash-panel-body"><h1>Styler</h1><p>Describe Styler here.</p></div>';
