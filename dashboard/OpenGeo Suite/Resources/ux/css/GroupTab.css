@@ -5,8 +5,8 @@
  * http://www.extjs.com/license
  */
 .x-grouptabs-panel {
-    background-color: #4E78B1;
-    border: solid 15px #4E78B1;
+    background-color: #291C17;
+    border: solid 15px #291C17;
 }
 .x-tab-panel-left .x-grouptabs-panel-header,
 .x-tab-panel-right .x-grouptabs-panel-header {
@@ -79,7 +79,7 @@
 }
 
 .x-grouptabs-panel .x-grouptabs-strip-active a.x-grouptabs-text {
-    color: #395B8E;
+    color: #0A2742;
 }
 
 .x-grouptabs-panel ul.x-grouptabs-sub a.x-grouptabs-text {
@@ -131,7 +131,7 @@
 
 /* Tab corners */
 .x-grouptabs-panel .x-grouptabs-corner {
-    background-image: url('../images/x-grouptabs-corners.gif');
+    background-image: url('../images/x-grouptabs-corners.png');
     display: none;
     width: 11px;
     height: 11px;
