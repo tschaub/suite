@@ -23,7 +23,7 @@ body {
 }
 
 .dash-panel-content {
-    margin: 0 200px 0 0;
+    margin: 0 150px 0 0;
 }
 .dash-panel-content-item {
     margin-bottom: 10px;
@@ -33,7 +33,7 @@ body {
     position: absolute;
     right: 0px;
     top: 0px;
-    width: 200px;
+    width: 150px;
 }
 .dash-panel-tasks ul {
     list-style: disc;
