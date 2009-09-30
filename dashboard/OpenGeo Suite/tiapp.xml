@@ -13,7 +13,7 @@
 <id>initial</id>
 <title>OpenGeo Suite</title>
 <url>app://index.html</url>
-<width>600</width>
+<width>700</width>
 <max-width>3000</max-width>
 <min-width>0</min-width>
 <height>400</height>
