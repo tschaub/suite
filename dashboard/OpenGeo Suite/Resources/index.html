@@ -6,6 +6,19 @@
         <link rel="stylesheet" type="text/css" href="ux/css/Portal.css" />
         <link rel="stylesheet" type="text/css" href="ux/css/GroupTab.css" />
         <link rel="stylesheet" type="text/css" href="theme/app.css" />
+        
+        <script type="text/javascript">
+        
+            // The "Version" string is missing from WebKit Linux and Ext requires it.
+            if (navigator.userAgent.match(/WebKit/) && !navigator.userAgent.toLowerCase().match(/version\/\d+\.\d/)) {
+                try {
+                    navigator.userAgent += " Version/4.0";
+                } catch(e) {
+                    // in case there is a getter but not a setter
+                }
+            }
+        
+        </script>
 
         <script type="text/javascript" src="ext/adapter/ext/ext-base.js"></script>
         <script type="text/javascript" src="ext/ext-all.js"></script>
