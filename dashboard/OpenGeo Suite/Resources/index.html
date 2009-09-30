@@ -11,11 +11,16 @@
         
             // The "Version" string is missing from WebKit Linux and Ext requires it.
             if (navigator.userAgent.match(/WebKit/) && !navigator.userAgent.toLowerCase().match(/version\/\d+\.\d/)) {
-                try {
+                (function() {
+                    // we need to create a new navigator object because the original doesn't have setters
+                    var old = navigator;
+                    var navigator = {};
+                    for (var k in old) {
+                        navigator[k] = old[k];
+                    }
                     navigator.userAgent += " Version/4.0";
-                } catch(e) {
-                    // in case there is a getter but not a setter
-                }
+                    window.navigator = navigator;
+                })();
             }
         
         </script>
