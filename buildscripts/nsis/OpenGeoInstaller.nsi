@@ -60,8 +60,11 @@ Var Service
 Var IsManual
 Var GSUsername
 Var GSPassword
+Var Port
 Var GSUsernameTemp
 Var GSPasswordTemp
+Var PortTemp
+Var PortFilter
 Var DataDirPath
 Var FolderName
 
@@ -120,10 +123,8 @@ Function RunStuff
     ExecShell "open" "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\Start GeoServer.lnk"
   ${EndIf}
 
-  ;Script to check if GeoServer has finished launching.  Checks for a response on port 8080
+  ;Script to check if GeoServer has finished launching.  Checks for a response on $Port 
   ;We could delete this file after it's finished running, as it's no longer needed...
-  SetOutPath "$INSTDIR\GeoServer"
-  File /a gscheck.bat
   ExecWait $INSTDIR\GeoServer\gscheck.bat
   ;Delete $INSTDIR\GeoServer\gscheck.bat
 
@@ -143,9 +144,9 @@ FunctionEnd
 Page custom CheckUserType                                     ; Die if not admin
 Page custom PriorInstall                                      ; Check to see if previously installed
 !insertmacro MUI_PAGE_LICENSE "license.txt"                   ; Show license
-!insertmacro MUI_PAGE_COMPONENTS                              ; List of stuff to install
 !insertmacro MUI_PAGE_DIRECTORY                               ; Where to install
 !insertmacro MUI_PAGE_STARTMENU Application $STARTMENU_FOLDER ; Start menu location
+!insertmacro MUI_PAGE_COMPONENTS                              ; List of stuff to install
 Page custom InstallType InstallTypeTest                       ; Install manually or as a service?
 Page custom Creds CredsLeave                                  ; Set GeoServer admin credentials
 Page custom Ready                                             ; Ready to install page
@@ -335,22 +336,30 @@ Function Creds
   ;${NSD_GetText} $GSUsernameTemp $GSUsername ; converts numeric string into text...
   ;${NSD_GetText} $GSPasswordTemp $GSPassword ; ...and then saves into the same variable
 
-  ; Populate defaults on first display, and reset if user blanked either username/password
+  ; Populates defaults on first display, and resets to default user blanked any of the values
   StrCmp $GSUsername "" 0 +3
     StrCpy $GSUsername "admin"
     StrCpy $GSPassword "geoserver"
   StrCmp $GSPassword "" 0 +3
     StrCpy $GSUsername "admin"
     StrCpy $GSPassword "geoserver"
+  StrCmp $Port "" 0 +2
+    StrCpy $Port 8080
+
+
 
   ;Syntax: ${NSD_*} x y width height text
-  ${NSD_CreateLabel} 0 10u 100% 36u "GeoServer requires a username and password in order to manage and edit configuration.  Please enter a username and password in each of the below fields, or leave unchanged to accept the default values.  If either the username or password fields are left blank, both fields will be replaced by the default values."
-  ${NSD_CreateLabel} 20u 50u 40u 14u "Username"  
-  ${NSD_CreateText} 70u 48u 50u 14u $GSUsername
+  ${NSD_CreateLabel} 0 0 100% 36u "GeoServer requires a username and password in order to manage and edit configuration.  Please enter a username and password in each of the below fields, or leave unchanged to accept the default values.  If either the username or password fields are left blank, both fields will be replaced by the default values."
+  ${NSD_CreateLabel} 20u 40u 40u 14u "Username"  
+  ${NSD_CreateText} 70u 38u 50u 14u $GSUsername
   Pop $GSUsernameTemp
-  ${NSD_CreateLabel} 20u 70u 40u 14u "Password" 
-  ${NSD_CreateText} 70u 68u 50u 14u $GSPassword
+  ${NSD_CreateLabel} 20u 60u 40u 14u "Password" 
+  ${NSD_CreateText} 70u 58u 50u 14u $GSPassword
   Pop $GSPasswordTemp
+  ${NSD_CreateLabel} 0 80u 100% 20u "Enter the port that GeoServer will respond on.  Valid port range is 1024-65535.  Illegal values entered here will be replaced by the default value."
+  ${NSD_CreateLabel} 20u 102u 40u 14u "Port" 
+  ${NSD_CreateText} 70u 100u 50u 14u $Port
+  Pop $PortTemp
 
   nsDialogs::Show
 
@@ -359,18 +368,33 @@ FunctionEnd
 ; Second half of Creds function
 Function CredsLeave
 
-
   ${NSD_GetText} $GSUsernameTemp $GSUsername ; converts numeric string into text...
   ${NSD_GetText} $GSPasswordTemp $GSPassword ; ...and then saves into the same variable
+  ${NSD_GetText} $PortTemp $Port             ; ditto  
 
   ; If user blanked either username/password, use defaults anyway!
-  StrCmp $GSUsername "" 0 +3
-    StrCpy $GSUsername "admin"
-    StrCpy $GSPassword "geoserver"
-  StrCmp $GSPassword "" 0 +3
-    StrCpy $GSUsername "admin"
-    StrCpy $GSPassword "geoserver"
 
+  StrCmp $GSUsername "" 0 +4
+    MessageBox MB_ICONEXCLAMATION "The Username field cannot be blank.  Resetting username and password fields to default values."
+    StrCpy $GSUsername "admin"
+    StrCpy $GSPassword "geoserver"
+  StrCmp $GSPassword "" 0 +4
+    MessageBox MB_ICONEXCLAMATION "The Password field cannot be blank.  Resetting username and password fields to default values."
+    StrCpy $GSUsername "admin"
+    StrCpy $GSPassword "geoserver"
+  StrCmp $Port "" 0 +3
+    MessageBox MB_ICONEXCLAMATION "The Port field cannot be blank.  Resetting to default value."
+    StrCpy $Port 8080
+
+  ; This will filter $Port to only the numeric characters
+  ${StrFilter} $Port "1" "" "" $PortFilter
+  ; Check for illegal values of $Port
+  ${If} $Port != $PortFilter ; If something was filtered, it's obviously wrong
+  ${OrIf} $Port < 1024       ; Too low
+  ${OrIf} $Port > 65535      ; Too high
+    MessageBox MB_ICONSTOP "Bad value in Port field.  Resetting to default value."
+    StrCpy $Port 8080
+  ${EndIf}  
 
 FunctionEnd
 
@@ -384,25 +408,25 @@ Function Ready
   ${NSD_CreateLabel} 0 0 100% 24u "Please review the settings below and click the Back button if changes need to be made.  Click the Install button to continue."
 
   ${NSD_CreateLabel} 20u 25u 75% 12u "OpenGeo Suite install directory:"
-  ${NSD_CreateLabel} 30u 33u 70% 12u "$INSTDIR"
+  ${NSD_CreateLabel} 40u 34u 70% 12u "$INSTDIR"
 
   ; Install type
-  ${NSD_CreateLabel} 20u 45u 75% 12u "GeoServer installation:"
+  ${NSD_CreateLabel} 20u 47u 75% 12u "GeoServer installation:"
   StrCmp $IsManual 1 Manual Service
   Manual:
-    ${NSD_CreateLabel} 30u 53u 70% 12u "Run manually"
+    ${NSD_CreateLabel} 40u 56u 70% 12u "Run manually"
     Goto Creds
   Service:
-    ${NSD_CreateLabel} 30u 53u 70% 12u "Installed as a service"
+    ${NSD_CreateLabel} 40u 56u 70% 12u "Installed as a service"
     Goto Creds
 
   Creds:
 
-    ${NSD_CreateLabel} 20u 65u 75% 12u "GeoServer username and password:"
-    ${NSD_CreateLabel} 30u 73u 70% 12u "$GSUsername : $GSPassword"
+    ${NSD_CreateLabel} 20u 69u 75% 12u "GeoServer username and password:"
+    ${NSD_CreateLabel} 40u 78u 70% 12u "$GSUsername : $GSPassword"
 
-    ${NSD_CreateLabel} 20u 85u 75% 12u "Data and configuration will be stored here:"
-    ${NSD_CreateLabel} 30u 93u 80% 20u "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
+    ${NSD_CreateLabel} 20u 91u 75% 12u "GeoServer web server port:"
+    ${NSD_CreateLabel} 40u 100u 70% 12u "$Port"
 
   nsDialogs::Show
 
@@ -418,10 +442,8 @@ SectionEnd
 
 ; The main install section
 
-SectionGroup "GeoServer" Section1
+Section "GeoServer" Section1a
 
-Section "GeoServer Core" Section1a
-	
   SectionIn RO  ; Makes this install mandatory
 
   SetOverwrite on  ; Set Section properties
@@ -475,6 +497,17 @@ Section "GeoServer Core" Section1a
                                 "[gspassword]" "$GSPassword" \
                                 "/S=1" $0
 
+  ; This is batch file that watches for port activity
+  SetOutPath "$INSTDIR\GeoServer"
+  File /a gscheck.bat
+
+  ; Set gscheck.bat to use the correct port
+    ${textreplace::ReplaceInFile} "$INSTDIR\GeoServer\gscheck.bat" \
+                                  "$INSTDIR\GeoServer\gscheck.bat" \
+                                  "[jettyport]" "$Port" \ 
+                                  "/S=1" $1
+
+
 
 
   ; Continuing on...
@@ -517,6 +550,11 @@ Section "GeoServer Core" Section1a
                                   "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
                                   "[wrapperlogpath]" "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs\" \ 
                                   "/S=1" $1
+    ${textreplace::ReplaceInFile} "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
+                                  "$INSTDIR\GeoServer\wrapper\wrapper.conf" \
+                                  "[jettyport]" "$Port" \ 
+                                  "/S=1" $1
+
 
 
 
@@ -533,9 +571,9 @@ Section "GeoServer Core" Section1a
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Web Admin Page.lnk" \
-                 "http://localhost:8080/geoserver/web"
+                 "http://localhost:$Port/geoserver/web"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Data Importer.lnk" \
-                 "http://localhost:8080/geoserver/web/?wicket:bookmarkablePage=:org.geoserver.web.importer.ImportPage"
+                 "http://localhost:$Port/geoserver/web/?wicket:bookmarkablePage=:org.geoserver.web.importer.ImportPage"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Data Directory.lnk" \
                  "$DataDirPath"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
@@ -554,7 +592,7 @@ Section "GeoServer Core" Section1a
     SetOutPath "$INSTDIR\GeoServer"
 
     FileOpen $9 startgs.bat w ; Opens a Empty File and fills it
-    FileWrite $9 'call "$INSTDIR\GeoServer\jre\bin\java.exe" -DGEOSERVER_DATA_DIR="$DataDirPath" -Xmx300m -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -Djetty.logs="$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs" -jar start.jar'
+    FileWrite $9 'call "$INSTDIR\GeoServer\jre\bin\java.exe" -DGEOSERVER_DATA_DIR="$DataDirPath" -Xmx300m -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -Djetty.logs="$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs" -Djetty.port=$Port -jar start.jar'
     FileClose $9 ; Closes the file
 
     FileOpen $9 stopgs.bat w ; Opens a Empty File and fills it
@@ -620,13 +658,12 @@ SectionGroup "GeoServer Extensions" Section1c
 
   SectionEnd
 
-  SectionGroupEnd
-
 SectionGroupEnd
 
 
-SectionGroup "GeoExplorer" Section2
-Section "GeoExplorer Application" Section2a
+
+
+Section "GeoExplorer" Section2a
 
   ; Set Section properties
 
@@ -649,7 +686,7 @@ Section "GeoExplorer Application" Section2a
   ; Shortcuts
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer\GeoExplorer.lnk" \
-		         "http://localhost:8080/geoserver/www/geoexplorer/index.html" \
+		         "http://localhost:$Port/geoserver/www/geoexplorer/index.html" \
                  "$DataDirPath\www\geoexplorer\geoext.ico"
 
 SectionEnd
@@ -672,8 +709,6 @@ Section "GeoExplorer Documentation" Section2b
 
 SectionEnd
 
-SectionGroupEnd
-
 
 Section "Styler" Section3
 
@@ -693,7 +728,7 @@ Section "Styler" Section3
   ; Shortcuts
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\Styler"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Styler\Styler.lnk" \
-		         "http://localhost:8080/geoserver/www/styler/index.html" \
+		         "http://localhost:$Port/geoserver/www/styler/index.html" \
                  "$DataDirPath\www\styler\geoext.ico"
 
 SectionEnd
@@ -717,18 +752,16 @@ Section "-Getting Started" SectionH1 ;dash means hidden
 SectionEnd
 
 ; Modern install component descriptions
-; Yes, this needs needs to go after the install sections. 
+; Yes, this needs to go after the install sections. 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section1} "Installs GeoServer, a spatial data server."
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section1a} "Installs GeoServer core components."
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section1a} "Installs GeoServer, a spatial data server."
   !insertmacro MUI_DESCRIPTION_TEXT ${Section1b} "Includes GeoServer User Manual."
   !insertmacro MUI_DESCRIPTION_TEXT ${Section1c} "Includes GeoServer Extensions."
   !insertmacro MUI_DESCRIPTION_TEXT ${Section1c1} "Adds support for GDAL image formats."
   !insertmacro MUI_DESCRIPTION_TEXT ${Section1c2} "Adds support for H2 databases."
   ;!insertmacro MUI_DESCRIPTION_TEXT ${Section1c3} "Adds support for image pyramid stores."
   !insertmacro MUI_DESCRIPTION_TEXT ${Section1c4} "Adds support for Oracle databases."
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section2} "Installs GeoExplorer, a graphical map editor."
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section2a} "Installs GeoExplorer application."
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section2a} "Installs GeoExplorer, a graphical map editor."
   !insertmacro MUI_DESCRIPTION_TEXT ${Section2b} "Includes GeoExplorer documentation."
   !insertmacro MUI_DESCRIPTION_TEXT ${Section3} "Installs Styler, a graphical map style editor."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionH1} "Quickstart guide on the OpenGeo Suite."
