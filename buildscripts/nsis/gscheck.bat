@@ -19,5 +19,6 @@ goto end
 :fail
 set gs="" >nul 2>nul
 echo ERROR: GeoServer could not be started.
+pause
 
 :end
