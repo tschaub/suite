@@ -14,12 +14,12 @@ tiplatform:0.6.0
 tiui:0.6.0
 javascript:0.6.0
 tianalytics:0.6.0
-tidatabase:0.6.0
-tidesktop:0.6.0
+tinetwork:0.6.0
 tigrowl:0.6.0
 timedia:0.6.0
-timonkey:0.6.0
-tinetwork:0.6.0
-tinotification:0.6.0
+tidesktop:0.6.0
 tiprocess:0.6.0
+tinotification:0.6.0
+timonkey:0.6.0
+tidatabase:0.6.0
 tiworker:0.6.0
