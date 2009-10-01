@@ -10,6 +10,8 @@
         <script type="text/javascript">
         
             // The "Version" string is missing from WebKit Linux and Ext requires it.
+            // TODO: This has been fixed in Ext (svn).  Remove this when the fix is
+            // released (see http://www.extjs.com/forum/showthread.php?p=392846).
             if (navigator.userAgent.match(/WebKit/) && !navigator.userAgent.toLowerCase().match(/version\/\d+\.\d/)) {
                 (function() {
                     // we need to create a new navigator object because the original doesn't have setters
