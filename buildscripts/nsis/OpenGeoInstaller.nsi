@@ -58,13 +58,17 @@ Var CommonAppData
 Var Manual
 Var Service
 Var IsManual
-Var GSUsername
-Var GSPassword
+Var GSUser
+Var GSPass
 Var Port
-Var GSUsernameTemp
-Var GSPasswordTemp
+Var GSUserTemp
+Var GSPassTemp
 Var PortTemp
-Var PortFilter
+Var GSUserWarn
+Var GSPassWarn
+Var PortWarn
+Var GSUserFilter
+Var GSPassFilter
 Var DataDirPath
 Var FolderName
 
@@ -81,8 +85,8 @@ VIAddVersionKey Comments "http://opengeo.org"
 ; Page headers for pages
 LangString TEXT_TYPE_TITLE ${LANG_ENGLISH} "Type of Installation"
 LangString TEXT_TYPE_SUBTITLE ${LANG_ENGLISH} "Select the type of installation."
-LangString TEXT_CREDS_TITLE ${LANG_ENGLISH} "GeoServer Administrator"
-LangString TEXT_CREDS_SUBTITLE ${LANG_ENGLISH} "Set administrator credentials."
+LangString TEXT_CREDS_TITLE ${LANG_ENGLISH} "GeoServer Administration"
+LangString TEXT_CREDS_SUBTITLE ${LANG_ENGLISH} "Set administrator credentials and port."
 LangString TEXT_READY_TITLE ${LANG_ENGLISH} "Ready to Install"
 LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be installed."
 
@@ -327,71 +331,110 @@ FunctionEnd
 
 ; Will build a page to input default GS admin creds
 Function Creds
-
   
   nsDialogs::Create 1018
   !insertmacro MUI_HEADER_TEXT "$(TEXT_CREDS_TITLE)" "$(TEXT_CREDS_SUBTITLE)"
 
-  ; This needs to be done at the beginning too to avoid clobbering these variables back into numbers
-  ;${NSD_GetText} $GSUsernameTemp $GSUsername ; converts numeric string into text...
-  ;${NSD_GetText} $GSPasswordTemp $GSPassword ; ...and then saves into the same variable
-
   ; Populates defaults on first display, and resets to default user blanked any of the values
-  StrCmp $GSUsername "" 0 +3
-    StrCpy $GSUsername "admin"
-    StrCpy $GSPassword "geoserver"
-  StrCmp $GSPassword "" 0 +3
-    StrCpy $GSUsername "admin"
-    StrCpy $GSPassword "geoserver"
+  StrCmp $GSUser "" 0 +3
+    StrCpy $GSUser "admin"
+    StrCpy $GSPass "geoserver"
+  StrCmp $GSPass "" 0 +3
+    StrCpy $GSUser "admin"
+    StrCpy $GSPass "geoserver"
   StrCmp $Port "" 0 +2
     StrCpy $Port 8080
-
 
 
   ;Syntax: ${NSD_*} x y width height text
   ${NSD_CreateLabel} 0 0 100% 36u "GeoServer requires a username and password in order to manage and edit configuration.  Please enter a username and password in each of the below fields, or leave unchanged to accept the default values.  If either the username or password fields are left blank, both fields will be replaced by the default values."
   ${NSD_CreateLabel} 20u 40u 40u 14u "Username"  
-  ${NSD_CreateText} 70u 38u 50u 14u $GSUsername
-  Pop $GSUsernameTemp
+  ${NSD_CreateText} 70u 38u 50u 14u $GSUser
+  Pop $GSUserTemp
+  ${NSD_CreateLabel} 130u 40u 120u 14u "No commas or equal signs, please."
+  Pop $GSUserWarn
+  ${NSD_OnChange} $GSUserTemp UsernameCheck
+
   ${NSD_CreateLabel} 20u 60u 40u 14u "Password" 
-  ${NSD_CreateText} 70u 58u 50u 14u $GSPassword
-  Pop $GSPasswordTemp
-  ${NSD_CreateLabel} 0 80u 100% 20u "Enter the port that GeoServer will respond on.  Valid port range is 1024-65535.  Illegal values entered here will be replaced by the default value."
+  ${NSD_CreateText} 70u 58u 50u 14u $GSPass
+  Pop $GSPassTemp
+  ${NSD_CreateLabel} 130u 60u 120u 14u "No commas or equal signs, please."
+  Pop $GSPassWarn
+  ${NSD_OnChange} $GSPassTemp PasswordCheck
+
+  ${NSD_CreateLabel} 0 80u 100% 20u "Enter the port that GeoServer will respond on.  Illegal values entered here will be replaced by the default value."
   ${NSD_CreateLabel} 20u 102u 40u 14u "Port" 
-  ${NSD_CreateText} 70u 100u 50u 14u $Port
+  ${NSD_CreateNumber} 70u 100u 50u 14u $Port
   Pop $PortTemp
+  ${NSD_CreateLabel} 130u 102u 120u 14u "Valid range is 1024-65535." 
+  Pop $PortWarn
+  ${NSD_OnChange} $PortTemp PortCheck
 
   nsDialogs::Show
+
+FunctionEnd
+
+Function UsernameCheck
+
+  ; Check for illegal values of $GSUser and fix immediately
+  ${NSD_GetText} $GSUserTemp $GSUser
+  ${StrFilter} $GSUser "" "" ",=" $GSUserFilter
+  StrCmp $GSUser $GSUserFilter +2 0        ; was anything filtered?
+  ${NSD_SetText} $GSUserTemp $GSUserFilter ; if so display the filtered string
+
+FunctionEnd
+
+Function PasswordCheck
+
+  ; Check for illegal values of $GSPass and fix immediately
+  ${NSD_GetText} $GSPassTemp $GSPass
+  ${StrFilter} $GSPass "" "" ",=" $GSPassFilter
+  StrCmp $GSPass $GSPassFilter +2 0        ; was anything filtered?
+  ${NSD_SetText} $GSPassTemp $GSPassFilter ; if so display the filtered string
+
+FunctionEnd
+
+Function PortCheck
+
+  ; Check for illegal values of $Port and fix immediately
+
+  ${NSD_GetText} $PortTemp $Port
+
+  ${If} $Port > 65535
+    StrCpy $Port 65535
+    ${NSD_SetText} $PortTemp $Port  
+  ;${ElseIf} $Port < 1
+  ;  StrCpy $Port "8080"
+  ;  ${NSD_SetText} $PortTemp $Port 
+
+  ${EndIf}  
 
 FunctionEnd
 
 ; Second half of Creds function
 Function CredsLeave
 
-  ${NSD_GetText} $GSUsernameTemp $GSUsername ; converts numeric string into text...
-  ${NSD_GetText} $GSPasswordTemp $GSPassword ; ...and then saves into the same variable
+  ${NSD_GetText} $GSUserTemp $GSUser ; converts numeric string into text...
+  ${NSD_GetText} $GSPassTemp $GSPass ; ...and then saves into the same variable
   ${NSD_GetText} $PortTemp $Port             ; ditto  
 
   ; If user blanked either username/password, use defaults anyway!
 
-  StrCmp $GSUsername "" 0 +4
+  StrCmp $GSUser "" 0 +4
     MessageBox MB_ICONEXCLAMATION "The Username field cannot be blank.  Resetting username and password fields to default values."
-    StrCpy $GSUsername "admin"
-    StrCpy $GSPassword "geoserver"
-  StrCmp $GSPassword "" 0 +4
+    StrCpy $GSUser "admin"
+    StrCpy $GSPass "geoserver"
+  StrCmp $GSPass "" 0 +4
     MessageBox MB_ICONEXCLAMATION "The Password field cannot be blank.  Resetting username and password fields to default values."
-    StrCpy $GSUsername "admin"
-    StrCpy $GSPassword "geoserver"
-  StrCmp $Port "" 0 +3
+    StrCpy $GSUser "admin"
+    StrCpy $GSPass "geoserver"
+  StrCmp $Port "" 0 +3 
     MessageBox MB_ICONEXCLAMATION "The Port field cannot be blank.  Resetting to default value."
     StrCpy $Port 8080
 
-  ; This will filter $Port to only the numeric characters
-  ${StrFilter} $Port "1" "" "" $PortFilter
   ; Check for illegal values of $Port
-  ${If} $Port != $PortFilter ; If something was filtered, it's obviously wrong
-  ${OrIf} $Port < 1024       ; Too low
-  ${OrIf} $Port > 65535      ; Too high
+  ${If} $Port < 1024        ; Too low
+  ${OrIf} $Port > 65535     ; Too high
     MessageBox MB_ICONSTOP "Bad value in Port field.  Resetting to default value."
     StrCpy $Port 8080
   ${EndIf}  
@@ -423,7 +466,7 @@ Function Ready
   Creds:
 
     ${NSD_CreateLabel} 20u 69u 75% 12u "GeoServer username and password:"
-    ${NSD_CreateLabel} 40u 78u 70% 12u "$GSUsername : $GSPassword"
+    ${NSD_CreateLabel} 40u 78u 70% 12u "$GSUser : $GSPass"
 
     ${NSD_CreateLabel} 20u 91u 75% 12u "GeoServer web server port:"
     ${NSD_CreateLabel} 40u 100u 70% 12u "$Port"
@@ -490,11 +533,11 @@ Section "GeoServer" Section1a
   ; Overwrite username and password in users.properties
   ${textreplace::ReplaceInFile} "$DataDirPath\security\users.properties" \
                                 "$DataDirPath\security\users.properties" \
-                                "[gsusername]" "$GSUsername" \
+                                "[gsusername]" "$GSUser" \
                                 "/S=1" $0
   ${textreplace::ReplaceInFile} "$DataDirPath\security\users.properties" \
                                 "$DataDirPath\security\users.properties" \
-                                "[gspassword]" "$GSPassword" \
+                                "[gspassword]" "$GSPass" \
                                 "/S=1" $0
 
   ; This is batch file that watches for port activity
@@ -659,7 +702,6 @@ SectionGroup "GeoServer Extensions" Section1c
   SectionEnd
 
 SectionGroupEnd
-
 
 
 
