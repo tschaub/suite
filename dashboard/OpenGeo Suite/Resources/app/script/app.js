@@ -12,7 +12,7 @@ var app = {
         var lines = text.split(/[\n\r]/);
         var config = {};
         var defaults = {};
-        var line, pair, match, section;
+        var line, pair, key, value, match, section;
         for (var i=0, len=lines.length; i<len; ++i) {
             line = lines[i].trim();
             match = line.match(/^\s*\[(.*?)\]\s*$/);
@@ -20,15 +20,17 @@ var app = {
                 section = match[1];
             } else if (line) {
                 pair = line.split("=");
-                if (pair.length === 2) {
+                if (pair.length > 1) {
+                    key = pair.shift().trim();
+                    value = pair.join("=").trim();
                     if (section) {
                         if (!config[section]) {
                             config[section] = {};
                         }
-                        config[section][pair[0].trim()] = pair[1].trim();
+                        config[section][key] = value;
                     } else {
                         // defaults are pairs before all sections
-                        defaults[pair[0].trim()] = pair[1].trim();
+                        defaults[key] = value;
                     }
                 }
             }
@@ -45,8 +47,8 @@ var app = {
     },
     
     afterPanelRender: function() {
-        var links = Ext.select(".app-xlink");
-        links.on({
+        var xlinks = Ext.select(".app-xlink");
+        xlinks.on({
             click: function(evt, el) {
                 var id = el.href.split("#").pop();
                 var parts = id.split("-");
@@ -58,7 +60,17 @@ var app = {
             },
             scope: this
         });
-        links.removeClass("app-xlink");
+        xlinks.removeClass("app-xlink");
+
+        var ilinks = Ext.select(".app-ilink");
+        ilinks.on({
+            click: function(evt, el) {
+                var id = el.href.split("#").pop();
+                this.openPanel(id);
+            },
+            scope: this
+        });
+        ilinks.removeClass("app-ilink");
     },
     
     openURL: function(url) {
@@ -67,6 +79,31 @@ var app = {
         } else {
             window.open(url);
         }
+    },
+    
+    openPanel: function(id) {
+        var panel = Ext.getCmp(id);
+        if (panel && panel.ownerCt) {
+            panel.ownerCt.setActiveTab(panel);
+        }
+    },
+    
+    getConfigSections: function() {
+        var config = this.config;
+        var sections = [];
+        for (var id in config) {
+            var items = [];
+            for (var key in config[id]) {
+                if (key !== "title") {
+                    items.push({name: key, value: config[id][key]});
+                }
+            }
+            sections.push({
+                title: config[id].title,
+                items: items.sort(function(a, b) {return a.name > b.name;})
+            });
+        }
+        return sections;
     }
     
 };
@@ -76,6 +113,14 @@ app.config = app.loadConfig();
 Ext.onReady(function() {
     Ext.QuickTips.init();
     
+    var dashPanelListeners = {
+        render: {
+            fn: app.afterPanelRender,
+            scope: app,
+            delay: 1
+        }
+    };
+    
     var viewport = new Ext.Viewport({
         layout: "fit",
         items: [{
@@ -83,68 +128,55 @@ Ext.onReady(function() {
             tabWidth: 130,
             activeGroup: 0,
             items: [{
-                mainItem: 0,
-                defaults: {border: false},
+                defaults: {border: false, autoScroll: true},
                 items: [{
                     title: "Dashboard",
                     tabTip: "OpenGeo Suite Dashboard",
                     cls: "dash-panel",
-                    html: app.loadSync("dash/main.html"),
-                    listeners: {
-                        render: {
-                            fn: app.afterPanelRender,
-                            scope: app,
-                            delay: 1
-                        }
-                    }
+                    html: app.loadSync("app/markup/dash/main.html"),
+                    id: "app-panels-dash-main",
+                    listeners: dashPanelListeners
                 }, {
                     title: "GeoServer",
                     tabTip: "Manage GeoServer",
                     cls: "dash-panel",
-                    html: app.loadSync("dash/geoserver.html"),
-                    listeners: {
-                        render: {
-                            fn: app.afterPanelRender,
-                            scope: app,
-                            delay: 1
-                        }
-                    }
+                    html: app.loadSync("app/markup/dash/geoserver.html"),
+                    id: "app-panels-dash-geoserver",
+                    listeners: dashPanelListeners
                 }, {
                     title: "GeoExplorer",
                     tabTip: "Manage GeoExplorer",
                     cls: "dash-panel",
-                    html: app.loadSync("dash/geoexplorer.html"),
-                    listeners: {
-                        render: {
-                            fn: app.afterPanelRender,
-                            scope: app,
-                            delay: 1
-                        }
-                    }
+                    html: app.loadSync("app/markup/dash/geoexplorer.html"),
+                    id: "app-panels-dash-geoexplorer",
+                    listeners: dashPanelListeners
                 }, {
                     title: "Styler",
                     tabTip: "Manage Styler",
                     cls: "dash-panel",
-                    html: app.loadSync("dash/styler.html"),
-                    listeners: {
-                        render: {
-                            fn: app.afterPanelRender,
-                            scope: app,
-                            delay: 1
-                        }
-                    }
+                    html: app.loadSync("app/markup/dash/styler.html"),
+                    id: "app-panels-dash-styler",
+                    listeners: dashPanelListeners
                 }]
             }, {
                 items: [{
                     title: "Configuration",
                     iconCls: "x-icon-configuration",
                     tabTip: "Configuration Information",
-                    html: "Any sort of configuration information can go here.  Where stuff is installed, versions, etc.",
+                    html: new Ext.XTemplate(
+                        app.loadSync("app/markup/config.html")
+                    ).apply(app.getConfigSections()),
                     border: false,
-                    cls: "dash-panel"
+                    id: "app-panels-config-main",
+                    autoScroll: true,
+                    cls: "dash-panel"                    
                 }]
             }]
         }]
     });
+    
+    // parse hash to activate relevant tab
+    app.openPanel(window.location.hash.substring(1));
+    
 });
 

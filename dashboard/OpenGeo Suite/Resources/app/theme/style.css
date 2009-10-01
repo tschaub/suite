@@ -1,5 +1,16 @@
 body {
     font-family: tahoma, arial, sans-serif;
+    font-size: 14px;
+}
+
+a {
+    color: #3366CC;
+    text-decoration: none;
+}
+
+.app-strong {
+    font-weight: bold;
+    font-size: larger;
 }
 
 .dash-panel {
@@ -10,16 +21,16 @@ body {
 }
 
 .dash-panel-body h1 {
-    font-size: 20;
+    font-size: 18;
 }
 .dash-panel-body h2 {
-    font-size: 18px;
-}
-.dash-panel-body h3 {
     font-size: 16px;
 }
+.dash-panel-body h3 {
+    font-size: 14px;
+}
 .dash-panel-body h4 {
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .dash-panel-content {
@@ -27,6 +38,20 @@ body {
 }
 .dash-panel-content-item {
     margin-bottom: 10px;
+    min-height: 55px;
+}
+
+.dash-panel-content-item.geoserver {
+    padding-left: 65px;
+    background: url(img/geoserver-sm.png) no-repeat;
+}
+.dash-panel-content-item.geoexplorer {
+    padding-left: 65px;
+    background: url(img/geoext-sm.png) no-repeat;
+}
+.dash-panel-content-item.styler {
+    padding-left: 65px;
+    background: url(img/geoext-sm.png) no-repeat;
 }
 
 .dash-panel-tasks {
