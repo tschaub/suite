@@ -5,5 +5,6 @@
   <bean id="opengeoTheme" class="org.geoserver.web.HeaderContribution">
     <property name="scope" value="org.opengeo.OpenGeoTheme"/>
     <property name="CSSFilename" value="css/opengeo.css"/>
+    <property name="faviconFilename" value="favicon/favicon.ico"/>
   </bean>
 </beans>
