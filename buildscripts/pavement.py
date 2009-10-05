@@ -420,9 +420,9 @@ def dashboard():
 	TIBUILD = "%s/.titanium/" % userhome
 	TIENV = "%s/.titanium/sdk/linux/0.6.0/" % userhome
 	base_path =  path(os.getcwd().strip("buildscripts"))    
-        opengeosuite = path.joinpath(dashboard,"OpenGeo\ Suite") 
 	dash_base = path.joinpath(base_path,"dashboard") 
 	dashboard = path.joinpath(dash_base,"OpenGeo Suite")  # will this work? 
+        opengeosuite = path.joinpath(dashboard,"OpenGeo\ Suite") 
 	with pushd(dashboard):
 		if sys.platform == 'linux2': 
 			sh("tibuild.py -v -d . -n -t bundle  -s %s -a %s ." % (TIBUILD, TIENV))
