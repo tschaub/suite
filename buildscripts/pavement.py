@@ -426,7 +426,7 @@ def dashboard():
 		if sys.platform == 'linux2': 
 			sh("tibuild.py -v -d . -n -t bundle  -s %s -a %s ." % (TIBUILD, TIENV))
 	 	if sys.platform == 'win32': 
-			sh("tibuild.py  -v -d . -s \"C:\Documents and Settings\All Users\Application Data\Titanium\" -a \"C:\Documents and Settings\All Users\Application Data\Titanium\sdk\win32\0.6.0\" . -n -t bundle")
+			sh("tibuild.py  -v -d . -s \"C:\\Documents and Settings\\All Users\\Application Data\\Titanium\" -a \"C:\\Documents and Settings\\All Users\\Application Data\\Titanium\\sdk\\win32\\0.6.0\" . -n -t bundle")
 		else: 
 		  	# What do we on OS X ? 
 			pass 
@@ -437,10 +437,11 @@ def dashboard():
 			sh("gunzip OpenGeo\ Suite.tgz ; tar -xf OpenGeo\ Suite.tar")
 			os.remove("OpenGeo Suite.tar")
 	if sys.platform == 'win32':
-		copy(path.joinpath(dashboard,"OpenGeo Suite.exe"),source_path)
+        opengeosuite = path.joinpath(dashboard,"OpenGeo\ Suite") 
+		copy(path.joinpath(opengeosuite,"OpenGeo\ Suite.exe"),source_path)
    		with pushed(source_path): 
-			unzip_file("OpenGeo Suite.exe")
-			os.remove("OpenGeo Suite.exe") 
+			unzip_file("OpenGeo\ Suite.exe")
+			os.remove("OpenGeo\ Suite.exe") 
 
 @task
 def source_dirs(): 
