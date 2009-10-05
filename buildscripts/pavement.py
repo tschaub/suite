@@ -422,8 +422,9 @@ def dashboard():
 	base_path =  path(os.getcwd().strip("buildscripts"))    
 	dash_base = path.joinpath(base_path,"dashboard") 
 	dashboard = path.joinpath(dash_base,"OpenGeo Suite")  # will this work? 
-        opengeosuite = path.joinpath(dashboard,"OpenGeo\ Suite") 
+	opengeosuite = path.joinpath(dashboard,"OpenGeo\ Suite")
 	with pushd(dashboard):
+		# todo ivan remove before creating
 		if sys.platform == 'linux2': 
 			sh("tibuild.py -v -d . -n -t bundle  -s %s -a %s ." % (TIBUILD, TIENV))
 	 	if sys.platform == 'win32': 
