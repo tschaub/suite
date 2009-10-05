@@ -178,6 +178,9 @@ def unpack_geoserver():
 
 
 
+
+
+
 @task
 @needs(["dir_layout"])
 def unpack_datadir(): 
@@ -262,16 +265,17 @@ def styler():
 
 
 @task 
+@needs(["dir_layout"])
 def download_docs(): 
     '''
     This downloads the OpenGeo Documentation
     '''
-    with pushd(download_path) as download:
-        if not docs_path.exists(): 
-            os.mkdir(docs_path)
+    with pushd(download_path) as download: # go into downloads dir
+        if not docs_path.exists():   
+            os.mkdir(docs_path)            # make ./documentation
         with pushd(docs_path):
-            section = "docs" 
-            for doc in config.options(section): 
+            section = "docs"                   # look in config.ini for [docs]
+            for doc in config.options(section):  
                 info("Download Docs for %s" % doc) 
                 url = config.get(section,doc) 
                 svn.export(url,doc)
