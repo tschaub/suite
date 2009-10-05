@@ -141,7 +141,7 @@ Function RunStuff
   ;Delete $INSTDIR\GeoServer\gscheck.bat
 
   ClearErrors
-  ExecShell "open" "$SMPROGRAMS\$STARTMENU_FOLDER\OpenGeo Suite Dashboard.lnk"
+  Exec "$INSTDIR\Dashboard\OpenGeo Suite.exe"
   IfErrors 0 +2
     MessageBox MB_ICONSTOP "Unable to start GeoServer or open Dashboard.  Please use the Start Menu to manually start the application."
   ClearErrors
@@ -665,7 +665,7 @@ Section "GeoServer Documentation" Section1b
 
   !insertmacro DisplayImage "slide_3_geoserver.bmp"
 
-  SectionIn RO  ; Makes this install mandatory
+  ;SectionIn RO  ; Makes this install mandatory
 
   ; Set Section properties
   SetOverwrite on
@@ -747,7 +747,7 @@ Section "GeoExplorer Documentation" Section2b
 
   !insertmacro DisplayImage "slide_6_geoext.bmp"
 
-  SectionIn RO  ; Makes this install mandatory
+  ;SectionIn RO  ; Makes this install mandatory
 
   ; Set Section properties
   SetOverwrite on
