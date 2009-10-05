@@ -330,24 +330,6 @@ def unzip_file(file):
             outfile.close()
 
 
-
-
-
-#def url_with_basic_auth(url, authstr):
-#    '''
-#    Split user:password into strings
-#    '''
-#    auth = dict()
-#    auth['user'], auth['password'] = authstr.split(':')
-#
-#@task
-#def auto(): 
-#    pass 
-#
-
-
-
-
 @task 
 def clean():
     info("Cleaning Installer Layout") 
@@ -423,16 +405,16 @@ def dashboard():
 	dash_base = path.joinpath(base_path,"dashboard") 
 	dashboard = path.joinpath(dash_base,"OpenGeo Suite")  # will this work? 
 	opengeosuite = path.joinpath(dashboard,"OpenGeo\ Suite")
-	with pushd(dashboard):
-		# todo ivan remove before creating
+	with pushd(source_path):
 		if sys.platform == 'linux2': 
-			sh("tibuild.py -v -d . -n -t bundle  -s %s -a %s ." % (TIBUILD, TIENV))
+			sh("tibuild.py -v -d ../../buildscripts/artifacts -n -t bundle  -s %s -a %s ../../dashboard/OpenGeo\ Suite" % (TIBUILD, TIENV))
 	 	if sys.platform == 'win32': 
-			sh("tibuild.py  -v -d . -s \"C:\\Documents and Settings\\All Users\\Application Data\\Titanium\" -a \"C:\\Documents and Settings\\All Users\\Application Data\\Titanium\\sdk\\win32\\0.6.0\" . -n -t bundle")
+			sh("tibuild.py  -v -d ..\..\buildscripts\artifacts -s \"C:\\Documents and Settings\\All Users\\Application Data\\Titanium\" -a \"C:\\Documents and Settings\\All Users\\Application Data\\Titanium\\sdk\\win32\\0.6.0\" . -n -t bundle")
 		else: 
 		  	# What do we on OS X ? 
 			pass 
-	# move finished 
+	# move finished
+	""" 
 	if sys.platform == 'linux2': 
 		copy(path.joinpath(dashboard,"OpenGeo Suite.tgz"),source_path)
 		with pushd(source_path): 
@@ -443,7 +425,7 @@ def dashboard():
    		with pushed(source_path): 
 			unzip_file("OpenGeo\ Suite.exe")
 			os.remove("OpenGeo\ Suite.exe") 
-
+	"""
 @task
 def source_dirs(): 
     '''
