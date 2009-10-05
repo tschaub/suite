@@ -54,9 +54,14 @@ var app = {
                 var parts = id.split("-");
                 var section = Ext.namespace(parts.slice(0, 3).join("."));
                 var key = parts.pop();
-                var port = section.port;
-                var url = "http://" + section.host + (port ? ":" + port : "") + section[key];
-                this.openURL(url);
+                var path = section[key];
+                if (path.match(/^(file|https?):/)) {
+                    this.openURL(path);
+                } else {
+                    var port = section.port;
+                    var url = "http://" + section.host + (port ? ":" + port : "") + section[key];
+                    this.openURL(url);
+                }
             },
             scope: this
         });
