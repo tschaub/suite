@@ -420,6 +420,7 @@ def dashboard():
 	TIBUILD = "%s/.titanium/" % userhome
 	TIENV = "%s/.titanium/sdk/linux/0.6.0/" % userhome
 	base_path =  path(os.getcwd().strip("buildscripts"))    
+        opengeosuite = path.joinpath(dashboard,"OpenGeo\ Suite") 
 	dash_base = path.joinpath(base_path,"dashboard") 
 	dashboard = path.joinpath(dash_base,"OpenGeo Suite")  # will this work? 
 	with pushd(dashboard):
@@ -437,7 +438,6 @@ def dashboard():
 			sh("gunzip OpenGeo\ Suite.tgz ; tar -xf OpenGeo\ Suite.tar")
 			os.remove("OpenGeo Suite.tar")
 	if sys.platform == 'win32':
-        opengeosuite = path.joinpath(dashboard,"OpenGeo\ Suite") 
 		copy(path.joinpath(opengeosuite,"OpenGeo\ Suite.exe"),source_path)
    		with pushed(source_path): 
 			unzip_file("OpenGeo\ Suite.exe")
