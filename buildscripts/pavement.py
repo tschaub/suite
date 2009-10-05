@@ -439,7 +439,7 @@ def dashboard():
 			sh("gunzip OpenGeo\ Suite.tgz ; tar -xf OpenGeo\ Suite.tar")
 			os.remove("OpenGeo Suite.tar")
 	if sys.platform == 'win33':
-		copy(source_path,path.joinpath(dashboard,"OpenGeo Suite.exe"))
+		copy(path.joinpath(dashboard,"OpenGeo Suite.exe"),source_path)
    		with pushed(source_path): 
 			unzip_file("OpenGeo Suite.exe")
 			os.remove("OpenGeo Suite.ext") 
