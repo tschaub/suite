@@ -71,6 +71,14 @@ Var GSUserFilter
 Var GSPassFilter
 Var DataDirPath
 Var FolderName
+Var GSPath
+Var GSDocPath
+Var GXPath
+Var GXDocPath
+Var StylerPath
+Var IntDocPath
+Var ImporterPath
+
 
 ; Version Information (Version tab for EXE properties)
 VIProductVersion ${LONGVERSION}
@@ -113,7 +121,7 @@ LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be ins
 
 ; What to do when done
 !define MUI_FINISHPAGE_RUN
-!define MUI_FINISHPAGE_RUN_TEXT "Start GeoServer and launch the Data Importer"
+!define MUI_FINISHPAGE_RUN_TEXT "Start GeoServer and launch the Dashboard"
 !define MUI_FINISHPAGE_RUN_FUNCTION "RunStuff"
 
 ; Do things after install
@@ -133,9 +141,9 @@ Function RunStuff
   ;Delete $INSTDIR\GeoServer\gscheck.bat
 
   ClearErrors
-  ExecShell "open" "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Data Importer.lnk"
+  ExecShell "open" "$SMPROGRAMS\$STARTMENU_FOLDER\OpenGeo Suite Dashboard.lnk"
   IfErrors 0 +2
-    MessageBox MB_ICONSTOP "Unable to start GeoServer or open browser.  Please use the Start Menu to manually start the application."
+    MessageBox MB_ICONSTOP "Unable to start GeoServer or open Dashboard.  Please use the Start Menu to manually start the application."
   ClearErrors
 
 FunctionEnd
@@ -657,6 +665,8 @@ Section "GeoServer Documentation" Section1b
 
   !insertmacro DisplayImage "slide_3_geoserver.bmp"
 
+  SectionIn RO  ; Makes this install mandatory
+
   ; Set Section properties
   SetOverwrite on
 
@@ -737,6 +747,8 @@ Section "GeoExplorer Documentation" Section2b
 
   !insertmacro DisplayImage "slide_6_geoext.bmp"
 
+  SectionIn RO  ; Makes this install mandatory
+
   ; Set Section properties
   SetOverwrite on
 
@@ -793,6 +805,48 @@ Section "-Getting Started" SectionH1 ;dash means hidden
 
 SectionEnd
 
+
+Section "-Dashboard" SectionH2 ;dash means hidden
+
+ 
+  !insertmacro DisplayImage "slide_1_suite.bmp"
+
+ SectionIn RO  ; Makes this install mandatory
+
+  ; Set Section properties
+  SetOverwrite on
+
+  ; Set Section Files and Shortcuts
+  SetOutPath "$INSTDIR"
+  File /r /x .svn /x config.ini ..\artifacts\dashboard
+  Rename "$INSTDIR\dashboard" "$INSTDIR\Dashboard"
+  SetOutPath "$INSTDIR\Dashboard\Resources"
+  File /a /oname=config.ini dashboard.ini
+  ${textreplace::ReplaceInFile} "$INSTDIR\Dashboard\Resources\config.ini" \
+                                "$INSTDIR\Dashboard\Resources\config.ini" \
+                                "[jettyport]" "$Port" \ 
+                                "/S=1" $1
+  ${textreplace::ReplaceInFile} "$INSTDIR\Dashboard\Resources\config.ini" \
+                                "$INSTDIR\Dashboard\Resources\config.ini" \
+                                "[gsdocspath]" "$INSTDIR\GeoServer\docs" \ 
+                                "/S=1" $1
+  ${textreplace::ReplaceInFile} "$INSTDIR\Dashboard\Resources\config.ini" \
+                                "$INSTDIR\Dashboard\Resources\config.ini" \
+                                "[gxdocspath]" "$INSTDIR\GeoExplorer\docs" \ 
+                                "/S=1" $1
+  ${textreplace::ReplaceInFile} "$INSTDIR\Dashboard\Resources\config.ini" \
+                                "$INSTDIR\Dashboard\Resources\config.ini" \
+                                "[stylerdocspath]" "$INSTDIR\Styler\docs" \ 
+                                "/S=1" $1
+
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\OpenGeo Suite Dashboard.lnk" \
+		         "$INSTDIR\Dashboard\OpenGeo Suite.exe" ;\
+                 ;"$DataDirPath\www\styler\geoext.ico"
+
+SectionEnd
+
+
+
 ; Modern install component descriptions
 ; Yes, this needs to go after the install sections. 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
@@ -807,6 +861,7 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${Section2b} "Includes GeoExplorer documentation."
   !insertmacro MUI_DESCRIPTION_TEXT ${Section3} "Installs Styler, a graphical map style editor."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionH1} "Quickstart guide on the OpenGeo Suite."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionH2} "Inntalls the OpenGeo Suite Dashboard for each access to all components."
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
@@ -930,6 +985,7 @@ Section Uninstall
     RMDir /r "$INSTDIR\GeoServer"
     RMDir /r "$INSTDIR\GeoExplorer"
     RMDir /r "$INSTDIR\Getting Started"
+    RMDir /r "$INSTDIR\Dashboard"
     Delete "$INSTDIR\*.*"
     RMDir "$INSTDIR"
     IfFileExists "$INSTDIR" Warn Succeed
