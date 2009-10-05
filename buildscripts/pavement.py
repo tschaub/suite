@@ -90,7 +90,7 @@ def build_all():
     info("Building all of the OpenGeo Stack")
     call_task("unpack_java")
     call_task("unpack_geoserver")
-    call_task("unpack_datadir")
+#    call_task("unpack_datadir")
     call_task("unpack_gdal")
     call_task("download_source")
     call_task("download_plugin")
@@ -129,7 +129,11 @@ def download_bin(options):
         for software in config.options(section):            
             info("Downloading %s" % software)
             url = config.get(section,software)
-            if software == 'java': 
+	    '''    
+	    Why are we doing this? 
+	    it would be a lot easier if we 
+            '''
+	    if software == 'java': 
                 urlgrab(url,'jre.zip',progress_obj=text_progress_meter())
             if software == 'datadir': 
                 urlgrab(url,'data_dir.zip',progress_obj=text_progress_meter())
@@ -295,7 +299,6 @@ def docs():
         with pushd(download_path):
             with pushd(docs_path):
                 svn.export('http://svn.codehaus.org/geoserver/trunk/doc/en/theme/','theme')
-                svn.export('http://svn.opengeo.org/vulcan/trunk/docs/opengeotheme/','opengeotheme')
                 for doc in config.options(section): 
                     info("Build docs for %s" % doc) 
                     app_doc = path(doc)
@@ -400,9 +403,46 @@ def unpack_plugin():
 		with pushd(path(plugin)): 
 			unzip_file(plugin_zip)
                         os.remove(plugin_zip)
-    # remove zips
 
-    
+
+
+@task
+def dashboard():
+	""" 
+	Builds a ti app for the bashboard. you must have the tit env setup 
+	
+	linux builds a OpenGeo Suite.tgz file 
+	windows builds a OpenGeo Suite.exe file <-- which is really a zip file. 
+	""" 
+
+	# build dashboard
+	userhome = os.getenv("HOME")
+	TIBUILD = "%s/.titanium/" % userhome
+	TIENV = "%s/.titanium/sdk/linux/0.6.0/" % userhome
+	base_path =  path(os.getcwd().strip("buildscripts"))    
+	dash_base = path.joinpath(base_path,"dashboard") 
+	dashboard = path.joinpath(dash_base,"OpenGeo Suite")  # will this work? 
+	with pushd(dashboard):
+		if sys.platform == 'linux2': 
+			sh("tibuild.py -v -d . -n -t bundle  -s %s -a %s ." % (TIBUILD, TIENV))
+	 	if sys.platform == 'win32': 
+			sh("""tibuild.py  -v -d . -s "C:\Documents and Settings\All Users\Application Data\Titanium" 
+				-a "C:\Documents and Settings\All Users\Application Data\Titanium\sdk\win32\0.6.0" 
+				. -n -t bundle""")
+		else: 
+		  	# What do we on OS X ? 
+			pass 
+	# move finished 
+	if sys.platform == 'linux2': 
+		copy(path.joinpath(dashboard,"OpenGeo Suite.tgz"),source_path)
+		with pushd(source_path): 
+			sh("gunzip OpenGeo\ Suite.tgz ; tar -xf OpenGeo\ Suite.tar")
+			os.remove("OpenGeo Suite.tar")
+	if sys.platform == 'win33':
+		copy(source_path,path.joinpath(dashboard,"OpenGeo Suite.exe"))
+   		with pushed(source_path): 
+			unzip_file("OpenGeo Suite.exe")
+			os.remove("OpenGeo Suite.ext") 
 
 @task
 def source_dirs(): 
