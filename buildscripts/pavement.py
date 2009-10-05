@@ -407,9 +407,11 @@ def dashboard():
 	opengeosuite = path.joinpath(dashboard,"OpenGeo\ Suite")
 	with pushd(source_path):
 		if sys.platform == 'linux2': 
-			sh("tibuild.py -v -d ../../buildscripts/artifacts -n -t bundle  -s %s -a %s ../../dashboard/OpenGeo\ Suite" % (TIBUILD, TIENV))
+			sh("tibuild.py -v -d ../../buildscripts/%s -n -t bundle  -s %s -a %s ../../dashboard/OpenGeo\ Suite" % (source_path,TIBUILD, TIENV))
 	 	if sys.platform == 'win32': 
-			sh("tibuild.py  -v -d ..\..\buildscripts\artifacts -s \"C:\\Documents and Settings\\All Users\\Application Data\\Titanium\" -a \"C:\\Documents and Settings\\All Users\\Application Data\\Titanium\\sdk\\win32\\0.6.0\" . -n -t bundle")
+			TIBUILD = "C:\\Documents and Settings\\All Users\\Application Data\\Titanium\\ " 
+			TIENV  = "C:\\Documents and Settings\\All Users\\Application Data\\Titanium\\sdk\\win32\\0.6.0\\ " 
+			sh("tibuild.py  -v -d ..\..\\buildscripts\\%s -s %s -a %s . -n -t bundle" % (source_path,TIBUILD, TIENV))
 		else: 
 		  	# What do we on OS X ? 
 			pass 
