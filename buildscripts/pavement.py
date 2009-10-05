@@ -377,57 +377,60 @@ def unpack_plugin():
     copytree(plugin_path,path.joinpath(source_path,"geoserver_plugins"))     
     # unzip in source
     with pushd(des_path): 
-	for plugin in config.options("extensions"): 
-		print "unpacking %s " % plugin
-                plugin_zip = "%s.zip" % plugin
-                os.mkdir(path(plugin))
-		move(plugin_zip,path(plugin))
-		with pushd(path(plugin)): 
-			unzip_file(plugin_zip)
-                        os.remove(plugin_zip)
+        for plugin in config.options("extensions"): 
+            print "unpacking %s " % plugin
+            plugin_zip = "%s.zip" % plugin
+            os.mkdir(path(plugin))
+        move(plugin_zip,path(plugin))
+        with pushd(path(plugin)): 
+            unzip_file(plugin_zip)
+            os.remove(plugin_zip)
 
 
 
 @task
 def dashboard():
-	""" 
-	Builds a ti app for the bashboard. you must have the tit env setup 
-	
-	linux builds a OpenGeo Suite.tgz file 
-	windows builds a OpenGeo Suite.exe file <-- which is really a zip file. 
-	""" 
+    ''' 
+    Builds a ti app for the bashboard. you must have the tit env setup 
+    linux builds a OpenGeo Suite.tgz file 
+    windows builds a OpenGeo Suite.exe file <-- which is really a zip file. 
+    ''' 
+    
+    # build dashboard
+    userhome = os.getenv("HOME")
+    TIBUILD = "%s/.titanium/" % userhome
+    TIENV = "%s/.titanium/sdk/linux/0.6.0/" % userhome
+    base_path =  path(os.getcwd().strip("buildscripts"))    
+    dash_base = path.joinpath(base_path,"dashboard") 
+    dashboard = path.joinpath(dash_base,"OpenGeo Suite")  # will this work? 
+    opengeosuite = path.joinpath(dashboard,"OpenGeo\ Suite")
+    with pushd(download_path):
+        if sys.platform == 'linux2': 
+            sh("tibuild.py -v -d ../../buildscripts/%s -n -t bundle  -s %s -a %s ../../dashboard/OpenGeo\ Suite" % (source_path,TIBUILD, TIENV))
+        if sys.platform == 'win32': 
+            TIBUILD = "C:\\Documents and Settings\\All Users\\Application Data\\Titanium" 
+            TIENV  = "C:\\Documents and Settings\\All Users\\Application Data\\Titanium\\sdk\\win32\\0.6.0" 
+            sh('tibuild.py -d . -s \"%s\" -a \"%s\" \"..\\..\\dashboard\\OpenGeo Suite\" -n -t bundle' % (TIBUILD, TIENV))
+        else: 
+            # What do we on OS X ? 
+            pass 
+        # move finished
 
-	# build dashboard
-	userhome = os.getenv("HOME")
-	TIBUILD = "%s/.titanium/" % userhome
-	TIENV = "%s/.titanium/sdk/linux/0.6.0/" % userhome
-	base_path =  path(os.getcwd().strip("buildscripts"))    
-	dash_base = path.joinpath(base_path,"dashboard") 
-	dashboard = path.joinpath(dash_base,"OpenGeo Suite")  # will this work? 
-	opengeosuite = path.joinpath(dashboard,"OpenGeo\ Suite")
-	with pushd(source_path):
-		if sys.platform == 'linux2': 
-			sh("tibuild.py -v -d ../../buildscripts/%s -n -t bundle  -s %s -a %s ../../dashboard/OpenGeo\ Suite" % (source_path,TIBUILD, TIENV))
-	 	if sys.platform == 'win32': 
-			TIBUILD = "C:\\Documents and Settings\\All Users\\Application Data\\Titanium\\ " 
-			TIENV  = "C:\\Documents and Settings\\All Users\\Application Data\\Titanium\\sdk\\win32\\0.6.0\\ " 
-			sh("tibuild.py  -v -d ..\..\\buildscripts\\%s -s %s -a %s . -n -t bundle" % (source_path,TIBUILD, TIENV))
-		else: 
-		  	# What do we on OS X ? 
-			pass 
-	# move finished
-	""" 
-	if sys.platform == 'linux2': 
-		copy(path.joinpath(dashboard,"OpenGeo Suite.tgz"),source_path)
-		with pushd(source_path): 
-			sh("gunzip OpenGeo\ Suite.tgz ; tar -xf OpenGeo\ Suite.tar")
-			os.remove("OpenGeo Suite.tar")
-	if sys.platform == 'win32':
-		copy(path.joinpath(opengeosuite,"OpenGeo\ Suite.exe"),source_path)
-   		with pushed(source_path): 
-			unzip_file("OpenGeo\ Suite.exe")
-			os.remove("OpenGeo\ Suite.exe") 
-	"""
+    if sys.platform == 'linux2': 
+        copy(path.joinpath(dashboard,"OpenGeo Suite.tgz"),source_path)
+        with pushd(source_path): 
+            sh("gunzip OpenGeo\ Suite.tgz ; tar -xf OpenGeo\ Suite.tar")
+            os.remove("OpenGeo Suite.tar")
+    if sys.platform == 'win32':
+        with pushd(path.joinpath(download_path,"OpenGe~1")): 
+            os.rename("OpenGeo Suite.exe","dashboard.zip")
+        with pushd(source_path):
+            os.mkdir("dashboard")
+        with pushd(path.joinpath(source_path,"dashboard")): 
+            sh('copy "..\\..\\downloads\\OpenGeo Suite\\dashboard.zip" .')
+            unzip_file("dashboard.zip")   # Does not work!  Why not?
+            os.remove("dashboard.zip")
+            
 @task
 def source_dirs(): 
     '''

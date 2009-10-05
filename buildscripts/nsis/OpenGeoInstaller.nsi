@@ -12,7 +12,7 @@
 Name "${APPNAMEANDVERSION}"
 InstallDir "$PROGRAMFILES\${COMPANYNAME}\${APPNAMEANDVERSION}"
 InstallDirRegKey HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" ""
-OutFile "OpenGeoSuite-0.9beta.exe"
+OutFile "OpenGeoSuite-0.9.exe"
 
 ;Compression options
 CRCCheck on
