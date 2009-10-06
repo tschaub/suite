@@ -173,19 +173,19 @@ Ext.onReady(function() {
                     id: "app-panels-dash-styler",
                     listeners: dashPanelListeners
                 }]
-            }, {
-                items: [{
-                    title: "Configuration",
-                    iconCls: "x-icon-configuration",
-                    tabTip: "Configuration Information",
-                    html: new Ext.XTemplate(
-                        app.loadSync("app/markup/config.html")
-                    ).apply(app.getConfigSections()),
-                    border: false,
-                    id: "app-panels-config-main",
-                    autoScroll: true,
-                    cls: "dash-panel"                    
-                }]
+            //}, {
+            //    items: [{
+            //        title: "Configuration",
+            //        iconCls: "x-icon-configuration",
+            //        tabTip: "Configuration Information",
+            //        html: new Ext.XTemplate(
+            //            app.loadSync("app/markup/config.html")
+            //        ).apply(app.getConfigSections()),
+            //        border: false,
+            //        id: "app-panels-config-main",
+            //        autoScroll: true,
+            //        cls: "dash-panel"                    
+            //    }]
             }]
         }]
     });
