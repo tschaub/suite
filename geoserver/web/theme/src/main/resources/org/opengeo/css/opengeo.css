@@ -62,6 +62,11 @@ color: #486300;
 border-color: #486300;
 }
 
+.status-bar span, 
+.mini-bar span, 
+div.progress-bar span.bar {
+background-image: url(../img_opengeo/status-bar-bg.png);
+}
 
 /*-----------------------
 Themed Layout
