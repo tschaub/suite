@@ -48,14 +48,18 @@ background: #103F6B; /* was #0076A1 */
 .button-group a,
 .button-group button,
 input.btnTxt {
-background-color: #486300;
-color: #fff;
+background-color: #fff;
+background-image: none;
+color: #486300;
+border-color: #486300;
 }
 
 .button-group a:hover,
 .button-group button:hover,
 input.btnTxt:hover {
-background-color: #6c9400;
+background-color: #a8bccf;
+color: #486300;
+border-color: #486300;
 }
 
 
@@ -103,48 +107,4 @@ background: url('../img_opengeo/powered-by.png') no-repeat bottom left;
 .navigation-tab-single, .navigation-tab-header,
 .navigation-tab-single a, .navigation-tab-header a, .navigation-tab-content a {
 color: #291C17; /* was #0076A1 */
-}
-
-/* to be ported to main opengeo css - replace the existing values */
-div.progress-bar {
--moz-border-radius: 5px;
--webkit-border-radius: 5px;
-border-radius: 5px;
-background-color: #E8E6E6;
-border:1px solid  #555555;
-float: none;
-height: 16px;
-margin: 1.2em auto;
-width: 50%;
-position: relative;
-background-repeat: repeat-x;
-background-image: url('../img_opengeo/status-bar-bg.png');
-overflow: hidden;
-}
-
-div.progress-bar span {
-display: block;
-height: 16px;
-background: #fff;
-width: 100%;
-position: absolute;
-}
-
-div.progress-bar em {
-top: 0;
-position: absolute;
-left: 50%;
-margin: 0 0 0 -1em;
-font-size: 10px;
-}
-
-/* Quick hack to get the progress bar content all on the same line - untested */
-.inline-everything * {
-float: left;
-margin: 0 1em 0 0;
-}
-
-.inline-everything .progress-bar {
-float: left;
-margin: 0 1em 0 0;
 }
