@@ -71,13 +71,6 @@ Var GSUserFilter
 Var GSPassFilter
 Var DataDirPath
 Var FolderName
-Var GSPath
-Var GSDocPath
-Var GXPath
-Var GXDocPath
-Var StylerPath
-Var IntDocPath
-Var ImporterPath
 
 
 ; Version Information (Version tab for EXE properties)
@@ -141,7 +134,7 @@ Function RunStuff
   ;Delete $INSTDIR\GeoServer\gscheck.bat
 
   ClearErrors
-  Exec "$INSTDIR\Dashboard\OpenGeo Suite.exe"
+  ExecShell "open" "$INSTDIR\Dashboard\OpenGeo Suite.exe" SW_SHOWMAXIMIZED
   IfErrors 0 +2
     MessageBox MB_ICONSTOP "Unable to start GeoServer or open Dashboard.  Please use the Start Menu to manually start the application."
   ClearErrors

@@ -321,7 +321,7 @@ def docs():
 def unzip_file(file):     
     zip = zipfile.ZipFile(file)
     for zipFile in zip.namelist(): 
-        #info(zipFile)
+        info(zipFile)
         if zipFile.endswith('/'): 
             os.mkdir(zipFile)
         else: 
@@ -368,6 +368,7 @@ def download_plugin(options):
             urlgrab(url,plugin_zip,progress_obj=text_progress_meter())
 
 
+
 @task
 def unpack_plugin():
     # copy to source 
@@ -377,16 +378,15 @@ def unpack_plugin():
     copytree(plugin_path,path.joinpath(source_path,"geoserver_plugins"))     
     # unzip in source
     with pushd(des_path): 
-        for plugin in config.options("extensions"): 
-            print "unpacking %s " % plugin
-            plugin_zip = "%s.zip" % plugin
-            os.mkdir(path(plugin))
-        move(plugin_zip,path(plugin))
-        with pushd(path(plugin)): 
-            unzip_file(plugin_zip)
-            os.remove(plugin_zip)
-
-
+	for plugin in config.options("extensions"): 
+		print "unpacking %s " % plugin
+                plugin_zip = "%s.zip" % plugin
+                os.mkdir(path(plugin))
+		move(plugin_zip,path(plugin))
+		with pushd(path(plugin)): 
+			unzip_file(plugin_zip)
+                        os.remove(plugin_zip)
+    # remove zips
 
 @task
 def dashboard():
