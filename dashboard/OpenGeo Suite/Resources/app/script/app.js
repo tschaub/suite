@@ -179,7 +179,7 @@ Ext.onReady(function() {
             //        iconCls: "x-icon-configuration",
             //        tabTip: "Configuration Information",
             //        html: new Ext.XTemplate(
-            //            app.loadSync("app/markup/config.html")
+            //            app.loadSync("app/markup/config/main.html")
             //        ).apply(app.getConfigSections()),
             //        border: false,
             //        id: "app-panels-config-main",
