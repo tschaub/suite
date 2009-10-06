@@ -90,7 +90,7 @@ def build_all():
     info("Building all of the OpenGeo Stack")
     call_task("unpack_java")
     call_task("unpack_geoserver")
-#    call_task("unpack_datadir")
+    call_task("unpack_datadir")
     call_task("unpack_gdal")
     call_task("download_source")
     call_task("download_plugin")
