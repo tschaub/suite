@@ -55,12 +55,13 @@ var app = {
                 var section = Ext.namespace(parts.slice(0, 3).join("."));
                 var key = parts.pop();
                 var path = section[key];
+                var title = section[key + "_title"];
                 if (path.match(/^(file|https?):/)) {
-                    this.openURL(path);
+                    this.openURL(path, title);
                 } else {
                     var port = section.port;
                     var url = "http://" + section.host + (port ? ":" + port : "") + section[key];
-                    this.openURL(url);
+                    this.openURL(url, title);
                 }
             },
             scope: this
@@ -78,9 +79,18 @@ var app = {
         ilinks.removeClass("app-ilink");
     },
     
-    openURL: function(url) {
+    openURL: function(url, title) {
+        url = encodeURI(url);
         if (window.Titanium) {
-            Titanium.Desktop.openURL(url);
+            if (url.match(/^https?:/)) {
+                Titanium.Desktop.openURL(url);                
+            } else {
+                var win = Titanium.UI.getCurrentWindow().createWindow({
+                    url: url,
+                    title: title
+                });
+                win.open();
+            }
         } else {
             window.open(url);
         }
