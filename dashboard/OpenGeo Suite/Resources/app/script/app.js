@@ -1,5 +1,13 @@
-var app = {
+Ext.namespace("og");
 
+og.util = {
+
+    /** api: method[loadSync]
+     *  :arg url: ``String``
+     *
+     *  Syncrhonously load a resource.  This is a workaround for Ext XHR
+     *  failures with Titanium.
+     */
     loadSync: function(url) {
         var client = new XMLHttpRequest();
         client.open("GET", url, false);
@@ -7,8 +15,14 @@ var app = {
         return client.responseText;
     },
     
-    loadConfig: function() {
-        var text = this.loadSync("config.ini");
+    /** api: method[loadConfig]
+     *  :arg url: ``String``
+     *  :returns: ``Object`` A config object.
+     *
+     *  Load and parse a config file given the URL.
+     */
+    loadConfig: function(url) {
+        var text = og.util.loadSync(url);
         var lines = text.split(/[\n\r]/);
         var config = {};
         var defaults = {};
@@ -44,15 +58,146 @@ var app = {
             }
         }
         return config;
+    }
+
+};
+
+og.Dashboard = Ext.extend(Ext.util.Observable, {
+    
+    /** api: property[statusInterval]
+     *  ``Number``
+     *  Time in miliseconds between service status checks.  Default is 5000.
+     */
+    statusInterval: 5000,
+    
+    /** api: property[debug]
+     *  ``Boolean``
+     *  Run in debug mode (useful when services are not running on same origin).
+     *  Default is false.
+     */
+    debug: false,
+    
+    /** api: property[status]
+     *  ``Number``
+     *  The HTTP status code for the service this depends on.  Assume 200 by
+     *  default.
+     */
+    status: 200,
+    
+    constructor: function(config) {
+        
+        // allow config via query string
+        var str = window.location.search.substring(1);
+        if (str) {
+            Ext.apply(config, Ext.urlDecode(str));
+        }
+        Ext.apply(this, config);
+        this.initialConfig = config;
+        
+        this.addEvents(            
+            /** api: event[statuschanged]
+             *  Fired when the service status changes.  Listeners will be called
+             *  with two arguments, the new status and old status codes.
+             */
+            "statuschanged"
+        );
+        
+        this.startStatusMonitor();
+
+        og.Dashboard.superclass.constructor.call(this);
+        
+        Ext.onReady(this.createViewport, this);
+        
+        this.on({
+            statuschanged: function(newStatus, oldStatus) {
+                if (newStatus >= 200 && newStatus < 300) {
+                    this.hideStatusWarning();
+                } else {
+                    this.showStatusWarning();
+                }
+            },
+            scope: this
+        });
+        
     },
     
+    startStatusMonitor: function() {
+        window.setInterval(
+            this.monitorStatus.createDelegate(this),
+            this.statusInterval
+        );
+        this.monitorStatus();
+    },
+    
+    createViewport: function() {
+
+        Ext.QuickTips.init();
+        
+        var dashPanelListeners = {
+            render: {
+                fn: this.afterPanelRender,
+                scope: this,
+                delay: 1
+            }
+        };
+        
+        this.viewport = new Ext.Viewport({
+            layout: "fit",
+            items: [{
+                xtype: "grouptabpanel",
+                tabWidth: 130,
+                activeGroup: 0,
+                items: [{
+                    defaults: {border: false, autoScroll: true},
+                    items: [{
+                        title: "Dashboard",
+                        tabTip: "OpenGeo Suite Dashboard",
+                        cls: "dash-panel",
+                        html: og.util.loadSync("app/markup/dash/main.html"),
+                        id: "app-panels-dash-main",
+                        listeners: dashPanelListeners
+                    }, {
+                        title: "GeoServer",
+                        tabTip: "Manage GeoServer",
+                        cls: "dash-panel",
+                        html: og.util.loadSync("app/markup/dash/geoserver.html"),
+                        id: "app-panels-dash-geoserver",
+                        listeners: dashPanelListeners
+                    }, {
+                        title: "GeoExplorer",
+                        tabTip: "Manage GeoExplorer",
+                        cls: "dash-panel",
+                        html: og.util.loadSync("app/markup/dash/geoexplorer.html"),
+                        id: "app-panels-dash-geoexplorer",
+                        listeners: dashPanelListeners
+                    }, {
+                        title: "Styler",
+                        tabTip: "Manage Styler",
+                        cls: "dash-panel",
+                        html: og.util.loadSync("app/markup/dash/styler.html"),
+                        id: "app-panels-dash-styler",
+                        listeners: dashPanelListeners
+                    }]
+                }]
+            }]
+        });
+        
+        // parse hash to activate relevant tab
+        this.openPanel(window.location.hash.substring(1));
+
+    },
+    
+    /** private: method[afterPanelRender]
+     *
+     *  Add behavior to links after a panel renders.
+     */
     afterPanelRender: function() {
         var xlinks = Ext.select(".app-xlink");
         xlinks.on({
             click: function(evt, el) {
                 var id = el.href.split("#").pop();
                 var parts = id.split("-");
-                var section = Ext.namespace(parts.slice(0, 3).join("."));
+                var section = eval(parts.slice(0, 2).join("."));
                 var key = parts.pop();
                 var path = section[key];
                 var title = section[key + "_title"];
@@ -103,95 +248,43 @@ var app = {
         }
     },
     
-    getConfigSections: function() {
-        var config = this.config;
-        var sections = [];
-        for (var id in config) {
-            var items = [];
-            for (var key in config[id]) {
-                if (key !== "title") {
-                    items.push({name: key, value: config[id][key]});
+    monitorStatus: function() {
+        if (this.debug === false) {
+            var port = this.geoserver.port || "80";
+            var url = "http://" + this.geoserver.host + ":" + port + this.geoserver.path;
+            var client = new XMLHttpRequest();
+            client.open("HEAD", url);
+            client.onreadystatechange = (function() {
+                if(client.readyState === 4) {
+                    var status = parseInt(client.status, 10);
+                    if (status !== this.status) {
+                        this.fireEvent("statuschanged", status, this.status);
+                    }
+                    this.status = status;
                 }
-            }
-            sections.push({
-                title: config[id].title,
-                items: items.sort(function(a, b) {return a.name > b.name;})
+            }).createDelegate(this);
+            client.send();
+        }
+    },
+    
+    showStatusWarning: function() {
+        if (!this.statusWarning) {
+            this.statusWarning = new Ext.Window({
+                title: "Warning",
+                iconCls: "dash-warning-header",
+                modal: true,
+                closable: false,
+                html: og.util.loadSync("app/markup/status-warning.html")
             });
         }
-        return sections;
-    }
+        this.statusWarning.show();        
+    },
     
-};
-
-app.config = app.loadConfig();
-
-Ext.onReady(function() {
-    Ext.QuickTips.init();
-    
-    var dashPanelListeners = {
-        render: {
-            fn: app.afterPanelRender,
-            scope: app,
-            delay: 1
+    hideStatusWarning: function() {
+        if (this.statusWarning) {
+            this.statusWarning.hide();
         }
-    };
-    
-    var viewport = new Ext.Viewport({
-        layout: "fit",
-        items: [{
-            xtype: "grouptabpanel",
-            tabWidth: 130,
-            activeGroup: 0,
-            items: [{
-                defaults: {border: false, autoScroll: true},
-                items: [{
-                    title: "Dashboard",
-                    tabTip: "OpenGeo Suite Dashboard",
-                    cls: "dash-panel",
-                    html: app.loadSync("app/markup/dash/main.html"),
-                    id: "app-panels-dash-main",
-                    listeners: dashPanelListeners
-                }, {
-                    title: "GeoServer",
-                    tabTip: "Manage GeoServer",
-                    cls: "dash-panel",
-                    html: app.loadSync("app/markup/dash/geoserver.html"),
-                    id: "app-panels-dash-geoserver",
-                    listeners: dashPanelListeners
-                }, {
-                    title: "GeoExplorer",
-                    tabTip: "Manage GeoExplorer",
-                    cls: "dash-panel",
-                    html: app.loadSync("app/markup/dash/geoexplorer.html"),
-                    id: "app-panels-dash-geoexplorer",
-                    listeners: dashPanelListeners
-                }, {
-                    title: "Styler",
-                    tabTip: "Manage Styler",
-                    cls: "dash-panel",
-                    html: app.loadSync("app/markup/dash/styler.html"),
-                    id: "app-panels-dash-styler",
-                    listeners: dashPanelListeners
-                }]
-            //}, {
-            //    items: [{
-            //        title: "Configuration",
-            //        iconCls: "x-icon-configuration",
-            //        tabTip: "Configuration Information",
-            //        html: new Ext.XTemplate(
-            //            app.loadSync("app/markup/config/main.html")
-            //        ).apply(app.getConfigSections()),
-            //        border: false,
-            //        id: "app-panels-config-main",
-            //        autoScroll: true,
-            //        cls: "dash-panel"                    
-            //    }]
-            }]
-        }]
-    });
-    
-    // parse hash to activate relevant tab
-    app.openPanel(window.location.hash.substring(1));
-    
+    }
+
 });
 

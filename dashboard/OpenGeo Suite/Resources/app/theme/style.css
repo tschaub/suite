@@ -72,3 +72,10 @@ a {
     display: inline;
     padding: 10px;
 }
+
+.dash-warning-header {
+    background: url(img/error.png)
+}
+.dash-warning {
+    padding: 10px;
+}
