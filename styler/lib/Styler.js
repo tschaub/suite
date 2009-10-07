@@ -375,6 +375,7 @@ var Styler = Ext.extend(Ext.util.Observable, {
                 }, {
                     isBaseLayer: false,
                     buffer: 0,
+                    tileSize: new OpenLayers.Size(512, 512),
                     displayOutsideMaxExtent: true,
                     visibility: false,
                     alpha: OpenLayers.Util.alphaHack(), 
