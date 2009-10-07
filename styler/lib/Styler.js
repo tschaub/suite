@@ -336,6 +336,10 @@ var Styler = Ext.extend(Ext.util.Observable, {
             }
         });
         this.map = this.mapPanel.map;
+        this.map.events.on({
+            zoomend: this.setLegendScale,
+            scope: this
+        });
     },
     
     /**
@@ -578,11 +582,7 @@ var Styler = Ext.extend(Ext.util.Observable, {
      *     before he legend is actually displayed, the sequence will be aborted.
      */
     showLegend: function(layer) {
-        var old = this.legendContainer.items.length && this.legendContainer.getComponent(0);
-        if(old) {
-            this.getAddButton().disable();
-            this.legendContainer.remove(old);
-        }
+        this.removeLegend();
         this.legendContainer.setTitle("Legend: " + layer.name);
         var mask = new Ext.LoadMask(this.legendContainer.getEl(), {
             msg: "Loading ...",
@@ -627,6 +627,7 @@ var Styler = Ext.extend(Ext.util.Observable, {
             border: false,
             style: {padding: "10px"},
             selectOnClick: true,
+            currentScaleDenominator: this.map.getScale(),
             listeners: {
                 "ruleselected": function(panel, rule) {
                     this.showRule(this.currentLayer, rule, panel.symbolType);
@@ -650,6 +651,29 @@ var Styler = Ext.extend(Ext.util.Observable, {
         this.getAddButton().enable();
     },
     
+    /**
+     * Method: removeLegend
+     * Undo what is done in addLegend.
+     */
+    removeLegend: function() {
+        var old = this.legendContainer.items.length && this.legendContainer.getComponent(0);
+        if(old) {
+            this.getAddButton().disable();
+            this.legendContainer.remove(old);
+        }
+    },
+    
+    /**
+     * Method: setLegendScale
+     * Called when map scale changes.
+     */
+    setLegendScale: function() {
+        var legend = this.legendContainer.items.length && this.legendContainer.getComponent(0);
+        if (legend && legend.setCurrentScaleDenominator) {
+            legend.setCurrentScaleDenominator(this.map.getScale());
+        }
+    },
+
     /**
      * Method: refreshLegend
      * Redraw the legend if shown.

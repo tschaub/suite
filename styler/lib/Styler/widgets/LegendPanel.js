@@ -11,6 +11,15 @@ Ext.namespace("Styler");
 Styler.LegendPanel = Ext.extend(Ext.Panel, {
     
     /**
+     * Property: currentScaleDenominator
+     * {Number} The current scale denominator of any map associated with this
+     *     legend.  Use <setCurrentScaleDenominator> to change this.  If not set
+     *     an entry for each rule will be rendered.  If set, only rules that
+     *     apply for the given scale will be rendered.
+     */
+    currentScaleDenominator: null,
+    
+    /**
      * Property: symbolType
      * {String} One of "Point", "Line", or "Polygon".  Default is "Point".
      */
@@ -159,6 +168,21 @@ Styler.LegendPanel = Ext.extend(Ext.Panel, {
         Styler.LegendPanel.superclass.initComponent.call(this);
         this.update();
     },
+    
+    /**
+     * Method: setCurrentScaleDenominator
+     * Set the current scale denominator.  This will hide entries for any
+     *     rules that don't apply at the current scale.
+     *
+     * Parameters:
+     * scale - {Number} The scale denominator.
+     */
+    setCurrentScaleDenominator: function(scale) {
+        if (scale !== this.currentScaleDenominator) {
+            this.currentScaleDenominator = scale;
+            this.update();
+        }
+    },
 
     /**
      * Method: getRuleEntry
@@ -243,6 +267,15 @@ Styler.LegendPanel = Ext.extend(Ext.Panel, {
      * Method: createRuleEntry
      */
     createRuleEntry: function(rule) {
+        var applies = true;
+        if (this.currentScaleDenominator != null) {
+            if (rule.minScaleDenominator) {
+                applies = applies && (this.currentScaleDenominator >= rule.minScaleDenominator);
+            }
+            if (rule.maxScaleDenominator) {
+                applies = applies && (this.currentScaleDenominator < rule.maxScaleDenominator);
+            }
+        }
         return {
             xtype: "panel",
             layout: "column",
@@ -251,6 +284,7 @@ Styler.LegendPanel = Ext.extend(Ext.Panel, {
             defaults: {
                 border: false
             },
+            hidden: !applies, 
             items: [
                 this.createRuleRenderer(rule),
                 this.createRuleTitle(rule)
