@@ -10,7 +10,7 @@
      
       <FeatureTypeStyle>
 
-<!--Forest Parks 280K-35K-->      
+<!--Forest Parks-->      
         <Rule>
           <Name>Forest Parks</Name>
           <Title>Forest Parks 280K-35K</Title>
@@ -21,7 +21,7 @@
             </ogc:PropertyIsEqualTo>
           </ogc:Filter>
           
-          <MinScaleDenominator> 70000 </MinScaleDenominator>
+          <MinScaleDenominator> 1000 </MinScaleDenominator>
           <MaxScaleDenominator> 280000 </MaxScaleDenominator>
 
           <PolygonSymbolizer>
@@ -32,10 +32,10 @@
           </PolygonSymbolizer>
         </Rule>
         
-<!--Parks 140K-35K-->      
+<!--Parks < 140K-->      
         <Rule>
           <Name>Parks</Name>
-          <Title>Parks 140K-35K</Title>
+          <Title>Parks &lt; 140K</Title>
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
               <ogc:PropertyName>parktype</ogc:PropertyName>
@@ -43,7 +43,7 @@
             </ogc:PropertyIsEqualTo>
           </ogc:Filter>
 
-          <MinScaleDenominator> 35000 </MinScaleDenominator>
+          <MinScaleDenominator> 1000 </MinScaleDenominator>
           <MaxScaleDenominator> 140000 </MaxScaleDenominator>   
           <PolygonSymbolizer>
             <Fill>
@@ -53,10 +53,10 @@
           </PolygonSymbolizer>
         </Rule>
 
-<!--Athletic and School 70K-35K-->                
+<!--Athletic and School < 70K-->                
         <Rule>
-          <Name>Parks</Name>
-          <Title>Parks 70K-25K</Title>
+          <Name>School/Athletic Fields</Name>
+          <Title>School/Athletic Fields &lt; 70K</Title>
           <ogc:Filter>
             <ogc:Or>
               <ogc:PropertyIsEqualTo>
@@ -70,7 +70,7 @@
             </ogc:Or>
           </ogc:Filter>
 
-          <MinScaleDenominator> 35000 </MinScaleDenominator>
+          <MinScaleDenominator> 1000 </MinScaleDenominator>
           <MaxScaleDenominator> 70000 </MaxScaleDenominator>   
           <PolygonSymbolizer>
             <Fill>
@@ -80,7 +80,49 @@
           </PolygonSymbolizer>
         </Rule>
         
+<!--Tennis < 70K-->                
+        <Rule>
+          <Name>Parks</Name>
+          <Title>Tennis Courts &lt; 75K</Title>
+          <ogc:Filter>
+            <ogc:PropertyIsEqualTo>
+              <ogc:PropertyName>parktype</ogc:PropertyName>
+              <ogc:Literal>Tennis Courts</ogc:Literal>          
+            </ogc:PropertyIsEqualTo>
+          </ogc:Filter>
+
+          <MinScaleDenominator> 1000 </MinScaleDenominator>
+          <MaxScaleDenominator> 70000 </MaxScaleDenominator>   
+          <PolygonSymbolizer>
+            <Fill>
+              <CssParameter name="fill">#64f8a9</CssParameter>
+              <CssParameter name="fill-opacity">.5</CssParameter>   
+            </Fill>
+          </PolygonSymbolizer>
+        </Rule>
         
+<!--Riparian < 70K-->                
+        <Rule>
+          <Name>Riparian</Name>
+          <Title>Riparian &lt; 70K</Title>
+          <ogc:Filter>
+            <ogc:PropertyIsEqualTo>
+              <ogc:PropertyName>parktype</ogc:PropertyName>
+              <ogc:Literal>Riparian</ogc:Literal>          
+            </ogc:PropertyIsEqualTo>
+          </ogc:Filter>
+
+          <MinScaleDenominator> 1000 </MinScaleDenominator>
+          <MaxScaleDenominator> 70000 </MaxScaleDenominator>   
+          <PolygonSymbolizer>
+            <Fill>
+              <CssParameter name="fill">#67ffae</CssParameter>
+              <CssParameter name="fill-opacity">.5</CssParameter>   
+            </Fill>
+          </PolygonSymbolizer>
+        </Rule>
+
+
       </FeatureTypeStyle>
 
 
