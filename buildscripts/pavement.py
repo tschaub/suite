@@ -8,6 +8,7 @@ from paver.easy import path, sh, info, pushd
 from paver.easy import task 
 from paver import svn 
 import os, zipfile 
+from os.path import join, isdir
 from  shutil import copytree,rmtree , copy, rmtree, move
 import urlgrabber.grabber
 from urlgrabber.grabber import urlgrab
@@ -98,7 +99,7 @@ def build_all():
     call_task("gx")
     call_task("styler")
     call_task("download_docs")
-    call_task("docs")
+#    call_task("docs")
 
 
 @task 
@@ -129,14 +130,8 @@ def download_bin(options):
         for software in config.options(section):            
             info("Downloading %s" % software)
             url = config.get(section,software)
-	    '''    
-	    Why are we doing this? 
-	    it would be a lot easier if we 
-            '''
 	    if software == 'java': 
                 urlgrab(url,'jre.zip',progress_obj=text_progress_meter())
-            if software == 'datadir': 
-                urlgrab(url,'data_dir.zip',progress_obj=text_progress_meter())
             if software == 'geoserver':
                 urlgrab(url,'geoserver.zip',progress_obj=text_progress_meter())
             if software == 'gdal':
@@ -191,13 +186,10 @@ def unpack_datadir():
     '''
     Unzips data_dir.zip into data_dir/
     '''
-    vulcan_datadir = path.joinpath(download_path,"data_dir.zip")
+    base_path =  path(os.getcwd().strip("buildscripts"))    
+    vulcan_datadir = path.joinpath(base_path,"data_dir")
     info("Moving data_dir into %s" % source_path)
-    copy(path.joinpath(download_path,'data_dir.zip'),source_path)
-    with pushd(source_path):
-	unzip_file("data_dir.zip")
-	os.rename("data","data_dir")
-        os.remove("data_dir.zip")
+    copytree(vulcan_datadir,path.joinpath(source_path,"data_dir"))
 
 
 
@@ -229,7 +221,8 @@ def download_source():
         for software in config.options(section): 
             info("Checking out source of %s " % software)
             url = config.get(section,software)
-            svn.export(url,software)
+	    sh("svn -q export %s %s" % (url,software))
+
 
 @task 
 def gx(): 
@@ -282,7 +275,7 @@ def download_docs():
             for doc in config.options(section):  
                 info("Download Docs for %s" % doc) 
                 url = config.get(section,doc) 
-                svn.export(url,doc)
+                sh("svn -q export %s %s" % (url,doc))
 
 
 
@@ -295,18 +288,17 @@ def docs():
     ''' 
     section = "docs" 
     def build():
-        # fix 
-        with pushd(download_path):
-            with pushd(docs_path):
-                svn.export('http://svn.codehaus.org/geoserver/trunk/doc/en/theme/','theme')
-                for doc in config.options(section): 
-                    info("Build docs for %s" % doc) 
-                    app_doc = path(doc)
-                    with pushd(app_doc):
-                        if doc == 'geoexplorer':                             
-                            sh("sphinx-build -bhtml . html")
-                        else:
-                            sh("sphinx-build -bhtml source html")
+        with pushd(path.joinpath(download_path,docs_path)):
+        	for doc in config.options(section): 
+                	info("Build docs for %s" % doc) 
+                	app_doc = path(doc)
+                    	with pushd(app_doc):
+                        	if doc == 'geoexplorer':                             
+                            		sh("sphinx-build -bhtml . html")
+				if doc == 'installerdocs':
+					print "installer docs" 
+				else:
+                            		sh("sphinx-build -bhtml source html")
 
     def move(): 
         for doc in config.options(section): 
@@ -319,15 +311,18 @@ def docs():
 
 
 def unzip_file(file):     
-    zip = zipfile.ZipFile(file)
-    for zipFile in zip.namelist(): 
-        info(zipFile)
-        if zipFile.endswith('/'): 
-            os.mkdir(zipFile)
-        else: 
-            outfile = open(zipFile, 'wb')
-            outfile.write(zip.read(zipFile))
-            outfile.close()
+	zip = zipfile.ZipFile(file)
+        for zipFile in zip.namelist():
+                if zipFile.endswith('/'):
+                        os.mkdir(zipFile)
+                else:
+                        _dir,file =  os.path.split(zipFile)
+                        if _dir and not isdir(_dir):
+                                os.makedirs(_dir)
+                        outfile = open(zipFile, 'wb')
+                        outfile.write(zip.read(zipFile))
+                        outfile.close()
+
 
 
 @task 
@@ -386,7 +381,6 @@ def unpack_plugin():
 		with pushd(path(plugin)): 
 			unzip_file(plugin_zip)
                         os.remove(plugin_zip)
-    # remove zips
 
 @task
 def dashboard():
