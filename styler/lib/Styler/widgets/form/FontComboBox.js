@@ -30,11 +30,16 @@ Styler.form.FontComboBox = Ext.extend(Ext.form.ComboBox, {
     editable: false,
   
     initComponent: function() {
+        var fonts = this.fonts || Styler.form.FontComboBox.prototype.fonts;
+        var defaultFont = this.defaultFont;
+        if (fonts.indexOf(this.defaultFont) === -1) {
+            defaultFont = fonts[0];
+        }
         var defConfig = {
             displayField: "text",
             valueField: "text",
-            store: this.fonts || Styler.form.FontComboBox.prototype.fonts,
-            value: this.defaultFont,
+            store: fonts,
+            value: defaultFont,
             tpl: new Ext.XTemplate(
                 '<tpl for=".">' +
                     '<div class="x-combo-list-item">' +
