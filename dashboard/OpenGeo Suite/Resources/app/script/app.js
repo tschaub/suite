@@ -142,7 +142,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         };
         
         this.viewport = new Ext.Viewport({
-            layout: "fit",
+          layout: "fit",
             items: [{
                 xtype: "grouptabpanel",
                 tabWidth: 130,
@@ -150,9 +150,10 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 items: [{
                     defaults: {border: false, autoScroll: true},
                     items: [{
-                        title: "Dashboard",
+                        title: "Home",
                         tabTip: "OpenGeo Suite Dashboard",
                         cls: "dash-panel",
+                        bodyStyle: '',
                         html: og.util.loadSync("app/markup/dash/main.html"),
                         id: "app-panels-dash-main",
                         listeners: dashPanelListeners

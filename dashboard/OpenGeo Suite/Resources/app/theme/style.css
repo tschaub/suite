@@ -1,12 +1,29 @@
 body {
-    font-family: arial, sans-serif;
-    font-size: 14px;
+    font-family:Helvetica,Arial,Franklin Gothic;
+    font-size:12px;
+    color: #333333;
 }
 
+p {
+  color:#333333;
+  line-height:1.5;
+  margin:10px;
+  text-align: justify;
+}
 a {
     color: #3366CC;
     text-decoration: none;
 }
+
+a:hover {
+  
+  color:#6C9400;
+}
+
+img {
+  border:0 none;
+  padding:0 0 10px;
+} 
 
 .app-strong {
     font-weight: bold;
@@ -14,25 +31,83 @@ a {
 }
 
 .dash-panel {
-    padding: 20px;
+    padding: 5px 20px;
 }
 .dash-panel-body {
     width: 100%;
 }
 
 .dash-panel-body h1 {
-    font-size: 18;
+    color:#0A2742;
+    font-family:Optima,"Century Gothic","Franklin Gothic";
+    font-size:24px;
+    font-weight:normal;
 }
 .dash-panel-body h2 {
-    font-size: 16px;
+  color:#0A2742;
+  font-family:Optima,"Century Gothic","Franklin Gothic";
+  font-size:16px;
+  font-weight:normal;    
 }
 .dash-panel-body h3 {
-    font-size: 14px;
+    color:#0A2742;
+    font-family:Optima,"Century Gothic","Franklin Gothic";
+    font-size:16px;
+    font-weight:normal;    
+    padding: 10px 0 0 0;
 }
+  
 .dash-panel-body h4 {
-    font-size: 14px;
+    border-bottom:1px solid #486300;
+    color:#0A2742;
+    font-family:Optima,"Century Gothic","Franklin Gothic";
+    font-size:24px;
+    font-weight:normal;
+    margin:0 10px 0 10px;
+  }
+
+.dash-panel-body .launch {
+      background:#F0F5EF none repeat scroll 0 0;
+      border:1px solid black;
+      color:#0A2742;
+      float:right;
+      font-family:Optima,"Century Gothic","Franklin Gothic";
+      font-size:12px;
+      font-weight:bold;
+      margin:10px 10px 0 15px;
+      padding:5px;
+      position:absolute;
+      right:150px;
+      top:260px;
+  }
+
+* html .dash-panel-body .launch {
+      margin-right: 15px;
+  }
+
+  .dash-panel-body .iconlaunch {
+        color:#0A2742;
+        float:right;
+        font-family:Optima,"Century Gothic","Franklin Gothic";
+        font-size:12px;
+        font-weight:bold;
+        margin:10px 10px 0 15px;
+        padding:5px;
+    }
+
+  * html .dash-panel-body .iconlaunch {
+        margin-right: 15px;
+    }
+    
+
+.dash-panel-body .launch a {
+  color: #333333;
 }
 
+.dash-panel-body .launch a:hover {
+  color: #6C9400;;
+}
+    
 .dash-panel-content {
     margin: 0 150px 0 0;
 }
@@ -44,33 +119,40 @@ a {
 .dash-panel-content-item.geoserver {
     padding-left: 65px;
     background: url(img/geoserver-sm.png) no-repeat;
+    margin-top: 15px;
 }
 .dash-panel-content-item.geoexplorer {
     padding-left: 65px;
     background: url(img/geoext-sm.png) no-repeat;
+    margin-top: 15px;
 }
 .dash-panel-content-item.styler {
     padding-left: 65px;
     background: url(img/geoext-sm.png) no-repeat;
+    margin-top: 15px;
 }
 
 .dash-panel-tasks {
     position: absolute;
     right: 0px;
     top: 0px;
-    width: 150px;
+    width: 110px;
 }
 .dash-panel-tasks ul {
-    list-style: disc;
-    padding: 10px 0;
+    line-height:1.4;
+    list-style-image:none;
+    list-style-position:outside;
+    list-style-type:disc;
+    padding:0 0 0 10px;
 }
+
 .dash-panel-tasks ul li {
     margin-left: 10px;
 }
 
-.quick-links li {
+ .quick-links li {
     display: inline;
-    padding: 10px;
+    padding:10px 10px 10px 0;
 }
 
 .dash-warning-header {
@@ -79,3 +161,16 @@ a {
 .dash-warning {
     padding: 10px;
 }
+
+/* override left hand menu*/
+.x-tab-panel-left .x-tab-panel-header ul.x-grouptabs-strip a.x-grouptabs-text{
+    padding-left: 18px;
+    color:#0A2742;
+    font-family:Optima,"Century Gothic","Franklin Gothic";
+}
+
+/*override background color--still working it out
+.x-grouptabs-panel {
+background:#110E0C url(img/og-intro4-openlayers.png) no-repeat scroll 0 0; 
+border:15px solid #A8BCCF;}*/
+
