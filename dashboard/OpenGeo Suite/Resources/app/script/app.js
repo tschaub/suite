@@ -142,7 +142,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         };
         
         this.viewport = new Ext.Viewport({
-          layout: "fit",
+            layout: "fit",
             items: [{
                 xtype: "grouptabpanel",
                 tabWidth: 130,

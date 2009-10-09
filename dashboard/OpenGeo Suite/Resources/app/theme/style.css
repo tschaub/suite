@@ -1,5 +1,5 @@
 body {
-    font-family:Helvetica,Arial,Franklin Gothic;
+    font-family:Helvetica, Arial, sans-serif;
     font-size:12px;
     color: #333333;
 }
@@ -16,14 +16,8 @@ a {
 }
 
 a:hover {
-  
   color:#6C9400;
 }
-
-img {
-  border:0 none;
-  padding:0 0 10px;
-} 
 
 .app-strong {
     font-weight: bold;
@@ -39,19 +33,19 @@ img {
 
 .dash-panel-body h1 {
     color:#0A2742;
-    font-family:Optima,"Century Gothic","Franklin Gothic";
+    font-family:Optima,Georgia, serif;
     font-size:24px;
     font-weight:normal;
 }
 .dash-panel-body h2 {
   color:#0A2742;
-  font-family:Optima,"Century Gothic","Franklin Gothic";
+  font-family:Optima, Georgia, serif;
   font-size:16px;
   font-weight:normal;    
 }
 .dash-panel-body h3 {
     color:#0A2742;
-    font-family:Optima,"Century Gothic","Franklin Gothic";
+    font-family:Optima,Georgia, serif;
     font-size:16px;
     font-weight:normal;    
     padding: 10px 0 0 0;
@@ -60,52 +54,43 @@ img {
 .dash-panel-body h4 {
     border-bottom:1px solid #486300;
     color:#0A2742;
-    font-family:Optima,"Century Gothic","Franklin Gothic";
+    font-family:Optima,Georgia, serif;
     font-size:24px;
     font-weight:normal;
     margin:0 10px 0 10px;
   }
 
 .dash-panel-body .launch {
-      background:#F0F5EF none repeat scroll 0 0;
-      border:1px solid black;
-      color:#0A2742;
-      float:right;
-      font-family:Optima,"Century Gothic","Franklin Gothic";
-      font-size:12px;
-      font-weight:bold;
-      margin:10px 10px 0 15px;
-      padding:5px;
-      position:absolute;
-      right:150px;
-      top:260px;
+    background:#F0F5EF;
+    border:1px solid black;
+    color:#0A2742;
+    display:block;
+    font-family:Optima,Georgia,serif;
+    font-size:12px;
+    font-weight:bold;
+    margin:10px 0;
+    padding:5px;
+    text-align:center;
+    text-transform: uppercase;
+    width:auto;
   }
 
-* html .dash-panel-body .launch {
-      margin-right: 15px;
-  }
-
-  .dash-panel-body .iconlaunch {
-        color:#0A2742;
-        float:right;
-        font-family:Optima,"Century Gothic","Franklin Gothic";
-        font-size:12px;
-        font-weight:bold;
-        margin:10px 10px 0 15px;
-        padding:5px;
+.dash-panel-body .iconlaunch {
+        margin: 10px 0;
+        text-align: center;
+        width: 100%;
     }
 
-  * html .dash-panel-body .iconlaunch {
-        margin-right: 15px;
-    }
-    
+.dash-panel-body .iconlaunch a {
+  line-height: normal;
+}
 
 .dash-panel-body .launch a {
   color: #333333;
 }
 
 .dash-panel-body .launch a:hover {
-  color: #6C9400;;
+  color: #6C9400;
 }
     
 .dash-panel-content {
@@ -138,6 +123,7 @@ img {
     top: 0px;
     width: 110px;
 }
+
 .dash-panel-tasks ul {
     line-height:1.4;
     list-style-image:none;
@@ -166,11 +152,8 @@ img {
 .x-tab-panel-left .x-tab-panel-header ul.x-grouptabs-strip a.x-grouptabs-text{
     padding-left: 18px;
     color:#0A2742;
-    font-family:Optima,"Century Gothic","Franklin Gothic";
+    font-family:Optima,Georgia, serif;
 }
 
-/*override background color--still working it out
-.x-grouptabs-panel {
-background:#110E0C url(img/og-intro4-openlayers.png) no-repeat scroll 0 0; 
-border:15px solid #A8BCCF;}*/
+
 
