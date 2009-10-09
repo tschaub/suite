@@ -1,7 +1,7 @@
 Installing the OpenGeo Suite
 ============================
 
-This document will discuss how to install the OpenGeo Suite.  More detailed operating instructions are contained inside the archive.
+This document will discuss how to install the OpenGeo Suite.  More detailed operating instructions are available once the software is installed.
 
 
 Prerequisites
@@ -9,11 +9,12 @@ Prerequisites
 
 The OpenGeo Suite has the following system requirements:
 
-* **Operating System**: Windows XP, Vista, Server 2000, Server 2003, Server 2008 (all 32 bit)
+* **Operating System**: Windows XP, Vista, 7, Server 2000, Server 2003, Server 2008 (all 32 bit)
 * **Memory**: 512MB minimum (1GB recommended)
-* **Disk space**: 250MB minimum (plus extra space for your data)
+* **Disk space**: 450MB minimum (plus optional extra space for loaded data)
 * **Browser**: Any modern web browser is supported (Internet Explorer 7+, Firefox 2+, Chrome 1+)
 * **Permissions**: Administrative rights
+
 
 
 Installation
@@ -26,54 +27,63 @@ Installation
    .. figure:: img/welcome.png
       :align: center
 
-      *The Welcome screen*
+      *Welcome screen*
 
 #. Read the **License Agreement** then click :guilabel:`I Agree`.
 
    .. figure:: img/license.png
       :align: center
 
-      *The License Agreement*
+      *License Agreement*
 
-#. Type in the **Destination folder** where you would like to install the OpenGeo Suite, and click :guilabel:`Next`.  (This can usually be left as the default.)
+#. Select the **Destination folder** where you would like to install the OpenGeo Suite, and click :guilabel:`Next`.
 
    .. figure:: img/directory.png
       :align: center
 
-      *The destination for the installation*
+      *Destination folder for the installation*
 
-#. Select the name and location of the **Start Menu folder** to be created.  (This can usually be left as the default.)
+#. Select the name and location of the **Start Menu folder** to be created, and click :guilabel:`Next`.
 
    .. figure:: img/startmenu.png
       :align: center
 
-      *The Start Menu folder to be created*
+      *Start Menu folder to be created*
 
-#. You can install the OpenGeo Suite in one of two ways.
+#. Select the components you wish to install and click :guilabel:`Next`.
+
+   .. figure:: img/components.png
+      :align: center
+
+      *Component selection*
+
+#. You can install the OpenGeo Suite in one of two ways.:
   
-   * :guilabel:`Run manually` - GeoServer is run like a standard application.  This is useful for evaluating the software. 
-   * :guilabel:`Install as a service` - This integrates GeoServer with Windows Services.  This is more secure, and is the preferred method of running in a production environment.
+   * :guilabel:`Run manually` - The OpenGeo Suite is run like a standard application.  This is useful for evaluating the software.
+   * :guilabel:`Install as a service` - The OpenGeo Suite is integrated with Windows Services.  This is more secure, and is the preferred method of running in a production environment.  This will also launch the OpenGeo Suite automatically with Windows.
 
-   If you are not sure which selection to choose, select :guilabel:`Run manually`.
+   If you are not sure which option to choose, select :guilabel:`Run manually`.
 
    .. figure:: img/installtype.png
       :align: center
 
-      *Select Manual or Service installation*
+      *Select the type of installation*
 
-#. Review all the information and click :guilabel:`Back` to make any changes.  Click :guilabel:`Install` to perform the installation.
+#. Enter a username and password for configuring GeoServer, and also the port that the OpenGeo Suite will respond on.  When finished, click :guilabel:`Next`.
+
+   .. note:: Please make sure that no other applications are running on this port.
+
+   .. figure:: img/creds.png
+      :align: center
+
+      *Enter credentials and port information*
+
+#. Verify all the information and click :guilabel:`Back` to make any changes.  Click :guilabel:`Install` to perform the installation.
 
    .. figure:: img/ready.png
       :align: center
 
       *Verify all settings before continuing*
-
-#. The OpenGeo Suite requires a **Java Runtime Environment (JRE)**.  If the installer is unable to detect a JRE on your system, it will install its own prior to the installation.
-
-   .. figure:: img/jre.png
-      :align: center
-
-      *The installer will install a JRE on your system if necessary*
 
 #. Please wait while the installation proceeds.
 
@@ -82,29 +92,51 @@ Installation
 
       *Installation*
 
-#. After installation, click :guilabel:`Finish` to run the Data Importer to load shapefiles into GeoServer.  If you would like to run the Data Importer at a later time, uncheck the box and then click :guilabel:`Finish`.
+#. After installation, click :guilabel:`Finish` to start the OpenGeo Suite and launch the Dashboard.  If you would like to start the OpenGeo Suite at a later time, uncheck the box and then click :guilabel:`Finish`.
 
    .. figure:: img/finish.png
       :align: center
 
       *The OpenGeo Suite successfully installed*
 
-
-   .. note:: With the exception of the initial running of the Data Importer after installation, GeoServer will always need to be started and stopped manually.  To start or stop GeoServer, please use the shortcuts in the :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoServer` folder.
-
 For more information, please see the document titled **Getting Started**, which is available in the Start Menu at :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Getting Started`.
+
+.. note:: The OpenGeo Suite must be running in order to view all documentation.
 
 
 Upgrading
 ---------
 
-In order to upgrade to a newer version of the OpenGeo Suite, it is first necessary to uninstall the current version.  A new installer will not install on top of the current installation, and having two parallel installs on the same system is not supported.
+It is possible to run two different versions of the OpenGeo Suite (ex: 1.0 and 1.1) simultaneously on the same machine.  This is useful for evaluation puposes, and to ensure that upgrading will not cause unwanted functionality.
+
+If you wish to upgrade to a newer version, you should uninstall the current version (making sure to back up your data directory), and then install the newer version, overwriting the new data directory with the old.
+
+Example upgrade (from 1.0 to 1.1)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#. Stop OpenGeo Suite 1.0.
+
+#. Back up the current data directory.
+
+   .. note:: On Windows XP this is by default stored in :file:`C:\\Documents and Settings\\All Users\\Application Data\\OpenGeo\\OpenGeo Suite 1.0\\data_dir`).
+
+#. Uninstall OpenGeo Suite 1.0.
+
+#. Install OpenGeo Suite 1.1.
+
+#. Stop OpenGeo Suite 1.1 (if it is running).
+
+#. Overwrite data directory with saved data directory.
+
+   .. note:: On Windows XP this is by default stored in :file:`C:\\Documents and Settings\\All Users\\Application Data\\OpenGeo\\OpenGeo Suite 1.1\\data_dir`).
+
+#. Restart OpenGeo Suite 1.1.
 
 
 Uninstallation
 --------------
 
-#. Navigate to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Uninstall`.
+#. Navigate to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Uninstall`
 
    .. note:: Uninstallation is also available via the standard Windows program removal workflow (i.e. **Add/Remove Programs** for Windows XP, **Installed Programs** for Windows Vista, etc.)
 
@@ -115,14 +147,14 @@ Uninstallation
 
       *Ready to uninstall the OpenGeo Suite*
 
-#. The uninstaller will ask if you wish to keep your existing GeoServer data directory.  If you are upgrading, select :guilabel:`Yes`.  If you wish to completely remove the OpenGeo Suite, select :guilabel:`No`.
+#. The uninstaller warn you to back up your data directory if you are upgrading.  When ready to continue, click :guilabel:`OK`.
 
    .. warning:: Deleting the data directory is *not* undoable!
 
-   .. figure:: img/keepdatadir.png
+   .. figure:: img/datadir.png
       :align: center
 
-      *Keep or delete your existing GeoServer data directory*
+      *Backup your existing data directory if desired*
 
 #. When done, click :guilabel:`Close`.
 
@@ -137,7 +169,7 @@ Credits
 
 All text content created by OpenGeo and licensed under the `Creative Commons Share-Alike license <http://creativecommons.org/licenses/by-sa/3.0>`_.
 
-All code is copyrighted by their respective owners.
+All code is open source.
 
 For More Information
 --------------------
