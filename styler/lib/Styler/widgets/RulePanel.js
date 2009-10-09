@@ -16,6 +16,13 @@ Ext.namespace("Styler");
 Styler.RulePanel = Ext.extend(Ext.TabPanel, {
     
     /**
+     * APIProperty: fonts
+     * {Array(String)} List of fonts for the font combo.  If not set, defaults
+     *     to the list provided by the <Styler.FontComboBox>.
+     */
+    fonts: undefined,
+
+    /**
      * Property: symbolType
      * {String} One of "Point", "Line", or "Polygon".  Default is "Point".
      */
@@ -128,6 +135,7 @@ Styler.RulePanel = Ext.extend(Ext.TabPanel, {
         this.textSymbolizer = new Styler.TextSymbolizer({
             symbolizer: this.rule.symbolizer["Text"],
             attributes: this.attributes,
+            fonts: this.fonts,
             listeners: {
                 change: function(symbolizer) {
                     this.fireEvent("change", this, this.rule);

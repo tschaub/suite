@@ -30,6 +30,13 @@ var Styler = Ext.extend(Ext.util.Observable, {
     getFeatureControl: null,
     saving: null,
     windowPositions: {featureDlg: {}, ruleDlg: {}},
+
+    /**
+     * APIProperty: fonts
+     * {Array(String)} List of fonts for the font combo.  If not set, defaults
+     *     to the list provided by the <Styler.FontComboBox>.
+     */
+    fonts: undefined,
     
     constructor: function(config) {
         config = config || {};
@@ -841,6 +848,7 @@ var Styler = Ext.extend(Ext.util.Observable, {
                 autoHeight: false,
                 autoScroll: true,
                 rule: newRule,
+                fonts: this.fonts,
                 symbolType: Styler.Util.getSymbolTypeFromRule(rule),
                 nestedFilters: false,
                 scaleLevels: this.map.baseLayer.numZoomLevels,

@@ -33,7 +33,7 @@ Styler.form.FontComboBox = Ext.extend(Ext.form.ComboBox, {
         var defConfig = {
             displayField: "text",
             valueField: "text",
-            store: this.fonts,
+            store: this.fonts || Styler.form.FontComboBox.prototype.fonts,
             value: this.defaultFont,
             tpl: new Ext.XTemplate(
                 '<tpl for=".">' +

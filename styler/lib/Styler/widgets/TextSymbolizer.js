@@ -9,6 +9,13 @@ Ext.namespace("Styler");
 Styler.TextSymbolizer = Ext.extend(Ext.Panel, {
     
     /**
+     * APIProperty: fonts
+     * {Array(String)} List of fonts for the font combo.  If not set, defaults
+     *     to the list provided by the <Styler.FontComboBox>.
+     */
+    fonts: undefined,
+    
+    /**
      * Property: symbolizer
      * {Object} A symbolizer object that will be used to fill in form values.
      *     This object will be modified when values change.  Clone first if
@@ -78,6 +85,7 @@ Styler.TextSymbolizer = Ext.extend(Ext.Panel, {
             xtype: "toolbar",
             items: [{
                 xtype: "gx_fontcombo",
+                fonts: this.fonts || undefined,
                 width: 110,
                 value: this.symbolizer.fontFamily,
                 listeners: {
