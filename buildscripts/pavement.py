@@ -99,6 +99,7 @@ def build_all():
     call_task("gx")
     call_task("styler")
     call_task("download_docs")
+    call_task("dashboard")
 #    call_task("docs")
 
 

@@ -3,8 +3,8 @@
 ; Define your application name
 !define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
-!define VERSION "0.9"
-!define LONGVERSION "0.9.0.0" ; must be a.b.c.d
+!define VERSION "1.0"
+!define LONGVERSION "1.0.0.0" ; must be a.b.c.d
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
 
 
@@ -12,7 +12,7 @@
 Name "${APPNAMEANDVERSION}"
 InstallDir "$PROGRAMFILES\${COMPANYNAME}\${APPNAMEANDVERSION}"
 InstallDirRegKey HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" ""
-OutFile "OpenGeoSuite-0.9.exe"
+OutFile "OpenGeoSuite-1.0beta.exe"
 
 ;Compression options
 CRCCheck on
@@ -86,8 +86,8 @@ VIAddVersionKey Comments "http://opengeo.org"
 ; Page headers for pages
 LangString TEXT_TYPE_TITLE ${LANG_ENGLISH} "Type of Installation"
 LangString TEXT_TYPE_SUBTITLE ${LANG_ENGLISH} "Select the type of installation."
-LangString TEXT_CREDS_TITLE ${LANG_ENGLISH} "GeoServer Administration"
-LangString TEXT_CREDS_SUBTITLE ${LANG_ENGLISH} "Set administrator credentials and port."
+LangString TEXT_CREDS_TITLE ${LANG_ENGLISH} "Administration"
+LangString TEXT_CREDS_SUBTITLE ${LANG_ENGLISH} "Set configuration credentials and port."
 LangString TEXT_READY_TITLE ${LANG_ENGLISH} "Ready to Install"
 LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be installed."
 
@@ -114,7 +114,7 @@ LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be ins
 
 ; What to do when done
 !define MUI_FINISHPAGE_RUN
-!define MUI_FINISHPAGE_RUN_TEXT "Start GeoServer and launch the Dashboard"
+!define MUI_FINISHPAGE_RUN_TEXT "Start the OpenGeo Suite and launch the Dashboard"
 !define MUI_FINISHPAGE_RUN_FUNCTION "RunStuff"
 
 ; Do things after install
@@ -136,7 +136,7 @@ Function RunStuff
   ClearErrors
   ExecShell "open" "$INSTDIR\Dashboard\OpenGeo Suite.exe" SW_SHOWMAXIMIZED
   IfErrors 0 +2
-    MessageBox MB_ICONSTOP "Unable to start GeoServer or open Dashboard.  Please use the Start Menu to manually start the application."
+    MessageBox MB_ICONSTOP "Unable to start the OpenGeo Suite or launch the Dashboard.  Please use the Start Menu to manually start the applications."
   ClearErrors
 
 FunctionEnd
@@ -299,7 +299,7 @@ Function InstallType
   !insertmacro MUI_HEADER_TEXT "$(TEXT_TYPE_TITLE)" "$(TEXT_TYPE_SUBTITLE)"
 
   ;Syntax: ${NSD_*} x y width height text
-  ${NSD_CreateLabel} 0 0 100% 24u 'Select the type of installation for the OpenGeo Suite.  If you are unsure of which option to select, choose the "Run manually" option.'
+  ${NSD_CreateLabel} 0 0 100% 24u 'Select the type of installation for the OpenGeo Suite.  If you are unsure of which option to choose, select the "Run manually" option.'
   ${NSD_CreateRadioButton} 10 28u 50% 12u "Run manually"
   Pop $Manual
 
@@ -363,7 +363,7 @@ Function Creds
   Pop $GSPassWarn
   ${NSD_OnChange} $GSPassTemp PasswordCheck
 
-  ${NSD_CreateLabel} 0 80u 100% 20u "Enter the port that GeoServer will respond on.  Illegal values entered here will be replaced by the default value."
+  ${NSD_CreateLabel} 0 80u 100% 20u "Enter the port that the OpenGeo Suite will respond on.  Illegal values entered here will be replaced by the default value."
   ${NSD_CreateLabel} 20u 102u 40u 14u "Port" 
   ${NSD_CreateNumber} 70u 100u 50u 14u $Port
   Pop $PortTemp
@@ -455,7 +455,7 @@ Function Ready
   ${NSD_CreateLabel} 40u 34u 70% 12u "$INSTDIR"
 
   ; Install type
-  ${NSD_CreateLabel} 20u 47u 75% 12u "GeoServer installation:"
+  ${NSD_CreateLabel} 20u 47u 75% 12u "OpenGeo Suite installation:"
   StrCmp $IsManual 1 Manual Service
   Manual:
     ${NSD_CreateLabel} 40u 56u 70% 12u "Run manually"
@@ -469,7 +469,7 @@ Function Ready
     ${NSD_CreateLabel} 20u 69u 75% 12u "GeoServer username and password:"
     ${NSD_CreateLabel} 40u 78u 70% 12u "$GSUser : $GSPass"
 
-    ${NSD_CreateLabel} 20u 91u 75% 12u "GeoServer web server port:"
+    ${NSD_CreateLabel} 20u 91u 75% 12u "OpenGeo Suite web server port:"
     ${NSD_CreateLabel} 40u 100u 70% 12u "$Port"
 
   nsDialogs::Show
@@ -754,7 +754,7 @@ Section "GeoExplorer Documentation" Section2b
 SectionEnd
 
 
-Section "Styler" Section3
+Section "Styler" Section3a
 
   SectionIn RO ; mandatory
 
@@ -777,6 +777,14 @@ Section "Styler" Section3
 
 SectionEnd
 
+Section "Styler Documentation" Section3b
+
+  ; Set Section properties
+  SetOverwrite on
+
+  !insertmacro DisplayImage "slide_6_geoext.bmp"
+
+SectionEnd
 
 Section "-Getting Started" SectionH1 ;dash means hidden
 
@@ -849,9 +857,10 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${Section1c4} "Adds support for Oracle databases."
   !insertmacro MUI_DESCRIPTION_TEXT ${Section2a} "Installs GeoExplorer, a graphical map editor."
   !insertmacro MUI_DESCRIPTION_TEXT ${Section2b} "Includes GeoExplorer documentation."
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section3} "Installs Styler, a graphical map style editor."
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section3a} "Installs Styler, a graphical map style editor."
+  !insertmacro MUI_DESCRIPTION_TEXT ${Section3b} "Includes Styler documentation."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionH1} "Quickstart guide on the OpenGeo Suite."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionH2} "Inntalls the OpenGeo Suite Dashboard for each access to all components."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionH2} "Inntalls the OpenGeo Suite Dashboard for access to all components."
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
@@ -924,6 +933,16 @@ Section Uninstall
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders" "Common AppData"
   StrCpy $CommonAppData $R0
 
+  StrCpy $DataDirPath "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\data_dir"
+
+  MessageBox MB_OKCANCEL                    "Your data directory will be deleted!$\r$\n$\r$\n\
+                                             Your data directory is located at:\
+                                             $\r$\n     $DataDirPath$\r$\n$\r$\n\
+                                             If you wish to save this directory for future use, \
+                                             please take a moment to back it up now.$\r$\n\
+                                             Click OK when ready to proceed." IDOK 0 IDCANCEL Die
+
+
 ;  ; Check if user wants to remove the data dir
 ;  MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 "Do you want to remove your GeoServer data directory?  (If you have anything you want to keep, click No.)" IDYES DelDataDir IDNO NoDelDataDir
 
@@ -986,6 +1005,9 @@ Section Uninstall
   GiveUp:
     MessageBox MB_ICONINFORMATION "WARNING: Some files and folders could not be removed from:$\r$\n   $INSTDIR\$\r$\nYou will have to manually remove these files and folders."
     Goto Succeed
+
+  Die:
+   Quit
 
   Fail:
     MessageBox MB_OK "Could not uninstall cleanly.  This may be due to a corrupted registry entry.  If you feel you have reached this message in error, please contact OpenGeo at inquiry@opengeo.org."
