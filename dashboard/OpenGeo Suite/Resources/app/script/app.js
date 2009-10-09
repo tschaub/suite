@@ -178,6 +178,23 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         html: og.util.loadSync("app/markup/dash/styler.html"),
                         id: "app-panels-dash-styler",
                         listeners: dashPanelListeners
+                    }, {
+                        title: "About OpenGeo (1)",
+                        tabTip: "Learn more about OpenGeo",
+                        cls: "dash-panel",
+                        html: "The tab could get grouped with these others.",
+                        id: "app-panels-dash-about",
+                        listeners: dashPanelListeners
+                    }]
+                }, {
+                    defaults: {border: false, autoScroll: true},
+                    items: [{
+                        title: "About OpenGeo (2)",
+                        tabTip: "Learn more about OpenGeo",
+                        cls: "dash-panel",
+                        html: "The tab could get placed in its own group.",
+                        id: "app-panels-og-about",
+                        listeners: dashPanelListeners
                     }]
                 }]
             }]
