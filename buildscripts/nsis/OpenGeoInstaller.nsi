@@ -712,7 +712,7 @@ Section "GeoExplorer" Section2a
 
   ; Set Section properties
 
-  SectionIn RO ; mandatroy
+  SectionIn RO ; mandatory
 
   SetOverwrite on
 
@@ -724,10 +724,7 @@ Section "GeoExplorer" Section2a
   File /a /oname=geoexplorer\geoext.ico geoext.ico
   ; Next few lines are for a custom index.html (for looking at local host + no proxy)
   SetOutPath "$DataDirPath\www\GeoExplorer"
-  Delete index.html
-  File /a gxindex.html
-  Rename gxindex.html index.html
-
+  
   ; Shortcuts
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer\GeoExplorer.lnk" \
