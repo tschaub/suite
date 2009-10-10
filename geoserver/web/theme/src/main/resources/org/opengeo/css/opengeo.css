@@ -53,7 +53,7 @@ border-color: #486300;
 .button-group a:hover,
 .button-group button:hover,
 input.btnTxt:hover {
-  background: #A8BCCF url(../GeoServer_Images/button-gradient3.png) repeat-x scroll left top;
+  background: #A8BCCF url(../img/button-gradient.png) repeat-x scroll left top;
 
 }
 
