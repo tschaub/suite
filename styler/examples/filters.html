@@ -15,16 +15,15 @@
     <script type="text/javascript" src="../externals/ext/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="../externals/ext/ext-all.js"></script>
     <script type="text/javascript" src="../script/OpenLayers.js"></script>
+    <script type="text/javascript" src="../externals/geoext/lib/GeoExt.js"></script>
     <!--<script type="text/javascript" src="../externals/openlayers/lib/OpenLayers.js"></script>-->
     <!--<script type="text/javascript" src="../script/Styler.js"></script>-->
     <script type="text/javascript" src="../lib/Styler/widgets/FilterPanel.js"></script>
     <script type="text/javascript" src="../lib/Styler/widgets/FilterBuilder.js"></script>
-    <script type="text/javascript" src="../lib/Styler/data/AttributesReader.js"></script>
-    <script type="text/javascript" src="../lib/Styler/data/AttributesStore.js"></script>
     <script type="text/javascript" src="../lib/Styler/widgets/form/ComparisonComboBox.js"></script>
     <script>
     
-    Ext.BLANK_IMAGE_URL = "../externals/core/theme/images/default/s.gif";
+    Ext.BLANK_IMAGE_URL = "../externals/ext/resources/images/default/s.gif";
 
     var filter = new OpenLayers.Filter.Logical({
         type: OpenLayers.Filter.Logical.OR,
@@ -77,7 +76,7 @@
             items: [{
                 xtype: "gx_filterbuilder",
                 filter: filter.clone(),
-                attributes: new Styler.data.AttributesStore({
+                attributes: new GeoExt.data.AttributeStore({
                     url: "data/describe_feature_type.xml",
                     ignore: {name: "the_geom"}
                 })
@@ -98,7 +97,7 @@
                 xtype: "gx_filterbuilder",
                 allowGroups: false,
                 filter: filter.clone(),
-                attributes: new Styler.data.AttributesStore({
+                attributes: new GeoExt.data.AttributeStore({
                     url: "data/describe_feature_type.xml",
                     ignore: {name: "the_geom"}
                 })
