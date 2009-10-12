@@ -718,7 +718,7 @@ Section "GeoExplorer" SectionGX
 
   ; Set Section Files and Shortcuts
   SetOutPath "$INSTDIR\webapps\"
-  File /r /x .svn ..\artifacts\GeoExplorer
+  File /r /x .svn /x doc ..\artifacts\GeoExplorer
   Rename "$INSTDIR\webapps\GeoExplorer" "$INSTDIR\webapps\geoexplorer" ; ugh, fix this in paver
   File /a /oname=geoexplorer\geoext.ico geoext.ico
   
@@ -727,7 +727,7 @@ Section "GeoExplorer" SectionGX
 		         "http://localhost:$Port/geoexplorer/index.html" \
                  "$INSTDIR\webapps\geoexplorer\geoext.ico"
 
-  ; Give permission for NetworkService to be able to read/write to data_dir and logs
+  ; Give permission for NetworkService to be able to read/write
   ; This needs to change, shouldn't give write access to Program Files
   AccessControl::GrantOnFile "$INSTDIR\webapps\geoexplorer" "NT AUTHORITY\NetworkService" "FullAccess"
 
@@ -865,8 +865,11 @@ SectionEnd
 ; What happens at the end of the install.
 Section -FinishSection
 
-  ; Reg Keys
+  ; Changelog
+  SetOutPath "$INSTDIR"
+  File /a changelog.txt
 
+  ; Reg Keys
   WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" "" ""
   WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" "InstallDir" "$INSTDIR"
 
