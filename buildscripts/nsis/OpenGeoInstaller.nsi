@@ -608,12 +608,12 @@ Section "GeoServer" Section1a
 
   ;Create shortcuts
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
-  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer"
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Web Admin Page.lnk" \
+  CreateDirectory "$INSTDIR\webapps\docs" ; Needed for docs later?
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer Admin Page.lnk" \
                  "http://localhost:$Port/geoserver/web"
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Data Importer.lnk" \
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer Data Importer.lnk" \
                  "http://localhost:$Port/geoserver/web/?wicket:bookmarkablePage=:org.geoserver.web.importer.ImportPage"
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Data Directory.lnk" \
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer Data Directory.lnk" \
                  "$DataDirPath"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
 
@@ -649,28 +649,6 @@ Section "GeoServer" Section1a
 
 SectionEnd
 
-Section "GeoServer Documentation" Section1b
-
-  !insertmacro DisplayImage "slide_3_geoserver.bmp"
-
-  ;SectionIn RO  ; Makes this install mandatory
-
-  ; Set Section properties
-  SetOverwrite on
-
-  ; Set Section Files and Shortcuts
-  CreateDirectory "$INSTDIR\webapps\docs"
-  SetOutPath "$INSTDIR\webapps\docs"
-  
-  File /r /x .svn ..\artifacts\geoserver_doc
-  Rename "$INSTDIR\webapps\docs\geoserver_doc" "$INSTDIR\webapps\docs\geoserver" ; fix in paver
-
-  ; Shortcuts
-  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation"
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoServer Documentation.lnk" \
-		         "$INSTDIR\webapps\docs\geoserver\index.html"
-
-SectionEnd
 
 SectionGroup "GeoServer Extensions" SectionGSExt
 
@@ -715,8 +693,7 @@ Section "GeoWebCache" SectionGWC
   ; GWC included with GS!
 
 
-  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\GeoWebCache"
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoWebCache\GeoWebCache.lnk" \
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoWebCache.lnk" \
 		         "http://localhost:$Port/geoserver/gwc/demo/" \
                  "$INSTDIR\webapps\geowebcache.ico"
 
@@ -724,7 +701,7 @@ Section "GeoWebCache" SectionGWC
   ; Fake section for docs
   SetOutPath "$INSTDIR"
   File /a geowebcache.ico
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoWebCache\GeoWebCache Documentation.lnk" \
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoWebCache Documentation.lnk" \
 		         "http://localhost:$Port/docs/geoserver/geowebcache/" \
                  "$INSTDIR\webapps\geowebcache.ico"
 
@@ -746,33 +723,15 @@ Section "GeoExplorer" SectionGX
   File /a /oname=geoexplorer\geoext.ico geoext.ico
   
   ; Shortcuts
-  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer"
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer\GeoExplorer.lnk" \
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer.lnk" \
 		         "http://localhost:$Port/geoexplorer/index.html" \
                  "$INSTDIR\webapps\geoexplorer\geoext.ico"
 
-SectionEnd
-
-Section "GeoExplorer Documentation" SectionGXDocs
-
-  !insertmacro DisplayImage "slide_6_geoext.bmp"
-
-  ;SectionIn RO  ; Makes this install mandatory
-
-  ; Set Section properties
-  SetOverwrite on
-
-  ; Set Section Files and Shortcuts
-  CreateDirectory "$INSTDIR\webapps\docs"
-  SetOutPath "$INSTDIR\webapps\docs"
-  File /r /x .svn ..\artifacts\geoexplorer_doc
-  Rename "$INSTDIR\webapps\docs\geoexplorer_doc" "$INSTDIR\webapps\docs\geoexplorer"
-
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer\GeoExplorer Documentation.lnk" \
-		         "$INSTDIR\webapps\docs\geoexplorer\index.html"
+  ; Give permission for NetworkService to be able to read/write to data_dir and logs
+  ; This needs to change, shouldn't give write access to Program Files
+  AccessControl::GrantOnFile "$INSTDIR\webapps\geoexplorer" "NT AUTHORITY\NetworkService" "FullAccess"
 
 SectionEnd
-
 
 Section "Styler" SectionStyler
 
@@ -789,23 +748,53 @@ Section "Styler" SectionStyler
   File /a /oname=styler\geoext.ico geoext.ico
 
   ; Shortcuts
-  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\Styler"
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Styler\Styler.lnk" \
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Styler.lnk" \
 		         "http://localhost:$Port/styler/" \
                  "$INSTDIR\geoext.ico"
 
 SectionEnd
 
-Section "Styler Documentation" SectionStylerDocs
+
+Section "Documentation" SectionDocs
 
   ; Set Section properties
   SetOverwrite on
 
-  !insertmacro DisplayImage "slide_6_geoext.bmp"
+  !insertmacro DisplayImage "slide_1_suite.bmp"
+
+; GeoServer Documentation
+
+  ; Set Section Files and Shortcuts
+  CreateDirectory "$INSTDIR\webapps\docs"
+  SetOutPath "$INSTDIR\webapps\docs"
+  
+  File /r /x .svn ..\artifacts\geoserver_doc
+  Rename "$INSTDIR\webapps\docs\geoserver_doc" "$INSTDIR\webapps\docs\geoserver" ; fix in paver
+
+  ; Shortcuts
+  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoServer Documentation.lnk" \
+		         "$INSTDIR\webapps\docs\geoserver\index.html"
+
+
+; GeoExplorer Documentation
+
+  ; Set Section Files and Shortcuts
+  CreateDirectory "$INSTDIR\webapps\docs"
+  SetOutPath "$INSTDIR\webapps\docs"
+  File /r /x .svn ..\artifacts\geoexplorer_doc
+  Rename "$INSTDIR\webapps\docs\geoexplorer_doc" "$INSTDIR\webapps\docs\geoexplorer"
+
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoExplorer Documentation.lnk" \
+		         "$INSTDIR\webapps\docs\geoexplorer\index.html"
+
+
+; "Styler Docs" 
 
   ; NEED DOCS!
 
 SectionEnd
+
 
 
 Section "-Getting Started" SectionGettingStarted ;dash means hidden
@@ -821,7 +810,7 @@ Section "-Getting Started" SectionGettingStarted ;dash means hidden
   Rename "$INSTDIR\webapps\docs\integrationdocs_doc" "$INSTDIR\webapps\docs\gettingstarted"
 
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Getting Started.lnk" \
-		         "$INSTDIR\webapps\docs\gettingstarted\"
+		         "$INSTDIR\webapps\docs\gettingstarted\index.html"
 
 SectionEnd
 
@@ -846,22 +835,10 @@ Section "-Dashboard" SectionDashboard ;dash means hidden
                                 "$INSTDIR\dashboard\Resources\config.ini" \
                                 "[jettyport]" "$Port" \ 
                                 "/S=1" $1
-  ${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
-                                "$INSTDIR\dashboard\Resources\config.ini" \
-                                "[gsdocspath]" "$INSTDIR\docs" \ 
-                                "/S=1" $1
-  ${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
-                                "$INSTDIR\dashboard\Resources\config.ini" \
-                                "[gxdocspath]" "$INSTDIR\GeoExplorer\docs" \ 
-                                "/S=1" $1
-  ${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
-                                "$INSTDIR\dashboard\Resources\config.ini" \
-                                "[stylerdocspath]" "$INSTDIR\Styler\docs" \ 
-                                "/S=1" $1
 
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\OpenGeo Suite Dashboard.lnk" \
-		         "$INSTDIR\dashboard\OpenGeo Suite.exe" ;\
-                 ;"$DataDirPath\www\styler\geoext.ico"
+		         "$INSTDIR\dashboard\OpenGeo Suite.exe" \
+                 "$INSTDIR\geoext.ico"
 
 SectionEnd
 
@@ -871,7 +848,6 @@ SectionEnd
 ; Yes, this needs to go after the install sections. 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${Section1a} "Installs GeoServer, a spatial data server."
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section1b} "Includes GeoServer User Manual."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSExt} "Includes GeoServer Extensions."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSGDAL} "Adds support for GDAL image formats."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSH2} "Adds support for H2 databases."
@@ -879,10 +855,9 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSOracle} "Adds support for Oracle databases."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGWC} "Includes GeoWebCache, a tile cache server."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGX} "Installs GeoExplorer, a graphical map editor."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGXDocs} "Includes GeoExplorer documentation."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionStyler} "Installs Styler, a graphical map style editor."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionStylerDocs} "Includes Styler documentation."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGettingStarted} "Quickstart guide on the OpenGeo Suite."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionDocs} "Includes full documentation for all applications."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGettingStarted} "Quickstart guide to the OpenGeo Suite."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionDashboard} "Installs the OpenGeo Suite Dashboard for access to all components."
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
@@ -1014,14 +989,16 @@ Section Uninstall
 
 
   Try:
-    ;RMDir /r "$INSTDIR"
-    ;RMDir /r "$INSTDIR\GeoExplorer"
-    ;RMDir /r "$INSTDIR\Getting Started"
+
     RMDir /r "$INSTDIR\dashboard"
     RMDir /r "$INSTDIR\etc"
     RMDir /r "$INSTDIR\lib"
     RMDir /r "$INSTDIR\resources"
     RMDir /r "$INSTDIR\webapps"
+    RMDir /r "$INSTDIR\jre"
+    RMDir /r "$INSTDIR\wrapper\lib"
+    RMDir /r "$INSTDIR\wrapper\*.*"
+    RMDir /r "$INSTDIR\wrapper"
     Delete "$INSTDIR\*.*"
     RMDir "$INSTDIR"
     IfFileExists "$INSTDIR" Warn Succeed
