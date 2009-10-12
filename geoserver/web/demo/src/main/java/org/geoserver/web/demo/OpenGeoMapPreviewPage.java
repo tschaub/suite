@@ -57,7 +57,7 @@ public class OpenGeoMapPreviewPage extends GeoServerBasePage {
                     return f;
                 } else if (property == STYLER) {
                     // openlayers preview
-                    final String stylerUrl = "../www/styler/index.html?layer=" + urlEncode(layer.getName());
+                    final String stylerUrl = "/styler/index.html?layer=" + urlEncode(layer.getName());
                     Fragment f = new Fragment(id, "newpagelink", OpenGeoMapPreviewPage.this);
                     f.add(new ExternalLink("link", new Model(stylerUrl),  new Model("Styler")));
                     return f;
