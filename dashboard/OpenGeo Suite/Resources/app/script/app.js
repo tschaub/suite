@@ -157,7 +157,14 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         html: og.util.loadSync("app/markup/dash/main.html"),
                         id: "app-panels-dash-main",
                         listeners: dashPanelListeners
-                    }, {
+                    },  {
+                        title: "Quickstart",
+                        tabTip: "Get Started",
+                        cls: "dash-panel",
+                        html: og.util.loadSync("app/markup/dash/quickstart.html"),
+                        id: "app-panels-dash-quickstart",
+                        listeners: dashPanelListeners
+                    },  {
                         title: "GeoServer",
                         tabTip: "Manage GeoServer",
                         cls: "dash-panel",
