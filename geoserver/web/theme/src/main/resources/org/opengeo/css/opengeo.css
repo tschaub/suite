@@ -3,108 +3,108 @@ Color Overrides
 -----------------------*/
 
 h1, h2, h3, h4, h5, h6 {
-color: #0A2742; /* was #0076A1 */
+  color: #0A2742; /* was #0076A1 */
 }
 
 a:link, a:visited {
-color: #103F6B; /* was #0076A1 */
+  color: #103F6B; /* was #0076A1 */
 }
 
 thead th {
-background: #0A2742;
-color: #fff;
-border-color: #103F6B; /* was #0076A1 */
+  background: #0A2742;
+  color: #fff;
+  border-color: #103F6B; /* was #0076A1 */
 }
 
 thead th a:link, 
 thead th a:visited {
-color: #fff;
+  color: #fff;
 }
 
 tr.even td, tr.even th {
-background: #A8BCCF;
+  background: #A8BCCF;
 }
 
 tr:hover td,
 tr.even:hover td,
 tr.even:hover th {
-background: #F0F5EF;
+  background: #F0F5EF;
 }
 
 
 .paginator a,
 .paginator em {
-border: 1px solid #486300;
+  border: 1px solid #486300;
 }
 
 .paginator a:hover {
-background: #103F6B; /* was #0076A1 */
+  background: #103F6B; /* was #0076A1 */
 }
 
 .button-group a,
 .button-group button,
 input.btnTxt {
-background-color: #fff;
-background-image: none;
-color: #486300;
-border-color: #486300;
+  background-color: #fff;
+  background-image: none;
+  color: #486300;
+  border-color: #486300;
 }
 
 .button-group a:hover,
 .button-group button:hover,
 input.btnTxt:hover {
-  background: #A8BCCF url(../img/button-gradient.png) repeat-x scroll left top;
+  background: #A8BCCF url('../img_opengeo/button-gradient.png') repeat-x scroll left top;
 
 }
 
 .status-bar span, 
 .mini-bar span, 
 div.progress-bar span.bar {
-background-image: url(../img_opengeo/status-bar-bg.png);
+  background-image: url('../img_opengeo/status-bar-bg.png');
 }
 
 /*-----------------------
 Themed Layout
 -----------------------*/
 body {
-font-family: Helvetica, Arial sans-serif;
+  font-family: Helvetica, Arial. sans-serif;
 }
 
 h1 {
-font-family: Optima, Helvetica, Arial sans-serif;
+  font-family: Optima, Helvetica, Arial, sans-serif;
 }
 
 h2, h3, h4, h5, h6 {
-font-family: "Century Gothic", Optima, Helvetica, Arial sans-serif;
+  font-family: "Century Gothic", Optima, Helvetica, Arial, sans-serif;
 }
 
 #header h2 a {
-background-image: url('../img_opengeo/logo.png');
+  background-image: url('../img_opengeo/logo.png');
 }
 
 #main {
-border-top: 2px solid #8a7d79;
-background-image: url('../img_opengeo/main-bg.png');
+  border-top: 2px solid #8a7d79;
+  background-image: url('../img_opengeo/main-bg.png');
 }
 
 #main .wrap {
-background-image: url('../img_opengeo/main-wrap-bg.png');
+  background-image: url('../img_opengeo/main-wrap-bg.png');
 }
 
 #page {
-background-image: url('../img_opengeo/page-bg.png');
+  background-image: url('../img_opengeo/page-bg.png');
 }
 
 .page-header {
-background-image: url('../img_opengeo/page-header-bg.png');
+  background-image: url('../img_opengeo/page-header-bg.png');
 }
 
 #navigation {
-padding-bottom: 32px;
-background: url('../img_opengeo/powered-by.png') no-repeat bottom left;
+  padding-bottom: 32px;
+  background: url('../img_opengeo/powered-by.png') no-repeat bottom left;
 }
 
 .navigation-tab-single, .navigation-tab-header,
 .navigation-tab-single a, .navigation-tab-header a, .navigation-tab-content a {
-color: #291C17; /* was #0076A1 */
+  color: #291C17; /* was #0076A1 */
 }
