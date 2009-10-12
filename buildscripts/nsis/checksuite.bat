@@ -1,7 +1,7 @@
 @echo off
 cls
 set gs=0 >nul 2>nul
-echo Please wait while GeoServer starts for the first time...
+echo Please wait while the OpenGeo Suite starts...
 
 :try
 if %gs%==60 goto fail
