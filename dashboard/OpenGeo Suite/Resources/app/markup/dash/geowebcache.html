@@ -3,7 +3,11 @@
     <h4>GeoWebCache</h4>
     <p>GeoWebCache intelligently stores and serves map tiles using standard web protocols to make map services scale.</p>
     <p></p>
-    <p>GeoWebCache is a WMS tiling client. It runs as a proxy server between a map client and map server, caching tiles as they are requested, eliminating redundant requests and saving large amounts of processing time. GeoWebCache has been integrated into GeoServer, although it is also available as a standalone product.</p>
+    <p>Accelerate the performance of your maps with GeoWebCache.  Traditional map servers generate a new image on every request.  GeoWebCache sits between GeoServer (or any compliant WMS) and a tiling client (like OpenLayers or GeoExt), and saves already requested images.  Once tiles are stored in GeoWebCache maps are returned to the client 10 to 100 times as fast as traditional map servers.</p>
+
+<p>GeoWebCache includes an administration console to 'seed' a layer.  This makes a series of requests to GeoServer, saving the rendered images at the desired bounding boxes and zoom levels, ensuring that the first user experience is fast from the beginning.</p>
+
+<p>GeoWebCache supports tiling standards like TMS and WMS-C.  Support for the WMTS will be available in the 1.2 release.  GeoWebCache is also compatible with other tile schemes.  Google Earth, Google Maps, Virtual Earth and Mobile Gmaps can all access GeoWebCache directly.</p>
   </div>
     
     

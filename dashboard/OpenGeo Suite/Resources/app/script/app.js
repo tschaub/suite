@@ -242,6 +242,17 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         ilinks.on({
             click: function(evt, el) {
                 var id = el.href.split("#").pop();
+                this.openPanel(id);
+            },
+            scope: this
+        });
+        ilinks.removeClass("app-ilink");
+        
+        /* http:opengeo.org link --doesn't work for images
+        var wwwlinks = Ext.select(".app-wwwlink");
+        ilinks.on({
+            click: function(evt, el) {
+                var id = e.href.split("#").pop();
                 var parts = id.split("-");
                 var section = eval(parts.slice(0, 2).join("."));
                 var key = parts.pop();
@@ -252,7 +263,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             },
             scope: this
         });
-        ilinks.removeClass("app-ilink");
+        ilinks.removeClass("app-wwwlink");*/
     },
     
     openURL: function(url, title) {
