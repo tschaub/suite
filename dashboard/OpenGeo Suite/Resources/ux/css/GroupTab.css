@@ -37,6 +37,7 @@
     margin: 0;
     position: relative;
     clear: both;
+    border-left: 1px solid #999;
 }
 .x-tab-panel-left .x-tab-panel-header ul.x-grouptabs-strip a.x-grouptabs-text,
 .x-tab-panel-right .x-tab-panel-header ul.x-grouptabs-strip a.x-grouptabs-text{
@@ -68,7 +69,7 @@
 .x-grouptabs-panel .x-grouptabs-strip a.x-grouptabs-text{
     overflow: hidden;
     white-space: nowrap;
-	display: block;
+    display: block;
     color: #DFE8F6;
     font-family: tahoma, arial, sans-serif;
     font-weight: bold;
@@ -94,13 +95,15 @@
 }
 
 .x-grouptabs-panel .x-grouptabs-panel-body {
-    border: 1px solid #999;
+    border: 1px solid #fff;
 }
 
 .x-grouptabs-panel ul.x-grouptabs-strip li {
-    border-top: 1px solid transparent;
-    border-bottom: 1px solid transparent;
-	border-left: 1px solid transparent;
+  background: #EDEEF0;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-left: 1px solid transparent;
+  margin-bottom: 10px;
 }
 
 .x-grouptabs-panel ul.x-grouptabs-strip li.x-grouptabs-strip-active {
@@ -111,14 +114,16 @@
 }
 
 .x-tab-panel-left ul.x-grouptabs-strip li.x-grouptabs-strip-active {
-    border-left: 1px solid #999;
+    border-left: 1px solid #fff;
+    border-top: 1px solid #fff;
+    background: #fff;
 }
 .x-tab-panel-right ul.x-grouptabs-strip li.x-grouptabs-strip-active {
     border-right: 1px solid #999;
 }
 
 .x-grouptabs-panel li.x-grouptabs-strip-active ul.x-grouptabs-sub li.x-grouptabs-strip-active{
-    background-color: #EDEEF0;
+    background-color: #A8BCCF;
 }
 
 .x-grouptabs-panel li.x-grouptabs-strip-active ul.x-grouptabs-sub {
@@ -126,13 +131,14 @@
 }
 
 .x-grouptabs-panel li.x-grouptabs-strip-active ul.x-grouptabs-sub li {
-    border-color: transparent;
+    background:#fff;
+    border-color:#fff;
 }
 
 /* Tab corners */
 .x-grouptabs-panel .x-grouptabs-corner {
     background-image: url('../images/x-grouptabs-corners.png');
-    display: none;
+    display: block;
     width: 11px;
     height: 11px;
     position: absolute;
@@ -150,19 +156,19 @@
 
 .x-grouptabs-panel .x-grouptabs-corner-top-left {
     background-position: top left;
-    left: 0; top: 0;
+    left: 0; top: -4px; left: -4px;
 }
 .x-grouptabs-panel .x-grouptabs-corner-bottom-left {
     background-position: bottom left;
-    left: 0; bottom: 0;
+    left: 0; bottom: -4px; left: -4px;
 }
 .x-grouptabs-panel .x-grouptabs-corner-top-right {
     background-position: top right;
-    right: 0; top: 0;
+    right: 0; top: -4px; right: -4px;;
 }
 .x-grouptabs-panel .x-grouptabs-corner-bottom-right {
     background-position: bottom right;
-    right: 0; bottom: 0;
+    right: 0; bottom: -4px; right: -4px;;
 }
 .x-grouptabs-panel li.x-grouptabs-strip-active .x-grouptabs-corner-bottom-left{
     bottom: -4px; left: -4px;

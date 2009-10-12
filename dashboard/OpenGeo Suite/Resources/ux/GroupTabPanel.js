@@ -96,7 +96,7 @@ Ext.ux.GroupTabPanel = Ext.extend(Ext.TabPanel, {
         this.addClass('x-tab-panel-' + this.tabPosition);
         this.header.setWidth(this.tabWidth);
         
-        if (this.activeGroup !== undefined) {
+        if (this.activeGroup !== 1) {
             var group = (typeof this.activeGroup == 'object') ? this.activeGroup : this.items.get(this.activeGroup);
             delete this.activeGroup;
             this.setActiveGroup(group);

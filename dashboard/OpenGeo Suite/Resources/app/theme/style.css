@@ -108,12 +108,18 @@ a:hover {
 }
 .dash-panel-content-item.geoexplorer {
     padding-left: 65px;
-    background: url(img/geoext-sm.png) no-repeat;
+    background: url(img/geoexplorer-sm.png) no-repeat;
     margin-top: 15px;
 }
 .dash-panel-content-item.styler {
     padding-left: 65px;
-    background: url(img/geoext-sm.png) no-repeat;
+    background: url(img/styler_sm.png) no-repeat;
+    margin-top: 15px;
+}
+
+.dash-panel-content-item.geowebcache {
+    padding-left: 65px;
+    background: url(img/geowebcache_sm.png) no-repeat;
     margin-top: 15px;
 }
 

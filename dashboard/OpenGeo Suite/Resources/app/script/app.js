@@ -178,22 +178,29 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         html: og.util.loadSync("app/markup/dash/styler.html"),
                         id: "app-panels-dash-styler",
                         listeners: dashPanelListeners
-                    }, {
-                        title: "About OpenGeo (1)",
-                        tabTip: "Learn more about OpenGeo",
+                    },  {
+                        title: "GeoWebCache",
+                        tabTip: "Manage GeoWebCache",
                         cls: "dash-panel",
-                        html: "The tab could get grouped with these others.",
-                        id: "app-panels-dash-about",
+                        html: og.util.loadSync("app/markup/dash/geowebcache.html"),
+                        id: "app-panels-dash-geowebcache",
                         listeners: dashPanelListeners
                     }]
                 }, {
                     defaults: {border: false, autoScroll: true},
                     items: [{
-                        title: "About OpenGeo (2)",
+                        title: "OpenGeo",
                         tabTip: "Learn more about OpenGeo",
                         cls: "dash-panel",
-                        html: "The tab could get placed in its own group.",
+                        html: og.util.loadSync("app/markup/dash/opengeo.html"),
                         id: "app-panels-og-about",
+                        listeners: dashPanelListeners
+                    }, {
+                        title: "Contact",
+                        tabTip: "Contact OpenGeo",
+                        cls: "dash-panel",
+                        html: og.util.loadSync("app/markup/dash/contact.html"),
+                        id: "app-panels-dash-contact",
                         listeners: dashPanelListeners
                     }]
                 }]
