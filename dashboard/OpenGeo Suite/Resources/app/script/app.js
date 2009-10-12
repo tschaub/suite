@@ -247,23 +247,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             scope: this
         });
         ilinks.removeClass("app-ilink");
-        
-        /* http:opengeo.org link --doesn't work for images
-        var wwwlinks = Ext.select(".app-wwwlink");
-        ilinks.on({
-            click: function(evt, el) {
-                var id = e.href.split("#").pop();
-                var parts = id.split("-");
-                var section = eval(parts.slice(0, 2).join("."));
-                var key = parts.pop();
-                var path = section[key];
-                var title = section[key + "_title"];
-                var url = "http://" + section[key];
-                this.openURL(url, title);
-            },
-            scope: this
-        });
-        ilinks.removeClass("app-wwwlink");*/
     },
     
     openURL: function(url, title) {
