@@ -640,7 +640,7 @@ Section "GeoServer" Section1a
 
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Start OpenGeo Suite.lnk" "$INSTDIR\startsuite.bat" "" "$INSTDIR\opengeo.ico" 0 SW_SHOWMINIMIZED
 
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Start OpenGeo Suite.lnk" "$INSTDIR\stopsuite.bat" "" "$INSTDIR\opengeo.ico" 0 SW_SHOWMINIMIZED
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Stop OpenGeo Suite.lnk" "$INSTDIR\stopsuite.bat" "" "$INSTDIR\opengeo.ico" 0 SW_SHOWMINIMIZED
 
   ${EndIf}
 
@@ -663,38 +663,39 @@ Section "GeoServer Documentation" Section1b
   SetOutPath "$INSTDIR\webapps\docs"
   
   File /r /x .svn ..\artifacts\geoserver_doc
-  Rename "$INSTDIR\webapps\docs\geoserver_doc" "$INSTDIR\webapps\docs\geoserver"
+  Rename "$INSTDIR\webapps\docs\geoserver_doc" "$INSTDIR\webapps\docs\geoserver" ; fix in paver
 
   ; Shortcuts
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer\GeoServer Documentation.lnk" \
+  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoServer Documentation.lnk" \
 		         "$INSTDIR\webapps\docs\geoserver\index.html"
 
 SectionEnd
 
-SectionGroup "GeoServer Extensions" Section1c
+SectionGroup "GeoServer Extensions" SectionGSExt
 
-  Section "GDAL" Section1c1
+  Section "GDAL" SectionGSGDAL
 
     SetOutPath "$INSTDIR\jre\bin"
     File /a ..\artifacts\gdal\*.*
 
   SectionEnd
 
-  Section "H2" Section1c2
+  Section "H2" SectionGSH2
 
     SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
     File /a ..\artifacts\geoserver_plugins\h2\*.*
 
   SectionEnd
 
-;  Section "Image Pyramid" Section1c3
+;  Section "Image Pyramid" SectionGSPyramid
 ;
 ;    SetOutPath "$INSTDIR\GeoServer\webapps\geoserver\WEB-INF\lib"
 ;    File /a ..\artifacts\geoserver_plugins\pyramid\*.*
 ;
 ;  SectionEnd
 
-  Section "Oracle" Section1c4
+  Section "Oracle" SectionGSOracle
 
     SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
     File /a ..\artifacts\geoserver_plugins\oracle\*.*
@@ -703,13 +704,37 @@ SectionGroup "GeoServer Extensions" Section1c
 
 SectionGroupEnd
 
-
-Section "GeoExplorer" Section2a
+Section "GeoWebCache" SectionGWC
 
   ; Set Section properties
-
   SectionIn RO ; mandatory
+  SetOverwrite on
 
+  ;!insertmacro DisplayImage "slide_4_gwc.bmp"
+
+  ; GWC included with GS!
+
+
+  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\GeoWebCache"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoWebCache\GeoWebCache.lnk" \
+		         "http://localhost:$Port/geoserver/gwc/demo/" \
+                 "$INSTDIR\webapps\geowebcache.ico"
+
+
+  ; Fake section for docs
+  SetOutPath "$INSTDIR"
+  File /a geowebcache.ico
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoWebCache\GeoWebCache Documentation.lnk" \
+		         "http://localhost:$Port/docs/geoserver/geowebcache/" \
+                 "$INSTDIR\webapps\geowebcache.ico"
+
+SectionEnd
+
+
+Section "GeoExplorer" SectionGX
+
+  ; Set Section properties
+  SectionIn RO ; mandatory
   SetOverwrite on
 
   !insertmacro DisplayImage "slide_6_geoext.bmp"
@@ -728,7 +753,7 @@ Section "GeoExplorer" Section2a
 
 SectionEnd
 
-Section "GeoExplorer Documentation" Section2b
+Section "GeoExplorer Documentation" SectionGXDocs
 
   !insertmacro DisplayImage "slide_6_geoext.bmp"
 
@@ -749,7 +774,7 @@ Section "GeoExplorer Documentation" Section2b
 SectionEnd
 
 
-Section "Styler" Section3a
+Section "Styler" SectionStyler
 
   SectionIn RO ; mandatory
 
@@ -766,12 +791,12 @@ Section "Styler" Section3a
   ; Shortcuts
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\Styler"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Styler\Styler.lnk" \
-		         "http://localhost:$Port/geoserver/www/styler/index.html" \
-                 "$DataDirPath\www\styler\geoext.ico"
+		         "http://localhost:$Port/styler/" \
+                 "$INSTDIR\geoext.ico"
 
 SectionEnd
 
-Section "Styler Documentation" Section3b
+Section "Styler Documentation" SectionStylerDocs
 
   ; Set Section properties
   SetOverwrite on
@@ -782,7 +807,8 @@ Section "Styler Documentation" Section3b
 
 SectionEnd
 
-Section "-Getting Started" SectionH1 ;dash means hidden
+
+Section "-Getting Started" SectionGettingStarted ;dash means hidden
 
   !insertmacro DisplayImage "slide_1_suite.bmp"
 
@@ -795,12 +821,12 @@ Section "-Getting Started" SectionH1 ;dash means hidden
   Rename "$INSTDIR\webapps\docs\integrationdocs_doc" "$INSTDIR\webapps\docs\gettingstarted"
 
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Getting Started.lnk" \
-		         "$INSTDIR\webapps\docs\gettingstarted\index.html"
+		         "$INSTDIR\webapps\docs\gettingstarted\"
 
 SectionEnd
 
 
-Section "-Dashboard" SectionH2 ;dash means hidden
+Section "-Dashboard" SectionDashboard ;dash means hidden
 
  
   !insertmacro DisplayImage "slide_1_suite.bmp"
@@ -846,17 +872,18 @@ SectionEnd
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${Section1a} "Installs GeoServer, a spatial data server."
   !insertmacro MUI_DESCRIPTION_TEXT ${Section1b} "Includes GeoServer User Manual."
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section1c} "Includes GeoServer Extensions."
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section1c1} "Adds support for GDAL image formats."
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section1c2} "Adds support for H2 databases."
-  ;!insertmacro MUI_DESCRIPTION_TEXT ${Section1c3} "Adds support for image pyramid stores."
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section1c4} "Adds support for Oracle databases."
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section2a} "Installs GeoExplorer, a graphical map editor."
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section2b} "Includes GeoExplorer documentation."
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section3a} "Installs Styler, a graphical map style editor."
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section3b} "Includes Styler documentation."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionH1} "Quickstart guide on the OpenGeo Suite."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionH2} "Inntalls the OpenGeo Suite Dashboard for access to all components."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSExt} "Includes GeoServer Extensions."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSGDAL} "Adds support for GDAL image formats."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSH2} "Adds support for H2 databases."
+  ;!insertmacro MUI_DESCRIPTION_TEXT ${SectionGSPyramid} "Adds support for image pyramid stores."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSOracle} "Adds support for Oracle databases."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGWC} "Includes GeoWebCache, a tile cache server."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGX} "Installs GeoExplorer, a graphical map editor."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGXDocs} "Includes GeoExplorer documentation."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionStyler} "Installs Styler, a graphical map style editor."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionStylerDocs} "Includes Styler documentation."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGettingStarted} "Quickstart guide on the OpenGeo Suite."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionDashboard} "Installs the OpenGeo Suite Dashboard for access to all components."
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
