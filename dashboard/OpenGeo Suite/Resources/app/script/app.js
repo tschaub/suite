@@ -242,7 +242,13 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         ilinks.on({
             click: function(evt, el) {
                 var id = el.href.split("#").pop();
-                this.openPanel(id);
+                var parts = id.split("-");
+                var section = eval(parts.slice(0, 2).join("."));
+                var key = parts.pop();
+                var path = section[key];
+                var title = section[key + "_title"];
+                var url = "http://" + section[key];
+                this.openURL(url, title);
             },
             scope: this
         });
