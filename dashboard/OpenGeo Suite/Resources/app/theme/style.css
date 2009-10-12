@@ -154,6 +154,36 @@ a:hover {
     padding: 10px;
 }
 
+a.icon-geoexplorer {
+    display: block;
+    height: 101px;
+    background: transparent url(img/geoexplorer.png) no-repeat center;
+}
+
+a.icon-geoserver {
+    display: block;
+    height: 101px;
+    background: transparent url(img/geoserver.png) no-repeat center;
+}
+
+a.icon-geowebcache {
+    display: block;
+    height: 101px;
+    background: transparent url(img/geowebcache.png) no-repeat center;
+}
+
+a.icon-opengeo {
+    display: block;
+    height: 101px;
+    background: transparent url(img/opengeo.png) no-repeat center;
+}
+
+a.icon-styler {
+    display: block;
+    height: 101px;
+    background: transparent url(img/styler.png) no-repeat center;
+}
+
 /* override left hand menu*/
 .x-tab-panel-left .x-tab-panel-header ul.x-grouptabs-strip a.x-grouptabs-text{
     padding-left: 18px;

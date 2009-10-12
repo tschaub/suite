@@ -192,15 +192,15 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         title: "OpenGeo",
                         tabTip: "Learn more about OpenGeo",
                         cls: "dash-panel",
-                        html: og.util.loadSync("app/markup/dash/opengeo.html"),
-                        id: "app-panels-og-about",
+                        html: og.util.loadSync("app/markup/opengeo/main.html"),
+                        id: "app-panels-opengeo-main",
                         listeners: dashPanelListeners
                     }, {
                         title: "Contact",
                         tabTip: "Contact OpenGeo",
                         cls: "dash-panel",
-                        html: og.util.loadSync("app/markup/dash/contact.html"),
-                        id: "app-panels-dash-contact",
+                        html: og.util.loadSync("app/markup/opengeo/contact.html"),
+                        id: "app-panels-opengeo-contact",
                         listeners: dashPanelListeners
                     }]
                 }]
@@ -220,19 +220,28 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         var xlinks = Ext.select(".app-xlink");
         xlinks.on({
             click: function(evt, el) {
+                // lookup URL in config
                 var id = el.href.split("#").pop();
                 var parts = id.split("-");
-                var section = eval(parts.slice(0, 2).join("."));
-                var key = parts.pop();
-                var path = section[key];
-                var title = section[key + "_title"];
-                if (path.match(/^(file|https?):/)) {
-                    this.openURL(path, title);
-                } else {
-                    var port = section.port;
-                    var url = "http://" + section.host + (port ? ":" + port : "") + section[key];
-                    this.openURL(url, title);
+                var path, url, title;
+                if (parts.length > 1) {
+                    var section = eval(parts.slice(0, 2).join("."));
+                    var key = parts.pop();
+                    path = section[key];
+                    if (path) {
+                        title = section[key + "_title"];
+                        if (!path.match(/^(https?|file):\/\//)) {
+                            var port = section.port;
+                            url = "http://" + section.host + (port ? ":" + port : "") + section[key];
+                        }
+                    }
                 }
+                if (!path) {
+                    // href may be to arbitrary url
+                    url = el.href;
+                    el.href = "#";
+                }
+                this.openURL(url, title);
             },
             scope: this
         });
@@ -252,15 +261,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
     openURL: function(url, title) {
         url = encodeURI(url);
         if (window.Titanium) {
-            if (url.match(/^https?:/)) {
-                Titanium.Desktop.openURL(url);                
-            } else {
-                var win = Titanium.UI.getCurrentWindow().createWindow({
-                    url: url,
-                    title: title
-                });
-                win.open();
-            }
+            Titanium.Desktop.openURL(url);                
         } else {
             window.open(url);
         }
@@ -312,4 +313,3 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
     }
 
 });
-
