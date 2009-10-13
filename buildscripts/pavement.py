@@ -100,7 +100,7 @@ def build_all():
     call_task("styler")
     call_task("download_docs")
     call_task("dashboard")
-#    call_task("docs")
+    call_task("docs")
 
 
 @task 
@@ -236,7 +236,7 @@ def gx():
         sh("ant dist") 
     with pushd(geoexplorer_build): 
         build_min() 
-    copytree(path.joinpath(geoexplorer_build,'GeoExplorer'),path.joinpath(path.joinpath(source_path,'GeoExplorer')))
+    copytree(path.joinpath(geoexplorer_build,'geoexplorer'),path.joinpath(path.joinpath(source_path,'geoexplorer')))
 
 
 
@@ -282,31 +282,29 @@ def download_docs():
 
 
 @task 
-@needs(['download_docs'])
+#@needs(['download_docs'])
 def docs():
-    ''' 
-    This builds the OpenGeo Documentation
-    ''' 
-    section = "docs" 
-    def build():
-        with pushd(path.joinpath(download_path,docs_path)):
-        	for doc in config.options(section): 
-                	info("Build docs for %s" % doc) 
-                	app_doc = path(doc)
-                    	with pushd(app_doc):
-                        	if doc == 'geoexplorer':                             
-                            		sh("sphinx-build -bhtml . html")
-				if doc == 'installerdocs':
-					print "installer docs" 
-				else:
-                            		sh("sphinx-build -bhtml source html")
-
-    def move(): 
-        for doc in config.options(section): 
-            doc_path = path.joinpath(download_path,docs_path,doc,path('html'))
-            copytree(doc_path,path.joinpath(source_path,path("%s_doc"% doc)))            
-    build()
-    move()
+	''' 
+    	This builds the OpenGeo Documentation
+    	''' 
+    	section = "docs" 
+    	def build():
+        	with pushd(path.joinpath(download_path,docs_path)):
+   			with pushd("geoserver"):
+				sh("sphinx-build -bhtml source html")
+     			with pushd("geoexplorer"): 
+				sh("sphinx-build -bhtml . html")
+			with pushd(path.joinpath(path("docs"),"installerdocs")):
+				sh("sphinx-build -bhtml source html")
+			with pushd(path.joinpath(path("docs"),"integrationdocs")): 
+				sh("sphinx-build -bhtml source html")
+			with pushd(path.joinpath(path("docs"),"styler")): 
+				sh("sphinx-build -bhtml . html")
+	
+   	def move(): 
+    		copytree(path.joinpath(download_path,"documentation"),path.joinpath(source_path,"documentation"))
+	build()
+    	move()
 
 
 
@@ -412,10 +410,9 @@ def dashboard():
         # move finished
 
     if sys.platform == 'linux2': 
-        copy(path.joinpath(dashboard,"OpenGeo Suite.tgz"),source_path)
         with pushd(source_path): 
-            sh("gunzip OpenGeo\ Suite.tgz ; tar -xf OpenGeo\ Suite.tar")
-            os.remove("OpenGeo Suite.tar")
+#            sh("gunzip OpenGeo\ Suite.tgz ; tar -xf OpenGeo\ Suite.tar")
+            os.remove("OpenGeo Suite.tgz")
     if sys.platform == 'win32':
         with pushd(path.joinpath(download_path,"OpenGe~1")): 
             os.rename("OpenGeo Suite.exe","dashboard.zip")
