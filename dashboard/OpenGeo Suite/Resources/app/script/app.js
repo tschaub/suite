@@ -227,21 +227,24 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         var xlinks = Ext.select(".app-xlink");
         xlinks.on({
             click: function(evt, el) {
-                // lookup URL in config
-                var id = el.href.split("#").pop();
-                var parts = id.split("-");
-                var path, url, title;
-                if (parts.length > 1) {
-                    var section = eval(parts.slice(0, 2).join("."));
-                    var key = parts.pop();
-                    path = section[key];
-                    if (path) {
-                        title = section[key + "_title"];
-                        if (!path.match(/^(https?|file):\/\//)) {
-                            var port = section.port;
-                            url = "http://" + section.host + (port ? ":" + port : "") + section[key];
+                var path;
+                if (el.href.indexOf("#") >= 0) {
+                    var id = el.href.split("#").pop();
+                    var parts = id.split("-");
+                    var path, url, title;
+                    if (parts.length > 1) {
+                        // lookup URL in config
+                        var section = eval(parts.slice(0, 2).join("."));
+                        var key = parts.pop();
+                        path = section[key];
+                        if (path) {
+                            title = section[key + "_title"];
+                            if (!path.match(/^(https?|file):\/\//)) {
+                                var port = section.port;
+                                url = "http://" + section.host + (port ? ":" + port : "") + section[key];
+                            }
                         }
-                    }
+                    }                    
                 }
                 if (!path) {
                     // href may be to arbitrary url
