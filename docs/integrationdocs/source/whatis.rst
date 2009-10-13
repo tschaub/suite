@@ -3,11 +3,12 @@
 What Is The OpenGeo Suite?
 ==========================
 
-This package includes the following components:
+The OpenGeo Suite is comprised of geospatial software applications that work in concert.  In this package, the applications contained are: 
 
-* **GeoServer** - A software server for users to share and edit geospatial data.
-* **GeoServer Data Importer** - An extension to GeoServer for mass importing of shapefiles.
-* **GeoExplorer** - An application for creating a browser-based mapping application.
+* **GeoServer** - A software server for loading and sharing geospatial data.
+* **GeoWebCache** - A tile cache server that accelerates the serving of maps.
+* **Styler** - A graphical map layer visualization editor.
+* **GeoExplorer** - A layer browser and map creator.
 
-GeoExplorer is based on `GeoExt <http://geoext.org>`_.
+GeoExplorer and Styler are based on `GeoExt <http://geoext.org>`_ and contain code from `OpenLayers <http://openlayers.org>`.
 

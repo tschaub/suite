@@ -3,9 +3,9 @@
 Compose Your Map
 ================
 
-Now that the data is imported and styled, you can organize and compose your into a map.  GeoExplorer allows creation of web mapping applications based on layers served through GeoServer.
+Now that the data is imported and styled, you can organize and compose your layers into a map.  **GeoExplorer** allows you to create web maps based on layers served through GeoServer.
 
-#. Run GeoExplorer.  You can do this by navigating to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoExplorer --> GeoExplorer` or by opening a web browser and browsing to http://localhost:8080/geoserver/www/GeoExplorer .
+#. Run GeoExplorer.  You can do this by selecting :guilabel:`GeoExplorer` in the Dashboard or by navigating to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoExplorer`.
 
    .. figure:: img/geoexplorer.png
       :align: center
@@ -21,6 +21,8 @@ Now that the data is imported and styled, you can organize and compose your into
 
 #. A list of layers from GeoServer will be displayed.  Select the layers you wish to add, then click :guilabel:`Add layers`.  (You can Ctrl-click to select multiple layers.)  Click :guilabel:`Done` when finished.
 
+   .. note:: You can also add layers served through another remote GeoServer, or any other compatible Web Map Server (WMS).  Click the :guilabel:`Add a new server` button to connect to another server.
+
    .. figure:: img/addlayersdialog.png
       :align: center
 
@@ -33,11 +35,20 @@ Now that the data is imported and styled, you can organize and compose your into
 
       *The initial view of layers*
 
-#. Use the toolbar at the top of the screen to compose your map.
+#. Right-click on one of the layers and select :guilabel:`Zoom to layer extent` to zoom in to your layer content.
 
-   .. note:: For more information on GeoExplorer, please see the included GeoExplorer Documentation at :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoExplorer --> GeoExplorer Documentation`.
+   .. figure:: img/mapzoombefore.png
+      :align: center
+
+      *The map zoomed in*
+
+
+#. Use the toolbar at the top of the screen to compose your map.  Adjust the placement of layers by dragging them in the Layers panel.
 
    .. figure:: img/mapafter.png
       :align: center
 
       *The composed map*
+
+   .. note:: For more information on GeoExplorer, please see the GeoExplorer Documentation by selecting :guilabel:`GeoExplorer Documentation` in teh Dashboard, or by navigating to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Documentation --> GeoExplorer Documentation`.
+

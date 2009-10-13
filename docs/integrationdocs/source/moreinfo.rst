@@ -8,9 +8,9 @@ Below are links to various resources to help you learn more about the OpenGeo Su
 GeoServer
 ---------
 
-**Homepage:**  For the latest in GeoServer development, see `http://geoserver.org <http://geoserver.org>`_.  
+**Homepage:**  For the latest in GeoServer development, see `<http://geoserver.org>`_.  
 
-**Documentation:** Online documentation page is found at `http://docs.geoserver.org <http://docs.geoserver.org>`_.  Also included locally at :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoServer --> GeoServer Documentation`
+**Documentation:**  Online documentation page is found at `<http://docs.geoserver.org>`_.  Also included locally at :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoServer --> GeoServer Documentation`
 
 GeoExplorer
 -----------

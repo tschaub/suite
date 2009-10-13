@@ -3,45 +3,39 @@
 Import Your Data
 ================
 
-The OpenGeo Suite comes with some data built in to GeoServer.  (See the section on :ref:`builtindemos` for more information.)  But to make *your* web map, you will need to first load your data into GeoServer.  GeoServer comes with an importer application to make this process easy.
+The OpenGeo Suite comes with some data preloaded.  (See the section on :ref:`builtindemos` for more information.)  But to create *your* web map, you will need to first load your data into GeoServer.  GeoServer comes with a Data Importer application to make this process easy.
 
-#. First, start GeoServer if it is not already started.  You can do this by going to the :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoServer --> Start GeoServer`
+#. First, start the OpenGeo Suite if it is not already started.  You can do this by going to the :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Start OpenGeo Suite`
 
-#. Open the GeoServer Data Importer.  You can do this by going to the :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoServer --> GeoServer Data Importer`.
+#. Open the GeoServer Data Importer.  You can do this in the Dashboard by clicking :guilabel:`Import Layers` in the Dashboard or by navigating to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Import Layers`.
 
-   .. note:: You can also navigate to the Data Importer from the GeoServier web admin page when you are logged into GeoServer.  Log into GeoServer on from the top menu and then click on the :guilabel:`Importer` link on the left side of the screen.  
-
-#. Your browser will open to the GeoServer login screen.  The default username and password is ``admin`` and ``geoserver``.  Click :guilabel:`Login` when done.
+#. You browser will open, and you may be asked to log into GeoServer.  Enter the username and password you chose when installing the OpenGeo Suite.  (The default username and password is ``admin`` and ``geoserver``.)  Click :guilabel:`Login` when done.
 
    .. figure:: img/login.png
       :align: center
 
-      *Logging in to the GeoServer web admin interface*
+      *Logging in to the GeoServer Admin interface*
 
-#. On the next screen, enter a name for the project in the :guilabel:`Project prefix` box.  This name can be up to ten characters in length, and may not contain spaces.
-
-   .. note:: The :guilabel:`Project prefix` will be placed before the name of every shapefile you import into GeoServer.  For example, if you import a shapefile named :file:`roads.shp`, and enter a prefix of ``usa``, the resulting layer in GeoServer will be called ``usa:roads``.
+#. On the next screen, enter the path to a directory that contains the shapefiles you wish to import.  You can also click :guilabel:`Browse...` to navigate to the folder.
 
    .. figure:: img/importerblank.png
       :align: center
 
       *The Data Importer main page*
 
-#. In the :guilabel:`Directory` box, enter the path to a directory that contains the shapefiles you wish to import.  You can also click :guilabel:`Browse...` to navigate to the folder.
-
    .. figure:: img/browse.png
       :align: center
 
       *Browsing for shapefiles on your local machine*
 
-   .. warning:: If you installed GeoServer as a **Service**, GeoServer will not be able to read any folders outside of the existing data directory.  You must explicitly grant read access to the folder that contains the shapefiles for the user "NETWORK SERVICE".  For more information on how to grant permissions, please see the following article:  http://www.microsoft.com/windowsxp/using/security/learnmore/accesscontrol.mspx
+   .. warning:: If you installed GeoServer as a **Service**, GeoServer will not be able to read any folders outside of the existing data directory.  In this case, it is recommended to manually copy your shapefile directories into the data directory and then point the Importer at the directory.  The Data Directory can be located by navigating to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoServer Data Directory`.
 
 #. When done, click :guilabel:`Import data`.
 
    .. figure:: img/importerfilledin.png
       :align: center
 
-      *The Data Importer with project information entered*
+      *The Layer Importer with project information entered*
 
 #. You will see a progress bar indicating that the shapefiles are being loaded into GeoServer.
 
@@ -50,15 +44,13 @@ The OpenGeo Suite comes with some data built in to GeoServer.  (See the section 
 
       *The Data Importer showing the progress of the import*
 
-#. When finished, a list of the shapefiles will be displayed, along with details and errors (if any).  Each shapefile will correspond to a layer.
+#. When finished, a list of the shapefiles will be displayed, along with details and issues (if any).  Each shapefile will correspond to a layer.
 
    .. figure:: img/results.png
       :align: center
 
-      *The Data Importer results page*
+      *The Layer Importer results page*
 
-#. If you would like to see a preview of how a layer looks, click the :guilabel:`Preview` button next to that layer.  When finished you may close the browser.  Your data is now loaded into GeoServer.
+#. If you would like to see a preview of how a layer looks, click the :guilabel:`Preview` button next to that layer.  If you would like to view a layer's configuration, click the Name of the layer.
 
-#. If you would like to view a layer's data and publishing configuration, click the layer :guilabel:`Name`.
-
-If you wish to import more shapefiles from other directories, you may repeat this process.
+When finished you may close the browser.  Your data is now loaded into GeoServer.  If you wish to import more shapefiles from other directories, you may repeat this process.

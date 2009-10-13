@@ -8,6 +8,7 @@ This section will guide you through the process of going from geosptatial data t
 .. toctree::
    :maxdepth: 2
 
+   dashboard.rst
    import.rst
    style.rst
    compose.rst
