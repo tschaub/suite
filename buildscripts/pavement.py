@@ -6,7 +6,6 @@ from paver.setuputils import setup
 import ConfigParser
 from paver.easy import path, sh, info, pushd
 from paver.easy import task 
-from paver import svn 
 import os, zipfile 
 from os.path import join, isdir
 from  shutil import copytree,rmtree , copy, rmtree, move
@@ -284,27 +283,46 @@ def download_docs():
 @task 
 #@needs(['download_docs'])
 def docs():
-	''' 
-    	This builds the OpenGeo Documentation
-    	''' 
-    	section = "docs" 
-    	def build():
-        	with pushd(path.joinpath(download_path,docs_path)):
-   			with pushd("geoserver"):
-				sh("sphinx-build -bhtml source html")
-     			with pushd("geoexplorer"): 
-				sh("sphinx-build -bhtml . html")
-			with pushd(path.joinpath(path("docs"),"installerdocs")):
-				sh("sphinx-build -bhtml source html")
-			with pushd(path.joinpath(path("docs"),"integrationdocs")): 
-				sh("sphinx-build -bhtml source html")
-			with pushd(path.joinpath(path("docs"),"styler")): 
-				sh("sphinx-build -bhtml . html")
-	
-   	def move(): 
-    		copytree(path.joinpath(download_path,"documentation"),path.joinpath(source_path,"documentation"))
-	build()
-    	move()
+    ''' 
+    This builds the OpenGeo Documentation
+    section = "docs" 
+    '''
+    call_task("build_docs")
+    call_task("move_docs")
+
+
+@task 
+def move_docs():
+    download_docs_path = path.joinpath(download_path,"documentation")
+    source_docs_path = path.joinpath(source_path,"documentation")
+    
+    if source_docs_path.exists(): 
+        rmtree(source_docs_path)
+        os.mkdir(source_docs_path)
+    else:
+        os.mkdir(source_docs_path)
+    # move geoserver docs
+    copytree(path.joinpath(download_docs_path,"geoserver/html"),path.joinpath(source_docs_path,"geoserver"))
+    copytree(path.joinpath(download_docs_path,"geoexplorer/html"),path.joinpath(source_docs_path,"geoexplorer"))
+    vulcan_docs = path.joinpath(download_docs_path,"docs")
+    copytree(path.joinpath(vulcan_docs,"installerdocs/html"),path.joinpath(source_docs_path,"installer"))
+    copytree(path.joinpath(vulcan_docs,"integrationdocs/html"),path.joinpath(source_docs_path,"integration"))
+    copytree(path.joinpath(vulcan_docs,"styler/html"),path.joinpath(source_docs_path,"styler"))
+
+@task
+def build_docs():
+    with pushd(path.joinpath(download_path,docs_path)):
+        with pushd("geoserver"):
+            sh("sphinx-build -bhtml source html")
+        with pushd("geoexplorer"): 
+            sh("sphinx-build -bhtml . html")
+        with pushd(path.joinpath(path("docs"),"installerdocs")):
+            sh("sphinx-build -bhtml source html")
+        with pushd(path.joinpath(path("docs"),"integrationdocs")): 
+            sh("sphinx-build -bhtml source html")
+        with pushd(path.joinpath(path("docs"),"styler")): 
+            sh("sphinx-build -bhtml . html")
+
 
 
 
@@ -411,7 +429,6 @@ def dashboard():
 
     if sys.platform == 'linux2': 
         with pushd(source_path): 
-#            sh("gunzip OpenGeo\ Suite.tgz ; tar -xf OpenGeo\ Suite.tar")
             os.remove("OpenGeo Suite.tgz")
     if sys.platform == 'win32':
         with pushd(path.joinpath(download_path,"OpenGe~1")): 
