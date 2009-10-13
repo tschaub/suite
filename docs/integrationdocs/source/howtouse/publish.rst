@@ -1,9 +1,9 @@
 .. _publishyourmap:
 
-Publish Your Map
-================
+Step 4: Publish Your Map
+========================
 
-After you have created and composed your map, you can save it via a URL bookmark.  The URL can also be embedded in a web page.
+After you have created and composed your map in **GeoExplorer**, you can save it via a URL bookmark.  The URL can also be embedded in a web page.
 
 URL Bookmark
 ------------

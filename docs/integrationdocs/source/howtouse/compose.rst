@@ -1,7 +1,7 @@
 .. _composeyourmap:
 
-Compose Your Map
-================
+Step 3: Compose Your Map
+========================
 
 Now that the data is imported and styled, you can organize and compose your layers into a map.  **GeoExplorer** allows you to create web maps based on layers served through GeoServer.
 

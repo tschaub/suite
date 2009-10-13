@@ -10,14 +10,14 @@ GeoServer
 
 **Homepage:**  For the latest in GeoServer development, see `<http://geoserver.org>`_.  
 
-**Documentation:**  Online documentation page is found at `<http://docs.geoserver.org>`_.  Also included locally at :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoServer --> GeoServer Documentation`
+**Documentation:** Links to the documentation are available in the Dashboard or by navigating to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Documentation --> GeoServer Documentation`
 
-GeoExplorer
------------
+GeoExplorer and Styler
+----------------------
 
-**Homepage:** GeoExplorer is a component of GeoExt. For more information visit `http://geoext.org <http://geoext.org>`_.
+**Homepage:** GeoExplorer and Styler are applications built using GeoExt. For more information visit `http://geoext.org <http://geoext.org>`_.
 
-**Documentation:** Included locally at :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoExplorer --> GeoExplorer Documentation`
+**Documentation:** Links to the documentation are available in the Dashboard or by navigating to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Documentation`.
 
 OpenGeo
 -------

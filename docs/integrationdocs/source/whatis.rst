@@ -10,5 +10,5 @@ The OpenGeo Suite is comprised of geospatial software applications that work in 
 * **Styler** - A graphical map layer visualization editor.
 * **GeoExplorer** - A layer browser and map creator.
 
-GeoExplorer and Styler are based on `GeoExt <http://geoext.org>`_ and contain code from `OpenLayers <http://openlayers.org>`.
+GeoExplorer and Styler are based on `GeoExt <http://geoext.org>`_ and contain code from `OpenLayers <http://openlayers.org>`_.
 

@@ -1,13 +1,13 @@
 .. _importyourdata:
 
-Import Your Data
-================
+Step 1: Import Your Data
+========================
 
 The OpenGeo Suite comes with some data preloaded.  (See the section on :ref:`builtindemos` for more information.)  But to create *your* web map, you will need to first load your data into GeoServer.  GeoServer comes with a Data Importer application to make this process easy.
 
 #. First, start the OpenGeo Suite if it is not already started.  You can do this by going to the :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Start OpenGeo Suite`
 
-#. Open the GeoServer Data Importer.  You can do this in the Dashboard by clicking :guilabel:`Import Layers` in the Dashboard or by navigating to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Import Layers`.
+#. Open the GeoServer Layer Importer.  You can do this in the Dashboard by clicking :guilabel:`Import Layers` in the Dashboard or by navigating to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Import Layers`.
 
 #. You browser will open, and you may be asked to log into GeoServer.  Enter the username and password you chose when installing the OpenGeo Suite.  (The default username and password is ``admin`` and ``geoserver``.)  Click :guilabel:`Login` when done.
 

@@ -1,7 +1,7 @@
 .. _styleyourlayers:
 
-Style Your Layers
-=================
+Step 2: Style Your Layers
+=========================
 
 The Layer Importer will generate basic styles for each layer loaded in GeoServer.  To alter and improve the styling of your layers, use the **Styler** application.  
 
