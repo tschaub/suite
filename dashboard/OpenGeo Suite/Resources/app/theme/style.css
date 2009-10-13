@@ -60,6 +60,25 @@ a:hover {
     margin:0 10px 0 10px;
   }
 
+.dash-panel-body .steps {
+    font-weight:normal;
+    margin:10px 0 0 10px;
+}
+
+.dash-panel-body .stepheading {
+    color:#486300;
+    font-family:Optima,Georgia,serif;
+    font-size:15px;
+    margin-top:10px;
+}
+
+.dash-panel-body .steps ul {
+    line-height:1.5;
+    list-style-image:none;
+    list-style-position:inside;
+    list-style-type:square;
+    text-align:justify;
+}
 .dash-panel-body .launch {
     background:#F0F5EF;
     border:1px solid black;
