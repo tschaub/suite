@@ -609,9 +609,9 @@ Section "GeoServer" Section1a
   ;Create shortcuts
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
   CreateDirectory "$INSTDIR\webapps\docs" ; Needed for docs later?
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer Admin Page.lnk" \
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer Admin.lnk" \
                  "http://localhost:$Port/geoserver/web"
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer Data Importer.lnk" \
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Import Layers.lnk" \
                  "http://localhost:$Port/geoserver/web/?wicket:bookmarkablePage=:org.geoserver.web.importer.ImportPage"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer Data Directory.lnk" \
                  "$DataDirPath"
@@ -631,7 +631,7 @@ Section "GeoServer" Section1a
     SetOutPath "$INSTDIR"
 
     FileOpen $9 startsuite.bat w ; Opens a Empty File and fills it
-    FileWrite $9 'call "$INSTDIR\jre\bin\java.exe" -DGEOSERVER_DATA_DIR="$DataDirPath" -Xmx300m -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -Djetty.logs="$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs" -Djetty.port=$Port -jar start.jar'
+    FileWrite $9 'call "$INSTDIR\jre\bin\java.exe" -DGEOSERVER_DATA_DIR="$DataDirPath" -Xmx512m -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -Djetty.logs="$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs" -Djetty.port=$Port -jar start.jar'
     FileClose $9 ; Closes the file
 
     FileOpen $9 stopsuite.bat w ; Opens a Empty File and fills it
