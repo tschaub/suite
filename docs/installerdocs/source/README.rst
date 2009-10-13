@@ -59,8 +59,8 @@ Installation
 
 #. You can install the OpenGeo Suite in one of two ways.:
   
-   * :guilabel:`Run manually` - The OpenGeo Suite is run like a standard application.  This is useful for evaluating the software.
-   * :guilabel:`Install as a service` - The OpenGeo Suite is integrated with Windows Services.  This is more secure, and is the preferred method of running in a production environment.  This will also launch the OpenGeo Suite automatically with Windows.
+     * :guilabel:`Run manually` - The OpenGeo Suite is run like a standard application.  This is useful for evaluating the software.
+     * :guilabel:`Install as a service` - The OpenGeo Suite is integrated with Windows Services.  This is more secure, and is the preferred method of running in a production environment.  This will also launch the OpenGeo Suite automatically with Windows.
 
    If you are not sure which option to choose, select :guilabel:`Run manually`.
 
@@ -71,7 +71,7 @@ Installation
 
 #. Enter a username and password for configuring GeoServer, and also the port that the OpenGeo Suite will respond on.  When finished, click :guilabel:`Next`.
 
-   .. note:: Please make sure that no other applications are running on this port.
+      .. note:: Please make sure that no other applications are running on this port.
 
    .. figure:: img/creds.png
       :align: center
@@ -169,7 +169,7 @@ Credits
 
 All text content created by OpenGeo and licensed under the `Creative Commons Share-Alike license <http://creativecommons.org/licenses/by-sa/3.0>`_.
 
-All code is open source.
+All code is open source under various licenses including, but not limited to, the `GNU Public License <http://www.gnu.org/licenses/gpl.html>`_.
 
 For More Information
 --------------------
