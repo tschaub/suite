@@ -718,8 +718,7 @@ Section "GeoExplorer" SectionGX
 
   ; Set Section Files and Shortcuts
   SetOutPath "$INSTDIR\webapps\"
-  File /r /x .svn /x doc ..\artifacts\GeoExplorer
-  Rename "$INSTDIR\webapps\GeoExplorer" "$INSTDIR\webapps\geoexplorer" ; ugh, fix this in paver
+  File /r /x .svn /x doc ..\artifacts\geoexplorer
   File /a /oname=geoexplorer\geoext.ico geoext.ico
   
   ; Shortcuts
@@ -768,8 +767,7 @@ Section "Documentation" SectionDocs
   CreateDirectory "$INSTDIR\webapps\docs"
   SetOutPath "$INSTDIR\webapps\docs"
   
-  File /r /x .svn ..\artifacts\geoserver_doc
-  Rename "$INSTDIR\webapps\docs\geoserver_doc" "$INSTDIR\webapps\docs\geoserver" ; fix in paver
+  File /r /x .svn ..\artifacts\documentation\geoserver
 
   ; Shortcuts
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation"
@@ -780,10 +778,8 @@ Section "Documentation" SectionDocs
 ; GeoExplorer Documentation
 
   ; Set Section Files and Shortcuts
-  CreateDirectory "$INSTDIR\webapps\docs"
   SetOutPath "$INSTDIR\webapps\docs"
-  File /r /x .svn ..\artifacts\geoexplorer_doc
-  Rename "$INSTDIR\webapps\docs\geoexplorer_doc" "$INSTDIR\webapps\docs\geoexplorer"
+  File /r /x .svn ..\artifacts\documentation\geoexplorer
 
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoExplorer Documentation.lnk" \
 		         "$INSTDIR\webapps\docs\geoexplorer\index.html"
@@ -791,7 +787,12 @@ Section "Documentation" SectionDocs
 
 ; "Styler Docs" 
 
-  ; NEED DOCS!
+  ; Set Section Files and Shortcuts
+  SetOutPath "$INSTDIR\webapps\docs"
+  File /r /x .svn ..\artifacts\documentation\styler
+
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\Styler Documentation.lnk" \
+		         "$INSTDIR\webapps\docs\styler\index.html"
 
 SectionEnd
 
@@ -806,10 +807,10 @@ Section "-Getting Started" SectionGettingStarted ;dash means hidden
 
   ; Set Section Files and Shortcuts
   SetOutPath "$INSTDIR\webapps\docs"
-  File /r /x .svn ..\artifacts\integrationdocs_doc
-  Rename "$INSTDIR\webapps\docs\integrationdocs_doc" "$INSTDIR\webapps\docs\gettingstarted"
+  File /r /x .svn ..\artifacts\documentation\integration
+  Rename "$INSTDIR\webapps\docs\integration" "$INSTDIR\webapps\docs\gettingstarted"
 
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Getting Started.lnk" \
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\Getting Started.lnk" \
 		         "$INSTDIR\webapps\docs\gettingstarted\index.html"
 
 SectionEnd
