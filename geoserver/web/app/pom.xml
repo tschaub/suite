@@ -24,6 +24,11 @@
       <groupId>org.geoserver.extension</groupId>
       <artifactId>restconfig</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.geoserver.community</groupId>
+      <artifactId>proxy</artifactId>
+      <version>${project.version}</version>
+    </dependency>
     
     <!-- we add some spices here -->
     <dependency>
@@ -359,16 +364,6 @@
         <dependency>
           <groupId>org.geoserver.community</groupId>
           <artifactId>hibernate</artifactId>
-          <version>${project.version}</version>
-        </dependency>
-      </dependencies>
-    </profile>
-    <profile>
-      <id>proxy</id>
-      <dependencies>
-        <dependency>
-          <groupId>org.geoserver.community</groupId>
-          <artifactId>proxy</artifactId>
           <version>${project.version}</version>
         </dependency>
       </dependencies>
