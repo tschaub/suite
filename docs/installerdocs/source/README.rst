@@ -99,7 +99,7 @@ Installation
 
       *The OpenGeo Suite successfully installed*
 
-For more information, please see the document titled **Getting Started**, which is available in the Start Menu at :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Getting Started`.
+For more information, please see the document titled **Getting Started**, which is available in the Start Menu at :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Documentation --> Getting Started`.
 
 .. note:: The OpenGeo Suite must be running in order to view all documentation.
 
@@ -118,7 +118,7 @@ Example upgrade (from 1.0 to 1.1)
 
 #. Back up the current data directory.
 
-   .. note:: On Windows XP this is by default stored in :file:`C:\\Documents and Settings\\All Users\\Application Data\\OpenGeo\\OpenGeo Suite 1.0\\data_dir`).
+   .. note:: On Windows XP this is by default stored in :file:`C:\\Documents and Settings\\All Users\\Application Data\\OpenGeo\\OpenGeo Suite 1.0\\data_dir`.
 
 #. Uninstall OpenGeo Suite 1.0.
 
@@ -128,7 +128,7 @@ Example upgrade (from 1.0 to 1.1)
 
 #. Overwrite data directory with saved data directory.
 
-   .. note:: On Windows XP this is by default stored in :file:`C:\\Documents and Settings\\All Users\\Application Data\\OpenGeo\\OpenGeo Suite 1.1\\data_dir`).
+   .. note:: On Windows XP this is by default stored in :file:`C:\\Documents and Settings\\All Users\\Application Data\\OpenGeo\\OpenGeo Suite 1.1\\data_dir`.
 
 #. Restart OpenGeo Suite 1.1.
 
@@ -147,7 +147,7 @@ Uninstallation
 
       *Ready to uninstall the OpenGeo Suite*
 
-#. The uninstaller warn you to back up your data directory if you are upgrading.  When ready to continue, click :guilabel:`OK`.
+#. The uninstaller will warn you to back up your data directory if you are upgrading.  When ready to continue, click :guilabel:`OK`.
 
    .. warning:: Deleting the data directory is *not* undoable!
 
