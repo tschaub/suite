@@ -12,7 +12,7 @@
 Name "${APPNAMEANDVERSION}"
 InstallDir "$PROGRAMFILES\${COMPANYNAME}\${APPNAMEANDVERSION}"
 InstallDirRegKey HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" ""
-OutFile "OpenGeoSuite-1.0beta.exe"
+OutFile "OpenGeoSuite-1.0.exe"
 
 ;Compression options
 CRCCheck on
@@ -313,7 +313,7 @@ Function InstallType
     ${NSD_Check} $Service
   ${EndIf}
 
-  ${NSD_CreateLabel} 10 88u 90% 24u "For system administrators who wish to integrate with Windows Services.  GeoServer will run in a restricted account for greater security."
+  ${NSD_CreateLabel} 10 88u 90% 24u "For system administrators who wish to integrate with Windows Services.  The OpenGeo Suite will run in a restricted account for greater security."
 
   nsDialogs::Show
 
@@ -455,7 +455,7 @@ Function Ready
   ${NSD_CreateLabel} 40u 34u 70% 12u "$INSTDIR"
 
   ; Install type
-  ${NSD_CreateLabel} 20u 47u 75% 12u "OpenGeo Suite installation:"
+  ${NSD_CreateLabel} 20u 47u 75% 12u "OpenGeo Suite installation type:"
   StrCmp $IsManual 1 Manual Service
   Manual:
     ${NSD_CreateLabel} 40u 56u 70% 12u "Run manually"

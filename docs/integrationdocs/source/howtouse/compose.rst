@@ -21,12 +21,13 @@ Now that the data is imported and styled, you can organize and compose your laye
 
 #. A list of layers from GeoServer will be displayed.  Select the layers you wish to add, then click :guilabel:`Add layers`.  (You can Ctrl-click to select multiple layers.)  Click :guilabel:`Done` when finished.
 
-   .. note:: You can also add layers served through another remote GeoServer, or any other compatible Web Map Server (WMS).  Click the :guilabel:`Add a new server` button to connect to another server.
-
    .. figure:: img/addlayersdialog.png
       :align: center
 
       *Selecting layers to add to your map*
+
+   .. note:: You can also add layers served through another remote GeoServer, or any other compatible Web Map Server (WMS).  Click the :guilabel:`Add a new server` button to connect to another server.
+
 
 #. The layers will be added to the map.  
 
@@ -50,5 +51,5 @@ Now that the data is imported and styled, you can organize and compose your laye
 
       *The composed map*
 
-   .. note:: For more information on GeoExplorer, please see the GeoExplorer Documentation by selecting :guilabel:`GeoExplorer Documentation` in teh Dashboard, or by navigating to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Documentation --> GeoExplorer Documentation`.
+   .. note:: For more information on GeoExplorer, please see the GeoExplorer Documentation by selecting :guilabel:`GeoExplorer Documentation` in the Dashboard, or by navigating to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Documentation --> GeoExplorer Documentation`.
 

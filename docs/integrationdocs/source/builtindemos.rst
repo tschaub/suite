@@ -22,5 +22,5 @@ Base Map
 
 Also included is a base map containing country boundaries and major cities.
 
-These layers are shown by default when GeoExplorer is loaded.  Go to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoExplorer --> GeoExplorer Documentation` or select :guilabel:`GeoExplorer` from the Dashboard to view this base map.
+These layers are shown by default when GeoExplorer is loaded.  Go to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoExplorer` or select :guilabel:`GeoExplorer` from the Dashboard to view this base map.
 

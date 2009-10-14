@@ -313,7 +313,7 @@ def move_docs():
 def build_docs():
     with pushd(path.joinpath(download_path,docs_path)):
         with pushd("geoserver"):
-            sh("sphinx-build -bhtml source html")
+            sh("sphinx-build source html")
         with pushd("geoexplorer"): 
             sh("sphinx-build -bhtml . html")
         with pushd(path.joinpath(path("docs"),"installerdocs")):

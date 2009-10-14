@@ -3,16 +3,18 @@
 Step 2: Style Your Layers
 =========================
 
-The Layer Importer will generate basic styles for each layer loaded in GeoServer.  To alter and improve the styling of your layers, use the **Styler** application.  
+The Layer Importer will generate a distinct style for each layer.  To alter and improve the styling of your layers, use the **Styler** application.  
 
-These example instructions will change the color of one of the default styles.  If you would like to keep the default styles, you may skip to the next section, :ref:`composeyourmap`.
+These example instructions will change the color of one of the default styles created during the import process.  If you would like to keep the default styles, you may skip to the next section, :ref:`composeyourmap`.
 
-.. note:: For more information on Styler, please see the Styler Documentation.  you can access this by clicking the :guilabel:`Styler Documentation` link in the Dashboard or by navigating to `Start Menu --> Programs --> OpenGeo Suite --> Documentation --> Styler`.
+.. note:: For more information on Styler, please see the Styler Documentation. You can access this by clicking the :guilabel:`Styler Documentation` link in the Dashboard or by navigating to `Start Menu --> Programs --> OpenGeo Suite --> Documentation --> Styler`.
 
-#. Launch Styler.  Styler can be launched from the :guilabel:`Style Layers` link in the Dashboard or by navigating to menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Styler`.
+#. Launch Styler.  Styler can be launched from the :guilabel:`Style Layers` link in the Dashboard or by navigating to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Styler`.
 
    .. figure:: img/styler.png
       :align: center
+
+      *Styler*
 
 #. A list of all the loaded layers in GeoServer will be displayed in the :guilabel:`Layers` column.  Select the layer you would like to style by clicking the radio button next to the layer name.  While styling your layer, you can show or hide other layers for context by checking or unchecking the boxes next to the layers.
 
@@ -55,4 +57,4 @@ These example instructions will change the color of one of the default styles.  
 
 #. Repeat this process for every layer that you wish to style.
 
-   .. note:: Any changes made through Styler will immediately be live and will persist.
+   .. note:: Any changes made through Styler will get saved be immediately saved in GeoServer and will persist.
