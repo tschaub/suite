@@ -165,13 +165,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         id: "app-panels-dash-quickstart",
                         listeners: dashPanelListeners
                     },  {
-                        title: "GeoServer",
-                        tabTip: "Manage GeoServer",
-                        cls: "dash-panel",
-                        html: og.util.loadSync("app/markup/dash/geoserver.html"),
-                        id: "app-panels-dash-geoserver",
-                        listeners: dashPanelListeners
-                    }, {
                         title: "GeoExplorer",
                         tabTip: "Manage GeoExplorer",
                         cls: "dash-panel",
@@ -186,6 +179,13 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         id: "app-panels-dash-styler",
                         listeners: dashPanelListeners
                     },  {
+                        title: "GeoServer",
+                        tabTip: "Manage GeoServer",
+                        cls: "dash-panel",
+                        html: og.util.loadSync("app/markup/dash/geoserver.html"),
+                        id: "app-panels-dash-geoserver",
+                        listeners: dashPanelListeners
+                    }, {
                         title: "GeoWebCache",
                         tabTip: "Manage GeoWebCache",
                         cls: "dash-panel",
