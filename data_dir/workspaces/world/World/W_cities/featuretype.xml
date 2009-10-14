@@ -6,6 +6,7 @@
     <id>NamespaceInfoImpl-68b76edb:123c95ae60d:-7ffe</id>
   </namespace>
   <title>World - Cities</title>
+  <abstract>Location of some major international cities.</abstract>
   <srs>EPSG:4326</srs>
   <nativeBoundingBox>
     <minx>-122.42</minx>

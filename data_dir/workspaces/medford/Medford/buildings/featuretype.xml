@@ -6,6 +6,7 @@
     <id>NamespaceInfoImpl--5a410816:122666d6979:-7fa4</id>
   </namespace>
   <title>Medford, OR - Buildings</title>
+  <abstract>The building outlines for Medford, Oregon as of March 2009.</abstract>
   <srs>EPSG:4326</srs>
   <nativeBoundingBox>
     <minx>-122.911</minx>

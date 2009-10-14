@@ -6,6 +6,7 @@
     <id>NamespaceInfoImpl--5a410816:122666d6979:-7fa4</id>
   </namespace>
   <title>Medford, OR - Hospitals</title>
+  <abstract>Location of Hospitals in Jackson County, Oregon as of October 2006.</abstract>
   <nativeCRS>GEOGCS[&quot;GCS_WGS_1984&quot;, 
   DATUM[&quot;D_WGS_1984&quot;, 
     SPHEROID[&quot;WGS_1984&quot;, 6378137.0, 298.257223563]], 

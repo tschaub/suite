@@ -6,6 +6,7 @@
   </namespace>
   <title>Medford, OR - Digital Elevation</title>
   <description>Generated from GeoTIFF</description>
+  <abstract>50 Meters USGS 30 Meter Digital Elevation Model Color Shaded Relief of Medford, Oregon taken as of 01/23/2001.</abstract>
   <keywords>
     <string>WCS</string>
     <string>GeoTIFF</string>
@@ -51,8 +52,8 @@
       <high>3465 3319</high>
     </range>
     <transform>
-      <scaleX>1.578825469569909E-4</scaleX>
-      <scaleY>-1.578825469569909E-4</scaleY>
+      <scaleX>1.0</scaleX>
+      <scaleY>1.0</scaleY>
       <shearX>0.0</shearX>
       <shearX>0.0</shearX>
       <translateX>-123.0464617608601</translateX>

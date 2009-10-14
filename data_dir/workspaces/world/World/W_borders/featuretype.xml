@@ -6,6 +6,7 @@
     <id>NamespaceInfoImpl-68b76edb:123c95ae60d:-7ffe</id>
   </namespace>
   <title>World - Borders</title>
+  <abstract>Borders of world continents.</abstract>
   <nativeCRS>GEOGCS[&quot;GCS_WGS_1984&quot;, 
   DATUM[&quot;D_WGS_1984&quot;, 
     SPHEROID[&quot;WGS_1984&quot;, 6378137.0, 298.257223563]], 

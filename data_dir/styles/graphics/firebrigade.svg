@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 13.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 14948)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1"
+	 id="svg2" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" inkscape:version="0.45.1" xmlns:cc="http://web.resource.org/cc/" sodipodi:version="0.32" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" sodipodi:docbase="C:\Dokumente und Einstellungen\ulfl\Eigene Dateien\svn.openstreetmap.org\applications\share\map-icons\svg\public" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" sodipodi:docname="firebrigade.svg" inkscape:output_extension="org.inkscape.output.svg.inkscape"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1000px" height="500px"
+	 viewBox="0 0 1000 500" enable-background="new 0 0 1000 500" xml:space="preserve">
+<path id="path3172" sodipodi:type="arc" sodipodi:open="true" sodipodi:end="6.2831853" sodipodi:start="3.1415927" sodipodi:ry="25.983147" sodipodi:rx="14.747191" sodipodi:cy="25.983147" sodipodi:cx="577.94946" fill="#0000FF" d="
+	M820.225,100.421c0-25.209,14.463-45.646,32.304-45.646s32.304,20.437,32.304,45.646l0,0"/>
+<circle id="circle10" sodipodi:ry="77" sodipodi:rx="77" sodipodi:cy="412" sodipodi:cx="748" cx="252.563" cy="412" r="77">
+</circle>
+<sodipodi:namedview  id="base" inkscape:current-layer="svg2" inkscape:window-y="58" inkscape:window-x="44" inkscape:cy="138.73616" inkscape:cx="500.63904" inkscape:zoom="0.712" pagecolor="#ffffff" inkscape:window-height="852" inkscape:window-width="1178" inkscape:pageshadow="2" inkscape:pageopacity="0.0" guidetolerance="10.0" gridtolerance="10.0" objecttolerance="10.0" borderopacity="1.0" bordercolor="#666666">
+	</sodipodi:namedview>
+<path id="path4" fill="#D40000" d="M704.782,86.812l179.719,12.406c30.479,2.308,21.177-5.965,54.875,83.469
+	c32.75,83.897,27.228,54.695,26.875,98.938v99c-0.271,25.888-4.147,32.259-32.25,32.469
+	c-4.065-130.672-191.179-131.133-194.906,0.75l-389.062,0.25c0.188-33.994-14.188-59.896-37.188-78.688l391.938-0.312V233.156
+	h41.562V127.812h-41.562V86.812z M781.063,127.719l1.562,105.469l132.625,15.531c23.517,3.06,24.88-3.128,16.281-24.062
+	l-25.594-68.25c-6.427-21.155-6.572-21.247-24.812-22.469L781.063,127.719z M192.126,335.562
+	c-23.832,19.108-37.293,46.282-37.062,78.625l-56.719,0.062l-64.594-22.875l0.188-55.781L192.126,335.562z"/>
+<path id="rect6" fill="#D40000" d="M705.47,86.594v41.219H590.438v105.344H705.47V337.75H34.813V86.594h512.094v228h18.25v-228
+	H705.47z"/>
+<circle id="circle8" sodipodi:ry="77" sodipodi:rx="77" sodipodi:cy="412" sodipodi:cx="164" cx="836.563" cy="412" r="77">
+</circle>
+<rect id="rect3160" x="58.989" y="112.359" fill="#333333" width="223.314" height="203.652"/>
+<rect id="rect3162" x="58.989" y="112.359" fill="#808080" width="223.314" height="203.652"/>
+<rect id="rect3166" x="296.348" y="110.955" fill="#808080" width="223.315" height="203.652"/>
+<path id="path3174" fill="none" stroke="#0000FF" stroke-width="10.7645" d="M853.933,48.318V7.725"/>
+<path id="path5118" fill="none" stroke="#0000FF" stroke-width="10.7645" d="M871.917,52.532l23.021-33.434"/>
+<path id="path5120" fill="none" stroke="#0000FF" stroke-width="10.7645" d="M835.948,51.127l-23.021-33.434"/>
+</svg>

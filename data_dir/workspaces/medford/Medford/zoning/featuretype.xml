@@ -6,6 +6,7 @@
     <id>NamespaceInfoImpl--5a410816:122666d6979:-7fa4</id>
   </namespace>
   <title>Medford, OR - Zoning</title>
+  <abstract>City Zones from the Jackson County City Planning as of April 2008.</abstract>
   <srs>EPSG:4326</srs>
   <nativeBoundingBox>
     <minx>-122.911</minx>
