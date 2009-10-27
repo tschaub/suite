@@ -5,15 +5,15 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.opengeo.vulcan</groupId>    
+    <groupId>org.opengeo</groupId>    
     <artifactId>geoserver</artifactId>
-    <version>2.0-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.opengeo.vulcan</groupId>
-  <artifactId>vulcan-web</artifactId>
+  <groupId>org.opengeo.geoserver</groupId>
+  <artifactId>web</artifactId>
   <packaging>pom</packaging>
-  <name>Vulcan custom Web Modules</name>
+  <name>OpenGeo Suite GeoServer Web Application</name>
   
   <modules>
     <module>demo</module>

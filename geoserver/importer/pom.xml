@@ -6,63 +6,50 @@
 
   <!-- set parent pom to community pom -->
   <parent>
-    <groupId>org.opengeo.vulcan</groupId>
+    <groupId>org.opengeo</groupId>
     <artifactId>geoserver</artifactId>
-    <version>2.0-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.opengeo.vulcan</groupId>
-  <artifactId>vulcan-importer</artifactId>
+  <groupId>org.opengeo.geoserver</groupId>
+  <artifactId>importer</artifactId>
   <packaging>jar</packaging>
-  <version>2.0-SNAPSHOT</version>
-  <name>Vulcan mass layer importer</name>
+  <name>OpenGeo Suite GeoServer Data Importer</name>
 
-  <!-- declare depenency on geoserver main -->
   <dependencies>
     <dependency>
-      <groupId>org.opengeo.vulcan.web</groupId>
-      <artifactId>vulcan-demo</artifactId>
+      <groupId>org.opengeo.geoserver</groupId>
+      <artifactId>web-demo</artifactId>
       <version>${project.version}</version>
     </dependency>
-    
     <dependency>
       <groupId>org.geoserver</groupId>
       <artifactId>main</artifactId>
-      <version>${project.version}</version>
     </dependency>
-  
     <dependency>
       <groupId>org.geoserver.web</groupId>
       <artifactId>web-core</artifactId>
-      <version>${project.version}</version>
     </dependency>
-    
     <dependency>
       <groupId>org.geoserver.web</groupId>
       <artifactId>web-demo</artifactId>
-      <version>2.0-SNAPSHOT</version>
     </dependency>
-    
     <dependency>
       <groupId>org.geotools</groupId>
       <artifactId>gt-directory</artifactId>	
       <version>${gt.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.geotools</groupId>
       <artifactId>gt-shapefile</artifactId>
       <version>${gt.version}</version>
     </dependency>
-    
     <dependency>
       <groupId>org.geoserver</groupId>
       <artifactId>main</artifactId>
-      <version>2.0-SNAPSHOT</version>
       <classifier>tests</classifier>
       <scope>test</scope>
     </dependency>
-    
     <dependency>
       <groupId>com.mockrunner</groupId>
       <artifactId>mockrunner</artifactId>

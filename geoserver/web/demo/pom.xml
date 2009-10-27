@@ -5,31 +5,28 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.opengeo.vulcan</groupId>
-    <artifactId>vulcan-web</artifactId>
-    <version>2.0-SNAPSHOT</version>
+    <groupId>org.opengeo.geoserver</groupId>
+    <artifactId>web</artifactId>
+    <version>1.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.opengeo.vulcan.web</groupId>
-  <artifactId>vulcan-demo</artifactId>
+  <groupId>org.opengeo.geoserver</groupId>
+  <artifactId>web-demo</artifactId>
   <packaging>jar</packaging>
-  <name>Vulcan demo extras</name>
+  <name>OpenGeo Suite GeoServer Web Demo Module</name> 
 
   <dependencies>
     <dependency>
       <groupId>org.geoserver.web</groupId>
       <artifactId>web-core</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.geoserver.web</groupId>
       <artifactId>web-demo</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.geoserver</groupId>
       <artifactId>main</artifactId>
-      <version>${project.version}</version>
       <classifier>tests</classifier>
       <scope>test</scope>
     </dependency>
