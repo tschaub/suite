@@ -253,7 +253,7 @@
  </profiles>
 
  <properties>
-  <gs.version>2.0-SNAPSHOT</gs.version>
+  <gs.version>2.0.1-SNAPSHOT</gs.version>
   <gt.version>2.6-SNAPSHOT</gt.version>
   <java.awt.headless>true</java.awt.headless>
   <test.maxHeapSize>512M</test.maxHeapSize>
