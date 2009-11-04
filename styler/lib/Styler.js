@@ -182,7 +182,7 @@ var Styler = Ext.extend(Ext.util.Observable, {
      */
     parseWMSCapabilities: function(response, request) {
         var capabilities = new OpenLayers.Format.WMSCapabilities().read(
-            response.responseXML.documentElement ?
+            response.responseXML && response.responseXML.documentElement ?
             response.responseXML : response.responseText);
         this.wmsLayerList = capabilities.capability.layers;
         request.options.callback();
@@ -193,7 +193,7 @@ var Styler = Ext.extend(Ext.util.Observable, {
      */
     parseWFSCapabilities: function(response, request) {
         var capabilities = new OpenLayers.Format.WFSCapabilities().read(
-            response.responseXML.documentElement ?
+            response.responseXML && response.responseXML.documentElement ?
             response.responseXML : response.responseText);
         this.wfsLayerList = capabilities.featureTypeList.featureTypes;
         request.options.callback();
