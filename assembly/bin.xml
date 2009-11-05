@@ -37,6 +37,10 @@
       <outputDirectory>webapps/docs/geoserver</outputDirectory>
     </fileSet>
     <fileSet>
+      <directory>data_dir</directory>
+      <outputDirectory>data_dir</outputDirectory>
+    </fileSet>
+    <fileSet>
       <directory>jetty</directory>
       <outputDirectory>/</outputDirectory>
       <excludes>
