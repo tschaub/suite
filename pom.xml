@@ -105,6 +105,31 @@
   <module>dashboard</module>
  </modules>
 
+ <profiles>
+   <profile>
+     <id>jetty</id>
+     <activation>
+       <property>
+         <name>full</name>
+        </property>
+      </activation>
+     <modules>
+       <module>jetty</module>
+     </modules>
+   </profile>
+   <profile>
+     <id>docs</id>
+     <activation>
+       <property>
+         <name>full</name>
+        </property>
+      </activation>
+     <modules>
+       <module>docs</module>
+     </modules>
+   </profile>
+ </profiles>
+
  <properties>
    <jetty.version>6.1.8</jetty.version>
    <ant.version>1.6.5</ant.version>
