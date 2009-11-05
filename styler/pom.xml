@@ -43,6 +43,13 @@
                   <arg line="-o ${basedir}/script"/> 
                   <arg line="build.cfg"/>
                 </exec>
+                <mkdir dir="${build.directory}/styler"/>
+                <copy todir="${build.directory}/styler">
+                  <fileset dir="${basedir}" includes="*.html"/>
+                  <fileset dir="${basedir}" includes="externals/**"/>
+                  <fileset dir="${basedir}" includes="script/**"/>
+                  <fileset dir="${basedir}" includes="theme/**"/>
+                </copy>
               </tasks>
             </configuration>
             <goals>
