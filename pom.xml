@@ -70,16 +70,43 @@
    <version>${jetty.version}</version>
    <type>pom</type>
   </dependency>
+  <dependency>
+   <groupId>ant</groupId>
+   <artifactId>ant</artifactId>
+   <version>${ant.version}</version>
+  </dependency>
   </dependencies>
  </dependencyManagement>
+
+ <build>
+   <plugins>
+     <plugin>
+       <artifactId>maven-assembly-plugin</artifactId>
+       <configuration>
+         <descriptors>
+           <descriptor>assembly/bin.xml</descriptor>
+         </descriptors>
+       </configuration>
+     </plugin>
+     <!--plugin>
+       <artifactId>maven-eclipse-plugin</artifactId>
+       <version>2.7</version>
+       <configuration>
+         <addGroupIdToProjectName>true</addGroupIdToProjectName>
+       </configuration>
+     </plugin-->
+   </plugins>
+ </build>
 
  <modules>
   <module>geoserver</module>
   <module>styler</module>
+  <module>geoexplorer</module>
   <module>dashboard</module>
  </modules>
 
  <properties>
    <jetty.version>6.1.8</jetty.version>
+   <ant.version>1.6.5</ant.version>
  </properties>
 </project>
