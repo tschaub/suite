@@ -139,6 +139,9 @@ var Styler = Ext.extend(Ext.util.Observable, {
      * Method: getWMSCapabilities
      */
     getWMSCapabilities: function(callback) {
+        var namespace = OpenLayers.Util.upperCaseObject(
+            OpenLayers.Util.getParameters(window.location.href)
+        ).NAMESPACE;
         Ext.Ajax.request({
             url: "/geoserver/wms?",
             method: "GET",
@@ -147,10 +150,10 @@ var Styler = Ext.extend(Ext.util.Observable, {
             failure: function() {
                 throw("Unable to read capabilities from WMS");
             },
-            params: {
+            params: Ext.apply(namespace ? {NAMESPACE: namespace} : {}, {
                 VERSION: "1.1.1",
                 REQUEST: "GetCapabilities"
-            },
+            }),
             options: {callback: callback},
             scope: this
         });
@@ -456,9 +459,6 @@ var Styler = Ext.extend(Ext.util.Observable, {
 
         this.map.addLayers(layers);
         
-        var params = OpenLayers.Util.getParameters(window.location.href);
-        
-
         this.setCurrentLayer(this.map.layers[selected]);
     },
     
