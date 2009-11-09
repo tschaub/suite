@@ -11,7 +11,7 @@
 
   <groupId>org.opengeo.geoserver</groupId>
   <artifactId>web-app</artifactId>
-  <packaging>war</packaging>
+  <packaging>jar</packaging>
   <name>OpenGeo Suite GeoServer Web App Module</name>
 
   <dependencies>
@@ -78,6 +78,14 @@
         <warName>geoserver</warName>
         <webappDirectory>${project.build.directory}/geoserver</webappDirectory>
       </configuration>
+      <executions>
+        <execution>
+           <phase>install</phase> 
+           <goals>
+             <goal>war</goal>
+           </goals>
+        </execution>
+      </executions>
     </plugin>
     <plugin>
       <groupId>org.geoserver.maven</groupId>
