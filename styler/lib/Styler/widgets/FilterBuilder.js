@@ -252,9 +252,9 @@ Styler.FilterBuilder = Ext.extend(Ext.Panel, {
                             // non-logical child of NOT should be wrapped
                             var type;
                             if(this.defaultBuilderType === Styler.FilterBuilder.NOT_ALL_OF) {
-                                type = OpenLayers.Logical.Filter.AND;
+                                type = OpenLayers.Filter.Logical.AND;
                             } else {
-                                type = OpenLayers.Logical.Filter.OR;
+                                type = OpenLayers.Filter.Logical.OR;
                             }
                             filter.filters = [
                                 new OpenLayers.Filter.Logical({
