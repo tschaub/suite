@@ -40,7 +40,23 @@
     <enabled>true</enabled>
    </snapshots>
   </repository>
+  <repository>
+    <id>central</id>
+    <name>Central Maven Repository</name>
+    <url>http://repo1.maven.org/maven2</url>
+    <snapshots>
+      <enabled>false</enabled>
+    </snapshots>
+  </repository>
  </repositories>
+
+ <pluginRepositories>
+  <pluginRepository>
+    <id>opengeo</id>
+    <name>OpenGeo Maven Repository</name>
+    <url>http://repo.opengeo.org</url>
+  </pluginRepository>
+ </pluginRepositories>
 
  <dependencyManagement>
   <dependencies>
