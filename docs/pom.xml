@@ -17,6 +17,7 @@
  <name>OpenGeo Doc Module</name>
 
  <modules>
+  <module>gettingstarted</module>
   <module>geoexplorer</module>
   <module>geoserver</module>
   <module>styler</module>
