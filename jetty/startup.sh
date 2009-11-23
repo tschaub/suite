@@ -9,11 +9,12 @@ _RUNJAVA=""
 if [ "$JAVA_HOME" != "" ] && [ -e $JAVA_HOME/bin/java ]; then
   _RUNJAVA=$JAVA_HOME/bin/java
 else
-  which java
+  which java > /dev/null
   if [ "$?" == "1" ]; then
     echo "JAVA_HOME is not defined, and java is not on the current PATH"
     exit
   fi
+  _RUNJAVA=`which java`
 fi
 
 GDD=$GEOSERVER_DATA_DIR
