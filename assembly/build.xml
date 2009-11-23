@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="assembly" default="build" basedir=".">
+
+  <property name="data" value="http://data.opengeo.org/suite"/>
+
+  <target name="build"> 
+    <tstamp/>
+    <get src="${data}/suite_jre.zip" dest="jre.zip" usetimestamp="yes"/>
+    <unzip src="jre.zip" dest="." overwrite="false"/>
+    <get src="${data}/suite_gdal.zip" dest="gdal.zip" usetimestamp="yes"/>
+    <unzip src="gdal.zip" dest="gdal" overwrite="false"/>
+  </target>
+
+</project>

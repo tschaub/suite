@@ -101,6 +101,7 @@
        <configuration>
          <descriptors>
            <descriptor>assembly/bin.xml</descriptor>
+           <descriptor>assembly/raw.xml</descriptor>
          </descriptors>
        </configuration>
      </plugin>
@@ -142,6 +143,17 @@
       </activation>
      <modules>
        <module>docs</module>
+     </modules>
+   </profile>
+   <profile>
+     <id>assembly</id>
+     <activation>
+       <property>
+         <name>full</name>
+        </property>
+      </activation>
+     <modules>
+       <module>assembly</module>
      </modules>
    </profile>
  </profiles>
