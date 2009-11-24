@@ -28,7 +28,7 @@ extensions = ['sphinx.ext.intersphinx', 'sphinx.ext.todo']
 todo_include_todos = True
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['../../opengeotheme/_templates']
+#templates_path = ['../../opengeotheme/_templates']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
@@ -94,7 +94,8 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  Major themes that come with
 # Sphinx are currently 'default' and 'sphinxdoc'.
-html_theme = 'default'
+html_theme = 'opengeo'
+html_theme_path = ['../../themes']
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -123,7 +124,7 @@ html_theme = 'default'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['../../opengeotheme/_static']
+#html_static_path = ['../../opengeotheme/_static']
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
