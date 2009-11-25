@@ -78,7 +78,7 @@ public class Dashboard {
             //dashboard context
             cxt = new WebAppContext();
             cxt.setContextPath("/dashboard");
-            cxt.setWar("OpenGeo Suite/Resources");
+            cxt.setWar("OpenGeo Dashboard/Resources");
             contexts.add(cxt);
             
             jetty.setHandlers((Handler[])contexts.toArray(new Handler[contexts.size()]));

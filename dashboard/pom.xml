@@ -73,7 +73,7 @@
               <tasks>
                 <mkdir dir="${build.directory}/dashboard"/>
                 <copy todir="${build.directory}/dashboard">
-                  <fileset dir="${basedir}/OpenGeo Suite/Resources" includes="**/*"/>
+                  <fileset dir="${basedir}/OpenGeo Dashboard/Resources" includes="**/*"/>
                 </copy>
               </tasks>
             </configuration>
