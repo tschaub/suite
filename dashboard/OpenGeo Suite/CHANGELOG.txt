@@ -1,4 +1,0 @@
-Pre-Release
------------
-
-Getting dashboard set up as a Titanium app.

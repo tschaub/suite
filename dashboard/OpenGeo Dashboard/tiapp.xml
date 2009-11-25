@@ -2,16 +2,16 @@
 <ti:app xmlns:ti='http://ti.appcelerator.org'>
 <!-- These values are edited/maintained by Titanium Developer -->
 <id>org.opengeo.suite</id>
-<name>OpenGeo Suite</name>
-<version>0.1</version>
-<publisher>OpenGeo</publisher>
+<name>OpenGeo Dashboard</name>
+<version>1.0</version>
+<publisher>tschaub</publisher>
 <url>http://opengeo.org</url>
-<icon>logo.png</icon>
+<icon>default_app_logo.png</icon>
 <copyright>2009 by The Open Planning Project</copyright>
 <!-- Window Definition - these values can be edited -->
 <window>
 <id>initial</id>
-<title>OpenGeo Suite</title>
+<title>OpenGeo Dashboard</title>
 <url>app://index.html</url>
 <width>800</width>
 <max-width>3000</max-width>
