@@ -38,7 +38,7 @@
             <phase>compile</phase>
             <configuration>
               <tasks>
-                <exec executable="sphinx-build" failonerror="true" dir="${basedir}">
+                <exec executable="sphinx-build" failonerror="true" dir="${basedir}/source">
                   <arg line="-b html -d ${build.directory}/doctrees . ${build.directory}/html"/>
                 </exec>
               </tasks>
