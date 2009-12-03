@@ -3,14 +3,14 @@
 # This script is used to package a Titanium application in the cloud.
 #
 
-import sys, os.path, logging, urllib, json
+import sys, os, logging, urllib, urllib2, json, zipfile, StringIO
 
 logger = logging.getLogger("cloud")
+cloud_url = "https://api.appcelerator.net/p/v1/"
 
 def login(app_path, user, password):
 
-    # this is extracted from the Titanium Developer source
-    url = "https://api.appcelerator.net/p/v1/sso-login"
+    url = cloud_url + "sso-login"
 
     # get some app details
     h = open(os.path.join(app_path, "timanifest"))
@@ -29,23 +29,49 @@ def login(app_path, user, password):
     return details
 
 
-def bundle(app_path):
+def bundle(app_path, ignore=(".svn",)):
 
-    zip_data = "TODO: bundle resources as zip"
+    def add_entry(path, archive):
+        if os.path.isdir(path):
+            for entry in [e for e in os.listdir(path) if e not in ignore]:
+                entry = os.path.join(path, entry)
+                add_entry(entry, archive)
+        elif path not in ignore:
+            archive.write(path, path[len(app_path)+1:])
+        return
+    
+    entries = ("Resources", "modules", "timanifest", "manifest",
+               "tiapp.xml", "CHANGELOG.txt", "LICENSE.txt")
+
+    zip_data = StringIO.StringIO()
+    archive = zipfile.ZipFile(zip_data, "w", zipfile.ZIP_DEFLATED)    
+    for entry in entries:
+        path = os.path.join(app_path, entry)
+        if os.path.exists(path):
+            add_entry(path, archive)
+    archive.close()
+
+    zip_data.seek(0)
     return zip_data
 
 
 def package(zip_data, sid=None, token=None, uid=None, uidt=None):
 
-    url = "TODO: determine this"
+    url = cloud_url + "publish"
     params = urllib.urlencode({
         "sid": sid,
         "token": token,
         "uid": uid,
         "uidt": uidt
     })
-
-    h = urllib.urlopen("%s?%s" % (url, params), zip_data)
+    data = zip_data.read()
+    headers = {
+        "Content-Type": "application/zip", 
+        "Content-Length": str(len(data))
+    }
+    
+    req = urllib2.Request("%s?%s" % (url, params), data, headers)
+    h = urllib2.urlopen(req)
     response = h.read()
     h.close()
     
@@ -58,7 +84,7 @@ def package(zip_data, sid=None, token=None, uid=None, uidt=None):
 
 def check_status(ticket):
     
-    url = "TODO: determine this"
+    url = cloud_url + "publish-status"
     params = urllib.urlencode({"ticket": ticket})
     h = urllib.urlopen("%s?%s", (url, params))
     response = h.read()
@@ -144,10 +170,9 @@ def main():
     zip_data = bundle(app_path)
     
     # post app bundle for packaging
-    ticket = package(zip_data, **details)
+    ticket = package(zip_data, sid=details['sid'], token=details['token'], uid=details['uid'], uidt=details['uidt'])
     
     # keep checking status until complete
-    
 
 if __name__ == "__main__":
     main()
