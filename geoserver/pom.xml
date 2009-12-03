@@ -240,6 +240,7 @@
 
  <modules>
   <module>importer</module>
+  <module>extension</module>
   <module>web</module>
  </modules>
 
