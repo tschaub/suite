@@ -4,7 +4,6 @@
 
 /**
  * @include Styler/widgets/FilterBuilder.js
- * @include Styler/widgets/FeatureRenderer.js
  * @include Styler/widgets/ScaleLimitPanel.js
  * @include Styler/widgets/PointSymbolizer.js
  * @include Styler/widgets/LineSymbolizer.js
@@ -313,9 +312,9 @@ Styler.RulePanel = Ext.extend(Ext.TabPanel, {
      *     constraints.
      */
     createHeaderPanel: function() {
-        this.symbolizerSwatch = new Styler.FeatureRenderer({
+        this.symbolizerSwatch = new GeoExt.FeatureRenderer({
             symbolType: this.symbolType,
-            symbolizer: this.rule.symbolizer[this.symbolType],
+            symbolizers: [this.rule.symbolizer[this.symbolType]],
             isFormField: true,
             fieldLabel: "Symbol"
         });

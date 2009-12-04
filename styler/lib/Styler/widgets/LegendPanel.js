@@ -3,7 +3,6 @@
  */
 
 /**
- * @include Styler/widgets/FeatureRenderer.js
  * @include Styler/Util.js
  */
 
@@ -314,7 +313,7 @@ Styler.LegendPanel = Ext.extend(Ext.Panel, {
      * rule - {OpenLayers.Rule}
      *
      * Returns:
-     * {Styler.FeatureRenderer} The renderer.
+     * {GeoExt.FeatureRenderer} The renderer.
      */
     createRuleRenderer: function(rule) {
         var symbolType = Styler.Util.getSymbolTypeFromRule(rule) || 
@@ -322,7 +321,7 @@ Styler.LegendPanel = Ext.extend(Ext.Panel, {
         return {
             xtype: "gx_renderer",
             symbolType: symbolType,
-            symbolizer: rule.symbolizer[symbolType] || rule.symbolizer,
+            symbolizers: [rule.symbolizer[symbolType] || rule.symbolizer],
             style: this.clickableSymbol ? {cursor: "pointer"} : undefined,
             listeners: {
                 click: function() {
