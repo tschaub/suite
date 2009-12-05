@@ -102,6 +102,9 @@
          <descriptors>
            <descriptor>assembly/bin.xml</descriptor>
            <descriptor>assembly/raw.xml</descriptor>
+           <descriptor>assembly/mac.xml</descriptor>
+           <descriptor>assembly/doc.xml</descriptor>
+           <descriptor>assembly/ext.xml</descriptor>
          </descriptors>
        </configuration>
      </plugin>

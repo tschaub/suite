@@ -1,0 +1,29 @@
+<assembly>
+  <id>doc</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <baseDirectory>docs</baseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>docs/styler/target/html</directory>
+      <outputDirectory>styler</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>docs/geoexplorer/target/html</directory>
+      <outputDirectory>geoexplorer</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>docs/geoserver/target/html</directory>
+      <outputDirectory>geoserver</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>docs/gettingstarted/target/html</directory>
+      <outputDirectory>gettingstarted</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>docs/install/target/html</directory>
+      <outputDirectory>install</outputDirectory>
+    </fileSet>
+  </fileSets>
+</assembly>
