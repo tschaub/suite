@@ -404,12 +404,18 @@ var Styler = Ext.extend(Ext.util.Observable, {
                 });
             }
         };
-
+        
         this.layerTree = new Ext.tree.TreePanel({
             border: false,
             animate: false,
             loader: new Ext.tree.TreeLoader({
-                applyLoader: false
+                applyLoader: false,
+                uiProviders: {
+                    "use_radio": Ext.extend(
+                        GeoExt.tree.LayerNodeUI,
+                        new GeoExt.tree.RadioButtonMixin()
+                    )
+                }
             }),
             root: {
                 nodeType: "async",
@@ -420,7 +426,8 @@ var Styler = Ext.extend(Ext.util.Observable, {
                     leaf: false,
                     loader: {
                         baseAttrs: {
-                            radioGroup: "active"
+                            radioGroup: "active",
+                            uiProvider: "use_radio"
                         }
                     }
                 }, {
@@ -468,8 +475,11 @@ var Styler = Ext.extend(Ext.util.Observable, {
      */
     checkCurrentLayerNode: function() {
         this.layerTree.getRootNode().firstChild.cascade(function(node) {
-            if (node.ui.radio && node.layer === this.currentLayer && !node.ui.radio.checked) {
-                node.ui.radio.checked = true;
+            var el = node.ui.anchor.previousSibling;
+            if (el && el.type === "radio") {
+                if (node.layer === this.currentLayer && !el.checked) {
+                    el.checked = true;
+                }
             }
         }, this);
     },
