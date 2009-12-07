@@ -11,11 +11,12 @@
     <script type="text/javascript" src="../externals/ext/ext-all.js"></script>
     <script type="text/javascript" src="../externals/ux/colorpicker/color-picker.ux.js"></script>
     <script type="text/javascript" src="../script/OpenLayers.js"></script>
+    <script type="text/javascript" src="../externals/geoext/lib/GeoExt.js"></script>
     <script type="text/javascript" src="../script/Styler.js"></script>
     <script type="text/javascript" src="../script/core.js"></script>
     <script>
     
-    Ext.BLANK_IMAGE_URL = "../externals/core/theme/images/default/s.gif";
+    Ext.BLANK_IMAGE_URL = "../externals/ext/resources/images/default/s.gif";
 
     var rule = new OpenLayers.Rule({
         symbolizer: {
@@ -90,7 +91,7 @@
                 rule: rule,
                 nestedFilters: false,
                 symbolType: "Polygon",
-                attributes: new Styler.data.AttributesStore({
+                attributes: new GeoExt.data.AttributeStore({
                     url: "data/describe_feature_type.xml",
                     ignore: {name: "the_geom"}
                 })
