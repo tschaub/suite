@@ -2,15 +2,18 @@
     <head>
         <title>OpenGeo Recipes</title>
 
-        <link rel="stylesheet" type="text/css" href="ext/resources/css/ext-all.css" />
-        <link rel="stylesheet" type="text/css" href="ext/resources/css/xtheme-gray.css" />
-        <link rel="stylesheet" type="text/css" href="app/theme/style.css" />
+        <link rel="stylesheet" type="text/css" href="externals/ext/resources/css/ext-all.css" />
+        <link rel="stylesheet" type="text/css" href="externals/ext/resources/css/xtheme-gray.css" />
+        <script type="text/javascript" src="externals/ext/adapter/ext/ext-base.js"></script>
+        <script type="text/javascript" src="externals/ext/ext-all-debug.js"></script>
 
-        <script type="text/javascript" src="ext/adapter/ext/ext-base.js"></script>
-        <script type="text/javascript" src="ext/ext-all.js"></script>
+        <link rel="stylesheet" type="text/css" href="app/theme/style.css" />
         <script type="text/javascript" src="app/script/app.js"></script>
         <script type="text/javascript">
-            var app = new og.Recipes();
+            Ext.BLANK_IMAGE_URL = "externals/ext/resources/images/default/s.gif";
+            var app = new og.Recipes({
+                index: "recipes/index.json"
+            });
         </script>
     </head>
     <body></body>
