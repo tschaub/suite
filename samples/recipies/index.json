@@ -1,0 +1,9 @@
+{
+    "recipes": [{    
+        "id": "basic",
+        "title": "Basic Recipe",
+        "description": "This recipe describes how to use the Suite.",
+        "components": ["Dashboard", "GeoServer", "OpenLayers", "GeoExt"],
+        "topics": ["setup"]
+    }]
+}
