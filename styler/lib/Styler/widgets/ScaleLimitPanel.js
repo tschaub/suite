@@ -12,49 +12,49 @@ Ext.namespace("Styler");
 Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
     
     /**
-     * Property: maxScaleLimit
-     * {Number} Lower limit for scale denominators.  Default is what you get
+     * Property: maxScaleDenominatorLimit
+     * {Number} Upper limit for scale denominators.  Default is what you get
      *     when you project the world in Spherical Mercator onto a single
      *     256 x 256 pixel tile and assume OpenLayers.DOTS_PER_INCH (this
      *     corresponds to zoom level 0 in Google Maps).
      */
-    maxScaleLimit: 40075016.68 * 39.3701 * OpenLayers.DOTS_PER_INCH / 256,
+    maxScaleDenominatorLimit: 40075016.68 * 39.3701 * OpenLayers.DOTS_PER_INCH / 256,
     
     /**
-     * Property: limitMaxScale
+     * Property: limitMaxScaleDenominator
      * {Boolean} Limit the maximum scale denominator.  If false, no upper
      *     limit will be imposed.
      */
-    limitMaxScale: true,
+    limitMaxScaleDenominator: true,
 
     /**
      * Property: maxScaleDenominator
-     * {Number} The initial maximum scale denominator.  If <limitMaxScale> is
-     *     true and no minScaleDenominator is provided, <maxScaleLimit> will
+     * {Number} The initial maximum scale denominator.  If <limitMaxScaleDenominator> is
+     *     true and no minScaleDenominator is provided, <maxScaleDenominatorLimit> will
      *     be used.
      */
     maxScaleDenominator: undefined,
 
     /**
-     * Property: minScaleLimit
+     * Property: minScaleDenominatorLimit
      * {Number} Lower limit for scale denominators.  Default is what you get when
      *     you assume 20 zoom levels starting with the world in Spherical
      *     Mercator on a single 256 x 256 tile at zoom 0 where the zoom factor
      *     is 2.
      */
-    minScaleLimit: Math.pow(0.5, 19) * 40075016.68 * 39.3701 * OpenLayers.DOTS_PER_INCH / 256,
+    minScaleDenominatorLimit: Math.pow(0.5, 19) * 40075016.68 * 39.3701 * OpenLayers.DOTS_PER_INCH / 256,
 
     /**
-     * Property: limitMinScale
+     * Property: limitMinScaleDenominator
      * {Boolean} Limit the minimum scale denominator.  If false, no lower
      *     limit will be imposed.
      */
-    limitMinScale: true,
+    limitMinScaleDenominator: true,
 
     /**
      * Property: minScaleDenominator
-     * {Number} The initial minimum scale denominator.  If <limitMinScale> is
-     *     true and no minScaleDenominator is provided, <minScaleLimit> will
+     * {Number} The initial minimum scale denominator.  If <limitMinScaleDenominator> is
+     *     true and no minScaleDenominator is provided, <minScaleDenominatorLimit> will
      *     be used.
      */
     minScaleDenominator: undefined,
@@ -74,12 +74,12 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
      * Can be customized using the following keywords in curly braces:
      * zoom - the zoom level
      * scale - the scale denominator
-     * type - "Min" or "Max"
-     * zoomType - "Max" or "Min" (sense is opposite type)
+     * type - "Max" or "Min" denominator
+     * scaleType - "Min" or "Max" scale (sense is opposite of type)
      *
-     * Default is "{type} Scale 1:{scale}".
+     * Default is "{scaleType} Scale 1:{scale}".
      */
-    scaleSliderTemplate: "{type} Scale 1:{scale}",
+    scaleSliderTemplate: "{scaleType} Scale 1:{scale}",
     
     /**
      * Method: modifyScaleTipContext
@@ -121,12 +121,12 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
         this.scaleSliderTemplate = new Ext.Template(this.scaleSliderTemplate);
         
         Ext.applyIf(this, {
-            minScaleDenominator: this.minScaleLimit,
-            maxScaleDenominator: this.maxScaleLimit
+            minScaleDenominator: this.minScaleDenominatorLimit,
+            maxScaleDenominator: this.maxScaleDenominatorLimit
         });
         
         this.scaleFactor = Math.pow(
-            this.maxScaleLimit / this.minScaleLimit,
+            this.maxScaleDenominatorLimit / this.minScaleDenominatorLimit,
             1 / (this.scaleLevels - 1)
         );
         
@@ -136,9 +136,9 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
             listeners: {
                 changecomplete: this.updateScaleValues,
                 render: function(slider) {
-                    slider.thumbs[0].setVisible(this.limitMaxScale);
-                    slider.thumbs[1].setVisible(this.limitMinScale);
-                    slider.setDisabled(!this.limitMinScale && !this.limitMaxScale);
+                    slider.thumbs[0].setVisible(this.limitMaxScaleDenominator);
+                    slider.thumbs[1].setVisible(this.limitMinScaleDenominator);
+                    slider.setDisabled(!this.limitMinScaleDenominator && !this.limitMaxScaleDenominator);
                 },
                 scope: this
             },
@@ -150,7 +150,7 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
                         scale: String(scales[index]),
                         zoom: (values[index] * (this.scaleLevels / 100)).toFixed(1),
                         type: (index === 0) ? "Max" : "Min",
-                        zoomType: (index === 0) ? "Min" : "Max"
+                        scaleType: (index === 0) ? "Min" : "Max"
                     };
                     this.modifyScaleTipContext(this, data);
                     return this.scaleSliderTemplate.apply(data);
@@ -158,15 +158,15 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
             })]
         });
         
-        this.maxScaleInput = new Ext.form.TextField({
+        this.maxScaleDenominatorInput = new Ext.form.TextField({
             width: 100,
             fieldLabel: "1",
             value: Math.round(this.maxScaleDenominator),
-            disabled: !this.limitMaxScale,
+            disabled: !this.limitMaxScaleDenominator,
             listeners: {
                 valid: function(field) {
                     var value = Number(field.getValue());
-                    var limit = Math.round(this.maxScaleLimit);
+                    var limit = Math.round(this.maxScaleDenominatorLimit);
                     if(value < limit && value > this.minScaleDenominator) {
                         this.maxScaleDenominator = value;
                         this.updateSliderValues();
@@ -174,7 +174,7 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
                 },
                 change: function(field) {
                     var value = Number(field.getValue());
-                    var limit = Math.round(this.maxScaleLimit);
+                    var limit = Math.round(this.maxScaleDenominatorLimit);
                     if(value > limit) {
                         field.setValue(limit);
                     } else if(value < this.minScaleDenominator) {
@@ -188,15 +188,15 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
             }
         });
 
-        this.minScaleInput = new Ext.form.TextField({
+        this.minScaleDenominatorInput = new Ext.form.TextField({
             width: 100,
             fieldLabel: "1",
             value: Math.round(this.minScaleDenominator),
-            disabled: !this.limitMinScale,
+            disabled: !this.limitMinScaleDenominator,
             listeners: {
                 valid: function(field) {
                     var value = Number(field.getValue());
-                    var limit = Math.round(this.minScaleLimit);
+                    var limit = Math.round(this.minScaleDenominatorLimit);
                     if(value > limit && value < this.maxScaleDenominator) {
                         this.minScaleDenominator = value;
                         this.updateSliderValues();
@@ -204,7 +204,7 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
                 },
                 change: function(field) {
                     var value = Number(field.getValue());
-                    var limit = Math.round(this.minScaleLimit);
+                    var limit = Math.round(this.minScaleDenominatorLimit);
                     if(value < limit) {
                         field.setValue(limit);
                     } else if(value > this.maxScaleDenominator) {
@@ -228,19 +228,19 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
                 width: 150,
                 items: [{
                     xtype: "checkbox",
-                    checked: !!this.limitMinScale,
-                    fieldLabel: "Min scale limit",
+                    checked: !!this.limitMinScaleDenominator,
+                    fieldLabel: "Max scale limit",
                     listeners: {
                         check: function(box, checked) {
-                            this.limitMinScale = checked;
+                            this.limitMinScaleDenominator = checked;
                             var slider = this.scaleSlider;
                             var values = slider.getValues();
                             values[1] = 100;
                             slider.setValues(values);
                             slider.thumbs[1].setVisible(checked);
-                            this.minScaleInput.setDisabled(!checked);
+                            this.minScaleDenominatorInput.setDisabled(!checked);
                             this.updateScaleValues(slider, values);
-                            slider.setDisabled(!this.limitMinScale && !this.limitMaxScale);
+                            slider.setDisabled(!this.limitMinScaleDenominator && !this.limitMaxScaleDenominator);
                         },
                         scope: this
                     }
@@ -248,25 +248,25 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
             }, {
                 labelWidth: 10,
                 layout: "form",
-                items: [this.minScaleInput]
+                items: [this.minScaleDenominatorInput]
             }, {
                 labelWidth: 90,
                 layout: "form",
                 items: [{
                     xtype: "checkbox",
-                    checked: !!this.limitMaxScale,
-                    fieldLabel: "Max scale limit",
+                    checked: !!this.limitMaxScaleDenominator,
+                    fieldLabel: "Min scale limit",
                     listeners: {
                         check: function(box, checked) {
-                            this.limitMaxScale = checked;
+                            this.limitMaxScaleDenominator = checked;
                             var slider = this.scaleSlider;
                             var values = slider.getValues();
                             values[0] = 0;
                             slider.setValues(values);
                             slider.thumbs[0].setVisible(checked);
-                            this.maxScaleInput.setDisabled(!checked);
+                            this.maxScaleDenominatorInput.setDisabled(!checked);
                             this.updateScaleValues(slider, values);
-                            slider.setDisabled(!this.limitMinScale && !this.limitMaxScale);
+                            slider.setDisabled(!this.limitMinScaleDenominator && !this.limitMaxScaleDenominator);
                         },
                         scope: this
                     }
@@ -274,7 +274,7 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
             }, {
                 labelWidth: 10,
                 layout: "form",
-                items: [this.maxScaleInput]
+                items: [this.maxScaleDenominatorInput]
             }]
         }];
 
@@ -300,13 +300,13 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
     updateScaleValues: function(slider, values) {
         if(!this.changing) {
             var resetSlider = false;
-            if(!this.limitMaxScale) {
+            if(!this.limitMaxScaleDenominator) {
                 if(values[0] > 0) {
                     values[0] = 0;
                     resetSlider = true;
                 }
             }
-            if(!this.limitMinScale) {
+            if(!this.limitMinScaleDenominator) {
                 if(values[1] < 100) {
                     values[1] = 100;
                     resetSlider = true;
@@ -319,13 +319,13 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
                 var max = scales[0];
                 var min = scales[1];
                 this.changing = true;
-                this.minScaleInput.setValue(min);
-                this.maxScaleInput.setValue(max);
+                this.minScaleDenominatorInput.setValue(min);
+                this.maxScaleDenominatorInput.setValue(max);
                 this.changing = false;
                 this.fireEvent(
                     "change", this,
-                    (this.limitMinScale) ? min : undefined,
-                    (this.limitMaxScale) ? max : undefined
+                    (this.limitMinScaleDenominator) ? min : undefined,
+                    (this.limitMaxScaleDenominator) ? max : undefined
                 );
             }
         }
@@ -344,8 +344,8 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
             this.changing = false;
             this.fireEvent(
                 "change", this,
-                (this.limitMinScale) ? min : undefined,
-                (this.limitMaxScale) ? max : undefined
+                (this.limitMinScaleDenominator) ? min : undefined,
+                (this.limitMaxScaleDenominator) ? max : undefined
             );
         }
     },
@@ -363,8 +363,8 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
      */
     sliderValuesToScale: function(values) {
         var interval = 100 / (this.scaleLevels - 1);
-        return [Math.round(Math.pow(this.scaleFactor, (100 - values[0]) / interval) * this.minScaleLimit),
-                Math.round(Math.pow(this.scaleFactor, (100 - values[1]) / interval) * this.minScaleLimit)];
+        return [Math.round(Math.pow(this.scaleFactor, (100 - values[0]) / interval) * this.minScaleDenominatorLimit),
+                Math.round(Math.pow(this.scaleFactor, (100 - values[1]) / interval) * this.minScaleDenominatorLimit)];
     },
     
     /**
@@ -372,8 +372,8 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
      */
     scaleToSliderValues: function(scales) {
         var interval = 100 / (this.scaleLevels - 1);
-        return [100 - (interval * Math.log(scales[0] / this.minScaleLimit) / Math.log(this.scaleFactor)),
-                100 - (interval * Math.log(scales[1] / this.minScaleLimit) / Math.log(this.scaleFactor))];
+        return [100 - (interval * Math.log(scales[0] / this.minScaleDenominatorLimit) / Math.log(this.scaleFactor)),
+                100 - (interval * Math.log(scales[1] / this.minScaleDenominatorLimit) / Math.log(this.scaleFactor))];
     }
     
 });

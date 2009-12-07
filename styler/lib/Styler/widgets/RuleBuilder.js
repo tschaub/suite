@@ -51,18 +51,18 @@ Styler.RuleBuilder = Ext.extend(Ext.TabPanel, {
     nestedFilters: true,
     
     /**
-     * Property: minScaleLimit
+     * Property: minScaleDenominatorLimit
      * {Number} Lower limit for scale denominators.  No default set here.
      *     Default is provided by the rule panel.
      */
-    minScaleLimit: undefined,
+    minScaleDenominatorLimit: undefined,
 
     /**
-     * Property: maxScaleLimit
-     * {Number} Lower limit for scale denominators.  No default set here.
+     * Property: maxScaleDenominatorLimit
+     * {Number} Upper limit for scale denominators.  No default set here.
      *     Default is provided by the rule panel.
      */
-    maxScaleLimit: undefined,
+    maxScaleDenominatorLimit: undefined,
     
     /**
      * Property: defaultSymbolizers

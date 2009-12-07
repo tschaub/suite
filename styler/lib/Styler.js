@@ -862,15 +862,15 @@ var Styler = Ext.extend(Ext.util.Observable, {
                 symbolType: Styler.Util.getSymbolTypeFromRule(rule),
                 nestedFilters: false,
                 scaleLevels: this.map.baseLayer.numZoomLevels,
-                minScaleLimit: OpenLayers.Util.getScaleFromResolution(
+                minScaleDenominatorLimit: OpenLayers.Util.getScaleFromResolution(
                     this.map.baseLayer.resolutions[this.map.baseLayer.numZoomLevels-1],
                     this.map.units
                 ),
-                maxScaleLimit: OpenLayers.Util.getScaleFromResolution(
+                maxScaleDenominatorLimit: OpenLayers.Util.getScaleFromResolution(
                     this.map.baseLayer.resolutions[0],
                     this.map.units
                 ),
-                scaleSliderTemplate: "<div>{zoomType} Zoom Level: {zoom}</div>" + 
+                scaleSliderTemplate: "<div>{scaleType} Zoom Level: {zoom}</div>" + 
                     "<div>Current Map Zoom: {mapZoom}</div>",
                 modifyScaleTipContext: (function(panel, data) {
                     data.mapZoom = this.map.getZoom();

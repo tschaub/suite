@@ -67,22 +67,22 @@ Styler.RulePanel = Ext.extend(Ext.TabPanel, {
     nestedFilters: true,
     
     /**
-     * Property: minScaleLimit
+     * Property: minScaleDenominatorLimit
      * {Number} Lower limit for scale denominators.  Default is what you get when
      *     you assume 20 zoom levels starting with the world in Spherical
      *     Mercator on a single 256 x 256 tile at zoom 0 where the zoom factor
      *     is 2.
      */
-    minScaleLimit: Math.pow(0.5, 19) * 40075016.68 * 39.3701 * OpenLayers.DOTS_PER_INCH / 256,
+    minScaleDenominatorLimit: Math.pow(0.5, 19) * 40075016.68 * 39.3701 * OpenLayers.DOTS_PER_INCH / 256,
 
     /**
-     * Property: maxScaleLimit
-     * {Number} Lower limit for scale denominators.  Default is what you get
+     * Property: maxScaleDenominatorLimit
+     * {Number} Upper limit for scale denominators.  Default is what you get
      *     when you project the world in Spherical Mercator onto a single
      *     256 x 256 pixel tile and assume OpenLayers.DOTS_PER_INCH (this
      *     corresponds to zoom level 0 in Google Maps).
      */
-    maxScaleLimit: 40075016.68 * 39.3701 * OpenLayers.DOTS_PER_INCH / 256,
+    maxScaleDenominatorLimit: 40075016.68 * 39.3701 * OpenLayers.DOTS_PER_INCH / 256,
     
     /**
      * Property: scaleLevels
@@ -99,11 +99,12 @@ Styler.RulePanel = Ext.extend(Ext.TabPanel, {
      * Can be customized using the following keywords in curly braces:
      * zoom - the zoom level
      * scale - the scale denominator
-     * type - "Min" or "Max"
+     * type - "Max" or "Min" denominator
+     * scaleType - "Min" or "Max" scale (sense is opposite of type)
      *
-     * Default is "{type} Scale 1:{scale}".
+     * Default is "{scaleType} Scale 1:{scale}".
      */
-    scaleSliderTemplate: "{type} Scale 1:{scale}",
+    scaleSliderTemplate: "{scaleType} Scale 1:{scale}",
     
     /**
      * Method: modifyScaleTipContext
@@ -150,11 +151,11 @@ Styler.RulePanel = Ext.extend(Ext.TabPanel, {
          */
         this.scaleLimitPanel = new Styler.ScaleLimitPanel({
             maxScaleDenominator: this.rule.maxScaleDenominator || undefined,
-            limitMaxScale: !!this.rule.maxScaleDenominator,
-            maxScaleLimit: this.maxScaleLimit,
+            limitMaxScaleDenominator: !!this.rule.maxScaleDenominator,
+            maxScaleDenominatorLimit: this.maxScaleDenominatorLimit,
             minScaleDenominator: this.rule.minScaleDenominator || undefined,
-            limitMinScale: !!this.rule.minScaleDenominator,
-            minScaleLimit: this.minScaleLimit,
+            limitMinScaleDenominator: !!this.rule.minScaleDenominator,
+            minScaleDenominatorLimit: this.minScaleDenominatorLimit,
             scaleLevels: this.scaleLevels,
             scaleSliderTemplate: this.scaleSliderTemplate,
             modifyScaleTipContext: this.modifyScaleTipContext,
@@ -236,11 +237,11 @@ Styler.RulePanel = Ext.extend(Ext.TabPanel, {
                         },
                         expand: function(){
                             var changed = false;
-                            if (this.scaleLimitPanel.limitMinScale) {
+                            if (this.scaleLimitPanel.limitMinScaleDenominator) {
                                 this.rule.minScaleDenominator = this.scaleLimitPanel.minScaleDenominator;
                                 changed = true;
                             }
-                            if (this.scaleLimitPanel.limitMaxScale) {
+                            if (this.scaleLimitPanel.limitMaxScaleDenominator) {
                                 this.rule.maxScaleDenominator = this.scaleLimitPanel.maxScaleDenominator;
                                 changed = true;
                             }
@@ -371,7 +372,7 @@ Styler.RulePanel = Ext.extend(Ext.TabPanel, {
             },
             listeners: {
                 change: function(symbolizer) {
-                    this.symbolizerSwatch.setSymbolizer(symbolizer);
+                    this.symbolizerSwatch.setSymbolizers([symbolizer]);
                     this.fireEvent("change", this, this.rule);
                 },
                 scope: this
