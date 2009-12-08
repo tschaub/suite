@@ -93,7 +93,6 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
     parseHash: function() {
         var id = window.location.hash.substring(1);
         var index = this.recipeStore.findExact("id", id);
-        console.log(index);
         if (index >= 0) {
             this.recipeList.select(index);
         }
