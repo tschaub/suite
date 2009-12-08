@@ -1,0 +1,43 @@
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    color: #333333;
+}
+
+
+/* selectors for the index page */
+
+.header {
+    height: 40px;
+    padding: 0.5em;
+}
+
+.recipes {
+    width: 200px;
+}
+
+.index .recipe {
+    padding: 0.5em;
+    border: 1px solid #eeeeee;
+}
+
+.index .recipe.over {
+    cursor: pointer;
+    background-color: #fafafa;
+}
+
+.index .recipe.selected {
+    background-color: #ffffcc;
+}
+
+.entry {
+    padding: 1.5em;
+    background-color: white;
+}
+
+/* selectors for individual recipes */
+
+.description {
+    padding: 1em;
+    font-size: 0.9em;
+    background-color: #eeeeee;
+}

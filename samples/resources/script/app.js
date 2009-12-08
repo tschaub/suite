@@ -10,7 +10,9 @@ Ext.ux.IFrameComponent = Ext.extend(Ext.BoxComponent, {
         this.el = ct.createChild({
             tag: "iframe", 
             id: "iframe-" + this.id, 
-            frameBorder: 0, 
+            frameborder: 0,
+            width: "100%",
+            height: "100%", 
             src: this.url
         });
     }
@@ -48,21 +50,23 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
         this.recipeStore = new Ext.data.JsonStore({
             url: url,
             root: "recipes",
+            autoLoad: true,
             fields: ["id", "title", "description", "components", "topics"]
         });
-        this.recipeStore.load();
-        
+
     },
     
     initRecipeList: function() {
         
         this.recipeList = new Ext.DataView({
             store: this.recipeStore,
-            itemSelector: "div.recipe-entry",
+            itemSelector: "div.recipe",
+            overClass: "over",
+            selectedClass: "selected",
             singleSelect: true,
             tpl: new Ext.XTemplate(
                 '<tpl for=".">',
-                    '<div class="recipe-entry" id="recipe-{id}">',
+                    '<div class="recipe">',
                         '<h3>{title}</h3>',
                         '<p>{description}</p>',
                     '</div>',
@@ -70,7 +74,6 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
             ),
             listeners: {
                 selectionchange: function(view, selections) {
-                    console.log(arguments);
                     var recs = view.getSelectedRecords();
                     // assume singleSelect: true
                     this.loadRecipe(recs[0]);
@@ -79,6 +82,21 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
             }
         });
         
+        if (this.recipeStore.getCount()) { // poor substitute for loaded
+            this.parseHash();
+        } else {
+            this.recipeStore.on("load", this.parseHash, this, {single: true});
+        }
+  
+    },
+    
+    parseHash: function() {
+        var id = window.location.hash.substring(1);
+        var index = this.recipeStore.findExact("id", id);
+        console.log(index);
+        if (index >= 0) {
+            this.recipeList.select(index);
+        }
     },
     
     initViewport: function() {
@@ -89,20 +107,23 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
         
         this.viewport = new Ext.Viewport({
             layout: "border",
+            defaults: {border: false},
             items: [{
                 region: "north",
                 xtype: "box",
-                height: 40,
+                cls: "header",
                 autoEl: {
                     tag: "div",
-                    html: "<p>OpenGeo Recipe Book</p>"
+                    cls: "header",
+                    html: "<h1>OpenGeo Recipe Book</h1>"
                 }
             }, {
                 region: "west",
-                width: 150,
+                cls: "recipes",
                 items: [this.recipeList]
             }, {
                 region: "center",
+                cls: "entry",
                 items: [this.recipeFrame]
             }]
         });
@@ -114,10 +135,10 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
     },
     
     loadRecipe: function(recipe) {
-        
-        var url = this.recipeBase + "/" + recipe.get("id") + ".html";
-        this.recipeFrame.setUrl(url);
-        
+        var id = recipe.get("id");
+        window.location.hash = "#" + id;
+        var url = this.recipeBase + "/" + id + ".html";
+        this.recipeFrame.setUrl(url);        
     }
 
 });

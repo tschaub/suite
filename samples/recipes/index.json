@@ -5,5 +5,11 @@
         "description": "This recipe describes how to use the Suite.",
         "components": ["Dashboard", "GeoServer", "OpenLayers", "GeoExt"],
         "topics": ["setup"]
+    }, {
+        "id": "advanced",
+        "title": "Advanced Recipe",
+        "description": "This recipe describes how to do magic with the Suite.",
+        "components": ["Dashboard", "GeoServer", "OpenLayers", "GeoExt"],
+        "topics": ["ninja"]
     }]
 }
