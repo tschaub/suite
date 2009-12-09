@@ -1,15 +1,28 @@
 {
-    "recipes": [{    
+    "recipes": [{
         "id": "basic",
         "title": "Basic Recipe",
         "description": "This recipe describes how to use the Suite.",
-        "components": ["Dashboard", "GeoServer", "OpenLayers", "GeoExt"],
-        "topics": ["setup"]
+        "components": ["GeoServer", "OpenLayers", "GeoExt"]
     }, {
         "id": "advanced",
         "title": "Advanced Recipe",
         "description": "This recipe describes how to do magic with the Suite.",
-        "components": ["Dashboard", "GeoServer", "OpenLayers", "GeoExt"],
-        "topics": ["ninja"]
+        "components": ["GeoServer", "OpenLayers", "GeoWebCache", "GeoExt"]
+    }, {
+        "id": "basic-ol",
+        "title": "Basic OpenLayers",
+        "description": "This recipe describes how to use OpenLayers.",
+        "components": ["OpenLayers"]
+    }, {
+        "id": "basic-gs",
+        "title": "Basic GeoServer",
+        "description": "This recipe describes how to use GeoServer.",
+        "components": ["GeoServer"]
+    }, {
+        "id": "advanced",
+        "title": "Advanced Recipe",
+        "description": "This recipe describes how to do magic with the Suite.",
+        "components": ["GeoServer", "OpenLayers", "GeoWebCache", "GeoExt"]
     }]
 }

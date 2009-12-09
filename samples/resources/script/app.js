@@ -1,6 +1,6 @@
 Ext.namespace("og");
 
-Ext.ux.IFrameComponent = Ext.extend(Ext.BoxComponent, {
+og.IFrameComponent = Ext.extend(Ext.BoxComponent, {
     
     setUrl: function(url) {
         this.el.dom.contentWindow.location.href = url;
@@ -26,11 +26,22 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
     recipeStore: null,
     
     recipeList: null,
-
+    
+    startRecipe: null,
+    
+    query: null,
+    
     constructor: function(config) {
-
-        Ext.apply(this, config);
+        
+        this.query = {components: {
+            "PostGIS": true,
+            "GeoServer": true,
+            "GeoWebCache": true,
+            "OpenLayers": true,
+            "GeoExt": true
+        }};
         this.initialConfig = config;
+        Ext.apply(this, this.configFromUrl(), config);
         
         // require index in config
         var parts = this.index.split("/");
@@ -39,21 +50,42 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
 
         og.Recipes.superclass.constructor.call(this);
         
-        this.initRecipeStore(this.index);
+        var queue = [
+            this.initRecipeStore,
+            function(done) {
+                Ext.onReady(function() {
+                    this.initViewport();
+                    done();
+                }, this)
+            }
+        ];
         
-        Ext.onReady(this.initViewport, this);
+        this.dispatch(queue, function() {
+            this.selectRecipe(this.startRecipe)            
+        });
 
     },
     
-    initRecipeStore: function(url) {
-        
+    configFromUrl: function() {
+        var config = {};
+        // pull any recipe id
+        var id = window.location.hash.substring(1);
+        if (id) {
+            config.startRecipe = id;
+        }
+        return config;
+    },
+    
+    initRecipeStore: function(done) {
         this.recipeStore = new Ext.data.JsonStore({
-            url: url,
+            url: this.index,
             root: "recipes",
             autoLoad: true,
-            fields: ["id", "title", "description", "components", "topics"]
+            fields: ["id", "title", "description", "components"],
+            listeners: {
+                load: done
+            }
         });
-
     },
     
     initRecipeList: function() {
@@ -76,33 +108,23 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                 selectionchange: function(view, selections) {
                     var recs = view.getSelectedRecords();
                     // assume singleSelect: true
-                    this.loadRecipe(recs[0]);
+                    if (recs.length) {
+                        this.loadRecipe(recs[0].get("id"));                        
+                    }
                 },
                 scope: this
             }
         });
-        
-        if (this.recipeStore.getCount()) { // poor substitute for loaded
-            this.parseHash();
-        } else {
-            this.recipeStore.on("load", this.parseHash, this, {single: true});
-        }
-  
-    },
-    
-    parseHash: function() {
-        var id = window.location.hash.substring(1);
-        var index = this.recipeStore.findExact("id", id);
-        if (index >= 0) {
-            this.recipeList.select(index);
-        }
+          
     },
     
     initViewport: function() {
 
         Ext.QuickTips.init();
         this.initRecipeList();
-        this.initRecipeFrame();
+        this.initRecipeFrame({
+            url: this.getRecipeUrl(this.startRecipe)
+        });
         
         this.viewport = new Ext.Viewport({
             layout: "border",
@@ -118,8 +140,53 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                 }
             }, {
                 region: "west",
-                cls: "recipes",
-                items: [this.recipeList]
+                cls: "search",
+                layout: "fit",
+                items: [{
+                    xtype: "panel",
+                    border: false,
+                    autoScroll: true,
+                    items: [{
+                        xtype: "container",
+                        items: [{
+                            xtype: "textfield",
+                            width: "100%",
+                            emptyText: "search for recipes",
+                            enableKeyEvents: true,
+                            listeners: {
+                                keyup: function(field) {
+                                    var value = field.getValue();
+                                    this.query.keywords = value;
+                                    this.filterRecipes();
+                                },
+                                scope: this
+                            }
+                        }, {
+                            xtype: "fieldset",
+                            collapsible: true,
+                            title: "Components",
+                            collapsed: true,
+                            layout: "column",
+                            columns: 2,
+                            defaults: {
+                                xtype: "checkbox",
+                                hideLabel: true,
+                                columnWidth: '0.5',
+                                listeners: {
+                                    check: function(box, checked) {
+                                        this.query.components[box.getName()] = checked;
+                                        this.filterRecipes();
+                                    },
+                                    scope: this
+                                }
+                            },
+                            items: [this.createComponentCheckboxes()]
+                        }]
+                    }, {
+                        xtype: "container",
+                        items: [this.recipeList]
+                    }]
+                }]
             }, {
                 region: "center",
                 cls: "entry",
@@ -129,15 +196,89 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
 
     },
     
-    initRecipeFrame: function() {
-        this.recipeFrame = new Ext.ux.IFrameComponent();
+    createComponentCheckboxes: function() {
+        var components = this.query.components;
+        var checkboxes = [];
+        for (var name in components) {
+            checkboxes.push({
+                boxLabel: name,
+                name: name,
+                checked: components[name]
+            });
+        }
+        return checkboxes;
     },
     
-    loadRecipe: function(recipe) {
-        var id = recipe.get("id");
+    filterRecipes: function() {
+        var keywords = this.query.keywords;
+        keywords = keywords && keywords.trim().split(/\s+/).remove("");
+        var components = this.query.components;
+        this.recipeStore.filterBy(function(r) {
+            var hasComponent = false;
+            for (var name in components) {
+                if (components[name]) {
+                    if (r.get("components").indexOf(name) >= 0) {
+                        hasComponent = true;
+                    }
+                }
+            }
+            var len = keywords && keywords.length;
+            var word, title, description, hasKeyword = !len;
+            for (var i=0; i<len; ++i) {
+                word = keywords[i].toLowerCase();
+                if (word) {
+                    title = r.get("title").toLowerCase();
+                    description = r.get("description").toLowerCase();
+                    if (title.indexOf(word) >= 0 || description.indexOf(word) >= 0) {
+                        hasKeyword = true;
+                    }                    
+                }
+            }
+            return hasComponent && hasKeyword;
+        }, this);
+    },
+    
+    initRecipeFrame: function(config) {
+        this.recipeFrame = new og.IFrameComponent(config);
+    },
+    
+    getRecipeUrl: function(id) {
+        return this.recipeBase + "/" + id + ".html";
+    },
+    
+    selectRecipe: function(id) {
+        var index = this.recipeStore.findExact("id", id);
+        if (index >= 0) {
+            this.recipeList.select(index);
+        }
+    },
+    
+    loadRecipe: function(id) {
         window.location.hash = "#" + id;
-        var url = this.recipeBase + "/" + id + ".html";
-        this.recipeFrame.setUrl(url);        
+        this.recipeFrame.setUrl(this.getRecipeUrl(id));        
+    },
+
+    dispatch: function(functions, complete, scope) {
+        complete = complete || Ext.emptyFn;
+        scope = scope || this;
+        var requests = functions.length;
+        var responses = 0;
+        var storage = {};
+        function respond() {
+            ++responses;
+            if(responses === requests) {
+                complete.call(scope, storage);
+            }
+        }
+        function trigger(index) {
+            window.setTimeout(function() {
+                functions[index].apply(scope, [respond, storage]);
+            });
+        }
+        for(var i=0; i<requests; ++i) {
+            trigger(i);
+        }
     }
 
 });
+

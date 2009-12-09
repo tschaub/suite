@@ -11,13 +11,12 @@ body {
     padding: 0.5em;
 }
 
-.recipes {
-    width: 200px;
+.search {
+    width: 300px;
 }
 
 .index .recipe {
     padding: 0.5em;
-    border: 1px solid #eeeeee;
 }
 
 .index .recipe.over {
