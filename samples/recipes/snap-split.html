@@ -1,0 +1,68 @@
+<html>
+    <head>
+        <title>Snapping &amp; Splitting</title>
+        <link rel="stylesheet" href="../externals/openlayers/theme/default/style.css" type="text/css" />
+        <link rel="stylesheet" href="../resources/theme/style.css" type="text/css" />
+        <style type="text/css">
+            .olControlEditingToolbar .olControlModifyFeatureItemInactive { 
+                background-position: -1px 0px ;                                                                   
+            }
+            .olControlEditingToolbar .olControlModifyFeatureItemActive { 
+                background-position: -1px -23px ;                                                                   
+            }
+            label.head {
+                font-weight: bold;
+                padding: 1em 0 0.1em 0;
+                border-bottom: 1px solid grey;
+            }
+            td {
+                padding: 0.25em 1em;
+            }
+            tr.head td {
+                text-align: center;
+                font-weight: bold;
+            }
+        </style>
+        <script src="../externals/openlayers/lib/OpenLayers.js"></script>
+        <script src="snap-split.js" id="snap-split.js"></script>
+    </head>
+    <body onload="init()">
+        <h1>Snapping &amp; Splitting Example</h1>
+        <div class="description">
+            A demonstration snapping and splitting while editing vector features.
+        </div>
+        <div class="content">
+            <div id="map" class="map"></div>
+            <br/>
+            <input type="checkbox" id="snap_toggle" />
+            <label for="snap_toggle" class="head">Enable Snapping</label>
+            <table id="snap_options">
+                <tbody>
+                    <tr class="head">
+                        <td>target</td><td>node</td><td>vertex</td><td>edge</td>
+                    </tr>
+                    <tr>
+                        <td>roads</td>
+                        <td><input type="checkbox" id="target_node" /><input id="target_nodeTolerance" type="text" size="3" /></td>
+                        <td><input type="checkbox" id="target_vertex" /><input id="target_vertexTolerance" type="text" size="3" /></td>
+                        <td><input type="checkbox" id="target_edge" /><input id="target_edgeTolerance" type="text" size="3" /></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br />
+            <input type="checkbox" id="split_toggle" />
+            <label for="split_toggle" class="head">Enable Splitting</label>
+            <table id="split_options">
+                <tbody>
+                    <tr>
+                        <td><label for="edge_toggle">edges split</label></td>
+                        <td><input type="checkbox" id="edge_toggle" /></td>
+                    </tr>
+                </tbody>
+            </table>
+            <br />
+            <button id="clear">clear</button> Clear all features.
+            <div class="code" title="snap-split.js"></div>
+        </div>
+    </body>
+</html>

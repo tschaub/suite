@@ -10,9 +10,9 @@
         "description": "This recipe describes how to do magic with the Suite.",
         "components": ["GeoServer", "OpenLayers", "GeoWebCache", "GeoExt"]
     }, {
-        "id": "basic-ol",
-        "title": "Basic OpenLayers",
-        "description": "This recipe describes how to use OpenLayers.",
+        "id": "snap-split",
+        "title": "Snapping & Splitting",
+        "description": "Learn how to enable snapping and splitting while editing features in OpenLayers.",
         "components": ["OpenLayers"]
     }, {
         "id": "basic-gs",

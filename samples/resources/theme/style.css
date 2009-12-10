@@ -40,3 +40,8 @@ body {
     font-size: 0.9em;
     background-color: #eeeeee;
 }
+
+.map {
+    width: 512px;
+    height: 256px;
+}
