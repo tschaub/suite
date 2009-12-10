@@ -7,8 +7,9 @@ body {
 /* selectors for the index page */
 
 .header {
-    height: 40px;
+    height: 30px;
     padding: 0.5em;
+    font-size: 1.5em;
 }
 
 .search {
