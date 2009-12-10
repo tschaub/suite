@@ -47,6 +47,10 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
         var parts = this.index.split("/");
         parts.pop();
         this.recipeBase = parts.join("/");
+        
+        this.addEvents(
+            "recipeloaded"
+        );
 
         og.Recipes.superclass.constructor.call(this);
         
@@ -60,10 +64,19 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
             }
         ];
         
+        this.on({
+            recipeloaded: this.onRecipeLoad,
+            scope: this
+        })
+        
         this.dispatch(queue, function() {
             this.selectRecipe(this.startRecipe)            
         });
 
+    },
+    
+    onRecipeLoad: function() {
+        this.recipeFrame
     },
     
     configFromUrl: function() {
@@ -148,6 +161,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                     autoScroll: true,
                     items: [{
                         xtype: "container",
+                        cls: "searchbox",
                         items: [{
                             xtype: "textfield",
                             width: "100%",
@@ -163,6 +177,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                             }
                         }, {
                             xtype: "fieldset",
+                            style: "margin-top: 0.5em;",
                             collapsible: true,
                             title: "Components",
                             collapsed: true,
@@ -255,7 +270,8 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
     
     loadRecipe: function(id) {
         window.location.hash = "#" + id;
-        this.recipeFrame.setUrl(this.getRecipeUrl(id));        
+        this.recipeFrame.setUrl(this.getRecipeUrl(id));
+        this.fireEvent("recipeloaded");
     },
 
     dispatch: function(functions, complete, scope) {

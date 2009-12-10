@@ -9,7 +9,15 @@ function init() {
 var map, draw, modify, snap, split, vectors;
 function initMap() {
 
-    map = new OpenLayers.Map('map');
+    map = new OpenLayers.Map({
+        div: "map",
+        controls: [
+            new OpenLayers.Control.Navigation({
+                zoomWheelEnabled: false
+            }),
+            new OpenLayers.Control.PanZoom()
+        ]
+    });
     var styles = new OpenLayers.StyleMap({
         "default": new OpenLayers.Style(null, {
             rules: [
