@@ -1,4 +1,4 @@
-
+OpenLayers.ImgPath = "../externals/openlayers/img/";
 OpenLayers.Feature.Vector.style['default']['strokeWidth'] = '2';
 
 function init() {

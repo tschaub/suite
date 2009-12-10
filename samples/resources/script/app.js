@@ -29,6 +29,8 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
     
     startRecipe: null,
     
+    currentRecipe: null,
+    
     query: null,
     
     constructor: function(config) {
@@ -46,9 +48,14 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
         // require index in config
         var parts = this.index.split("/");
         parts.pop();
-        this.recipeBase = parts.join("/");
+        var dir = parts.join("/");
+        var loc = window.location.href;
+        parts = loc.split("/");
+        parts.pop();
+        this.recipeBase = parts.join("/") + "/" + dir;
         
         this.addEvents(
+            "recipeloading",
             "recipeloaded"
         );
 
@@ -65,6 +72,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
         ];
         
         this.on({
+            recipeloading: this.onRecipeLoading,
             recipeloaded: this.onRecipeLoad,
             scope: this
         })
@@ -75,8 +83,12 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
 
     },
     
-    onRecipeLoad: function() {
-        this.recipeFrame
+    onRecipeLoading: function() {
+        // TODO: add loading mask
+    },
+    
+    onRecipeLoad: function(doc) {
+        this.configureRecipeLinks(doc);
     },
     
     configFromUrl: function() {
@@ -131,13 +143,23 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
           
     },
     
+    configureRecipeLinks: function(root) {
+        var links = Ext.select("a.recipe-link", false, root);
+        links.on({
+            click: function(evt, link) {
+                var id = link.hash.substring(1);
+                this.loadRecipe(id);
+                evt.preventDefault();
+            },
+            scope: this
+        });
+    },
+    
     initViewport: function() {
 
         Ext.QuickTips.init();
         this.initRecipeList();
-        this.initRecipeFrame({
-            url: this.getRecipeUrl(this.startRecipe)
-        });
+        this.initRecipeFrame();
         
         this.viewport = new Ext.Viewport({
             layout: "border",
@@ -149,7 +171,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                 autoEl: {
                     tag: "div",
                     cls: "header",
-                    html: "<h1>OpenGeo Recipe Book</h1>"
+                    html: "<h1><a class='recipe-link' href='#index'>OpenGeo Recipe Book</a></h1>"
                 }
             }, {
                 region: "west",
@@ -206,8 +228,19 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                 region: "center",
                 cls: "entry",
                 items: [this.recipeFrame]
-            }]
+            }],
+            listeners: {
+                afterrender: {
+                    fn: function() {
+                        this.configureRecipeLinks();
+                    },
+                    scope: this,
+                    delay: 1
+                }
+            }
         });
+        
+        this.loadRecipe(this.startRecipe);
 
     },
     
@@ -254,7 +287,13 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
     },
     
     initRecipeFrame: function(config) {
-        this.recipeFrame = new og.IFrameComponent(config);
+        this.recipeFrame = new Ext.ux.ManagedIFrame.Component(config);
+        this.recipeFrame.on({
+            domready: function() {
+                this.fireEvent("recipeloaded", this.recipeFrame.getFrameDocument());
+            },
+            scope: this
+        });
     },
     
     getRecipeUrl: function(id) {
@@ -270,8 +309,11 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
     
     loadRecipe: function(id) {
         window.location.hash = "#" + id;
-        this.recipeFrame.setUrl(this.getRecipeUrl(id));
-        this.fireEvent("recipeloaded");
+        if (id !== this.currentRecipe) {
+            this.currentRecipe = id;
+            this.fireEvent("recipeloading");
+            this.recipeFrame.setSrc(this.getRecipeUrl(id));
+        }
     },
 
     dispatch: function(functions, complete, scope) {
