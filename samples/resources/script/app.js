@@ -27,12 +27,14 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
     
     recipeList: null,
     
+    recipeFrame: null,
+    
     startRecipe: null,
     
     currentRecipe: null,
     
     query: null,
-    
+        
     constructor: function(config) {
         
         this.query = {components: {
@@ -54,11 +56,6 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
         parts.pop();
         this.recipeBase = parts.join("/") + "/" + dir;
         
-        this.addEvents(
-            "recipeloading",
-            "recipeloaded"
-        );
-
         og.Recipes.superclass.constructor.call(this);
         
         var queue = [
@@ -71,24 +68,10 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
             }
         ];
         
-        this.on({
-            recipeloading: this.onRecipeLoading,
-            recipeloaded: this.onRecipeLoad,
-            scope: this
-        })
-        
         this.dispatch(queue, function() {
-            this.selectRecipe(this.startRecipe)            
+            this.loadRecipe(this.startRecipe)            
         });
 
-    },
-    
-    onRecipeLoading: function() {
-        // TODO: add loading mask
-    },
-    
-    onRecipeLoad: function(doc) {
-        this.configureRecipeLinks(doc);
     },
     
     configFromUrl: function() {
@@ -114,7 +97,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
     },
     
     initRecipeList: function() {
-        
+        var loading = false;
         this.recipeList = new Ext.DataView({
             store: this.recipeStore,
             itemSelector: "div.recipe",
@@ -132,9 +115,10 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
             listeners: {
                 selectionchange: function(view, selections) {
                     var recs = view.getSelectedRecords();
-                    // assume singleSelect: true
-                    if (recs.length) {
-                        this.loadRecipe(recs[0].get("id"));                        
+                    if (recs.length && !loading) {
+                        loading = true;
+                        this.loadRecipe(recs[0].get("id"));
+                        loading = false;
                     }
                 },
                 scope: this
@@ -240,8 +224,6 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
             }
         });
         
-        this.loadRecipe(this.startRecipe);
-
     },
     
     createComponentCheckboxes: function() {
@@ -284,16 +266,20 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
             }
             return hasComponent && hasKeyword;
         }, this);
+        this.selectRecipe(this.currentRecipe);
     },
     
-    initRecipeFrame: function(config) {
-        this.recipeFrame = new Ext.ux.ManagedIFrame.Component(config);
-        this.recipeFrame.on({
-            domready: function() {
-                this.fireEvent("recipeloaded", this.recipeFrame.getFrameDocument());
-            },
-            scope: this
+    initRecipeFrame: function() {
+        this.recipeFrame = new Ext.ux.ManagedIFrame.Component({
+            focusOnLoad: true,
+            listeners: {
+                domready: function() {
+                    this.configureRecipeLinks(this.recipeFrame.getFrameDocument());
+                },
+                scope: this                
+            }
         });
+        
     },
     
     getRecipeUrl: function(id) {
@@ -303,17 +289,22 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
     selectRecipe: function(id) {
         var index = this.recipeStore.findExact("id", id);
         if (index >= 0) {
-            this.recipeList.select(index);
+            var selected = this.recipeList.getSelectedIndexes();
+            if (selected.indexOf(index) === -1) {
+                this.recipeList.select(index);                
+            }
+        } else {
+            this.recipeList.clearSelections();
         }
     },
-    
+        
     loadRecipe: function(id) {
         window.location.hash = "#" + id;
         if (id !== this.currentRecipe) {
             this.currentRecipe = id;
-            this.fireEvent("recipeloading");
             this.recipeFrame.setSrc(this.getRecipeUrl(id));
         }
+        this.selectRecipe(id);
     },
 
     dispatch: function(functions, complete, scope) {
