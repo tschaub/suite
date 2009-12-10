@@ -14,15 +14,5 @@
         "title": "Snapping & Splitting",
         "description": "Learn how to enable snapping and splitting while editing features in OpenLayers.",
         "components": ["OpenLayers"]
-    }, {
-        "id": "basic-gs",
-        "title": "Basic GeoServer",
-        "description": "This recipe describes how to use GeoServer.",
-        "components": ["GeoServer"]
-    }, {
-        "id": "advanced",
-        "title": "Advanced Recipe",
-        "description": "This recipe describes how to do magic with the Suite.",
-        "components": ["GeoServer", "OpenLayers", "GeoWebCache", "GeoExt"]
     }]
 }

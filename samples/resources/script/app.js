@@ -127,18 +127,6 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
           
     },
     
-    configureRecipeLinks: function(root) {
-        var links = Ext.select("a.recipe-link", false, root);
-        links.on({
-            click: function(evt, link) {
-                var id = link.hash.substring(1);
-                this.loadRecipe(id);
-                evt.preventDefault();
-            },
-            scope: this
-        });
-    },
-    
     initViewport: function() {
 
         Ext.QuickTips.init();
@@ -274,12 +262,70 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
             focusOnLoad: true,
             listeners: {
                 domready: function() {
-                    this.configureRecipeLinks(this.recipeFrame.getFrameDocument());
+                    var doc = this.recipeFrame.getFrameDocument();
+                    this.configureRecipeLinks(doc);
+                    this.configureCodeBlocks(doc);
                 },
                 scope: this                
             }
         });
         
+    },
+    
+    configureRecipeLinks: function(root) {
+        var links = Ext.select("a.recipe-link", false, root);
+        links.on({
+            click: function(evt, link) {
+                var id = link.hash.substring(1);
+                this.loadRecipe(id);
+                evt.preventDefault();
+            },
+            scope: this
+        });
+    },
+    
+    configureCodeBlocks: function(doc) {
+        var blocks = Ext.select("div.code", false, doc);
+        blocks.each(function(block) {            
+            var id = block.dom.title;
+            var panel = new Ext.Panel({
+                cls: "code-panel",
+                applyTo: block,
+                collapsible: true,
+                titleCollapse: true,
+                collapsed: true,
+                title: id
+            });
+            var script = doc.getElementById(id);
+            this.fetchCodeSample(script, function(str) {
+                panel.add({
+                    xtype: "box",
+                    autoEl: {
+                        tag: "pre",
+                        html: str
+                    }
+                });
+                panel.doLayout();
+            })
+        }, this);
+    },
+    
+    fetchCodeSample: function(script, callback) {
+        var str = script.innerHTML;
+        if (str) {
+            callback(str);
+        } else {
+            Ext.Ajax.request({
+                disableCaching: false,
+                url: script.src,
+                success: function(req) {
+                    callback(req.responseText);
+                },
+                failure: function() {
+                    callback("Code request failed.");
+                }
+            });
+        }
     },
     
     getRecipeUrl: function(id) {
