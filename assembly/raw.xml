@@ -38,6 +38,10 @@
       <outputDirectory>docs/geoserver</outputDirectory>
     </fileSet>
     <fileSet>
+      <directory>samples</directory>
+      <outputDirectory>samples</outputDirectory>
+    </fileSet>
+    <fileSet>
       <directory>data_dir</directory>
       <outputDirectory>data_dir</outputDirectory>
     </fileSet>
