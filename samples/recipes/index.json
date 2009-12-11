@@ -10,6 +10,41 @@
         "description": "This recipe describes how to do magic with the Suite.",
         "components": ["GeoServer", "OpenLayers", "GeoWebCache", "GeoExt"]
     }, {
+        "id": "bogus1",
+        "title": "Bogus Recipe 1",
+        "description": "This recipe describes how to do use GeoExt.",
+        "components": ["GeoExt"]
+    }, {
+        "id": "bogus2",
+        "title": "Bogus Recipe 2",
+        "description": "This recipe describes how to use GeoWebCache.",
+        "components": ["GeoWebCache"]
+    }, {
+        "id": "bogus3",
+        "title": "Bogus Recipe 3",
+        "description": "This recipe describes how to use OpenLayers and GeoExt.",
+        "components": ["OpenLayers", "GeoExt"]
+    }, {
+        "id": "bogus4",
+        "title": "Bogus Recipe 4",
+        "description": "This recipe describes how to use GeoServer.",
+        "components": ["GeoServer"]
+    }, {
+        "id": "bogus5",
+        "title": "Bogus Recipe 5",
+        "description": "This recipe describes how to use GeoServer and GeoWebCache.",
+        "components": ["GeoServer", "GeoWebCache"]
+    }, {
+        "id": "bogus6",
+        "title": "Bogus Recipe 6",
+        "description": "This recipe describes how to do use the Suite.",
+        "components": ["GeoServer", "OpenLayers", "GeoWebCache", "GeoExt"]
+    }, {
+        "id": "bogus7",
+        "title": "Bogus Recipe 7",
+        "description": "This recipe also describes how to do use the Suite.",
+        "components": ["GeoServer", "OpenLayers", "GeoWebCache", "GeoExt"]
+    }, {
         "id": "snap-split",
         "title": "Snapping & Splitting",
         "description": "Learn how to enable snapping and splitting while editing features in OpenLayers.",

@@ -1,13 +1,8 @@
 OpenLayers.ImgPath = "../externals/openlayers/img/";
 OpenLayers.Feature.Vector.style['default']['strokeWidth'] = '2';
 
-function init() {
-    initMap();
-    initUI();
-}
-
 var map, draw, modify, snap, split, vectors;
-function initMap() {
+function init() {
 
     map = new OpenLayers.Map({
         div: "map",
@@ -122,6 +117,9 @@ function initMap() {
     
     map.addControl(new OpenLayers.Control.MousePosition());
     
+    // add behavior to checkboxes and other page elements
+    initUI();
+    
     map.zoomToMaxExtent();
 }
 
@@ -143,66 +141,3 @@ function flashFeatures(features, index) {
     }
 }
 
-/**
- * Add behavior to page elements.  This basically lets us set snapping
- * target properties with the checkboxes and text inputs.  The checkboxes
- * toggle the target node, vertex, or edge (boolean) values.  The
- * text inputs set the nodeTolerance, vertexTolerance, or edgeTolerance
- * property values.
- */
-function initUI() {
-    // add behavior to snap elements
-    var snapCheck = $("snap_toggle");
-    snapCheck.checked = true;
-    snapCheck.onclick = function() {
-        if(snapCheck.checked) {
-            snap.activate();
-            $("snap_options").style.display = "block";
-        } else {
-            snap.deactivate();
-            $("snap_options").style.display = "none";
-        }
-    };
-    var target, type, tog, tol;
-    var types = ["node", "vertex", "edge"];
-    var target = snap.targets[0];
-    for(var j=0; j<types.length; ++j) {
-        type = types[j];
-        tog = $("target_" + type);
-        tog.checked = target[type];
-        tog.onclick = (function(tog, type, target) {
-            return function() {target[type] = tog.checked;}
-        })(tog, type, target);
-        tol = $("target_" + type + "Tolerance");
-        tol.value = target[type + "Tolerance"];
-        tol.onchange = (function(tol, type, target) {
-            return function() {
-                target[type + "Tolerance"] = Number(tol.value) || 0;
-            }
-        })(tol, type, target);
-    }
-
-    // add behavior to split elements
-    var splitCheck = $("split_toggle");
-    splitCheck.checked = true;
-    splitCheck.onclick = function() {
-        if(splitCheck.checked) {
-            split.activate();
-            $("split_options").style.display = "block";
-        } else {
-            split.deactivate();
-            $("split_options").style.display = "none";
-        }
-    };
-    var edgeCheck = $("edge_toggle");
-    edgeCheck.checked = split.edge;
-    edgeCheck.onclick = function() {
-        split.edge = edgeCheck.checked;
-    };
-    
-    $("clear").onclick = function() {
-        modify.deactivate();
-        vectors.destroyFeatures();
-    };
-    
-}
