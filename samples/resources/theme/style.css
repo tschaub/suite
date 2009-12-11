@@ -9,6 +9,13 @@ body {
     opacity: 0;
 }
 
+h1, h2, h3, h4, h5 {
+    color: #0A2742;
+}
+
+a, a:visited {
+    color: #3366CC;
+}
 
 /* selectors for the index page */
 
@@ -37,7 +44,7 @@ body {
 
 .index .recipe.over {
     cursor: pointer;
-    background-color: #fafafa;
+    background-color: #f3f3f3;
 }
 
 .index .recipe.selected {

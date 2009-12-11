@@ -85,10 +85,10 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
     },
     
     initRecipeStore: function(done) {
-        this.recipeStore = new Ext.data.JsonStore({
+        this.recipeStore = new Ext.ux.data.PagingJsonStore({
             url: this.index,
             root: "recipes",
-            autoLoad: true,
+            autoLoad: {params: {start: 0, limit: 5}},
             fields: ["id", "title", "description", "components"],
             listeners: {
                 load: done
@@ -192,8 +192,19 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                             items: [this.createComponentCheckboxes()]
                         }]
                     }, {
-                        xtype: "container",
-                        items: [this.recipeList]
+                        xtype: "panel",
+                        border: false,
+                        items: [this.recipeList],
+                        bbar: new Ext.PagingToolbar({
+                            store: this.recipeStore,
+                            displayInfo: false,
+                            pageSize: 5
+                        }),
+                        listeners: {
+                            render: function(cmp) {
+                                cmp.toolbars[0].refresh.hide();
+                            }
+                        }
                     }]
                 }]
             }, {
