@@ -3,11 +3,15 @@
 
 <beans>
 
-  <!-- tries to replace the specified extension -->
-  <bean id="layerListDemo2" class="org.geoserver.web.MenuPageInfo" depends-on="demoRequests">
-    <property name="id" value="layerListDemo"/>
+  <bean id="suiteLayerListDemo" class="org.geoserver.web.MenuPageInfo">
+    <property name="id" value="suiteLayerListDemo"/>
     <property name="titleKey" value="OpenGeoMapPreviewPage.title"/>
     <property name="descriptionKey" value="OpenGeoMapPreviewPage.description"/>
     <property name="componentClass" value="org.geoserver.web.demo.OpenGeoMapPreviewPage"/>
   </bean>
+  
+  <bean id="layerListDemoBlacklister" class="org.geoserver.platform.NameExclusionFilter">
+  	<property name="beanId" value="layerListDemo2"/>
+  </bean>
+  
 </beans>
