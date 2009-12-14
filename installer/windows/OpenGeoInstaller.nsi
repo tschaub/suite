@@ -3,22 +3,23 @@
 ; Define your application name
 !define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
-!define VERSION "1.0"
+!define VERSION "1.0-SNAPSHOT"
 !define LONGVERSION "1.0.0.0" ; must be a.b.c.d
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
+!define SOURCEPATHROOT "..\..\target\suite-${VERSION}-raw"
 
 
 ; Main Install settings
 Name "${APPNAMEANDVERSION}"
 InstallDir "$PROGRAMFILES\${COMPANYNAME}\${APPNAMEANDVERSION}"
 InstallDirRegKey HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" ""
-OutFile "OpenGeoSuite-1.0.exe"
+OutFile "OpenGeoSuite-${VERSION}.exe"
 
 ;Compression options
 CRCCheck on
 
 ; This is the gray text on the bottom left of the installer.
-BrandingText " "
+BrandingText " " ; blank
 
 ; Hide the "Show details" button during the install/uninstall
 ShowInstDetails nevershow
@@ -128,15 +129,13 @@ Function RunStuff
     ExecShell "open" "$SMPROGRAMS\$STARTMENU_FOLDER\Start OpenGeo Suite.lnk"
   ${EndIf}
 
-  ;Script to check if GeoServer has finished launching.  Checks for a response on $Port 
-  ;We could delete this file after it's finished running, as it's no longer needed...
+  ;Script to check if Suite has finished launching.  Waits for a response on $Port 
   ExecWait $INSTDIR\checksuite.bat
-  ;Delete $INSTDIR\checksuite.bat
 
   ClearErrors
   ExecShell "open" "$INSTDIR\Dashboard\OpenGeo Suite.exe" SW_SHOWMAXIMIZED
   IfErrors 0 +2
-    MessageBox MB_ICONSTOP "Unable to start the OpenGeo Suite or launch the Dashboard.  Please use the Start Menu to manually start the applications."
+    MessageBox MB_ICONSTOP "Unable to start the OpenGeo Suite or launch the Dashboard.  Please use the Start Menu to manually start these applications."
   ClearErrors
 
 FunctionEnd
@@ -148,7 +147,7 @@ FunctionEnd
 ;Page custom FileStuff FileStuffLeave                                    
 Page custom CheckUserType                                     ; Die if not admin
 Page custom PriorInstall                                      ; Check to see if previously installed
-!insertmacro MUI_PAGE_LICENSE "license.txt"                   ; Show license
+!insertmacro MUI_PAGE_LICENSE "..\common\license.txt"         ; Show license
 !insertmacro MUI_PAGE_DIRECTORY                               ; Where to install
 !insertmacro MUI_PAGE_STARTMENU Application $STARTMENU_FOLDER ; Start menu location
 !insertmacro MUI_PAGE_COMPONENTS                              ; List of stuff to install
@@ -173,21 +172,26 @@ Function .onInit
 	
   ; Splash screen
   SetOutPath $TEMP
-; File /oname=spltmp.bmp "splash.bmp" ; normal splash
-; advsplash::show 2000 500 500 -1 $TEMP\spltmp 
-  File /oname=spltmp.bmp "splashtransparent.bmp" ; transparent splash
+  File /oname=spltmp.bmp "splash.bmp" ; transparent splash
   advsplash::show 2500 500 500 0xEC008C $TEMP\spltmp
-	;advsplash::show Delay FadeIn FadeOut KeyColor FileName
-  Pop $0 ; $0 has '1' if the user closed the splash screen early,
-         ;    has '0' if everything closed normally, and '-1' if some error occurred.
+  ;advsplash::show Delay FadeIn FadeOut KeyColor FileName
+  Pop $0 ; '1' if the user closed the splash screen early
+         ; '0' if everything closed normally
+         ; '-1' if some error occurred.
   Delete $TEMP\spltmp.bmp
-	
+
+
+;Don't need to check for 64 bit anymore!
+/*
+
   ; Tests for 32/64 bit system
   ; Bombs out if 64 bit
   ${If} ${RunningX64}
   MessageBox MB_ICONSTOP "Sorry, this installer is only supported on 32 bit systems."
   Quit
   ${EndIf}
+
+*/
 
   ; Get the Common App Data path
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders" "Common AppData"
@@ -197,6 +201,8 @@ Function .onInit
   StrCpy $IsManual 1
 
   StrCpy $FolderName $EXEDIR
+
+
 
 FunctionEnd
 
@@ -277,17 +283,17 @@ Function PriorInstall
   ClearErrors
   ; Fail!  This exact version is installed!
 
-    MessageBox MB_ICONSTOP "Setup has found this version (${VERSION}) of the OpenGeo Suite \
-                            installed on your machine.  If you wish to reinstall the \
-                            OpenGeo Suite, please uninstall first.  After you have \
-                            uninstalled, you may run Setup again.$\r$\n$\r$\nPlease note that \
-                            it is also possible to run different versions of the OpenGeo Suite \
-                            on your machine simultaneously."
-    MessageBox MB_OK "Setup will now exit..."
-    Quit
+  MessageBox MB_ICONSTOP "Setup has found this version (${VERSION}) of the OpenGeo Suite \
+                          installed on your machine.  If you wish to reinstall the \
+                          OpenGeo Suite, please uninstall first.  After you have \
+                          uninstalled, you may run Setup again.$\r$\n$\r$\nPlease note that \
+                          it is also possible to run different versions of the OpenGeo Suite \
+                          on your machine simultaneously."
+  MessageBox MB_OK "Setup will now exit..."
+  Quit
 
-NoPriorInstall:
-ClearErrors
+  NoPriorInstall:
+  ClearErrors
 
 FunctionEnd
 
@@ -348,7 +354,11 @@ Function Creds
 
 
   ;Syntax: ${NSD_*} x y width height text
-  ${NSD_CreateLabel} 0 0 100% 36u "GeoServer requires a username and password in order to manage and edit configuration.  Please enter a username and password in each of the below fields, or leave unchanged to accept the default values.  If either the username or password fields are left blank, both fields will be replaced by the default values."
+  ${NSD_CreateLabel} 0 0 100% 36u "GeoServer requires a username and password in order to manage \
+                                   and edit configuration.  Please enter a username and password \
+                                   in each of the below fields, or leave unchanged to accept the \
+                                   default values.  If either the username or password fields are \
+                                   left blank, both fields will be replaced by the default values."
   ${NSD_CreateLabel} 20u 40u 40u 14u "Username"  
   ${NSD_CreateText} 70u 38u 50u 14u $GSUser
   Pop $GSUserTemp
@@ -363,7 +373,9 @@ Function Creds
   Pop $GSPassWarn
   ${NSD_OnChange} $GSPassTemp PasswordCheck
 
-  ${NSD_CreateLabel} 0 80u 100% 20u "Enter the port that the OpenGeo Suite will respond on.  Illegal values entered here will be replaced by the default value."
+  ${NSD_CreateLabel} 0 80u 100% 20u "Enter the port that the OpenGeo Suite will respond on.  \
+                                     Illegal values entered here will be replaced by the default \
+                                     value."
   ${NSD_CreateLabel} 20u 102u 40u 14u "Port" 
   ${NSD_CreateNumber} 70u 100u 50u 14u $Port
   Pop $PortTemp
@@ -422,11 +434,13 @@ Function CredsLeave
   ; If user blanked either username/password, use defaults anyway!
 
   StrCmp $GSUser "" 0 +4
-    MessageBox MB_ICONEXCLAMATION "The Username field cannot be blank.  Resetting username and password fields to default values."
+    MessageBox MB_ICONEXCLAMATION "The Username field cannot be blank.  Resetting username and \
+                                   password fields to default values."
     StrCpy $GSUser "admin"
     StrCpy $GSPass "geoserver"
   StrCmp $GSPass "" 0 +4
-    MessageBox MB_ICONEXCLAMATION "The Password field cannot be blank.  Resetting username and password fields to default values."
+    MessageBox MB_ICONEXCLAMATION "The Password field cannot be blank.  Resetting username and \
+                                   password fields to default values."
     StrCpy $GSUser "admin"
     StrCpy $GSPass "geoserver"
   StrCmp $Port "" 0 +3 
@@ -442,14 +456,15 @@ Function CredsLeave
 
 FunctionEnd
 
-; Last page before install
+; Custom page, last page before install
 Function Ready
 
   nsDialogs::Create 1018
   !insertmacro MUI_HEADER_TEXT "$(TEXT_READY_TITLE)" "$(TEXT_READY_SUBTITLE)"
 
   ;Syntax: ${NSD_*} x y width height text
-  ${NSD_CreateLabel} 0 0 100% 24u "Please review the settings below and click the Back button if changes need to be made.  Click the Install button to continue."
+  ${NSD_CreateLabel} 0 0 100% 24u "Please review the settings below and click the Back button if \
+                                   changes need to be made.  Click the Install button to continue."
 
   ${NSD_CreateLabel} 20u 25u 75% 12u "OpenGeo Suite install directory:"
   ${NSD_CreateLabel} 40u 34u 70% 12u "$INSTDIR"
@@ -484,41 +499,111 @@ Section -Prerequisites
 
 SectionEnd
 
-; The main install section
 
-Section "GeoServer" Section1a
+; The webapp container
+Section "-Jetty" SectionJetty ; dash = hidden
+
+  SectionIn RO  ; Mandatory
+  SetOverwrite on ; Set Section properties
+
+  !insertmacro DisplayImage "slide_1_suite.bmp"
+
+  SetOutPath "$INSTDIR"
+  File /a "${SOURCEPATHROOT}\jetty\*.*"
+  File /r "${SOURCEPATHROOT}\jetty\etc"
+  File /r "${SOURCEPATHROOT}\jetty\lib"
+  File /r "${SOURCEPATHROOT}\jetty\resources"
+
+  File /a checksuite.bat ; Watches for port activity
+  
+  ; Set checksuite.bat to use the correct port
+  ${textreplace::ReplaceInFile} "$INSTDIR\checksuite.bat" \
+                                "$INSTDIR\checksuite.bat" \
+                                "[jettyport]" "$Port" \ 
+                                "/S=1" $1
+
+  File /a opengeo.ico
+  File /a ..\common\changelog.txt
+
+  ; Copy our own JRE (which includes native JAI)
+  File /r "${SOURCEPATHROOT}\jre"
+
+  ; Create some dirs
+  CreateDirectory "$INSTDIR\webapps"
+  CreateDirectory "$CommonAppData\${COMPANYNAME}"
+  CreateDirectory "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
+
+  ;Create shortcut
+  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+
+
+  ${If} $IsManual == 0 ; i.e. only if service install
+    SetOutPath "$INSTDIR"
+    CreateDirectory "$INSTDIR\wrapper"
+    File /a /oname=wrapper\wrapper.exe wrapper.exe
+    File /a /oname=wrapper\wrapper-server-license.txt wrapper-server-license.txt
+    CreateDirectory "$INSTDIR\wrapper\lib"
+    File /a /oname=wrapper\lib\wrapper.dll wrapper.dll
+    File /a /oname=wrapper\lib\wrapper.jar wrapper.jar
+    File /a /oname=wrapper\wrapper.conf wrapper.conf
+    ; wrapper.conf is customized here
+    ${textreplace::ReplaceInFile} "$INSTDIR\wrapper\wrapper.conf" \
+                                  "$INSTDIR\wrapper\wrapper.conf" \
+                                  "[javapath]" "$INSTDIR\jre" \ 
+                                  "/S=1" $1
+    ${textreplace::ReplaceInFile} "$INSTDIR\wrapper\wrapper.conf" \
+                                  "$INSTDIR\wrapper\wrapper.conf" \
+                                  "[datadirpath]" "$DataDirPath" \ 
+                                  "/S=1" $1
+    ${textreplace::ReplaceInFile} "$INSTDIR\wrapper\wrapper.conf" \
+                                  "$INSTDIR\wrapper\wrapper.conf" \
+                                  "[jettylogpath]" "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs" \ 
+                                  "/S=1" $1
+    ${textreplace::ReplaceInFile} "$INSTDIR\wrapper\wrapper.conf" \
+                                  "$INSTDIR\wrapper\wrapper.conf" \
+                                  "[wrapperlogpath]" "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs\" \ 
+                                  "/S=1" $1
+    ${textreplace::ReplaceInFile} "$INSTDIR\wrapper\wrapper.conf" \
+                                  "$INSTDIR\wrapper\wrapper.conf" \
+                                  "[jettyport]" "$Port" \ 
+                                  "/S=1" $1
+
+    ; Give permission for NetworkService to be able to read/write to data_dir and logs
+    AccessControl::GrantOnFile "$CommonAppData\${COMPANYNAME}" "NT AUTHORITY\NetworkService" "FullAccess"
+	; Install the service (i)
+    nsExec::Exec "$INSTDIR\wrapper\wrapper.exe -i wrapper.conf"
+
+  ${EndIf}
+
+
+
+
+
+SectionEnd
+
+
+Section "GeoServer" SectionGS
 
   SectionIn RO  ; Makes this install mandatory
-
-  SetOverwrite on  ; Set Section properties
+  SetOverwrite on  
 
   !insertmacro DisplayImage "slide_3_geoserver.bmp"
 
-  ; Copy GeoServer (minus data_dir)
-  ;CreateDirectory $INSTDIR\GeoServer
-  ;SetOutPath "$INSTDIR\GeoServer"
-  SetOutPath "$INSTDIR"
-  File /a /oname=start.jar ..\artifacts\geoserver\start.jar 
-  File /a /oname=GPL.txt ..\artifacts\geoserver\GPL.txt
-  File /a /oname=LICENSE.txt ..\artifacts\geoserver\LICENSE.txt
-  File /a /oname=README.txt ..\artifacts\geoserver\README.txt
-  File /a /oname=RUNNING.txt ..\artifacts\geoserver\RUNNING.txt 
+  ; Copy GeoServer
+  SetOutPath "$INSTDIR\webapps"
+  File /r /x jai*.* "${SOURCEPATHROOT}\geoserver"
+  SetOutPath "$INSTDIR\webapps\geoserver"
   File /a geoserver.ico
-  File /r ..\artifacts\geoserver\etc 
-  File /r ..\artifacts\geoserver\resources 
-  File /r /x jai*.* ..\artifacts\geoserver\webapps ; excludes JAI
-  File /r /x jai*.* ..\artifacts\geoserver\lib ; ugh, copies WEB-INF\lib too
-
-  ; Copy our own JRE (which includes native JAI)
-  File /r ..\artifacts\jre
 
   ; Copy data_dir
-  CreateDirectory "$CommonAppData\${COMPANYNAME}"
-  CreateDirectory "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
   SetOutPath "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
-  File /r /x logging.xml /x security\users.properties /x .svn ..\artifacts\data_dir    ; Custom data_dir
- ; Next line is lame, but I can't figure out where this directory is being created
+  File /r /x logging.xml /x security\users.properties  "${SOURCEPATHROOT}\data_dir"    ; Custom data_dir
+  ; Next line is lame, but I can't figure out where this directory is being created
   RMDir /r "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\geoserver"
+
+  ; Log path
+  CreateDirectory "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs"
 
 
   StrCpy $DataDirPath "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\data_dir"
@@ -542,80 +627,172 @@ Section "GeoServer" Section1a
                                 "[gspassword]" "$GSPass" \
                                 "/S=1" $0
 
-  ; This is batch file that watches for port activity
-  SetOutPath "$INSTDIR"
-  File /a checksuite.bat
-
-  ; Set checksuite.bat to use the correct port
-    ${textreplace::ReplaceInFile} "$INSTDIR\checksuite.bat" \
-                                  "$INSTDIR\checksuite.bat" \
-                                  "[jettyport]" "$Port" \ 
-                                  "/S=1" $1
-
-  ; Continuing on...
-  SetOutPath "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
-  File /r ..\artifacts\geoserver\logs
-  SetOutPath "$INSTDIR"
-  File /a opengeo.ico
-
-  ; NOT USING ENV VAR!
-  ; Write GEOSERVER_DATA_DIR environment variable
-  ;WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "GEOSERVER_DATA_DIR" "$CommonAppData\OpenGeo\GeoServer\data_dir"
-  ; Make sure Windows knows about the change (not quite sure what this does)
-  ;SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
-
-  ${If} $IsManual == 0 ; i.e. only if service install
-    SetOutPath "$INSTDIR"
-    CreateDirectory "$INSTDIR\wrapper"
-    File /a /oname=wrapper\wrapper.exe wrapper.exe
-    File /a /oname=wrapper\wrapper-server-license.txt wrapper-server-license.txt
-    CreateDirectory "$INSTDIR\wrapper\lib"
-    File /a /oname=wrapper\lib\wrapper.dll wrapper.dll
-    File /a /oname=wrapper\lib\wrapper.jar wrapper.jar
-    File /a /oname=wrapper\wrapper.conf wrapper.conf
-    ; wrapper.conf is customized here
-    ; since we can't use environment variables (running as NetworkService)
-    ${textreplace::ReplaceInFile} "$INSTDIR\wrapper\wrapper.conf" \
-                                  "$INSTDIR\wrapper\wrapper.conf" \
-                                  "[javapath]" "$INSTDIR\jre" \ 
-                                  "/S=1" $1
-    ${textreplace::ReplaceInFile} "$INSTDIR\wrapper\wrapper.conf" \
-                                  "$INSTDIR\wrapper\wrapper.conf" \
-                                  "[datadirpath]" "$DataDirPath" \ 
-                                  "/S=1" $1
-    ${textreplace::ReplaceInFile} "$INSTDIR\wrapper\wrapper.conf" \
-                                  "$INSTDIR\wrapper\wrapper.conf" \
-                                  "[jettylogpath]" "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs" \ 
-                                  "/S=1" $1
-    ${textreplace::ReplaceInFile} "$INSTDIR\wrapper\wrapper.conf" \
-                                  "$INSTDIR\wrapper\wrapper.conf" \
-                                  "[wrapperlogpath]" "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs\" \ 
-                                  "/S=1" $1
-    ${textreplace::ReplaceInFile} "$INSTDIR\wrapper\wrapper.conf" \
-                                  "$INSTDIR\wrapper\wrapper.conf" \
-                                  "[jettyport]" "$Port" \ 
-                                  "/S=1" $1
-
-
-    ; Give permission for NetworkService to be able to read/write to data_dir and logs
-    AccessControl::GrantOnFile "$CommonAppData\${COMPANYNAME}" "NT AUTHORITY\NetworkService" "FullAccess"
-	; Install the service (i)
-    nsExec::Exec "$INSTDIR\wrapper\wrapper.exe -i wrapper.conf"
-
-  ${EndIf}
-
-  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-
-  ;Create shortcuts
-  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
-  CreateDirectory "$INSTDIR\webapps\docs" ; Needed for docs later?
+  ; Shortcuts
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer Admin.lnk" \
-                 "http://localhost:$Port/geoserver/web"
+                 "http://localhost:$Port/geoserver/web" \
+                 "$INSTDIR\webapps\geoserver\geoserver.ico"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Import Layers.lnk" \
-                 "http://localhost:$Port/geoserver/web/?wicket:bookmarkablePage=:org.geoserver.web.importer.ImportPage"
+                 "http://localhost:$Port/geoserver/web/?wicket:bookmarkablePage=:org.geoserver.web.importer.ImportPage" \
+                 "$INSTDIR\webapps\geoserver\geoserver.ico"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer Data Directory.lnk" \
                  "$DataDirPath"
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer Logs.lnk" \
+                 "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs" \
+                 "$INSTDIR\webapps\geoserver\geoserver.ico"
+
+SectionEnd
+
+
+SectionGroup "GeoServer Extensions" SectionGSExt
+
+  Section "GDAL" SectionGSGDAL
+
+    SetOutPath "$INSTDIR\jre\bin"
+    File /a "${SOURCEPATHROOT}\gdal\*.*"
+
+  SectionEnd
+
+  Section "H2" SectionGSH2
+
+    ;SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
+    ;File /a "${SOURCEPATHROOT}\geoserver_plugins\h2\*.*"
+
+  SectionEnd
+
+  Section "Oracle" SectionGSOracle
+
+    ;SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
+    ;File /a "${SOURCEPATHROOT}\geoserver_plugins\oracle\*.*"
+
+  SectionEnd
+
+SectionGroupEnd
+
+Section "GeoWebCache" SectionGWC
+
+  ; Set Section properties
+  SectionIn RO ; mandatory
+  SetOverwrite on
+
+  ; Too Short to display graphic
+  ; !insertmacro DisplayImage "slide_4_gwc.bmp"
+
+  SetOutPath "$INSTDIR\webapps\geoserver"
+  File /a geowebcache.ico
+
+
+
+  ; GWC included with GS!
+
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoWebCache.lnk" \
+		         "http://localhost:$Port/geoserver/gwc/demo/" \
+                 "$INSTDIR\webapps\geoserver\geowebcache.ico"
+
+SectionEnd
+
+
+Section "GeoExplorer" SectionGX
+
+  SectionIn RO ; mandatory
+  SetOverwrite on
+
+  !insertmacro DisplayImage "slide_6_geoext.bmp"
+
+  SetOutPath "$INSTDIR\webapps\"
+  File /r /x doc "${SOURCEPATHROOT}\geoexplorer"
+  File /a /oname=geoexplorer\geoext.ico geoext.ico
+  
+  ; Shortcuts
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer.lnk" \
+		         "http://localhost:$Port/geoexplorer/index.html" \
+                 "$INSTDIR\webapps\geoexplorer\geoext.ico"
+
+  ; Give permission for NetworkService to be able to read/write
+  ; This needs to change, shouldn't give write access to Program Files
+  AccessControl::GrantOnFile "$INSTDIR\webapps\geoexplorer" "NT AUTHORITY\NetworkService" "FullAccess"
+
+SectionEnd
+
+Section "Styler" SectionStyler
+
+  SectionIn RO ; mandatory
+  SetOverwrite on
+
+  !insertmacro DisplayImage "slide_6_geoext.bmp"
+
+  ; Set Section Files and Shortcuts
+  SetOutPath "$INSTDIR\webapps\"
+  File /r "${SOURCEPATHROOT}\styler"
+  File /a /oname=styler\geoext.ico geoext.ico
+
+  ; Shortcuts
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Styler.lnk" \
+		         "http://localhost:$Port/styler/" \
+                 "$INSTDIR\webapps\styler\geoext.ico"
+
+SectionEnd
+
+
+Section "Documentation" SectionDocs
+
+  SetOverwrite on
+
+  !insertmacro DisplayImage "slide_1_suite.bmp"
+
+  SetOutPath "$INSTDIR\webapps"
+
+  ; Copy all doc projects
+  File /r "${SOURCEPATHROOT}\docs"
+
+  ; Shortcuts
+  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoServer Documentation.lnk" \
+		         "$INSTDIR\webapps\docs\geoserver\index.html" \
+                 "$INSTDIR\webapps\geoserver\geoserver.ico"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoExplorer Documentation.lnk" \
+		         "$INSTDIR\webapps\docs\geoexplorer\index.html" \
+                 "$INSTDIR\webapps\geoexplorer\geoext.ico"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\Styler Documentation.lnk" \
+		         "$INSTDIR\webapps\docs\styler\index.html" \
+                 "$INSTDIR\webapps\styler\geoext.ico"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoWebCache Documentation.lnk" \
+		         "$INSTDIR\webapps\docs\geoserver\geowebcache\index.html" \
+                 "$INSTDIR\webapps\geoserver\geowebcache.ico"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\Getting Started.lnk" \
+		         "$INSTDIR\webapps\docs\gettingstarted\index.html"
+
+SectionEnd
+
+
+Section "-Dashboard" SectionDashboard ;dash means hidden
+
+  SectionIn RO  ; Makes this install mandatory
+  SetOverwrite on
+ 
+  !insertmacro DisplayImage "slide_1_suite.bmp"
+
+  SetOutPath "$INSTDIR"
+  ;File /r /x config.ini "${SOURCEPATHROOT}\dashboard"
+  File /r "${SOURCEPATHROOT}\dashboard"
+  SetOutPath "$INSTDIR\dashboard\Resources"
+  ;File /a /oname=config.ini dashboard.ini
+  ;${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
+  ;                              "$INSTDIR\dashboard\Resources\config.ini" \
+  ;                              "[jettyport]" "$Port" \ 
+  ;                              "/S=1" $1
+  ${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
+                                "$INSTDIR\dashboard\Resources\config.ini" \
+                                "8080" "$Port" \ 
+                                "/S=1" $1
+
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\OpenGeo Suite Dashboard.lnk" \
+		         "$INSTDIR\dashboard\OpenGeo Suite.exe" \
+                 "$INSTDIR\opengeo.ico"
+
+SectionEnd
+
+
+Section "-StartStop" SectionStartStop
 
 
   ; Create Start/Stop shortcuts
@@ -644,203 +821,6 @@ Section "GeoServer" Section1a
 
   ${EndIf}
 
-  !insertmacro MUI_STARTMENU_WRITE_END
-	
-
-SectionEnd
-
-
-SectionGroup "GeoServer Extensions" SectionGSExt
-
-  Section "GDAL" SectionGSGDAL
-
-    SetOutPath "$INSTDIR\jre\bin"
-    File /a ..\artifacts\gdal\*.*
-
-  SectionEnd
-
-  Section "H2" SectionGSH2
-
-    SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
-    File /a ..\artifacts\geoserver_plugins\h2\*.*
-
-  SectionEnd
-
-;  Section "Image Pyramid" SectionGSPyramid
-;
-;    SetOutPath "$INSTDIR\GeoServer\webapps\geoserver\WEB-INF\lib"
-;    File /a ..\artifacts\geoserver_plugins\pyramid\*.*
-;
-;  SectionEnd
-
-  Section "Oracle" SectionGSOracle
-
-    SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
-    File /a ..\artifacts\geoserver_plugins\oracle\*.*
-
-  SectionEnd
-
-SectionGroupEnd
-
-Section "GeoWebCache" SectionGWC
-
-  ; Set Section properties
-  SectionIn RO ; mandatory
-  SetOverwrite on
-
-  ;!insertmacro DisplayImage "slide_4_gwc.bmp"
-
-  ; GWC included with GS!
-
-
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoWebCache.lnk" \
-		         "http://localhost:$Port/geoserver/gwc/demo/" \
-                 "$INSTDIR\webapps\geowebcache.ico"
-
-
-  ; Fake section for docs
-  SetOutPath "$INSTDIR"
-  File /a geowebcache.ico
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoWebCache Documentation.lnk" \
-		         "http://localhost:$Port/docs/geoserver/geowebcache/" \
-                 "$INSTDIR\webapps\geowebcache.ico"
-
-SectionEnd
-
-
-Section "GeoExplorer" SectionGX
-
-  ; Set Section properties
-  SectionIn RO ; mandatory
-  SetOverwrite on
-
-  !insertmacro DisplayImage "slide_6_geoext.bmp"
-
-  ; Set Section Files and Shortcuts
-  SetOutPath "$INSTDIR\webapps\"
-  File /r /x .svn /x doc ..\artifacts\geoexplorer
-  File /a /oname=geoexplorer\geoext.ico geoext.ico
-  
-  ; Shortcuts
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer.lnk" \
-		         "http://localhost:$Port/geoexplorer/index.html" \
-                 "$INSTDIR\webapps\geoexplorer\geoext.ico"
-
-  ; Give permission for NetworkService to be able to read/write
-  ; This needs to change, shouldn't give write access to Program Files
-  AccessControl::GrantOnFile "$INSTDIR\webapps\geoexplorer" "NT AUTHORITY\NetworkService" "FullAccess"
-
-SectionEnd
-
-Section "Styler" SectionStyler
-
-  SectionIn RO ; mandatory
-
-  ; Set Section properties
-  SetOverwrite on
-
-  !insertmacro DisplayImage "slide_6_geoext.bmp"
-
-  ; Set Section Files and Shortcuts
-  SetOutPath "$INSTDIR\webapps\"
-  File /r /x .svn ..\artifacts\styler
-  File /a /oname=styler\geoext.ico geoext.ico
-
-  ; Shortcuts
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Styler.lnk" \
-		         "http://localhost:$Port/styler/" \
-                 "$INSTDIR\geoext.ico"
-
-SectionEnd
-
-
-Section "Documentation" SectionDocs
-
-  ; Set Section properties
-  SetOverwrite on
-
-  !insertmacro DisplayImage "slide_1_suite.bmp"
-
-; GeoServer Documentation
-
-  ; Set Section Files and Shortcuts
-  CreateDirectory "$INSTDIR\webapps\docs"
-  SetOutPath "$INSTDIR\webapps\docs"
-  
-  File /r /x .svn ..\artifacts\documentation\geoserver
-
-  ; Shortcuts
-  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation"
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoServer Documentation.lnk" \
-		         "$INSTDIR\webapps\docs\geoserver\index.html"
-
-
-; GeoExplorer Documentation
-
-  ; Set Section Files and Shortcuts
-  SetOutPath "$INSTDIR\webapps\docs"
-  File /r /x .svn ..\artifacts\documentation\geoexplorer
-
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoExplorer Documentation.lnk" \
-		         "$INSTDIR\webapps\docs\geoexplorer\index.html"
-
-
-; "Styler Docs" 
-
-  ; Set Section Files and Shortcuts
-  SetOutPath "$INSTDIR\webapps\docs"
-  File /r /x .svn ..\artifacts\documentation\styler
-
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\Styler Documentation.lnk" \
-		         "$INSTDIR\webapps\docs\styler\index.html"
-
-SectionEnd
-
-
-
-Section "-Getting Started" SectionGettingStarted ;dash means hidden
-
-  !insertmacro DisplayImage "slide_1_suite.bmp"
-
-  ; Set Section properties
-  SetOverwrite on
-
-  ; Set Section Files and Shortcuts
-  SetOutPath "$INSTDIR\webapps\docs"
-  File /r /x .svn ..\artifacts\documentation\integration
-  Rename "$INSTDIR\webapps\docs\integration" "$INSTDIR\webapps\docs\gettingstarted"
-
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\Getting Started.lnk" \
-		         "$INSTDIR\webapps\docs\gettingstarted\index.html"
-
-SectionEnd
-
-
-Section "-Dashboard" SectionDashboard ;dash means hidden
-
- 
-  !insertmacro DisplayImage "slide_1_suite.bmp"
-
- SectionIn RO  ; Makes this install mandatory
-
-  ; Set Section properties
-  SetOverwrite on
-
-  ; Set Section Files and Shortcuts
-  SetOutPath "$INSTDIR"
-  File /r /x .svn /x config.ini ..\artifacts\dashboard
-  ;Rename "$INSTDIR\dashboard" "$INSTDIR\Dashboard"
-  SetOutPath "$INSTDIR\dashboard\Resources"
-  File /a /oname=config.ini dashboard.ini
-  ${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
-                                "$INSTDIR\dashboard\Resources\config.ini" \
-                                "[jettyport]" "$Port" \ 
-                                "/S=1" $1
-
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\OpenGeo Suite Dashboard.lnk" \
-		         "$INSTDIR\dashboard\OpenGeo Suite.exe" \
-                 "$INSTDIR\geoext.ico"
-
 SectionEnd
 
 
@@ -848,27 +828,23 @@ SectionEnd
 ; Modern install component descriptions
 ; Yes, this needs to go after the install sections. 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-  !insertmacro MUI_DESCRIPTION_TEXT ${Section1a} "Installs GeoServer, a spatial data server."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionJetty} "Installs Jetty, a web server."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGS} "Installs GeoServer, a spatial data server."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSExt} "Includes GeoServer Extensions."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSGDAL} "Adds support for GDAL image formats."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSH2} "Adds support for H2 databases."
-  ;!insertmacro MUI_DESCRIPTION_TEXT ${SectionGSPyramid} "Adds support for image pyramid stores."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSOracle} "Adds support for Oracle databases."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGWC} "Includes GeoWebCache, a tile cache server."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGX} "Installs GeoExplorer, a graphical map editor."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionStyler} "Installs Styler, a graphical map style editor."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionDocs} "Includes full documentation for all applications."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGettingStarted} "Quickstart guide to the OpenGeo Suite."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionDashboard} "Installs the OpenGeo Suite Dashboard for access to all components."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionStartStop} "Creates shortcuts for starting and stopping the OpenGeo Suite."
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
 ; What happens at the end of the install.
 Section -FinishSection
-
-  ; Changelog
-  SetOutPath "$INSTDIR"
-  File /a changelog.txt
 
   ; Reg Keys
   WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" "" ""
@@ -882,11 +858,7 @@ Section -FinishSection
     WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" "InstallType" "Manual"
   ${EndIf}  
 
-  ; OLD! v0.7 and before
-  ;WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}\${VERSION}" "" "$INSTDIR"
-  ;WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}" "" "OpenGeo Suite"
-  ;WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}" "CurrentVersion" "${VERSION}"
-
+  ; For the Add/Remove programs area
   !define UNINSTALLREGPATH "Software\Microsoft\Windows\CurrentVersion\Uninstall"
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "DisplayName" "${APPNAMEANDVERSION}"
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "UninstallString" "$INSTDIR\uninstall.exe"
@@ -944,53 +916,27 @@ Section Uninstall
                                              please take a moment to back it up now.$\r$\n\
                                              Click OK when ready to proceed." IDOK 0 IDCANCEL Die
 
+  ; Have to move out of the directory to delete it
+  SetOutPath $TEMP
 
-;  ; Check if user wants to remove the data dir
-;  MessageBox MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 "Do you want to remove your GeoServer data directory?  (If you have anything you want to keep, click No.)" IDYES DelDataDir IDNO NoDelDataDir
+  ; Delete whole $CommonAppData directory (including logs)!
+  RMDir /r "$DataDirPath"
+  RMDir /r "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs"
+  RMDir /r "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
+  RMDir "$CommonAppData\${COMPANYNAME}"  ; Only delete if not empty!!!!!
 
-;  DelDataDir:
+  ; Remove all reg entries
+  DeleteRegKey HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}"
+  DeleteRegKey /ifempty HKLM "Software\${COMPANYNAME}"
+  DeleteRegKey HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}"
 
-    ; Have to move out of the directory to delete it
-    SetOutPath $TEMP
-    ; Remove env var
-    ;DeleteRegValue HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "GEOSERVER_DATA_DIR"
-    ; Make sure Windows knows about the change (not quite sure what this does)
-    ;SendMessage ${HWND_BROADCAST} ${WM_WININICHANGE} 0 "STR:Environment" /TIMEOUT=5000
+  ; Delete self
+  Delete "$INSTDIR\uninstall.exe"
 
-    ; Delete whole $CommonAppData directory (including logs)!
-    RMDir /r "$DataDirPath"
-    RMDir /r "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs"
-    RMDir /r "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
-    RMDir "$CommonAppData\${COMPANYNAME}"  ; Only delete if not empty!!!!!
+  ; Delete Shortcuts
+  RMDir /r "$SMPROGRAMS\$STARTMENU_FOLDER"
 
- 
-
-  Goto Continue
-
-;  NoDelDataDir:
-;
-;    ; Can't delete something we're inside!
-;    SetOutPath $PROGRAMFILES
-;    ; Just delete logs from CommonAppData
-;    RMDir /r "$CommonAppData\OpenGeo\GeoServer\logs"
-;
-;  Goto Continue
-
-  Continue:
-
-    ; Remove all reg entries
-    DeleteRegKey HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}"
-    DeleteRegKey /ifempty HKLM "Software\${COMPANYNAME}"
-    DeleteRegKey HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}"
-
-    ; Delete self
-    Delete "$INSTDIR\uninstall.exe"
-	
-    ; Delete Shortcuts
-    RMDir /r "$SMPROGRAMS\$STARTMENU_FOLDER"
-
-	; Delete all!
-
+  ; Delete all!
 
   Try:
 
@@ -1000,8 +946,6 @@ Section Uninstall
     RMDir /r "$INSTDIR\resources"
     RMDir /r "$INSTDIR\webapps"
     RMDir /r "$INSTDIR\jre"
-    RMDir /r "$INSTDIR\wrapper\lib"
-    RMDir /r "$INSTDIR\wrapper\*.*"
     RMDir /r "$INSTDIR\wrapper"
     Delete "$INSTDIR\*.*"
     RMDir "$INSTDIR"
@@ -1015,17 +959,16 @@ Section Uninstall
     Goto Succeed
 
   Die:
-   Quit
+    MessageBox MB_OK "Uninstallation was interrupted..."
+    Quit
 
   Fail:
     MessageBox MB_ICONEXCLAMATION "Could not uninstall cleanly.  This may be due to a corrupted registry entry.  If you feel you have reached this message in error, please contact OpenGeo at inquiry@opengeo.org."
     Quit
 
   Succeed:
-
-  RMDir "$PROGRAMFILES\${COMPANYNAME}"
+    RMDir "$PROGRAMFILES\${COMPANYNAME}"
 
 SectionEnd
-
 
 ; The End
