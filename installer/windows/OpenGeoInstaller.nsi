@@ -7,7 +7,7 @@
 !define LONGVERSION "1.0.0.0" ; must be a.b.c.d
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
 !define SOURCEPATHROOT "..\..\target\suite-${VERSION}-raw"
-
+!define STARTMENU_FOLDER "${APPNAMEANDVERSION}"
 
 ; Main Install settings
 Name "${APPNAMEANDVERSION}"
@@ -31,7 +31,6 @@ RequestExecutionLevel admin
 ; Includes
 !include "MUI.nsh" ; Modern interface settings
 !include "StrFunc.nsh" ; String functions
-!include "x64.nsh" ; To check for 64 bit OS
 !include "LogicLib.nsh" ; ${If} ${Case} etc.
 !include "nsDialogs.nsh" ; For Custom page layouts (Radio buttons etc)
 !include "WordFunc.nsh" ; For VersionCompare
@@ -59,9 +58,9 @@ Var CommonAppData
 Var Manual
 Var Service
 Var IsManual
-Var GSUser
-Var GSPass
-Var Port
+Var /GLOBAL GSUser
+Var /GLOBAL GSPass
+Var /GLOBAL Port
 Var GSUserTemp
 Var GSPassTemp
 Var PortTemp
@@ -121,6 +120,8 @@ LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be ins
 ; Do things after install
 Function RunStuff
 
+  IfSilent SilentSkip
+
   ${If} $IsManual == 0 ; i.e. only if service install
 	; Run the service (t)
     nsExec::Exec "$INSTDIR\wrapper\wrapper.exe -t wrapper.conf"
@@ -137,6 +138,8 @@ Function RunStuff
   IfErrors 0 +2
     MessageBox MB_ICONSTOP "Unable to start the OpenGeo Suite or launch the Dashboard.  Please use the Start Menu to manually start these applications."
   ClearErrors
+
+  SilentSkip:
 
 FunctionEnd
 
@@ -169,29 +172,6 @@ Page custom Ready                                             ; Ready to install
 
 ; Startup tasks
 Function .onInit
-	
-  ; Splash screen
-  SetOutPath $TEMP
-  File /oname=spltmp.bmp "splash.bmp" ; transparent splash
-  advsplash::show 2500 500 500 0xEC008C $TEMP\spltmp
-  ;advsplash::show Delay FadeIn FadeOut KeyColor FileName
-  Pop $0 ; '1' if the user closed the splash screen early
-         ; '0' if everything closed normally
-         ; '-1' if some error occurred.
-  Delete $TEMP\spltmp.bmp
-
-
-;Don't need to check for 64 bit anymore!
-/*
-
-  ; Tests for 32/64 bit system
-  ; Bombs out if 64 bit
-  ${If} ${RunningX64}
-  MessageBox MB_ICONSTOP "Sorry, this installer is only supported on 32 bit systems."
-  Quit
-  ${EndIf}
-
-*/
 
   ; Get the Common App Data path
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders" "Common AppData"
@@ -202,6 +182,19 @@ Function .onInit
 
   StrCpy $FolderName $EXEDIR
 
+  IfSilent SilentSkip
+
+  ; Splash screen
+  SetOutPath $TEMP
+  File /oname=spltmp.bmp "splash.bmp" ; transparent splash
+  advsplash::show 2500 500 500 0xEC008C $TEMP\spltmp
+  ;advsplash::show Delay FadeIn FadeOut KeyColor FileName
+  Pop $0 ; '1' if the user closed the splash screen early
+         ; '0' if everything closed normally
+         ; '-1' if some error occurred.
+  Delete $TEMP\spltmp.bmp
+
+  SilentSkip:
 
 
 FunctionEnd
@@ -301,6 +294,8 @@ FunctionEnd
 ; Will build a page with radio buttons for manual vs service selection
 Function InstallType
 
+  IfSilent SilentSkip
+
   nsDialogs::Create 1018
   !insertmacro MUI_HEADER_TEXT "$(TEXT_TYPE_TITLE)" "$(TEXT_TYPE_SUBTITLE)"
 
@@ -323,6 +318,8 @@ Function InstallType
 
   nsDialogs::Show
 
+  SilentSkip: ; By default set to Manual
+
 FunctionEnd
 
 
@@ -339,6 +336,8 @@ FunctionEnd
 ; Will build a page to input default GS admin creds
 Function Creds
   
+  IfSilent SlientSkip  
+
   nsDialogs::Create 1018
   !insertmacro MUI_HEADER_TEXT "$(TEXT_CREDS_TITLE)" "$(TEXT_CREDS_SUBTITLE)"
 
@@ -385,6 +384,8 @@ Function Creds
 
   nsDialogs::Show
 
+  SlientSkip:
+
 FunctionEnd
 
 Function UsernameCheck
@@ -427,6 +428,8 @@ FunctionEnd
 ; Second half of Creds function
 Function CredsLeave
 
+  IfSilent SilentSkip
+
   ${NSD_GetText} $GSUserTemp $GSUser ; converts numeric string into text...
   ${NSD_GetText} $GSPassTemp $GSPass ; ...and then saves into the same variable
   ${NSD_GetText} $PortTemp $Port             ; ditto  
@@ -452,12 +455,23 @@ Function CredsLeave
   ${OrIf} $Port > 65535     ; Too high
     MessageBox MB_ICONSTOP "Bad value in Port field.  Resetting to default value."
     StrCpy $Port 8080
-  ${EndIf}  
+  ${EndIf}
+
+  Goto End
+
+  SilentSkip:
+    StrCpy $GSUser "admin"
+    StrCpy $GSPass "geoserver"
+    StrCpy $Port 8080
+
+  End:
 
 FunctionEnd
 
 ; Custom page, last page before install
 Function Ready
+
+  IfSilent SilentSkip
 
   nsDialogs::Create 1018
   !insertmacro MUI_HEADER_TEXT "$(TEXT_READY_TITLE)" "$(TEXT_READY_SUBTITLE)"
@@ -488,6 +502,9 @@ Function Ready
     ${NSD_CreateLabel} 40u 100u 70% 12u "$Port"
 
   nsDialogs::Show
+
+  SilentSkip:
+  MessageBox MB_OK "$GSUser $GSPass $Port"
 
 FunctionEnd
 
@@ -538,48 +555,6 @@ Section "-Jetty" SectionJetty ; dash = hidden
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
 
 
-  ${If} $IsManual == 0 ; i.e. only if service install
-    SetOutPath "$INSTDIR"
-    CreateDirectory "$INSTDIR\wrapper"
-    File /a /oname=wrapper\wrapper.exe wrapper.exe
-    File /a /oname=wrapper\wrapper-server-license.txt wrapper-server-license.txt
-    CreateDirectory "$INSTDIR\wrapper\lib"
-    File /a /oname=wrapper\lib\wrapper.dll wrapper.dll
-    File /a /oname=wrapper\lib\wrapper.jar wrapper.jar
-    File /a /oname=wrapper\wrapper.conf wrapper.conf
-    ; wrapper.conf is customized here
-    ${textreplace::ReplaceInFile} "$INSTDIR\wrapper\wrapper.conf" \
-                                  "$INSTDIR\wrapper\wrapper.conf" \
-                                  "[javapath]" "$INSTDIR\jre" \ 
-                                  "/S=1" $1
-    ${textreplace::ReplaceInFile} "$INSTDIR\wrapper\wrapper.conf" \
-                                  "$INSTDIR\wrapper\wrapper.conf" \
-                                  "[datadirpath]" "$DataDirPath" \ 
-                                  "/S=1" $1
-    ${textreplace::ReplaceInFile} "$INSTDIR\wrapper\wrapper.conf" \
-                                  "$INSTDIR\wrapper\wrapper.conf" \
-                                  "[jettylogpath]" "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs" \ 
-                                  "/S=1" $1
-    ${textreplace::ReplaceInFile} "$INSTDIR\wrapper\wrapper.conf" \
-                                  "$INSTDIR\wrapper\wrapper.conf" \
-                                  "[wrapperlogpath]" "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs\" \ 
-                                  "/S=1" $1
-    ${textreplace::ReplaceInFile} "$INSTDIR\wrapper\wrapper.conf" \
-                                  "$INSTDIR\wrapper\wrapper.conf" \
-                                  "[jettyport]" "$Port" \ 
-                                  "/S=1" $1
-
-    ; Give permission for NetworkService to be able to read/write to data_dir and logs
-    AccessControl::GrantOnFile "$CommonAppData\${COMPANYNAME}" "NT AUTHORITY\NetworkService" "FullAccess"
-	; Install the service (i)
-    nsExec::Exec "$INSTDIR\wrapper\wrapper.exe -i wrapper.conf"
-
-  ${EndIf}
-
-
-
-
-
 SectionEnd
 
 
@@ -598,7 +573,7 @@ Section "GeoServer" SectionGS
 
   ; Copy data_dir
   SetOutPath "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
-  File /r /x logging.xml /x security\users.properties  "${SOURCEPATHROOT}\data_dir"    ; Custom data_dir
+  File /r /x logging.xml /x security\users.properties  "${SOURCEPATHROOT}\data_dir"
   ; Next line is lame, but I can't figure out where this directory is being created
   RMDir /r "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\geoserver"
 
@@ -792,6 +767,51 @@ Section "-Dashboard" SectionDashboard ;dash means hidden
 SectionEnd
 
 
+Section "-Wrapper" SectionWrapper
+
+  ${If} $IsManual == 0 ; i.e. only if service install
+    SetOutPath "$INSTDIR"
+    CreateDirectory "$INSTDIR\wrapper"
+    File /a /oname=wrapper\wrapper.exe wrapper.exe
+    File /a /oname=wrapper\wrapper-server-license.txt wrapper-server-license.txt
+    CreateDirectory "$INSTDIR\wrapper\lib"
+    File /a /oname=wrapper\lib\wrapper.dll wrapper.dll
+    File /a /oname=wrapper\lib\wrapper.jar wrapper.jar
+    File /a /oname=wrapper\wrapper.conf wrapper.conf
+    ; wrapper.conf is customized here
+    ${textreplace::ReplaceInFile} "$INSTDIR\wrapper\wrapper.conf" \
+                                  "$INSTDIR\wrapper\wrapper.conf" \
+                                  "[javapath]" "$INSTDIR\jre" \ 
+                                  "/S=1" $1
+    ${textreplace::ReplaceInFile} "$INSTDIR\wrapper\wrapper.conf" \
+                                  "$INSTDIR\wrapper\wrapper.conf" \
+                                  "[datadirpath]" "$DataDirPath" \ 
+                                  "/S=1" $1
+    ${textreplace::ReplaceInFile} "$INSTDIR\wrapper\wrapper.conf" \
+                                  "$INSTDIR\wrapper\wrapper.conf" \
+                                  "[jettylogpath]" "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs" \ 
+                                  "/S=1" $1
+    ${textreplace::ReplaceInFile} "$INSTDIR\wrapper\wrapper.conf" \
+                                  "$INSTDIR\wrapper\wrapper.conf" \
+                                  "[wrapperlogpath]" "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs\" \ 
+                                  "/S=1" $1
+    ${textreplace::ReplaceInFile} "$INSTDIR\wrapper\wrapper.conf" \
+                                  "$INSTDIR\wrapper\wrapper.conf" \
+                                  "[jettyport]" "$Port" \ 
+                                  "/S=1" $1
+
+    ; Give permission for NetworkService to be able to read/write to data_dir and logs
+    AccessControl::GrantOnFile "$CommonAppData\${COMPANYNAME}" "NT AUTHORITY\NetworkService" "FullAccess"
+	; Install the service (i)
+    nsExec::Exec "$INSTDIR\wrapper\wrapper.exe -i wrapper.conf"
+
+  ${EndIf}
+
+
+
+SectionEnd
+
+
 Section "-StartStop" SectionStartStop
 
 
@@ -839,6 +859,7 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionStyler} "Installs Styler, a graphical map style editor."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionDocs} "Includes full documentation for all applications."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionDashboard} "Installs the OpenGeo Suite Dashboard for access to all components."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionWrapper} "Installs the Java Service Wrapper."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionStartStop} "Creates shortcuts for starting and stopping the OpenGeo Suite."
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
