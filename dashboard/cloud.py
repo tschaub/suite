@@ -3,9 +3,26 @@
 # This script is used to package a Titanium application in the cloud.
 #
 
-import sys, os, logging, time, urllib, urllib2, json, zipfile, StringIO
+import sys, os, logging, time, urllib, urllib2, zipfile, StringIO
+
+try:
+    import json
+except ImportError:
+    try:
+        import simplejson as json
+    except ImportError:
+        raise "Requires either simplejson or Python 2.6"
+
 
 logger = logging.getLogger("titanium.cloud")
+
+class NullHandler(logging.Handler):
+    def emit(self, record):
+        pass
+
+logger.addHandler(NullHandler())
+
+
 cloud_url = "https://api.appcelerator.net/p/v1/"
 
 def login(app_path, user, password):
@@ -19,7 +36,7 @@ def login(app_path, user, password):
 
     logger.info("Logging in to %s", url)
     data = urllib.urlencode({"mid": manifest["mid"], "un": user, "pw": password})
-    h = urllib.urlopen(url, data)
+    h = urllib2.urlopen(url, data)
     response = h.read()
     h.close()
     
@@ -95,7 +112,7 @@ def get_status(ticket):
     logger.info("Checking status for ticket %s", ticket)
     url = cloud_url + "publish-status"
     params = urllib.urlencode({"ticket": ticket})
-    h = urllib.urlopen("%s?%s" % (url, params))
+    h = urllib2.urlopen("%s?%s" % (url, params))
     response = h.read()
     h.close()
 
@@ -131,6 +148,7 @@ def wait(ticket, interval=30, timeout=300, start=None):
     
     return details
 
+
 def download(releases, dir=os.getcwd()):
     
     # only grab one per os (service occassionally returns two entries for same os)
@@ -141,10 +159,21 @@ def download(releases, dir=os.getcwd()):
     # download each
     for platform, url in platforms.items():
         logger.info("Downloading %s package %s", platform, url)
-        #h = urllib.urlopen(url)
-        #data = h.read()
-        #h.close()
-        # write data to dir
+        h = urllib2.urlopen(url)
+        data = h.read()
+        meta = h.info()
+        h.close()
+        disp = meta.getheader("x-amz-meta-content-disposition")
+        if disp is None:
+            logger.warning("Trouble downloading %s package:\n%s", platform, data[:255])
+        else:
+            name = disp.split(";")[1].split("=")[1].replace('"', "")
+            path = os.path.join(dir, name)
+            logger.info("Saving %s", path)
+            h = open(path, "wb")
+            h.write(data)
+            h.close()
+
 
 def main():
 
@@ -162,6 +191,10 @@ def main():
     parser.add_option(
         "-p", "--password",
         help="PASSWORD for the USER"
+    )
+    parser.add_option(
+        "-o", "--output",
+        help="OUTPUT directory for saving downloaded packages"
     )
     parser.add_option(
         "-q", "--quiet",
@@ -223,7 +256,10 @@ def main():
     job = wait(ticket)
 
     # download all releases
-    download(job["releases"])        
+    output = options.output or os.getcwd()
+    if not os.path.exists(output):
+        os.makedirs(output)
+    download(job["releases"], dir=output)
 
 
 if __name__ == "__main__":
