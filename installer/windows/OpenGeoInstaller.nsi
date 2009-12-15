@@ -117,6 +117,10 @@ LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be ins
 !define MUI_FINISHPAGE_RUN_TEXT "Start the OpenGeo Suite and launch the Dashboard"
 !define MUI_FINISHPAGE_RUN_FUNCTION "RunStuff"
 
+
+
+
+
 ; Do things after install
 Function RunStuff
 
@@ -167,11 +171,15 @@ Page custom Ready                                             ; Ready to install
 
 ; Set languages (first is default language)
 !insertmacro MUI_LANGUAGE "English"
+;!insertmacro MUI_LANGUAGE "French"
+
+; Makes the installer code at the top of the .EXE making loading faster, apparently
 !insertmacro MUI_RESERVEFILE_LANGDLL
 
 
 ; Startup tasks
 Function .onInit
+
 
   ; Get the Common App Data path
   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders" "Common AppData"
@@ -184,6 +192,7 @@ Function .onInit
 
   IfSilent SilentSkip
 
+
   ; Splash screen
   SetOutPath $TEMP
   File /oname=spltmp.bmp "splash.bmp" ; transparent splash
@@ -193,6 +202,10 @@ Function .onInit
          ; '0' if everything closed normally
          ; '-1' if some error occurred.
   Delete $TEMP\spltmp.bmp
+
+  ; Please select a language
+  ;!insertmacro MUI_LANGDLL_DISPLAY
+
 
   SilentSkip:
 
