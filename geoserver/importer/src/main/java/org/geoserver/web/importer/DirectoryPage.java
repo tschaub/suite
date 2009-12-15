@@ -46,7 +46,7 @@ import org.geotools.data.directory.DirectoryDataStoreFactory;
  * Sets up the import process and starts it up delegating the progress to {@link ImportProgressPage}
  */
 @SuppressWarnings("serial")
-public class ImportPage extends GeoServerSecuredPage {
+public class DirectoryPage extends GeoServerSecuredPage {
     String directory = "";
 
     String project = "";
@@ -60,9 +60,7 @@ public class ImportPage extends GeoServerSecuredPage {
     private Form form;
     
    
-    public ImportPage(PageParameters params) {
-        if("TRUE".equalsIgnoreCase((String) params.getString("afterCleanup")))
-            info(new ParamResourceModel("rollbackSuccessful", this).getString());
+    public DirectoryPage() {
         add(dialog = new GeoServerDialog("dialog"));
         
         // prefill project name
@@ -141,7 +139,7 @@ public class ImportPage extends GeoServerSecuredPage {
     }
 
     SubmitLink submitLink() {
-        return new SubmitLink("import") {
+        return new SubmitLink("next") {
 
             @Override
             public void onSubmit() {
@@ -196,12 +194,13 @@ public class ImportPage extends GeoServerSecuredPage {
                         getCatalog().add(si);
                     }
                     
-                    // build and run the importer
-                    FeatureTypeImporter importer = new FeatureTypeImporter(si, null, getCatalog(), workspaceNew, storeNew);
-                    ImporterThreadManager manager = (ImporterThreadManager) getGeoServerApplication().getBean("importerPool");
-                    String importerKey = manager.startImporter(importer);
-                    
-                    setResponsePage(new ImportProgressPage(importerKey));
+                    // redirect to the layer chooser
+                    PageParameters pp = new PageParameters();
+                    pp.put("store", si.getName());
+                    pp.put("workspace", ws.getName());
+                    pp.put("storeNew", storeNew);
+                    pp.put("workspaceNew", workspaceNew);
+                    setResponsePage(VectorLayerChooserPage.class, pp);
                 } catch (Exception e) {
                     LOGGER.log(Level.SEVERE, "Error while setting up mass import", e);
                 }

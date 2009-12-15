@@ -4,6 +4,7 @@
  */
 package org.geoserver.web.importer;
 
+import static org.geoserver.ows.util.ResponseUtils.*;
 import static org.geoserver.web.importer.ImportSummaryProvider.*;
 
 import java.util.logging.Level;
@@ -14,12 +15,11 @@ import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ResourceReference;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.link.PageLink;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -27,6 +27,7 @@ import org.geoserver.catalog.CascadeDeleteVisitor;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.FeatureTypeInfo;
 import org.geoserver.catalog.LayerInfo;
+import org.geoserver.catalog.ResourceInfo;
 import org.geoserver.catalog.StoreInfo;
 import org.geoserver.catalog.WorkspaceInfo;
 import org.geoserver.importer.ImportStatus;
@@ -35,54 +36,71 @@ import org.geoserver.importer.LayerSummary;
 import org.geoserver.web.CatalogIconFactory;
 import org.geoserver.web.GeoServerSecuredPage;
 import org.geoserver.web.data.resource.ResourceConfigurationPage;
-import org.geoserver.web.demo.OpenGeoMapPreviewPage;
 import org.geoserver.web.demo.PreviewLayer;
+import org.geoserver.web.wicket.CRSPanel;
 import org.geoserver.web.wicket.ConfirmationAjaxLink;
 import org.geoserver.web.wicket.GeoServerTablePanel;
 import org.geoserver.web.wicket.ParamResourceModel;
+import org.geoserver.web.wicket.SRSListPanel;
+import org.geoserver.web.wicket.SimpleAjaxLink;
 import org.geoserver.web.wicket.GeoServerDataProvider.Property;
 import org.opengis.feature.type.GeometryDescriptor;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
- * Reports the import results in a table and allows the user to
- * edit the and to preview the layers
+ * Reports the import results in a table and allows the user to edit the and to preview the layers
+ * 
  * @author aaime
- *
+ * 
  */
 @SuppressWarnings("serial")
 public class ImportSummaryPage extends GeoServerSecuredPage {
+
+    private ModalWindow popupWindow;
+    private GeoServerTablePanel<LayerSummary> summaryTable;
 
     public ImportSummaryPage(final ImportSummary summary) {
         // the synthetic results
         IModel summaryMessage;
         Exception error = summary.getError();
-        if(error != null) {
+        if (error != null) {
             String errorSummary = error.getClass().getSimpleName() + ", " + error.getMessage();
             summaryMessage = new ParamResourceModel("summaryError", this, errorSummary);
-        } else if(summary.getProcessedLayers() == 0) {
+        } else if (summary.getProcessedLayers() == 0) {
             summaryMessage = new ParamResourceModel("summaryCancelled", this);
+            // no undo link in this case
+            add(new Label("undo", ""));
         } else {
-            if(summary.getFailures() > 0) {
-                if(summary.isCompleted()) {
-                    summaryMessage = new ParamResourceModel("summaryFailures", this, summary.getTotalLayers(), summary.getFailures()); 
+            if (summary.getFailures() > 0) {
+                if (summary.isCompleted()) {
+                    summaryMessage = new ParamResourceModel("summaryFailures", this, summary
+                            .getProcessedLayers(), summary.getProject(), summary.getFailures());
                 } else {
-                    summaryMessage = new ParamResourceModel("summaryPartialFailures", this, summary.getTotalLayers(), 
-                            summary.getProcessedLayers(), summary.getFailures());
+                    summaryMessage = new ParamResourceModel("summaryPartialFailures", this, summary
+                            .getProcessedLayers(), summary.getProject(), summary.getFailures());
                 }
             } else {
-                if(summary.isCompleted()) {
-                    summaryMessage = new ParamResourceModel("summarySuccess", this, summary.getTotalLayers());
+                if (summary.isCompleted()) {
+                    summaryMessage = new ParamResourceModel("summarySuccess", this, summary
+                            .getProcessedLayers(), summary.getProject());
                 } else {
-                    summaryMessage = new ParamResourceModel("summaryPartialSuccess", this, summary.getTotalLayers(), 
-                            summary.getProcessedLayers());
+                    summaryMessage = new ParamResourceModel("summaryPartialSuccess", this, summary
+                            .getProcessedLayers(), summary.getProject(), summary.getFailures());
                 }
             }
+
+            // show undo link
+            add(undoLink(summary));
         }
         add(new Label("summary", summaryMessage));
         
+        // the declare SRS link
+        add(popupLink("declareSRS", new ParamResourceModel("declareSRS", this), srsListSelectionPanel()));
+
         // the list of imported layers
-        GeoServerTablePanel<LayerSummary> table = new GeoServerTablePanel<LayerSummary>("importSummary", new ImportSummaryProvider(
-                summary.getLayers())) {
+        ImportSummaryProvider provider = new ImportSummaryProvider(summary.getLayers());
+        summaryTable = new GeoServerTablePanel<LayerSummary>(
+                "importSummary", provider, true) {
 
             @Override
             protected Component getComponentForProperty(String id, IModel itemModel,
@@ -90,68 +108,117 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
                 final LayerSummary layerSummary = (LayerSummary) itemModel.getObject();
                 final CatalogIconFactory icons = CatalogIconFactory.get();
                 LayerInfo layer = layerSummary.getLayer();
-				if(property == LAYER) {
+                if (property == LAYER) {
                     Fragment f = new Fragment(id, "edit", ImportSummaryPage.this);
                     
-                    Link editLink = editLink(layerSummary);
-                    editLink.setEnabled(layer != null);
-                    f.add(editLink);
+                    // keep the last modified name if possible
+                    IModel label;
+                    if (layerSummary.getLayer() != null)
+                        label = new Model(layerSummary.getLayer().getName());
+                    else
+                        label = new Model(layerSummary.getLayerName());
                     
+                    // build the edit link
+                    Link editLink = editLink(layerSummary, label);
+                    editLink.setEnabled(layer != null);
+                    // also set a tooltip explaining what this action does
+                    editLink.add(new AttributeModifier("title", true, 
+                            new ParamResourceModel("edit", this, label.getObject())));
+                    f.add(editLink);
+
                     return f;
-                } else if(property == STATUS) {
-                    ResourceReference icon = layerSummary.getStatus().successful() ? 
-                            icons.getEnabledIcon() : icons.getDisabledIcon();
-                    Fragment f = new Fragment(id, "iconFragment", ImportSummaryPage.this);
-                    f.add(new Image("icon", icon));
-                    return f;
-                } else if(property == TYPE) {
-                    if(layer != null) {
-                        ResourceReference icon = icons.getSpecificLayerIcon(layer);
+                } else if (property == TYPE) {
+                    if (layer != null) {
+                        // show icon type or an error icon if anything went wrong
+                        ResourceReference icon;
+                        if (layerSummary.getStatus().successful()) {
+                            icon = icons.getSpecificLayerIcon(layer);
+                        } else {
+                            icon = icons.getDisabledIcon();
+                        }
                         Fragment f = new Fragment(id, "iconFragment", ImportSummaryPage.this);
                         Image image = new Image("icon", icon);
-                        image.add(new AttributeModifier("title", true, new Model(getTypeTooltip(layer))));
-						f.add(image);
+                        image.add(new AttributeModifier("title", true, new Model(
+                                getTypeTooltip(layer))));
+                        f.add(image);
+                        return f;
+                    } else {
+                        // no icon, no description
+                        return new Label(id, "");
+                    }
+                } else if (property == ISSUES) {
+                    if(layerSummary.getStatus() != ImportStatus.NO_SRS_MATCH) {
+                        return new Label(id, property.getModel(itemModel));
+                    } else {
+                        Fragment f = new Fragment(id, "noSRSMatch", ImportSummaryPage.this);
+                        f.add(new Label("issue", property.getModel(itemModel)));
+                        f.add(getLayerWKTLink(itemModel));
+                        return f;
+                    }
+                } else if (property == SRS) {
+                    if(layerSummary.getStatus().successful()) {
+                        return new Label(id, property.getModel(itemModel));
+                    } else if(layerSummary.getStatus() == ImportStatus.MISSING_NATIVE_CRS ||
+                            layerSummary.getStatus() == ImportStatus.NO_SRS_MATCH) {
+                        return popupLink(id, new ParamResourceModel("declareSRS", this), srsListLayerPanel(itemModel));
+                    } else {
+                        Fragment f = new Fragment(id, "edit", ImportSummaryPage.this);
+                        
+                        // build the edit link
+                        Link editLink = editLink(layerSummary, new ParamResourceModel("directFix", this));
+                        editLink.setEnabled(layer != null);
+                        
+                        f.add(editLink);
+                    }
+                } else if (property == COMMANDS) {
+                    if (layerSummary.getStatus().successful()) {
+                        Fragment f = new Fragment(id, "preview", ImportSummaryPage.this);
+                        PreviewLayer preview = new PreviewLayer(layer);
+                        f.add(new ExternalLink("ol", preview.getWmsLink()
+                                + "&format=application/openlayers"));
+                        f.add(new ExternalLink("ge", "../wms/kml?layers=" + layer.getName()));
+                        f.add(new ExternalLink("styler", "/styler/index.html?layer="
+                                + urlEncode(layer.getName())));
+
                         return f;
                     } else {
                         return new Label(id, "");
                     }
-                } else if(property == COMMANDS) {
-                    Fragment f = new Fragment(id, "preview", ImportSummaryPage.this);
-
-                    ExternalLink preview = new ExternalLink("preview", new PreviewLayer(layer).getWmsLink() + "&format=application/openlayers");
-                    if(!layerSummary.getStatus().successful()) {
-                        preview.setEnabled(false);
-                    }
-                    f.add(preview);
-                    
-                    return f;
                 }
                 return null;
             }
 
-            
         };
-        table.setOutputMarkupId(true);
-        table.setFilterable(false);
-        add(table);
+        summaryTable.setOutputMarkupId(true);
+        summaryTable.setFilterable(false);
+        add(summaryTable);
         
-        // the rollback command
-        add(new ConfirmationAjaxLink("rollback", null, 
-                new ParamResourceModel("rollback", this), 
+        // the popup window
+        popupWindow = new ModalWindow("popup");
+        add( popupWindow );
+    }
+
+    /**
+     * Rolls back the import and redirects to the initial page
+     * @param summary
+     * @return
+     */
+    private ConfirmationAjaxLink undoLink(final ImportSummary summary) {
+        return new ConfirmationAjaxLink("undo", null, new ParamResourceModel("rollback", this),
                 new ParamResourceModel("confirmRollback", this)) {
-            
+
             @Override
             protected void onClick(AjaxRequestTarget target) {
                 Catalog catalog = getCatalog();
                 CascadeDeleteVisitor deleteVisitor = new CascadeDeleteVisitor(catalog);
                 String project = summary.getProject();
-                if(summary.isWorkspaceNew()) {
+                if (summary.isWorkspaceNew()) {
                     WorkspaceInfo ws = catalog.getWorkspaceByName(project);
-                    if(ws != null)
+                    if (ws != null)
                         ws.accept(deleteVisitor);
-                } else if(summary.isStoreNew()) {
+                } else if (summary.isStoreNew()) {
                     StoreInfo si = catalog.getStoreByName(project, project, StoreInfo.class);
-                    if(si != null)
+                    if (si != null)
                         si.accept(deleteVisitor);
                 } else {
                     // just remove the layers we created
@@ -160,15 +227,12 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
                         catalog.remove(layer.getLayer().getResource());
                     }
                 }
-                setResponsePage(ImportPage.class, new PageParameters("afterCleanup=true"));
+                setResponsePage(DirectoryPage.class, new PageParameters("afterCleanup=true"));
             }
-        });
-        
-        // the link to the preview page
-        add(new BookmarkablePageLink("previewLink", OpenGeoMapPreviewPage.class));
+        };
     }
-    
-    Link editLink(final LayerSummary layerSummary) {
+
+    Link editLink(final LayerSummary layerSummary, IModel labelModel) {
         Link link = new Link("edit") {
 
             @Override
@@ -179,7 +243,7 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
                         setResponsePage(ImportSummaryPage.this);
                         layerSummary.setStatus(ImportStatus.SUCCESS);
                     }
-                    
+
                     @Override
                     protected void onCancel() {
                         setResponsePage(ImportSummaryPage.this);
@@ -187,39 +251,130 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
                 };
                 setResponsePage(p);
             }
-            
+
         };
-        
-        // keep the last modified name if possible
-        String name;
-        if(layerSummary.getLayer() != null)
-            name = layerSummary.getLayer().getName();
-        else
-            name =  layerSummary.getLayerName();
-        link.add(new Label("name", name));
-        
-        // also set a tooltip explaining what this action does
-        link.add(new AttributeModifier("title", true, new ParamResourceModel("edit", this, name)));
-        
+        link.add(new Label("name", labelModel));
+
         return link;
     }
-    
+
     String getTypeTooltip(LayerInfo layer) {
-    	try {
-	    	String type = null;
-	    	FeatureTypeInfo fti = (FeatureTypeInfo) layer.getResource();
-	        GeometryDescriptor gd = fti.getFeatureType().getGeometryDescriptor();
-	        if(gd != null) {
-	            type = gd.getType().getBinding().getSimpleName();
-	        }
-	        if(type != null)
-	        	return new ParamResourceModel("geomtype." + type, ImportSummaryPage.this).getString();
-	        else
-	        	return "geomtype.null";
-    	} catch(Exception e) {
-    		LOGGER.log(Level.WARNING, "Could not compute the geom type tooltip", e);
-    		return "geomtype.error";
-    	}
+        try {
+            String type = null;
+            FeatureTypeInfo fti = (FeatureTypeInfo) layer.getResource();
+            GeometryDescriptor gd = fti.getFeatureType().getGeometryDescriptor();
+            if (gd != null) {
+                type = gd.getType().getBinding().getSimpleName();
+            }
+            if (type != null)
+                return new ParamResourceModel("geomtype." + type, ImportSummaryPage.this)
+                        .getString();
+            else
+                return "geomtype.null";
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Could not compute the geom type tooltip", e);
+            return "geomtype.error";
+        }
     }
+    
+    Component getLayerWKTLink(IModel layerSummaryModel) {
+        return new SimpleAjaxLink("seeWKT", layerSummaryModel, new ParamResourceModel("seeWKT", this)) {
+            
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                popupWindow.setInitialHeight( 375 );
+                popupWindow.setInitialWidth( 525 );
+                LayerSummary summary = (LayerSummary) getModel().getObject();
+                CoordinateReferenceSystem crs = summary.getLayer().getResource().getNativeCRS();
+                popupWindow.setContent(new CRSPanel.WKTPanel(popupWindow.getContentId(), crs));
+                if(crs != null)
+                    popupWindow.setTitle(crs.getName().toString());
+                popupWindow.show(target);
+            }
+        };
+    }
+    
+    Component popupLink(String id, final IModel label, final Component windowContent) {
+         return new SimpleAjaxLink(id, label) {
+            
+            @Override
+            protected void onClick(AjaxRequestTarget target) {
+                popupWindow.setContent(windowContent);
+                popupWindow.setTitle(new ParamResourceModel("selectSRS", ImportSummaryPage.this));
+                popupWindow.show(target);
+            }
+        };
+    }
+    
+    /**
+     * Builds the srs list panel component for a single layer
+     */
+    @SuppressWarnings("serial")
+    SRSListPanel srsListLayerPanel(final IModel layerSummaryModel) {
+        SRSListPanel srsList = new SRSListPanel(popupWindow.getContentId()) {
+            
+            @Override
+            protected void onCodeClicked(AjaxRequestTarget target, String epsgCode) {
+                popupWindow.close(target);
+                
+                LayerSummary summary = (LayerSummary) layerSummaryModel.getObject();
+                ResourceInfo resource = summary.getLayer().getResource();
+                resource.setSRS("EPSG:" + epsgCode);
+                if(resource.getNativeBoundingBox() == null) {
+                    summary.setStatus(ImportStatus.MISSING_BBOX);
+                } else {
+                    summary.setStatus(ImportStatus.SUCCESS);
+                }
+                getCatalog().add(summary.getLayer().getResource());
+                getCatalog().add(summary.getLayer());
+                
+                target.addComponent(summaryTable);
+            }
+        };
+        srsList.setCompactMode(true);
+        return srsList;
+    }
+    
+    /**
+     * Builds the srs list panel component for a single layer
+     */
+    @SuppressWarnings("serial")
+    SRSListPanel srsListSelectionPanel() {
+        SRSListPanel srsList = new SRSListPanel(popupWindow.getContentId()) {
+            
+            @Override
+            protected void onCodeClicked(AjaxRequestTarget target, String epsgCode) {
+                popupWindow.close(target);
+                Catalog catalog = getCatalog();
+                
+                for(LayerSummary summary : summaryTable.getSelection()) {
+                    ResourceInfo resource = summary.getLayer().getResource();
+                    resource.setSRS("EPSG:" + epsgCode);
+                    if(resource.getNativeBoundingBox() == null) {
+                        summary.setStatus(ImportStatus.MISSING_BBOX);
+                    } else {
+                        summary.setStatus(ImportStatus.SUCCESS);
+                    }
+                    if(summary.getLayer().getId() == null) {
+                        catalog.add(summary.getLayer().getResource());
+                        catalog.add(summary.getLayer());
+                    } else {
+                        catalog.save(summary.getLayer().getResource());
+                        catalog.save(summary.getLayer());
+                    }
+                }
+                
+                target.addComponent(summaryTable);
+            }
+        };
+        srsList.setCompactMode(true);
+        return srsList;
+    }
+    
+    
+    
+    
 
 }
+
+

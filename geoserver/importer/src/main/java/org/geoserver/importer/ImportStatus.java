@@ -8,7 +8,7 @@ package org.geoserver.importer;
  * The result of the import process for a certain layer
  */
 public enum ImportStatus {
-    SUCCESS(true), DEFAULTED_SRS(true), DUPLICATE(false), MISSING_SRS(false), MISSING_BBOX(false), OTHER(false);
+    SUCCESS(true), DEFAULTED_SRS(true), DUPLICATE(false), MISSING_NATIVE_CRS(false), NO_SRS_MATCH(false), MISSING_BBOX(false), OTHER(false);
     
     boolean success;
     ImportStatus(boolean success) {

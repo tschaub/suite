@@ -108,3 +108,12 @@ h2, h3, h4, h5, h6 {
 .navigation-tab-single a, .navigation-tab-header a, .navigation-tab-content a {
   color: #291C17; /* was #0076A1 */
 }
+
+/*---------------------------------
+Extras needed only in the Suite
+----------------------------------*/
+
+.srs-link {
+background: transparent url(../../../org/geoserver/web/img/icons/silk/shape_square_blue.png) scroll no-repeat left center;
+padding: 2px 0px 2px 20px;
+}

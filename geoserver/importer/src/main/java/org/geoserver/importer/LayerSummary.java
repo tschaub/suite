@@ -44,6 +44,8 @@ public class LayerSummary implements Serializable {
     }
 
     public void setStatus(ImportStatus status) {
+        if(status == null)
+            throw new NullPointerException("Layer status cannot be null");
         this.status = status;
     }
 

@@ -39,9 +39,9 @@ public class ImportProgressPage extends GeoServerSecuredPage {
         add(info = new WebMarkupContainer("info"));
         info.setOutputMarkupId(true);
         info.add(bar = new Label("bar", "0"));
-        widthModel = new Model("width: 0%;");
+        widthModel = new Model("width: 5%;");
         bar.add(new AttributeModifier("style", widthModel));
-        info.add(percentage = new Label("percentage", "0"));
+        info.add(percentage = new Label("percentage", "5"));
         info.add(currentFile = new Label("currentFile", ""));
         info.add(new AjaxLink("cancel") {
 
@@ -68,9 +68,12 @@ public class ImportProgressPage extends GeoServerSecuredPage {
                         setResponsePage(new ImportSummaryPage(summary));
                     }
                     
-                    long perc = Math.round(100.0 * (summary.getProcessedLayers() + 1) / summary.getTotalLayers());
-                    if(perc > 100) {
-                        perc = 100;
+                    // we have the percentage go between 5 and 95. This way the user sees something is in progress
+                    // at the beginning and does not have to wonder why we keep at 100 for a few seconds (happens
+                    // if the last layer requires a costly SRS code lookup)
+                    long perc = 5 + Math.round(100.0 * (summary.getProcessedLayers() + 1) / summary.getTotalLayers());
+                    if(perc > 90) {
+                        perc = 90;
                     }
                     widthModel.setObject("width: " + perc + "%;");
                     percentage.setModelObject(perc);

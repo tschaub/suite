@@ -4,9 +4,16 @@
  */
 package org.geoserver.importer;
 
-import static org.geoserver.importer.ImportStatus.*;
+import static org.geoserver.importer.ImportStatus.DEFAULTED_SRS;
+import static org.geoserver.importer.ImportStatus.DUPLICATE;
+import static org.geoserver.importer.ImportStatus.MISSING_BBOX;
+import static org.geoserver.importer.ImportStatus.MISSING_NATIVE_CRS;
+import static org.geoserver.importer.ImportStatus.NO_SRS_MATCH;
+import static org.geoserver.importer.ImportStatus.SUCCESS;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,10 +46,22 @@ public class FeatureTypeImporter  implements Runnable {
     
     boolean cancelled;
 
-    public FeatureTypeImporter(DataStoreInfo store, String defaultSRS, Catalog catalog, boolean workspaceNew, boolean storeNew) {
+    Set<Name> resources;
+
+    /**
+     * Imports all the selected resources from the provided data store
+     * @param store The data store
+     * @param defaultSRS The default SRS to use when data have none
+     * @param resources The list of resources to import. Use {@code null} to import all available ones
+     * @param catalog The GeoServer catalog
+     * @param workspaceNew Marks the workspace as newly created and ready for rollback
+     * @param storeNew Marks the store as newly created and ready for rollback
+     */
+    public FeatureTypeImporter(DataStoreInfo store, String defaultSRS, Set<Name> resources, Catalog catalog, boolean workspaceNew, boolean storeNew) {
         this.storeInfo = store;
         this.defaultSRS = defaultSRS;
         this.catalog = catalog;
+        this.resources = resources;
         this.summary = new ImportSummary(storeInfo.getName(), workspaceNew, storeNew);
     }
     
@@ -62,7 +81,11 @@ public class FeatureTypeImporter  implements Runnable {
             
             // cast necessary due to some classpath oddity/geoapi issue, the compiler
             // complained about getNames() returning a List<Object>...
-            List<Name> names = da.getNames();
+            List<Name> names = new ArrayList<Name>(da.getNames());
+            // filter to the selected resources if necessary
+            if(resources != null)
+                names.retainAll(resources);
+            
             summary.setTotalLayers(names.size());
             for (Name name : names) {
                 // start information
@@ -94,7 +117,10 @@ public class FeatureTypeImporter  implements Runnable {
                     if (catalog.getFeatureTypeByName(namespace, layerName) != null) {
                         status = DUPLICATE;
                     } else if (layer.getResource().getSRS() == null && defaultSRS == null) {
-                        status = MISSING_SRS;
+                        if(layer.getResource().getNativeCRS() == null)
+                            status = MISSING_NATIVE_CRS;
+                        else 
+                            status = NO_SRS_MATCH;
                     } else if (layer.getResource().getLatLonBoundingBox() == null) {
                         status = MISSING_BBOX;
                     } else {

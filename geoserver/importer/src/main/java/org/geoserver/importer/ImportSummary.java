@@ -20,21 +20,23 @@ public class ImportSummary implements Serializable {
     long endTime;
 
     int totalLayers;
-    
+
     int processedLayers;
 
     int failures;
 
     String currentLayer;
-    
+
     Exception error;
-    
+
     String project;
-    
+
     boolean workspaceNew;
-    
+
     boolean storeNew;
-    
+
+    boolean done;
+
     // concurrent list so that we can manipulate it while it's being iterated over
     List<LayerSummary> layers = new CopyOnWriteArrayList<LayerSummary>();
 
@@ -44,7 +46,7 @@ public class ImportSummary implements Serializable {
         this.workspaceNew = workspaceNew;
         this.storeNew = storeNew;
     }
-    
+
     void setTotalLayers(int totalLayers) {
         this.totalLayers = totalLayers;
     }
@@ -64,12 +66,13 @@ public class ImportSummary implements Serializable {
     }
 
     void end() {
+        this.done = true;
         this.currentLayer = null;
         this.endTime = System.currentTimeMillis();
     }
-    
+
     public boolean isCompleted() {
-        return currentLayer == null;
+        return done;
     }
 
     public long getStartTime() {
@@ -91,7 +94,7 @@ public class ImportSummary implements Serializable {
     public int getProcessedLayers() {
         return processedLayers;
     }
-
+    
     public int getFailures() {
         return failures;
     }
@@ -103,16 +106,16 @@ public class ImportSummary implements Serializable {
     void completeLayer(String layerName, LayerInfo layer, ImportStatus status) {
         layers.add(new LayerSummary(layerName, layer, status));
         processedLayers++;
-        if(!status.successful())
+        if (!status.successful())
             failures++;
     }
-    
+
     void completeLayer(String layerName, LayerInfo layer, Exception error) {
         layers.add(new LayerSummary(layerName, layer, error));
         processedLayers++;
         failures++;
     }
-    
+
     public boolean isWorkspaceNew() {
         return workspaceNew;
     }
@@ -120,10 +123,9 @@ public class ImportSummary implements Serializable {
     public boolean isStoreNew() {
         return storeNew;
     }
-    
+
     public Exception getError() {
         return error;
     }
-
 
 }

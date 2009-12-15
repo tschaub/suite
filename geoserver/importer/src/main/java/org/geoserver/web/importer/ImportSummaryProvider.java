@@ -25,15 +25,7 @@ public class ImportSummaryProvider extends GeoServerDataProvider<LayerSummary> {
     static final Logger LOGGER = org.geotools.util.logging.Logging.getLogger(ImportSummaryProvider.class);
     
     static final Property<LayerSummary> LAYER = new BeanProperty<LayerSummary>("name", "layerName");
-    static final Property<LayerSummary> STATUS = new AbstractProperty<LayerSummary>("status") {
-
-        public Object getPropertyValue(LayerSummary item) {
-            return item.getStatus().successful();
-        }
-        
-    };
-    
-    static final Property<LayerSummary> DETAILS = new AbstractProperty<LayerSummary>("details") {
+    static final Property<LayerSummary> ISSUES = new AbstractProperty<LayerSummary>("details") {
         public Object getPropertyValue(LayerSummary item) {
             return new ResourceModel("ImportSummaryPage." + item.getStatus());
         }
@@ -89,7 +81,7 @@ public class ImportSummaryProvider extends GeoServerDataProvider<LayerSummary> {
 
     @Override
     protected List getProperties() {
-        return Arrays.asList(STATUS, LAYER, TYPE, SRS, DETAILS, COMMANDS);
+        return Arrays.asList(TYPE, LAYER, ISSUES, SRS, COMMANDS);
     }
 
     public IModel model(Object object) {

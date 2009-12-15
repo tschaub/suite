@@ -2,20 +2,13 @@
 <body>
 <wicket:extend>
 
-    <p wicket:id="summary"></p>
+    <p><span wicket:id="summary"></span><span wicket:id="undo"></span></p>
+    
+    <div><span class="add-link" wicket:id="declareSRS"></span></div>
     
     <div wicket:id="importSummary"></div>
     
-    <div class="button-group selfclear" style="margin-top: 2em">
-        <wicket:message key="rollbackDescription"/>
-        <span wicket:id="rollback"></span>
-    </div>
-    
-    <div class="button-group selfclear" style="margin-top: 2em">
-        <wicket:message key="previewDescription"/>
-        <a href="#" wicket:id="previewLink"><wicket:message key="preview"/></a>
-    </div>
-    
+    <div wicket:id="popup"></div>
     
     <wicket:fragment wicket:id="iconFragment">
         <img wicket:id="icon" />
@@ -25,8 +18,14 @@
       <a href="#" wicket:id="edit"><span wicket:id="name"></span></a>
     </wicket:fragment>
     
+    <wicket:fragment wicket:id="noSRSMatch">
+      <span wicket:id="issue"></span><span wicket:id="seeWKT"></span>
+    </wicket:fragment>
+    
     <wicket:fragment wicket:id="preview">
-      <a href="#" wicket:id="preview" target="_blank">Preview</a>&nbsp;
+      <a href="#" wicket:id="ol" target="_blank">OpenLayers</a>&nbsp;
+      <a href="#" wicket:id="ge" target="_blank">Google Earth</a>&nbsp;
+      <a href="#" wicket:id="styler" target="_blank">Styler</a>&nbsp;
     </wicket:fragment>
 </wicket:extend>
 </body>
