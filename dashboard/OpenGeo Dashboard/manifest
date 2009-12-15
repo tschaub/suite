@@ -1,9 +1,9 @@
 #appname:OpenGeo Dashboard
 #appid:org.opengeo.suite
 #publisher:tschaub
-#image:default_app_logo.png
+#image:logo.png
 #url:http://opengeo.org
-#guid:e0b3d5c3-1468-4bc8-9589-1bd18a085a3c
+#guid:9ffcedfa-4c8e-4cad-b356-f01420657d3d
 #desc:Your dashboard to the OpenGeo Suite
 #type:desktop
 runtime:0.7.0
@@ -14,13 +14,13 @@ tiplatform:0.7.0
 tiui:0.7.0
 javascript:0.7.0
 tianalytics:0.7.0
-ticodec:0.7.0
-tidatabase:0.7.0
-tidesktop:0.7.0
+tinetwork:0.7.0
 tigrowl:0.7.0
 timedia:0.7.0
-timonkey:0.7.0
-tinetwork:0.7.0
-tinotification:0.7.0
+tidesktop:0.7.0
 tiprocess:0.7.0
+tinotification:0.7.0
+timonkey:0.7.0
+tidatabase:0.7.0
 tiworker:0.7.0
+ticodec:0.7.0
