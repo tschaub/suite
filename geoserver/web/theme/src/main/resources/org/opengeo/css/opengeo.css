@@ -113,7 +113,11 @@ h2, h3, h4, h5, h6 {
 Extras needed only in the Suite
 ----------------------------------*/
 
+/* 
+  Note, the resource pointed is a copy of the one in the GeoServer web-core jar. However, I could
+  not find any working way of referencing it from there, so I ended up just copying the resource
+*/
 .srs-link {
-background: transparent url(../../../org/geoserver/web/img/icons/silk/shape_square_blue.png) scroll no-repeat left center;
+background: transparent url(../img_opengeo/shape_square_blue.png) scroll no-repeat left center;
 padding: 2px 0px 2px 20px;
 }

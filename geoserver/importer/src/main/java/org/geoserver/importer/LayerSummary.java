@@ -6,6 +6,7 @@ package org.geoserver.importer;
 
 import java.io.Serializable;
 
+import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.LayerInfo;
 
 /**
@@ -62,6 +63,13 @@ public class LayerSummary implements Serializable {
      */
     public LayerInfo getLayer() {
         return layer;
+    }
+
+    /**
+     * Allows to update the layer when the layer has been saved
+     */
+    public void updateLayer(Catalog catalog) {
+        this.layer = catalog.getLayer(layer.getId());        
     }
 
 }

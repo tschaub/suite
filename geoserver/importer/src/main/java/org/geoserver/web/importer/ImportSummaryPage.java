@@ -58,6 +58,7 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
 
     private ModalWindow popupWindow;
     private GeoServerTablePanel<LayerSummary> summaryTable;
+    private SimpleAjaxLink declareSRSLink;
 
     public ImportSummaryPage(final ImportSummary summary) {
         // the synthetic results
@@ -94,8 +95,15 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
         }
         add(new Label("summary", summaryMessage));
         
+        // the popup window
+        popupWindow = new ModalWindow("popup");
+        add( popupWindow );
+        
         // the declare SRS link
-        add(popupLink("declareSRS", new ParamResourceModel("declareSRS", this), srsListSelectionPanel()));
+        declareSRSLink = popupLink("declareSRS", new ParamResourceModel("declareSRS", this), srsListSelectionPanel());
+        declareSRSLink.getLink().setEnabled(false);
+        declareSRSLink.setOutputMarkupId(true);
+        add(declareSRSLink);
 
         // the list of imported layers
         ImportSummaryProvider provider = new ImportSummaryProvider(summary.getLayers());
@@ -187,15 +195,17 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
                 }
                 return null;
             }
+            
+            @Override
+            protected void onSelectionUpdate(AjaxRequestTarget target) {
+                declareSRSLink.getLink().setEnabled(getSelection().size() > 0);
+                target.addComponent(declareSRSLink);
+            } 
 
         };
         summaryTable.setOutputMarkupId(true);
         summaryTable.setFilterable(false);
         add(summaryTable);
-        
-        // the popup window
-        popupWindow = new ModalWindow("popup");
-        add( popupWindow );
     }
 
     /**
@@ -242,6 +252,7 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
                     protected void onSuccessfulSave() {
                         setResponsePage(ImportSummaryPage.this);
                         layerSummary.setStatus(ImportStatus.SUCCESS);
+                        layerSummary.updateLayer(getCatalog());
                     }
 
                     @Override
@@ -294,7 +305,7 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
         };
     }
     
-    Component popupLink(String id, final IModel label, final Component windowContent) {
+    SimpleAjaxLink popupLink(String id, final IModel label, final Component windowContent) {
          return new SimpleAjaxLink(id, label) {
             
             @Override
@@ -318,15 +329,7 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
                 popupWindow.close(target);
                 
                 LayerSummary summary = (LayerSummary) layerSummaryModel.getObject();
-                ResourceInfo resource = summary.getLayer().getResource();
-                resource.setSRS("EPSG:" + epsgCode);
-                if(resource.getNativeBoundingBox() == null) {
-                    summary.setStatus(ImportStatus.MISSING_BBOX);
-                } else {
-                    summary.setStatus(ImportStatus.SUCCESS);
-                }
-                getCatalog().add(summary.getLayer().getResource());
-                getCatalog().add(summary.getLayer());
+                forceEpsgCode(epsgCode, summary);
                 
                 target.addComponent(summaryTable);
             }
@@ -345,23 +348,9 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
             @Override
             protected void onCodeClicked(AjaxRequestTarget target, String epsgCode) {
                 popupWindow.close(target);
-                Catalog catalog = getCatalog();
                 
                 for(LayerSummary summary : summaryTable.getSelection()) {
-                    ResourceInfo resource = summary.getLayer().getResource();
-                    resource.setSRS("EPSG:" + epsgCode);
-                    if(resource.getNativeBoundingBox() == null) {
-                        summary.setStatus(ImportStatus.MISSING_BBOX);
-                    } else {
-                        summary.setStatus(ImportStatus.SUCCESS);
-                    }
-                    if(summary.getLayer().getId() == null) {
-                        catalog.add(summary.getLayer().getResource());
-                        catalog.add(summary.getLayer());
-                    } else {
-                        catalog.save(summary.getLayer().getResource());
-                        catalog.save(summary.getLayer());
-                    }
+                    forceEpsgCode(epsgCode, summary);
                 }
                 
                 target.addComponent(summaryTable);
@@ -371,7 +360,32 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
         return srsList;
     }
     
-    
+
+    /**
+     * Sets the EPSG code on a layer and saves it
+     * @param epsgCode
+     * @param catalog
+     * @param summary
+     */
+    void forceEpsgCode(String epsgCode, LayerSummary summary) {
+        Catalog catalog = getCatalog();
+        LayerInfo layer = summary.getLayer();
+        ResourceInfo resource = layer.getResource();
+        resource.setSRS("EPSG:" + epsgCode);
+        if(resource.getNativeBoundingBox() == null) {
+            summary.setStatus(ImportStatus.MISSING_BBOX);
+        } else {
+            summary.setStatus(ImportStatus.SUCCESS);
+        }
+        if(layer.getId() == null || catalog.getLayer(layer.getId()) == null) {
+            catalog.add(resource);
+            catalog.add(layer);
+        } else {
+            catalog.save(resource);
+            catalog.save(layer);
+        }
+        summary.updateLayer(catalog);
+    }
     
     
 
