@@ -1,1 +1,7 @@
-Place your change log text here.  This file will be incorporated with your app at package time.
+Changelog for the OpenGeo Dashboard
+===================================
+
+Version 1.0 2009-10-14
+----------------------
+
++  Basic dashboard with documentation and links to services.
