@@ -37,7 +37,6 @@ RequestExecutionLevel admin
 
 ; WARNING!!! These plugins need to be installed spearately
 
-
 ; See http://nsis.sourceforge.net/ModernUI_Mod_to_Display_Images_while_installing_files
 !include "Image.nsh" ; For graphics during the install 
 
@@ -93,7 +92,7 @@ LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be ins
 
 ; Interface Settings
 !define MUI_ICON "opengeo.ico"
-!define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\win-uninstall.ico"
+!define MUI_UNICON "uninstall.ico"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_RIGHT
 !define MUI_HEADERIMAGE_BITMAP header.bmp
@@ -517,7 +516,6 @@ Function Ready
   nsDialogs::Show
 
   SilentSkip:
-  MessageBox MB_OK "$GSUser $GSPass $Port"
 
 FunctionEnd
 
@@ -539,12 +537,14 @@ Section "-Jetty" SectionJetty ; dash = hidden
   !insertmacro DisplayImage "slide_1_suite.bmp"
 
   SetOutPath "$INSTDIR"
+  File /a ..\common\changelog.txt
+  File /a checksuite.bat ; Watches for port activity
+
   File /a "${SOURCEPATHROOT}\jetty\*.*"
   File /r "${SOURCEPATHROOT}\jetty\etc"
   File /r "${SOURCEPATHROOT}\jetty\lib"
   File /r "${SOURCEPATHROOT}\jetty\resources"
 
-  File /a checksuite.bat ; Watches for port activity
   
   ; Set checksuite.bat to use the correct port
   ${textreplace::ReplaceInFile} "$INSTDIR\checksuite.bat" \
@@ -552,8 +552,6 @@ Section "-Jetty" SectionJetty ; dash = hidden
                                 "[jettyport]" "$Port" \ 
                                 "/S=1" $1
 
-  File /a opengeo.ico
-  File /a ..\common\changelog.txt
 
   ; Copy our own JRE (which includes native JAI)
   File /r "${SOURCEPATHROOT}\jre"
@@ -563,10 +561,15 @@ Section "-Jetty" SectionJetty ; dash = hidden
   CreateDirectory "$CommonAppData\${COMPANYNAME}"
   CreateDirectory "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
 
-  ;Create shortcut
-  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+  ;Create shortcuts 
 
+  CreateDirectory $INSTDIR\icons
+  SetOutPath $INSTDIR\icons
+  File /a opengeo.ico
+  File /a uninstall.ico
+ 
+ CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
+ 
 
 SectionEnd
 
@@ -581,9 +584,12 @@ Section "GeoServer" SectionGS
   ; Copy GeoServer
   SetOutPath "$INSTDIR\webapps"
   File /r /x jai*.* "${SOURCEPATHROOT}\geoserver"
-  SetOutPath "$INSTDIR\webapps\geoserver"
-  File /a geoserver.ico
 
+  SetOutPath "$INSTDIR\icons"
+  File /a geoserver.ico
+  File /a import.ico
+
+  SetOutPath "$INSTDIR\webapps\geoserver"
   ; Copy data_dir
   SetOutPath "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}"
   File /r /x logging.xml /x security\users.properties  "${SOURCEPATHROOT}\data_dir"
@@ -618,15 +624,15 @@ Section "GeoServer" SectionGS
   ; Shortcuts
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer Admin.lnk" \
                  "http://localhost:$Port/geoserver/web" \
-                 "$INSTDIR\webapps\geoserver\geoserver.ico"
+                 "" "$INSTDIR\icons\geoserver.ico" 0
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Import Layers.lnk" \
                  "http://localhost:$Port/geoserver/web/?wicket:bookmarkablePage=:org.geoserver.web.importer.ImportPage" \
-                 "$INSTDIR\webapps\geoserver\geoserver.ico"
+                 "" "$INSTDIR\icons\import.ico" 0
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer Data Directory.lnk" \
                  "$DataDirPath"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer Logs.lnk" \
-                 "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs" \
-                 "$INSTDIR\webapps\geoserver\geoserver.ico"
+                 "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\logs"
+
 
 SectionEnd
 
@@ -665,8 +671,10 @@ Section "GeoWebCache" SectionGWC
   ; Too Short to display graphic
   ; !insertmacro DisplayImage "slide_4_gwc.bmp"
 
-  SetOutPath "$INSTDIR\webapps\geoserver"
+  SetOutPath "$INSTDIR\icons"
   File /a geowebcache.ico
+
+  SetOutPath "$INSTDIR\webapps\geoserver"
 
 
 
@@ -674,7 +682,7 @@ Section "GeoWebCache" SectionGWC
 
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoWebCache.lnk" \
 		         "http://localhost:$Port/geoserver/gwc/demo/" \
-                 "$INSTDIR\webapps\geoserver\geowebcache.ico"
+                 "" "$INSTDIR\icons\geowebcache.ico" 0
 
 SectionEnd
 
@@ -686,14 +694,17 @@ Section "GeoExplorer" SectionGX
 
   !insertmacro DisplayImage "slide_6_geoext.bmp"
 
+  SetOutPath "$INSTDIR\icons"
+  File /a /oname=geoext.ico ; should change to be gx specific
+
   SetOutPath "$INSTDIR\webapps\"
   File /r /x doc "${SOURCEPATHROOT}\geoexplorer"
-  File /a /oname=geoexplorer\geoext.ico geoext.ico
+
   
   ; Shortcuts
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer.lnk" \
 		         "http://localhost:$Port/geoexplorer/index.html" \
-                 "$INSTDIR\webapps\geoexplorer\geoext.ico"
+                 "" "$INSTDIR\icons\geoext.ico" 0
 
   ; Give permission for NetworkService to be able to read/write
   ; This needs to change, shouldn't give write access to Program Files
@@ -708,15 +719,16 @@ Section "Styler" SectionStyler
 
   !insertmacro DisplayImage "slide_6_geoext.bmp"
 
-  ; Set Section Files and Shortcuts
+  SetOutPath "$INSTDIR\icons"
+  File /a /oname=geoext.ico ; should change to be styler specific
+
   SetOutPath "$INSTDIR\webapps\"
   File /r "${SOURCEPATHROOT}\styler"
-  File /a /oname=styler\geoext.ico geoext.ico
 
   ; Shortcuts
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Styler.lnk" \
 		         "http://localhost:$Port/styler/" \
-                 "$INSTDIR\webapps\styler\geoext.ico"
+                 "" "$INSTDIR\icons\geoext.ico" 0
 
 SectionEnd
 
@@ -727,6 +739,9 @@ Section "Documentation" SectionDocs
 
   !insertmacro DisplayImage "slide_1_suite.bmp"
 
+  SetOutPath "$INSTDIR\icons"
+  File /a documentation.ico
+
   SetOutPath "$INSTDIR\webapps"
 
   ; Copy all doc projects
@@ -736,18 +751,19 @@ Section "Documentation" SectionDocs
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoServer Documentation.lnk" \
 		         "$INSTDIR\webapps\docs\geoserver\index.html" \
-                 "$INSTDIR\webapps\geoserver\geoserver.ico"
+                 "" "$INSTDIR\icons\documentation.ico" 0
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoExplorer Documentation.lnk" \
 		         "$INSTDIR\webapps\docs\geoexplorer\index.html" \
-                 "$INSTDIR\webapps\geoexplorer\geoext.ico"
+                 "" "$INSTDIR\icons\documentation.ico" 0
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\Styler Documentation.lnk" \
 		         "$INSTDIR\webapps\docs\styler\index.html" \
-                 "$INSTDIR\webapps\styler\geoext.ico"
+                 "" "$INSTDIR\icons\documentation.ico" 0
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoWebCache Documentation.lnk" \
 		         "$INSTDIR\webapps\docs\geoserver\geowebcache\index.html" \
-                 "$INSTDIR\webapps\geoserver\geowebcache.ico"
+                 "" "$INSTDIR\icons\documentation.ico" 0
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\Getting Started.lnk" \
-		         "$INSTDIR\webapps\docs\gettingstarted\index.html"
+		         "$INSTDIR\webapps\docs\gettingstarted\index.html" \
+                 "" "$INSTDIR\icons\documentation.ico" 0
 
 SectionEnd
 
@@ -774,8 +790,8 @@ Section "-Dashboard" SectionDashboard ;dash means hidden
                                 "/S=1" $1
 
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\OpenGeo Suite Dashboard.lnk" \
-		         "$INSTDIR\dashboard\OpenGeo Suite.exe" \
-                 "$INSTDIR\opengeo.ico"
+		         "$INSTDIR\dashboard\OpenGeo Dashboard.exe" \
+                 "" "$INSTDIR\icons\opengeo.ico" 0
 
 SectionEnd
 
@@ -832,8 +848,8 @@ Section "-StartStop" SectionStartStop
   ; Different shortcuts depending on install type
 
   ${If} $IsManual == 0 ; i.e. only if service install
-    CreateShortCut '$SMPROGRAMS\$STARTMENU_FOLDER\Start OpenGeo Suite.lnk' '"$INSTDIR\wrapper\wrapper.exe"' '"-t" "wrapper.conf"' '$INSTDIR\opengeo.ico' 0
-    CreateShortCut '$SMPROGRAMS\$STARTMENU_FOLDER\Stop OpenGeo Suite.lnk' '"$INSTDIR\wrapper\wrapper.exe"' '"-p" "wrapper.conf"' '$INSTDIR\opengeo.ico' 0
+    CreateShortCut '$SMPROGRAMS\$STARTMENU_FOLDER\Start OpenGeo Suite.lnk' '"$INSTDIR\wrapper\wrapper.exe"' '"-t" "wrapper.conf"' '$INSTDIR\icons\opengeo.ico' 0
+    CreateShortCut '$SMPROGRAMS\$STARTMENU_FOLDER\Stop OpenGeo Suite.lnk' '"$INSTDIR\wrapper\wrapper.exe"' '"-p" "wrapper.conf"' '$INSTDIR\icons\opengeo.ico' 0
   ${EndIf}
 
   ${If} $IsManual == 1 ; i.e. only if manual install
@@ -848,13 +864,31 @@ Section "-StartStop" SectionStartStop
     FileWrite $9 'call "$INSTDIR\jre\bin\java.exe" -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -jar start.jar --stop'
     FileClose $9 ; Closes the file
 
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Start OpenGeo Suite.lnk" "$INSTDIR\startsuite.bat" "" "$INSTDIR\opengeo.ico" 0 SW_SHOWMINIMIZED
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Start OpenGeo Suite.lnk" \
+                   "$INSTDIR\startsuite.bat" \
+                   "" "$INSTDIR\icons\opengeo.ico" 0 SW_SHOWMINIMIZED
 
-    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Stop OpenGeo Suite.lnk" "$INSTDIR\stopsuite.bat" "" "$INSTDIR\opengeo.ico" 0 SW_SHOWMINIMIZED
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Stop OpenGeo Suite.lnk" \
+                   "$INSTDIR\stopsuite.bat" \
+                   "" "$INSTDIR\icons\opengeo.ico" 0 SW_SHOWMINIMIZED
 
   ${EndIf}
 
+
+
+
+
+
 SectionEnd
+
+Section "-Misc" SectionMisc
+
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" \
+                 "$INSTDIR\Uninstall.exe" \
+                 "" "$INSTDIR\icons\uninstall.ico" 0
+
+SectionEnd
+
 
 
 
@@ -874,6 +908,7 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionDashboard} "Installs the OpenGeo Suite Dashboard for access to all components."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionWrapper} "Installs the Java Service Wrapper."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionStartStop} "Creates shortcuts for starting and stopping the OpenGeo Suite."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionMisc} "Creates everything else."
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
@@ -897,7 +932,7 @@ Section -FinishSection
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "DisplayName" "${APPNAMEANDVERSION}"
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "UninstallString" "$INSTDIR\uninstall.exe"
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "InstallLocation" "$INSTDIR"
-  WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "DisplayIcon" "$INSTDIR\opengeo.ico"
+  WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "DisplayIcon" "$INSTDIR\icons\opengeo.ico"
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "Publisher" "OpenGeo"
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "HelpLink" "http://opengeo.org"
   WriteRegDWORD HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "NoModify" "1"
@@ -981,6 +1016,7 @@ Section Uninstall
     RMDir /r "$INSTDIR\webapps"
     RMDir /r "$INSTDIR\jre"
     RMDir /r "$INSTDIR\wrapper"
+    RMDir /r "$INSTDIR\icons"
     Delete "$INSTDIR\*.*"
     RMDir "$INSTDIR"
     IfFileExists "$INSTDIR" Warn Succeed
