@@ -3,7 +3,7 @@
 # This script is used to package a Titanium application in the cloud.
 #
 
-import sys, os, logging, time, urllib, urllib2, zipfile, StringIO
+import sys, os, logging, time, urllib, urllib2, zipfile, tarfile, StringIO, shutil
 
 try:
     import json
@@ -149,7 +149,7 @@ def wait(ticket, interval=30, timeout=300, start=None):
     return details
 
 
-def download(releases, dir=os.getcwd()):
+def download(releases, dir=os.getcwd(), extract=True):
     
     # only grab one per os (service occassionally returns two entries for same os)
     platforms = {}
@@ -173,6 +173,33 @@ def download(releases, dir=os.getcwd()):
             h = open(path, "wb")
             h.write(data)
             h.close()
+            if extract:
+                out = os.path.join(dir, platform)
+                logger.info("Extracting %s to %s", name, out)
+                if os.path.exists(out):
+                    shutil.rmtree(out)
+
+                if zipfile.is_zipfile(path):
+                    archive = zipfile.ZipFile(path)
+                    archive.extractall(out)
+                    archive.close()
+                    h = open(os.path.join(out, ".installed"), "w")
+                    h.write("")
+                    h.close()
+                elif tarfile.is_tarfile(path):
+                    archive = tarfile.open(path)                
+                    # tar has extra directory level
+                    tmp = out + ".tmp"
+                    archive.extractall(tmp)
+                    archive.close()
+                    first = os.path.join(tmp, os.listdir(tmp)[0])
+                    shutil.copytree(first, out)
+                    shutil.rmtree(tmp)
+                    h = open(os.path.join(out, ".installed"), "w")
+                    h.write("")
+                    h.close()
+                else:
+                    logger.warning("Unable to extract package resources from %s", path)
 
 
 def main():
@@ -200,6 +227,11 @@ def main():
         "-q", "--quiet",
         action="store_false", dest="verbose", default=True,
         help="don't print status messages"
+    )
+    parser.add_option(
+        "-x", "--unextracted",
+        action="store_false", dest="extract", default=True,
+        help="don't extract downloaded packages"
     )
     
     group = OptionGroup(
