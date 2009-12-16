@@ -636,7 +636,6 @@ Section "GeoServer" SectionGS
 
 SectionEnd
 
-
 SectionGroup "GeoServer Extensions" SectionGSExt
 
   Section "GDAL" SectionGSGDAL
@@ -695,7 +694,7 @@ Section "GeoExplorer" SectionGX
   !insertmacro DisplayImage "slide_6_geoext.bmp"
 
   SetOutPath "$INSTDIR\icons"
-  File /a /oname=geoext.ico ; should change to be gx specific
+  File /a geoext.ico ; should change to be gx specific
 
   SetOutPath "$INSTDIR\webapps\"
   File /r /x doc "${SOURCEPATHROOT}\geoexplorer"
@@ -720,7 +719,7 @@ Section "Styler" SectionStyler
   !insertmacro DisplayImage "slide_6_geoext.bmp"
 
   SetOutPath "$INSTDIR\icons"
-  File /a /oname=geoext.ico ; should change to be styler specific
+  File /a geoext.ico ; should change to be styler specific
 
   SetOutPath "$INSTDIR\webapps\"
   File /r "${SOURCEPATHROOT}\styler"
