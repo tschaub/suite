@@ -685,7 +685,6 @@ Section "GeoWebCache" SectionGWC
 
 SectionEnd
 
-
 Section "GeoExplorer" SectionGX
 
   SectionIn RO ; mandatory
@@ -731,7 +730,6 @@ Section "Styler" SectionStyler
 
 SectionEnd
 
-
 Section "Documentation" SectionDocs
 
   SetOverwrite on
@@ -766,6 +764,19 @@ Section "Documentation" SectionDocs
 
 SectionEnd
 
+Section "Recipies" SectionRecipies
+
+  SetOverwrite on
+
+  !insertmacro DisplayImage "slide_1_suite.bmp"
+
+  SetOutPath "$INSTDIR\webapps"
+  File /r "${SOURCEPATHROOT}\samples"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Recipies.lnk" \
+		         "http://localhost:$Port/samples/index.html" \
+                 "" "$INSTDIR\icons\opengeo.ico" 0
+
+SectionEnd
 
 Section "-Dashboard" SectionDashboard ;dash means hidden
 
@@ -890,7 +901,6 @@ SectionEnd
 
 
 
-
 ; Modern install component descriptions
 ; Yes, this needs to go after the install sections. 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
@@ -905,6 +915,7 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionStyler} "Installs Styler, a graphical map style editor."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionDocs} "Includes full documentation for all applications."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionDashboard} "Installs the OpenGeo Suite Dashboard for access to all components."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionRecipies} "Installs examples and demos to help you build your own mapping applications."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionWrapper} "Installs the Java Service Wrapper."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionStartStop} "Creates shortcuts for starting and stopping the OpenGeo Suite."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionMisc} "Creates everything else."
