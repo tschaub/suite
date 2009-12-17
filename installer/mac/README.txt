@@ -62,7 +62,7 @@ Unzip the "suite-<VERISON>-mac.zip" artifact created in the first section into t
 
 Open the "services.pmdoc" PackageMaker project:
 
-  open suite.pmdoc
+  open services.pmdoc
 
 Click the "Build" button in the menu and save the result as "Services.pkg" in the "pkg" directory.
 
@@ -75,15 +75,8 @@ Unzip the "suite-<VERSION>-doc.zip" and "suite-<VERSION>-ext.zip" artifacts crea
   unzip ../../target/suite-<VERSION>-doc.zip -d pkg
   unzip ../../target/suite-<VERSION>-ext.zip -d pkg
 
+Open the "suite.pmdoc" PackageMaker project:
 
+  open suite.pmdoc
 
-
-
-
-
-
-
-
-
-
-
+Click the "Build" button in the menu and save the result as "OpenGeoSuite.mpkg"
