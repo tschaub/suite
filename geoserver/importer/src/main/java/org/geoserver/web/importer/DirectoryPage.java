@@ -31,8 +31,6 @@ import org.geoserver.catalog.DataStoreInfo;
 import org.geoserver.catalog.NamespaceInfo;
 import org.geoserver.catalog.StoreInfo;
 import org.geoserver.catalog.WorkspaceInfo;
-import org.geoserver.importer.FeatureTypeImporter;
-import org.geoserver.importer.ImporterThreadManager;
 import org.geoserver.web.GeoServerSecuredPage;
 import org.geoserver.web.wicket.GeoServerDialog;
 import org.geoserver.web.wicket.ParamResourceModel;
@@ -50,7 +48,7 @@ public class DirectoryPage extends GeoServerSecuredPage {
     String directory = "";
 
     String project = "";
-    
+
     GeoServerDialog dialog;
 
     private TextField dirField;
@@ -58,14 +56,13 @@ public class DirectoryPage extends GeoServerSecuredPage {
     private TextField projectField;
 
     private Form form;
-    
-   
+
     public DirectoryPage() {
         add(dialog = new GeoServerDialog("dialog"));
-        
+
         // prefill project name
         project = getProjectNameFromPrefix("ogs");
-        
+
         form = new Form("form", new CompoundPropertyModel(this));
         add(form);
 
@@ -85,12 +82,12 @@ public class DirectoryPage extends GeoServerSecuredPage {
 
         SubmitLink submitLink = submitLink();
         form.add(submitLink);
-        
+
         form.setDefaultButton(submitLink);
     }
 
     private Component chooserButton(Form form) {
-        AjaxSubmitLink link =  new AjaxSubmitLink("chooser") {
+        AjaxSubmitLink link = new AjaxSubmitLink("chooser") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form form) {
                 dialog.setTitle(new ParamResourceModel("chooseDirectory", this));
@@ -99,13 +96,13 @@ public class DirectoryPage extends GeoServerSecuredPage {
                     @Override
                     protected Component getContents(String id) {
                         // use what the user currently typed
-                    	File file = null;
-                    	if(!dirField.getInput().trim().equals("")) {
-                    		file = new File(dirField.getInput());
-                    		if(!file.exists())
-                    		    file = null;
-                    	}
-                    		
+                        File file = null;
+                        if (!dirField.getInput().trim().equals("")) {
+                            file = new File(dirField.getInput());
+                            if (!file.exists())
+                                file = null;
+                        }
+
                         GeoServerFileChooser chooser = new GeoServerFileChooser(id, new Model(file));
                         chooser.setFilter(new Model(new ExtensionFileFilter(".shp")));
                         return chooser;
@@ -117,21 +114,21 @@ public class DirectoryPage extends GeoServerSecuredPage {
                         directory = ((File) chooser.getModelObject()).getAbsolutePath();
                         // clear the raw input of the field won't show the new model value
                         dirField.clearInput();
-                        
+
                         target.addComponent(dirField);
                         return true;
                     }
-                    
+
                     @Override
                     public void onClose(AjaxRequestTarget target) {
                         // update the field with the user chosen value
                         target.addComponent(dirField);
                     }
-                    
+
                 });
-                
+
             }
-            
+
         };
         // otherwise the link won't trigger when the form contents are not valid
         link.setDefaultFormProcessing(false);
@@ -146,7 +143,7 @@ public class DirectoryPage extends GeoServerSecuredPage {
                 try {
                     // build the datastore namespace URI
                     String ns = buildDatastoreNamespace();
-                    
+
                     // build the workspace
                     WorkspaceInfo ws = getCatalog().getWorkspaceByName(project);
                     boolean workspaceNew = false;
@@ -160,26 +157,29 @@ public class DirectoryPage extends GeoServerSecuredPage {
                         getCatalog().add(ws);
                         getCatalog().add(nsi);
                     }
-                    
+
                     // build/reuse the store
                     String storeType = new DirectoryDataStoreFactory().getDisplayName();
                     Map<String, Serializable> params = new HashMap<String, Serializable>();
-                    params.put(DirectoryDataStoreFactory.URLP.key, new File(directory).toURI().toURL().toString());
+                    params.put(DirectoryDataStoreFactory.URLP.key, new File(directory).toURI()
+                            .toURL().toString());
                     params.put(DirectoryDataStoreFactory.NAMESPACE.key, new URI(ns).toString());
-                    
+
                     DataStoreInfo si;
-                    StoreInfo preExisting = getCatalog().getStoreByName(ws, project, StoreInfo.class);
+                    StoreInfo preExisting = getCatalog().getStoreByName(ws, project,
+                            StoreInfo.class);
                     boolean storeNew = false;
-                    if(preExisting != null) {
-                        if(!(preExisting instanceof DataStoreInfo)) {
+                    if (preExisting != null) {
+                        if (!(preExisting instanceof DataStoreInfo)) {
                             error(new ParamResourceModel("storeExistsNotVector", this, project));
                             return;
-                        } 
+                        }
                         si = (DataStoreInfo) preExisting;
-                        if(!si.getType().equals(storeType) || !si.getConnectionParameters().equals(params)) {
+                        if (!si.getType().equals(storeType)
+                                || !si.getConnectionParameters().equals(params)) {
                             error(new ParamResourceModel("storeExistsNotSame", this, project));
                             return;
-                        } 
+                        }
                         // make sure it's enabled, we just verified the directory exists
                         si.setEnabled(true);
                     } else {
@@ -190,10 +190,10 @@ public class DirectoryPage extends GeoServerSecuredPage {
                         si.getConnectionParameters().putAll(params);
                         si.setEnabled(true);
                         si.setType(storeType);
-                        
+
                         getCatalog().add(si);
                     }
-                    
+
                     // redirect to the layer chooser
                     PageParameters pp = new PageParameters();
                     pp.put("store", si.getName());
@@ -208,47 +208,48 @@ public class DirectoryPage extends GeoServerSecuredPage {
             }
         };
     }
-    
+
     String buildDatastoreNamespace() {
         return "http://www.geoserver.org/" + project;
     }
-    
+
     /**
-     * Tries to figure out a free project name from a prefix (was meant to work
-     * for a random directory name but could not hook it up properly to both
-     * dialog navigation and manual directory field filling so I just gave up). 
+     * Tries to figure out a free project name from a prefix (was meant to work for a random
+     * directory name but could not hook it up properly to both dialog navigation and manual
+     * directory field filling so I just gave up).
+     * 
      * @param prefix
      * @return
      */
     String getProjectNameFromPrefix(String prefix) {
         String name = new File(prefix).getName();
-        if(name.length() > 6) {
+        if (name.length() > 6) {
             name = name.substring(0, 6);
         }
-        
+
         Catalog catalog = getCatalog();
         String candidate = name;
-        for(int i = 1; i < 100; i++) {
-            if(catalog.getWorkspaceByName(candidate) == null)
+        for (int i = 1; i < 100; i++) {
+            if (catalog.getWorkspaceByName(candidate) == null)
                 return candidate;
-            
-            if(catalog.getDataStoreByName(candidate, candidate) == null)
+
+            if (catalog.getDataStoreByName(candidate, candidate) == null)
                 return candidate;
-            
+
             // build a 6 chars version with a number at the end
-            if(i < 10) {
-                if(prefix.length() == 6)
+            if (i < 10) {
+                if (prefix.length() == 6)
                     candidate = prefix.substring(0, 5) + i;
                 else
                     candidate = prefix + i;
             } else {
-                if(prefix.length() > 4)
+                if (prefix.length() > 4)
                     candidate = prefix.substring(0, 4) + i;
                 else
                     candidate = prefix + i;
             }
         }
-        
+
         return null;
     }
 
@@ -257,44 +258,44 @@ public class DirectoryPage extends GeoServerSecuredPage {
         @Override
         protected void onValidate(IValidatable validatable) {
             String directory = (String) validatable.getValue();
-            
+
             DataStore store = null;
             Map<String, Serializable> params = new HashMap<String, Serializable>();
             try {
                 // check the store can be built (we need to provide the namespace as well
                 params.put(DirectoryDataStoreFactory.URLP.key, new File(directory).toURI().toURL());
-                params.put(DirectoryDataStoreFactory.NAMESPACE.key, new URI("http://www.geoserver.org"));
+                params.put(DirectoryDataStoreFactory.NAMESPACE.key, new URI(
+                        "http://www.geoserver.org"));
                 store = DataStoreFinder.getDataStore(params);
                 if (store == null) {
                     error(validatable, "ImportPage.invalidPath");
                 } else if (store.getTypeNames().length == 0) {
                     error(validatable, "ImportPage.noData");
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
                 error(validatable, "ImportPage.noData");
             }
         }
     }
-    
+
     class ProjectValidator extends AbstractValidator {
 
         @Override
         protected void onValidate(IValidatable validatable) {
             String project = (String) validatable.getValue();
-            
+
             // new workspace? if so, good
             WorkspaceInfo ws = getCatalog().getWorkspaceByName(project);
-            if(ws == null)
+            if (ws == null)
                 return;
-            
+
             // new store too?
             StoreInfo store = getCatalog().getStoreByName(ws, project, StoreInfo.class);
-            if(store != null)
-                error(validatable, "ImportPage.duplicateStore", 
-                        Collections.singletonMap("project", project));
+            if (store != null)
+                error(validatable, "ImportPage.duplicateStore", Collections.singletonMap("project",
+                        project));
         }
-        
+
     }
-    
-    
+
 }

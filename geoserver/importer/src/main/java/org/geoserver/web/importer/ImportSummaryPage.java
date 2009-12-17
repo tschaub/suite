@@ -237,7 +237,7 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
                         catalog.remove(layer.getLayer().getResource());
                     }
                 }
-                setResponsePage(DirectoryPage.class, new PageParameters("afterCleanup=true"));
+                setResponsePage(StoreChooserPage.class, new PageParameters("afterCleanup=true"));
             }
         };
     }

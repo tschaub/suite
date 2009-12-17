@@ -7,6 +7,7 @@ package org.geoserver.web.importer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Level;
@@ -76,6 +77,7 @@ public class ImportSummaryProvider extends GeoServerDataProvider<LayerSummary> {
 
     @Override
     protected List<LayerSummary> getItems() {
+        Collections.sort(layers, new LayerSummaryComparator());
         return layers;
     }
 
@@ -86,6 +88,21 @@ public class ImportSummaryProvider extends GeoServerDataProvider<LayerSummary> {
 
     public IModel model(Object object) {
         return new LayerSummaryModel((LayerSummary) object);
+    }
+    
+    static class LayerSummaryComparator implements Comparator<LayerSummary> {
+
+        public int compare(LayerSummary s1, LayerSummary s2) {
+            if(s1.getStatus().successful() == s2.getStatus().successful()) {
+                return s1.getLayerName().compareTo(s2.getLayerName());
+            } else {
+                if(s1.getStatus().successful())
+                    return 1;
+                else
+                    return -1;
+            }
+        }
+        
     }
 
 }

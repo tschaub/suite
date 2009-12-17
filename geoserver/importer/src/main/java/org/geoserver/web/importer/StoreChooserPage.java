@@ -45,7 +45,7 @@ public class StoreChooserPage extends GeoServerBasePage {
     
     enum Store {
         directory(new ResourceReference(GeoServerApplication.class, "img/icons/silk/folder.png"), DirectoryPage.class), 
-        postgis(new ResourceReference(GeoServerApplication.class, "img/icons/geosilk/database_vector.png"), DirectoryPage.class);
+        postgis(new ResourceReference(GeoServerApplication.class, "img/icons/geosilk/database_vector.png"), PostGISPage.class);
         
         ResourceReference icon;
         Class destinationPage;
