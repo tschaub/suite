@@ -53,9 +53,12 @@ public class LayerChooserProvider extends GeoServerDataProvider<Resource> {
     public static final List<Property<Resource>> PROPERTIES = Arrays.asList(TYPE, NAME);
 
     String storeId;
+
+    boolean skipGeometryless;
     
-    public LayerChooserProvider(String storeId) {
+    public LayerChooserProvider(String storeId, boolean skipGeometryless) {
         this.storeId = storeId;
+        this.skipGeometryless = skipGeometryless;
     }
 
     @Override
@@ -82,10 +85,12 @@ public class LayerChooserProvider extends GeoServerDataProvider<Resource> {
                 List<Name> names = gtStore.getNames();
                 for (Name name : names) {
                     GeometryDescriptor geom = gtStore.getSchema(name).getGeometryDescriptor();
-                    ResourceReference icon = icons.getVectoryIcon(geom);
-                    Resource resource = new Resource(name);
-                    resource.setIcon(icon);
-                    resources.put(name.getLocalPart(), resource);
+                    if(geom != null || !skipGeometryless) {
+                        ResourceReference icon = icons.getVectoryIcon(geom);
+                        Resource resource = new Resource(name);
+                        resource.setIcon(icon);
+                        resources.put(name.getLocalPart(), resource);
+                    }
                 }
 
             } else {

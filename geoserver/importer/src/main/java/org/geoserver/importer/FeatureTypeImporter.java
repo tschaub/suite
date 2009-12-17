@@ -4,12 +4,7 @@
  */
 package org.geoserver.importer;
 
-import static org.geoserver.importer.ImportStatus.DEFAULTED_SRS;
-import static org.geoserver.importer.ImportStatus.DUPLICATE;
-import static org.geoserver.importer.ImportStatus.MISSING_BBOX;
-import static org.geoserver.importer.ImportStatus.MISSING_NATIVE_CRS;
-import static org.geoserver.importer.ImportStatus.NO_SRS_MATCH;
-import static org.geoserver.importer.ImportStatus.SUCCESS;
+import static org.geoserver.importer.ImportStatus.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +20,8 @@ import org.geoserver.catalog.LayerInfo;
 import org.geoserver.catalog.NamespaceInfo;
 import org.geoserver.catalog.ProjectionPolicy;
 import org.geotools.data.DataAccess;
+import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.geotools.util.logging.Logging;
 import org.opengis.feature.type.Name;
 
@@ -34,6 +31,8 @@ import org.opengis.feature.type.Name;
  * <p>It is advised to run it into its own thread</p> 
  */
 public class FeatureTypeImporter  implements Runnable {
+    static final ReferencedEnvelope WORLD = new ReferencedEnvelope(-180, 180, -90, 90, DefaultGeographicCRS.WGS84);
+
     static final Logger LOGGER = Logging.getLogger(FeatureTypeImporter.class);
     
     DataStoreInfo storeInfo;
@@ -96,8 +95,14 @@ public class FeatureTypeImporter  implements Runnable {
                 try {
                     builder.setStore(storeInfo);
                     FeatureTypeInfo featureType = builder.buildFeatureType(name);
-                    builder.lookupSRS(featureType, true);
-                    builder.setupBounds(featureType);
+                    if(featureType.getFeatureType().getGeometryDescriptor() != null) {
+                        builder.lookupSRS(featureType, true);
+                        builder.setupBounds(featureType);
+                    } else {
+                        // geometryless case, fill in some random values just because we need them
+                        featureType.setSRS("EPSG:4326");
+                        featureType.setLatLonBoundingBox(WORLD);
+                    }
                     layer = builder.buildLayer(featureType);
                     layer.setDefaultStyle(styles.getStyle(featureType));
                     ImportStatus status = SUCCESS;

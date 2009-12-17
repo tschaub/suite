@@ -248,6 +248,7 @@ public class PostGISPage extends GeoServerSecuredPage {
                     pp.put("workspace", workspace.getName());
                     pp.put("storeNew", true);
                     pp.put("workspaceNew", false);
+                    pp.put("skipGeometryless", otherParamsPanel.excludeGeometryless);
                     setResponsePage(VectorLayerChooserPage.class, pp);
                 } catch (Exception e) {
                     LOGGER.log(Level.SEVERE, "Error while setting up mass import", e);

@@ -84,7 +84,7 @@ public class StyleGenerator {
         // geometryless, style it randomly
         GeometryDescriptor gd = featureType.getFeatureType().getGeometryDescriptor();
         if (gd == null)
-            return catalog.getStyle(StyleInfo.DEFAULT_POINT);
+            return catalog.getStyleByName(StyleInfo.DEFAULT_POINT);
 
         Class gtype = gd.getType().getBinding();
         GeometryType gt;

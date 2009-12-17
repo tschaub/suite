@@ -44,6 +44,7 @@ import org.geoserver.web.wicket.ParamResourceModel;
 import org.geoserver.web.wicket.SRSListPanel;
 import org.geoserver.web.wicket.SimpleAjaxLink;
 import org.geoserver.web.wicket.GeoServerDataProvider.Property;
+import org.opengis.feature.type.FeatureType;
 import org.opengis.feature.type.GeometryDescriptor;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
@@ -183,7 +184,18 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
                         f.add(editLink);
                     }
                 } else if (property == COMMANDS) {
-                    if (layerSummary.getStatus().successful()) {
+                    boolean geometryless = false;
+                    ResourceInfo resource = layerSummary.getLayer().getResource();
+                    if(resource instanceof FeatureTypeInfo) {
+                        try {
+                            FeatureType featureType = ((FeatureTypeInfo) resource).getFeatureType();
+                            geometryless = featureType.getGeometryDescriptor() == null;
+                        } catch(Exception e) {
+                            geometryless = true;
+                        }
+                    }
+                    
+                    if (layerSummary.getStatus().successful() && !geometryless) {
                         Fragment f = new Fragment(id, "preview", ImportSummaryPage.this);
                         PreviewLayer preview = new PreviewLayer(layer);
                         f.add(new ExternalLink("ol", preview.getWmsLink()
@@ -359,6 +371,7 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
                     forceEpsgCode(epsgCode, summary);
                 }
 
+                summaryTable.clearSelection();
                 target.addComponent(summaryTable);
             }
         };
