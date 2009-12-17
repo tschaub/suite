@@ -3,10 +3,10 @@
 ; Define your application name
 !define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
-!define VERSION "1.0-SNAPSHOT"
-!define LONGVERSION "1.0.0.0" ; must be a.b.c.d
+!define VERSION "1.1-SNAPSHOT"
+!define LONGVERSION "1.1.0.0" ; must be a.b.c.d
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
-!define SOURCEPATHROOT "..\..\target\suite-${VERSION}-raw"
+!define SOURCEPATHROOT "..\..\target\suite-1.0-SNAPSHOT-raw"
 !define STARTMENU_FOLDER "${APPNAMEANDVERSION}"
 
 ; Main Install settings
@@ -137,7 +137,7 @@ Function RunStuff
   ExecWait $INSTDIR\checksuite.bat
 
   ClearErrors
-  ExecShell "open" "$INSTDIR\Dashboard\OpenGeo Suite.exe" SW_SHOWMAXIMIZED
+  ExecShell "open" "$INSTDIR\Dashboard\OpenGeo Dashboard.exe" SW_SHOWMAXIMIZED
   IfErrors 0 +2
     MessageBox MB_ICONSTOP "Unable to start the OpenGeo Suite or launch the Dashboard.  Please use the Start Menu to manually start these applications."
   ClearErrors
@@ -694,7 +694,7 @@ Section "GeoExplorer" SectionGX
   !insertmacro DisplayImage "slide_6_geoext.bmp"
 
   SetOutPath "$INSTDIR\icons"
-  File /a geoext.ico ; should change to be gx specific
+  File /a geoexplorer.ico ; should change to be gx specific
 
   SetOutPath "$INSTDIR\webapps\"
   File /r /x doc "${SOURCEPATHROOT}\geoexplorer"
@@ -703,7 +703,7 @@ Section "GeoExplorer" SectionGX
   ; Shortcuts
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoExplorer.lnk" \
 		         "http://localhost:$Port/geoexplorer/index.html" \
-                 "" "$INSTDIR\icons\geoext.ico" 0
+                 "" "$INSTDIR\icons\geoexplorer.ico" 0
 
   ; Give permission for NetworkService to be able to read/write
   ; This needs to change, shouldn't give write access to Program Files
@@ -719,7 +719,7 @@ Section "Styler" SectionStyler
   !insertmacro DisplayImage "slide_6_geoext.bmp"
 
   SetOutPath "$INSTDIR\icons"
-  File /a geoext.ico ; should change to be styler specific
+  File /a styler.ico ; should change to be styler specific
 
   SetOutPath "$INSTDIR\webapps\"
   File /r "${SOURCEPATHROOT}\styler"
@@ -727,7 +727,7 @@ Section "Styler" SectionStyler
   ; Shortcuts
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Styler.lnk" \
 		         "http://localhost:$Port/styler/" \
-                 "" "$INSTDIR\icons\geoext.ico" 0
+                 "" "$INSTDIR\icons\styler.ico" 0
 
 SectionEnd
 
