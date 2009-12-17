@@ -22,7 +22,55 @@ og.util = {
      *  Load and parse a config file given the URL.
      */
     loadConfig: function(url) {
-        var text = og.util.loadSync(url);
+        if (window.Titanium) {
+            return this.loadConfigFS(url);
+        }
+        else {
+            return this.loadConfigHTTP(url);
+        }
+    }, 
+    
+    /** method[loadConfig]
+     *  :arg url: ``String``
+     *  :returns: ``Object`` A config object.
+     *
+     *  Load and parses a config file by requesting it via HTTP.
+     */
+    loadConfigHTTP: function(url) {
+        return this.parseConfig(this.loadSync(url));
+    }, 
+    
+    /** method[loadConfig]
+     *  :arg filename: ``String``
+     *  :returns: ``Object`` A config object.
+     *
+     *  Load and parse a config file from the filesystem.
+     */
+    loadConfigFS: function(filename) {
+        var fs = Titanium.Filesystem;
+        var config = fs.getFile(fs.getUserDirectory().toString(), ".opengeo", filename);
+
+        // if file fodes not exist, create one by loading the default via http
+        // and copy it into the proper location
+        if (config.exists() == false) {
+            // create parent directory if it does not exist
+            if (config.parent().exists() == false) {
+                config.parent().createDirectory();
+            }
+            
+            config.write(this.loadSync(filename));
+        }
+        
+        return this.parseConfig(config.read().toString());
+    }, 
+    
+    /** method[loadConfig]
+     *  :arg url: ``String``
+     *  :returns: ``Object`` A config object.
+     *
+     *  Parses the contents of a config file into a config object.
+     */    
+     parseConfig: function(text) {
         var lines = text.split(/[\n\r]/);
         var config = {};
         var defaults = {};
@@ -59,7 +107,7 @@ og.util = {
         }
         return config;
     }
-
+    
 };
 
 og.Dashboard = Ext.extend(Ext.util.Observable, {
