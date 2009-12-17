@@ -25,6 +25,14 @@
       <outputDirectory>webapps/dashboard</outputDirectory>
     </fileSet>
     <fileSet>
+      <directory>docs/install/target/html</directory>
+      <outputDirectory>webapps/docs/install</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>docs/gettingstarted/target/html</directory>
+      <outputDirectory>webapps/docs/gettingstarted</outputDirectory>
+    </fileSet>
+    <fileSet>
       <directory>docs/styler/target/html</directory>
       <outputDirectory>webapps/docs/styler</outputDirectory>
     </fileSet>

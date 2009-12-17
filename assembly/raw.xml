@@ -14,6 +14,20 @@
       </excludes>
     </fileSet>
     <fileSet>
+      <directory>geoserver/extension/target/dependency</directory>
+      <outputDirectory>extension/oracle</outputDirectory>
+      <includes>
+        <include>gt-jdbc-oracle-*</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>geoserver/extension/target/dependency</directory>
+      <outputDirectory>extension/arcsde</outputDirectory>
+      <includes>
+        <include>gt-arcsde-*</include>
+      </includes>
+    </fileSet>
+    <fileSet>
       <directory>styler/target/styler</directory>
       <outputDirectory>styler</outputDirectory>
     </fileSet>
@@ -22,8 +36,18 @@
       <outputDirectory>geoexplorer</outputDirectory>
     </fileSet>
     <fileSet>
-      <directory>dashboard/target/dashboard</directory>
       <outputDirectory>dashboard</outputDirectory>
+      <includes>
+        <include>assembly/dummy</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>docs/install/target/html</directory>
+      <outputDirectory>docs/install</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>docs/gettingstarted/target/html</directory>
+      <outputDirectory>docs/gettingstarted</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>docs/styler/target/html</directory>
