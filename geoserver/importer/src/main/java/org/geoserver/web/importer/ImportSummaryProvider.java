@@ -21,16 +21,22 @@ import org.geoserver.web.wicket.GeoServerDataProvider;
 import org.opengis.feature.type.FeatureType;
 import org.opengis.feature.type.GeometryDescriptor;
 
+/**
+ * Data source for the {@link ImportSummaryPage}
+ * @author Andrea Aime - OpenGeo
+ */
 @SuppressWarnings("serial")
 public class ImportSummaryProvider extends GeoServerDataProvider<LayerSummary> {
-    static final Logger LOGGER = org.geotools.util.logging.Logging.getLogger(ImportSummaryProvider.class);
-    
+    static final Logger LOGGER = org.geotools.util.logging.Logging
+            .getLogger(ImportSummaryProvider.class);
+
     static final Property<LayerSummary> LAYER = new BeanProperty<LayerSummary>("name", "layerName");
+
     static final Property<LayerSummary> ISSUES = new AbstractProperty<LayerSummary>("details") {
         public Object getPropertyValue(LayerSummary item) {
             return new ResourceModel("ImportSummaryPage." + item.getStatus());
         }
-        
+
         @Override
         public Comparator<LayerSummary> getComparator() {
             return new Comparator<LayerSummary>() {
@@ -42,33 +48,36 @@ public class ImportSummaryProvider extends GeoServerDataProvider<LayerSummary> {
                     String s2 = (String) r2.getObject();
                     return s1.compareTo(s2);
                 }
-                
+
             };
         }
     };
-    
-    static final Property<LayerSummary> SRS = new BeanProperty<LayerSummary>("SRS", "layer.resource.SRS");
+
+    static final Property<LayerSummary> SRS = new BeanProperty<LayerSummary>("SRS",
+            "layer.resource.SRS");
+
     static final Property<LayerSummary> TYPE = new AbstractProperty<LayerSummary>("type") {
 
         public Object getPropertyValue(LayerSummary item) {
             try {
-                if(item.getLayer() == null)
+                if (item.getLayer() == null)
                     return null;
-                FeatureType type = ((FeatureTypeInfo) item.getLayer().getResource()).getFeatureType();
+                FeatureType type = ((FeatureTypeInfo) item.getLayer().getResource())
+                        .getFeatureType();
                 GeometryDescriptor gd = type.getGeometryDescriptor();
-                if(gd == null)
+                if (gd == null)
                     return null;
                 else
                     return gd.getType().getBinding().getSimpleName();
-            } catch(IOException e) {
+            } catch (IOException e) {
                 LOGGER.log(Level.WARNING, "Problems occurred computing the geometry type");
                 return null;
             }
         }
     };
-    
-    static final Property<LayerSummary> COMMANDS= new PropertyPlaceholder<LayerSummary>("commands");
-    
+
+    static final Property<LayerSummary> COMMANDS = new PropertyPlaceholder<LayerSummary>("commands");
+
     private List<LayerSummary> layers;
 
     public ImportSummaryProvider(List<LayerSummary> layers) {
@@ -89,21 +98,24 @@ public class ImportSummaryProvider extends GeoServerDataProvider<LayerSummary> {
     public IModel model(Object object) {
         return new LayerSummaryModel((LayerSummary) object);
     }
-    
+
+    /**
+     * Sorts layers so that the first ones are failures. The secondary sort criteria is the layer
+     * name
+     */
     static class LayerSummaryComparator implements Comparator<LayerSummary> {
 
         public int compare(LayerSummary s1, LayerSummary s2) {
-            if(s1.getStatus().successful() == s2.getStatus().successful()) {
+            if (s1.getStatus().successful() == s2.getStatus().successful()) {
                 return s1.getLayerName().compareTo(s2.getLayerName());
             } else {
-                if(s1.getStatus().successful())
+                if (s1.getStatus().successful())
                     return 1;
                 else
                     return -1;
             }
         }
-        
+
     }
 
 }
-

@@ -50,14 +50,16 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 /**
  * Reports the import results in a table and allows the user to edit the and to preview the layers
  * 
- * @author aaime
+ * @author Andrea Aime - OpenGeo
  * 
  */
 @SuppressWarnings("serial")
 public class ImportSummaryPage extends GeoServerSecuredPage {
 
     private ModalWindow popupWindow;
+
     private GeoServerTablePanel<LayerSummary> summaryTable;
+
     private SimpleAjaxLink declareSRSLink;
 
     public ImportSummaryPage(final ImportSummary summary) {
@@ -94,21 +96,21 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
             add(undoLink(summary));
         }
         add(new Label("summary", summaryMessage));
-        
+
         // the popup window
         popupWindow = new ModalWindow("popup");
-        add( popupWindow );
-        
+        add(popupWindow);
+
         // the declare SRS link
-        declareSRSLink = popupLink("declareSRS", new ParamResourceModel("declareSRS", this), srsListSelectionPanel());
+        declareSRSLink = popupLink("declareSRS", new ParamResourceModel("declareSRS", this),
+                srsListSelectionPanel());
         declareSRSLink.getLink().setEnabled(false);
         declareSRSLink.setOutputMarkupId(true);
         add(declareSRSLink);
 
         // the list of imported layers
         ImportSummaryProvider provider = new ImportSummaryProvider(summary.getLayers());
-        summaryTable = new GeoServerTablePanel<LayerSummary>(
-                "importSummary", provider, true) {
+        summaryTable = new GeoServerTablePanel<LayerSummary>("importSummary", provider, true) {
 
             @Override
             protected Component getComponentForProperty(String id, IModel itemModel,
@@ -118,20 +120,20 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
                 LayerInfo layer = layerSummary.getLayer();
                 if (property == LAYER) {
                     Fragment f = new Fragment(id, "edit", ImportSummaryPage.this);
-                    
+
                     // keep the last modified name if possible
                     IModel label;
                     if (layerSummary.getLayer() != null)
                         label = new Model(layerSummary.getLayer().getName());
                     else
                         label = new Model(layerSummary.getLayerName());
-                    
+
                     // build the edit link
                     Link editLink = editLink(layerSummary, label);
                     editLink.setEnabled(layer != null);
                     // also set a tooltip explaining what this action does
-                    editLink.add(new AttributeModifier("title", true, 
-                            new ParamResourceModel("edit", this, label.getObject())));
+                    editLink.add(new AttributeModifier("title", true, new ParamResourceModel(
+                            "edit", this, label.getObject())));
                     f.add(editLink);
 
                     return f;
@@ -155,7 +157,7 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
                         return new Label(id, "");
                     }
                 } else if (property == ISSUES) {
-                    if(layerSummary.getStatus() != ImportStatus.NO_SRS_MATCH) {
+                    if (layerSummary.getStatus() != ImportStatus.NO_SRS_MATCH) {
                         return new Label(id, property.getModel(itemModel));
                     } else {
                         Fragment f = new Fragment(id, "noSRSMatch", ImportSummaryPage.this);
@@ -164,18 +166,20 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
                         return f;
                     }
                 } else if (property == SRS) {
-                    if(layerSummary.getStatus().successful()) {
+                    if (layerSummary.getStatus().successful()) {
                         return new Label(id, property.getModel(itemModel));
-                    } else if(layerSummary.getStatus() == ImportStatus.MISSING_NATIVE_CRS ||
-                            layerSummary.getStatus() == ImportStatus.NO_SRS_MATCH) {
-                        return popupLink(id, new ParamResourceModel("declareSRS", this), srsListLayerPanel(itemModel));
+                    } else if (layerSummary.getStatus() == ImportStatus.MISSING_NATIVE_CRS
+                            || layerSummary.getStatus() == ImportStatus.NO_SRS_MATCH) {
+                        return popupLink(id, new ParamResourceModel("declareSRS", this),
+                                srsListLayerPanel(itemModel));
                     } else {
                         Fragment f = new Fragment(id, "edit", ImportSummaryPage.this);
-                        
+
                         // build the edit link
-                        Link editLink = editLink(layerSummary, new ParamResourceModel("directFix", this));
+                        Link editLink = editLink(layerSummary, new ParamResourceModel("directFix",
+                                this));
                         editLink.setEnabled(layer != null);
-                        
+
                         f.add(editLink);
                     }
                 } else if (property == COMMANDS) {
@@ -195,12 +199,12 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
                 }
                 return null;
             }
-            
+
             @Override
             protected void onSelectionUpdate(AjaxRequestTarget target) {
                 declareSRSLink.getLink().setEnabled(getSelection().size() > 0);
                 target.addComponent(declareSRSLink);
-            } 
+            }
 
         };
         summaryTable.setOutputMarkupId(true);
@@ -210,6 +214,7 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
 
     /**
      * Rolls back the import and redirects to the initial page
+     * 
      * @param summary
      * @return
      */
@@ -287,27 +292,28 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
             return "geomtype.error";
         }
     }
-    
+
     Component getLayerWKTLink(IModel layerSummaryModel) {
-        return new SimpleAjaxLink("seeWKT", layerSummaryModel, new ParamResourceModel("seeWKT", this)) {
-            
+        return new SimpleAjaxLink("seeWKT", layerSummaryModel, new ParamResourceModel("seeWKT",
+                this)) {
+
             @Override
             protected void onClick(AjaxRequestTarget target) {
-                popupWindow.setInitialHeight( 375 );
-                popupWindow.setInitialWidth( 525 );
+                popupWindow.setInitialHeight(375);
+                popupWindow.setInitialWidth(525);
                 LayerSummary summary = (LayerSummary) getModel().getObject();
                 CoordinateReferenceSystem crs = summary.getLayer().getResource().getNativeCRS();
                 popupWindow.setContent(new CRSPanel.WKTPanel(popupWindow.getContentId(), crs));
-                if(crs != null)
+                if (crs != null)
                     popupWindow.setTitle(crs.getName().toString());
                 popupWindow.show(target);
             }
         };
     }
-    
+
     SimpleAjaxLink popupLink(String id, final IModel label, final Component windowContent) {
-         return new SimpleAjaxLink(id, label) {
-            
+        return new SimpleAjaxLink(id, label) {
+
             @Override
             protected void onClick(AjaxRequestTarget target) {
                 popupWindow.setContent(windowContent);
@@ -316,53 +322,53 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
             }
         };
     }
-    
+
     /**
      * Builds the srs list panel component for a single layer
      */
     @SuppressWarnings("serial")
     SRSListPanel srsListLayerPanel(final IModel layerSummaryModel) {
         SRSListPanel srsList = new SRSListPanel(popupWindow.getContentId()) {
-            
+
             @Override
             protected void onCodeClicked(AjaxRequestTarget target, String epsgCode) {
                 popupWindow.close(target);
-                
+
                 LayerSummary summary = (LayerSummary) layerSummaryModel.getObject();
                 forceEpsgCode(epsgCode, summary);
-                
+
                 target.addComponent(summaryTable);
             }
         };
         srsList.setCompactMode(true);
         return srsList;
     }
-    
+
     /**
      * Builds the srs list panel component for a single layer
      */
     @SuppressWarnings("serial")
     SRSListPanel srsListSelectionPanel() {
         SRSListPanel srsList = new SRSListPanel(popupWindow.getContentId()) {
-            
+
             @Override
             protected void onCodeClicked(AjaxRequestTarget target, String epsgCode) {
                 popupWindow.close(target);
-                
-                for(LayerSummary summary : summaryTable.getSelection()) {
+
+                for (LayerSummary summary : summaryTable.getSelection()) {
                     forceEpsgCode(epsgCode, summary);
                 }
-                
+
                 target.addComponent(summaryTable);
             }
         };
         srsList.setCompactMode(true);
         return srsList;
     }
-    
 
     /**
      * Sets the EPSG code on a layer and saves it
+     * 
      * @param epsgCode
      * @param catalog
      * @param summary
@@ -372,12 +378,12 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
         LayerInfo layer = summary.getLayer();
         ResourceInfo resource = layer.getResource();
         resource.setSRS("EPSG:" + epsgCode);
-        if(resource.getNativeBoundingBox() == null) {
+        if (resource.getNativeBoundingBox() == null) {
             summary.setStatus(ImportStatus.MISSING_BBOX);
         } else {
             summary.setStatus(ImportStatus.SUCCESS);
         }
-        if(layer.getId() == null || catalog.getLayer(layer.getId()) == null) {
+        if (layer.getId() == null || catalog.getLayer(layer.getId()) == null) {
             catalog.add(resource);
             catalog.add(layer);
         } else {
@@ -386,9 +392,5 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
         }
         summary.updateLayer(catalog);
     }
-    
-    
 
 }
-
-

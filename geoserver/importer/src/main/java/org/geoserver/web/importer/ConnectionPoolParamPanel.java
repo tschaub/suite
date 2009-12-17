@@ -1,3 +1,7 @@
+/* Copyright (c) 2001 - 2007 TOPP - www.openplans.org. All rights reserved.
+ * This code is licensed under the GPL 2.0 license, available at the root
+ * application directory.
+ */
 package org.geoserver.web.importer;
 
 
@@ -7,6 +11,10 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
+/**
+ * Connection pool related parameter form
+ */
+@SuppressWarnings("serial")
 public class ConnectionPoolParamPanel extends Panel {
     int minConnection = 1;
     int maxConnection = 10;

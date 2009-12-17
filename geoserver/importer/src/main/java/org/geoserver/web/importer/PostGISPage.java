@@ -1,9 +1,12 @@
+/* Copyright (c) 2001 - 2007 TOPP - www.openplans.org. All rights reserved.
+ * This code is licensed under the GPL 2.0 license, available at the root
+ * application directory.
+ */
 package org.geoserver.web.importer;
 
-import static org.geotools.data.postgis.PostgisNGJNDIDataStoreFactory.*;
 import static org.geotools.data.postgis.PostgisNGDataStoreFactory.*;
+import static org.geotools.jdbc.JDBCJNDIDataStoreFactory.*;
 
-import java.io.File;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.Arrays;
@@ -29,13 +32,14 @@ import org.geoserver.web.GeoServerSecuredPage;
 import org.geoserver.web.wicket.ParamResourceModel;
 import org.geotools.data.DataAccess;
 import org.geotools.data.DataAccessFinder;
-import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFactorySpi;
-import org.geotools.data.directory.DirectoryDataStoreFactory;
 import org.geotools.data.postgis.PostgisNGDataStoreFactory;
 import org.geotools.data.postgis.PostgisNGJNDIDataStoreFactory;
-import org.geotools.jdbc.JDBCDataStoreFactory;
 
+/**
+ * Connection params form for the PostGIS database
+ * @author Andrea Aime - OpenGeo
+ */
 @SuppressWarnings("serial")
 public class PostGISPage extends GeoServerSecuredPage {
     /** The PostGIS connection types */

@@ -20,53 +20,65 @@ import org.geoserver.web.GeoServerApplication;
 import org.geoserver.web.GeoServerBasePage;
 import org.geoserver.web.wicket.ParamResourceModel;
 
+/**
+ * First page in the importer, the store chooser one that will redirect to the proper parameter
+ * collecting page
+ * 
+ * @author Andrea Aime - OpenGeo
+ */
+@SuppressWarnings("serial")
 public class StoreChooserPage extends GeoServerBasePage {
 
     public StoreChooserPage(PageParameters params) {
-        if("TRUE".equalsIgnoreCase((String) params.getString("afterCleanup")))
+        if ("TRUE".equalsIgnoreCase((String) params.getString("afterCleanup")))
             info(new ParamResourceModel("rollbackSuccessful", this).getString());
-        
+
         ListView storeLinks = new ListView("stores", Arrays.asList(Store.values())) {
-            
+
             @Override
             protected void populateItem(ListItem item) {
                 Store store = (Store) item.getModelObject();
-                BookmarkablePageLink link = new BookmarkablePageLink("storeLink", store.getDestinationPage());
+                BookmarkablePageLink link = new BookmarkablePageLink("storeLink", store
+                        .getDestinationPage());
                 link.add(new Label("storeName", store.getStoreName(StoreChooserPage.this)));
                 item.add(link);
-                item.add(new Label("storeDescription", store.getStoreDescription(StoreChooserPage.this)));
+                item.add(new Label("storeDescription", store
+                        .getStoreDescription(StoreChooserPage.this)));
                 Image icon = new Image("storeIcon", store.getStoreIcon());
-                icon.add(new AttributeModifier("alt", store.getStoreDescription(StoreChooserPage.this)));
+                icon.add(new AttributeModifier("alt", store
+                        .getStoreDescription(StoreChooserPage.this)));
                 item.add(icon);
             }
         };
         add(storeLinks);
     }
-    
+
     enum Store {
-        directory(new ResourceReference(GeoServerApplication.class, "img/icons/silk/folder.png"), DirectoryPage.class), 
-        postgis(new ResourceReference(GeoServerApplication.class, "img/icons/geosilk/database_vector.png"), PostGISPage.class);
-        
+        directory(new ResourceReference(GeoServerApplication.class, "img/icons/silk/folder.png"),
+                DirectoryPage.class), postgis(new ResourceReference(GeoServerApplication.class,
+                "img/icons/geosilk/database_vector.png"), PostGISPage.class);
+
         ResourceReference icon;
+
         Class destinationPage;
-        
+
         Store(ResourceReference icon, Class destinationPage) {
             this.icon = icon;
             this.destinationPage = destinationPage;
         }
-        
+
         IModel getStoreName(Component component) {
             return new ParamResourceModel(this.name() + "_name", component);
         }
-        
+
         IModel getStoreDescription(Component component) {
             return new ParamResourceModel(this.name() + "_description", component);
         }
-        
+
         ResourceReference getStoreIcon() {
             return icon;
         }
-        
+
         Class getDestinationPage() {
             return destinationPage;
         }

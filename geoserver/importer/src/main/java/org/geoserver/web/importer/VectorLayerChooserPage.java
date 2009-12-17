@@ -25,12 +25,21 @@ import org.geoserver.web.wicket.ParamResourceModel;
 import org.geoserver.web.wicket.GeoServerDataProvider.Property;
 import org.opengis.feature.type.Name;
 
+/**
+ * Allows to choose the vector layers that need to be imported
+ * 
+ * @author Andrea Aime - OpenGeo
+ */
 public class VectorLayerChooserPage extends GeoServerSecuredPage {
 
     GeoServerTablePanel<Resource> layers;
+
     boolean workspaceNew;
+
     boolean storeNew;
+
     private String wsName;
+
     private String storeName;
 
     public VectorLayerChooserPage(PageParameters params) {
@@ -38,21 +47,21 @@ public class VectorLayerChooserPage extends GeoServerSecuredPage {
         storeName = params.getString("store");
         storeNew = params.getBoolean("storeNew");
         workspaceNew = params.getBoolean("workspaceNew");
-        
+
         // if we don't find the store for any reason go back to the first page
         StoreInfo store = getCatalog().getDataStoreByName(wsName, storeName);
-        if(store == null) {
+        if (store == null) {
             error(new ParamResourceModel("storeNotFound", this, storeName, wsName));
             setResponsePage(StoreChooserPage.class);
         }
-        
+
         // check if we have anything to import
         LayerChooserProvider provider = new LayerChooserProvider(store.getId());
-        if(provider.size() <= 0) {
+        if (provider.size() <= 0) {
             error(new ParamResourceModel("storeEmpty", this, storeName, wsName));
             setResponsePage(StoreChooserPage.class);
         }
-        
+
         // build the GUI
         Form form = new Form("form", new CompoundPropertyModel(this));
         add(form);
@@ -62,25 +71,25 @@ public class VectorLayerChooserPage extends GeoServerSecuredPage {
             protected Component getComponentForProperty(String id, IModel itemModel,
                     Property<Resource> property) {
                 Resource resource = (Resource) itemModel.getObject();
-                if(property == LayerChooserProvider.TYPE) {
+                if (property == LayerChooserProvider.TYPE) {
                     return new Icon(id, resource.getIcon());
-                } else if(property == LayerChooserProvider.NAME) {
+                } else if (property == LayerChooserProvider.NAME) {
                     return new Label(id, property.getModel(itemModel));
                 }
                 return null;
             }
-            
+
         };
         layers.setFilterable(false);
         layers.selectAll();
         form.add(layers);
-        
+
         // submit
         SubmitLink submitLink = submitLink();
         form.add(submitLink);
         form.setDefaultButton(submitLink);
     }
-    
+
     SubmitLink submitLink() {
         return new SubmitLink("import") {
 
@@ -89,23 +98,26 @@ public class VectorLayerChooserPage extends GeoServerSecuredPage {
                 try {
                     // grab the selection
                     Set<Name> names = new java.util.HashSet<Name>();
-                    for(Resource r : layers.getSelection()) {
+                    for (Resource r : layers.getSelection()) {
                         names.add(r.getName());
                     }
-                    
+
                     // if nothing was selected we need to go back
-                    if(names.size() == 0) {
-                        error(new ParamResourceModel("selectionEmpty", VectorLayerChooserPage.this).getString());
+                    if (names.size() == 0) {
+                        error(new ParamResourceModel("selectionEmpty", VectorLayerChooserPage.this)
+                                .getString());
                         return;
                     }
-                    
+
                     DataStoreInfo store = getCatalog().getDataStoreByName(wsName, storeName);
 
                     // build and run the importer
-                    FeatureTypeImporter importer = new FeatureTypeImporter(store, null, names, getCatalog(),  workspaceNew, storeNew);
-                    ImporterThreadManager manager = (ImporterThreadManager) getGeoServerApplication().getBean("importerPool");
+                    FeatureTypeImporter importer = new FeatureTypeImporter(store, null, names,
+                            getCatalog(), workspaceNew, storeNew);
+                    ImporterThreadManager manager = (ImporterThreadManager) getGeoServerApplication()
+                            .getBean("importerPool");
                     String importerKey = manager.startImporter(importer);
-                    
+
                     setResponsePage(new ImportProgressPage(importerKey));
                 } catch (Exception e) {
                     LOGGER.log(Level.SEVERE, "Error while setting up mass import", e);
@@ -114,6 +126,5 @@ public class VectorLayerChooserPage extends GeoServerSecuredPage {
             }
         };
     }
-    
-    
+
 }

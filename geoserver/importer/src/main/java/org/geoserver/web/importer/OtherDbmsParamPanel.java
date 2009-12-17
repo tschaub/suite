@@ -1,3 +1,7 @@
+/* Copyright (c) 2001 - 2007 TOPP - www.openplans.org. All rights reserved.
+ * This code is licensed under the GPL 2.0 license, available at the root
+ * application directory.
+ */
 package org.geoserver.web.importer;
 
 
@@ -10,6 +14,11 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
+/**
+ * Other params form for databases: schema, loose bbox, pk metadata lookup table
+ *  
+ * @author Andrea Aime - OpenGeo
+ */
 @SuppressWarnings("serial")
 public class OtherDbmsParamPanel extends Panel {
     String schema;
