@@ -31,8 +31,8 @@
       <outputDirectory>webapps/geoexplorer</outputDirectory>
     </fileSet>
     <fileSet>
-      <directory>samples</directory>
-      <outputDirectory>webapps/samples</outputDirectory>
+      <directory>recipes</directory>
+      <outputDirectory>webapps/recipes</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>data_dir</directory>

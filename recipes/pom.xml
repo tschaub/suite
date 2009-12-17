@@ -12,7 +12,7 @@
  </parent>
 
  <groupId>org.opengeo</groupId>
- <artifactId>samples</artifactId>
+ <artifactId>recipes</artifactId>
  <packaging>pom</packaging>
  <name>OpenGeo Recipe Book</name>
 
