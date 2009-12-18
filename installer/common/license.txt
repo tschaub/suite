@@ -1,13 +1,13 @@
 The OpenGeo Suite: The premiere open source geospatial stack for data sharing, mapping, and online editing.
 
-Copyright (C) 2009 OpenGeo, the geospatial division of The Open Planning Project
+Copyright (C) 2010 OpenGeo, the geospatial division of The Open Planning Project
 http://opengeo.org/
 
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License following for more details.
 
-For latest contact information of OpenGeo see the website at http://opengeo.org/.  Current email is inquiry@opengeo.org and address is 349 W. 12th Street, New York, NY 10014.
+For latest contact information of OpenGeo see the website at http://opengeo.org/.  Current email is inquiry@opengeo.org and address is 148 Lafayette St, Floor 12, New York, NY 10013.
 
 ***************************************
 GNU GENERAL PUBLIC LICENSE

@@ -108,7 +108,7 @@ LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be ins
 
 ; Optional welcome text here
 !define MUI_WELCOMEPAGE_TEXT "Welcome to the OpenGeo Suite.\r\n\r\n\
-                              It is recommended that you close all other applications before starting Setup.\r\n\r\n\
+                              We recommended that you close all other applications before starting Setup.\r\n\r\n\
 	                          Click Next to continue."
 
 ; What to do when done
