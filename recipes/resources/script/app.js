@@ -398,12 +398,11 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
             this.currentRecipe = id;
             this.recipeFrame.setSrc(this.getRecipeUrl(id));
             this.recipeFrame.ownerCt.activate(this.recipeFrame);
-            if (this.recipeStore.getById(id).get("source")) {
+            var rec = this.recipeStore.getById(id);
+            if (rec && rec.get("source")) {
                 this.loadSource(id);
-                console.log("show", id);
                 this.sourcePanel.ownerCt.unhideTabStripItem(this.sourcePanel);
             } else {
-                console.log("hide", id);
                 this.sourcePanel.ownerCt.hideTabStripItem(this.sourcePanel);
             }
         }
