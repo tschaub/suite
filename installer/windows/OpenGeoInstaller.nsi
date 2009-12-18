@@ -566,6 +566,8 @@ Section "-Jetty" SectionJetty ; dash = hidden
   CreateDirectory $INSTDIR\icons
   SetOutPath $INSTDIR\icons
   File /a opengeo.ico
+  File /a opengeo-start.ico
+  File /a opengeo-stop.ico
   File /a uninstall.ico
  
  CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
@@ -858,8 +860,8 @@ Section "-StartStop" SectionStartStop
   ; Different shortcuts depending on install type
 
   ${If} $IsManual == 0 ; i.e. only if service install
-    CreateShortCut '$SMPROGRAMS\$STARTMENU_FOLDER\Start OpenGeo Suite.lnk' '"$INSTDIR\wrapper\wrapper.exe"' '"-t" "wrapper.conf"' '$INSTDIR\icons\opengeo.ico' 0
-    CreateShortCut '$SMPROGRAMS\$STARTMENU_FOLDER\Stop OpenGeo Suite.lnk' '"$INSTDIR\wrapper\wrapper.exe"' '"-p" "wrapper.conf"' '$INSTDIR\icons\opengeo.ico' 0
+    CreateShortCut '$SMPROGRAMS\$STARTMENU_FOLDER\Start OpenGeo Suite.lnk' '"$INSTDIR\wrapper\wrapper.exe"' '"-t" "wrapper.conf"' '$INSTDIR\icons\opengeo-start.ico' 0
+    CreateShortCut '$SMPROGRAMS\$STARTMENU_FOLDER\Stop OpenGeo Suite.lnk' '"$INSTDIR\wrapper\wrapper.exe"' '"-p" "wrapper.conf"' '$INSTDIR\icons\opengeo-stop.ico' 0
   ${EndIf}
 
   ${If} $IsManual == 1 ; i.e. only if manual install
@@ -876,11 +878,11 @@ Section "-StartStop" SectionStartStop
 
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Start OpenGeo Suite.lnk" \
                    "$INSTDIR\startsuite.bat" \
-                   "" "$INSTDIR\icons\opengeo.ico" 0 SW_SHOWMINIMIZED
+                   "" "$INSTDIR\icons\opengeo-start.ico" 0 SW_SHOWMINIMIZED
 
     CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Stop OpenGeo Suite.lnk" \
                    "$INSTDIR\stopsuite.bat" \
-                   "" "$INSTDIR\icons\opengeo.ico" 0 SW_SHOWMINIMIZED
+                   "" "$INSTDIR\icons\opengeo-stop.ico" 0 SW_SHOWMINIMIZED
 
   ${EndIf}
 
