@@ -28,9 +28,9 @@
             }
         </style>
         <script src="../externals/openlayers/build/OpenLayers.js"></script>
-        <script src="snap-split.js" id="snap-split.js"></script>
+        <script src="snap-split.js"></script>
     </head>
-    <body onload="init()">
+    <body onload="init()" class="recipe-body">
         <h1>Snapping &amp; Splitting Example</h1>
         <div class="description">
             A demonstration snapping and splitting while editing vector features.
@@ -66,7 +66,6 @@
             </table>
             <br />
             <button id="clear">clear</button> Clear all features.
-            <div class="code" title="snap-split.js"></div>
         </div>
         <script>
             /**

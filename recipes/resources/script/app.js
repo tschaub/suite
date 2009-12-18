@@ -88,8 +88,15 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
         this.recipeStore = new Ext.ux.data.PagingJsonStore({
             url: this.index,
             root: "recipes",
-            autoLoad: {params: {start: 0, limit: 5}},
-            fields: ["id", "title", "description", "components"],
+            autoLoad: {params: {start: 0, limit: 10}},
+            fields: [
+                "id",
+                "title",
+                "description",
+                "components",
+                {name: "source", type: "boolean", defaultValue: true}
+            ],
+            idIndex: 0,
             listeners: {
                 load: done
             }
@@ -132,6 +139,8 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
         Ext.QuickTips.init();
         this.initRecipeList();
         this.initRecipeFrame();
+        this.initSourcePanel();
+        this.initReferencePanel();
         
         this.viewport = new Ext.Viewport({
             layout: "border",
@@ -198,7 +207,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                         bbar: new Ext.PagingToolbar({
                             store: this.recipeStore,
                             displayInfo: false,
-                            pageSize: 5
+                            pageSize: 10
                         }),
                         listeners: {
                             render: function(cmp) {
@@ -210,7 +219,22 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
             }, {
                 region: "center",
                 cls: "entry",
-                items: [this.recipeFrame]
+                height: "100%",
+                layout: "fit",
+                unstyled: true,
+                items: [{
+                    xtype: "tabpanel",
+                    border: false,
+                    plain: true,
+                    activeTab: 0,
+                    height: "100%",
+                    autoScroll: true,
+                    items: [
+                        this.recipeFrame,
+                        this.sourcePanel,
+                        this.referencePanel
+                    ]
+                }]
             }],
             listeners: {
                 afterrender: {
@@ -270,17 +294,32 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
     
     initRecipeFrame: function() {
         this.recipeFrame = new Ext.ux.ManagedIFrame.Component({
+            title: "Demo",
             focusOnLoad: true,
             listeners: {
                 domready: function() {
                     var doc = this.recipeFrame.getFrameDocument();
                     this.configureRecipeLinks(doc);
-                    this.configureCodeBlocks(doc);
                 },
                 scope: this                
             }
         });
         
+    },
+    
+    initSourcePanel: function() {
+        this.sourcePanel = new Ext.Panel({
+            title: "Source",
+            height: "100%",
+            autoScroll: true
+        });
+    },
+    
+    initReferencePanel: function() {
+        this.referencePanel = new Ext.Panel({
+            title: "Reference",
+            html: "links to additional docs go here"
+        });
     },
     
     configureRecipeLinks: function(root) {
@@ -321,26 +360,12 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
         }, this);
     },
     
-    fetchCodeSample: function(script, callback) {
-        var str = script.innerHTML;
-        if (str) {
-            callback(str);
-        } else {
-            Ext.Ajax.request({
-                disableCaching: false,
-                url: script.src,
-                success: function(req) {
-                    callback(req.responseText);
-                },
-                failure: function() {
-                    callback("Code request failed.");
-                }
-            });
-        }
-    },
-    
     getRecipeUrl: function(id) {
         return this.recipeBase + "/" + id + ".html";
+    },
+    
+    getSourceUrl: function(id) {
+        return this.recipeBase + "/" + id + ".js";
     },
     
     selectRecipe: function(id) {
@@ -360,8 +385,75 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
         if (id !== this.currentRecipe) {
             this.currentRecipe = id;
             this.recipeFrame.setSrc(this.getRecipeUrl(id));
+            this.recipeFrame.ownerCt.activate(this.recipeFrame);
+            if (this.recipeStore.getById(id).get("source")) {
+                this.loadSource(id);
+                console.log("show", id);
+                this.sourcePanel.ownerCt.unhideTabStripItem(this.sourcePanel);
+            } else {
+                console.log("hide", id);
+                this.sourcePanel.ownerCt.hideTabStripItem(this.sourcePanel);
+            }
         }
         this.selectRecipe(id);
+    },
+    
+    loadSource: function(id) {
+        var loadedId;
+        this.sourcePanel.purgeListeners();
+        this.sourcePanel.on({
+            activate: function(panel) {
+                if (id !== loadedId) {
+                    Ext.Ajax.request({
+                        url: this.getSourceUrl(id),
+                        disableCaching: false,
+                        success: function(request) {
+                            
+                            // highlight.js requires div > pre > code
+                            var div = document.createElement("div");
+                            Ext.DomHelper.append(div, {
+                                tag: "pre",
+                                children: [{
+                                    tag: "code",
+                                    cls: "javascript",
+                                    html: request.responseText
+                                }]
+                            });
+                            hljs.highlightBlock(div.firstChild.firstChild);
+                            
+                            panel.removeAll();
+                            panel.add({
+                                xtype: "box",
+                                height: "100%",
+                                autoEl: {
+                                    tag: "pre",
+                                    children: [{
+                                        tag: "code",
+                                        cls: "javascript",
+                                        html: div.firstChild.firstChild.innerHTML
+                                    }]
+                                }
+                            });
+                            panel.doLayout();
+                            loadedId = id;
+                        },
+                        failure: function() {
+                            panel.removeAll();
+                            panel.add({
+                                xtype: "box",
+                                autoEl: {
+                                    html: "Unable to load source for " + id
+                                }
+                            });
+                            panel.doLayout();
+                        },
+                        scope: this
+                    });
+                }
+            },
+            scope: this
+        });
+
     },
 
     dispatch: function(functions, complete, scope) {

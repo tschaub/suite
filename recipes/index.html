@@ -4,15 +4,21 @@
 
         <link rel="stylesheet" type="text/css" href="externals/ext/resources/css/ext-all.css" />
         <link rel="stylesheet" type="text/css" href="externals/ext/resources/css/xtheme-gray.css" />
-        <script type="text/javascript" src="externals/ext/adapter/ext/ext-base.js"></script>
-        <script type="text/javascript" src="externals/ext/ext-all.js"></script>
+        <script src="externals/ext/adapter/ext/ext-base.js"></script>
+        <script src="externals/ext/ext-all.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="externals/highlight/styles/idea.css" />
+        <script src="externals/highlight/highlight.pack.js"></script>
 
         <link rel="stylesheet" type="text/css" href="resources/theme/style.css" />
-        <script type="text/javascript" src="resources/script/PagingStore.js"></script>
-        <script type="text/javascript" src="resources/script/miframe.js"></script>
-        <script type="text/javascript" src="resources/script/app.js"></script>
+        <script src="resources/script/PagingStore.js"></script>
+        <script src="resources/script/miframe.js"></script>
+        <script src="resources/script/app.js"></script>
+
+
         <script type="text/javascript">
             Ext.BLANK_IMAGE_URL = "externals/ext/resources/images/default/s.gif";
+            hljs.initHighlighting();
             var app = new og.Recipes({
                 index: "recipes/index.json",
                 startRecipe: "index"

@@ -52,11 +52,15 @@ a, a:visited {
 }
 
 .entry {
-    padding: 1.5em;
-    background-color: white;
+    /*padding: 0 1.5em;*/
+    /*background-color: white;*/
 }
 
 /* selectors for individual recipes */
+
+body.recipe-body {
+    margin: 1em;
+}
 
 .description {
     margin: 1em 0 1em 0;
@@ -70,11 +74,7 @@ a, a:visited {
     height: 256px;
 }
 
-.code-panel {
-    margin: 1em 0.5em;
-}
-
-.code-panel pre {
-    margin: 1em;
+pre code {
+    padding: 1em;
     font-size: 0.9em;
 }
