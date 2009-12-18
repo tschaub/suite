@@ -94,6 +94,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                 "title",
                 "description",
                 "components",
+                "reference",
                 {name: "source", type: "boolean", defaultValue: true}
             ],
             idIndex: 0,
@@ -140,7 +141,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
         this.initRecipeList();
         this.initRecipeFrame();
         this.initSourcePanel();
-        this.initReferencePanel();
+        this.initReferenceFrame();
         
         this.viewport = new Ext.Viewport({
             layout: "border",
@@ -241,10 +242,11 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                     activeTab: 0,
                     height: "100%",
                     autoScroll: true,
+                    deferredRender: false,
                     items: [
                         this.recipeFrame,
                         this.sourcePanel,
-                        this.referencePanel
+                        this.referenceFrame
                     ]
                 }]
             }],
@@ -327,10 +329,10 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
         });
     },
     
-    initReferencePanel: function() {
-        this.referencePanel = new Ext.Panel({
+    initReferenceFrame: function() {
+        this.referenceFrame = new Ext.ux.ManagedIFrame.Component({
             title: "Reference",
-            html: "links to additional docs go here"
+            focusOnLoad: true
         });
     },
     
@@ -380,6 +382,11 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
         return this.recipeBase + "/" + id + ".js";
     },
     
+    getReferenceUrl: function(id) {
+        var rec = this.recipeStore.getById(id);
+        return this.recipeBase + "/" + rec.get("reference") + ".html";
+    },
+
     selectRecipe: function(id) {
         var index = this.recipeStore.findExact("id", id);
         if (index >= 0) {
@@ -396,14 +403,22 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
         window.location.hash = "#" + id;
         if (id !== this.currentRecipe) {
             this.currentRecipe = id;
-            this.recipeFrame.setSrc(this.getRecipeUrl(id));
+            this.sourcePanel.removeAll();
             this.recipeFrame.ownerCt.activate(this.recipeFrame);
+            this.recipeFrame.setSrc(this.getRecipeUrl(id));
             var rec = this.recipeStore.getById(id);
             if (rec && rec.get("source")) {
                 this.loadSource(id);
                 this.sourcePanel.ownerCt.unhideTabStripItem(this.sourcePanel);
             } else {
                 this.sourcePanel.ownerCt.hideTabStripItem(this.sourcePanel);
+            }
+            if (rec && rec.get("reference")) {
+                this.referenceFrame.ownerCt.unhideTabStripItem(this.referenceFrame);
+                this.referenceFrame.setSrc(this.getReferenceUrl(id));
+            } else {
+                this.referenceFrame.setSrc("about:blank");
+                this.referenceFrame.ownerCt.hideTabStripItem(this.referenceFrame);
             }
         }
         this.selectRecipe(id);

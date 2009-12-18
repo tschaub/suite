@@ -21,8 +21,15 @@ a, a:visited {
 
 .header {
     height: 30px;
-    padding: 0.5em;
+    padding: 0.5em 50px;
     font-size: 1.5em;
+    background-image: url(img/opengeo-32.png);
+    background-repeat: no-repeat;
+    background-position: 10px 12px;
+}
+
+.header h1 a {
+    color: #333333;
 }
 
 .west {
@@ -56,9 +63,9 @@ a, a:visited {
     /*background-color: white;*/
 }
 
-/* selectors for individual recipes */
+/* selectors for individual recipes and reference docs */
 
-body.recipe-body {
+body.reference-body, body.recipe-body {
     margin: 1em;
 }
 

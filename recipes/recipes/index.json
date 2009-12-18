@@ -43,6 +43,7 @@
         "id": "snap-split",
         "title": "Snapping & Splitting",
         "description": "Learn how to enable snapping and splitting while editing features in OpenLayers.",
-        "components": ["OpenLayers"]
+        "components": ["OpenLayers"],
+        "reference": "snap-split-ref"
     }]
 }
