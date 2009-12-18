@@ -25,13 +25,13 @@ a, a:visited {
     font-size: 1.5em;
 }
 
-.search {
+.west {
     width: 300px;
     font-size: 0.9em;
 }
 
 .searchbox {
-    padding: 1em;
+    padding: 1em 1em 0 1em;
 }
 
 .index .recipe {

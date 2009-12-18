@@ -156,64 +156,76 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                 }
             }, {
                 region: "west",
-                cls: "search",
-                layout: "fit",
-                items: [{
-                    xtype: "panel",
-                    border: false,
-                    autoScroll: true,
+                xtype: "tabpanel",
+                cls: "west",    
+                border: true,
+                plain: true,
+                activeTab: 0,
+                height: "100%",
+                autoScroll: true,
+                items:[{
+                    title: "Contents",
+                    html: "A tree like table of contents could go here."
+                }, {
+                    title: "Search",
+                    layout: "fit",
                     items: [{
-                        xtype: "container",
-                        cls: "searchbox",
+                        xtype: "panel",
+                        border: false,
+                        autoScroll: true,
                         items: [{
-                            xtype: "textfield",
-                            width: "100%",
-                            emptyText: "search for recipes",
-                            enableKeyEvents: true,
-                            listeners: {
-                                keyup: function(field) {
-                                    var value = field.getValue();
-                                    this.query.keywords = value;
-                                    this.filterRecipes();
-                                },
-                                scope: this
-                            }
-                        }, {
-                            xtype: "fieldset",
-                            style: "margin-top: 0.5em;",
-                            collapsible: true,
-                            title: "Components",
-                            collapsed: true,
-                            layout: "column",
-                            columns: 2,
-                            defaults: {
-                                xtype: "checkbox",
-                                hideLabel: true,
-                                columnWidth: '0.5',
+                            xtype: "container",
+                            cls: "searchbox",
+                            items: [{
+                                xtype: "textfield",
+                                width: "100%",
+                                emptyText: "search for recipes",
+                                enableKeyEvents: true,
                                 listeners: {
-                                    check: function(box, checked) {
-                                        this.query.components[box.getName()] = checked;
+                                    keyup: function(field) {
+                                        var value = field.getValue();
+                                        this.query.keywords = value;
                                         this.filterRecipes();
                                     },
                                     scope: this
                                 }
-                            },
-                            items: [this.createComponentCheckboxes()]
-                        }]
-                    }, {
-                        xtype: "panel",
-                        border: false,
-                        items: [this.recipeList],
-                        bbar: new Ext.PagingToolbar({
-                            store: this.recipeStore,
-                            displayInfo: false,
-                            pageSize: 10
-                        }),
-                        listeners: {
-                            render: function(cmp) {
-                                cmp.toolbars[0].refresh.hide();
+                            }, {
+                                xtype: "fieldset",
+                                style: "margin-top: 0.5em;",
+                                collapsible: true,
+                                title: "Components",
+                                collapsed: true,
+                                layout: "column",
+                                columns: 2,
+                                defaults: {
+                                    xtype: "checkbox",
+                                    hideLabel: true,
+                                    columnWidth: '0.5',
+                                    listeners: {
+                                        check: function(box, checked) {
+                                            this.query.components[box.getName()] = checked;
+                                            this.filterRecipes();
+                                        },
+                                        scope: this
+                                    }
+                                },
+                                items: [this.createComponentCheckboxes()]
+                            }]
+                        }, {
+                            xtype: "panel",
+                            border: false,
+                            items: [this.recipeList],
+                            bbar: new Ext.PagingToolbar({
+                                store: this.recipeStore,
+                                displayInfo: false,
+                                pageSize: 10
+                            }),
+                            listeners: {
+                                render: function(cmp) {
+                                    cmp.toolbars[0].refresh.hide();
+                                }
                             }
-                        }
+                        }]
                     }]
                 }]
             }, {
