@@ -18,4 +18,4 @@ function init() {
     // set the map location
     map.zoomToMaxExtent();
 
-};
+}

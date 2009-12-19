@@ -9,7 +9,8 @@
         "id": "advanced",
         "title": "Advanced Recipe",
         "description": "This recipe describes how to do magic with the Suite.",
-        "components": ["GeoServer", "OpenLayers", "GeoWebCache", "GeoExt"]
+        "components": ["GeoServer", "OpenLayers", "GeoWebCache", "GeoExt"],
+        "source": false
     }, {
         "id": "bogus1",
         "title": "Bogus Recipe 1",
@@ -21,24 +22,6 @@
         "title": "Bogus Recipe 2",
         "description": "This recipe describes how to use GeoWebCache.",
         "components": ["GeoWebCache"],
-        "source": false
-    }, {
-        "id": "bogus3",
-        "title": "Bogus Recipe 3",
-        "description": "This recipe describes how to use OpenLayers and GeoExt.",
-        "components": ["OpenLayers", "GeoExt"],
-        "source": false
-    }, {
-        "id": "bogus4",
-        "title": "Bogus Recipe 4",
-        "description": "This recipe describes how to use GeoServer.",
-        "components": ["GeoServer"],
-        "source": false
-    }, {
-        "id": "bogus5",
-        "title": "Bogus Recipe 5",
-        "description": "This recipe describes how to use GeoServer and GeoWebCache.",
-        "components": ["GeoServer", "GeoWebCache"],
         "source": false
     }, {
         "id": "snap-split",
