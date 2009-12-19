@@ -1,9 +1,10 @@
 {
     "recipes": [{
-        "id": "basic",
-        "title": "Basic Recipe",
-        "description": "This recipe describes how to use the Suite.",
-        "components": ["GeoServer", "OpenLayers", "GeoExt"]
+        "id": "map",
+        "title": "Basic Map",
+        "description": "This recipe describes how to add a map to any web page.",
+        "components": ["OpenLayers"],
+        "reference": "map-ref"
     }, {
         "id": "advanced",
         "title": "Advanced Recipe",
