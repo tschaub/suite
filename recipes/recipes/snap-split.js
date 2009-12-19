@@ -117,9 +117,6 @@ function init() {
     
     map.addControl(new OpenLayers.Control.MousePosition());
     
-    // add behavior to checkboxes and other page elements
-    initUI();
-    
     map.zoomToMaxExtent();
 }
 

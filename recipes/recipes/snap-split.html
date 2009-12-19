@@ -29,8 +29,11 @@
         </style>
         <script src="../externals/openlayers/build/OpenLayers.js"></script>
         <script src="snap-split.js"></script>
+        <script>
+            OpenLayers.ImgPath = "../externals/openlayers/img/";
+        </script>
     </head>
-    <body onload="init()" class="recipe-body">
+    <body onload="init(); initUI();" class="recipe-body">
         <h1>Snapping &amp; Splitting Example</h1>
         <div class="description">
             A demonstration snapping and splitting while editing vector features.
