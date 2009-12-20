@@ -22,4 +22,5 @@ if [ "$GDD" == "" ]; then
   GDD=`pwd`/data_dir
 fi
 
-exec "$_RUNJAVA" -DGEOSERVER_DATA_DIR="$GDD" -Djava.awt.headless=true -DSTOP.PORT=8079 -DSTOP.KEY=opengeo -cp og_start.jar:start.jar:lib/ini4j-0.5.1.jar org.opengeo.jetty.Start
+exec "$_RUNJAVA" -DGEOSERVER_DATA_DIR="$GDD" -Djava.awt.headless=true -DSTOP.PORT=8079 -DSTOP.KEY=opengeo -jar start.jar 
+
