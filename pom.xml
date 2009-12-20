@@ -67,6 +67,11 @@
   </dependency>
   <dependency>
    <groupId>org.mortbay.jetty</groupId>
+   <artifactId>jetty-start</artifactId>
+   <version>${jetty.version}</version>
+  </dependency>
+  <dependency>
+   <groupId>org.mortbay.jetty</groupId>
    <artifactId>jetty-naming</artifactId>
    <version>${jetty.version}</version>
   </dependency>
@@ -123,20 +128,10 @@
   <module>styler</module>
   <module>geoexplorer</module>
   <module>dashboard</module>
+  <module>jetty</module>
  </modules>
 
  <profiles>
-   <profile>
-     <id>jetty</id>
-     <activation>
-       <property>
-         <name>full</name>
-        </property>
-      </activation>
-     <modules>
-       <module>jetty</module>
-     </modules>
-   </profile>
    <profile>
      <id>docs</id>
      <activation>

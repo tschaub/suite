@@ -10,11 +10,16 @@
  </parent>
 
  <groupId>org.opengeo</groupId>
- <artifactId>jetty</artifactId>
+ <artifactId>og-jtty</artifactId>
  <packaging>jar</packaging>
  <name>OpenGeo Suite Jetty Module</name>
 
  <dependencies>
+  <dependency>
+    <groupId>org.ini4j</groupId>
+    <artifactId>ini4j</artifactId>
+    <version>0.5.1</version>
+  </dependency>
   <dependency>
    <groupId>org.mortbay.jetty</groupId>
    <artifactId>jetty</artifactId>
@@ -22,6 +27,10 @@
   <dependency>
    <groupId>org.mortbay.jetty</groupId>
    <artifactId>jetty-util</artifactId>
+  </dependency>
+  <dependency>
+   <groupId>org.mortbay.jetty</groupId>
+   <artifactId>jetty-start</artifactId>
   </dependency>
   <dependency>
    <groupId>tomcat</groupId>
@@ -98,7 +107,7 @@
         </execution>
       </executions>
     </plugin>
-	<plugin>
+    <plugin>
        <artifactId>maven-antrun-plugin</artifactId>
        <dependencies>
           <dependency>
