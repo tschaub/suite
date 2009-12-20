@@ -10,7 +10,7 @@
  </parent>
 
  <groupId>org.opengeo</groupId>
- <artifactId>og-jtty</artifactId>
+ <artifactId>og-jetty</artifactId>
  <packaging>jar</packaging>
  <name>OpenGeo Suite Jetty Module</name>
 
