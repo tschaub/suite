@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ ! -e "`pwd`/start.jar" ]; then
+if [ ! -e "`pwd`/og-jetty.jar" ]; then
   echo "This script must be run from the root of the OpenGeo suite distribution."
   exit
 fi
@@ -22,5 +22,4 @@ if [ "$GDD" == "" ]; then
   GDD=`pwd`/data_dir
 fi
 
-exec "$_RUNJAVA" -DGEOSERVER_DATA_DIR="$GDD" -Djava.awt.headless=true -DSTOP.PORT=8079 -DSTOP.KEY=opengeo -jar start.jar 
-
+exec "$_RUNJAVA" -DGEOSERVER_DATA_DIR="$GDD" -Djava.awt.headless=true -DSTOP.PORT=8079 -DSTOP.KEY=opengeo -cp og-jetty.jar:jetty-start.jar:lib/ini4j-0.5.1.jar org.opengeo.jetty.Start
