@@ -30,7 +30,7 @@ og.util = {
         }
     }, 
     
-    /** method[loadConfig]
+    /** private: method[loadConfig]
      *  :arg url: ``String``
      *  :returns: ``Object`` A config object.
      *
@@ -40,7 +40,7 @@ og.util = {
         return this.parseConfig(this.loadSync(url));
     }, 
     
-    /** method[loadConfig]
+    /** private: method[loadConfig]
      *  :arg filename: ``String``
      *  :returns: ``Object`` A config object.
      *
@@ -64,7 +64,7 @@ og.util = {
         return this.parseConfig(config.read().toString());
     }, 
     
-    /** method[loadConfig]
+    /** private: method[loadConfig]
      *  :arg url: ``String``
      *  :returns: ``Object`` A config object.
      *
@@ -105,12 +105,89 @@ og.util = {
                 }
             }
         }
+        
+        config['defaults'] = defaults;
         return config;
+    }, 
+    
+    /** api: method[saveConfig]
+     *  :arg config: ``Object``
+     *
+     *  Saves the current config to config.ini in the users home directory.
+     */
+    saveConfig: function(config) {
+        this.tirun(function() {
+            var fs = Titanium.Filesystem;
+            var sep = fs.getSeparator();
+            var file = fs.getFileStream(fs.getUserDirectory() +sep+ ".opengeo" +sep+ "config.ini");
+            if (file.open(fs.MODE_WRITE) == true) {
+                for (section in config) {
+                    if (section != "defaults") {
+                        file.writeLine("["+section+"]");
+                    }
+                    
+                    for (key in config[section]) {
+                        //if the key has a default key only write it 
+                        // out if its value is different
+                        if (section != "defaults" && key in config["defaults"]
+                            && config[section][key] == config["defaults"][key]) {
+                            continue;
+                        }
+                        
+                        file.writeLine(key + "=" + config[section][key]);
+                    }
+                    file.writeLine(" ");
+                }
+                file.close();
+            }
+            else {
+                Ext.Msg.alert("Warning", "Could not write to " + file.toString());
+            }
+
+        }, config);
+    }, 
+    
+    /**
+     * api: method[tirun]
+     *  :arg f: ``Function`` The function to execute.
+     *  :arg scope: ``Object`` The function execution scope.
+     *  :arg fallback: ``Function`` An optional function to execute if titanium is 
+     *     not available.
+     *
+     * Executes a function if running in the titanium environment.
+     */
+    tirun: function(f, scope, fallback) {
+        if (window.Titanium) {
+            return f.call(scope);
+        }
+        else {
+            if (fallback) {
+                return fallback.call(scope);
+            }
+            else {
+                Ext.Msg.alert("Warning", "Titanium is required for this action.");                
+            }
+        }
     }
     
 };
 
-og.Dashboard = Ext.extend(Ext.util.Observable, {
+/**
+ * Separates out platform spcefic properties and operations.
+ * 
+ */
+og.platform = {
+    Darwin: {
+        startSuite: function(exe) {
+            var p = Titanium.Process.createProcess({
+                args: ["open", exe]
+            });
+            p.launch();
+        },
+    }, 
+};
+
+og.Suite = Ext.extend(Ext.util.Observable, {
     
     /** api: property[statusInterval]
      *  ``Number``
@@ -118,19 +195,178 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
      */
     statusInterval: 5000,
     
+    /**
+     * api: property[config]
+     * ``Object``
+     * The dashboard configuration.
+     */
+    config: {},
+    
+    /** api: property[status]
+     *  ``Number``
+     *  The HTTP status code for the service this depends on.  Unset by
+     *  default.
+     */
+    status: -1, 
+    
+    /**
+     * api: property[online]
+     *  ``Boolean``
+     *  Flag indicating if the suite is running. True if the suite is running,
+     *  false if the suite is not running, and null if the state is unknown.
+     */
+    online: null,
+    
+    constructor: function(config) {
+        Ext.apply(this.config, config);
+        
+        this.addEvents(
+            /** api: event[changed]
+             *  Fired when the service status changes.  Listeners will be called
+             *  with two arguments, the new status and old status codes.
+             */
+            "changed", 
+            
+            /** api: event[starting]
+             *
+             *  Fired when the suite is starting up.
+             */
+            "starting", 
+            
+            /** api: event[started]
+             *
+             *  Fired when the suite has started.
+             */
+            "started", 
+          
+            /** api: event[starting]
+             *
+             *  Fired when the suite is shuttind down.
+             */
+            "stopping", 
+            
+            /** api: event[stopped]
+             *
+             *  Fired when the suite has been stopped.
+             */
+            "stopped"  
+        );
+        this.on({
+            changed: function(newStatus, oldStatus) {
+                if (newStatus >= 200 && newStatus < 300) {
+                    //online
+                    this.fireEvent("started");
+                }
+                else {
+                    //offline
+                    this.fireEvent("stopped");
+                }
+            },
+            scope: this
+        });
+    }, 
+    
+    /**
+     * api: method[run]
+     *
+     * Starts the opengeo suite monitor.
+     */
+    run: function() {
+        window.setInterval(
+            this.monitor.createDelegate(this),
+            this.statusInterval
+        );
+        this.monitor();
+    }, 
+    
+    /**
+     * private: method[monitor]
+     * 
+     * Monitors the status of the suite.
+     */
+    monitor: function() {
+        var port = this.config.start_port || "80";
+        var url = "http://" + this.config.host + ":" + port + "/geoserver"
+        var client = new XMLHttpRequest();
+        client.open("HEAD", url);
+        client.onreadystatechange = (function() {
+            if(client.readyState === 4) {
+                var status = parseInt(client.status, 10);
+                if (status !== this.status) {
+                    this.fireEvent("changed", status, this.status);
+                }
+                this.status = status;
+            }
+        }).createDelegate(this);
+        client.send();
+    },
+    
+    /**
+     * api: method[start]
+     *
+     * Starts the suite.
+     */
+    start: function() {
+        this.fireEvent("starting");
+       
+        og.util.tirun(
+            function() {
+                sys = og.platform[Titanium.Platform.name]
+                sys.startSuite(this.config.exe);
+            }, 
+            this, 
+            function() {
+            }
+        );
+        
+        this.online = true;
+    }, 
+    
+    /**
+     * api: method[stop]
+     * 
+     * Stops the suite.
+     */
+    stop: function() {
+        this.fireEvent("stopping");
+        
+        og.util.tirun(function() {
+            var sep = Titanium.Filesystem.getSeparator();
+            var jar = Titanium.App.home +sep+ "Resources" +sep+ "jetty-start.jar";
+            
+            var p = Titanium.Process.createProcess({
+                args:['java', '-DSTOP.PORT='+this.config.stop_port, 
+                    '-DSTOP.KEY=opengeo', '-jar', jar, '--stop']
+            });
+            p.launch();
+        }, this);
+        
+        this.online = false;
+    }
+});
+
+og.Dashboard = Ext.extend(Ext.util.Observable, {
+    
     /** api: property[debug]
      *  ``Boolean``
      *  Run in debug mode (useful when services are not running on same origin).
      *  Default is false.
      */
     debug: false,
-    
-    /** api: property[status]
-     *  ``Number``
-     *  The HTTP status code for the service this depends on.  Assume 200 by
-     *  default.
+
+    /**
+     * api: property[config]
+     * ``Object``
+     * The dashboard configuration.
      */
-    status: 200,
+    config: {},
+    
+    /**
+     * private: property[configDirty]
+     *  ``Boolean``
+     * Flag to track if the configuration has been changed.
+     */
+    configDirty: false,
     
     constructor: function(config) {
         
@@ -139,42 +375,64 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         if (str) {
             Ext.apply(config, Ext.urlDecode(str));
         }
-        Ext.apply(this, config);
         this.initialConfig = config;
+        Ext.apply(this.config, config);
         
-        this.addEvents(            
-            /** api: event[statuschanged]
-             *  Fired when the service status changes.  Listeners will be called
-             *  with two arguments, the new status and old status codes.
-             */
-            "statuschanged"
-        );
-        
-        this.startStatusMonitor();
-
-        og.Dashboard.superclass.constructor.call(this);
-        
-        Ext.onReady(this.createViewport, this);
-        
-        this.on({
-            statuschanged: function(newStatus, oldStatus) {
-                if (newStatus >= 200 && newStatus < 300) {
-                    this.hideStatusWarning();
-                } else {
-                    this.showStatusWarning();
+        this.suite = new og.Suite(config.suite);
+        this.suite.on({
+            starting: function() {
+                 if (!this.startingWindow) {
+                     this.startingWindow = new Ext.Window({
+                         modal: true,
+                         closable: false,
+                         html: og.util.loadSync("app/markup/status/starting.html")
+                     });
+                 }
+                 this.startingWindow.show();
+            }, 
+            scope: this
+        });
+        this.suite.on({
+            started: function() {
+                this.message("The OpenGeo Suite is online.");
+                if (this.startingWindow && this.startingWindow.rendered) {
+                    this.startingWindow.hide();
+                }
+            }, 
+            scope: this
+        });
+        this.suite.on({
+            stopping: function() {
+                if (!this.stoppingWindow) {
+                    this.stoppingWindow = new Ext.Window({
+                         modal: true,
+                         closable: false,
+                         html: og.util.loadSync("app/markup/status/stopping.html")
+                    });
+                }
+                this.stoppingWindow.show();
+            }, 
+            scope: this
+        });
+        this.suite.on({
+            stopped: function() {
+                this.message("The OpenGeo Suite is offline.");
+                if (this.stoppingWindow && this.stoppingWindow.rendered) {
+                    this.stoppingWindow.hide();
+                }
+                
+                //if the current config is dirty, update the suite config
+                if (this.configDirty == true) {
+                    Ext.apply(this.suite.config, this.config.suite);
+                    this.configDirty = false;
                 }
             },
             scope: this
         });
+
+        og.Dashboard.superclass.constructor.call(this);
         
-    },
-    
-    startStatusMonitor: function() {
-        window.setInterval(
-            this.monitorStatus.createDelegate(this),
-            this.statusInterval
-        );
-        this.monitorStatus();
+        Ext.onReady(this.createViewport, this);
     },
     
     createViewport: function() {
@@ -189,10 +447,19 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             }
         };
         
+        var statusPanelListeners = {
+            render: {
+                fn: this.afterStatusPanelRender,
+                scope: this,
+                delay: 1
+            }
+        };
+        
         this.viewport = new Ext.Viewport({
-            layout: "fit",
+            layout: "border",
             items: [{
                 xtype: "grouptabpanel",
+                region: "center", 
                 tabWidth: 130,
                 activeGroup: 0,
                 items: [{
@@ -258,14 +525,100 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         id: "app-panels-opengeo-contact",
                         listeners: dashPanelListeners
                     }]
+                }, {
+                    defaults: {border: false, autoScroll: true},
+                    items: [{
+                        defaults: {border: false, autoScroll: true},
+                        title: "Preferences", 
+                        tabTip: "Configure the OpenGeo Suite",
+                        cls: "dash-panel",
+                        id: "app-panels-pref",
+                        items: [
+                            this.createPrefPanel() 
+                        ]
+                    }]
                 }]
-            }]
+            }, {
+                xtype: "box",
+                region: "south",
+                id: "app-panels-status",
+                autoEl: {
+                    tag: "div",
+                    html: og.util.loadSync("app/markup/status/main.html")
+                },
+                listeners: statusPanelListeners
+            }], 
+            listeners: {
+                render: {
+                    fn: function() {
+                        this.suite.run();
+                    }, 
+                    scope: this,
+                    delay: 1
+                }
+            }
         });
         
         // parse hash to activate relevant tab
         this.openPanel(window.location.hash.substring(1));
 
     },
+    
+    createPrefPanel: function() {
+        this.prefPanel = new Ext.FormPanel({
+            region: "center",
+            cls: "dash-panel",
+            buttonAlign: "left",
+            items: [{
+                xtype: "textfield", 
+                fieldLabel: "Suite Executable", 
+                name: "exe", 
+                width: 250,
+                value: this.config.suite.exe
+            }, { 
+                xtype: "textfield",
+                fieldLabel: "Start Port",
+                name: "start_port",
+                value: this.config.suite.start_port
+            }, {
+                xtype: "textfield",
+                fieldLabel: "Shutdown Port",
+                name: "stop_port",
+                value: this.config.suite.stop_port
+            }],
+            buttons: [{
+                text: "Save",
+                handler: function(btn, evt) {
+                    this.config.suite.exe = 
+                        this.prefPanel.getForm().findField('exe').getValue();
+                    this.config.suite.start_port = 
+                        this.prefPanel.getForm().findField('start_port').getValue();
+                    this.config.suite.stop_port = 
+                        this.prefPanel.getForm().findField('stop_port').getValue();
+
+                    og.util.saveConfig(this.config, 'config.ini');
+                    this.message("Configuration saved.");
+                    
+                    //if the suite is running then we need to keep the old config 
+                    // around in order to shut it down, so set the dirty flag and 
+                    // we update the suite config after it shuts down
+                    if (this.suite.online == true) {
+                        this.configDirty = true;
+                    }
+                    else {
+                        Ext.apply(this.suite.config, this.config.suite);
+                    }
+                },
+                scope: this
+            }, {
+                text: "Revert", 
+                handler: function(btn, evt) {
+                    
+                }
+            }]
+        })
+        return this.prefPanel;
+    }, 
     
     /** private: method[afterPanelRender]
      *
@@ -316,6 +669,28 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         ilinks.removeClass("app-ilink");
     },
     
+    /**
+     * private method[afterStatusPanelRender]
+     * 
+     * Adds behaviour to the status panel.
+     */
+    afterStatusPanelRender: function() {
+        this.afterPanelRender();
+        Ext.select("#app-panels-status-start").on({
+           click: function(evt, el) {
+               this.suite.start();
+           },
+           scope: this
+        });
+        
+        Ext.select("#app-panels-status-stop").on({
+           click: function(evt, el) {
+               this.suite.stop();
+           }, 
+           scope: this
+        });
+    }, 
+    
     openURL: function(url, title) {
         url = encodeURI(url);
         if (window.Titanium) {
@@ -332,42 +707,17 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         }
     },
     
-    monitorStatus: function() {
-        if (this.debug === false) {
-            var port = this.geoserver.port || "80";
-            var url = "http://" + this.geoserver.host + ":" + port + this.geoserver.path;
-            var client = new XMLHttpRequest();
-            client.open("HEAD", url);
-            client.onreadystatechange = (function() {
-                if(client.readyState === 4) {
-                    var status = parseInt(client.status, 10);
-                    if (status !== this.status) {
-                        this.fireEvent("statuschanged", status, this.status);
-                    }
-                    this.status = status;
-                }
-            }).createDelegate(this);
-            client.send();
+    /**
+     * api method[message]
+     *  :arg m: ``String`` The message.
+     *
+     * Displays a message in the status panel.
+     */
+    message: function(m) {
+        var msg = Ext.get("app-panels-status-msg");
+        if (msg) {
+            msg.dom.innerHTML = m;
         }
-    },
-    
-    showStatusWarning: function() {
-        if (!this.statusWarning) {
-            this.statusWarning = new Ext.Window({
-                title: "Warning",
-                iconCls: "dash-warning-header",
-                modal: true,
-                closable: false,
-                html: og.util.loadSync("app/markup/status-warning.html")
-            });
-        }
-        this.statusWarning.show();        
-    },
-    
-    hideStatusWarning: function() {
-        if (this.statusWarning) {
-            this.statusWarning.hide();
-        }
-    }
+    }, 
 
 });
