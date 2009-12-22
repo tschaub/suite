@@ -48,7 +48,8 @@ og.util = {
      */
     loadConfigFS: function(filename) {
         var fs = Titanium.Filesystem;
-        var config = fs.getFile(fs.getUserDirectory().toString(), ".opengeo", filename);
+        var config = fs.getFile(fs.getUserDirectory().toString(), ".opengeo",
+                                filename);
 
         // if file fodes not exist, create one by loading the default via http
         // and copy it into the proper location
@@ -119,7 +120,9 @@ og.util = {
         this.tirun(function() {
             var fs = Titanium.Filesystem;
             var sep = fs.getSeparator();
-            var file = fs.getFileStream(fs.getUserDirectory() +sep+ ".opengeo" +sep+ "config.ini");
+            var file = fs.getFileStream(fs.getUserDirectory() +sep+ ".opengeo"
+                                        +sep+ "config.ini");
+
             if (file.open(fs.MODE_WRITE) == true) {
                 for (section in config) {
                     if (section != "defaults") {
@@ -130,7 +133,7 @@ og.util = {
                         //if the key has a default key only write it 
                         // out if its value is different
                         if (section != "defaults" && key in config["defaults"]
-                            && config[section][key] == config["defaults"][key]) {
+                            && config[section][key] == config["defaults"][key]){
                             continue;
                         }
                         
@@ -141,7 +144,8 @@ og.util = {
                 file.close();
             }
             else {
-                Ext.Msg.alert("Warning", "Could not write to " + file.toString());
+                Ext.Msg.alert("Warning",
+                              "Could not write to " + file.toString());
             }
 
         }, config);
@@ -151,8 +155,8 @@ og.util = {
      * api: method[tirun]
      *  :arg f: ``Function`` The function to execute.
      *  :arg scope: ``Object`` The function execution scope.
-     *  :arg fallback: ``Function`` An optional function to execute if titanium is 
-     *     not available.
+     *  :arg fallback: ``Function`` An optional function to execute if titanium
+     *    is not available.
      *
      * Executes a function if running in the titanium environment.
      */
@@ -165,7 +169,8 @@ og.util = {
                 return fallback.call(scope);
             }
             else {
-                Ext.Msg.alert("Warning", "Titanium is required for this action.");                
+                Ext.Msg.alert("Warning",
+                              "Titanium is required for this action.");
             }
         }
     }
@@ -177,14 +182,23 @@ og.util = {
  * 
  */
 og.platform = {
-    Darwin: {
+    "Windows NT": {
+        startSuite: function(exe) {
+            var p = Titanium.Process.createProcess({
+                args: [exe]
+            });
+            p.launch();
+        }
+    },
+    
+    "Darwin": {
         startSuite: function(exe) {
             var p = Titanium.Process.createProcess({
                 args: ["open", exe]
             });
             p.launch();
         },
-    }, 
+    },
 };
 
 og.Suite = Ext.extend(Ext.util.Observable, {
@@ -307,16 +321,19 @@ og.Suite = Ext.extend(Ext.util.Observable, {
      * Starts the suite.
      */
     start: function() {
-        this.fireEvent("starting");
-       
         og.util.tirun(
             function() {
                 sys = og.platform[Titanium.Platform.name]
-                sys.startSuite(this.config.exe);
+                if (sys) {
+                    sys.startSuite(this.config.exe);
+                    this.fireEvent("starting");
+                }
+                else {
+                    Ext.Msg.alert("Warning", "Platform " + 
+                        Titanium.Platform.name + " not supported.");
+                }
             }, 
-            this, 
-            function() {
-            }
+            this
         );
         
         this.online = true;
@@ -328,17 +345,17 @@ og.Suite = Ext.extend(Ext.util.Observable, {
      * Stops the suite.
      */
     stop: function() {
-        this.fireEvent("stopping");
-        
         og.util.tirun(function() {
             var sep = Titanium.Filesystem.getSeparator();
-            var jar = Titanium.App.home +sep+ "Resources" +sep+ "jetty-start.jar";
+            var jar = Titanium.App.home +sep+"Resources"+sep+ "jetty-start.jar";
             
             var p = Titanium.Process.createProcess({
                 args:['java', '-DSTOP.PORT='+this.config.stop_port, 
                     '-DSTOP.KEY=opengeo', '-jar', jar, '--stop']
             });
             p.launch();
+            
+            this.fireEvent("stopping");
         }, this);
         
         this.online = false;
@@ -589,19 +606,19 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             buttons: [{
                 text: "Save",
                 handler: function(btn, evt) {
-                    this.config.suite.exe = 
-                        this.prefPanel.getForm().findField('exe').getValue();
-                    this.config.suite.start_port = 
-                        this.prefPanel.getForm().findField('start_port').getValue();
+                    var form = this.prefPanel.getForm();
+                    this.config.suite.exe = form.findField('exe').getValue();
+                    this.config.suite.start_port =
+                        form.findField('start_port').getValue();
                     this.config.suite.stop_port = 
-                        this.prefPanel.getForm().findField('stop_port').getValue();
+                        form.findField('stop_port').getValue();
 
                     og.util.saveConfig(this.config, 'config.ini');
                     this.message("Configuration saved.");
                     
-                    //if the suite is running then we need to keep the old config 
-                    // around in order to shut it down, so set the dirty flag and 
-                    // we update the suite config after it shuts down
+                    //if the suite is running then we need to keep the old
+                    // config around in order to shut it down, so set the dirty
+                    // flag and we update the suite config after it shuts down
                     if (this.suite.online == true) {
                         this.configDirty = true;
                     }
@@ -613,7 +630,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             }, {
                 text: "Revert", 
                 handler: function(btn, evt) {
-                    
                 }
             }]
         })
@@ -694,7 +710,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
     openURL: function(url, title) {
         url = encodeURI(url);
         if (window.Titanium) {
-            Titanium.Desktop.openURL(url);                
+            Titanium.Desktop.openURL(url);
         } else {
             window.open(url);
         }
