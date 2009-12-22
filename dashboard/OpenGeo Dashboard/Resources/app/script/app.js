@@ -550,9 +550,24 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         tabTip: "Configure the OpenGeo Suite",
                         cls: "dash-panel",
                         id: "app-panels-pref",
-                        items: [
-                            this.createPrefPanel() 
-                        ]
+                        listeners: {
+                           render: {
+                               fn: function() {
+                                   this.afterPanelRender();
+                                   this.createPrefForm();
+                               }, 
+                               scope: this,
+                               delay: 1
+                           } 
+                        }, 
+                        items: [{
+                            xtype: "box", 
+                            id: "app-panels-pref",
+                            autoEl: {
+                                tag: "div",
+                                html: og.util.loadSync("app/markup/pref/main.html")
+                            },
+                        }]
                     }]
                 }]
             }, {
@@ -581,10 +596,10 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
 
     },
     
-    createPrefPanel: function() {
+    createPrefForm: function() {
         this.prefPanel = new Ext.FormPanel({
-            region: "center",
-            cls: "dash-panel",
+            renderTo: "app-panels-pref-form",
+            border: false,
             buttonAlign: "left",
             items: [{
                 xtype: "textfield", 
