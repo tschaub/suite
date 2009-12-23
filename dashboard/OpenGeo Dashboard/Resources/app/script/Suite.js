@@ -12,7 +12,7 @@ og.Suite = Ext.extend(Ext.util.Observable, {
      *  ``Object``
      *  The dashboard configuration.
      */
-    config: {},
+    config: null,
     
     /** api: property[status]
      *  ``Number``
@@ -29,7 +29,8 @@ og.Suite = Ext.extend(Ext.util.Observable, {
     online: null,
     
     constructor: function(config) {
-        Ext.apply(this.config, config);
+        this.initialConfig = config;
+        this.config = Ext.apply({}, config);
         
         this.addEvents(
             /** api: event[changed]

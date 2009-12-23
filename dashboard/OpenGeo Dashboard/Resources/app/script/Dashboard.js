@@ -13,7 +13,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
      *  ``Object``
      *  The dashboard configuration.
      */
-    config: {},
+    config: null,
     
     /** private: property[configDirty]
      *  ``Boolean``
@@ -29,7 +29,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             Ext.apply(config, Ext.urlDecode(str));
         }
         this.initialConfig = config;
-        Ext.apply(this.config, config);
+        this.config = Ext.apply({}, config);
         
         this.suite = new og.Suite(config.suite);
         this.suite.on({
