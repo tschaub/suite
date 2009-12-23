@@ -8,28 +8,6 @@
         <link rel="stylesheet" type="text/css" href="ux/css/GroupTab.css" />
         <link rel="stylesheet" type="text/css" href="app/theme/style.css" />
         
-        <script type="text/javascript">
-        
-            // The "Version" string is missing from WebKit Linux and Ext requires it.
-            // TODO: This has been fixed in Ext (svn).  Remove this when the fix is
-            // released (see http://www.extjs.com/forum/showthread.php?p=392846).
-            // This has also now been fixed in Titanium and can be removed at 0.7.0
-            // http://github.com/appcelerator/titanium_desktop/commit/e916b6bfd712e8060aca4c6897b143a5a49de24b
-            if (navigator.userAgent.match(/WebKit/) && !navigator.userAgent.toLowerCase().match(/version\/\d+\.\d/)) {
-                (function() {
-                    // we need to create a new navigator object because the original doesn't have setters
-                    var old = navigator;
-                    var navigator = {};
-                    for (var k in old) {
-                        navigator[k] = old[k];
-                    }
-                    navigator.userAgent += " Version/4.0";
-                    window.navigator = navigator;
-                })();
-            }
-        
-        </script>
-
         <script type="text/javascript" src="ext/adapter/ext/ext-base.js"></script>
         <script type="text/javascript" src="ext/ext-all.js"></script>
         <script type="text/javascript" src="ux/GroupTabPanel.js"></script>
