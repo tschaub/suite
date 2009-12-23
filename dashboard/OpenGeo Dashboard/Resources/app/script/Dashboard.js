@@ -43,9 +43,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                  }
                  this.startingWindow.show();
             }, 
-            scope: this
-        });
-        this.suite.on({
             started: function() {
                 this.message("The OpenGeo Suite is online.");
                 if (this.startingWindow && this.startingWindow.rendered) {
@@ -53,9 +50,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 }
                 this.updateOnlineLinks(true);
             }, 
-            scope: this
-        });
-        this.suite.on({
             stopping: function() {
                 if (!this.stoppingWindow) {
                     this.stoppingWindow = new Ext.Window({
@@ -66,9 +60,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 }
                 this.stoppingWindow.show();
             }, 
-            scope: this
-        });
-        this.suite.on({
             stopped: function() {
                 this.message("The OpenGeo Suite is offline.");
                 if (this.stoppingWindow && this.stoppingWindow.rendered) {

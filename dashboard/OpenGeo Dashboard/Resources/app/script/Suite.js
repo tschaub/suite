@@ -74,15 +74,9 @@ og.Suite = Ext.extend(Ext.util.Observable, {
                     this.fireEvent("stopped");
                 }
             },
-            scope: this
-        });
-        this.on({
             started: function() {
                 this.online = true;
             },
-            scope: this
-        });
-        this.on({
             stopped: function() {
                 this.online = false;
             }, 
