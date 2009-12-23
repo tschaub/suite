@@ -19,9 +19,21 @@ a:hover {
   color:#6C9400;
 }
 
+a.app-disabled {
+  color: #0A2742;
+}
+
+a.app-disabled:hover {
+  color: #0A2742;
+}
+
 .app-strong {
     font-weight: bold;
     font-size: larger;
+}
+
+.app-disabled {
+    color: #0A2742;
 }
 
 .dash-panel {
@@ -111,7 +123,15 @@ a:hover {
 .dash-panel-body .launch a:hover {
   color: #6C9400;
 }
-    
+
+.dash-panel-body .launch a.app-disabled {
+    color: #0A2742;
+}
+
+.dash-panel-body .launch a.app-disabled:hover {
+    color: #0A2742;
+}
+
 .dash-panel-content {
     margin: 0 150px 0 0;
 }

@@ -288,6 +288,18 @@ og.Suite = Ext.extend(Ext.util.Observable, {
             },
             scope: this
         });
+        this.on({
+            started: function() {
+                this.online = true;
+            },
+            scope: this
+        });
+        this.on({
+            stopped: function() {
+                this.online = false;
+            }, 
+            scope: this
+        });
     }, 
     
     /**
@@ -309,7 +321,7 @@ og.Suite = Ext.extend(Ext.util.Observable, {
      * Monitors the status of the suite.
      */
     monitor: function() {
-        var port = this.config.start_port || "80";
+        var port = this.config.port || "80";
         var url = "http://" + this.config.host + ":" + port + "/geoserver"
         var client = new XMLHttpRequest();
         client.open("HEAD", url);
@@ -345,8 +357,6 @@ og.Suite = Ext.extend(Ext.util.Observable, {
             }, 
             this
         );
-        
-        this.online = true;
     }, 
     
     /**
@@ -367,8 +377,6 @@ og.Suite = Ext.extend(Ext.util.Observable, {
             
             this.fireEvent("stopping");
         }, this);
-        
-        this.online = false;
     }
 });
 
@@ -425,6 +433,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 if (this.startingWindow && this.startingWindow.rendered) {
                     this.startingWindow.hide();
                 }
+                this.updateOnlineLinks(true);
             }, 
             scope: this
         });
@@ -453,6 +462,8 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     Ext.apply(this.suite.config, this.config.suite);
                     this.configDirty = false;
                 }
+                
+                this.updateOnlineLinks(false);
             },
             scope: this
         });
@@ -593,7 +604,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             listeners: {
                 render: {
                     fn: function() {
-                        this.suite.run();
+                        this.suite.run();                            
                     }, 
                     scope: this,
                     delay: 1
@@ -619,9 +630,9 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 value: this.config.suite.exe
             }, { 
                 xtype: "textfield",
-                fieldLabel: "Start Port",
-                name: "start_port",
-                value: this.config.suite.start_port
+                fieldLabel: "Port",
+                name: "port",
+                value: this.config.suite.port
             }, {
                 xtype: "textfield",
                 fieldLabel: "Shutdown Port",
@@ -633,8 +644,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 handler: function(btn, evt) {
                     var form = this.prefPanel.getForm();
                     this.config.suite.exe = form.findField('exe').getValue();
-                    this.config.suite.start_port =
-                        form.findField('start_port').getValue();
+                    this.config.suite.port = form.findField('port').getValue();
                     this.config.suite.stop_port = 
                         form.findField('stop_port').getValue();
 
@@ -675,8 +685,12 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     var parts = id.split("-");
                     var path, url, title;
                     if (parts.length > 1) {
+                        var tmp = parts.shift();
+                        parts.unshift("config");
+                        parts.unshift(tmp);
+                        
                         // lookup URL in config
-                        var section = eval(parts.slice(0, 2).join("."));
+                        var section = eval(parts.slice(0, 3).join("."));
                         var key = parts.pop();
                         path = section[key];
                         if (path) {
@@ -708,6 +722,8 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             scope: this
         });
         ilinks.removeClass("app-ilink");
+        
+        this.updateOnlineLinks(this.suite.online);
     },
     
     /**
@@ -729,6 +745,32 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                this.suite.stop();
            }, 
            scope: this
+        });
+    }, 
+    
+    /**
+     * private method[updateOnlineLinks]
+     *  :arg online: ``Boolean`` Flag inidciating if services are online.
+     * 
+     * Enables/disables all links that require online services to be active.
+     */
+    updateOnlineLinks: function(online) {
+        var olinks = Ext.select(".app-online");
+        olinks.each(function(el, c, idx) {
+            if (online == true) {
+                el.removeClass('app-disabled');
+                if (el.dom.href_off) {
+                    el.dom['href'] = el.dom.href_off;
+                    el.dom.removeAttribute('href_off');
+                }
+            }
+            else {
+                el.addClass('app-disabled');
+                if (el.dom.href) {
+                    el.dom['href_off'] = el.dom.href; 
+                    el.dom.removeAttribute('href');
+                }
+            }
         });
     }, 
     
