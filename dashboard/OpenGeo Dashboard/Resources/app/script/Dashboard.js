@@ -1,385 +1,5 @@
 Ext.namespace("og");
 
-og.util = {
-
-    /** api: method[loadSync]
-     *  :arg url: ``String``
-     *
-     *  Syncrhonously load a resource.  This is a workaround for Ext XHR
-     *  failures with Titanium.
-     */
-    loadSync: function(url) {
-        var client = new XMLHttpRequest();
-        client.open("GET", url, false);
-        client.send(null);
-        return client.responseText;
-    },
-    
-    /** api: method[loadConfig]
-     *  :arg url: ``String``
-     *  :returns: ``Object`` A config object.
-     *
-     *  Load and parse a config file given the URL.
-     */
-    loadConfig: function(url) {
-        if (window.Titanium) {
-            return this.loadConfigFS(url);
-        }
-        else {
-            return this.loadConfigHTTP(url);
-        }
-    }, 
-    
-    /** private: method[loadConfig]
-     *  :arg url: ``String``
-     *  :returns: ``Object`` A config object.
-     *
-     *  Load and parses a config file by requesting it via HTTP.
-     */
-    loadConfigHTTP: function(url) {
-        return this.parseConfig(this.loadSync(url));
-    }, 
-    
-    /** private: method[loadConfig]
-     *  :arg filename: ``String``
-     *  :returns: ``Object`` A config object.
-     *
-     *  Load and parse a config file from the filesystem.
-     */
-    loadConfigFS: function(filename) {
-        var fs = Titanium.Filesystem;
-        var config = fs.getFile(fs.getUserDirectory().toString(), ".opengeo",
-                                filename);
-
-        // if file fodes not exist, create one by loading the default via http
-        // and copy it into the proper location
-        if (config.exists() == false) {
-            // create parent directory if it does not exist
-            if (config.parent().exists() == false) {
-                config.parent().createDirectory();
-            }
-            
-            config.write(this.loadSync(filename));
-        }
-        
-        return this.parseConfig(config.read().toString());
-    }, 
-    
-    /** private: method[loadConfig]
-     *  :arg url: ``String``
-     *  :returns: ``Object`` A config object.
-     *
-     *  Parses the contents of a config file into a config object.
-     */    
-     parseConfig: function(text) {
-        var lines = text.split(/[\n\r]/);
-        var config = {};
-        var defaults = {};
-        var line, pair, key, value, match, section;
-        for (var i=0, len=lines.length; i<len; ++i) {
-            line = lines[i].trim();
-            match = line.match(/^\s*\[(.*?)\]\s*$/);
-            if (match) {
-                section = match[1];
-            } else if (line) {
-                pair = line.split("=");
-                if (pair.length > 1) {
-                    key = pair.shift().trim();
-                    value = pair.join("=").trim();
-                    if (section) {
-                        if (!config[section]) {
-                            config[section] = {};
-                        }
-                        config[section][key] = value;
-                    } else {
-                        // defaults are pairs before all sections
-                        defaults[key] = value;
-                    }
-                }
-            }
-        }
-        // apply all defaults to each section
-        for (section in config) {
-            for (var key in defaults) {
-                if (!(key in config[section])) {
-                    config[section][key] = defaults[key];
-                }
-            }
-        }
-        
-        config['defaults'] = defaults;
-        return config;
-    }, 
-    
-    /** api: method[saveConfig]
-     *  :arg config: ``Object``
-     *
-     *  Saves the current config to config.ini in the users home directory.
-     */
-    saveConfig: function(config) {
-        this.tirun(function() {
-            var fs = Titanium.Filesystem;
-            var sep = fs.getSeparator();
-            var file = fs.getFileStream(fs.getUserDirectory() +sep+ ".opengeo"
-                                        +sep+ "config.ini");
-
-            if (file.open(fs.MODE_WRITE) == true) {
-                for (section in config) {
-                    if (section != "defaults") {
-                        file.writeLine("["+section+"]");
-                    }
-                    
-                    for (key in config[section]) {
-                        //if the key has a default key only write it 
-                        // out if its value is different
-                        if (section != "defaults" && key in config["defaults"]
-                            && config[section][key] == config["defaults"][key]){
-                            continue;
-                        }
-                        
-                        file.writeLine(key + "=" + config[section][key]);
-                    }
-                    file.writeLine(" ");
-                }
-                file.close();
-            }
-            else {
-                Ext.Msg.alert("Warning",
-                              "Could not write to " + file.toString());
-            }
-
-        }, config);
-    }, 
-    
-    /**
-     * api: method[tirun]
-     *  :arg f: ``Function`` The function to execute.
-     *  :arg scope: ``Object`` The function execution scope.
-     *  :arg fallback: ``Function`` An optional function to execute if titanium
-     *    is not available.
-     *
-     * Executes a function if running in the titanium environment.
-     */
-    tirun: function(f, scope, fallback) {
-        if (window.Titanium) {
-            return f.call(scope);
-        }
-        else {
-            if (fallback) {
-                return fallback.call(scope);
-            }
-            else {
-                Ext.Msg.alert("Warning",
-                              "Titanium is required for this action.");
-            }
-        }
-    }
-    
-};
-
-/**
- * Separates out platform spcefic properties and operations.
- * 
- */
-og.platform = {
-    //TODO: have starting just be a single script to run
-    "Windows NT": {
-        startSuite: function(exe) {
-            var p = Titanium.Process.createProcess({
-                args: [exe]
-            });
-            p.launch();
-        }
-    },
-    
-    "Darwin": {
-        startSuite: function(exe) {
-            var p = Titanium.Process.createProcess({
-                args: ["open", exe]
-            });
-            p.launch();
-        },
-    },
-    
-    "Linux": {
-        startSuite: function(exe) {
-            var p = Titanium.Process.createProcess({
-                args: [exe]
-            });
-            p.launch();
-        }
-    }
-};
-
-og.Suite = Ext.extend(Ext.util.Observable, {
-    
-    /** api: property[statusInterval]
-     *  ``Number``
-     *  Time in miliseconds between service status checks.  Default is 5000.
-     */
-    statusInterval: 5000,
-    
-    /**
-     * api: property[config]
-     * ``Object``
-     * The dashboard configuration.
-     */
-    config: {},
-    
-    /** api: property[status]
-     *  ``Number``
-     *  The HTTP status code for the service this depends on.  Unset by
-     *  default.
-     */
-    status: -1, 
-    
-    /**
-     * api: property[online]
-     *  ``Boolean``
-     *  Flag indicating if the suite is running. True if the suite is running,
-     *  false if the suite is not running, and null if the state is unknown.
-     */
-    online: null,
-    
-    constructor: function(config) {
-        Ext.apply(this.config, config);
-        
-        this.addEvents(
-            /** api: event[changed]
-             *  Fired when the service status changes.  Listeners will be called
-             *  with two arguments, the new status and old status codes.
-             */
-            "changed", 
-            
-            /** api: event[starting]
-             *
-             *  Fired when the suite is starting up.
-             */
-            "starting", 
-            
-            /** api: event[started]
-             *
-             *  Fired when the suite has started.
-             */
-            "started", 
-          
-            /** api: event[starting]
-             *
-             *  Fired when the suite is shuttind down.
-             */
-            "stopping", 
-            
-            /** api: event[stopped]
-             *
-             *  Fired when the suite has been stopped.
-             */
-            "stopped"  
-        );
-        this.on({
-            changed: function(newStatus, oldStatus) {
-                if (newStatus >= 200 && newStatus < 300) {
-                    //online
-                    this.fireEvent("started");
-                }
-                else {
-                    //offline
-                    this.fireEvent("stopped");
-                }
-            },
-            scope: this
-        });
-        this.on({
-            started: function() {
-                this.online = true;
-            },
-            scope: this
-        });
-        this.on({
-            stopped: function() {
-                this.online = false;
-            }, 
-            scope: this
-        });
-    }, 
-    
-    /**
-     * api: method[run]
-     *
-     * Starts the opengeo suite monitor.
-     */
-    run: function() {
-        window.setInterval(
-            this.monitor.createDelegate(this),
-            this.statusInterval
-        );
-        this.monitor();
-    }, 
-    
-    /**
-     * private: method[monitor]
-     * 
-     * Monitors the status of the suite.
-     */
-    monitor: function() {
-        var port = this.config.port || "80";
-        var url = "http://" + this.config.host + ":" + port + "/geoserver"
-        var client = new XMLHttpRequest();
-        client.open("HEAD", url);
-        client.onreadystatechange = (function() {
-            if(client.readyState === 4) {
-                var status = parseInt(client.status, 10);
-                if (status !== this.status) {
-                    this.fireEvent("changed", status, this.status);
-                }
-                this.status = status;
-            }
-        }).createDelegate(this);
-        client.send();
-    },
-    
-    /**
-     * api: method[start]
-     *
-     * Starts the suite.
-     */
-    start: function() {
-        og.util.tirun(
-            function() {
-                sys = og.platform[Titanium.Platform.name]
-                if (sys) {
-                    sys.startSuite(this.config.exe);
-                    this.fireEvent("starting");
-                }
-                else {
-                    Ext.Msg.alert("Warning", "Platform " + 
-                        Titanium.Platform.name + " not supported.");
-                }
-            }, 
-            this
-        );
-    }, 
-    
-    /**
-     * api: method[stop]
-     * 
-     * Stops the suite.
-     */
-    stop: function() {
-        og.util.tirun(function() {
-            var sep = Titanium.Filesystem.getSeparator();
-            var jar = Titanium.App.home +sep+"Resources"+sep+ "jetty-start.jar";
-            
-            var p = Titanium.Process.createProcess({
-                args:['java', '-DSTOP.PORT='+this.config.stop_port, 
-                    '-DSTOP.KEY=opengeo', '-jar', jar, '--stop']
-            });
-            p.launch();
-            
-            this.fireEvent("stopping");
-        }, this);
-    }
-});
-
 og.Dashboard = Ext.extend(Ext.util.Observable, {
     
     /** api: property[debug]
@@ -389,17 +9,15 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
      */
     debug: false,
 
-    /**
-     * api: property[config]
-     * ``Object``
-     * The dashboard configuration.
+    /** api: property[config]
+     *  ``Object``
+     *  The dashboard configuration.
      */
     config: {},
     
-    /**
-     * private: property[configDirty]
+    /** private: property[configDirty]
      *  ``Boolean``
-     * Flag to track if the configuration has been changed.
+     *  Flag to track if the configuration has been changed.
      */
     configDirty: false,
     
@@ -726,10 +344,9 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         this.updateOnlineLinks(this.suite.online);
     },
     
-    /**
-     * private method[afterStatusPanelRender]
+    /** private method[afterStatusPanelRender]
      * 
-     * Adds behaviour to the status panel.
+     *  Adds behaviour to the status panel.
      */
     afterStatusPanelRender: function() {
         this.afterPanelRender();
@@ -748,11 +365,10 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         });
     }, 
     
-    /**
-     * private method[updateOnlineLinks]
+    /** private method[updateOnlineLinks]
      *  :arg online: ``Boolean`` Flag inidciating if services are online.
      * 
-     * Enables/disables all links that require online services to be active.
+     *  Enables/disables all links that require online services to be active.
      */
     updateOnlineLinks: function(online) {
         var olinks = Ext.select(".app-online");
@@ -790,11 +406,10 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         }
     },
     
-    /**
-     * api method[message]
+    /** api method[message]
      *  :arg m: ``String`` The message.
      *
-     * Displays a message in the status panel.
+     *  Displays a message in the status panel.
      */
     message: function(m) {
         var msg = Ext.get("app-panels-status-msg");
