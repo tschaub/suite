@@ -182,6 +182,7 @@ og.util = {
  * 
  */
 og.platform = {
+    //TODO: have starting just be a single script to run
     "Windows NT": {
         startSuite: function(exe) {
             var p = Titanium.Process.createProcess({
@@ -199,6 +200,15 @@ og.platform = {
             p.launch();
         },
     },
+    
+    "Linux": {
+        startSuite: function(exe) {
+            var p = Titanium.Process.createProcess({
+                args: [exe]
+            });
+            p.launch();
+        }
+    }
 };
 
 og.Suite = Ext.extend(Ext.util.Observable, {
