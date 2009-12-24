@@ -34,36 +34,32 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         this.suite = new og.Suite(config.suite);
         this.suite.on({
             starting: function() {
-                 if (!this.startingWindow) {
-                     this.startingWindow = new Ext.Window({
-                         modal: true,
-                         closable: false,
-                         html: "Starting the OpenGeo Suite"
+                 if (!this.startingMask) {
+                     this.startingMask = new Ext.LoadMask(Ext.getBody(), {
+                         msg: "Starting the OpenGeo Suite"
                      });
                  }
-                 this.startingWindow.show();
+                 this.startingMask.show();
             }, 
             started: function() {
                 this.message("The OpenGeo Suite is online.");
-                if (this.startingWindow && this.startingWindow.rendered) {
-                    this.startingWindow.hide();
+                if (this.startingMask) {
+                    this.startingMask.hide();
                 }
                 this.updateOnlineLinks(true);
             }, 
             stopping: function() {
-                if (!this.stoppingWindow) {
-                    this.stoppingWindow = new Ext.Window({
-                         modal: true,
-                         closable: false,
-                         html: og.util.loadSync("app/markup/status/stopping.html")
+                if (!this.stoppingMask) {
+                    this.stoppingMask = new Ext.LoadMask(Ext.getBody(), {
+                         msg: "Shutting down the OpenGeo Suite"
                     });
                 }
-                this.stoppingWindow.show();
+                this.stoppingMask.show();
             }, 
             stopped: function() {
                 this.message("The OpenGeo Suite is offline.");
-                if (this.stoppingWindow && this.stoppingWindow.rendered) {
-                    this.stoppingWindow.hide();
+                if (this.stoppingMask) {
+                    this.stoppingMask.hide();
                 }
                 
                 //if the current config is dirty, update the suite config
@@ -338,7 +334,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             text: "Start",
             iconCls: "start-button",
             cls: "control-button",
-            hidden: !!this.suite.online,
+            disabled: !!this.suite.online,
             handler: function() {
                 this.suite.start();
             },
@@ -348,11 +344,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             starting: function() {
                 startButton.disable();
             },
-            started: function() {
-                startButton.hide();
-            },
             stopped: function() {
-                startButton.show();
                 startButton.enable();
             }
         });
@@ -361,7 +353,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             text: "Stop",
             iconCls: "stop-button",
             cls: "control-button",
-            hidden: !this.suite.online,
+            disabled: !this.suite.online,
             handler: function() {
                 this.suite.stop();
             },
@@ -371,11 +363,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             stopping: function() {
                 stopButton.disable();
             },
-            stopped: function() {
-                stopButton.hide();
-            },
             started: function() {
-                stopButton.show();
                 stopButton.enable();
             }
         });
