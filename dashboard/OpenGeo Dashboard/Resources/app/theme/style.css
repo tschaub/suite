@@ -249,52 +249,26 @@ a.icon-styler {
     border-bottom-width: 5px;
 }
 
-/* status panel */
-#app-panels-status {
+/* control panel */
+.app-panels-control {
     border: solid #291C17;
     border-width: 0px 15px 5px 145px;
-    height: 40px;
     background: #FFFFFF url('img/x-grouptabs-corners-bot-left.png') no-repeat;
     background-position: bottom left;
+    padding: 1em;
+    height: 2em;
 }
 
-#app-panels-status div {
-    position: relative;
-    top: 50%;
-    margin-top: -15px;
+.control-button {
+    padding-left: 1em;
 }
 
-#app-panels-status button {
-    float: right;
-    display: block;
-    margin: 0 7px 0 0;
-    background-color: #f5f5f5;
-    border: 1px solid #dedede;
-    border-top: 1px solid #eee;
-    border-left: 1px solid #eee;
-    
-    width: auto;
-    overflow: visible;
-    padding:4px 10px 3px 7px; /* IE6 */
+.x-btn .start-button {
+    background-image: url(img/server_go.png);
 }
 
-#app-panels-status button:hover {
-    background-color:#dff4ff;
-    border:1px solid #c2e1ef;
-    color:#336699;
-    cursor: pointer;
-}
-
-#app-panels-status button img {
-    margin: 0 3px -3px 0 !important;
-    padding: 0;
-    border: none;
-    width: 16px;
-    height: 16px;
-}
-
-#app-panels-status-msg {
-    margin-left: 10px;
+.x-btn .stop-button {
+    background-image: url(img/server_delete.png);
 }
 
 #app-panels-pref-form {

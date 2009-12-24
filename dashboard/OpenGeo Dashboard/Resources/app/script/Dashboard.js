@@ -38,7 +38,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                      this.startingWindow = new Ext.Window({
                          modal: true,
                          closable: false,
-                         html: og.util.loadSync("app/markup/status/starting.html")
+                         html: "Starting the OpenGeo Suite"
                      });
                  }
                  this.startingWindow.show();
@@ -94,13 +94,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             }
         };
         
-        var statusPanelListeners = {
-            render: {
-                fn: this.afterStatusPanelRender,
-                scope: this,
-                delay: 1
-            }
-        };
+        this.initControlPanel();
         
         this.viewport = new Ext.Viewport({
             layout: "border",
@@ -201,14 +195,10 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     }]
                 }]
             }, {
-                xtype: "box",
                 region: "south",
-                id: "app-panels-status",
-                autoEl: {
-                    tag: "div",
-                    html: og.util.loadSync("app/markup/status/main.html")
-                },
-                listeners: statusPanelListeners
+                xtype: "container",
+                cls: "app-panels-control",
+                items: [this.controlPanel]
             }], 
             listeners: {
                 render: {
@@ -335,26 +325,72 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         this.updateOnlineLinks(this.suite.online);
     },
     
-    /** private method[afterStatusPanelRender]
-     * 
-     *  Adds behaviour to the status panel.
-     */
-    afterStatusPanelRender: function() {
-        this.afterPanelRender();
-        Ext.select("#app-panels-status-start").on({
-           click: function(evt, el) {
-               this.suite.start();
-           },
-           scope: this
+    initControlPanel: function() {
+
+        this.messageBox = new Ext.BoxComponent({
+            autoEl: {
+                tag: "div",
+                html: ""
+            }
         });
-        
-        Ext.select("#app-panels-status-stop").on({
-           click: function(evt, el) {
-               this.suite.stop();
-           }, 
-           scope: this
+
+        var startButton = new Ext.Button({
+            text: "Start",
+            iconCls: "start-button",
+            cls: "control-button",
+            hidden: !!this.suite.online,
+            handler: function() {
+                this.suite.start();
+            },
+            scope: this
         });
-    }, 
+        this.suite.on({
+            starting: function() {
+                startButton.disable();
+            },
+            started: function() {
+                startButton.hide();
+            },
+            stopped: function() {
+                startButton.show();
+                startButton.enable();
+            }
+        });
+
+        var stopButton = new Ext.Button({
+            text: "Stop",
+            iconCls: "stop-button",
+            cls: "control-button",
+            hidden: !this.suite.online,
+            handler: function() {
+                this.suite.stop();
+            },
+            scope: this
+        });
+        this.suite.on({
+            stopping: function() {
+                stopButton.disable();
+            },
+            stopped: function() {
+                stopButton.hide();
+            },
+            started: function() {
+                stopButton.show();
+                stopButton.enable();
+            }
+        });
+
+        this.controlPanel = new Ext.Container({
+            layout: "hbox",
+            items: [
+                this.messageBox, 
+                {xtype: "spacer", flex: 1},
+                startButton, 
+                stopButton
+            ]
+        });
+
+    },
     
     /** private method[updateOnlineLinks]
      *  :arg online: ``Boolean`` Flag inidciating if services are online.
@@ -403,10 +439,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
      *  Displays a message in the status panel.
      */
     message: function(m) {
-        var msg = Ext.get("app-panels-status-msg");
-        if (msg) {
-            msg.dom.innerHTML = m;
-        }
+        this.messageBox.el.dom.innerHTML = m;
     }, 
 
 });
