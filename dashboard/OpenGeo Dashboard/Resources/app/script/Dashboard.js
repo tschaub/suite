@@ -32,35 +32,28 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         this.config = Ext.apply({}, config);
         
         this.suite = new og.Suite(config.suite);
+        
+        var startingMask = new Ext.LoadMask(Ext.getBody(), {
+             msg: "Starting the OpenGeo Suite"
+        });
+        var stoppingMask = new Ext.LoadMask(Ext.getBody(), {
+             msg: "Shutting down the OpenGeo Suite"
+        });
         this.suite.on({
             starting: function() {
-                 if (!this.startingMask) {
-                     this.startingMask = new Ext.LoadMask(Ext.getBody(), {
-                         msg: "Starting the OpenGeo Suite"
-                     });
-                 }
-                 this.startingMask.show();
+                 startingMask.show();
             }, 
             started: function() {
                 this.message("The OpenGeo Suite is online.");
-                if (this.startingMask) {
-                    this.startingMask.hide();
-                }
+                startingMask.hide();
                 this.updateOnlineLinks(true);
             }, 
             stopping: function() {
-                if (!this.stoppingMask) {
-                    this.stoppingMask = new Ext.LoadMask(Ext.getBody(), {
-                         msg: "Shutting down the OpenGeo Suite"
-                    });
-                }
-                this.stoppingMask.show();
+                stoppingMask.show();
             }, 
             stopped: function() {
                 this.message("The OpenGeo Suite is offline.");
-                if (this.stoppingMask) {
-                    this.stoppingMask.hide();
-                }
+                stoppingMask.hide();
                 
                 //if the current config is dirty, update the suite config
                 if (this.configDirty == true) {
