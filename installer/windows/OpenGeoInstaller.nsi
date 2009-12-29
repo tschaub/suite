@@ -70,7 +70,12 @@ Var GSUserFilter
 Var GSPassFilter
 Var DataDirPath
 Var FolderName
-
+Var SDEPath
+Var SDEPathTemp
+Var SDEPathCheck
+Var SDECheckBox
+Var SDEPathHWND
+Var BrowseSDEHWND
 
 ; Version Information (Version tab for EXE properties)
 VIProductVersion ${LONGVERSION}
@@ -87,6 +92,8 @@ LangString TEXT_TYPE_TITLE ${LANG_ENGLISH} "Type of Installation"
 LangString TEXT_TYPE_SUBTITLE ${LANG_ENGLISH} "Select the type of installation."
 LangString TEXT_CREDS_TITLE ${LANG_ENGLISH} "Administration"
 LangString TEXT_CREDS_SUBTITLE ${LANG_ENGLISH} "Set configuration credentials and port."
+LangString TEXT_ARCSDE_TITLE ${LANG_ENGLISH} "ArcSDE Libraries"
+LangString TEXT_ARCSDE_SUBTITLE ${LANG_ENGLISH} "Link to your existing ArcSDE libraries."
 LangString TEXT_READY_TITLE ${LANG_ENGLISH} "Ready to Install"
 LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be installed."
 
@@ -159,6 +166,8 @@ Page custom PriorInstall                                      ; Check to see if 
 !insertmacro MUI_PAGE_COMPONENTS                              ; List of stuff to install
 Page custom InstallType InstallTypeTest                       ; Install manually or as a service?
 Page custom Creds CredsLeave                                  ; Set GeoServer admin credentials
+Page custom GetSDE                                            ; Look for exisitng ArcSDE library
+Page custom SDE SDELeave                                      ; Set the SDE Path
 Page custom Ready                                             ; Ready to install page
 !insertmacro MUI_PAGE_INSTFILES                               ; Actually do the install
 !insertmacro MUI_PAGE_FINISH                                  ; Done
@@ -209,48 +218,10 @@ Function .onInit
   SilentSkip:
 
 
-FunctionEnd
 
-/*
-Function FileStuff
-
-
-  nsDialogs::Create 1018
-  ;!insertmacro MUI_HEADER_TEXT "$(TEXT_TYPE_TITLE)" "$(TEXT_TYPE_SUBTITLE)"
-
-   ;Syntax: ${NSD_*} x y width height text
-   ${NSD_CreateLabel} 0 0 100% 24u "Setup needs to know the location of a folder.  Please select the folder or type it into the box below."
-
-   ${NSD_CreateText} 10u 50u 200u 15u "$FolderName"
-   Pop $R9 
-
-   ${NSD_CreateBrowseButton} 220u 50u 60u 15u "Browse..."
-   Pop $R1
-   ${NSD_OnClick} $R1 FolderSpawn
-    
-  nsDialogs::Show
 
 FunctionEnd
 
-Function FolderSpawn
-
-MessageBox MB_OK $R1
-
-  nsDialogs::SelectFolderDialog "Please select a folder..." $EXEDIR
-  Pop $R2
-  StrCpy $FolderName $R2
-  ${NSD_SetText} $R9 $FolderName
-
-FunctionEnd
-
-Function FileStuffLeave
-
-   ${NSD_GetText} $R9 $FolderName
-
-  MessageBox MB_OK "$FolderName"
-
-FunctionEnd
-*/
 
 ; Check the user type, and quit if it's not an administrator.
 ; Taken from Examples/UserInfo that ships with NSIS.
@@ -480,6 +451,143 @@ Function CredsLeave
 
 FunctionEnd
 
+; Calls path function only if it hasn't called it before
+Function GetSDE
+
+  ; Skip if box unchecked
+  StrCmp $SDECheckBox 1 0 Skip
+
+  ; as this function been run before?
+  StrCmp $SDEPath "" 0 Skip 
+  ClearErrors
+  ReadRegStr $0 HKLM "SOFTWARE\ESRI\ArcInfo\ArcSDE\8.0\ArcSDE Java SDK" "InstallDir"
+  IfErrors NoSDE
+  StrCpy $0 $0 -1 ; remove trailing slash
+  IfFileExists "$0\arcsde\lib" 0 NoSDE
+  StrCpy $SDEPath "$0\arcsde\lib"
+  IfFileExists "$SDEPath\jsde*.jar" 0 NoSDE
+  IfFileExists "$SDEPath\jpe*.jar" Success NoSDE
+
+  NoSDE:
+  StrCpy $SDEPath ""
+
+  Success: 
+  ClearErrors
+  StrCpy $0 ""
+
+  Skip:  
+
+FunctionEnd
+
+Function SDE
+
+  ; Skip if box unchecked
+  StrCmp $SDECheckBox 1 0 Skip
+
+  !insertmacro MUI_HEADER_TEXT "$(TEXT_ARCSDE_TITLE)" "$(TEXT_ARCSDE_SUBTITLE)"
+
+  StrCpy $SDEPathTemp $SDEPath
+
+  Call SDEPathValidInit
+  Pop $8
+
+  nsDialogs::Create 1018
+
+  ; ${NSD_Create*} x y width height text
+  ${NSD_CreateLabel} 0 0 100% 48u "You have elected to install the GeoServer ArcSDE extension.  GeoServer requires libraries from an existing ArcSDE installation to proceed.  The files required are named jsde*.jar and jpe*.jar. $\r$\n$\r$\nPlease select the path to your ArcSDE Java SDK library path or click Back to unselect the ArcSDE extension."
+
+  ${NSD_CreateDirRequest} 0 70u 240u 13u $SDEPathTemp
+  Pop $SDEPathHWND
+  ${NSD_OnChange} $SDEPathHWND SDEPathValid
+  Pop $9
+
+  ${NSD_CreateBrowseButton} 242u 70u 50u 13u "Browse..."
+  Pop $BrowseSDEHWND
+  ${NSD_OnClick} $BrowseSDEHWND BrowseSDE
+
+  ${NSD_CreateLabel} 0 86u 100% 12u " "
+  Pop $SDEPathCheck
+
+  ${If} $8 == "validSDE"
+    ${NSD_SetText} $SDEPathCheck "This path contains a valid ArcSDE library"
+    GetDlgItem $0 $HWNDPARENT 1 ; Next
+    EnableWindow $0 1 ; Turns on
+  ${EndIf}
+  ${If} $8 == "novalidSDE"
+    ${NSD_SetText} $SDEPathCheck "This path does not contain a valid ArcSDE library"
+    GetDlgItem $0 $HWNDPARENT 1 ; Next
+    EnableWindow $0 0 ; Turns off
+  ${EndIf}
+   
+  nsDialogs::Show
+
+  Skip:  
+
+FunctionEnd
+
+; Runs when page is initialized
+Function SDEPathValidInit
+
+    IfFileExists "$SDEPath\jsde*.jar" 0 Errors
+    IfFileExists "$SDEPath\jpe*.jar" NoErrors Errors
+
+    NoErrors:
+    StrCpy $8 "validSDE"
+    Goto End
+
+    Errors:
+    StrCpy $8 "novalidSDE"
+    
+    End:
+    Push $8
+
+FunctionEnd
+
+; Runs in real time
+Function SDEPathValid
+
+  Pop $8
+  ${NSD_GetText} $8 $SDEPathTemp
+
+    IfFileExists "$SDEPathTemp\jsde*.jar" 0 Errors
+    IfFileExists "$SDEPathTemp\jpe*.jar" NoErrors Errors
+
+  NoErrors:
+    ${NSD_SetText} $SDEPathCheck "This path contains a valid ArcSDE library"
+    GetDlgItem $0 $HWNDPARENT 1 ; Next
+    EnableWindow $0 1 ; Enable
+  Goto End
+
+  Errors:
+    ${NSD_SetText} $SDEPathCheck "This path does not contain a valid ArcSDE library"
+    GetDlgItem $0 $HWNDPARENT 1 ; Next
+    EnableWindow $0 0 ; Disable
+
+  End:
+    StrCpy $8 ""
+    ClearErrors
+
+FunctionEnd
+
+; Brings up folder dialog
+Function BrowseSDE
+
+  nsDialogs::SelectFolderDialog "Please select the location of your ArcSDE library..." $PROGRAMFILES
+  Pop $1
+  ${NSD_SetText} $SDEPathHWND $1
+    
+FunctionEnd
+
+; When done, set variable permanently
+Function SDELeave
+
+  StrCpy $SDEPath $SDEPathTemp
+
+FunctionEnd
+
+
+
+
 ; Custom page, last page before install
 Function Ready
 
@@ -640,6 +748,15 @@ SectionEnd
 
 SectionGroup "GeoServer Extensions" SectionGSExt
 
+  Section /o "ArcSDE" SectionGSArcSDE
+
+  SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
+  CopyFiles /SILENT /FILESONLY $SDEPath\jsde*.jar "$INSTDIR\webapps\geoserver\WEB-INF\lib"
+  CopyFiles /SILENT /FILESONLY $SDEPath\jpe*.jar "$INSTDIR\webapps\geoserver\WEB-INF\lib"
+  ;File /a "${SOURCEPATHROOT}\geoserver_plugins\arcsde\*.*"
+
+  SectionEnd
+
   Section "GDAL" SectionGSGDAL
 
     SetOutPath "$INSTDIR\jre\bin"
@@ -649,19 +766,28 @@ SectionGroup "GeoServer Extensions" SectionGSExt
 
   Section "H2" SectionGSH2
 
-    ;SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
+    SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
     ;File /a "${SOURCEPATHROOT}\geoserver_plugins\h2\*.*"
 
   SectionEnd
 
   Section "Oracle" SectionGSOracle
 
-    ;SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
+    SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
     ;File /a "${SOURCEPATHROOT}\geoserver_plugins\oracle\*.*"
 
   SectionEnd
 
 SectionGroupEnd
+
+; This MUST go after the SectionGSArcSDE section (so that the var is defined)
+Function .onSelChange
+
+  ;Sets $SDECheckBox to 1 if component is checked
+  SectionGetFlags ${SectionGSArcSDE} $SDECheckBox
+
+FunctionEnd
+
 
 Section "GeoWebCache" SectionGWC
 
@@ -766,16 +892,16 @@ Section "Documentation" SectionDocs
 
 SectionEnd
 
-Section "Recipies" SectionRecipies
+Section "Recipes" SectionRecipes
 
   SetOverwrite on
 
   !insertmacro DisplayImage "slide_1_suite.bmp"
 
   SetOutPath "$INSTDIR\webapps"
-  File /r "${SOURCEPATHROOT}\samples"
+  File /r "${SOURCEPATHROOT}\recipes"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Recipies.lnk" \
-		         "http://localhost:$Port/samples/index.html" \
+		         "http://localhost:$Port/recipes/index.html" \
                  "" "$INSTDIR\icons\opengeo.ico" 0
 
 SectionEnd
@@ -791,11 +917,7 @@ Section "-Dashboard" SectionDashboard ;dash means hidden
   ;File /r /x config.ini "${SOURCEPATHROOT}\dashboard"
   File /r "${SOURCEPATHROOT}\dashboard"
   SetOutPath "$INSTDIR\dashboard\Resources"
-  ;File /a /oname=config.ini dashboard.ini
-  ;${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
-  ;                              "$INSTDIR\dashboard\Resources\config.ini" \
-  ;                              "[jettyport]" "$Port" \ 
-  ;                              "/S=1" $1
+
   ${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
                                 "$INSTDIR\dashboard\Resources\config.ini" \
                                 "8080" "$Port" \ 
@@ -902,28 +1024,6 @@ Section "-Misc" SectionMisc
 SectionEnd
 
 
-
-; Modern install component descriptions
-; Yes, this needs to go after the install sections. 
-!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionJetty} "Installs Jetty, a web server."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGS} "Installs GeoServer, a spatial data server."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSExt} "Includes GeoServer Extensions."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSGDAL} "Adds support for GDAL image formats."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSH2} "Adds support for H2 databases."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSOracle} "Adds support for Oracle databases."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGWC} "Includes GeoWebCache, a tile cache server."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGX} "Installs GeoExplorer, a graphical map editor."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionStyler} "Installs Styler, a graphical map style editor."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionDocs} "Includes full documentation for all applications."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionDashboard} "Installs the OpenGeo Suite Dashboard for access to all components."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionRecipies} "Installs examples and demos to help you build your own mapping applications."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionWrapper} "Installs the Java Service Wrapper."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionStartStop} "Creates shortcuts for starting and stopping the OpenGeo Suite."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionMisc} "Creates everything else."
-!insertmacro MUI_FUNCTION_DESCRIPTION_END
-
-
 ; What happens at the end of the install.
 Section -FinishSection
 
@@ -953,6 +1053,28 @@ Section -FinishSection
   WriteUninstaller "$INSTDIR\uninstall.exe"
 
 SectionEnd
+
+
+; Modern install component descriptions
+; Yes, this needs to go after the install sections. 
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionJetty} "Installs Jetty, a web server."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGS} "Installs GeoServer, a spatial data server."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSExt} "Includes GeoServer Extensions."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSArcSDE} "Adds support for ArcSDE databases.  Requires additional ArcSDE installation files."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSGDAL} "Adds support for GDAL image formats."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSH2} "Adds support for H2 databases."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSOracle} "Adds support for Oracle databases."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGWC} "Includes GeoWebCache, a tile cache server."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGX} "Installs GeoExplorer, a graphical map editor."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionStyler} "Installs Styler, a graphical map style editor."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionDocs} "Includes full documentation for all applications."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionDashboard} "Installs the OpenGeo Suite Dashboard for access to all components."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionRecipes} "Installs examples and demos to help you build your own mapping applications."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionWrapper} "Installs the Java Service Wrapper."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionStartStop} "Creates shortcuts for starting and stopping the OpenGeo Suite."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionMisc} "Creates everything else."
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 
 ; Uninstall section
