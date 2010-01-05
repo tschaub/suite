@@ -5,13 +5,18 @@
 package org.geoserver.web.importer;
 
 
+import org.apache.batik.css.engine.sac.CSSAttributeCondition;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByLink.CssModifier;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.PropertyModel;
 
 /**
@@ -52,15 +57,24 @@ public class OtherDbmsParamPanel extends Panel {
     }
     
     Component toggleAdvanced() {
-        return new AjaxLink("advancedLink") {
+        final AjaxLink advanced = new AjaxLink("advancedLink") {
             
             @Override
             public void onClick(AjaxRequestTarget target) {
-                System.out.println("TODO: change link style");
                 advancedPanel.setVisible(!advancedPanel.isVisible());
                 target.addComponent(advancedContainer);
+                target.addComponent(this);
             }
         };
+        advanced.add(new AttributeModifier("class", true, new AbstractReadOnlyModel() {
+            
+            @Override
+            public Object getObject() {
+                return advancedPanel.isVisible() ? "expanded" : "collapsed";
+            }
+        }));
+        advanced.setOutputMarkupId(true);
+        return advanced;
     }
     
 }

@@ -142,3 +142,18 @@ ul.form-data li.secondary input.text {
 width:10em;
 }
 
+form a.expanded {
+background-image: url(../silk/bullet_toggle_minus.png);
+background-repeat: no-repeat;
+background-position: 0px 0px;
+padding-left: 16px;
+height: 18px;
+}
+
+form a.collapsed {
+background-image: url(../silk/bullet_toggle_plus.png);
+background-repeat: no-repeat;
+background-position: 0px 0px;
+padding-left: 16px;
+height: 18px;
+}

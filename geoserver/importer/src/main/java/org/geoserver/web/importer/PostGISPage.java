@@ -14,15 +14,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.PropertyModel;
 import org.geoserver.catalog.CatalogBuilder;
 import org.geoserver.catalog.NamespaceInfo;
@@ -125,15 +128,24 @@ public class PostGISPage extends GeoServerSecuredPage {
      * @return
      */
     Component toggleConnectionPoolLink() {
-        return new AjaxLink("connectionPoolLink") {
+        AjaxLink connPool = new AjaxLink("connectionPoolLink") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                System.out.println("TODO: change link style");
                 connectionPoolPanel.setVisible(!connectionPoolPanel.isVisible());
                 target.addComponent(connPoolParametersContainer);
+                target.addComponent(this);
             }
         };
+        connPool.add(new AttributeModifier("class", true, new AbstractReadOnlyModel() {
+            
+            @Override
+            public Object getObject() {
+                return connectionPoolPanel.isVisible() ? "expanded" : "collapsed";
+            }
+        }));
+        connPool.setOutputMarkupId(true);
+        return connPool;
     }
 
     /**
