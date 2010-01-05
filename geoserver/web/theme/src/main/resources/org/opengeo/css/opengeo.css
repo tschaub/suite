@@ -121,3 +121,24 @@ Extras needed only in the Suite
 background: transparent url(../img_opengeo/shape_square_blue.png) scroll no-repeat left center;
 padding: 2px 0px 2px 20px;
 }
+
+form li.primary,
+ul.form-data li.primary {
+clear: both;
+float: left;
+}
+
+form li.secondary,
+ul.form-data li.secondary {
+display:block;
+float:right;
+margin:0 0 0.3em;
+padding:4px 5px 2px 0;
+width:35%;
+}
+
+form li.secondary input.text,
+ul.form-data li.secondary input.text {
+width:10em;
+}
+
