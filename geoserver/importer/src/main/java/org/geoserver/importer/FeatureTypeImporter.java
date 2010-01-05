@@ -154,10 +154,7 @@ public class FeatureTypeImporter  implements Runnable {
         } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Import process failed", e);
             summary.end(e);
-        } finally {
-            if(da != null)
-                da.dispose();
-        }
+        } 
     }
 
     public ImportSummary getSummary() {
