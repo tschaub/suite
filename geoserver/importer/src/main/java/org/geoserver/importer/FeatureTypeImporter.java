@@ -95,13 +95,18 @@ public class FeatureTypeImporter  implements Runnable {
                 try {
                     builder.setStore(storeInfo);
                     FeatureTypeInfo featureType = builder.buildFeatureType(name);
-                    if(featureType.getFeatureType().getGeometryDescriptor() != null) {
-                        builder.lookupSRS(featureType, true);
-                        builder.setupBounds(featureType);
-                    } else {
+                    boolean geometryless = featureType.getFeatureType().getGeometryDescriptor() == null;
+                    if(geometryless) {
                         // geometryless case, fill in some random values just because we need them
                         featureType.setSRS("EPSG:4326");
                         featureType.setLatLonBoundingBox(WORLD);
+                    } else {
+                        builder.lookupSRS(featureType, true);
+                        try {
+                            builder.setupBounds(featureType);
+                        } catch(Exception e) {
+                            LOGGER.log(Level.FINE, "Could not compute the layer bbox", e);
+                        }
                     }
                     layer = builder.buildLayer(featureType);
                     layer.setDefaultStyle(styles.getStyle(featureType));
@@ -121,7 +126,7 @@ public class FeatureTypeImporter  implements Runnable {
                     // handler common error conditions
                     if (catalog.getFeatureTypeByName(namespace, layerName) != null) {
                         status = DUPLICATE;
-                    } else if (layer.getResource().getSRS() == null && defaultSRS == null) {
+                    } else if (layer.getResource().getSRS() == null && defaultSRS == null && !geometryless) {
                         if(layer.getResource().getNativeCRS() == null)
                             status = MISSING_NATIVE_CRS;
                         else 
@@ -135,7 +140,7 @@ public class FeatureTypeImporter  implements Runnable {
                             catalog.add(layer);
                         } catch(Exception e) {
                             // will be caught by the external try/catch, here we just try to undo 
-                            // the feature type saving (transactions, where are thou)
+                            // the feature type saving (transactions, where are you...)
                             catalog.remove(featureType);
                             throw e;
                         }

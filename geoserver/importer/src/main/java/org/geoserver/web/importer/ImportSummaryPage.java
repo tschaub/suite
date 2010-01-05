@@ -25,6 +25,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.geoserver.catalog.CascadeDeleteVisitor;
 import org.geoserver.catalog.Catalog;
+import org.geoserver.catalog.CatalogBuilder;
 import org.geoserver.catalog.FeatureTypeInfo;
 import org.geoserver.catalog.LayerInfo;
 import org.geoserver.catalog.ResourceInfo;
@@ -391,7 +392,12 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
         LayerInfo layer = summary.getLayer();
         ResourceInfo resource = layer.getResource();
         resource.setSRS("EPSG:" + epsgCode);
-        if (resource.getNativeBoundingBox() == null) {
+        try {
+            new CatalogBuilder(getCatalog()).setupBounds(resource);
+        } catch(Exception e) {
+            LOGGER.log(Level.FINE, "Issue occurred while computing the bounding boxes", e);
+        }
+        if (resource.getLatLonBoundingBox() == null) {
             summary.setStatus(ImportStatus.MISSING_BBOX);
         } else {
             summary.setStatus(ImportStatus.SUCCESS);
