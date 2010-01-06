@@ -2,7 +2,6 @@
   <id>bin</id>
   <formats>
     <format>zip</format>
-    <format>tgz</format>
   </formats>
   <baseDirectory>opengeosuite-${project.version}</baseDirectory>
   <fileSets>
