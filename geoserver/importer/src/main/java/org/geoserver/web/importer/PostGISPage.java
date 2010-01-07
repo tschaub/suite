@@ -5,6 +5,7 @@
 package org.geoserver.web.importer;
 
 import static org.geotools.data.postgis.PostgisNGDataStoreFactory.*;
+import static org.geotools.jdbc.JDBCDataStoreFactory.*;
 import static org.geotools.jdbc.JDBCJNDIDataStoreFactory.*;
 
 import java.io.Serializable;
@@ -20,7 +21,6 @@ import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -85,7 +85,7 @@ public class PostGISPage extends GeoServerSecuredPage {
         add(form);
 
         // general parameters panel
-        form.add(generalParams = new GeneralStoreParamPanel("generalParams", getCatalog()));
+        form.add(generalParams = new GeneralStoreParamPanel("generalParams"));
 
         // connection type chooser
         form.add(connectionTypeSelector());
