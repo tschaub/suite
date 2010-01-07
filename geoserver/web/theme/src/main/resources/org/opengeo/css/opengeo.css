@@ -143,17 +143,19 @@ width:10em;
 }
 
 form a.expanded {
-background-image: url(../silk/bullet_toggle_minus.png);
+background-image: url(../silk/bullet_arrow_down.png);
 background-repeat: no-repeat;
 background-position: 0px 0px;
 padding-left: 16px;
 height: 18px;
+font-weight: bold;
 }
 
 form a.collapsed {
-background-image: url(../silk/bullet_toggle_plus.png);
+background-image: url(../geosilk/bullet_arrow_right.png);
 background-repeat: no-repeat;
 background-position: 0px 0px;
 padding-left: 16px;
 height: 18px;
+font-weight: bold;
 }
