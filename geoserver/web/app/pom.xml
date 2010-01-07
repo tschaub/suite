@@ -25,7 +25,7 @@
       <artifactId>restconfig</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.geoserver.extension</groupId>
+      <groupId>org.geoserver.web</groupId>
       <artifactId>web-security</artifactId>
     </dependency>
     <dependency>

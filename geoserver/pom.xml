@@ -34,6 +34,11 @@
      <version>${gs.version}</version>
    </dependency>
    <dependency>
+    <groupId>org.geoserver.web</groupId>
+    <artifactId>web-security</artifactId>
+    <version>${gs.version}</version>
+   </dependency>
+   <dependency>
      <groupId>org.geoserver</groupId>
      <artifactId>main</artifactId>
      <version>${gs.version}</version>
@@ -47,11 +52,6 @@
    <dependency>
     <groupId>org.geoserver.extension</groupId>
     <artifactId>restconfig</artifactId>
-    <version>${gs.version}</version>
-   </dependency>
-   <dependency>
-    <groupId>org.geoserver.extension</groupId>
-    <artifactId>web-security</artifactId>
     <version>${gs.version}</version>
    </dependency>
    <dependency>
@@ -254,7 +254,7 @@
  </profiles>
 
  <properties>
-  <gs.version>2.0.1-SNAPSHOT</gs.version>
+  <gs.version>2.0.2-SNAPSHOT</gs.version>
   <gt.version>2.6-SNAPSHOT</gt.version>
   <java.awt.headless>true</java.awt.headless>
   <test.maxHeapSize>512M</test.maxHeapSize>
