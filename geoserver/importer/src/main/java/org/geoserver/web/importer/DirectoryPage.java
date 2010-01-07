@@ -23,8 +23,6 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.validator.AbstractValidator;
-import org.apache.wicket.validation.validator.PatternValidator;
-import org.apache.wicket.validation.validator.StringValidator;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.CatalogBuilder;
 import org.geoserver.catalog.DataStoreInfo;
@@ -47,8 +45,6 @@ import org.geotools.data.directory.DirectoryDataStoreFactory;
 public class DirectoryPage extends GeoServerSecuredPage {
     String directory = "";
 
-    String project = "";
-
     GeoServerDialog dialog;
 
     private TextField dirField;
@@ -57,28 +53,24 @@ public class DirectoryPage extends GeoServerSecuredPage {
 
     private Form form;
 
+    GeneralStoreParamPanel generalParams;
+
     public DirectoryPage() {
         add(dialog = new GeoServerDialog("dialog"));
-
-        // prefill project name
-        project = getProjectNameFromPrefix("ogs");
 
         form = new Form("form", new CompoundPropertyModel(this));
         add(form);
 
+        form.add(generalParams = new GeneralStoreParamPanel("generalParams"));
+        
+        
         dirField = new TextField("directory");
         dirField.add(new DirectoryValidator());
         dirField.setRequired(true);
         dirField.setOutputMarkupId(true);
         form.add(dirField);
         form.add(chooserButton(form));
-        projectField = new TextField("project");
-        projectField.setOutputMarkupId(true);
-        projectField.setRequired(true);
-        projectField.add(new ProjectValidator());
-        projectField.add(new PatternValidator("\\w+"));
-        projectField.add(new StringValidator.MaximumLengthValidator(6));
-        form.add(projectField);
+        
 
         SubmitLink submitLink = submitLink();
         form.add(submitLink);
@@ -141,21 +133,16 @@ public class DirectoryPage extends GeoServerSecuredPage {
             @Override
             public void onSubmit() {
                 try {
-                    // build the datastore namespace URI
-                    String ns = buildDatastoreNamespace();
-
-                    // build the workspace
-                    WorkspaceInfo ws = getCatalog().getWorkspaceByName(project);
-                    boolean workspaceNew = false;
-                    if (ws == null) {
-                        workspaceNew = true;
-                        ws = getCatalog().getFactory().createWorkspace();
-                        ws.setName(project);
-                        NamespaceInfo nsi = getCatalog().getFactory().createNamespace();
-                        nsi.setPrefix(project);
-                        nsi.setURI(ns);
-                        getCatalog().add(ws);
-                        getCatalog().add(nsi);
+                    // check there is not another store with the same name
+                    WorkspaceInfo workspace = generalParams.getWorkpace();
+                    NamespaceInfo namespace = getCatalog()
+                            .getNamespaceByPrefix(workspace.getName());
+                    StoreInfo oldStore = getCatalog().getStoreByName(workspace, generalParams.name,
+                            StoreInfo.class);
+                    if (oldStore != null) {
+                        error(new ParamResourceModel("ImporterError.duplicateStore",
+                                DirectoryPage.this, generalParams.name, workspace.getName()).getString());
+                        return;
                     }
 
                     // build/reuse the store
@@ -163,21 +150,21 @@ public class DirectoryPage extends GeoServerSecuredPage {
                     Map<String, Serializable> params = new HashMap<String, Serializable>();
                     params.put(DirectoryDataStoreFactory.URLP.key, new File(directory).toURI()
                             .toURL().toString());
-                    params.put(DirectoryDataStoreFactory.NAMESPACE.key, new URI(ns).toString());
+                    params.put(DirectoryDataStoreFactory.NAMESPACE.key, new URI(namespace.getURI()).toString());
 
                     DataStoreInfo si;
-                    StoreInfo preExisting = getCatalog().getStoreByName(ws, project,
+                    StoreInfo preExisting = getCatalog().getStoreByName(workspace, generalParams.name,
                             StoreInfo.class);
                     boolean storeNew = false;
                     if (preExisting != null) {
                         if (!(preExisting instanceof DataStoreInfo)) {
-                            error(new ParamResourceModel("storeExistsNotVector", this, project));
+                            error(new ParamResourceModel("storeExistsNotVector", this, generalParams.name));
                             return;
                         }
                         si = (DataStoreInfo) preExisting;
                         if (!si.getType().equals(storeType)
                                 || !si.getConnectionParameters().equals(params)) {
-                            error(new ParamResourceModel("storeExistsNotSame", this, project));
+                            error(new ParamResourceModel("storeExistsNotSame", this, generalParams.name));
                             return;
                         }
                         // make sure it's enabled, we just verified the directory exists
@@ -185,8 +172,9 @@ public class DirectoryPage extends GeoServerSecuredPage {
                     } else {
                         storeNew = true;
                         CatalogBuilder builder = new CatalogBuilder(getCatalog());
-                        builder.setWorkspace(ws);
-                        si = builder.buildDataStore(project);
+                        builder.setWorkspace(workspace);
+                        si = builder.buildDataStore(generalParams.name);
+                        si.setDescription(generalParams.description);
                         si.getConnectionParameters().putAll(params);
                         si.setEnabled(true);
                         si.setType(storeType);
@@ -197,9 +185,9 @@ public class DirectoryPage extends GeoServerSecuredPage {
                     // redirect to the layer chooser
                     PageParameters pp = new PageParameters();
                     pp.put("store", si.getName());
-                    pp.put("workspace", ws.getName());
+                    pp.put("workspace", workspace.getName());
                     pp.put("storeNew", storeNew);
-                    pp.put("workspaceNew", workspaceNew);
+                    pp.put("workspaceNew", false);
                     setResponsePage(VectorLayerChooserPage.class, pp);
                 } catch (Exception e) {
                     LOGGER.log(Level.SEVERE, "Error while setting up mass import", e);
@@ -207,10 +195,6 @@ public class DirectoryPage extends GeoServerSecuredPage {
 
             }
         };
-    }
-
-    String buildDatastoreNamespace() {
-        return "http://www.geoserver.org/" + project;
     }
 
     /**
