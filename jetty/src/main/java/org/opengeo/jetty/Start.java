@@ -19,7 +19,7 @@ public class Start {
         if (f.exists()) {
             Wini ini = new Wini(f);
             
-            String startPort = ini.get("suite", "start_port");
+            String startPort = ini.get("suite", "port");
             if (startPort != null) {
                 System.setProperty("jetty.port", startPort);
             }
