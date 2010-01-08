@@ -23,10 +23,6 @@
       <outputDirectory>webapps/geoexplorer</outputDirectory>
     </fileSet>
     <fileSet>
-      <directory>dashboard/target/dashboard</directory>
-      <outputDirectory>webapps/dashboard</outputDirectory>
-    </fileSet>
-    <fileSet>
       <directory>docs/install/target/html</directory>
       <outputDirectory>webapps/docs/install</outputDirectory>
     </fileSet>
