@@ -33,27 +33,24 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         
         this.suite = new og.Suite(config.suite);
         
-        var startingMask = new Ext.LoadMask(Ext.getBody(), {
-             msg: "Starting the OpenGeo Suite"
-        });
-        var stoppingMask = new Ext.LoadMask(Ext.getBody(), {
-             msg: "Shutting down the OpenGeo Suite"
-        });
+        var startingDialog = this.createWorkingDialog("Starting the OpenGeo Suite");
+        var stoppingDialog = this.createWorkingDialog("Stopping the OpenGeo Suite");
+
         this.suite.on({
             starting: function() {
-                 startingMask.show();
+                startingDialog.show();
             }, 
             started: function() {
                 this.message("The OpenGeo Suite is online.");
-                startingMask.hide();
+                startingDialog.hide();
                 this.updateOnlineLinks(true);
             }, 
             stopping: function() {
-                stoppingMask.show();
+                stoppingDialog.show();
             }, 
             stopped: function() {
                 this.message("The OpenGeo Suite is offline.");
-                stoppingMask.hide();
+                stoppingDialog.hide();
                 
                 //if the current config is dirty, update the suite config
                 if (this.configDirty == true) {
@@ -70,6 +67,33 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         
         Ext.onReady(this.createViewport, this);
     },
+    
+    createWorkingDialog: function(msg) {
+        var dialog = new Ext.Window({
+            layout: "column",
+            closable: false,
+            modal: true,
+            items: [{
+               xtype: "box", 
+               autoEl: {
+                   tag: "div",
+                   cls: "dash-dialog-working",
+                   html: msg,
+               },
+               columnWidth: 1
+            }, {
+               xtype: "button",
+               text: "",
+               iconCls: "cancel-button",
+               cls: "control-button",
+               handler: function() {
+                   dialog.hide();
+               },
+               scope: this
+            }] 
+        });
+        return dialog;
+    }, 
     
     createViewport: function() {
 

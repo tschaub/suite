@@ -204,6 +204,7 @@ a.app-disabled:hover {
     background: url(img/indicator.gif) no-repeat;
     background-position: left;
     padding-left: 20px;
+    padding-top: 4px;
 }
 
 a.icon-geoexplorer {
@@ -269,6 +270,10 @@ a.icon-styler {
 
 .x-btn .stop-button {
     background-image: url(img/server_delete.png);
+}
+
+.x-btn .cancel-button {
+    background-image: url(img/cancel.png);
 }
 
 #app-panels-pref-form {
