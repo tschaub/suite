@@ -124,22 +124,28 @@ og.util = {
                                         +sep+ "config.ini");
 
             if (file.open(fs.MODE_WRITE) == true) {
+                //write out defaults first
+                for (key in config["defaults"]) {
+                    file.writeLine(key + "=" + config["defaults"][key]);
+                }
+                
+                //write out rest of sections
                 for (section in config) {
-                    if (section != "defaults") {
-                        file.writeLine("["+section+"]");
+                    if (section == "defaults") {
+                        continue;
                     }
-                    
+                    file.writeLine(" ");
+                    file.writeLine("["+section+"]");
+
                     for (key in config[section]) {
                         //if the key has a default key only write it 
                         // out if its value is different
-                        if (section != "defaults" && key in config["defaults"]
-                            && config[section][key] == config["defaults"][key]){
+                        if (key in config["defaults"] && config[section][key] == config["defaults"][key]){
                             continue;
                         }
                         
                         file.writeLine(key + "=" + config[section][key]);
                     }
-                    file.writeLine(" ");
                 }
                 file.close();
             }
