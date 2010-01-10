@@ -84,6 +84,21 @@ og.Suite = Ext.extend(Ext.util.Observable, {
         });
     }, 
     
+    /**
+     * api: method[getLogFile]
+     * :return: ``String`` The absolute path to the log file.
+     *
+     * Returns the location of the suite log file.
+     */
+    getLogFile: function() {
+        var sep = "/";
+        if (window.Titanium) {
+            sep = Titanium.Filesystem.getSeparator();
+        }
+        
+        return this.config.dir +sep+ "logs" +sep+ "opengeosuite.log";
+    }, 
+    
     /** api: method[run]
      *
      *  Starts the opengeo suite monitor.

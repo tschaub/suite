@@ -108,6 +108,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         };
         
         this.initControlPanel();
+        this.initLogPanel();
         
         this.viewport = new Ext.Viewport({
             layout: "border",
@@ -205,6 +206,20 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                                 html: og.util.loadSync("app/markup/pref/main.html")
                             },
                         }]
+                    }]
+                }, {
+                    defaults: {border: false, autoScroll: true}, 
+                    items: [{
+                        title: "Help",
+                        cls: "dash-panel",
+                        id: "app-panels-help"
+                    }, {
+                        xtype: "container",
+                        layout: "fit",
+                        title: "Logs",
+                        cls: "dash-panel",
+                        id: "app-panels-help-logs",
+                        items: [this.logPanel]
                     }]
                 }]
             }, {
@@ -396,6 +411,86 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         });
 
     },
+    
+    initLogPanel: function() {
+        this.logTextArea = new Ext.form.TextArea({
+             region: "center"
+        });
+        
+        var refreshButton = new Ext.Button({
+            text: "",
+            tooltip: "Refresh the view of the log",
+            iconCls: "refresh-button",
+            cls: "control-button",
+            handler: function() {
+                 this.refreshLog();
+            }, 
+            scope: this
+        });
+        
+        var viewButton = new Ext.Button({
+            text: "",
+            tooltip: "View the log with an external program",
+            iconCls: "view-button",
+            cls: "control-button",
+            handler: function() {
+                og.util.tirun(
+                    function() {
+                        Titanium.Desktop.openURL("file://" + this.suite.getLogFile());
+                    }, 
+                    this
+                )
+            }, 
+            scope: this
+        });
+        
+        this.logPanel = new Ext.Container({
+            layout: "border",
+            items: [this.logTextArea, {
+                xtype: "container",
+                region: "south",
+                layout: "hbox",
+                //Can't figure out why this container gets a greyish background, ask Tim.
+                style: {
+                    "background-color": "#ffffff"
+                },
+                items: [
+                    {xtype: "spacer", flex: 1},
+                    refreshButton,
+                    viewButton
+                ]
+            }]
+        });
+    }, 
+    
+    refreshLog: function() {
+        if (!this.refreshingLogDialog) {
+            this.refreshingLogDialog = this.createWorkingDialog("Refreshing logs");
+        }
+        this.refreshingLogDialog.show();
+        
+        og.util.tirun(
+            function() {
+                var fs = Titanium.Filesystem;
+                var sep = fs.getSeparator();
+                var file = fs.getFileStream(this.suite.getLogFile());
+
+                if (file.open(fs.MODE_READ) == true) {
+                    this.logTextArea.el.dom.innerHTML = "";
+                    var line = file.readLine();
+                    while(line != null) {
+                        line = file.readLine();
+                        this.logTextArea.el.dom.innerHTML += line + "\n";
+                    }
+                
+                    file.close();    
+                }
+            }, 
+            this
+        );
+        
+        this.refreshingLogDialog.hide();
+    }, 
     
     /** private method[updateOnlineLinks]
      *  :arg online: ``Boolean`` Flag inidciating if services are online.

@@ -261,7 +261,7 @@ a.icon-styler {
 }
 
 .control-button {
-    padding-left: 1em;
+    padding-left: 0.4em;
 }
 
 .x-btn .start-button {
@@ -274,6 +274,14 @@ a.icon-styler {
 
 .x-btn .cancel-button {
     background-image: url(img/cancel.png);
+}
+
+.x-btn .refresh-button {
+    background-image: url(img/arrow_refresh.png);
+}
+
+.x-btn .view-button {
+    background-image: url(img/page_white_magnify.png);
 }
 
 #app-panels-pref-form {
