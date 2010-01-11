@@ -516,16 +516,28 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     this.message("Log file does not exist.");
                 }
                 else {
+                    //only ready the last 100K of the log file
+                    var offset = file.size() - 100*1024;
+                    var buf = [];
+                    var count = 0;
+
                     file = fs.getFileStream(file.nativePath());
                     if (file.open(fs.MODE_READ) == true) {
-                        this.logTextArea.el.dom.innerHTML = "";
                         var line = file.readLine();
-                        while(line != null) {
+
+                        //skip over lines until we get ot the last 100K
+                        while(line != null && count < offset) {
+                            count += line.length+1;
                             line = file.readLine();
-                            this.logTextArea.el.dom.innerHTML += line + "\n";
                         }
-                
+ 
+                        while(line != null) {
+                            buf.push(line);
+                            line = file.readLine();
+                        }
                         file.close();    
+
+                        this.logTextArea.el.dom.innerHTML = buf.join("\n");
                     }
                 }
             }, 
