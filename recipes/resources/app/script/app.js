@@ -38,7 +38,6 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
     constructor: function(config) {
         
         this.query = {components: {
-            "PostGIS": true,
             "GeoServer": true,
             "GeoWebCache": true,
             "OpenLayers": true,

@@ -3,13 +3,23 @@
         "id": "basic/map",
         "title": "Basic Map",
         "description": "This recipe describes how to add a map to any web page.",
-        "components": ["OpenLayers"],
+        "components": ["OpenLayers", "GeoWebCache"],
         "reference": "basic/map-ref"
     }, {
         "id": "basic/mappanel",
         "title": "Map Panel",
         "description": "This recipe demonstrates the use of a GeoExt MapPanel.",
-        "components": ["GeoExt"]
+        "components": ["GeoExt", "GeoWebCache"]
+    }, {
+        "id": "basic/layertree",
+        "title": "Layer Tree",
+        "description": "This recipe demonstrates a layer tree.",
+        "components": ["GeoExt", "GeoWebCache"]
+    }, {
+        "id": "vector/external-graphic",
+        "title": "External Grapihc",
+        "description": "Style points with an external grapihc.",
+        "components": ["OpenLayers"]
     }, {
         "id": "editing/snap-split",
         "title": "Snapping & Splitting",
