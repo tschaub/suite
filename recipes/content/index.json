@@ -22,8 +22,8 @@
         "components": ["GeoExt", "OpenLayers"]
     }, {
         "id": "vector/external-graphic",
-        "title": "External Grapihc",
-        "description": "Style points with an external grapihc.",
+        "title": "External Graphic",
+        "description": "Style points with an external graphic.",
         "components": ["OpenLayers"]
     }, {
         "id": "editing/snap-split",
