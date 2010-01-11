@@ -26,7 +26,7 @@ og.platform = {
     "Linux": {
         startSuite: function(exe) {
             var p = Titanium.Process.createProcess({
-                args: [exe]
+                args: [exe, "start"]
             });
             p.launch();
         }
