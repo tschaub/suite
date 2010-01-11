@@ -8,19 +8,20 @@ Ext.onReady(function() {
         renderTo: "map-id",
         layers: [
             new OpenLayers.Layer.WMS(
+                "Transportation",
+                "http://maps.opengeo.org/geowebcache/service/wms",
+                {layers: "openstreetmap"}
+            ),
+            new OpenLayers.Layer.WMS(
                 "Global Imagery",
                 "http://maps.opengeo.org/geowebcache/service/wms",
-                {layers: "bluemarble"}
+                {layers: "bluemarble"},
+                {visibility: false}
             ),
             new OpenLayers.Layer.WMS(
                 "State Boundaries",
                 "http://maps.opengeo.org/geowebcache/service/wms",
                 {layers: "topp:states", format: "image/png"}
-            ),
-            new OpenLayers.Layer.WMS(
-                "Transportation",
-                "http://maps.opengeo.org/geowebcache/service/wms",
-                {layers: "openstreetmap"}
             )
         ],
         center: [-120, 48],
