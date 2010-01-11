@@ -259,12 +259,20 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 xtype: "textfield",
                 fieldLabel: "Port",
                 name: "port",
+                width: 50,
                 value: this.config.suite.port
             }, {
                 xtype: "textfield",
                 fieldLabel: "Shutdown Port",
                 name: "stop_port",
+                width: 50,
                 value: this.config.suite.stop_port
+            }, {
+                xtype: "textfield",
+                fieldLabel: "GeoServer Data",
+                name: "data_dir",
+                width: 250,
+                value: this.config.geoserver.data_dir
             }],
             buttons: [{
                 text: "Save",
@@ -414,7 +422,8 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
     
     initLogPanel: function() {
         this.logTextArea = new Ext.form.TextArea({
-             region: "center"
+             region: "center",
+             margins: "10 10 0 10"
         });
         
         var refreshButton = new Ext.Button({
@@ -446,14 +455,25 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         
         this.logPanel = new Ext.Container({
             layout: "border",
-            items: [this.logTextArea, {
+            items: [{
+                xtype: "container",
+                region: "north",
+                layout: "fit",
+                cls: "dash-panel-body",
+                items: [{
+                    xtype: "box",
+                    cls: "dash-panel-content",
+                    autoEl: {
+                        tag: "div",
+                        html: "<h4>Logs</h4>",
+                    }
+                }]
+            }, 
+            this.logTextArea, {
                 xtype: "container",
                 region: "south",
                 layout: "hbox",
-                //Can't figure out why this container gets a greyish background, ask Tim.
-                style: {
-                    "background-color": "#ffffff"
-                },
+                margins: "2 10 10 10",
                 items: [
                     {xtype: "spacer", flex: 1},
                     refreshButton,
@@ -473,17 +493,22 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             function() {
                 var fs = Titanium.Filesystem;
                 var sep = fs.getSeparator();
-                var file = fs.getFileStream(this.suite.getLogFile());
-
-                if (file.open(fs.MODE_READ) == true) {
-                    this.logTextArea.el.dom.innerHTML = "";
-                    var line = file.readLine();
-                    while(line != null) {
-                        line = file.readLine();
-                        this.logTextArea.el.dom.innerHTML += line + "\n";
-                    }
+                var file = fs.getFile(this.suite.getLogFile());
+                if (file.exists() === false) {
+                    this.message("Log file does not exist.");
+                }
+                else {
+                    file = fs.getFileStream(file.nativePath());
+                    if (file.open(fs.MODE_READ) == true) {
+                        this.logTextArea.el.dom.innerHTML = "";
+                        var line = file.readLine();
+                        while(line != null) {
+                            line = file.readLine();
+                            this.logTextArea.el.dom.innerHTML += line + "\n";
+                        }
                 
-                    file.close();    
+                        file.close();    
+                    }
                 }
             }, 
             this
