@@ -289,6 +289,10 @@ a.icon-styler {
     background-image: url(img/page_white_magnify.png);
 }
 
+.x-btn .delete-button {
+    background-image: url(img/delete.png);
+}
+
 #app-panels-pref-form {
     margin: 10px 10px;
 }

@@ -428,11 +428,22 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         
         var refreshButton = new Ext.Button({
             text: "",
-            tooltip: "Refresh the view of the log",
+            tooltip: "Refresh view of the log",
             iconCls: "refresh-button",
             cls: "control-button",
             handler: function() {
                  this.refreshLog();
+            }, 
+            scope: this
+        });
+        
+        var clearButton = new Ext.Button({
+            text: "",
+            tooltip: "Clear view of the log",
+            iconCls: "delete-button",
+            cls: "control-button",
+            handler: function() {
+                this.clearLog();
             }, 
             scope: this
         });
@@ -477,12 +488,19 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 items: [
                     {xtype: "spacer", flex: 1},
                     refreshButton,
+                    clearButton,
                     viewButton
                 ]
             }]
         });
     }, 
     
+    /**
+     * api: method[refreshLog]
+     * 
+     * Refreshes the log view by reading from the suite log file and 
+     * displaying the contents in the log view text area.
+     */
     refreshLog: function() {
         if (!this.refreshingLogDialog) {
             this.refreshingLogDialog = this.createWorkingDialog("Refreshing logs");
@@ -515,6 +533,15 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         );
         
         this.refreshingLogDialog.hide();
+    }, 
+    
+    /**
+     * api: method[clearLog]
+     *
+     * Clears the log view by clearing the contents of teh log view text area.
+     */
+    clearLog: function() {
+        this.logTextArea.el.dom.innerHTML = "";
     }, 
     
     /** private method[updateOnlineLinks]
