@@ -16,6 +16,11 @@
         "description": "This recipe demonstrates a layer tree.",
         "components": ["GeoExt", "GeoWebCache"]
     }, {
+        "id": "basic/popup",
+        "title": "Feature Popups",
+        "description": "Learn how to open a popup when a feature is selected.",
+        "components": ["GeoExt", "OpenLayers"]
+    }, {
         "id": "vector/external-graphic",
         "title": "External Grapihc",
         "description": "Style points with an external grapihc.",
