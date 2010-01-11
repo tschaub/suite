@@ -26,12 +26,18 @@ public class Start {
             System.out.println(f.getAbsolutePath() + " not found, continuing with default parameters.");
         }
         
-        String startPort = ini.get("?", "port");
+        String startPort = ini.get("suite", "port");
+        if (startPort == null) {
+            startPort = ini.get("?", "port");
+        }
         if (startPort != null) {
             System.setProperty("jetty.port", startPort);
         }
         
-        String stopPort = ini.get("?", "stop_port");
+        String stopPort = ini.get("suite", "stop_port");
+        if (stopPort == null) {
+            stopPort = ini.get("?", "stop_port");
+        }
         if (stopPort == null) {
             stopPort = "8079";
         }
