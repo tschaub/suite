@@ -4,7 +4,9 @@
  */
 package org.geoserver.web.importer;
 
-import static org.geotools.data.postgis.PostgisNGDataStoreFactory.*;
+import static org.geotools.data.oracle.OracleNGDataStoreFactory.*;
+import static org.geotools.data.oracle.OracleNGOCIDataStoreFactory.*;
+import static org.geotools.jdbc.JDBCDataStoreFactory.*;
 import static org.geotools.jdbc.JDBCJNDIDataStoreFactory.*;
 
 import java.io.Serializable;
@@ -35,22 +37,23 @@ import org.geoserver.web.wicket.ParamResourceModel;
 import org.geotools.data.DataAccess;
 import org.geotools.data.DataAccessFinder;
 import org.geotools.data.DataStoreFactorySpi;
+import org.geotools.data.oracle.OracleNGDataStoreFactory;
+import org.geotools.data.oracle.OracleNGJNDIDataStoreFactory;
+import org.geotools.data.oracle.OracleNGOCIDataStoreFactory;
 import org.geotools.data.postgis.PostgisNGDataStoreFactory;
-import org.geotools.data.postgis.PostgisNGJNDIDataStoreFactory;
 import org.geotools.jdbc.JDBCDataStoreFactory;
 
 /**
- * Connection params form for the PostGIS database
+ * Connection params form for the Oracle database
  * @author Andrea Aime - OpenGeo
- * 
  * TODO: factor out a superclass of PostgisPage and OraclePage once all of the pages for the
  * various database types have been built and we know exactly what the moving parts are
  */
 @SuppressWarnings("serial")
-public class PostGISPage extends GeoServerSecuredPage {
-    /** The PostGIS connection types */
+public class OraclePage extends GeoServerSecuredPage {
+    /** The Oracle connection types */
     enum ConnectionType {
-        Default, JNDI;
+        Default, OCI, JNDI;
 
         public String toString() {
             return new ParamResourceModel("ConnectionType." + this.name(), null).getString();
@@ -60,8 +63,6 @@ public class PostGISPage extends GeoServerSecuredPage {
     ConnectionType connectionType = ConnectionType.Default;
 
     String schema;
-
-    boolean looseBBox;
 
     String pkMetadataTable;
 
@@ -83,7 +84,9 @@ public class PostGISPage extends GeoServerSecuredPage {
 
     private OtherDbmsParamPanel otherParamsPanel;
 
-    public PostGISPage() {
+    private OracleOCIParamPanel ociParamsPanel;
+
+    public OraclePage() {
         form = new Form("form");
         add(form);
 
@@ -97,7 +100,7 @@ public class PostGISPage extends GeoServerSecuredPage {
         connParamContainer = new WebMarkupContainer("connectionParamsContainer");
         connParamContainer.setOutputMarkupId(true);
 
-        basicDbmsPanel = new BasicDbmsParamPanel("basicParameters", "localhost", 5432, true);
+        basicDbmsPanel = new BasicDbmsParamPanel("basicParameters", "localhost", 1521, true);
         connParamContainer.add(basicDbmsPanel);
         connPoolLink = toggleConnectionPoolLink();
         connParamContainer.add(connPoolLink);
@@ -113,9 +116,14 @@ public class PostGISPage extends GeoServerSecuredPage {
         jndiParamsPanel = new JNDIParamPanel("jndiParameters");
         jndiParamsPanel.setVisible(false);
         connParamContainer.add(jndiParamsPanel);
+        
+        // oci param panel
+        ociParamsPanel = new OracleOCIParamPanel("ociParameters");
+        ociParamsPanel.setVisible(false);
+        connParamContainer.add(ociParamsPanel);
 
         // other params
-        otherParamsPanel = new OtherDbmsParamPanel("otherParams", "public", false, true);
+        otherParamsPanel = new OtherDbmsParamPanel("otherParams", "", true, true);
         form.add(otherParamsPanel);
 
         // next button (where the action really is)
@@ -156,17 +164,20 @@ public class PostGISPage extends GeoServerSecuredPage {
      * @return
      */
     Component connectionTypeSelector() {
-        DropDownChoice choice = new DropDownChoice("connType", new PropertyModel(this,
+        final DropDownChoice choice = new DropDownChoice("connType", new PropertyModel(this,
                 "connectionType"), Arrays.asList(ConnectionType.values()));
         choice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                boolean jndi = !jndiParamsPanel.isVisible();
-                basicDbmsPanel.setVisible(!jndi);
-                connPoolLink.setVisible(!jndi);
+                boolean jndi = choice.getModelObject() == ConnectionType.JNDI;
+                boolean oci = choice.getModelObject() == ConnectionType.OCI;
+                
+                basicDbmsPanel.setVisible(!jndi && !oci);
+                connPoolLink.setVisible(!jndi && !oci);
                 connectionPoolPanel.setVisible(false);
                 jndiParamsPanel.setVisible(jndi);
+                ociParamsPanel.setVisible(oci);
 
                 target.addComponent(connParamContainer);
             }
@@ -195,41 +206,48 @@ public class PostGISPage extends GeoServerSecuredPage {
                             StoreInfo.class);
                     if (oldStore != null) {
                         error(new ParamResourceModel("ImporterError.duplicateStore",
-                                PostGISPage.this, generalParams.name, workspace.getName()).getString());
+                                OraclePage.this, generalParams.name, workspace.getName()).getString());
                         return;
                     }
 
                     // build up the store connection param map
                     Map<String, Serializable> params = new HashMap<String, Serializable>();
+                    params.put(JDBCDataStoreFactory.DBTYPE.key, "oracle");
                     DataStoreFactorySpi factory;
                     if (connectionType == ConnectionType.JNDI) {
-                        factory = new PostgisNGJNDIDataStoreFactory();
+                        factory = new OracleNGJNDIDataStoreFactory();
 
-                        params.put(PostgisNGJNDIDataStoreFactory.DBTYPE.key,
-                                (String) PostgisNGJNDIDataStoreFactory.DBTYPE.sample);
                         params.put(JNDI_REFNAME.key, jndiParamsPanel.jndiReferenceName);
+                    } else if (connectionType == ConnectionType.OCI) {
+                        factory = new OracleNGOCIDataStoreFactory();
+                        
+                        params.put(ALIAS.key, ociParamsPanel.alias);
+                        params.put(USER.key, ociParamsPanel.username);
+                        params.put(PASSWD.key, ociParamsPanel.password);
                     } else {
-                        factory = new PostgisNGDataStoreFactory();
+                        factory = new OracleNGDataStoreFactory();
 
                         // basic params
-                        params.put(PostgisNGDataStoreFactory.DBTYPE.key,
-                                (String) PostgisNGDataStoreFactory.DBTYPE.sample);
                         params.put(HOST.key, basicDbmsPanel.host);
                         params.put(PostgisNGDataStoreFactory.PORT.key, basicDbmsPanel.port);
                         params.put(USER.key, basicDbmsPanel.username);
                         params.put(PASSWD.key, basicDbmsPanel.password);
                         params.put(DATABASE.key, basicDbmsPanel.database);
-
-                        // connection pool params
+                    }
+                    if(connectionType != ConnectionType.JNDI) {
+                        // connection pool params common to OCI and default connections
                         params.put(MINCONN.key, connectionPoolPanel.minConnection);
                         params.put(MAXCONN.key, connectionPoolPanel.maxConnection);
                         params.put(FETCHSIZE.key, connectionPoolPanel.fetchSize);
                         params.put(MAXWAIT.key, connectionPoolPanel.timeout);
                         params.put(VALIDATECONN.key, connectionPoolPanel.validate);
-                        params.put(PREPARED_STATEMENTS.key, connectionPoolPanel.preparedStatements);
 
                     }
-                    params.put(JDBCDataStoreFactory.SCHEMA.key, otherParamsPanel.schema);
+                    if(otherParamsPanel.userSchema) {
+                        params.put(JDBCDataStoreFactory.SCHEMA.key, ((String) params.get(USER.key)).toUpperCase());
+                    } else { 
+                        params.put(JDBCDataStoreFactory.SCHEMA.key, otherParamsPanel.schema);
+                    }
                     params.put(NAMESPACE.key, new URI(namespace.getURI()).toString());
                     params.put(LOOSEBBOX.key, otherParamsPanel.looseBBox);
                     params.put(PK_METADATA_TABLE.key, otherParamsPanel.pkMetadata);
@@ -244,7 +262,7 @@ public class PostGISPage extends GeoServerSecuredPage {
                     } catch (Throwable e) {
                         LOGGER.log(Level.INFO, "Could not connect to the datastore", e);
                         error(new ParamResourceModel("ImporterError.databaseConnectionError",
-                                PostGISPage.this, e.getMessage()).getString());
+                                OraclePage.this, e.getMessage()).getString());
                         return;
                     } finally {
                         if(store != null)

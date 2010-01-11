@@ -5,13 +5,11 @@
 package org.geoserver.web.importer;
 
 
-import org.apache.batik.css.engine.sac.CSSAttributeCondition;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByLink.CssModifier;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.TextField;
@@ -27,19 +25,52 @@ import org.apache.wicket.model.PropertyModel;
 @SuppressWarnings("serial")
 public class OtherDbmsParamPanel extends Panel {
     String schema;
+    boolean userSchema;
     boolean excludeGeometryless = true;
     boolean looseBBox = true;
     String pkMetadata;
     WebMarkupContainer advancedContainer;
     private WebMarkupContainer advancedPanel;
     
-    public OtherDbmsParamPanel(String id, String defaultSchema, boolean showLooseBBox) {
+    public OtherDbmsParamPanel(String id, String defaultSchema, boolean showUserSchema, boolean showLooseBBox) {
         super(id);
         this.schema = defaultSchema;
         
-        add(new TextField("schema", new PropertyModel(this, "schema")));
-        add(new CheckBox("excludeGeometryless", new PropertyModel(this, "excludeGeometryless")));
+        // we create a global container in order to update the visibility of the various items
+        // at runtime
+        final WebMarkupContainer basicParams = new WebMarkupContainer("basicParams");
+        basicParams.setOutputMarkupId(true);
+        add(basicParams);
+
+        // we allow defaulting to the user name schema for Oracle
+        // ... the checkbox to default to the user schema 
+        WebMarkupContainer userSchemaChkContainer = new WebMarkupContainer("userSchemaChkContainer");
+        basicParams.add(userSchemaChkContainer);
+        CheckBox userSchemaChk = new CheckBox("userSchema", new PropertyModel(this, "userSchema"));
+        userSchemaChkContainer.add(userSchemaChk);
+        // the custom schema chooser
+        final WebMarkupContainer userSchemaContainer = new WebMarkupContainer("userSchemaContainer");
+        basicParams.add(userSchemaContainer);
+        TextField schemaTxt = new TextField("schema", new PropertyModel(this, "schema"));
+        userSchemaContainer.add(schemaTxt);
         
+        if(showUserSchema) {
+            userSchema = true;
+            userSchemaContainer.setVisible(false);
+            userSchemaChk.add(new AjaxFormComponentUpdatingBehavior("onClick") {
+                
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+                    userSchemaContainer.setVisible(!userSchema);
+                    target.addComponent(basicParams);
+                }
+            });
+        } else {
+            userSchema = false;
+            userSchemaChkContainer.setVisible(false);
+        }
+        
+        basicParams.add(new CheckBox("excludeGeometryless", new PropertyModel(this, "excludeGeometryless")));
         add(toggleAdvanced());
         
         advancedContainer = new WebMarkupContainer("advancedContainer");

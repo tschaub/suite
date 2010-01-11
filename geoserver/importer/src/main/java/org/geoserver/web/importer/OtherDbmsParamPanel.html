@@ -1,8 +1,12 @@
 <html xmlns:wicket="http://wicket.apache.org/">
 <body>
 <wicket:panel>
-  <ul>
-    <li><label for="schema"><wicket:message key="schema">schema</wicket:message></label> <input
+  <ul wicket:id="basicParams">
+    <li wicket:id="userSchemaChkContainer"><input
+      type="checkbox" class="field checkbox"
+      wicket:id="userSchema" />
+      <label class="choice" for="userSchema"><wicket:message key="userSchema">userSchema</wicket:message></label></li> 
+    <li wicket:id="userSchemaContainer"><label for="schema"><wicket:message key="schema">schema</wicket:message></label> <input
       type="text" class="text"
       wicket:id="schema" /></li>
     <li><input

@@ -4,7 +4,10 @@
  */
 package org.geoserver.web.importer;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -19,6 +22,7 @@ import org.apache.wicket.model.IModel;
 import org.geoserver.web.GeoServerApplication;
 import org.geoserver.web.GeoServerBasePage;
 import org.geoserver.web.wicket.ParamResourceModel;
+import org.geotools.data.DataStoreFactorySpi;
 
 /**
  * First page in the importer, the store chooser one that will redirect to the proper parameter
@@ -33,7 +37,7 @@ public class StoreChooserPage extends GeoServerBasePage {
         if ("TRUE".equalsIgnoreCase((String) params.getString("afterCleanup")))
             info(new ParamResourceModel("rollbackSuccessful", this).getString());
 
-        ListView storeLinks = new ListView("stores", Arrays.asList(Store.values())) {
+        ListView storeLinks = new ListView("stores", Store.getAvailableStores()) {
 
             @Override
             protected void populateItem(ListItem item) {
@@ -53,18 +57,30 @@ public class StoreChooserPage extends GeoServerBasePage {
         add(storeLinks);
     }
 
+    /**
+     * A store we know about. It is usually a 1-many match towards GeoTools data stores (one of
+     * these matches more than one data store factory in particular)
+     */
     enum Store {
         directory(new ResourceReference(GeoServerApplication.class, "img/icons/silk/folder.png"),
-                DirectoryPage.class), postgis(new ResourceReference(GeoServerApplication.class,
-                "img/icons/geosilk/database_vector.png"), PostGISPage.class);
+                DirectoryPage.class, "org.geotools.data.directory.DirectoryDataStoreFactory"), postgis(
+                new ResourceReference(GeoServerApplication.class,
+                        "img/icons/geosilk/database_vector.png"), PostGISPage.class,
+                "org.geotools.data.postgis.PostgisNGDataStoreFactory"), oracle(
+                new ResourceReference(GeoServerApplication.class,
+                        "img/icons/geosilk/database_vector.png"), OraclePage.class,
+                "org.geotools.data.oracle.OracleNGDataStoreFactory");
 
         ResourceReference icon;
 
         Class destinationPage;
 
-        Store(ResourceReference icon, Class destinationPage) {
+        String factoryClassName;
+
+        Store(ResourceReference icon, Class destinationPage, String factoryClassName) {
             this.icon = icon;
             this.destinationPage = destinationPage;
+            this.factoryClassName = factoryClassName;
         }
 
         IModel getStoreName(Component component) {
@@ -81,6 +97,39 @@ public class StoreChooserPage extends GeoServerBasePage {
 
         Class getDestinationPage() {
             return destinationPage;
+        }
+
+        /**
+         * Checks whether the datastore is installed and available (e.g., all the extra libraries it
+         * requires are there)
+         * 
+         * @return
+         */
+        boolean isAvailable() {
+            try {
+                Class<?> clazz = Class.forName(factoryClassName);
+                DataStoreFactorySpi factory = (DataStoreFactorySpi) clazz.newInstance();
+                return factory.isAvailable();
+            } catch (Exception e) {
+                return false;
+            }
+        }
+
+        /**
+         * Returns the list of stores that are known to be available
+         * 
+         * @return
+         * @see #isAvailable()
+         */
+        static List<Store> getAvailableStores() {
+            List<Store> stores = new ArrayList<Store>(Arrays.asList(values()));
+            for (Iterator<Store> it = stores.iterator(); it.hasNext();) {
+                Store store = it.next();
+                if (!store.isAvailable())
+                    it.remove();
+            }
+
+            return stores;
         }
     }
 }

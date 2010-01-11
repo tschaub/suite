@@ -45,6 +45,15 @@
       <version>${gt.version}</version>
     </dependency>
     <dependency>
+      <!-- This dependency has been added to allow the module to compile the Oracle panels without
+           requiring too much reflection, but the plug-in won't be there at runtime unless the user
+           chose it in the GUI -->
+      <groupId>org.geotools.jdbc</groupId>
+      <artifactId>gt-jdbc-oracle</artifactId>
+      <version>${gt.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.geoserver</groupId>
       <artifactId>main</artifactId>
       <classifier>tests</classifier>
@@ -57,5 +66,27 @@
     </dependency>
     
   </dependencies>
+  
+  <profiles>
+    <profile>
+      <!-- 
+         This profile activates Oracle support for good, useful to make a .war with 
+         store and driver 
+      -->
+      <id>oracle</id>
+      <dependencies>
+        <dependency>
+	      <groupId>org.geotools.jdbc</groupId>
+	      <artifactId>gt-jdbc-oracle</artifactId>
+	      <version>${gt.version}</version>
+	    </dependency>
+        <dependency>
+          <groupId>com.oracle</groupId>
+          <artifactId>ojdbc14</artifactId> 
+          <version>10.2.0.3.0</version>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
 
 </project>
