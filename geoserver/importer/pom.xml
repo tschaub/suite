@@ -47,9 +47,20 @@
     <dependency>
       <!-- This dependency has been added to allow the module to compile the Oracle panels without
            requiring too much reflection, but the plug-in won't be there at runtime unless the user
-           chose it in the GUI -->
+           chose it in the GUI
+-->
       <groupId>org.geotools.jdbc</groupId>
       <artifactId>gt-jdbc-oracle</artifactId>
+      <version>${gt.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <!-- This dependency has been added to allow the module to compile the Oracle panels without
+           requiring too much reflection, but the plug-in won't be there at runtime unless the user
+           chose it in the GUI
+-->
+      <groupId>org.geotools.jdbc</groupId>
+      <artifactId>gt-jdbc-sqlserver</artifactId>
       <version>${gt.version}</version>
       <scope>provided</scope>
     </dependency>
@@ -66,24 +77,44 @@
     </dependency>
     
   </dependencies>
-  
+
   <profiles>
     <profile>
-      <!-- 
-         This profile activates Oracle support for good, useful to make a .war with 
-         store and driver 
+      <!--
+        This profile activates Oracle support for good, useful to make a
+        .war with store and driver
       -->
       <id>oracle</id>
       <dependencies>
         <dependency>
-	      <groupId>org.geotools.jdbc</groupId>
-	      <artifactId>gt-jdbc-oracle</artifactId>
-	      <version>${gt.version}</version>
-	    </dependency>
+          <groupId>org.geotools.jdbc</groupId>
+          <artifactId>gt-jdbc-oracle</artifactId>
+          <version>${gt.version}</version>
+        </dependency>
         <dependency>
           <groupId>com.oracle</groupId>
-          <artifactId>ojdbc14</artifactId> 
+          <artifactId>ojdbc14</artifactId>
           <version>10.2.0.3.0</version>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <!--
+        This profile activates Oracle support for good, useful to make a
+        .war with store and driver
+      -->
+      <id>sqlserver</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.geotools.jdbc</groupId>
+          <artifactId>gt-jdbc-sqlserver</artifactId>
+          <version>${gt.version}</version>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>com.microsoft</groupId>
+          <artifactId>sqljdbc</artifactId>
+          <version>1.2</version>
         </dependency>
       </dependencies>
     </profile>

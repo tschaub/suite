@@ -63,13 +63,16 @@ public class StoreChooserPage extends GeoServerBasePage {
      */
     enum Store {
         directory(new ResourceReference(GeoServerApplication.class, "img/icons/silk/folder.png"),
-                DirectoryPage.class, "org.geotools.data.directory.DirectoryDataStoreFactory"), postgis(
-                new ResourceReference(GeoServerApplication.class,
-                        "img/icons/geosilk/database_vector.png"), PostGISPage.class,
-                "org.geotools.data.postgis.PostgisNGDataStoreFactory"), oracle(
-                new ResourceReference(GeoServerApplication.class,
-                        "img/icons/geosilk/database_vector.png"), OraclePage.class,
-                "org.geotools.data.oracle.OracleNGDataStoreFactory");
+                DirectoryPage.class, "org.geotools.data.directory.DirectoryDataStoreFactory"), // 
+        postgis(new ResourceReference(GeoServerApplication.class,
+                "img/icons/geosilk/database_vector.png"), PostGISPage.class,
+                "org.geotools.data.postgis.PostgisNGDataStoreFactory"), //
+        oracle(new ResourceReference(GeoServerApplication.class,
+                "img/icons/geosilk/database_vector.png"), OraclePage.class,
+                "org.geotools.data.oracle.OracleNGDataStoreFactory"),
+        sqlserver(new ResourceReference(GeoServerApplication.class,
+                "img/icons/geosilk/database_vector.png"), SQLServerPage.class,
+                "org.geotools.data.sqlserver.SQLServerDataStoreFactory");
 
         ResourceReference icon;
 
