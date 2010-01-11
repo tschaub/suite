@@ -10,8 +10,11 @@
       <outputDirectory>/</outputDirectory>
       <excludes>
         <exclude>pom.xml</exclude>
-        <exclude>startup.sh</exclude>
         <exclude>target/**</exclude>
+        <exclude>src/**</exclude>
+        <exclude>.*</exclude>
+        <exclude>opengeo-suite</exclude>
+        <exclude>lib/jetty-start-*.jar</exclude>
       </excludes>
     </fileSet>
     <fileSet>
@@ -39,4 +42,21 @@
       <outputDirectory>data_dir</outputDirectory>
     </fileSet>
   </fileSets>
+  <files>
+    <file>
+      <source>jetty/lib/jetty-start-${jetty.version}.jar</source>
+      <outputDirectory>/</outputDirectory>
+      <destName>jetty-start.jar</destName>
+    </file>
+    <file>
+      <source>jetty/target/og-jetty-${project.version}.jar</source>
+      <outputDirectory>/</outputDirectory>
+      <destName>og-jetty.jar</destName>
+    </file>
+    <file>
+      <source>jetty/opengeo-suite</source>
+      <outputDirectory>/</outputDirectory>
+      <fileMode>544</fileMode>
+    </file>
+  </files>
 </assembly>

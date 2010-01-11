@@ -56,9 +56,9 @@ Click the "Build" button in the menu and save the result as "Dashboard.pkg" in t
 Build the Suite Services Package
 --------------------------------
 
-Unzip the "suite-<VERISON>-mac.zip" artifact created in the first section into the "app/OpenGeo Suite.app/Contents/Resources/Java" directory:
+Unzip the "opengeosuite-<VERISON>-mac.zip" artifact created in the first section into the "app/OpenGeo Suite.app/Contents/Resources/Java" directory:
 
-  unzip ../../target/suite-<VERSION>-mac.zip -d app/OpenGeo\ Suite.app/Contents/Resources/Java
+  unzip ../../target/opengeosuite-<VERSION>-mac.zip -d app/OpenGeo\ Suite.app/Contents/Resources/Java
 
 Open the "services.pmdoc" PackageMaker project:
 
@@ -72,8 +72,8 @@ Build the Suite Package
 
 Unzip the "suite-<VERSION>-doc.zip" and "suite-<VERSION>-ext.zip" artifacts created in the first section into the "pkg" directory:
 
-  unzip ../../target/suite-<VERSION>-doc.zip -d pkg
-  unzip ../../target/suite-<VERSION>-ext.zip -d pkg
+  unzip ../../target/opengeosuite-<VERSION>-doc.zip -d pkg
+  unzip ../../target/opengeosuite-<VERSION>-ext.zip -d pkg
 
 Open the "suite.pmdoc" PackageMaker project:
 
