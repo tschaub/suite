@@ -26,7 +26,7 @@ import org.opengis.feature.type.GeometryDescriptor;
  * @author Andrea Aime - OpenGeo
  */
 @SuppressWarnings("serial")
-public class ImportSummaryProvider extends GeoServerDataProvider<LayerSummary> {
+class ImportSummaryProvider extends GeoServerDataProvider<LayerSummary> {
     static final Logger LOGGER = org.geotools.util.logging.Logging
             .getLogger(ImportSummaryProvider.class);
 

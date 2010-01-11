@@ -11,7 +11,7 @@ import org.apache.wicket.validation.validator.AbstractValidator;
 import org.geoserver.web.GeoServerApplication;
 
 @SuppressWarnings("serial")
-public class NewWorkspacePanel extends Panel {
+class NewWorkspacePanel extends Panel {
     
     String workspace;
 

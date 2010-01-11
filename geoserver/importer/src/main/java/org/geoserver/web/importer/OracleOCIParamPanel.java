@@ -14,7 +14,7 @@ import org.apache.wicket.model.PropertyModel;
  * @author Andrea Aime - OpenGeo
  */
 @SuppressWarnings("serial")
-public class OracleOCIParamPanel extends Panel {
+class OracleOCIParamPanel extends Panel {
     String alias;
 
     String username;

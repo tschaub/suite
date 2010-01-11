@@ -19,7 +19,7 @@ import org.opengis.feature.type.Name;
  * 
  * @author Andrea Aime - OpenGeo
  */
-public class Resource implements Comparable<Resource>, Serializable {
+class Resource implements Comparable<Resource>, Serializable {
 
     /**
      * The resource name

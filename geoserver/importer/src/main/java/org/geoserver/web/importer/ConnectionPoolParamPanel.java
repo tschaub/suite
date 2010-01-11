@@ -15,7 +15,7 @@ import org.apache.wicket.model.PropertyModel;
  * Connection pool related parameter form
  */
 @SuppressWarnings("serial")
-public class ConnectionPoolParamPanel extends Panel {
+class ConnectionPoolParamPanel extends Panel {
     int minConnection = 1;
     int maxConnection = 10;
     int fetchSize = 1000;

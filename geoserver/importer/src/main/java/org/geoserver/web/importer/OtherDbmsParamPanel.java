@@ -23,7 +23,7 @@ import org.apache.wicket.model.PropertyModel;
  * @author Andrea Aime - OpenGeo
  */
 @SuppressWarnings("serial")
-public class OtherDbmsParamPanel extends Panel {
+class OtherDbmsParamPanel extends Panel {
     String schema;
     boolean userSchema;
     boolean excludeGeometryless = true;

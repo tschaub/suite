@@ -14,7 +14,7 @@ import org.apache.wicket.model.PropertyModel;
  * @author Andrea Aime - OpenGeo
  */
 @SuppressWarnings("serial")
-public class JNDIParamPanel extends Panel {
+class JNDIParamPanel extends Panel {
     String jndiReferenceName = "java:comp/env/jdbc/mydatabase";
     
     public JNDIParamPanel(String id) {
