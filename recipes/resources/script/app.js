@@ -51,7 +51,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
         var parts = this.index.split("/");
         parts.pop();
         var dir = parts.join("/");
-        var loc = window.location.href;
+        var loc = window.location.pathname;
         parts = loc.split("/");
         parts.pop();
         this.recipeBase = parts.join("/") + "/" + dir;

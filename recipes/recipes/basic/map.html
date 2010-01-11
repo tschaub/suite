@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>Basic Map</title>
+        <link rel="stylesheet" type="text/css" href="../../externals/ext/resources/css/ext-all.css" />
+        <link rel="stylesheet" type="text/css" href="../../externals/ext/resources/css/xtheme-gray.css" />
+        <link rel="stylesheet" href="../../externals/openlayers/theme/default/style.css" type="text/css" />
+        <link rel="stylesheet" href="../../resources/theme/style.css" type="text/css" />
+        <script src="../../externals/openlayers/build/OpenLayers.js"></script>
+        <script src="map.js"></script>
+        <script>
+            OpenLayers.ImgPath = "../../externals/openlayers/img/";
+        </script>
+    </head>
+    <body onload="init()" class="recipe-body">
+        <h1>Basic Map</h1>
+        <div class="description">
+            A simple example that adds a map to a web page.
+        </div>
+        <div class="content">
+            <div id="map-id" class="map"></div>
+        </div>
+    </body>
+</html>

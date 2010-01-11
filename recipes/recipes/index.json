@@ -1,33 +1,15 @@
 {
     "recipes": [{
-        "id": "map",
+        "id": "basic/map",
         "title": "Basic Map",
         "description": "This recipe describes how to add a map to any web page.",
         "components": ["OpenLayers"],
-        "reference": "map-ref"
+        "reference": "basic/map-ref"
     }, {
-        "id": "advanced",
-        "title": "Advanced Recipe",
-        "description": "This recipe describes how to do magic with the Suite.",
-        "components": ["GeoServer", "OpenLayers", "GeoWebCache", "GeoExt"],
-        "source": false
-    }, {
-        "id": "bogus1",
-        "title": "Bogus Recipe 1",
-        "description": "This recipe describes how to do use GeoExt.",
-        "components": ["GeoExt"],
-        "source": false
-    }, {
-        "id": "bogus2",
-        "title": "Bogus Recipe 2",
-        "description": "This recipe describes how to use GeoWebCache.",
-        "components": ["GeoWebCache"],
-        "source": false
-    }, {
-        "id": "snap-split",
+        "id": "editing/snap-split",
         "title": "Snapping & Splitting",
         "description": "Learn how to enable snapping and splitting while editing features in OpenLayers.",
         "components": ["OpenLayers"],
-        "reference": "snap-split-ref"
+        "reference": "editing/snap-split-ref"
     }]
 }

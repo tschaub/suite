@@ -68,7 +68,7 @@ function init() {
         isBaseLayer: true,
         strategies: [new OpenLayers.Strategy.Fixed()],                
         protocol: new OpenLayers.Protocol.HTTP({
-            url: "data/roads.json",
+            url: "../data/roads.json",
             format: new OpenLayers.Format.GeoJSON()
         }),
         styleMap: styles,
