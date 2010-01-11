@@ -42,7 +42,7 @@ case "$1" in
     ;;
 
   stop)
-    exec "$_RUNJAVA" -cp $CLASSPATH org.mortbay.start.Main --stop
+    exec "$_RUNJAVA" -cp $CLASSPATH org.opengeo.jetty.Start --stop
     ;;
    
   *)
