@@ -6,6 +6,11 @@
         "components": ["OpenLayers"],
         "reference": "basic/map-ref"
     }, {
+        "id": "basic/mappanel",
+        "title": "Map Panel",
+        "description": "This recipe demonstrates the use of a GeoExt MapPanel.",
+        "components": ["GeoExt"]
+    }, {
         "id": "editing/snap-split",
         "title": "Snapping & Splitting",
         "description": "Learn how to enable snapping and splitting while editing features in OpenLayers.",
