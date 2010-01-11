@@ -250,6 +250,11 @@ a.icon-styler {
     border-bottom-width: 5px;
 }
 
+/* override background color */
+.x-border-layout-ct {
+    background-color: #ffffff;
+}
+
 /* control panel */
 .app-panels-control {
     border: solid #291C17;
