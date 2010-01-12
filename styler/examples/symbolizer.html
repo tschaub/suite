@@ -25,10 +25,13 @@
     <script type="text/javascript" src="../lib/Styler/widgets/PointSymbolizer.js"></script>
     <script type="text/javascript" src="../lib/Styler/widgets/LineSymbolizer.js"></script>
     <script type="text/javascript" src="../lib/Styler/widgets/PolygonSymbolizer.js"></script>
-    <script type="text/javascript" src="../lib/Styler/widgets/FeatureRenderer.js"></script>
     <script type="text/javascript" src="../lib/Styler/ColorManager.js"></script>
+    <script type="text/javascript" src="../externals/geoext/lib/GeoExt/widgets/FeatureRenderer.js"></script>
     <script type="text/javascript" src="../externals/ux/colorpicker/color-picker.ux.js"></script>
     <script>
+    
+    Ext.BLANK_IMAGE_URL = "../theme/img/blank.gif";
+
 
     var symbolizer = {
         Point: {
@@ -70,9 +73,9 @@
 
         // create line swatch that opens line symbolizer in new window when clicked
         var lineWin;
-        var lineSwatch = new Styler.FeatureRenderer({
+        var lineSwatch = new GeoExt.FeatureRenderer({
             symbolType: "Line",
-            symbolizer: symbolizer["Line"],
+            symbolizers: [symbolizer["Line"]],
             renderTo: "line",
             listeners: {
                 click: function(renderer) {
@@ -83,7 +86,7 @@
                             closeAction: "hide",
                             items: [{
                                 xtype: "gx_linesymbolizer",
-                                symbolizer: renderer.symbolizer,
+                                symbolizer: renderer.symbolizers[0],
                                 bodyStyle: {padding: 10},
                                 border: false,
                                 defaults: {
@@ -92,7 +95,7 @@
                                 },
                                 listeners: {
                                     change: function(symbolizer) {
-                                        lineSwatch.setSymbolizer(symbolizer);
+                                        lineSwatch.setSymbolizers([symbolizer]);
                                     }
                                 }
                             }]
@@ -105,9 +108,9 @@
 
         // create poly swatch that opens polygon symbolizer in new window when clicked
         var polyWin;
-        var polySwatch = new Styler.FeatureRenderer({
+        var polySwatch = new GeoExt.FeatureRenderer({
             symbolType: "Polygon",
-            symbolizer: symbolizer["Polygon"],
+            symbolizers: [symbolizer["Polygon"]],
             renderTo: "polygon",
             listeners: {
                 click: function(renderer) {
@@ -118,7 +121,7 @@
                             closeAction: "hide",
                             items: [{
                                 xtype: "gx_polygonsymbolizer",
-                                symbolizer: renderer.symbolizer,
+                                symbolizer: renderer.symbolizers[0],
                                 bodyStyle: {padding: 10},
                                 border: false,
                                 defaults: {
@@ -127,7 +130,7 @@
                                 },
                                 listeners: {
                                     change: function(symbolizer) {
-                                        polySwatch.setSymbolizer(symbolizer);
+                                        polySwatch.setSymbolizers([symbolizer]);
                                     }
                                 }
                             }]
@@ -140,9 +143,9 @@
 
         // create point swatch that opens point symbolizer in new window when clicked
         var pointWin;
-        var pointSwatch = new Styler.FeatureRenderer({
+        var pointSwatch = new GeoExt.FeatureRenderer({
             symbolType: "Point",
-            symbolizer: symbolizer["Point"],
+            symbolizers: [symbolizer["Point"]],
             renderTo: "point",
             listeners: {
                 click: function(renderer) {
@@ -154,7 +157,7 @@
                             closeAction: "hide",
                             items: [{
                                 xtype: "gx_pointsymbolizer",
-                                symbolizer: renderer.symbolizer,
+                                symbolizer: renderer.symbolizers[0],
                                 pointGraphics: [
                                     {display: "circle", value: "circle", mark: true, preview: "../theme/img/circle.gif"},
                                     {display: "square", value: "square", mark: true, preview: "../theme/img/square.gif"},
@@ -175,7 +178,7 @@
                                 },
                                 listeners: {
                                     change: function(symbolizer) {
-                                        pointSwatch.setSymbolizer(symbolizer);
+                                        pointSwatch.setSymbolizers([symbolizer]);
                                     }
                                 }
                             }]
