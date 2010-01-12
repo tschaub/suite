@@ -51,7 +51,7 @@ public abstract class AbstractDBMSPage extends GeoServerSecuredPage {
 
     private WebMarkupContainer connParamContainer;
 
-    protected OtherDbmsParamPanel otherParamsPanel;
+    protected Component otherParamsPanel;
 
     private RepeatingView paramPanels;
 
@@ -95,19 +95,18 @@ public abstract class AbstractDBMSPage extends GeoServerSecuredPage {
      * 
      * @return
      */
-    protected OtherDbmsParamPanel buildOtherParamsPanel(String id) {
+    protected Component buildOtherParamsPanel(String id) {
         return new OtherDbmsParamPanel(id, "public", false, true);
     }
 
     /**
-     * Builds and returns a map with params panels. The keys are used to fill in the drop down
-     * choice and to look for the i18n key using the "ConnectionType.${key}" convention. The panels
-     * built should have ids made of digits only, otherwise Wicket will complain about non safe ids
-     * in repeater
-     * 
+     * Wheter the geometryless data is going to be imported, or not
      * @return
      */
-    protected abstract LinkedHashMap<String, Component> buildParamPanels();
+    protected boolean isGeometrylessExcluded() {
+        return ((OtherDbmsParamPanel) otherParamsPanel).excludeGeometryless;
+    }
+
 
     /**
      * Switches between the types of param panels
@@ -215,7 +214,7 @@ public abstract class AbstractDBMSPage extends GeoServerSecuredPage {
                     pp.put("workspace", workspace.getName());
                     pp.put("storeNew", true);
                     pp.put("workspaceNew", false);
-                    pp.put("skipGeometryless", otherParamsPanel.excludeGeometryless);
+                    pp.put("skipGeometryless", isGeometrylessExcluded());
                     setResponsePage(VectorLayerChooserPage.class, pp);
                 } catch (Exception e) {
                     LOGGER.log(Level.SEVERE, "Error while setting up mass import", e);
@@ -224,7 +223,25 @@ public abstract class AbstractDBMSPage extends GeoServerSecuredPage {
             }
         };
     }
+    
+    /**
+     * Builds and returns a map with params panels. The keys are used to fill in the drop down
+     * choice and to look for the i18n key using the "ConnectionType.${key}" convention. The panels
+     * built should have ids made of digits only, otherwise Wicket will complain about non safe ids
+     * in repeater
+     * 
+     * @return
+     */
+    protected abstract LinkedHashMap<String, Component> buildParamPanels();
 
+    /**
+     * Fills the specified params map and returns the factory spi that we're expected to use to 
+     * create the store
+     * @param namespace
+     * @param params
+     * @return
+     * @throws URISyntaxException
+     */
     protected abstract DataStoreFactorySpi fillStoreParams(NamespaceInfo namespace,
             Map<String, Serializable> params) throws URISyntaxException;
 }

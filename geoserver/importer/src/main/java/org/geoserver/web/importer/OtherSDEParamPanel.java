@@ -5,23 +5,27 @@
 package org.geoserver.web.importer;
 
 
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 
 /**
- * JNDI params form
+ * Other params form for ArcSDE: version and eclude geometryless
+ *  
  * @author Andrea Aime - OpenGeo
  */
 @SuppressWarnings("serial")
-class JNDIParamPanel extends Panel {
-    String jndiReferenceName;
+class OtherSDEParamPanel extends Panel {
+    String version;
+    boolean excludeGeometryless = true;
     
-    public JNDIParamPanel(String id, String jndiReferenceName) {
+    public OtherSDEParamPanel(String id) {
         super(id);
-        this.jndiReferenceName = jndiReferenceName;
         
-        add(new TextField("jndiReferenceName", new PropertyModel(this, "jndiReferenceName")).setRequired(true));
+        // the version chooser
+        add(new TextField("version", new PropertyModel(this, "version")));
+        add(new CheckBox("excludeGeometryless", new PropertyModel(this, "excludeGeometryless")));
     }
     
 }

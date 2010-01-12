@@ -54,15 +54,13 @@ public class VectorLayerChooserPage extends GeoServerSecuredPage {
         // if we don't find the store for any reason go back to the first page
         StoreInfo store = getCatalog().getDataStoreByName(wsName, storeName);
         if (store == null) {
-            error(new ParamResourceModel("storeNotFound", this, storeName, wsName));
-            setResponsePage(StoreChooserPage.class);
+            error(new ParamResourceModel("storeNotFound", this, storeName, wsName).getString());
         }
 
         // check if we have anything to import
         LayerChooserProvider provider = new LayerChooserProvider(store.getId(), skipGeometryless);
         if (provider.size() <= 0) {
-            error(new ParamResourceModel("storeEmpty", this, storeName, wsName));
-            setResponsePage(StoreChooserPage.class);
+            error(new ParamResourceModel("storeEmpty", this, storeName, wsName).getString());
         }
 
         // build the GUI

@@ -55,12 +55,22 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <!-- This dependency has been added to allow the module to compile the Oracle panels without
+      <!-- This dependency has been added to allow the module to compile the Sql Server panels without
            requiring too much reflection, but the plug-in won't be there at runtime unless the user
            chose it in the GUI
--->
+      -->
       <groupId>org.geotools.jdbc</groupId>
       <artifactId>gt-jdbc-sqlserver</artifactId>
+      <version>${gt.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <!-- This dependency has been added to allow the module to compile the SDE panels without
+           requiring too much reflection, but the plug-in won't be there at runtime unless the user
+           chose it in the GUI
+      -->
+      <groupId>org.geotools</groupId>
+      <artifactId>gt-arcsde</artifactId>
       <version>${gt.version}</version>
       <scope>provided</scope>
     </dependency>
@@ -100,7 +110,7 @@
     </profile>
     <profile>
       <!--
-        This profile activates Oracle support for good, useful to make a
+        This profile activates SQL server support for good, useful to make a
         .war with store and driver
       -->
       <id>sqlserver</id>
@@ -118,6 +128,35 @@
         </dependency>
       </dependencies>
     </profile>
+    <profile>
+      <!--
+        This profile activates SDE support for good, useful to make a
+        .war with store and driver
+      -->
+      <id>arcsde</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.geotools</groupId>
+          <artifactId>gt-arcsde</artifactId>
+          <version>${gt.version}</version>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>com.esri</groupId>
+          <artifactId>jsde_sdk</artifactId>
+          <version>${sde.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>com.esri</groupId>
+          <artifactId>jpe_sdk</artifactId>
+          <version>${sde.version}</version>
+        </dependency>
+      </dependencies>
+    </profile>
   </profiles>
+  
+  <properties>
+    <sde.version>9.2</sde.version>
+  </properties>
 
 </project>

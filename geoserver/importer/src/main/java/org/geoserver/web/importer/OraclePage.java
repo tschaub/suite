@@ -48,7 +48,7 @@ public class OraclePage extends AbstractDBMSPage {
         result.put(CONNECTION_OCI, ociParamsPanel);
 
         // jndi param panels
-        jndiParamsPanel = new JNDIParamPanel("03");
+        jndiParamsPanel = new JNDIParamPanel("03", "java:comp/env/jdbc/mydatabase");
         result.put(CONNECTION_JNDI, jndiParamsPanel);
         
         return result;
@@ -92,6 +92,7 @@ public class OraclePage extends AbstractDBMSPage {
             params.put(VALIDATECONN.key, basicDbmsPanel.connPool.validate);
 
         }
+        OtherDbmsParamPanel otherParamsPanel = (OtherDbmsParamPanel) this.otherParamsPanel;
         if(otherParamsPanel.userSchema) {
             params.put(JDBCDataStoreFactory.SCHEMA.key, ((String) params.get(USER.key)).toUpperCase());
         } else { 

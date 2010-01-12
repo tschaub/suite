@@ -69,10 +69,13 @@ public class StoreChooserPage extends GeoServerBasePage {
                 "org.geotools.data.postgis.PostgisNGDataStoreFactory"), //
         oracle(new ResourceReference(GeoServerApplication.class,
                 "img/icons/geosilk/database_vector.png"), OraclePage.class,
-                "org.geotools.data.oracle.OracleNGDataStoreFactory"),
+                "org.geotools.data.oracle.OracleNGDataStoreFactory"), //
         sqlserver(new ResourceReference(GeoServerApplication.class,
                 "img/icons/geosilk/database_vector.png"), SQLServerPage.class,
-                "org.geotools.data.sqlserver.SQLServerDataStoreFactory");
+                "org.geotools.data.sqlserver.SQLServerDataStoreFactory"), //
+        arcsde(new ResourceReference(GeoServerApplication.class,
+                "img/icons/geosilk/database_vector.png"), ArcSDEPage.class,
+                "org.geotools.arcsde.ArcSDEDataStoreFactory");
 
         ResourceReference icon;
 

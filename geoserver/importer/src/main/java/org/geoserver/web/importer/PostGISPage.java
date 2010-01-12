@@ -40,7 +40,7 @@ public class PostGISPage extends AbstractDBMSPage {
         result.put(CONNECTION_DEFAULT, basicDbmsPanel);
 
         // jndi param panels
-        jndiParamsPanel = new JNDIParamPanel("02");
+        jndiParamsPanel = new JNDIParamPanel("02", "java:comp/env/jdbc/mydatabase");
         result.put(CONNECTION_JNDI, jndiParamsPanel);
         
         return result;
@@ -73,6 +73,7 @@ public class PostGISPage extends AbstractDBMSPage {
             params.put(PREPARED_STATEMENTS.key, basicDbmsPanel.connPool.preparedStatements);
 
         }
+        OtherDbmsParamPanel otherParamsPanel = (OtherDbmsParamPanel) this.otherParamsPanel;
         params.put(JDBCDataStoreFactory.SCHEMA.key, otherParamsPanel.schema);
         params.put(NAMESPACE.key, new URI(namespace.getURI()).toString());
         params.put(LOOSEBBOX.key, otherParamsPanel.looseBBox);
