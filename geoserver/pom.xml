@@ -251,13 +251,81 @@
        <module>release</module>
      </modules>
    </profile>
- </profiles>
-
+   <profile>
+    <!--
+      This profile activates Oracle support for good, useful to make a
+      .war with store and driver
+    -->
+    <id>oracle</id>
+    <dependencies>
+      <dependency>
+        <groupId>org.geotools.jdbc</groupId>
+        <artifactId>gt-jdbc-oracle</artifactId>
+        <version>${gt.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.oracle</groupId>
+        <artifactId>ojdbc14</artifactId>
+        <version>10.2.0.3.0</version>
+      </dependency>
+    </dependencies>
+   </profile>
+   <profile>
+    <!--
+      This profile activates SQL server support for good, useful to make a
+      .war with store and driver
+    -->
+    <id>sqlserver</id>
+    <dependencies>
+      <dependency>
+        <groupId>org.geotools.jdbc</groupId>
+        <artifactId>gt-jdbc-sqlserver</artifactId>
+        <version>${gt.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.microsoft</groupId>
+        <artifactId>sqljdbc</artifactId>
+        <version>1.2</version>
+      </dependency>
+    </dependencies>
+   </profile>
+   <profile>
+    <!--
+      This profile activates SDE support for good, useful to make a
+      .war with store and driver
+    -->
+    <id>arcsde</id>
+    <dependencies>
+      <dependency>
+        <groupId>org.geotools</groupId>
+        <artifactId>gt-arcsde</artifactId>
+        <version>${gt.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.esri</groupId>
+        <artifactId>jsde_sdk</artifactId>
+        <version>${sde.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.esri</groupId>
+        <artifactId>jpe_sdk</artifactId>
+        <version>${sde.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.ibm.icu</groupId>
+        <artifactId>icu4j</artifactId>
+        <version>3.4.4</version>
+      </dependency>
+    </dependencies>
+   </profile>
+  </profiles>
+  
  <properties>
   <gs.version>2.0.2-SNAPSHOT</gs.version>
   <gt.version>2.6-SNAPSHOT</gt.version>
   <java.awt.headless>true</java.awt.headless>
   <test.maxHeapSize>512M</test.maxHeapSize>
+  <sde.version>9.2</sde.version>
  </properties>
 
 </project>

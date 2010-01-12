@@ -8,6 +8,7 @@ import static org.geotools.arcsde.ArcSDEDataStoreFactory.*;
 import static org.geotools.arcsde.ArcSDEJNDIDataStoreFactory.*;
 
 import java.io.Serializable;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -17,7 +18,6 @@ import org.geoserver.catalog.NamespaceInfo;
 import org.geotools.arcsde.ArcSDEDataStoreFactory;
 import org.geotools.arcsde.ArcSDEJNDIDataStoreFactory;
 import org.geotools.data.DataStoreFactorySpi;
-import org.geotools.data.postgis.PostgisNGDataStoreFactory;
 
 /**
  * Configures ArcSDE stores
@@ -61,7 +61,7 @@ public class ArcSDEPage extends AbstractDBMSPage {
 
             params.put(JNDI_REFNAME.key, jndiParamsPanel.jndiReferenceName);
         } else {
-            factory = new PostgisNGDataStoreFactory();
+            factory = new ArcSDEDataStoreFactory();
 
             // basic params
             params.put(SERVER_PARAM.key, basicSDEPanel.host);
@@ -79,6 +79,7 @@ public class ArcSDEPage extends AbstractDBMSPage {
         OtherSDEParamPanel otherParamsPanel = (OtherSDEParamPanel) this.otherParamsPanel;
         params.put(VERSION_PARAM.key, otherParamsPanel.version);
         params.put(ALLOW_NON_SPATIAL_PARAM.key, !otherParamsPanel.excludeGeometryless);
+        params.put(NAMESPACE_PARAM.key, new URI(namespace.getURI()).toString());
         return factory;
     }
 
