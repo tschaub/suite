@@ -212,7 +212,8 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     items: [{
                         title: "Help",
                         cls: "dash-panel",
-                        id: "app-panels-help"
+                        id: "app-panels-help",
+                        html: og.util.loadSync("app/markup/help/main.html")
                     }, {
                         xtype: "container",
                         layout: "fit",
