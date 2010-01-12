@@ -50,7 +50,7 @@ public class StoreChooserPage extends GeoServerBasePage {
                 item.add(new Label("storeDescription", store
                         .getStoreDescription(StoreChooserPage.this)));
                 Image icon = new Image("storeIcon", store.getStoreIcon());
-                icon.add(new AttributeModifier("alt", store
+                icon.add(new AttributeModifier("alt", true, store
                         .getStoreDescription(StoreChooserPage.this)));
                 item.add(icon);
             }

@@ -143,15 +143,18 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
                     if (layer != null) {
                         // show icon type or an error icon if anything went wrong
                         ResourceReference icon;
+                        IModel title = new Model(getTypeTooltip(layer));
                         if (layerSummary.getStatus().successful()) {
                             icon = icons.getSpecificLayerIcon(layer);
+                            title = new Model(getTypeTooltip(layer));
                         } else {
                             icon = icons.getDisabledIcon();
+                            title = ISSUES.getModel(itemModel);
                         }
                         Fragment f = new Fragment(id, "iconFragment", ImportSummaryPage.this);
                         Image image = new Image("icon", icon);
-                        image.add(new AttributeModifier("title", true, new Model(
-                                getTypeTooltip(layer))));
+                        image.add(new AttributeModifier("title", true, title));
+                        image.add(new AttributeModifier("alt", true, title));
                         f.add(image);
                         return f;
                     } else {

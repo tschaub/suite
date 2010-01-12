@@ -49,7 +49,7 @@ public class PostGISPage extends AbstractDBMSPage {
     protected DataStoreFactorySpi fillStoreParams(NamespaceInfo namespace,
             Map<String, Serializable> params) throws URISyntaxException {
         DataStoreFactorySpi factory;
-        params.put(JDBCDataStoreFactory.DBTYPE.key, (String) JDBCDataStoreFactory.DBTYPE.sample);
+        params.put(JDBCDataStoreFactory.DBTYPE.key, (String) PostgisNGDataStoreFactory.DBTYPE.sample);
         if (CONNECTION_JNDI.equals(connectionType)) {
             factory = new PostgisNGJNDIDataStoreFactory();
 
