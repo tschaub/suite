@@ -339,7 +339,6 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
     /**
      * Builds the srs list panel component for a single layer
      */
-    @SuppressWarnings("serial")
     SRSListPanel srsListLayerPanel(final IModel layerSummaryModel) {
         SRSListPanel srsList = new SRSListPanel(popupWindow.getContentId()) {
 
@@ -360,7 +359,6 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
     /**
      * Builds the srs list panel component for a single layer
      */
-    @SuppressWarnings("serial")
     SRSListPanel srsListSelectionPanel() {
         SRSListPanel srsList = new SRSListPanel(popupWindow.getContentId()) {
 

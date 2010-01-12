@@ -40,6 +40,7 @@ import org.geotools.data.DataStoreFactorySpi;
  * @author Andrea Aime - OpenGeo
  * 
  */
+@SuppressWarnings("serial")
 public abstract class AbstractDBMSPage extends GeoServerSecuredPage {
     protected static final String CONNECTION_DEFAULT = "Default";
 

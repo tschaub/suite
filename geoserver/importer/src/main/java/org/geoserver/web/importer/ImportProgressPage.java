@@ -97,6 +97,7 @@ public class ImportProgressPage extends GeoServerSecuredPage {
     /**
      * We want the indicator always on
      */
+    @Override
     public String getAjaxIndicatorMarkupId() {
         return null;
     }

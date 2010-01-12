@@ -49,8 +49,6 @@ public class DirectoryPage extends GeoServerSecuredPage {
 
     private TextField dirField;
 
-    private TextField projectField;
-
     private Form form;
 
     GeneralStoreParamPanel generalParams;

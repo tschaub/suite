@@ -1,7 +1,6 @@
 package org.geoserver.web.importer;
 
 import static org.geotools.data.postgis.PostgisNGDataStoreFactory.*;
-import static org.geotools.jdbc.JDBCDataStoreFactory.*;
 import static org.geotools.jdbc.JDBCJNDIDataStoreFactory.*;
 
 import java.io.Serializable;
@@ -24,6 +23,7 @@ public class SQLServerPage extends AbstractDBMSPage {
 
     private BasicDbmsParamPanel basicDbmsPanel;
     
+    @Override
     protected LinkedHashMap<String, Component> buildParamPanels() {
         LinkedHashMap<String, Component> result = new LinkedHashMap<String, Component>();
 

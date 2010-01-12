@@ -19,6 +19,7 @@ import org.opengis.feature.type.Name;
  * 
  * @author Andrea Aime - OpenGeo
  */
+@SuppressWarnings("serial")
 class Resource implements Comparable<Resource>, Serializable {
 
     /**

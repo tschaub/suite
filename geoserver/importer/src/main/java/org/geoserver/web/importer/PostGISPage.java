@@ -5,7 +5,6 @@
 package org.geoserver.web.importer;
 
 import static org.geotools.data.postgis.PostgisNGDataStoreFactory.*;
-import static org.geotools.jdbc.JDBCDataStoreFactory.*;
 import static org.geotools.jdbc.JDBCJNDIDataStoreFactory.*;
 
 import java.io.Serializable;
@@ -25,13 +24,13 @@ import org.geotools.jdbc.JDBCDataStoreFactory;
  * Connection params form for the PostGIS database
  * @author Andrea Aime - OpenGeo
  */
-@SuppressWarnings("serial")
 public class PostGISPage extends AbstractDBMSPage {
     
     private JNDIParamPanel jndiParamsPanel;
 
     private BasicDbmsParamPanel basicDbmsPanel;
 
+    @Override
     protected LinkedHashMap<String, Component> buildParamPanels() {
         LinkedHashMap<String, Component> result = new LinkedHashMap<String, Component>();
 
@@ -46,10 +45,11 @@ public class PostGISPage extends AbstractDBMSPage {
         return result;
     }
     
+    @Override
     protected DataStoreFactorySpi fillStoreParams(NamespaceInfo namespace,
             Map<String, Serializable> params) throws URISyntaxException {
         DataStoreFactorySpi factory;
-        params.put(PostgisNGJNDIDataStoreFactory.DBTYPE.key, (String) PostgisNGJNDIDataStoreFactory.DBTYPE.sample);
+        params.put(JDBCDataStoreFactory.DBTYPE.key, (String) JDBCDataStoreFactory.DBTYPE.sample);
         if (CONNECTION_JNDI.equals(connectionType)) {
             factory = new PostgisNGJNDIDataStoreFactory();
 

@@ -19,9 +19,15 @@ import org.geotools.arcsde.ArcSDEJNDIDataStoreFactory;
 import org.geotools.data.DataStoreFactorySpi;
 import org.geotools.data.postgis.PostgisNGDataStoreFactory;
 
+/**
+ * Configures ArcSDE stores
+ * 
+ * @author Andrea Aime - OpenGeo
+ */
 public class ArcSDEPage extends AbstractDBMSPage {
 
     private BasicSDEParamPanel basicSDEPanel;
+
     private JNDIParamPanel jndiParamsPanel;
 
     @Override
@@ -35,10 +41,10 @@ public class ArcSDEPage extends AbstractDBMSPage {
         // jndi param panels
         jndiParamsPanel = new JNDIParamPanel("02", "java:comp/env/geotools/arcsde");
         result.put(CONNECTION_JNDI, jndiParamsPanel);
-        
+
         return result;
     }
-    
+
     @Override
     protected Component buildOtherParamsPanel(String id) {
         return new OtherSDEParamPanel(id);
@@ -48,7 +54,8 @@ public class ArcSDEPage extends AbstractDBMSPage {
     protected DataStoreFactorySpi fillStoreParams(NamespaceInfo namespace,
             Map<String, Serializable> params) throws URISyntaxException {
         DataStoreFactorySpi factory;
-        params.put(ArcSDEDataStoreFactory.DBTYPE_PARAM.key, (String) ArcSDEDataStoreFactory.DBTYPE_PARAM.sample);
+        params.put(ArcSDEDataStoreFactory.DBTYPE_PARAM.key,
+                (String) ArcSDEDataStoreFactory.DBTYPE_PARAM.sample);
         if (CONNECTION_JNDI.equals(connectionType)) {
             factory = new ArcSDEJNDIDataStoreFactory();
 
@@ -74,7 +81,7 @@ public class ArcSDEPage extends AbstractDBMSPage {
         params.put(ALLOW_NON_SPATIAL_PARAM.key, !otherParamsPanel.excludeGeometryless);
         return factory;
     }
-    
+
     @Override
     protected boolean isGeometrylessExcluded() {
         OtherSDEParamPanel otherParamsPanel = (OtherSDEParamPanel) this.otherParamsPanel;

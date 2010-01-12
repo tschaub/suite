@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.Page;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ResourceReference;
 import org.apache.wicket.markup.html.basic.Label;
@@ -34,7 +35,7 @@ import org.geotools.data.DataStoreFactorySpi;
 public class StoreChooserPage extends GeoServerBasePage {
 
     public StoreChooserPage(PageParameters params) {
-        if ("TRUE".equalsIgnoreCase((String) params.getString("afterCleanup")))
+        if ("TRUE".equalsIgnoreCase(params.getString("afterCleanup")))
             info(new ParamResourceModel("rollbackSuccessful", this).getString());
 
         ListView storeLinks = new ListView("stores", Store.getAvailableStores()) {
@@ -79,11 +80,11 @@ public class StoreChooserPage extends GeoServerBasePage {
 
         ResourceReference icon;
 
-        Class destinationPage;
+        Class<? extends Page> destinationPage;
 
         String factoryClassName;
 
-        Store(ResourceReference icon, Class destinationPage, String factoryClassName) {
+        Store(ResourceReference icon, Class<? extends Page> destinationPage, String factoryClassName) {
             this.icon = icon;
             this.destinationPage = destinationPage;
             this.factoryClassName = factoryClassName;
@@ -101,7 +102,7 @@ public class StoreChooserPage extends GeoServerBasePage {
             return icon;
         }
 
-        Class getDestinationPage() {
+        Class<? extends Page> getDestinationPage() {
             return destinationPage;
         }
 

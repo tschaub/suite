@@ -30,6 +30,7 @@ import org.opengis.feature.type.Name;
  * 
  * @author Andrea Aime - OpenGeo
  */
+@SuppressWarnings("serial")
 public class VectorLayerChooserPage extends GeoServerSecuredPage {
 
     GeoServerTablePanel<Resource> layers;
@@ -41,8 +42,6 @@ public class VectorLayerChooserPage extends GeoServerSecuredPage {
     private String wsName;
 
     private String storeName;
-
-    private boolean skipGeometryless;
 
     public VectorLayerChooserPage(PageParameters params) {
         wsName = params.getString("workspace");

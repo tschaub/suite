@@ -26,7 +26,6 @@ import org.geotools.jdbc.JDBCDataStoreFactory;
  * Connection params form for the Oracle database
  * @author Andrea Aime - OpenGeo
  */
-@SuppressWarnings("serial")
 public class OraclePage extends AbstractDBMSPage {
     private static final String CONNECTION_OCI = "OCI";
     
@@ -36,6 +35,7 @@ public class OraclePage extends AbstractDBMSPage {
     
     private OracleOCIParamPanel ociParamsPanel;
 
+    @Override
     protected LinkedHashMap<String, Component> buildParamPanels() {
         LinkedHashMap<String, Component> result = new LinkedHashMap<String, Component>();
 
@@ -59,6 +59,7 @@ public class OraclePage extends AbstractDBMSPage {
         return new OtherDbmsParamPanel(id, "", true, true);
     }
     
+    @Override
     protected DataStoreFactorySpi fillStoreParams(NamespaceInfo namespace,
             Map<String, Serializable> params) throws URISyntaxException {
         DataStoreFactorySpi factory;
