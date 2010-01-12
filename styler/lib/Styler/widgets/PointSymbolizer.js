@@ -217,10 +217,10 @@ Styler.PointSymbolizer = Ext.extend(Ext.Panel, {
             xtype: "textfield",
             name: "size",
             fieldLabel: "Size",
-            value: this.symbolizer["pointRadius"],
+            value: this.symbolizer["pointRadius"] * 2,
             listeners: {
                 change: function(field, value) {
-                    this.symbolizer["pointRadius"] = value;
+                    this.symbolizer["pointRadius"] = value / 2;
                     this.fireEvent("change", this.symbolizer);
                 },
                 scope: this
