@@ -174,7 +174,7 @@ echo "Installing OpenGeo Suite..." &&
 tar xzf opengeosuite-$VERSION-bin.tar.gz -C "$INSTALL_DIR" &&
 
 echo "Installing OpenGeo Dashboard..." &&
-tar xzf opengeodashboard-$VERSION.tgz -C "$SUITE_DIR" &&
+tar xzf "OpenGeo Dashboard.tgz" -C "$SUITE_DIR" &&
 
 echo "Creating symlinks..." &&
 ln -sf "`find "$SUITE_DIR" -type f -name "OpenGeo Dashboard"`" "$SUITE_DIR/opengeo-dashboard" &&
