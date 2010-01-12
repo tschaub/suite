@@ -68,7 +68,7 @@ public abstract class AbstractDBMSPage extends GeoServerSecuredPage {
         // connection type chooser
         paramPanelMap = buildParamPanels();
         connectionType = paramPanelMap.keySet().iterator().next();
-        updatePanelVisibility();
+        updatePanelVisibility(null);
         form.add(connectionTypeSelector(paramPanelMap));
 
         // default param panels
@@ -132,7 +132,7 @@ public abstract class AbstractDBMSPage extends GeoServerSecuredPage {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                updatePanelVisibility();
+                updatePanelVisibility(target);
                 target.addComponent(connParamContainer);
             }
 
@@ -142,10 +142,12 @@ public abstract class AbstractDBMSPage extends GeoServerSecuredPage {
     }
     
     /**
-     * Updates the panel visibility to show only the currently selected one
+     * Updates the panel visibility to show only the currently selected one.
+     * Can also be used to perform actions when the panel visibility is updated
      * @param paramPanelMap
+     * @param target Used when doing ajax updates, might be null
      */
-    protected void updatePanelVisibility() {
+    protected void updatePanelVisibility(AjaxRequestTarget target) {
         for (String type : paramPanelMap.keySet()) {
             Component panel = paramPanelMap.get(type);
             panel.setVisible(connectionType.equals(type));

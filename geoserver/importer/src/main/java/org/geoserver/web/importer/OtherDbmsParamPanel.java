@@ -31,6 +31,8 @@ class OtherDbmsParamPanel extends Panel {
     String pkMetadata;
     WebMarkupContainer advancedContainer;
     private WebMarkupContainer advancedPanel;
+    private WebMarkupContainer userSchemaContainer;
+    private WebMarkupContainer userSchemaChkContainer;
     
     public OtherDbmsParamPanel(String id, String defaultSchema, boolean showUserSchema, boolean showLooseBBox) {
         super(id);
@@ -44,31 +46,24 @@ class OtherDbmsParamPanel extends Panel {
 
         // we allow defaulting to the user name schema for Oracle
         // ... the checkbox to default to the user schema 
-        WebMarkupContainer userSchemaChkContainer = new WebMarkupContainer("userSchemaChkContainer");
+        userSchemaChkContainer = new WebMarkupContainer("userSchemaChkContainer");
         basicParams.add(userSchemaChkContainer);
         CheckBox userSchemaChk = new CheckBox("userSchema", new PropertyModel(this, "userSchema"));
+        userSchemaChk.add(new AjaxFormComponentUpdatingBehavior("onClick") {
+            
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                userSchemaContainer.setVisible(!userSchema);
+                target.addComponent(basicParams);
+            }
+        });
         userSchemaChkContainer.add(userSchemaChk);
         // the custom schema chooser
-        final WebMarkupContainer userSchemaContainer = new WebMarkupContainer("userSchemaContainer");
+        userSchemaContainer = new WebMarkupContainer("userSchemaContainer");
         basicParams.add(userSchemaContainer);
         TextField schemaTxt = new TextField("schema", new PropertyModel(this, "schema"));
         userSchemaContainer.add(schemaTxt);
-        
-        if(showUserSchema) {
-            userSchema = true;
-            userSchemaContainer.setVisible(false);
-            userSchemaChk.add(new AjaxFormComponentUpdatingBehavior("onClick") {
-                
-                @Override
-                protected void onUpdate(AjaxRequestTarget target) {
-                    userSchemaContainer.setVisible(!userSchema);
-                    target.addComponent(basicParams);
-                }
-            });
-        } else {
-            userSchema = false;
-            userSchemaChkContainer.setVisible(false);
-        }
+        setShowUserSchema(showUserSchema);
         
         basicParams.add(new CheckBox("excludeGeometryless", new PropertyModel(this, "excludeGeometryless")));
         add(toggleAdvanced());
@@ -85,6 +80,18 @@ class OtherDbmsParamPanel extends Panel {
         advancedPanel.add(new TextField("pkMetadata", new PropertyModel(this, "pkMetadata")));
         advancedContainer.add(advancedPanel);
         add(advancedContainer);
+    }
+
+    public void setShowUserSchema(boolean showUserSchema) {
+        if(showUserSchema) {
+            userSchema = true;
+            userSchemaContainer.setVisible(false);
+            userSchemaChkContainer.setVisible(true);
+        } else {
+            userSchema = false;
+            userSchemaChkContainer.setVisible(false);
+            userSchemaContainer.setVisible(true);
+        }
     }
     
     Component toggleAdvanced() {

@@ -14,6 +14,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.geoserver.catalog.NamespaceInfo;
 import org.geotools.data.DataStoreFactorySpi;
 import org.geotools.data.oracle.OracleNGDataStoreFactory;
@@ -55,8 +56,19 @@ public class OraclePage extends AbstractDBMSPage {
     }
     
     @Override
+    protected void updatePanelVisibility(AjaxRequestTarget target) {
+        super.updatePanelVisibility(target);
+        if(target != null) {
+            ((OtherDbmsParamPanel) otherParamsPanel).setShowUserSchema(!CONNECTION_JNDI.equals(connectionType));
+            target.addComponent(otherParamsPanel);
+        }
+    }
+    
+    @Override
     protected OtherDbmsParamPanel buildOtherParamsPanel(String id) {
-        return new OtherDbmsParamPanel(id, "", true, true);
+        OtherDbmsParamPanel others = new OtherDbmsParamPanel(id, "", true, true);
+        others.setOutputMarkupId(true);
+        return others;
     }
     
     @Override
