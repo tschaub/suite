@@ -166,23 +166,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 }, {
                     defaults: {border: false, autoScroll: true},
                     items: [{
-                        title: "OpenGeo",
-                        tabTip: "Learn more about OpenGeo",
-                        cls: "dash-panel",
-                        html: og.util.loadSync("app/markup/opengeo/main.html"),
-                        id: "app-panels-opengeo-main",
-                        listeners: dashPanelListeners
-                    }, {
-                        title: "Contact",
-                        tabTip: "Contact OpenGeo",
-                        cls: "dash-panel",
-                        html: og.util.loadSync("app/markup/opengeo/contact.html"),
-                        id: "app-panels-opengeo-contact",
-                        listeners: dashPanelListeners
-                    }]
-                }, {
-                    defaults: {border: false, autoScroll: true},
-                    items: [{
                         defaults: {border: false, autoScroll: true},
                         title: "Preferences", 
                         tabTip: "Configure the OpenGeo Suite",
@@ -221,6 +204,13 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         cls: "dash-panel",
                         id: "app-panels-help-logs",
                         items: [this.logPanel]
+                    }, {
+                        title: "OpenGeo",
+                        tabTip: "Learn more about OpenGeo",
+                        cls: "dash-panel",
+                        html: og.util.loadSync("app/markup/help/opengeo.html"),
+                        id: "app-panels-opengeo-contact",
+                        listeners: dashPanelListeners
                     }]
                 }]
             }, {
