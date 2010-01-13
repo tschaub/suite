@@ -72,6 +72,7 @@ a.app-disabled:hover {
     margin:0 10px 0 10px;
   }
 
+/*QuickStart Styling*/
 .dash-panel-body .steps {
     font-weight:normal;
     margin:10px 0 0 10px;
@@ -91,6 +92,7 @@ a.app-disabled:hover {
     list-style-type:square;
     text-align:justify;
 }
+
 .dash-panel-body .launch {
     background:#F0F5EF;
     border:1px solid black;
@@ -295,4 +297,16 @@ a.icon-styler {
 
 #app-panels-pref-form {
     margin: 10px 10px;
+}
+
+/*FAQ page Styling*/
+.dash-panel-body .faq {
+}
+
+.dash-panel-body .faq h1 {
+  color:#486300;
+  font-family:Optima,Georgia,serif;
+  font-size:15px;
+  font-weight: normal;
+  margin:10px;
 }
