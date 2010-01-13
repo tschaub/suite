@@ -4,10 +4,10 @@
 <id>org.opengeo.suite</id>
 <name>OpenGeo Dashboard</name>
 <version>1.0</version>
-<publisher>tschaub</publisher>
+<publisher>OpenGeo</publisher>
 <url>http://opengeo.org</url>
 <icon>logo.png</icon>
-<copyright>2009 by The Open Planning Project</copyright>
+<copyright>2010 by The Open Planning Project</copyright>
 <!-- Window Definition - these values can be edited -->
 <window>
 <id>initial</id>
