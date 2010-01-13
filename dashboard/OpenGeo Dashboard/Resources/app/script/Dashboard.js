@@ -197,6 +197,13 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         cls: "dash-panel",
                         id: "app-panels-help",
                         html: og.util.loadSync("app/markup/help/main.html")
+                    },  {
+                        title: "FAQ",
+                        tabTip: "Frequently Asked Questions",
+                        cls: "dash-panel",
+                        html: og.util.loadSync("app/markup/help/faq.html"),
+                        id: "app-panels-help-faq",
+                        listeners: dashPanelListeners
                     }, {
                         xtype: "container",
                         layout: "fit",
@@ -205,11 +212,11 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         id: "app-panels-help-logs",
                         items: [this.logPanel]
                     }, {
-                        title: "OpenGeo",
+                        title: "About",
                         tabTip: "Learn more about OpenGeo",
                         cls: "dash-panel",
                         html: og.util.loadSync("app/markup/help/opengeo.html"),
-                        id: "app-panels-opengeo-contact",
+                        id: "app-panels-help-about",
                         listeners: dashPanelListeners
                     }]
                 }]
