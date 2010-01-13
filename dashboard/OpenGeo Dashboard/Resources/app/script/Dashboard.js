@@ -503,49 +503,34 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
      * displaying the contents in the log view text area.
      */
     refreshLog: function() {
+        //this is a hack, i don't see any good way to pass parameters into a worker
+        // so that it can run without blocking the main user interface thread
+        // so we write out a file that contains the location of the log file, then 
+        // the worker looks for this file and reads the location of the log file
+        og.util.tirun(function() {
+            var fs = Titanium.Filesystem;
+            var f = fs.getFile(fs.getResourcesDirectory().toString(), "log");
+            if (f.exists() === false) {
+                f.write(this.suite.getLogFile());
+            }
+        }, this);
+        
         if (!this.refreshingLogDialog) {
             this.refreshingLogDialog = this.createWorkingDialog("Refreshing logs");
         }
         this.refreshingLogDialog.show();
         
-        og.util.tirun(
-            function() {
-                var fs = Titanium.Filesystem;
-                var sep = fs.getSeparator();
-                var file = fs.getFile(this.suite.getLogFile());
-                if (file.exists() === false) {
-                    this.message("Log file does not exist.");
-                }
-                else {
-                    //only ready the last 100K of the log file
-                    var offset = file.size() - 100*1024;
-                    var buf = [];
-                    var count = 0;
-
-                    file = fs.getFileStream(file.nativePath());
-                    if (file.open(fs.MODE_READ) == true) {
-                        var line = file.readLine();
-
-                        //skip over lines until we get ot the last 100K
-                        while(line != null && count < offset) {
-                            count += line.length+1;
-                            line = file.readLine();
-                        }
- 
-                        while(line != null) {
-                            buf.push(line);
-                            line = file.readLine();
-                        }
-                        file.close();    
-
-                        this.logTextArea.el.dom.innerHTML = buf.join("\n");
-                    }
-                }
-            }, 
-            this
-        );
-        
-        this.refreshingLogDialog.hide();
+        //start a worker to read the log
+        og.util.tirun(function() {
+            var worker = Titanium.Worker.createWorker("app/script/log.js");
+            var self = this;
+            worker.onmessage = function(e) {
+                self.logTextArea.el.dom.innerHTML = e.message;
+                self.refreshingLogDialog.hide();
+                worker.terminate();
+            }
+            worker.start();
+        }, this);
     }, 
     
     /**
