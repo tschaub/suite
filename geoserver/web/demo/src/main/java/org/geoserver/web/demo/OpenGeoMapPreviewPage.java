@@ -15,6 +15,7 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.geoserver.web.GeoServerBasePage;
+import org.geoserver.web.demo.PreviewLayer.PreviewLayerType;
 import org.geoserver.web.wicket.GeoServerTablePanel;
 import org.geoserver.web.wicket.GeoServerDataProvider.Property;
 
@@ -56,11 +57,15 @@ public class OpenGeoMapPreviewPage extends GeoServerBasePage {
                     f.add(new ExternalLink("link", new Model(kmlUrl),  new Model("Google Earth")));
                     return f;
                 } else if (property == STYLER) {
-                    // openlayers preview
-                    final String stylerUrl = "/styler/index.html?layer=" + urlEncode(layer.getName());
-                    Fragment f = new Fragment(id, "newpagelink", OpenGeoMapPreviewPage.this);
-                    f.add(new ExternalLink("link", new Model(stylerUrl),  new Model("Styler")));
-                    return f;
+                    if(layer.getType() == PreviewLayerType.Group || layer.getType() == PreviewLayerType.Raster) {
+                        return new Label(id, "");
+                    } else {
+                        // styler link
+                        final String stylerUrl = "/styler/index.html?layer=" + urlEncode(layer.getName());
+                        Fragment f = new Fragment(id, "newpagelink", OpenGeoMapPreviewPage.this);
+                        f.add(new ExternalLink("link", new Model(stylerUrl),  new Model("Styler")));
+                        return f;
+                    }
                 }
                 
                 return null;
