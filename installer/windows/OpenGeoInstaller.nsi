@@ -6,7 +6,7 @@
 !define VERSION "1.1-SNAPSHOT"
 !define LONGVERSION "1.1.0.0" ; must be a.b.c.d
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
-!define SOURCEPATHROOT "..\..\target\suite-1.0-SNAPSHOT-raw"
+!define SOURCEPATHROOT "..\..\target\opengeosuite-1.0-SNAPSHOT-win"
 !define STARTMENU_FOLDER "${APPNAMEANDVERSION}"
 
 ; Main Install settings
@@ -54,20 +54,6 @@ RequestExecutionLevel admin
 ; Might be the same as !define
 Var STARTMENU_FOLDER
 Var CommonAppData
-Var Manual
-Var Service
-Var IsManual
-Var /GLOBAL GSUser
-Var /GLOBAL GSPass
-Var /GLOBAL Port
-Var GSUserTemp
-Var GSPassTemp
-Var PortTemp
-Var GSUserWarn
-Var GSPassWarn
-Var PortWarn
-Var GSUserFilter
-Var GSPassFilter
 Var DataDirPath
 Var FolderName
 Var SDEPath
@@ -127,10 +113,11 @@ Function RunAfterInstall
 
   IfSilent SilentSkip
 
-  ; START SERVICE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  ;Start Suite
+  ExecWait '"$INSTDIR\opengeo-suite.bat" start'
 
   ClearErrors
-  ExecShell "open" "$INSTDIR\Dashboard\OpenGeo Dashboard.exe" SW_SHOWMAXIMIZED
+  ExecShell "open" "$INSTDIR\dashboard\OpenGeo Dashboard.exe" SW_SHOWMAXIMIZED
   IfErrors 0 +2
     MessageBox MB_ICONSTOP "Unable to start the OpenGeo Suite or launch the Dashboard.  Please use the Start Menu to manually start these applications."
   ClearErrors
@@ -399,7 +386,7 @@ Function Ready
   !insertmacro MUI_HEADER_TEXT "$(TEXT_READY_TITLE)" "$(TEXT_READY_SUBTITLE)"
 
   ;Syntax: ${NSD_*} x y width height text
-  ${NSD_CreateLabel} 30u 30u 70% 36u "Setup has all the information required to install the OpenGeo Suite.  Click the Install button to continue."
+  ${NSD_CreateLabel} 10u 10u 90% 36u "Setup has all the information required to install the OpenGeo Suite.  Click the Install button to continue."
 
   nsDialogs::Show
 
@@ -425,29 +412,33 @@ Section "-Jetty" SectionJetty ; dash = hidden
   !insertmacro DisplayImage "slide_1_suite.bmp"
 
   SetOutPath "$INSTDIR"
-  File /r /x opengeo-suite "${SOURCEPATHROOT}\jetty"
+  File /a "${SOURCEPATHROOT}\*.jar" ; custom startup jars
+  File /r  "${SOURCEPATHROOT}\jetty\etc"
+  File /r  "${SOURCEPATHROOT}\jetty\lib"
+  File /r  "${SOURCEPATHROOT}\jetty\logs"
+  File /r  "${SOURCEPATHROOT}\jetty\resources"
  
   ; Copy our own JRE (which includes native JAI)
   File /r "${SOURCEPATHROOT}\jre"
 
-  SetOutPath "$INSTDIR"
-  File /a opengeo-suite.bat
-
+  File /a "${SOURCEPATHROOT}\opengeo-suite.bat" ; startup script
+  ${textreplace::ReplaceInFile} "$INSTDIR\opengeo-suite.bat" \
+                                "$INSTDIR\opengeo-suite.bat" \
+                                "@INSTDIR@" "$INSTDIR" \ 
+                                "/S=1" $1
 
   ; Create some dirs
   CreateDirectory "$INSTDIR\webapps"
-
-
-  CreateDirectory $INSTDIR\icons
-  SetOutPath $INSTDIR\icons
+  CreateDirectory "$INSTDIR\icons"
+  SetOutPath "$INSTDIR\icons"
   File /a opengeo.ico
   File /a uninstall.ico
  
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
- 
 
 SectionEnd
 
+SectionGroup /e "Suite Services" SectionServices
 
 Section "GeoServer" SectionGS
 
@@ -458,7 +449,7 @@ Section "GeoServer" SectionGS
 
   ; Copy GeoServer
   SetOutPath "$INSTDIR\webapps"
-  File /r /x jai*.* "${SOURCEPATHROOT}\geoserver"
+  File /r /x jai*.* "${SOURCEPATHROOT}\webapps\geoserver"
 
   ; Copy data_dir
   SetOutPath "$INSTDIR"
@@ -471,43 +462,6 @@ Section "GeoServer" SectionGS
                  "$INSTDIR\data_dir"
 
 SectionEnd
-
-SectionGroup "GeoServer Extensions" SectionGSExt
-
-  Section /o "ArcSDE" SectionGSArcSDE
-
-  ;SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
-  ;CopyFiles /SILENT /FILESONLY $SDEPath\jsde*.jar "$INSTDIR\webapps\geoserver\WEB-INF\lib"
-  ;CopyFiles /SILENT /FILESONLY $SDEPath\jpe*.jar "$INSTDIR\webapps\geoserver\WEB-INF\lib"
-  ;File /a "${SOURCEPATHROOT}\geoserver_plugins\arcsde\*.*"
-
-  SectionEnd
-
-  Section "GDAL" SectionGSGDAL
-
-    SetOutPath "$INSTDIR\jre\bin"
-    File /a "${SOURCEPATHROOT}\gdal\*.*"
-
-  SectionEnd
-
-  Section "Oracle" SectionGSOracle
-
-    SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
-    ; SOMETHING ELSE NEEDS TO GO HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    ;File /a "${SOURCEPATHROOT}\geoserver_plugins\oracle\*.*"
-
-  SectionEnd
-
-SectionGroupEnd
-
-; This MUST go after the SectionGSArcSDE section (so that the var is defined)
-Function .onSelChange
-
-  ;Sets $SDECheckBox to 1 if component is checked
-  SectionGetFlags ${SectionGSArcSDE} $SDECheckBox
-  ; SAME FOR ORACLE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-FunctionEnd
 
 
 Section "GeoWebCache" SectionGWC
@@ -531,7 +485,7 @@ Section "GeoExplorer" SectionGX
   !insertmacro DisplayImage "slide_6_geoext.bmp"
 
   SetOutPath "$INSTDIR\webapps\"
-  File /r /x doc "${SOURCEPATHROOT}\geoexplorer"
+  File /r /x doc "${SOURCEPATHROOT}\webapps\geoexplorer"
 
 SectionEnd
 
@@ -543,9 +497,49 @@ Section "Styler" SectionStyler
   !insertmacro DisplayImage "slide_6_geoext.bmp"
 
   SetOutPath "$INSTDIR\webapps\"
-  File /r "${SOURCEPATHROOT}\styler"
+  File /r "${SOURCEPATHROOT}\webapps\styler"
 
 SectionEnd
+
+SectionGroupEnd
+
+SectionGroup "Extensions" SectionGSExt
+
+  Section /o "ArcSDE" SectionGSArcSDE
+
+  ;SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
+  ;CopyFiles /SILENT /FILESONLY $SDEPath\jsde*.jar "$INSTDIR\webapps\geoserver\WEB-INF\lib"
+  ;CopyFiles /SILENT /FILESONLY $SDEPath\jpe*.jar "$INSTDIR\webapps\geoserver\WEB-INF\lib"
+  ;File /a "${SOURCEPATHROOT}\geoserver_plugins\arcsde\*.*"
+
+  SectionEnd
+
+  Section "GDAL" SectionGSGDAL
+
+    SetOutPath "$INSTDIR\jre\bin"
+    File /a "${SOURCEPATHROOT}\gdal\*.*"
+
+  SectionEnd
+
+  Section /o "Oracle" SectionGSOracle
+
+    SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
+    ; SOMETHING ELSE NEEDS TO GO HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    ;File /a "${SOURCEPATHROOT}\geoserver_plugins\oracle\*.*"
+
+  SectionEnd
+
+SectionGroupEnd
+
+; This MUST go after the SectionGSArcSDE section (so that the var is defined)
+Function .onSelChange
+
+  ;Sets $SDECheckBox to 1 if component is checked
+  SectionGetFlags ${SectionGSArcSDE} $SDECheckBox
+  ; SAME FOR ORACLE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+FunctionEnd
+
 
 Section "Documentation" SectionDocs
 
@@ -564,9 +558,13 @@ Section "Documentation" SectionDocs
   SetOutPath "$INSTDIR\webapps"
 
   ; Copy all doc projects
-  File /r "${SOURCEPATHROOT}\docs"
+  File /r "${SOURCEPATHROOT}\webapps\docs"
+
+  ; lame but this shouldn't be packaged
+  RMDir "$INSTDIR\webapps\docs\install"
 
   ; Shortcuts
+  SetOutPath "$INSTDIR"
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoServer Documentation.lnk" \
 		         "$INSTDIR\webapps\docs\geoserver\index.html" \
@@ -580,7 +578,7 @@ Section "Documentation" SectionDocs
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoWebCache Documentation.lnk" \
 		         "$INSTDIR\webapps\docs\geoserver\geowebcache\index.html" \
                  "" "$INSTDIR\icons\geowebcache.ico" 0
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\~Getting Started.lnk" \
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\Getting Started.lnk" \
 		         "$INSTDIR\webapps\docs\gettingstarted\index.html" \
                  "" "$INSTDIR\icons\opengeo.ico" 0
 
@@ -594,7 +592,7 @@ Section "Recipes" SectionRecipes
   !insertmacro DisplayImage "slide_1_suite.bmp"
 
   SetOutPath "$INSTDIR\webapps"
-  File /r "${SOURCEPATHROOT}\recipes"
+  File /r "${SOURCEPATHROOT}\webapps\recipes"
 
 SectionEnd
 
@@ -634,13 +632,13 @@ Section "-StartStop" SectionStartStop
   File /a opengeo-start.ico
   File /a opengeo-stop.ico
 
+  SetOutPath "$INSTDIR"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Start OpenGeo Suite.lnk" \
-                 '"$INSTDIR\opengeo-suite.bat" "start"' \
-                 "" "$INSTDIR\icons\opengeo-start.ico" 0 SW_SHOWMINIMIZED
-
+                 "$INSTDIR\opengeo-suite.bat" \
+                 "start" "$INSTDIR\icons\opengeo-start.ico" 0 SW_SHOWMINIMIZED
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Stop OpenGeo Suite.lnk" \
-                 '"$INSTDIR\opengeo-suite.bat" "stop"' \
-                 "" "$INSTDIR\icons\opengeo-stop.ico" 0 SW_SHOWMINIMIZED
+                 "$INSTDIR\opengeo-suite.bat" \
+                 "stop" "$INSTDIR\icons\opengeo-stop.ico" 0 SW_SHOWMINIMIZED
 
 SectionEnd
 
@@ -684,6 +682,7 @@ SectionEnd
 ; Yes, this needs to go after the install sections. 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionJetty} "Installs Jetty, a web server."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionServices} "A list of all of the services contained in the OpenGeo Suite."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGS} "Installs GeoServer, a spatial data server."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSExt} "Includes GeoServer Extensions."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSArcSDE} "Adds support for ArcSDE databases.  Requires additional ArcSDE installation files."
@@ -708,7 +707,7 @@ Section Uninstall
 
   ; Stop Suite
   SetOutPath "$INSTDIR"
-  ExecWait "$INSTDIR\opengeo-suite.bat stop"
+  ExecWait '"$INSTDIR\opengeo-suite.bat" stop'
   ; Wait for Start GeoServer window to go away
   Sleep 5000
 
@@ -741,12 +740,13 @@ Section Uninstall
     RMDir /r "$INSTDIR\data_dir"
     RMDir /r "$INSTDIR\etc"
     RMDir /r "$INSTDIR\lib"
+    RMDir /r "$INSTDIR\logs"
     RMDir /r "$INSTDIR\resources"
     RMDir /r "$INSTDIR\webapps"
-    RMDir /r "$INSTDIR\jetty"
     RMDir /r "$INSTDIR\jre"
     RMDir /r "$INSTDIR\icons"
     RMDir /r "$INSTDIR\recipes"
+    RMDir /r "$INSTDIR\trace.db" ; shouldn't need this
     Delete "$INSTDIR\*.*"
     RMDir "$INSTDIR"
     IfFileExists "$INSTDIR" Warn Succeed
