@@ -43,7 +43,7 @@
     </fileSet>
     <fileSet>
       <directory>docs/install/target/html</directory>
-      <outputDirectory>webapps/docs/install</outputDirectory>
+      <outputDirectory>docs/install</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>docs/gettingstarted/target/html</directory>
