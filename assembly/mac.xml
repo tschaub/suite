@@ -34,6 +34,22 @@
       <outputDirectory>webapps/geoexplorer</outputDirectory>
     </fileSet>
     <fileSet>
+      <directory>docs/gettingstarted/target/html</directory>
+      <outputDirectory>webapps/docs/gettingstarted</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>docs/styler/target/html</directory>
+      <outputDirectory>webapps/docs/styler</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>docs/geoexplorer/target/html</directory>
+      <outputDirectory>webapps/docs/geoexplorer</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>docs/geoserver/target/html</directory>
+      <outputDirectory>webapps/docs/geoserver</outputDirectory>
+    </fileSet>
+    <fileSet>
       <directory>recipes</directory>
       <outputDirectory>webapps/recipes</outputDirectory>
     </fileSet>
