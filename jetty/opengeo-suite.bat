@@ -35,7 +35,7 @@ set OPTS=-Dslf4j=false -cp %CLASSPATH%
 REM Start
 if "%1" == "start" (
   echo Starting the OpenGeo Suite...
-  call jre\bin\java.exe %OPTS% org.opengeo.jetty.Start
+  start jre\bin\javaw.exe %OPTS% org.opengeo.jetty.Start
   goto Done
 )
 
@@ -43,7 +43,7 @@ if "%1" == "start" (
 REM Stop
 if "%1" == "stop" (
   echo Stopping the OpenGeo Suite...
-  call jre\bin\java.exe %OPTS% org.opengeo.jetty.Start --stop
+  start jre\bin\javaw.exe %OPTS% org.opengeo.jetty.Start --stop
   goto Done
 )
 
