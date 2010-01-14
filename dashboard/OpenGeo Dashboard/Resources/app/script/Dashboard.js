@@ -246,31 +246,54 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         this.prefPanel = new Ext.FormPanel({
             renderTo: "app-panels-pref-form",
             border: false,
-            buttonAlign: "left",
+            buttonAlign: "right",
             items: [{
-                xtype: "textfield", 
-                fieldLabel: "Suite Executable", 
-                name: "exe", 
-                width: 250,
-                value: this.config.suite.exe
-            }, { 
-                xtype: "textfield",
-                fieldLabel: "Port",
-                name: "port",
-                width: 50,
-                value: this.config.suite.port
+                xtype: "fieldset",
+                style: "margin-top: 0.5em;",
+                collapsible: true,
+                title: "Service Ports",
+                defaultType: 'textfield',
+                defaults: { 
+                  width: 50
+                },
+                items: [{ 
+                    fieldLabel: "Port",
+                    name: "port",
+                    value: this.config.suite.port
+                },  {
+                    fieldLabel: "Shutdown Port",
+                    name: "stop_port",
+                    value: this.config.suite.stop_port
+                }]
             }, {
-                xtype: "textfield",
-                fieldLabel: "Shutdown Port",
-                name: "stop_port",
-                width: 50,
-                value: this.config.suite.stop_port
-            }, {
-                xtype: "textfield",
-                fieldLabel: "GeoServer Data",
-                name: "data_dir",
-                width: 250,
-                value: this.config.geoserver.data_dir
+                xtype: "fieldset",
+                style: "margin-top: 0.5em;",
+                collapsible: true,
+                title: "GeoServer",
+                defaultType: 'textfield',
+                defaults: { 
+                  width: 250
+                },
+                items: [{ 
+                    fieldLabel: "Data Directory",
+                    name: "data_dir",
+                    value: this.config.geoserver.data_dir
+                }]
+            },  {
+                xtype: "fieldset",
+                style: "margin-top: 0.5em;",
+                collapsible: true,
+                title: "Advanced",
+                collapsed: true,
+                defaultType: 'textfield',
+                defaults: { 
+                  width: 250
+                },
+                items: [{ 
+                    fieldLabel: "Suite Executable", 
+                    name: "exe", 
+                    value: this.config.suite.exe
+                }]
             }],
             buttons: [{
                 text: "Save",
@@ -296,7 +319,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 },
                 scope: this
             }, {
-                text: "Revert", 
+                text: "Reset", 
                 handler: function(btn, evt) {
                 }
             }]
