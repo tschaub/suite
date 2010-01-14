@@ -1,5 +1,5 @@
 <assembly>
-  <id>raw</id>
+  <id>win</id>
   <formats>
     <format>zip</format>
   </formats>
@@ -7,7 +7,7 @@
   <fileSets>
     <fileSet>
       <directory>geoserver/web/app/target/geoserver</directory>
-      <outputDirectory>geoserver</outputDirectory>
+      <outputDirectory>webapps/geoserver</outputDirectory>
       <excludes>
         <exclude>META-INF/**</exclude>
         <exclude>data/**</exclude>
@@ -29,11 +29,11 @@
     </fileSet>
     <fileSet>
       <directory>styler/target/styler</directory>
-      <outputDirectory>styler</outputDirectory>
+      <outputDirectory>webapps/styler</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>geoexplorer/build/geoexplorer</directory>
-      <outputDirectory>geoexplorer</outputDirectory>
+      <outputDirectory>webapps/geoexplorer</outputDirectory>
     </fileSet>
     <fileSet>
       <outputDirectory>dashboard</outputDirectory>
@@ -43,27 +43,27 @@
     </fileSet>
     <fileSet>
       <directory>docs/install/target/html</directory>
-      <outputDirectory>docs/install</outputDirectory>
+      <outputDirectory>webapps/docs/install</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>docs/gettingstarted/target/html</directory>
-      <outputDirectory>docs/gettingstarted</outputDirectory>
+      <outputDirectory>webapps/docs/gettingstarted</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>docs/styler/target/html</directory>
-      <outputDirectory>docs/styler</outputDirectory>
+      <outputDirectory>webapps/docs/styler</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>docs/geoexplorer/target/html</directory>
-      <outputDirectory>docs/geoexplorer</outputDirectory>
+      <outputDirectory>webapps/docs/geoexplorer</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>docs/geoserver/target/html</directory>
-      <outputDirectory>docs/geoserver</outputDirectory>
+      <outputDirectory>webapps/docs/geoserver</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>recipes</directory>
-      <outputDirectory>recipes</outputDirectory>
+      <outputDirectory>webapps/recipes</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>data_dir</directory>
@@ -74,7 +74,11 @@
       <outputDirectory>jetty</outputDirectory>
       <excludes>
         <exclude>pom.xml</exclude>
+        <exclude>opengeo-suite*</exclude>
+        <exclude>src/**</exclude>
         <exclude>target/**</exclude>
+        <exclude>.*</exclude>
+        <exclude>lib/jetty-start*.jar</exclude>
       </excludes>
     </fileSet>
     <fileSet>
@@ -86,4 +90,21 @@
       <outputDirectory>gdal</outputDirectory>
     </fileSet>
   </fileSets>
+  <files>
+    <file>
+      <source>jetty/lib/jetty-start-${jetty.version}.jar</source>
+      <outputDirectory>/</outputDirectory>
+      <destName>jetty-start.jar</destName>
+    </file>
+    <file>
+      <source>jetty/target/og-jetty-${project.version}.jar</source>
+      <outputDirectory>/</outputDirectory>
+      <destName>og-jetty.jar</destName>
+    </file>
+    <file>
+      <source>jetty/opengeo-suite.bat</source>
+      <outputDirectory>/</outputDirectory>
+      <fileMode>544</fileMode>
+    </file>
+  </files>
 </assembly>

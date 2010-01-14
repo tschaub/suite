@@ -55,7 +55,7 @@
       <outputDirectory>/</outputDirectory>
       <excludes>
         <exclude>pom.xml</exclude>
-        <exclude>opengeo-suite</exclude>
+        <exclude>opengeo-suite*</exclude>
         <exclude>src/**</exclude>
         <exclude>target/**</exclude>
         <exclude>.*</exclude>
