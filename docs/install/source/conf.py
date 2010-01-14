@@ -205,9 +205,9 @@ latex_documents = [
 # 3. Force LaTeX to place the images inline  
 #      For whatever reason, Sphinx automatically appends the \begin{figure}
 #      command with [htbp], which means "put the figure where ever you feel
-#      like it."  We then replaced the command to be appended with [H],
-#      which means "put the figure right here".  Unfortunately, this caused
-#      the [htbp] text to become visible in the document.  Thus we added the
+#      like it."  We replaced the command to be appended with [H], which
+#      means "put the figure right here".  Unfortunately, this caused the
+#      [htbp] text to become visible in the document.  Thus we added the
 #      [6], to eat up the 6 characters, which, due to placement, would be
 #      taken as arguments.
 
