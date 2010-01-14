@@ -5,21 +5,21 @@
     <p></p>
     <div class="faq">
       <h1>If something goes wrong, how do I find out the error?</h1>
-      <p>If you have unexpected behavior, the most helpful place to look is the logs (LINK).  Although the logs can be verbose, errors are displayed in line amongst other status outputs.  You may have to scroll back to find the error you're looking for.</p>
+      <p>If you have unexpected behavior, the most helpful place to look is the <a href="#app-panels-help-logs" class="app-xlink">Logs</a>.  Although the logs can be verbose, errors are displayed in line amongst other status outputs.  You may have to scroll back to find the error you're looking for.</p>
       <h1>If I have trouble, who can I contact?</h1>
       <p>Please email inquiry@opengeo.org for any questions.  If you are are one of our valued customers, we provide technical support for all aspects of this software. For sales information, please contact inquiry@opengeo.org as well.</p>
       <h1>What are the technical specs of the OpenGeo Suite?</h1>
-      <p>The OpenGeo Suite is a collection of Java servlet containers, running inside a Jetty (LINK) web server.</p>
+      <p>The OpenGeo Suite is a collection of Java servlet containers, running inside a <a href="http://jetty.codehaus.org/jetty" class="app-xlink">Jetty</a> web server.</p>
       <h1>Is this the full OpenGeo Suite stack?</h1>
       <p>The full OpenGeo Suite includes support for PostGIS, a spatial database.  This software natively supports and connects to existing PostGIS databases.  Future versions of this software will include PostGIS natively.</p>
       <h1>How do I learn more about the Suite?</h1>
-      <p>If you are new to the OpenGeo Suite, please see the Getting Started (LINK) section.  We have also included the full-up-to-date documentation for all components of the Suite.  If your questions aren't answered in these places, feel free to contact us at inquiry@opengeo.org .0</p>
-      <h1>What do I do if I want to implement this in my business?</h1>
+      <p>If you are new to the OpenGeo Suite, please see the <a href="#app-gettingstarted-docs" class="app-xlink">Getting Started</a> section.  We have also included the full-up-to-date documentation for all components of the Suite.  If your questions aren't answered in these places, feel free to contact us at inquiry@opengeo.org .</p>
+      <h1>What do I do if I want to implement the OpenGeo Suite in my business?</h1>
       <p>The OpenGeo Suite is designed to be used in a production environment, however, the evaluation version is not supported.  Please contact inquiry@opengeo.org for sales opportunities. </p>
       <h1>Where do I go if I have a feature request?</h1>
       <p>We are always looking to improve our software, and our improvements are always driven by customer needs and desires.  Please contact inquiry@opengeo.org with your requests.  Existing customers' requests are given highest priority. </p>
       <h1>Where can I learn more about OpenGeo/GeoServer/GeoExt/etc?</h1>
-      <p>Please visit our website, at opengeo.org .  You can also visit each community project's homepage:  PostGIS (LINK), GeoServer (LINK), GeoWebCache (LINK), OpenLayers (LINK), GeoExt (LINK).  We also encourage those interested in a particular project to join that project's mailing list, to interact with the wider community.</p>
+      <p>Please visit our website, at opengeo.org .  You can also visit each community project's homepage:  <a href="http://postgis.org" class="app-xlink">PostGIS</a>, <a href="http://geoserver.org" class="app-xlink">GeoServer</a>, <a href="http://geowebcache.org" class="app-xlink">GeoWebCache</a>, <a href="http://openlayers.org" class="app-xlink">OpenLayers</a>, and <a href="http://geoext.org" class="app-xlink">GeoExt</a>.  We also encourage those interested in a particular project to join that project's mailing list, to interact with the wider community.</p>
       <h1>How do I file a bug report?</h1>
       <p>GOOD QUESTION</p>
       <h1>Isn't PostGIS a part of the OpenGeo Suite?</h1>
@@ -27,7 +27,7 @@
       <h1>How do I start the OpenGeo Suite?</h1>
       <p>There are a few ways to start the OpenGeo Suite.  The simplest way is through the Dashboard, by clicking the Start button on the bottom right on the page.  You can also manually start and stop the suite by running the "opengeo-suite" script in the root of your application directory.</p>
       <h1>Why can't I start the OpenGeo Suite?</h1>
-      <p>The most common reason why the OpenGeo Suite is unable to start is because of a port conflict.  By default, the OpenGeo Suite runs on port 8080 of the host machine, and if another service using that port, the Suite will not run.  To change the OpenGeo Suite port, go to the Preferences tab, change the (NAME OF FIELD) click Save, then restart the OpenGeo Suite.  If you are still unable to start the service, you may want to check the Logs (LINK) for other errors.  If you are still unable to find you answer, please contact us at inquiry@opengeo.org with a description of your issue.</p>
+      <p>The most common reason why the OpenGeo Suite is unable to start is because of a port conflict.  By default, the OpenGeo Suite runs on port 8080 of the host machine, and if another service using that port, the Suite will not run.  To change the OpenGeo Suite port, go to the Preferences tab, change the (NAME OF FIELD) click Save, then restart the OpenGeo Suite.  If you are still unable to start the service, you may want to check the <a href="#app-panels-help-logs" class="app-xlink">Logs</a> for other errors.  If you are still unable to find you answer, please contact us at inquiry@opengeo.org with a description of your issue.</p>
       <h1>How do I change the port that the OpenGeo Suite runs on?</h1>
       <p>By default, the OpenGeo Suite runs on port 8080 of the host machine.  To change the OpenGeo Suite port, go to the Preferences tab, change the (NAME OF FIELD) click Save, then restart the OpenGeo Suite.</p>
       <h1>How do I make sense of these logs?</h1>
@@ -37,14 +37,14 @@
       <h1>Why did I get a Java stack trace with GeoServer on my web browser?</h1>
       <p>Java stack traces can happen for many reasons, ranging from incorrect requests to software bugs.  The first lines of the stack trace normally have the most helpful information.  If you are unable to discern to particular error you're receiving, please copying into an email and send it to inquiry@opengeo.org .</p>
       <h1>How do I add lots of data to the OpenGeo Suite at once?</h1>
-      <p>The OpenGeo Suite includes a Layer Importer (LINK) as an extension to GeoServer that allows for batch loading of PostGIS, Oracle, and ArcSDE tables, and also shapefiles.</p>
+      <p>The OpenGeo Suite includes a <a href="#app-geoserver-importer" class="app-xlink">Layer Importer</a> as an extension to GeoServer that allows for batch loading of PostGIS, Oracle, and ArcSDE tables, and also shapefiles.</p>
       <h1>Why is my OpenLayers map blank (or pink)?</h1>
-      <p>You may wish to look at the Error Console for your browser, or even better, use a JavaScript debugger.  If using Mozilla Firefox, a popular debugger is Firebug (LINK) </p>
+      <p>You may wish to look at the Error Console for your browser, or even better, use a JavaScript debugger.  If using Mozilla Firefox, a popular debugger is <a href="http://getfirebug.org" class="app-xlink">Firebug</a>. </p>
       <h1>Does Styler include all of the functionality contained in the SLD spec?</h1>
       <p>Style includes most common uses contained in the SLD specification.  Certain extras, such as vendor options, are not preserved.  If unsure about editing an existing SLD file with Styler, please make a backup first.</p>
       <h1>Why are my vendor options are not rendered when I view an existing SLD in Styler?</h1>
       <p>Styler does not recognize vendor options, which are not part of the SLD specification.</p>
-      <h1>How do I increment the bookmark # in GeoExplorer?</h1>
+      <h1>How do I increment the bookmark number in GeoExplorer?</h1>
       <p>FANTASTIC QUESTION</p>
     </div>
   </div>
