@@ -245,6 +245,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
     createPrefForm: function() {
         this.prefPanel = new Ext.FormPanel({
             renderTo: "app-panels-pref-form",
+            fileUpload: true,
             border: false,
             buttonAlign: "right",
             items: [{
@@ -254,7 +255,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 title: "Service Ports",
                 defaultType: 'textfield',
                 defaults: { 
-                  width: 50
+                    width: 50
                 },
                 items: [{ 
                     fieldLabel: "Port",
@@ -270,11 +271,11 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 style: "margin-top: 0.5em;",
                 collapsible: true,
                 title: "GeoServer",
-                defaultType: 'textfield',
                 defaults: { 
-                  width: 250
+                    width: 250
                 },
                 items: [{ 
+                    xtype: 'textfield',
                     fieldLabel: "Data Directory",
                     name: "data_dir",
                     value: this.config.geoserver.data_dir
@@ -285,14 +286,19 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 collapsible: true,
                 title: "Advanced",
                 collapsed: true,
-                defaultType: 'textfield',
                 defaults: { 
-                  width: 250
+                    width: 250
                 },
-                items: [{ 
-                    fieldLabel: "Suite Executable", 
-                    name: "exe", 
-                    value: this.config.suite.exe
+                items: [{
+                    xtype: 'fileuploadfield',
+                    id: 'form-file',
+                    emptyText: this.config.suite.exe,
+                    fieldLabel: "Suite Executable",
+                    name: "exe",
+                    buttonCfg: {
+                        text:'', 
+                        tooltip: 'Browse for your Suite executable file'
+                      }
                 }]
             }],
             buttons: [{
