@@ -524,8 +524,7 @@ SectionGroup "Extensions" SectionGSExt
   Section /o "Oracle" SectionGSOracle
 
     SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
-    ; SOMETHING ELSE NEEDS TO GO HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    ;File /a "${SOURCEPATHROOT}\geoserver_plugins\oracle\*.*"
+    File /a "${SOURCEPATHROOT}\extension\oracle\*.*"
 
   SectionEnd
 
