@@ -8,9 +8,13 @@ og.platform = {
     "Windows NT": {
         startSuite: function(exe) {
             var p = Titanium.Process.createProcess({
-                args: [exe]
+                args: [exe, "start"]
             });
             p.launch();
+        }, 
+        
+        toURL: function(filePath) {
+            return "file:///" + filePath;
         }
     },
     
@@ -20,7 +24,7 @@ og.platform = {
                 args: ["open", exe]
             });
             p.launch();
-        },
+        }
     },
     
     "Linux": {

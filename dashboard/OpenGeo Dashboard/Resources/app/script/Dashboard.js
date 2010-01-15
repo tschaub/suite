@@ -21,6 +21,13 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
      */
     configDirty: false,
     
+    /** private: property[platform]
+     * ``Object``
+     * 
+     * Instance of og.platform that encapsulates os specific operations.
+     */
+    platform: null,
+    
     constructor: function(config) {
         
         // allow config via query string
@@ -32,6 +39,9 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         this.config = Ext.apply({}, config);
         
         this.suite = new og.Suite(config.suite);
+        og.util.tirun(function() {
+            this.platform = og.platform[Titanium.Platform.name];
+        }, this);
         
         var startingDialog = this.createWorkingDialog("Starting the OpenGeo Suite");
         var stoppingDialog = this.createWorkingDialog("Stopping the OpenGeo Suite");
@@ -483,12 +493,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             iconCls: "view-button",
             cls: "control-button",
             handler: function() {
-                og.util.tirun(
-                    function() {
-                        Titanium.Desktop.openURL("file://" + this.suite.getLogFile());
-                    }, 
-                    this
-                )
+                this.openLog();
             }, 
             scope: this
         });
@@ -559,6 +564,31 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             }
             worker.start();
         }, this);
+    }, 
+    
+    /**
+     * api: method[openLog]
+     * 
+     * Opens the log file in the default system editor.
+     */
+    openLog: function() {
+        og.util.tirun(
+            function() {
+                var f = Titanium.Filesystem.getFile(this.suite.getLogFile());
+                if (f.exists() === true) {
+                    var path = f.nativePath().replace(" ", "%20");
+                    var url;
+                    if (this.platform && this.platform.toURL) {
+                        url = this.platform.toURL(path);
+                    }
+                    else {
+                        url = "file://" + path;
+                    }
+                    Titanium.Desktop.openURL(url);
+                }
+            }, 
+            this
+        );
     }, 
     
     /**
