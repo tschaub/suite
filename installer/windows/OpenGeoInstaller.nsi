@@ -422,10 +422,10 @@ Section "-Jetty" SectionJetty ; dash = hidden
   File /r "${SOURCEPATHROOT}\jre"
 
   File /a "${SOURCEPATHROOT}\opengeo-suite.bat" ; startup script
-  ${textreplace::ReplaceInFile} "$INSTDIR\opengeo-suite.bat" \
-                                "$INSTDIR\opengeo-suite.bat" \
-                                "@INSTDIR@" "$INSTDIR" \ 
-                                "/S=1" $1
+  ;${textreplace::ReplaceInFile} "$INSTDIR\opengeo-suite.bat" \
+  ;                              "$INSTDIR\opengeo-suite.bat" \
+  ;                              "@INSTDIR@" "$INSTDIR" \ 
+  ;                              "/S=1" $1
 
   ; Create some dirs
   CreateDirectory "$INSTDIR\webapps"
