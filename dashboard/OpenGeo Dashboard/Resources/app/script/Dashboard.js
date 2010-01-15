@@ -245,7 +245,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
     createPrefForm: function() {
         this.prefPanel = new Ext.FormPanel({
             renderTo: "app-panels-pref-form",
-            fileUpload: true,
+            //fileUpload: true,
             border: false,
             buttonAlign: "right",
             items: [{
@@ -290,15 +290,17 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     width: 250
                 },
                 items: [{
-                    xtype: 'fileuploadfield',
-                    id: 'form-file',
-                    emptyText: this.config.suite.exe,
+                    //xtype: 'fileuploadfield',
+                    xtype: 'textfield',
+                    id: 'exe',
+                    //emptyText: this.config.suite.exe,
+                    value: this.config.suite.exe,
                     fieldLabel: "Suite Executable",
                     name: "exe",
-                    buttonCfg: {
+                    /*buttonCfg: {
                         text:'', 
                         tooltip: 'Browse for your Suite executable file'
-                      }
+                    }*/
                 }]
             }],
             buttons: [{
