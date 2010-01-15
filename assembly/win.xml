@@ -71,7 +71,7 @@
     </fileSet>
     <fileSet>
       <directory>jetty</directory>
-      <outputDirectory>jetty</outputDirectory>
+      <outputDirectory>/</outputDirectory>
       <excludes>
         <exclude>pom.xml</exclude>
         <exclude>opengeo-suite*</exclude>
