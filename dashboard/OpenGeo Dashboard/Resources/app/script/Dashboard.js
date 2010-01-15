@@ -41,7 +41,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         this.suite = new og.Suite(config.suite);
         og.util.tirun(function() {
             this.platform = og.platform[Titanium.Platform.name];
-        }, this);
+        }, this, function(){}    );
         
         var startingDialog = this.createWorkingDialog("Starting the OpenGeo Suite");
         var stoppingDialog = this.createWorkingDialog("Stopping the OpenGeo Suite");
