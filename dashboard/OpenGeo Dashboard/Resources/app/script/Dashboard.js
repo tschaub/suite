@@ -253,11 +253,29 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
     },
     
     createPrefForm: function() {
+        // create a password field validator
+        Ext.apply(Ext.form.VTypes, {
+           password: function(value, field)
+           {
+              if (field.initialPasswordField)
+              {
+                 var pwd = Ext.getCmp(field.initialPasswordField);
+                 this.passwordText = 'Passwords do not match.';
+                 return (value == pwd.getValue());
+              }
+         
+              return true;
+           },
+         
+           passwordText: ''
+        });
+        
         this.prefPanel = new Ext.FormPanel({
             renderTo: "app-panels-pref-form",
             //fileUpload: true,
             border: false,
             buttonAlign: "right",
+            monitorValid: true,
             items: [{
                 xtype: "fieldset",
                 style: "margin-top: 0.5em;",
@@ -268,7 +286,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     width: 50
                 },
                 items: [{ 
-                    fieldLabel: "Port",
+                    fieldLabel: "Primary Port",
                     name: "port",
                     value: this.config.suite.port
                 },  {
@@ -282,13 +300,44 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 collapsible: true,
                 title: "GeoServer",
                 defaults: { 
-                    width: 250
+                    width: 250,
+                    allowBlank: false,
                 },
                 items: [{ 
                     xtype: 'textfield',
                     fieldLabel: "Data Directory",
                     name: "data_dir",
                     value: this.config.geoserver.data_dir
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: "Username",
+                    toolTip: "GeoServer adminstrator username",
+                    name: "username",
+                    value: this.config.geoserver.username
+                }, {
+                    xtype: "textfield",
+                    id: "geoserver-admin-password",
+                    inputType: "password",
+                    fieldLabel: "Password",
+                    toolTip: "GeoServer adminstrator password",
+                    name: "password",
+                    value: this.config.geoserver.password,
+                    listeners: {
+                        change: function(f, e) {
+                            //reset the password confiformation form
+                            var confirm = this.prefPanel.getForm().findField('password_confirm');
+                            confirm.setValue("");
+                        }, 
+                        scope: this
+                    }
+                }, {
+                    xtype: "textfield",
+                    inputType: "password",
+                    fieldLabel: "Confirm",
+                    vtype: "password",
+                    name: "password_confirm", 
+                    value: this.config.geoserver.password,
+                    initialPasswordField: "geoserver-admin-password"
                 }]
             },  {
                 xtype: "fieldset",
@@ -315,13 +364,29 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             }],
             buttons: [{
                 text: "Save",
+                formBind: true,
                 handler: function(btn, evt) {
                     var form = this.prefPanel.getForm();
-                    this.config.suite.exe = form.findField('exe').getValue();
-                    this.config.suite.port = form.findField('port').getValue();
-                    this.config.suite.stop_port = 
-                        form.findField('stop_port').getValue();
+                    
+                    //save suite config
+                    var suite = this.config.suite;
+                    suite.exe = form.findField('exe').getValue();
+                    suite.port = form.findField('port').getValue();
+                    suite.stop_port =  form.findField('stop_port').getValue();
 
+                    //save geoserver config
+                    var gs = this.config.geoserver;
+                    var username = form.findField("username").getValue();
+                    var password = form.findField("password").getValue();
+                    if (username != gs.username || password != gs.password) {
+                        //username password change
+                        this.updateGeoServerUserPass(username, password);
+                        gs.username = username;
+                        gs.password = password;
+                    }
+                    
+                    gs.data_dir = form.findField("data_dir").getValue();
+        
                     og.util.saveConfig(this.config, 'config.ini');
                     this.message("Configuration saved.");
                     
@@ -624,6 +689,54 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             }
         });
     }, 
+
+    /**
+     * private: method[updateGeoServerUserPass]
+     * :arg: username: ``String`` The new username
+     * :arg: password: ``Password`` The new password
+     * 
+     * :return: ``Boolean`` True if the username and password were updated.
+     * 
+     * Updates the GeoServer adminstrator username and password.
+     */    
+    updateGeoServerUserPass: function(username, password) {
+        og.util.tirun(function() {
+            //load the GeoServer users.properties file
+            var gs = this.config.geoserver;
+            var f = Titanium.Filesystem.getFile(gs.data_dir, "security", "users.properties");
+            if (f.exists() === true) {
+                var props = Titanium.App.loadProperties(f.nativePath());
+                
+                //has the username changed?
+                if (username != gs.username) {
+                    //kill the old entry
+                    if (props.hasProperty(gs.username)) {
+                        props.setString(gs.username, "dummy, ROLE_DUMMY");    
+                    }
+                    
+                    //add the new one
+                    props.setString(username, password + ", ROLE_ADMINISTRATOR");
+                }
+                else {
+                    //just update the entry
+                    if (props.hasProperty(gs.username)) {
+                        var entry = props.getString(gs.username).split(",");
+                        entry[0] = password;
+                        props.setString(gs.username, entry.join(", "));                        
+                    }
+                    else {
+                        //for some reason did not exist, just add a new one
+                        props.setString(username, password+", ROLE_ADMINISTRATOR");
+                    }
+                }
+                
+                props.saveTo(f.nativePath());
+                return true;
+            }
+            
+            return false;
+        }, this);
+    },
     
     openURL: function(url, title) {
         url = encodeURI(url);
