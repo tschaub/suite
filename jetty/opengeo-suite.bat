@@ -14,7 +14,7 @@ if not "%2" == "" (
 )
 
 REM pushd to current working directory
-pushd @INSTDIR@
+pushd %~dp0%
 
 REM Check for og-jetty.jar
 if not exist og-jetty.jar (
