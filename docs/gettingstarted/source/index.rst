@@ -1,5 +1,5 @@
-The OpenGeo Suite: Getting Started
-==================================
+Getting Started
+===============
 
 Welcome to the OpenGeo Suite!  The OpenGeo Suite allows you to style, compose, and publish maps with ease.
 

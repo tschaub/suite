@@ -10,7 +10,7 @@ Medford
 
 The city of Medford, Oregon has generously shared some of their municipal data, including zoning, buildings, and parks.
 
-You can use GeoExplorer to view the included layers.  Go to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoExplorer --> GeoExplorer Documentation` or select :guilabel:`GeoExplorer` from the Dashboard to load GeoExplorer.  See the section on :ref:`composeyourmap` for information on adding  layers in GeoExplorer, or see the full GeoExplorer Documentation at :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoExplorer --> GeoExplorer Documentation` or :guilabel:`GeoExplorer Documentation` in the Dashboard.
+You can use GeoExplorer to view the included layers.  Select :guilabel:`GeoExplorer` from the Dashboard to load GeoExplorer.  See the section on :ref:`composeyourmap` for information on adding layers in GeoExplorer, or see the full GeoExplorer Documentation by clicking :guilabel:`GeoExplorer Documentation` in the Dashboard.
 
 .. figure:: img/medford.png
    :align: center
@@ -22,5 +22,5 @@ Base Map
 
 Also included is a base map containing country boundaries and major cities.
 
-These layers are shown by default when GeoExplorer is loaded.  Go to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoExplorer` or select :guilabel:`GeoExplorer` from the Dashboard to view this base map.
+These layers are shown by default when GeoExplorer is loaded.  Select :guilabel:`GeoExplorer` from the Dashboard to view this base map.
 

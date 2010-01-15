@@ -5,7 +5,7 @@ Step 3: Compose Your Map
 
 Now that the data is imported and styled, you can organize and compose your layers into a map.  **GeoExplorer** allows you to create web maps based on layers served through GeoServer.
 
-#. Run GeoExplorer.  You can do this by selecting :guilabel:`GeoExplorer` in the Dashboard or by navigating to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> GeoExplorer`.
+#. Run GeoExplorer.  You can do this by selecting :guilabel:`GeoExplorer` in the Dashboard.
 
    .. figure:: img/geoexplorer.png
       :align: center
@@ -27,7 +27,6 @@ Now that the data is imported and styled, you can organize and compose your laye
       *Selecting layers to add to your map*
 
    .. note:: You can also add layers served through another remote GeoServer, or any other compatible Web Map Server (WMS).  Click the :guilabel:`Add a new server` button to connect to another server.
-
 
 #. The layers will be added to the map.  
 
@@ -51,5 +50,5 @@ Now that the data is imported and styled, you can organize and compose your laye
 
       *The composed map*
 
-   .. note:: For more information on GeoExplorer, please see the GeoExplorer Documentation by selecting :guilabel:`GeoExplorer Documentation` in the Dashboard, or by navigating to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Documentation --> GeoExplorer Documentation`.
+   .. note:: For more information on GeoExplorer, please see the GeoExplorer Documentation by selecting :guilabel:`GeoExplorer Documentation` in the Dashboard.
 
