@@ -28,7 +28,27 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
      */
     platform: null,
     
+    /** api: property[DEFAULTS]
+     *  ``Object``
+     *  Default preferences.
+     *
+     *  Members:
+     *   * helpOnStart - ``Boolean`` Show help dialog on start.  Default is true.
+     */
+    DEFAULTS: {
+        helpOnStart: true
+    },
+    
+    /** private: property[dbName]
+     *  ``String``
+     *  Database name for storage of user preferences.
+     */
+    dbName: "org.opengeo.suite",
+    
     constructor: function(config) {
+        
+        // apply default preferences
+        this.setPreferences(Ext.applyIf(this.getPreferences(), this.DEFAULTS));
         
         // allow config via query string
         var str = window.location.search.substring(1);
@@ -76,6 +96,32 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         og.Dashboard.superclass.constructor.call(this);
         
         Ext.onReady(this.createViewport, this);
+    },
+    
+    getPreferences: function(key) {
+        var db = Titanium.Database.open(this.dbName);
+        db.execute("CREATE TABLE IF NOT EXISTS preferences (blob TEXT)");
+        var results = db.execute("SELECT * FROM preferences");
+        var preferences = Ext.decode(results.field(0)) || {};
+        results.close();
+        db.close();
+        return key ? preferences[key] : preferences;      
+    },
+    
+    setPreferences: function(preferences) {
+        preferences = Ext.apply(this.getPreferences(), preferences);
+        this.clearPreferences();
+        var db = Titanium.Database.open(this.dbName);
+        db.execute("INSERT INTO preferences (blob) VALUES (?)", Ext.encode(preferences));
+        db.close();
+        return preferences;
+    },
+    
+    clearPreferences: function() {
+        var db = Titanium.Database.open(this.dbName);
+        db.execute("DROP TABLE IF EXISTS preferences");
+        db.close();
+        this.getPreferences();
     },
     
     createWorkingDialog: function(msg) {
@@ -249,7 +295,37 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         
         // parse hash to activate relevant tab
         this.openPanel(window.location.hash.substring(1));
+        
+        if (this.getPreferences("helpOnStart")) {
+            this.showStartHelp();
+        }
 
+    },
+    
+    showStartHelp: function() {
+        var win = new Ext.Window({
+            modal: true,
+            title: "Welcome",
+            html: og.util.loadSync("app/markup/help/start.html"),
+            width: "50%",
+            constrain: true,
+            bbar: [" ", {
+                xtype: "checkbox",
+                boxLabel: "Show this dialog at startup",
+                checked: this.getPreferences("helpOnStart"),
+                handler: function(box, checked) {
+                    this.setPreferences({helpOnStart: checked});
+                },
+                scope: this
+            }, "->", {
+                text: "Close",
+                iconCls: "cancel-button",
+                handler: function() {
+                    win.close();
+                }
+            }]
+        });
+        win.show();
     },
     
     createPrefForm: function() {
