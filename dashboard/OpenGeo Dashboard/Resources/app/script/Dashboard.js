@@ -51,7 +51,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 startingDialog.show();
             }, 
             started: function() {
-                this.message("The OpenGeo Suite is online.");
+                this.ok("The OpenGeo Suite is online.");
                 startingDialog.hide();
                 this.updateOnlineLinks(true);
             }, 
@@ -59,7 +59,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 stoppingDialog.show();
             }, 
             stopped: function() {
-                this.message("The OpenGeo Suite is offline.");
+                this.warn("The OpenGeo Suite is offline.");
                 stoppingDialog.hide();
                 
                 //if the current config is dirty, update the suite config
@@ -470,7 +470,8 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         this.messageBox = new Ext.BoxComponent({
             autoEl: {
                 tag: "div",
-                html: ""
+                html: "",
+                cls: "app-panels-control-msg"
             }
         });
 
@@ -754,13 +755,47 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         }
     },
     
-    /** api method[message]
-     *  :arg m: ``String`` The message.
+    /** api method[info]
+     *  :arg msg: ``String`` The message.
+     *
+     *  Displays a message in the status panel to relay information.
+     */
+    info: function(msg) {
+        this.message(msg, "info");
+    }, 
+    
+    /** api method[warn]
+     *  :arg msg: ``String`` The message.
+     *
+     *  Displays a message in the status panel to indicate a warning state.
+     */
+    warn: function(msg) {
+        this.message(msg, "warn");
+    }, 
+    
+    /** api method[ok]
+     *  :arg msg: ``String`` The message.
+     *
+     *  Displays a message in the status panel to indicate an ok state.
+     */
+    ok: function(msg) {
+        this.message(msg, "ok");
+    }, 
+    
+    /** private method[message]
+     *  :arg msg: ``String`` The message.
      *
      *  Displays a message in the status panel.
      */
-    message: function(m) {
-        this.messageBox.el.dom.innerHTML = m;
+    message: function(msg, cls) {
+        var classes = this.messageBox.el.dom.getAttribute("class").split(" ");
+        for (var i = 0; i < classes.length; i++) {
+            if (classes[i].search("app-msg-") != -1){
+                this.messageBox.el.removeClass(classes[i]);
+            }
+        }
+        this.messageBox.el.addClass("app-msg-"+cls);
+        this.messageBox.el.dom.innerHTML = msg;
     }, 
 
 });

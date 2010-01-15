@@ -267,6 +267,25 @@ a.icon-styler {
     height: 2em;
 }
 
+.app-panels-control-msg {
+    /*background: #FFFFFF url('img/information.png') no-repeat;*/
+    background-color: #FFFFFF;
+    padding-left: 25px;
+    padding-top: 2px;
+}
+
+.app-msg-warn {
+    background: url('img/delete.png') no-repeat;
+}
+
+.app-msg-info {
+    background: url('img/information.png') no-repeat;
+}
+
+.app-msg-ok {
+    background: url('img/tick.png') no-repeat;
+}
+
 .control-button {
     padding-left: 0.4em;
 }
