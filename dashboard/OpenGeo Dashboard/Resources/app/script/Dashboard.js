@@ -343,6 +343,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         var xlinks = Ext.select(".app-xlink");
         xlinks.on({
             click: function(evt, el) {
+                var port = this.config.suite.port;
                 var path;
                 if (el.href.indexOf("#") >= 0) {
                     var id = el.href.split("#").pop();
@@ -360,7 +361,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         if (path) {
                             title = section[key + "_title"];
                             if (!path.match(/^(https?|file):\/\//)) {
-                                var port = section.port;
                                 url = "http://" + section.host + (port ? ":" + port : "") + section[key];
                             }
                         }
