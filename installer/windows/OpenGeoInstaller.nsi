@@ -3,8 +3,8 @@
 ; Define your application name
 !define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
-!define VERSION "1.1-SNAPSHOT"
-!define LONGVERSION "1.1.0.0" ; must be a.b.c.d
+!define VERSION "1.0-SNAPSHOT"
+!define LONGVERSION "1.0.0.1" ; must be a.b.c.d
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
 !define SOURCEPATHROOT "..\..\target\opengeosuite-1.0-SNAPSHOT-win"
 !define STARTMENU_FOLDER "${APPNAMEANDVERSION}"
@@ -413,10 +413,10 @@ Section "-Jetty" SectionJetty ; dash = hidden
 
   SetOutPath "$INSTDIR"
   File /a "${SOURCEPATHROOT}\*.jar" ; custom startup jars
-  File /r  "${SOURCEPATHROOT}\jetty\etc"
-  File /r  "${SOURCEPATHROOT}\jetty\lib"
-  File /r  "${SOURCEPATHROOT}\jetty\logs"
-  File /r  "${SOURCEPATHROOT}\jetty\resources"
+  File /r  "${SOURCEPATHROOT}\etc"
+  File /r  "${SOURCEPATHROOT}\lib"
+  File /r  "${SOURCEPATHROOT}\logs"
+  File /r  "${SOURCEPATHROOT}\resources"
  
   ; Copy our own JRE (which includes native JAI)
   File /r "${SOURCEPATHROOT}\jre"
@@ -505,12 +505,12 @@ SectionGroupEnd
 
 SectionGroup "Extensions" SectionGSExt
 
-  Section /o "ArcSDE" SectionGSArcSDE
+  Section "ArcSDE" SectionGSArcSDE
 
-  ;SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
+  SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
   ;CopyFiles /SILENT /FILESONLY $SDEPath\jsde*.jar "$INSTDIR\webapps\geoserver\WEB-INF\lib"
   ;CopyFiles /SILENT /FILESONLY $SDEPath\jpe*.jar "$INSTDIR\webapps\geoserver\WEB-INF\lib"
-  ;File /a "${SOURCEPATHROOT}\geoserver_plugins\arcsde\*.*"
+  File /a "${SOURCEPATHROOT}\extension\arcsde\*.*"
 
   SectionEnd
 
@@ -521,7 +521,7 @@ SectionGroup "Extensions" SectionGSExt
 
   SectionEnd
 
-  Section /o "Oracle" SectionGSOracle
+  Section "Oracle" SectionGSOracle
 
     SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
     File /a "${SOURCEPATHROOT}\extension\oracle\*.*"
@@ -558,9 +558,6 @@ Section "Documentation" SectionDocs
 
   ; Copy all doc projects
   File /r "${SOURCEPATHROOT}\webapps\docs"
-
-  ; lame but this shouldn't be packaged
-  RMDir "$INSTDIR\webapps\docs\install"
 
   ; Shortcuts
   SetOutPath "$INSTDIR"
