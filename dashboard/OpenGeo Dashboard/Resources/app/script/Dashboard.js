@@ -99,28 +99,40 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
     },
     
     getPreferences: function(key) {
-        var db = Titanium.Database.open(this.dbName);
-        db.execute("CREATE TABLE IF NOT EXISTS preferences (blob TEXT)");
-        var results = db.execute("SELECT * FROM preferences");
-        var preferences = Ext.decode(results.field(0)) || {};
-        results.close();
-        db.close();
+        var preferences = og.util.tirun(function() {
+            var db = Titanium.Database.open(this.dbName);
+            db.execute("CREATE TABLE IF NOT EXISTS preferences (blob TEXT)");
+            var results = db.execute("SELECT * FROM preferences");
+            var preferences = Ext.decode(results.field(0)) || {};
+            results.close();
+            db.close();
+            return preferences;
+        }, this, function() {
+            return this.DEFAULTS;
+        });
+        
         return key ? preferences[key] : preferences;      
     },
     
     setPreferences: function(preferences) {
         preferences = Ext.apply(this.getPreferences(), preferences);
         this.clearPreferences();
-        var db = Titanium.Database.open(this.dbName);
-        db.execute("INSERT INTO preferences (blob) VALUES (?)", Ext.encode(preferences));
-        db.close();
+        og.util.tirun(function() {
+            var db = Titanium.Database.open(this.dbName);
+            db.execute("INSERT INTO preferences (blob) VALUES (?)", Ext.encode(preferences));
+            db.close();
+        }, this, function(){});
+        
         return preferences;
     },
     
     clearPreferences: function() {
-        var db = Titanium.Database.open(this.dbName);
-        db.execute("DROP TABLE IF EXISTS preferences");
-        db.close();
+        og.util.tirun(function() {
+            var db = Titanium.Database.open(this.dbName);
+            db.execute("DROP TABLE IF EXISTS preferences");
+            db.close();
+        }, this, function(){});
+        
         this.getPreferences();
     },
     
