@@ -139,15 +139,12 @@ og.Suite = Ext.extend(Ext.util.Observable, {
     start: function() {
         og.util.tirun(
             function() {
-                sys = og.platform[Titanium.Platform.name]
-                if (sys) {
-                    sys.startSuite(this.config.exe);
-                    this.fireEvent("starting");
-                }
-                else {
-                    Ext.Msg.alert("Warning", "Platform " + 
-                        Titanium.Platform.name + " not supported.");
-                }
+                var p = Titanium.Process.createProcess({
+                    args: [this.config.exe, "start"]
+                });
+                p.launch();
+                
+                this.fireEvent("starting");
             }, 
             this
         );
@@ -159,15 +156,11 @@ og.Suite = Ext.extend(Ext.util.Observable, {
      */
     stop: function() {
         og.util.tirun(function() {
-            var sep = Titanium.Filesystem.getSeparator();
-            var jar = Titanium.App.home +sep+"Resources"+sep+ "jetty-start.jar";
-            
             var p = Titanium.Process.createProcess({
-                args:['java', '-DSTOP.PORT='+this.config.stop_port, 
-                    '-DSTOP.KEY=opengeo', '-jar', jar, '--stop']
+                args: [this.config.exe, "stop"]
             });
             p.launch();
-            
+
             this.fireEvent("stopping");
         }, this);
     }
