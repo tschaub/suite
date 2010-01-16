@@ -314,6 +314,13 @@ a.icon-styler {
     background-image: url(img/delete.png);
 }
 
+.working-dialog {
+    text-align: center;
+    padding: 0.5em 1em 2em;
+    margin-bottom: 1em;
+    background: transparent url(img/indicator.gif) no-repeat bottom center;
+}
+
 #app-panels-pref-form {
     margin: 10px 10px;
 }

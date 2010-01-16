@@ -126,27 +126,12 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
     
     createWorkingDialog: function(msg) {
         var dialog = new Ext.Window({
-            layout: "column",
-            closable: false,
+            title: "Working...",
+            closeAction: "hide",
+            bodyCssClass: "working-dialog",
             modal: true,
-            items: [{
-               xtype: "box", 
-               autoEl: {
-                   tag: "div",
-                   cls: "dash-dialog-working",
-                   html: msg,
-               },
-               columnWidth: 1
-            }, {
-               xtype: "button",
-               text: "",
-               iconCls: "cancel-button",
-               cls: "control-button",
-               handler: function() {
-                   dialog.hide();
-               },
-               scope: this
-            }] 
+            constrain: true,
+            html: msg
         });
         return dialog;
     }, 
