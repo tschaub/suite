@@ -4,35 +4,18 @@ Ext.namespace("og");
  * Separates out platform spcefic properties and operations.
  */
 og.platform = {
-    //TODO: have starting just be a single script to run
     "Windows NT": {
-        startSuite: function(exe) {
-            var p = Titanium.Process.createProcess({
-                args: [exe, "start"]
-            });
-            p.launch();
-        }, 
-        
         toURL: function(filePath) {
             return "file:///" + filePath;
-        }
+        }, 
+        name: "Windows"
     },
     
     "Darwin": {
-        startSuite: function(exe) {
-            var p = Titanium.Process.createProcess({
-                args: ["open", exe]
-            });
-            p.launch();
-        }
+        name: "Mac"
     },
     
     "Linux": {
-        startSuite: function(exe) {
-            var p = Titanium.Process.createProcess({
-                args: [exe, "start"]
-            });
-            p.launch();
-        }
+        name: "Linux"
     }
 };
