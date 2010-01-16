@@ -559,7 +559,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             scope: this
         });
         this.suite.on({
-            starting: function() {
+            started: function() {
                 startButton.disable();
             },
             stopped: function() {
@@ -578,7 +578,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             scope: this
         });
         this.suite.on({
-            stopping: function() {
+            stopped: function() {
                 stopButton.disable();
             },
             started: function() {
