@@ -8,11 +8,6 @@ if "%1" == "" (
   goto Usage
 )
 
-if not "%2" == "" (
-  echo Sorry, too many arguments received.
-  goto Usage
-)
-
 REM pushd to current working directory
 pushd %~dp0%
 
@@ -26,6 +21,12 @@ REM Check for JRE
 if not exist jre\bin\java.exe (
   echo JRE not found!  Aborting...
   goto Done
+)
+
+REM Check debug flag
+set COMMAND=start jre\bin\javaw.exe
+if "%2" == "debug" (
+  set COMMAND=jre\bin\java.exe  
 )
 
 REM Java flags
@@ -53,7 +54,7 @@ REM if %1 is unknown
 REM Display usage 
 echo.
 echo Usage:
-echo    opengeo-suite ^[start^|stop^]
+echo    opengeo-suite ^[start^|stop^] ^[debug^]
 goto End
 
 :Done
