@@ -32,6 +32,9 @@
     <fileSet>
       <directory>geoexplorer/build/geoexplorer</directory>
       <outputDirectory>webapps/geoexplorer</outputDirectory>
+      <excludes>
+        <exclude>doc/**</exclude>
+      </excludes>
     </fileSet>
     <fileSet>
       <directory>docs/gettingstarted/target/html</directory>

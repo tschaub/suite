@@ -34,6 +34,9 @@
     <fileSet>
       <directory>geoexplorer/build/geoexplorer</directory>
       <outputDirectory>webapps/geoexplorer</outputDirectory>
+      <excludes>
+        <exclude>doc/**</exclude>
+      </excludes>
     </fileSet>
     <fileSet>
       <outputDirectory>dashboard</outputDirectory>
