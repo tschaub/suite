@@ -9,7 +9,7 @@ if [ "$1" == "" ]; then
   exit
 fi
 
-pushd `dirname $0` > /dev/null
+pushd "`dirname "$0"`" > /dev/null
  
 if [ ! -e "`pwd`/og-jetty.jar" ]; then
   echo "Could not find og-jetty.jar"
