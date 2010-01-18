@@ -59,7 +59,10 @@ Var STARTMENU_FOLDER
 ;Var SDEPath
 ;Var SDEPathTemp
 ;Var SDEPathCheck
-;Var SDECheckBox
+Var SDECheckBox
+Var SDECheckBoxPrior
+Var OracleCheckBox
+Var OracleCheckBoxPrior
 ;Var SDEPathHWND
 ;Var BrowseSDEHWND
 
@@ -74,10 +77,10 @@ VIAddVersionKey FileVersion "${VERSION}"
 VIAddVersionKey Comments "http://opengeo.org"
 
 ; Page headers for pages
-LangString TEXT_ARCSDE_TITLE ${LANG_ENGLISH} "ArcSDE Libraries"
-LangString TEXT_ARCSDE_SUBTITLE ${LANG_ENGLISH} "Link to your existing ArcSDE libraries."
-LangString TEXT_ORACLE_TITLE ${LANG_ENGLISH} "Oracle Libraries"
-LangString TEXT_ORACLE_SUBTITLE ${LANG_ENGLISH} "Link to your existing Oracle libraries."
+;LangString TEXT_ARCSDE_TITLE ${LANG_ENGLISH} "ArcSDE Libraries"
+;LangString TEXT_ARCSDE_SUBTITLE ${LANG_ENGLISH} "Link to your existing ArcSDE libraries."
+;LangString TEXT_ORACLE_TITLE ${LANG_ENGLISH} "Oracle Libraries"
+;LangString TEXT_ORACLE_SUBTITLE ${LANG_ENGLISH} "Link to your existing Oracle libraries."
 LangString TEXT_READY_TITLE ${LANG_ENGLISH} "Ready to Install"
 LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be installed."
 
@@ -159,6 +162,10 @@ Page custom Ready
 
 ; Startup tasks
 Function .onInit
+
+  ; Init vars
+  StrCpy $SDECheckBoxPrior 0
+  StrCpy $OracleCheckBoxPrior 0
 
   IfSilent SilentSkip
 
@@ -511,7 +518,7 @@ SectionGroupEnd
 
 SectionGroup "Extensions" SectionGSExt
 
-  Section "ArcSDE" SectionGSArcSDE
+  Section /o "ArcSDE" SectionGSArcSDE
 
   SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
   ;CopyFiles /SILENT /FILESONLY $SDEPath\jsde*.jar "$INSTDIR\webapps\geoserver\WEB-INF\lib"
@@ -527,7 +534,7 @@ SectionGroup "Extensions" SectionGSExt
 
   SectionEnd
 
-  Section "Oracle" SectionGSOracle
+  Section /o "Oracle" SectionGSOracle
 
     SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
     File /a "${SOURCEPATHROOT}\extension\oracle\*.*"
@@ -536,12 +543,30 @@ SectionGroup "Extensions" SectionGSExt
 
 SectionGroupEnd
 
-; This MUST go after the SectionGSArcSDE section (so that the var is defined)
+; This MUST go after the Extensions section (so that the vars aredefined)
 Function .onSelChange
 
   ;Sets $SDECheckBox to 1 if component is checked
   SectionGetFlags ${SectionGSArcSDE} $SDECheckBox
-  ; SAME FOR ORACLE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  StrCmp $SDECheckBox 1 0 Oracle
+    StrCmp $SDECheckBoxPrior 0 0 Oracle
+      MessageBox MB_ICONEXCLAMATION|MB_OK "You have elected to install the optional ArcSDE extension.  In order for this functionality to be activated, additional files will need to be manually copied from your ArcSDE installation.  The files required are:$\r$\n$\r$\n     jsde*.jar, jpe*.jar$\r$\n$\r$\nThese files must be copied to the following folder:$\r$\n$\r$\n     $INSTDIR\webapps\geoserver\WEB-INF\lib"
+
+  Oracle:
+
+  ;Sets $OracleCheckBox to 1 if component is checked
+  SectionGetFlags ${SectionGSOracle} $OracleCheckBox
+
+  StrCmp $OracleCheckBox 1 0 End
+    StrCmp $OracleCheckBoxPrior 0 0 End
+      MessageBox MB_ICONEXCLAMATION|MB_OK "You have elected to install the optional Oracle Spatial extension.  In order for this functionality to be activated, the Oracle JDBC driver will need to be manually copied from your Oracle installation.  The file required is:$\r$\n$\r$\n     ojdbc*.jar$\r$\n$\r$\nThis file must be copied to the following folder:$\r$\n$\r$\n     $INSTDIR\webapps\geoserver\WEB-INF\lib"
+
+  End:
+
+  ; This is to set a flag so both displays don't show at once
+  StrCpy $SDECheckBoxPrior $SDECheckBox 
+  StrCpy $OracleCheckBoxPrior $OracleCheckBox
 
 FunctionEnd
 
@@ -692,9 +717,9 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionServices} "A list of all of the services contained in the OpenGeo Suite."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGS} "Installs GeoServer, a spatial data server."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSExt} "Includes GeoServer Extensions."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSArcSDE} "Adds support for ArcSDE databases.  Requires additional ArcSDE installation files."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSArcSDE} "Adds support for ArcSDE databases.  Requires additional ArcSDE files."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSGDAL} "Adds support for GDAL image formats."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSOracle} "Adds support for Oracle databases."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSOracle} "Adds support for Oracle databases.  Requires additional Oracle files."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGWC} "Includes GeoWebCache, a tile cache server."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGX} "Installs GeoExplorer, a graphical map editor."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionStyler} "Installs Styler, a graphical map style editor."
