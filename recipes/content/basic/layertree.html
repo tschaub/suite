@@ -36,9 +36,9 @@
                     renderTo: "map-id",
                     layers: [
                         new OpenLayers.Layer.WMS(
-                            "Transportation",
-                            "http://maps.opengeo.org/geowebcache/service/wms",
-                            {layers: "openstreetmap"}
+                            "World Map",
+                            "/geoserver/gwc/service/wms",
+                            {layers: "World"}
                         ),
                         new OpenLayers.Layer.WMS(
                             "Global Imagery",
