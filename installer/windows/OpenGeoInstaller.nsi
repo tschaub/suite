@@ -452,14 +452,15 @@ Section "GeoServer" SectionGS
   File /r /x jai*.* "${SOURCEPATHROOT}\webapps\geoserver"
 
   ; Copy data_dir
-  SetOutPath "$INSTDIR"
+  CreateDirectory "$PROFILE\.opengeo"
+  SetOutPath "$PROFILE\.opengeo"
   File /r "${SOURCEPATHROOT}\data_dir"
   ;Next line is lame, but I can't figure out where this directory is being created
   ;RMDir /r "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\geoserver"
 
   ; Shortcuts
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer Data Directory.lnk" \
-                 "$INSTDIR\data_dir"
+                 "$PROFILE\.opengeo\data_dir"
 
 SectionEnd
 
@@ -485,7 +486,7 @@ Section "GeoExplorer" SectionGX
   !insertmacro DisplayImage "slide_6_geoext.bmp"
 
   SetOutPath "$INSTDIR\webapps\"
-  File /r /x doc "${SOURCEPATHROOT}\webapps\geoexplorer"
+  File /r  "${SOURCEPATHROOT}\webapps\geoexplorer"
 
 SectionEnd
 
@@ -612,6 +613,11 @@ Section "-Dashboard" SectionDashboard ;dash means hidden
                                 "$INSTDIR\dashboard\Resources\config.ini" \
                                 "@SUITE_DIR@" "$INSTDIR" \ 
                                 "/S=1" $1
+  ${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
+                                "$INSTDIR\dashboard\Resources\config.ini" \
+                                "@GEOSERVER_DATA_DIR@" "$PROFILE\.opengeo\data_dir" \ 
+                                "/S=1" $1
+
 
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\OpenGeo Suite Dashboard.lnk" \
 		         "$INSTDIR\dashboard\OpenGeo Dashboard.exe" \
