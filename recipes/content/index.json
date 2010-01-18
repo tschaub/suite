@@ -27,6 +27,11 @@
         "description": "Use a GetFeatureInfo control and display results in a popup.",
         "components": ["GeoExt", "OpenLayers"]
     }, {
+        "id": "basic/tools",
+        "title": "Map Tools",
+        "description": "Display map tools in a toolbar.",
+        "components": ["GeoExt", "OpenLayers"]
+    }, {
         "id": "vector/external-graphic",
         "title": "External Graphic",
         "description": "Style points with an external graphic.",
