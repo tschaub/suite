@@ -324,6 +324,13 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         win.show();
         console.log(win.el.dom);
         this.processLinks(win.el.dom);
+        
+        Ext.select("#app-start-pref-link").on({
+            click: function() {
+                win.close();
+            }, 
+            delay: 1
+        });
     },
     
     createPrefForm: function() {
