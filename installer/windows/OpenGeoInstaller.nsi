@@ -53,15 +53,15 @@ RequestExecutionLevel admin
 
 ; Might be the same as !define
 Var STARTMENU_FOLDER
-Var CommonAppData
-Var DataDirPath
-Var FolderName
-Var SDEPath
-Var SDEPathTemp
-Var SDEPathCheck
-Var SDECheckBox
-Var SDEPathHWND
-Var BrowseSDEHWND
+;Var CommonAppData
+;Var DataDirPath
+;Var FolderName
+;Var SDEPath
+;Var SDEPathTemp
+;Var SDEPathCheck
+;Var SDECheckBox
+;Var SDEPathHWND
+;Var BrowseSDEHWND
 
 ; Version Information (Version tab for EXE properties)
 VIProductVersion ${LONGVERSION}
@@ -99,7 +99,7 @@ LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be ins
 
 ; Optional welcome text here
 !define MUI_WELCOMEPAGE_TEXT "Welcome to the OpenGeo Suite.\r\n\r\n\
-                              We recommended that you close all other applications before starting Setup.\r\n\r\n\
+                              We recommend that you close all other applications before starting Setup.\r\n\r\n\
 	                          Click Next to continue."
 
 ; What to do when done
