@@ -486,7 +486,12 @@ Section "GeoExplorer" SectionGX
   !insertmacro DisplayImage "slide_6_geoext.bmp"
 
   SetOutPath "$INSTDIR\webapps\"
-  File /r  "${SOURCEPATHROOT}\webapps\geoexplorer"
+  File /r "${SOURCEPATHROOT}\webapps\geoexplorer"
+
+  ; Persevere
+  SetOutPath "$PROFILE\.opengeo"
+  File /r "${SOURCEPATHROOT}\persevere"
+
 
 SectionEnd
 
