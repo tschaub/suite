@@ -1,0 +1,8 @@
+Obtain bin.tar.gz artifact
+Obtain ext.tar.gz artifact
+Obtain dashboard
+Unpack dashboard and manually add a .installed file under the root
+Repackage dashboard
+Execute makself:
+
+  makself.sh . opengeosuite-<VERSION>.bin "OpenGeo Suite" ./install.sh
