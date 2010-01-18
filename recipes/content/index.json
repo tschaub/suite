@@ -19,9 +19,15 @@
     },  {
         "id": "basic/layertree",
         "title": "Layer Tree",
-        "description": "List map layers in a tree..",
+        "description": "List map layers in a tree.",
         "components": ["GeoExt", "GeoWebCache"],
         "reference": "basic/layertree-ref"
+    },  {
+        "id": "basic/treefilter",
+        "title": "Layer Tree with Filter",
+        "description": "Filtered list of map layers in a tree.",
+        "components": ["GeoExt", "GeoWebCache"],
+        "reference": "basic/treefilter-ref"
     }, {
         "id": "basic/popup",
         "title": "Feature Popups",
