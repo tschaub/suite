@@ -36,6 +36,11 @@ public class Resource implements Comparable<Resource>, Serializable {
      * The layer type icon
      */
     ResourceReference icon;
+    
+    /**
+     * The type of geometry in this resource
+     */
+    Class geometryType;
 
     /**
      * If this resource has already been published, or not
@@ -117,6 +122,14 @@ public class Resource implements Comparable<Resource>, Serializable {
     @Override
     public String toString() {
         return name + "(" + published + ")";
+    }
+    
+    public Class getGeometryType() {
+        return geometryType;
+    }
+
+    public void setGeometryType(Class geometryType) {
+        this.geometryType = geometryType;
     }
 
 }

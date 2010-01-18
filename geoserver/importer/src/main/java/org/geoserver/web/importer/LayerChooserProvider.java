@@ -4,10 +4,12 @@
  */
 package org.geoserver.web.importer;
 
+import java.awt.Polygon;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +30,15 @@ import org.opengis.feature.type.FeatureType;
 import org.opengis.feature.type.GeometryDescriptor;
 import org.opengis.feature.type.Name;
 
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryCollection;
+import com.vividsolutions.jts.geom.LineString;
+import com.vividsolutions.jts.geom.LinearRing;
+import com.vividsolutions.jts.geom.MultiLineString;
+import com.vividsolutions.jts.geom.MultiPoint;
+import com.vividsolutions.jts.geom.MultiPolygon;
+import com.vividsolutions.jts.geom.Point;
+
 /**
  * Provides a list of resources for a specific data store
  * 
@@ -43,10 +54,14 @@ import org.opengis.feature.type.Name;
 public class LayerChooserProvider extends GeoServerDataProvider<Resource> {
 
 //    TODO: add this back once we can handle existing stores
-//    public static final Property<Resource> PUBLISHED = new BeanProperty<Resource>("published",
-//            "published");
+    //    public static final Property<Resource> PUBLISHED = new BeanProperty<Resource>("published",
+    //            "published");
 
-    public static final Property<Resource> TYPE = new BeanProperty<Resource>("type", "typeIcon");
+    public static final Property<Resource> TYPE = new BeanProperty<Resource>("type", "icon") {
+        public java.util.Comparator<Resource> getComparator() {
+            return new GeometryTypeComparator();
+        };
+    };
 
     public static final Property<Resource> NAME = new BeanProperty<Resource>("name", "localName");
 
@@ -89,6 +104,7 @@ public class LayerChooserProvider extends GeoServerDataProvider<Resource> {
                         ResourceReference icon = icons.getVectoryIcon(geom);
                         Resource resource = new Resource(name);
                         resource.setIcon(icon);
+                        resource.setGeometryType(geom != null ? geom.getType().getBinding() : null);
                         resources.put(name.getLocalPart(), resource);
                     }
                 }
@@ -145,5 +161,41 @@ public class LayerChooserProvider extends GeoServerDataProvider<Resource> {
         return new Model((Serializable) object);
     }
 
+    
+    /**
+     * Compares two resources by their geometry type
+     * @author aaime
+     *
+     */
+    private static class GeometryTypeComparator implements Comparator<Resource> {
+        static final Map<Class, Integer> ORDER = new HashMap<Class, Integer>() {
+            {
+                 put(Point.class, 1);
+                 put(MultiPoint.class, 1);
+                 put(LineString.class, 2);
+                 put(LinearRing.class, 2);
+                 put(MultiLineString.class, 2);
+                 put(Polygon.class, 3);
+                 put(MultiPolygon.class, 3);
+                 put(GeometryCollection.class, 4);
+                 put(Geometry.class, 4);
+            }
+        };
+            
+
+        public int compare(final Resource o1, final Resource o2) {
+            Integer idx1 = ORDER.get(o1.getGeometryType());
+            Integer idx2 = ORDER.get(o2.getGeometryType());
+            if(idx1 == null) idx1 = -1;
+            if(idx2 == null) idx2 = -1;
+            
+            if(idx1 == idx2) {
+                return o1.getLocalName().compareTo(o2.getLocalName());
+            } else {
+                return idx1 - idx2;
+            }
+        }
+
+    }
 
 }
