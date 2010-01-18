@@ -19,11 +19,13 @@
       <h1>Where do I go if I have a feature request?</h1>
       <p>We are always looking to improve our software, and our improvements are always driven by customer needs and desires.  Please contact inquiry@opengeo.org with your requests.  Existing customers' requests are given highest priority. </p>
       <h1>Where can I learn more about OpenGeo/GeoServer/GeoExt/etc?</h1>
-      <p>Please visit our website, at opengeo.org .  You can also visit each community project's homepage:  <a href="http://postgis.org" class="app-xlink">PostGIS</a>, <a href="http://geoserver.org" class="app-xlink">GeoServer</a>, <a href="http://geowebcache.org" class="app-xlink">GeoWebCache</a>, <a href="http://openlayers.org" class="app-xlink">OpenLayers</a>, and <a href="http://geoext.org" class="app-xlink">GeoExt</a>.  We also encourage those interested in a particular project to join that project's mailing list, to interact with the wider community.</p>
+      <p>Please visit our website at <a href="http://opengeo.org" class="app-xlink">opengeo.org</a> .  You can also visit each community project's homepage:  <a href="http://postgis.org" class="app-xlink">PostGIS</a>, <a href="http://geoserver.org" class="app-xlink">GeoServer</a>, <a href="http://geowebcache.org" class="app-xlink">GeoWebCache</a>, <a href="http://openlayers.org" class="app-xlink">OpenLayers</a>, and <a href="http://geoext.org" class="app-xlink">GeoExt</a>.  We also encourage those interested in a particular project to join that project's mailing list to interact with the wider community.</p>
       <h1>How do I file a bug report?</h1>
-      <p>GOOD QUESTION</p>
+      <p>While we develop a more robust solution, please email inquiry@opengeo.org .</p>
       <h1>Isn't PostGIS a part of the OpenGeo Suite?</h1>
       <p>Yes.  This software natively supports and connects to existing PostGIS databases.  Future versions of this software will include PostGIS natively.</p>
+      <h1>Does the OpenGeo Suite support connections with ArcSDE databases?</h1>
+      <p>Yes, however there are certain required files that we are not allowed to redistribute.  To enable ArcSDE support, copy jsde*.jar and jpe*.jar from your ArcSDE isntallation into the installation directory under "webapps/geoserver/WEB-INF/lib" and restart.  You should then see ArcSDE as an option in GeoServer.</p>
       <h1>How do I start the OpenGeo Suite?</h1>
       <p>There are a few ways to start the OpenGeo Suite.  The simplest way is through the Dashboard, by clicking the Start button on the bottom right on the page.  You can also manually start and stop the suite by running the "opengeo-suite" script in the root of your application directory.</p>
       <h1>Why can't I start the OpenGeo Suite?</h1>
@@ -31,13 +33,13 @@
       <h1>How do I change the port that the OpenGeo Suite runs on?</h1>
       <p>By default, the OpenGeo Suite runs on port 8080 of the host machine.  To change the OpenGeo Suite port, go to the Preferences tab, change the (NAME OF FIELD) click Save, then restart the OpenGeo Suite.</p>
       <h1>How do I make sense of these logs?</h1>
-      <p>GREAT QUESTION</p>
+      <p>Many Java errors are very long and span multiple lines (all usually being with the word "at ...").  Usually the first line of the error is where the human-readable content is.</p>
       <h1>Where is my GeoServer data directory?</h1>
-      <p>Your GeoServer data directory is located inside the root of your installation, in a directory called "data_dir".</p>
+      <p>Your GeoServer data directory is located inside your user's home directory at ".opengeo/data_dir".</p>
       <h1>Why did I get a Java stack trace with GeoServer on my web browser?</h1>
       <p>Java stack traces can happen for many reasons, ranging from incorrect requests to software bugs.  The first lines of the stack trace normally have the most helpful information.  If you are unable to discern to particular error you're receiving, please copying into an email and send it to inquiry@opengeo.org .</p>
       <h1>How do I add lots of data to the OpenGeo Suite at once?</h1>
-      <p>The OpenGeo Suite includes a <a href="#app-geoserver-importer" class="app-xlink">Layer Importer</a> as an extension to GeoServer that allows for batch loading of PostGIS, Oracle, and ArcSDE tables, and also shapefiles.</p>
+      <p>The OpenGeo Suite includes a <a href="#app-geoserver-importer" class="app-xlink app-online">Layer Importer</a> as an extension to GeoServer that allows for batch loading of database tables and shapefiles.</p>
       <h1>Why is my OpenLayers map blank (or pink)?</h1>
       <p>You may wish to look at the Error Console for your browser, or even better, use a JavaScript debugger.  If using Mozilla Firefox, a popular debugger is <a href="http://getfirebug.org" class="app-xlink">Firebug</a>. </p>
       <h1>Does Styler include all of the functionality contained in the SLD spec?</h1>
@@ -45,7 +47,9 @@
       <h1>Why are my vendor options are not rendered when I view an existing SLD in Styler?</h1>
       <p>Styler does not recognize vendor options, which are not part of the SLD specification.</p>
       <h1>How do I increment the bookmark number in GeoExplorer?</h1>
-      <p>FANTASTIC QUESTION</p>
+      <p></p>
+
+
     </div>
   </div>
     
