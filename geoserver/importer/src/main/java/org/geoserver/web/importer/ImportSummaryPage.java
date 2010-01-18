@@ -206,7 +206,7 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
                                 + "&format=application/openlayers"));
                         f.add(new ExternalLink("ge", "../wms/kml?layers=" + layer.getName()));
                         f.add(new ExternalLink("styler", "/styler/index.html?layer="
-                                + urlEncode(layer.getName())));
+                                + urlEncode(layer.getResource().getStore().getWorkspace().getName() + ":" +  layer.getName())));
 
                         return f;
                     } else {
