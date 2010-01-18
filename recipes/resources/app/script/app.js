@@ -379,7 +379,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
     },
     
     getSourceUrl: function(id) {
-        return this.recipeBase + "/" + id + ".js";
+        return this.recipeBase + "/" + id + ".html";
     },
     
     getReferenceUrl: function(id) {
@@ -442,7 +442,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                                 children: [{
                                     tag: "code",
                                     cls: "javascript",
-                                    html: request.responseText
+                                    html: Ext.util.Format.htmlEncode(request.responseText)
                                 }]
                             });
                             hljs.highlightBlock(div.firstChild.firstChild);
