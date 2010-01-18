@@ -43,6 +43,11 @@
         "description": "Style points with an external graphic.",
         "components": ["OpenLayers"]
     }, {
+        "id": "editing/attributes",
+        "title": "Feature Attribute Editing",
+        "description": "Edit feature attributes in a property grid.",
+        "components": ["OpenLayers", "GeoExt"]
+    }, {
         "id": "editing/snap-split",
         "title": "Snapping & Splitting",
         "description": "Learn how to enable snapping and splitting while editing features in OpenLayers.",
