@@ -182,35 +182,35 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         listeners: dashPanelListeners
                     },  {
                         title: "Quickstart",
-                        tabTip: "Get Started",
+                        tabTip: "Learn about the components of the OpenGeo Suite",
                         cls: "dash-panel",
                         html: og.util.loadSync("app/markup/dash/quickstart.html"),
                         id: "app-panels-dash-quickstart",
                         listeners: dashPanelListeners
                     },  {
                         title: "GeoExplorer",
-                        tabTip: "Manage GeoExplorer",
+                        tabTip: "Learn about GeoExplorer",
                         cls: "dash-panel",
                         html: og.util.loadSync("app/markup/dash/geoexplorer.html"),
                         id: "app-panels-dash-geoexplorer",
                         listeners: dashPanelListeners
                     }, {
                         title: "Styler",
-                        tabTip: "Manage Styler",
+                        tabTip: "Learn about Styler",
                         cls: "dash-panel",
                         html: og.util.loadSync("app/markup/dash/styler.html"),
                         id: "app-panels-dash-styler",
                         listeners: dashPanelListeners
                     },  {
                         title: "GeoServer",
-                        tabTip: "Manage GeoServer",
+                        tabTip: "Learn about GeoServer",
                         cls: "dash-panel",
                         html: og.util.loadSync("app/markup/dash/geoserver.html"),
                         id: "app-panels-dash-geoserver",
                         listeners: dashPanelListeners
                     }, {
                         title: "GeoWebCache",
-                        tabTip: "Manage GeoWebCache",
+                        tabTip: "Learn about GeoWebCache",
                         cls: "dash-panel",
                         html: og.util.loadSync("app/markup/dash/geowebcache.html"),
                         id: "app-panels-dash-geowebcache",
@@ -246,6 +246,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     defaults: {border: false, autoScroll: true}, 
                     items: [{
                         title: "Help",
+                        tabTip: "Help",
                         cls: "dash-panel",
                         id: "app-panels-help",
                         html: og.util.loadSync("app/markup/help/main.html")
@@ -260,6 +261,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         xtype: "container",
                         layout: "fit",
                         title: "Logs",
+                        tabTip: "View the console log output",
                         cls: "dash-panel",
                         id: "app-panels-help-logs",
                         items: [this.logPanel]
