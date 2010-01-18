@@ -22,6 +22,11 @@
         "description": "Learn how to open a popup when a feature is selected.",
         "components": ["GeoExt", "OpenLayers"]
     }, {
+        "id": "basic/info",
+        "title": "Popup with Feature Information",
+        "description": "Use a GetFeatureInfo control and display results in a popup.",
+        "components": ["GeoExt", "OpenLayers"]
+    }, {
         "id": "vector/external-graphic",
         "title": "External Graphic",
         "description": "Style points with an external graphic.",
