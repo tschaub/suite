@@ -91,12 +91,19 @@ og.Suite = Ext.extend(Ext.util.Observable, {
      * Returns the location of the suite log file.
      */
     getLogFile: function() {
-        var sep = "/";
-        if (window.Titanium) {
-            sep = Titanium.Filesystem.getSeparator();
-        }
-        
-        return this.config.dir +sep+ "logs" +sep+ "opengeosuite.log";
+        return og.util.tirun(
+            function() {
+                var fs = Titanium.Filesystem;
+                var home = fs.getUserDirectory();
+                var f = fs.getFile(
+                    home.nativePath(), ".opengeo", "logs", "opengeosuite.log");
+                return f.nativePath();
+            }, 
+            this, 
+            function() {
+                return this.config.dir +sep+ "logs" +sep+ "opengeosuite.log";
+            }
+        );
     }, 
     
     /** api: method[run]
