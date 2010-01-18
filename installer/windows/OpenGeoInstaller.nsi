@@ -576,7 +576,8 @@ Section "Documentation" SectionDocs
   SectionIn RO ; mandatory
   SetOverwrite on
 
-  !insertmacro DisplayImage "slide_1_suite.bmp"
+  ; yes this isn't the GWC section, but it's a good place for GWC to go
+  !insertmacro DisplayImage "slide_4_gwc.bmp"
 
   SetOutPath "$INSTDIR\icons"
   File /a geoserver.ico
