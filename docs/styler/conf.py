@@ -146,7 +146,7 @@ html_use_index = False
 #html_file_suffix = ''
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'GeoExplorer Manual'
+htmlhelp_basename = 'Styler Manual'
 
 
 # Options for LaTeX output
@@ -161,8 +161,8 @@ htmlhelp_basename = 'GeoExplorer Manual'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, document class [howto/manual]).
 latex_documents = [
-  ('index', 'GeoExplorerManual.tex', u'GeoExplorer Manual',
-   u'GeoExplorer', 'manual'),
+  ('index', 'Styler.tex', u'Styler Manual',
+   u'Styler', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
