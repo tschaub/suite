@@ -3,7 +3,9 @@
 body {
     font-family: Helvetica, Arial, sans-serif;
     color: #333333;
+    
 }
+
 
 .ext-el-mask {
     opacity: 0;
@@ -19,23 +21,27 @@ a, a:visited {
 
 /* selectors for the index page */
 
-.header {
-    height: 30px;
-    padding: 0.5em 50px;
-    font-size: 1.5em;
-    background-image: url(img/opengeo-32.png);
-    background-repeat: no-repeat;
-    background-position: 10px 12px;
+.header { 
+  height: 60px;
+  padding:0.5em 10px;
+  width: 398px;
 }
 
 .header h1 a {
     color: #333333;
 }
 
+.header .recipe-link {
+  background: url(img/recipe.png) no-repeat 0;
+  height: 60px;
+  display:block;
+}
+
 .west {
     width: 300px;
-    font-size: 0.9em;
 }
+
+
 
 .searchbox {
     padding: 1em 1em 0 1em;
@@ -45,8 +51,14 @@ a, a:visited {
     padding: 0.5em;
 }
 
+.index .recipe h3 {
+  
+}
+
 .index .recipe p {
-    font-size: 0.9em;
+    color:#333333;
+    line-height:1.5;
+    margin:12px;
 }
 
 .index .recipe.over {
@@ -85,3 +97,18 @@ pre code {
     padding: 1em;
     font-size: 0.9em;
 }
+
+/* Layout classes */
+
+.x-border-layout-ct {
+    background: #ffffff;
+}
+
+/*overriding some tab styling*/
+.x-tab-strip span.x-tab-strip-text  {
+  font-family: Helvetica, Arial, sans-serif;
+  color: #333333; 
+  padding-top: 8px;
+}
+
+
