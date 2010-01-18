@@ -469,7 +469,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     gs.data_dir = form.findField("data_dir").getValue();
         
                     og.util.saveConfig(this.config, 'config.ini');
-                    this.info("Configuration saved.");
+                    this.info("Configuration saved. The suite must be restarted for changes to take effect.");
                     
                     //if the suite is running then we need to keep the old
                     // config around in order to shut it down, so set the dirty
