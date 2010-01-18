@@ -113,6 +113,11 @@ pre code {
     font-size: 0.9em;
 }
 
+tt {
+    font-family: 'Consolas','Deja Vu Sans Mono','Bitstream Vera Sans Mono',monospace;
+    font-size: 0.95em;
+    letter-spacing: 0.01em;
+}
 /* Layout classes */
 
 .x-border-layout-ct {

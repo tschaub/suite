@@ -11,6 +11,12 @@
         "description": "This recipe demonstrates the use of a GeoExt MapPanel.",
         "components": ["GeoExt", "GeoWebCache"]
     }, {
+        "id": "basic/grid",
+        "title": "Grid Panel",
+        "description": "List map layers in a grid.",
+        "components": ["GeoExt", "GeoWebCache"],
+        "reference": "basic/grid-ref"
+    },  {
         "id": "basic/layertree",
         "title": "Layer Tree",
         "description": "List map layers in a tree..",
