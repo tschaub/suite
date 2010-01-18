@@ -28,19 +28,13 @@ a, a:visited {
 /* selectors for the index page */
 
 .header { 
-    height: 60px;
-    padding:0.5em 10px;
-    width: 398px;
+    height: 35px;
+    padding: 17px 50px;
+    background: transparent url(img/opengeo-32.png) no-repeat 10px 15px;
 }
 
 .header h1 a {
     color: #333333;
-}
-
-.header .recipe-link {
-    background: url(img/recipe.png) no-repeat 0;
-    height: 60px;
-    display: block;
 }
 
 .west {
