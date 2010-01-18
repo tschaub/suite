@@ -152,7 +152,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                 autoEl: {
                     tag: "div",
                     cls: "header",
-                    html: "<h1><a class='recipe-link' href='#index'>OpenGeo Recipe Book</a></h1>"
+                    html: "<a class='recipe-link' href='#index'></a>"
                 }
             }, {
                 region: "west",
