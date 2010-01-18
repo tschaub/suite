@@ -245,8 +245,8 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                     deferredRender: false,
                     items: [
                         this.recipeFrame,
-                        this.sourcePanel,
-                        this.referenceFrame
+                        this.referenceFrame,
+                        this.sourcePanel
                     ]
                 }]
             }],
@@ -331,7 +331,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
     
     initReferenceFrame: function() {
         this.referenceFrame = new Ext.ux.ManagedIFrame.Component({
-            title: "Reference",
+            title: "Documentation",
             focusOnLoad: true
         });
     },
