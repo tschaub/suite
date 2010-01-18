@@ -630,13 +630,13 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         // online
         if (this.platform && this.platform.name == "Windows") {
             refreshButton.setDisabled(true);
-            refreshButton.setTooltip("Log refresh unavailable on Windows. View with"+ 
-                " system viewer instead.");
+            refreshButton.setTooltip("Logs display not yet implemented. Please"+ 
+                " view with system viewer instead.");
         }
         
         var clearButton = new Ext.Button({
             text: "",
-            tooltip: "Clear view of the log",
+            tooltip: "Clear logs view",
             iconCls: "delete-button",
             cls: "control-button",
             handler: function() {
@@ -647,7 +647,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         
         var viewButton = new Ext.Button({
             text: "",
-            tooltip: "View the log with default system viewer",
+            tooltip: "Open logs with default system viewer",
             iconCls: "view-button",
             cls: "control-button",
             handler: function() {
