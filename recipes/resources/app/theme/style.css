@@ -87,6 +87,7 @@ a, a:visited {
 
 body.reference-body, body.recipe-body {
     margin: 1em;
+    background-color: #FFFFFF;
 }
 
 .description {
