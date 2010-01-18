@@ -37,6 +37,7 @@ a, a:visited {
     padding: 10px 210px;
     font-size:48px;
     background: transparent url(img/recipe.png) no-repeat 10px 15px;
+    text-decoration: none;
 }
 
 .west {
