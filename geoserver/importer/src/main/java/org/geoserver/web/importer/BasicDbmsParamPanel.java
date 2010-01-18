@@ -46,7 +46,7 @@ class BasicDbmsParamPanel extends Panel {
         add(new TextField("port", new PropertyModel(this, "port")).setRequired(true));
         add(new TextField("username", new PropertyModel(this, "username")).setRequired(true));
         add(new PasswordTextField("password", new PropertyModel(this, "password"))
-                .setResetPassword(false));
+                .setResetPassword(false).setRequired(false));
         add(new TextField("database", new PropertyModel(this, "database"))
                 .setRequired(databaseRequired));
         
