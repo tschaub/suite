@@ -31,12 +31,13 @@ if "%2" == "debug" (
 
 REM Java flags
 set CLASSPATH=og-jetty.jar;jetty-start.jar;lib/ini4j-0.5.1.jar;lib/log4j-1.2.14.jar;lib/commons-logging-1.0.jar;lib/slf4j-jcl-1.0.1.jar
+set VMOPTS=-Xms128m -Xmx512m
 set OPTS=-Dslf4j=false -cp %CLASSPATH%
 
 REM Start
 if "%1" == "start" (
   echo Starting the OpenGeo Suite...
-  start jre\bin\javaw.exe %OPTS% org.opengeo.jetty.Start
+  %COMMAND% %VMOPTS% %OPTS% org.opengeo.jetty.Start
   goto Done
 )
 
@@ -44,7 +45,7 @@ if "%1" == "start" (
 REM Stop
 if "%1" == "stop" (
   echo Stopping the OpenGeo Suite...
-  start jre\bin\javaw.exe %OPTS% org.opengeo.jetty.Start --stop
+  %COMMAND% %VMOPTS% %OPTS% org.opengeo.jetty.Start --stop
   goto Done
 )
 
