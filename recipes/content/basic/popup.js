@@ -3,16 +3,8 @@ var panel, popup;
 
 Ext.onReady(function() {
 
-    // create a style with the symbolizer for your point features
-    var style = new OpenLayers.Style({
-        externalGraphic: "../data/opengeo-logo.png",
-        pointRadius: 10
-    });
-    
     // create a vector layer that will contain features
-    var features = new OpenLayers.Layer.Vector("Features", {
-        styleMap: new OpenLayers.StyleMap(style)
-    });
+    var features = new OpenLayers.Layer.Vector("Features");
     // create a feature with a point geometry and add to the layer
     var feature = new OpenLayers.Feature.Vector(
         new OpenLayers.Geometry.Point(-74, 40.8)

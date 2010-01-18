@@ -33,7 +33,7 @@ Ext.onReady(function() {
         border: false,
         enableDD: true,
         root: new GeoExt.tree.LayerContainer({
-            text: 'Map Layers',
+            text: "Layers",
             layerStore: panel.layers,
             leaf: false,
             expanded: true
