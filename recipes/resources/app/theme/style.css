@@ -17,6 +17,7 @@ h1 {
     font-weight:normal;
 }
 
+
 h2, h3, h4, h5 {
     color: #0A2742;
 }
@@ -28,13 +29,14 @@ a, a:visited {
 /* selectors for the index page */
 
 .header { 
-    height: 35px;
-    padding: 17px 50px;
-    background: transparent url(img/opengeo-32.png) no-repeat 10px 15px;
+    height: 75px;
 }
 
 .header h1 a {
     color: #333333;
+    padding: 10px 210px;
+    font-size:48px;
+    background: transparent url(img/recipe.png) no-repeat 10px 15px;
 }
 
 .west {
