@@ -14,9 +14,18 @@ public class Start {
 
     public static void main(String[] args) throws Exception {
         
+        File ogConfigDir = new File(System.getProperty("user.home")+File.separator+".opengeo");
+        if (!ogConfigDir.exists() ) {
+            ogConfigDir.mkdir();
+        }
+        
+        if (!ogConfigDir.exists()) {
+            System.err.print("Could not create configuration directory " + ogConfigDir.getCanonicalPath() );
+            System.exit(1);
+        }
+        
         Wini ini = null;
-        File f = new File(
-            System.getProperty("user.home")+File.separator+".opengeo"+File.separator+"config.ini");
+        File f = new File( ogConfigDir, File.separator+"config.ini");
         
         if (f.exists()) {
             ini = new Wini(f);
@@ -46,7 +55,13 @@ public class Start {
         
         String gsDataDirectory = ini.get("geoserver", "data_dir" );
         if (gsDataDirectory == null) {
-            File dd = new File("data_dir");
+            //look in config directory
+            File dd = new File( ogConfigDir, "data_dir");
+            if (!dd.exists()) {
+                //try in directory we are running in
+                dd = new File("data_dir");
+            }
+             
             if (dd.exists()) {
                 gsDataDirectory = dd.getCanonicalPath();
             }
@@ -56,6 +71,13 @@ public class Start {
         }
         
         System.setProperty("RELINQUISH_LOG4J_CONTROL", "true");
+        
+        //on some verison of windows we can't write to the installation directory to look for 
+        // a .opengeo/persevere directory and if there set persevere.home to it
+        File persevereHome = new File(ogConfigDir, "persevere");
+        if (persevereHome.exists()) {
+            System.setProperty("persevere.home", persevereHome.getCanonicalPath());
+        }
         
         org.mortbay.start.Main.main(args);
     }
