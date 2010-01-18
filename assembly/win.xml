@@ -39,6 +39,17 @@
       </excludes>
     </fileSet>
     <fileSet>
+      <directory>geoexplorer/build/geoexplorer</directory>
+      <outputDirectory>persevere</outputDirectory>
+      <includes>
+        <include>WEB-INF/**</include>
+      </includes>
+      <excludes>
+        <exclude>WEB-INF/web.xml</exclude>  
+        <exclude>WEB-INF/lib/**</exclude>  
+      </excludes>
+    </fileSet>
+    <fileSet>
       <outputDirectory>dashboard</outputDirectory>
       <includes>
         <include>assembly/dummy</include>
