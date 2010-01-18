@@ -142,6 +142,12 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
         this.initSourcePanel();
         this.initReferenceFrame();
         
+        this.pagingBar = new Ext.PagingToolbar({
+            store: this.recipeStore,
+            displayInfo: false,
+            pageSize: 10
+        });
+        
         this.viewport = new Ext.Viewport({
             layout: "border",
             defaults: {border: false},
@@ -216,11 +222,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                             xtype: "panel",
                             border: false,
                             items: [this.recipeList],
-                            bbar: new Ext.PagingToolbar({
-                                store: this.recipeStore,
-                                displayInfo: false,
-                                pageSize: 10
-                            }),
+                            bbar: this.pagingBar,
                             listeners: {
                                 render: function(cmp) {
                                     cmp.toolbars[0].refresh.hide();
@@ -277,6 +279,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
     },
     
     filterRecipes: function() {
+        this.pagingBar.unbind(this.recipeStore);
         var keywords = this.query.keywords;
         keywords = keywords && keywords.trim().split(/\s+/).remove("");
         var components = this.query.components;
@@ -303,6 +306,8 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
             }
             return hasComponent && hasKeyword;
         }, this);
+        this.pagingBar.bind(this.recipeStore);
+        this.pagingBar.changePage(1);
         this.selectRecipe(this.currentRecipe);
     },
     
