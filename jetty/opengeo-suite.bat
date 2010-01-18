@@ -17,9 +17,15 @@ if not exist og-jetty.jar (
   goto Done
 )
 
-REM Check for JRE
+REM Check for javaw.exe
+if not exist jre\bin\javaw.exe (
+  echo javaw.exe not found!  Aborting...
+  goto Done
+)
+
+REM Check for java.exe
 if not exist jre\bin\java.exe (
-  echo JRE not found!  Aborting...
+  echo java.exe not found!  Aborting...
   goto Done
 )
 
