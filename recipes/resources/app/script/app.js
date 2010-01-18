@@ -165,7 +165,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                 autoScroll: true,
                 items:[{
                     title: "Contents",
-                    html: "A tree like table of contents could go here."
+                    html: "<p>A tree like table of contents could go here.</p>"
                 }, {
                     title: "Search",
                     layout: "fit",

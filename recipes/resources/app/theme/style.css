@@ -11,7 +11,14 @@ body {
     opacity: 0;
 }
 
-h1, h2, h3, h4, h5 {
+h1 {
+  color:#0A2742;
+  font-family:Optima,Georgia, serif;
+  font-size:24px;
+  font-weight:normal;
+}
+
+h2, h3, h4, h5 {
     color: #0A2742;
 }
 
@@ -41,7 +48,11 @@ a, a:visited {
     width: 300px;
 }
 
-
+.west  p {
+  line-height:1.5;
+  margin:10px;
+  font-size: 12px;
+  }
 
 .searchbox {
     padding: 1em 1em 0 1em;
@@ -84,8 +95,15 @@ body.reference-body, body.recipe-body {
 .description {
     margin: 1em 0 1em 0;
     padding: 0.75em;
-    font-size: 0.9em;
+    font-size: 12px;
     background-color: #eeeeee;
+}
+
+.content {
+    margin: 1em 0 1em 0;
+    padding: 0.75em;
+    font-size: 12px;
+    background-color: #A8BCCF;
 }
 
 .map {
@@ -104,7 +122,8 @@ pre code {
     background: #ffffff;
 }
 
-/*overriding some tab styling*/
+/*overriding specific tab styling*/
+
 .x-tab-strip span.x-tab-strip-text  {
   font-family: Helvetica, Arial, sans-serif;
   color: #333333; 
