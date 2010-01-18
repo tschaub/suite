@@ -6,6 +6,8 @@ if [ -e "$DEST/OpenGeo Dashboard.app" ]; then
 
   sed -i .bak 's/@SUITE_DIR@/\/Applications\/OpenGeo Suite.app\/Contents\/Resources\/Java/g' "$DEST/OpenGeo Dashboard.app/Contents/Resources/config.ini"
 
+  sed -i .bak 's/@GEOSERVER_DATA_DIR@/\/Applications\/OpenGeo Suite.app\/Contents\/Resources\/Java\/data_dir/g' "$DEST/OpenGeo Dashboard.app/Contents/Resources/config.ini"
+
   F="$2/OpenGeo Suite.app/Contents/Resources/dashboard-uninstall.sh"
   touch "$F"
   echo '#!/bin/bash' >> "$F"

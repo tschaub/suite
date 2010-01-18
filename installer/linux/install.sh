@@ -180,6 +180,7 @@ echo "Creating symlinks..." &&
 ln -sf "`find "$SUITE_DIR" -type f -name "OpenGeo Dashboard"`" "$SUITE_DIR/opengeo-dashboard" &&
 sed -i "s#@SUITE_DIR@#$SUITE_DIR#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
 sed -i "s#@SUITE_EXE@#$SUITE_DIR/opengeo-suite#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
+sed -i "s#@GEOSERVER_DATA_DIR@#$SUITE_DIR/data_dir#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
 
 if [ "$?" != "0" ]; then
   exit 1
