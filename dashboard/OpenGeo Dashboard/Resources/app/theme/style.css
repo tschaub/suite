@@ -142,11 +142,12 @@ div.dash-panel-startup {
     padding: 5px;
 }
 
-.dash-panel-startup ul {
-    margin-left: 25px;
+.dash-panel-startup table {
+    font-size: 1em;
+    margin: 10px 25px;
 }
 
-.dash-panel-startup li em {
+.dash-panel-startup td em {
     font-weight: bold;
     font-size: larger;
     padding-left: 10px;

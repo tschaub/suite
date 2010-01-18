@@ -154,7 +154,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         
         var dashPanelListeners = {
             render: {
-                fn: this.afterPanelRender,
+                fn: function() {this.processLinks()},
                 scope: this,
                 delay: 1
             }
@@ -223,11 +223,11 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         title: "Preferences", 
                         tabTip: "Configure the OpenGeo Suite",
                         cls: "dash-panel",
-                        id: "app-panels-pref",
+                        id: "app-panels-pref-main",
                         listeners: {
                            render: {
                                fn: function() {
-                                   this.afterPanelRender();
+                                   this.processLinks();
                                    this.createPrefForm();
                                }, 
                                scope: this,
@@ -236,7 +236,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         }, 
                         items: [{
                             xtype: "box", 
-                            id: "app-panels-pref",
                             autoEl: {
                                 tag: "div",
                                 html: og.util.loadSync("app/markup/pref/main.html")
@@ -323,6 +322,8 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             }]
         });
         win.show();
+        console.log(win.el.dom);
+        this.processLinks(win.el.dom);
     },
     
     createPrefForm: function() {
@@ -483,12 +484,14 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         return this.prefPanel;
     }, 
     
-    /** private: method[afterPanelRender]
+    /** private: method[processLinks]
+     *  :arg root: ``Element`` or ``String`` Optional element or element id
+     *      that is the root of any elements that need behavior modification.
      *
      *  Add behavior to links after a panel renders.
      */
-    afterPanelRender: function() {
-        var xlinks = Ext.select(".app-xlink");
+    processLinks: function(root) {
+        var xlinks = Ext.select(".app-xlink", false, root);
         xlinks.on({
             click: function(evt, el) {
                 var port = this.config.suite.port;
@@ -525,7 +528,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         });
         xlinks.removeClass("app-xlink");
 
-        var ilinks = Ext.select(".app-ilink");
+        var ilinks = Ext.select(".app-ilink", false, root);
         ilinks.on({
             click: function(evt, el) {
                 var id = el.href.split("#").pop();
