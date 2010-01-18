@@ -191,6 +191,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                                 }
                             }, {
                                 xtype: "fieldset",
+                                cls: "components",
                                 style: "margin-top: 0.5em;",
                                 collapsible: true,
                                 title: "Components",
