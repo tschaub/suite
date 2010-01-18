@@ -1,19 +1,19 @@
 <div class="dash-panel-body">
   <div class="dash-panel-content">
     <h4>GeoWebCache</h4>
-    <p>GeoWebCache intelligently stores and serves map tiles using standard web protocols to make map services scale.</p>
+    <p>GeoWebCache intelligently stores and serves map tiles using standard web protocols to make map services more efficient and scalable.</p>
     <p></p>
-    <p>Accelerate the performance of your maps with GeoWebCache.  Traditional map servers generate a new image on every request.  GeoWebCache sits between GeoServer (or any compliant WMS) and a tiling client (like OpenLayers or GeoExt), and saves already requested images.  Once tiles are stored in GeoWebCache, maps are returned to the client 10 to 100 times as fast as traditional map servers.</p>
+    <p>Accelerate the performance of your maps with GeoWebCache.  Traditional map servers generate a new image on every request.  GeoWebCache sits between GeoServer (or any compliant WMS) and a tiling client (like OpenLayers or GeoExt) and saves previously requested tiles.  Once tiles are stored in GeoWebCache, maps are returned to the client up to 100 times as fast as traditional map servers.</p>
 
-<p>GeoWebCache includes an administration console to 'seed' a layer.  This makes a series of requests to GeoServer, saving rendered images thereby ensuring that the first user experience is fast from the beginning.</p>
+<p>GeoWebCache includes an administration console to manage a layer's tiles.  From this console, it is possible to 'seed' a layer, which will make a series of requests to GeoServer to generate tiles, ensuring that the maps are pre-rendered for a better user experience.</p>
 
-<p>GeoWebCache supports tiling standards like TIGER Map Service (TMS) and Web Mapping Service-Cached (WMS-C).  Support for the Web Map Tile Server (WMTS) will be available in a future release.  GeoWebCache is also compatible with other tile schemes.  Google Earth, Google Maps, Bing (Virtual Earth), and Mobile GMaps can all access GeoWebCache directly.</p>
-    <p>Further information is available in the <a href="#app-geowebcache-docs" class="app-xlink">GeoWebCache Documentation</a>.</p>
+<p>GeoWebCache supports tiling standards like Tiled Map Service (TMS) and Web Mapping Service-Cached (WMS-C).  Support for the Web Map Tile Server (WMTS) will be available in a future release.  GeoWebCache is also compatible with other tile schemes.  Google Earth, Google Maps, Bing (Virtual Earth), and Mobile GMaps can all access GeoWebCache tiles directly.</p>
+    <p>Further information is available in the <a href="#app-geowebcache-docs" class="app-xlink app-online">GeoWebCache Documentation</a>.</p>
   </div>
     
     
     <div class="dash-panel-tasks">
-      <div class="iconlaunch"><a href="#app-geowebcache-path" class="app-xlink icon-geowebcache">&nbsp;</a></div>
+      <div class="iconlaunch"><a href="#app-geowebcache-path" class="app-xlink app-online icon-geowebcache">&nbsp;</a></div>
       <div class="launch app-online"><a href="#app-geowebcache-path" class="app-xlink app-online">Configure</a></div>          
       
       <h3>Documentation</h3>
