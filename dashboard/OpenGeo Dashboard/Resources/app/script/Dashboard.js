@@ -627,17 +627,9 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         //hack for windows, we need to disable the refresh log while the suite is
         // online
         if (this.platform && this.platform.name == "Windows") {
-            this.suite.on({
-                started: function() {
-                    refreshButton.setDisabled(true);
-                    refreshButton.setTooltip("Log refresh unavailable while suite is online.");
-                },
-                
-                stopped: function() {
-                    refreshButton.setDisabled(false);
-                    refreshButton.setTooltip("Refresh view of the log");
-                }
-            });
+            refreshButton.setDisabled(true);
+            refreshButton.setTooltip("Log refresh unavailable on Windows. View with"+ 
+                " system viewer instead.");
         }
         
         var clearButton = new Ext.Button({
@@ -653,7 +645,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         
         var viewButton = new Ext.Button({
             text: "",
-            tooltip: "View the log with an external program",
+            tooltip: "View the log with default system viewer",
             iconCls: "view-button",
             cls: "control-button",
             handler: function() {
