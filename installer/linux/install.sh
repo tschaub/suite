@@ -6,7 +6,7 @@
 # function to help parse input
 function parse() {
   in="$1"
-  if [ "$in" == "" ] && [ "$2" != ""] ; then
+  if [ "$in" == "" ] && [ "$2" != "" ]; then
     in=$2
   fi
 
@@ -25,20 +25,27 @@ function parse() {
 }
 
 # get version
-VERSION=1.0-SNAPSHOT
-#VERSION=`ls opengeosuite-*.tar.gz`
-#len=`expr length VERSION - 20`
-#VERSION=${VERSION:13:$len}
+VERSION=`ls opengeosuite-*-bin.tar.gz`
+x=`expr index "$VERSION" -`
+y=`expr length "$VERSION" - "$x" - 11`
+VERSION=${VERSION:$x:$y}
 
 # default installation directory
 INSTALL_DIR_DEF=""
 if [ "`whoami`" == "root" ]; then 
   INSTALL_DIR_DEF="/opt"
 else
-  INSTALL_DIR_DEF="/home/`whoami`"
+  INSTALL_DIR_DEF="$HOME"
 fi
 
-#
+# default symlink directory
+SYMLINK_DIR_DEF=""
+if [ "`whoami`" == "root" ]; then 
+  SYMLINK_DIR_DEF="/usr/local/bin"
+else
+  SYMLINK_DIR_DEF="$HOME/bin"
+fi
+
 # welcome
 #
 echo "Thank you for choosing the OpenGeo Suite."
@@ -53,7 +60,7 @@ fi
 #
 # license agreement
 #
-cat license.txt | less
+cat license-header.txt license.txt | more
 echo -n "Do you accept the license agreement? [Y|n]: "
 read ACCEPT_LICENSE
 ACCEPT_LICENSE=`parse $ACCEPT_LICENSE y`
@@ -123,9 +130,9 @@ read CREATE_SYMLINKS
 CREATE_SYMLINKS=`parse $CREATE_SYMLINKS y`
 
 if [ "$CREATE_SYMLINKS" == "Yes" ]; then
-  echo -n "What directory should links be created in? [/usr/local/bin]: "
+  echo -n "What directory should links be created in? [$SYMLINK_DIR_DEF]: "
   read SYMLINK_DIR 
-  SYMLINK_DIR=`parse $SYMLINK_DIR /usr/local/bin`
+  SYMLINK_DIR=`parse $SYMLINK_DIR $SYMLINK_DIR_DEF`
 
   if [ ! -e "$SYMLINK_DIR" ]; then
     echo -n "$SYMLINK_DIR does not exist. Would you like to create it now? [Y|n]: "
@@ -148,17 +155,18 @@ if [ "$CREATE_SYMLINKS" == "Yes" ]; then
   
 fi
 
+echo
 echo "Installation summary: "
 echo 
 echo -e "\t Installation directory: \t $INSTALL_DIR/opengeosuite-$VERSION"
-echo -e "\t Install documentation: \t $INCLUDE_DOCS"
+#echo -e "\t Install documentation: \t $INCLUDE_DOCS"
 echo -e "\t Install ArcSDE support: \t $INCLUDE_SDE"
 echo -e "\t Install Oracle support: \t $INCLUDE_ORACLE"
 
 if [ "$CREATE_SYMLINKS" == "Yes" ]; then
-  echo -e "\t Create symlinks: \t $SYMLINK_DIR"
+  echo -e "\t Install executables: \t\t $SYMLINK_DIR"
 else
-  echo -e "\t Create symlinks: \t No"
+  echo -e "\t Install executables: \t\t No"
 fi
 
 echo
@@ -170,6 +178,7 @@ if [ "$PROCEED" == "No" ]; then
 fi
 
 SUITE_DIR=$INSTALL_DIR/opengeosuite-$VERSION
+
 echo "Installing OpenGeo Suite..." &&
 tar xzf opengeosuite-$VERSION-bin.tar.gz -C "$INSTALL_DIR" &&
 
@@ -205,15 +214,59 @@ fi
 #fi
 
 if [ "$INCLUDE_SDE" == "Yes" ]; then
+  echo "Installing ArcSDE Extension..."
   tar xzvf opengeosuite-$VERSION-ext.tar.gz -C "$SUITE_DIR/webapps/geoserver/WEB-INF/lib" "ext/arcsde"
 
-  echo -n "The ArcSDE extension has been selected which requires additional libraries to function. Where are the libraries located on your system? [Leave blank to skip]: "
-
+  echo
+  echo -n "The ArcSDE extension requires the Java ESRI client libraries to function. Where are the libraries located on your system? [Leave blank to skip]: "
+  read SDE_LIB_DIR
+  SDE_LIB_DIR=`parse $SDE_LIB_DIR`
 fi
 
 if [ "$INCLUDE_ORACLE" == "Yes" ]; then
-  tar xzvf opengeosuite-$VERSION-doc.tar.gz -C "$SUITE_DIR/webapps/geoserver/WEB-INF/lib" "ext/oracle"
+  echo "Installing Oracle Extension..."
+  tar xzvf opengeosuite-$VERSION-ext.tar.gz -C "$SUITE_DIR/webapps/geoserver/WEB-INF/lib" "ext/oracle"
 
-  echo -n "The Oracle extension has been selected which requires the Oracle JDBC driver to function. Where is ojdbc jar located on your system? [Leave blank to skip]: "
-
+  echo
+  echo -n "The Oracle extension the Oracle JDBC driver to function. Where is ojdbc jar located on your system? [Leave blank to skip]: "
+  read ORACLE_LIB_DIR
+  ORACLE_LIB_DIR=`parse $ORACLE_LIB_DIR`
 fi
+
+# create an uninstaller
+UNINSTALLER=$SUITE_DIR/uninstall.sh
+echo '#!/bin/bash' > "$UNINSTALLER"
+echo "rm -rf \"$SUITE_DIR\"" >> "$UNINSTALLER"
+
+if [ "$CREATE_SYMLINKS" == "Yes" ]; then
+  echo "rm -f \"$SYMLINK_DIR/opengeo-suite\"" >> "$UNINSTALLER"
+  echo "rm -f \"$SYMLINK_DIR/opengeo-dashboard\"" >> "$UNINSTALLER"
+fi
+
+chmod +x "$UNINSTALLER"
+ 
+echo 
+echo 
+echo "Installation of the OpenGeo Suite has been successfully completed." 
+echo
+echo "An uninstaller has been created at:" 
+echo 
+echo "  $UNINSTALLER"
+echo 
+
+if [ "$INCLUDE_SDE" == "Yes" ]; then
+  echo
+  echo "You have opted to include the ArcSDE extension. This extension requires the ESRI Java client libraries be copied to the following directory:"
+  echo
+  echo -e " $SUITE_DIR/webapps/geoserver/WEB-INF/lib"
+  echo
+fi
+
+if [ "$INCLUDE_ORACLE" == "Yes" ]; then
+  echo
+  echo "You have opted to include the Oracle extension. This extension requires the Oracle JDBC driver to  be copied to the following directory:"
+  echo
+  echo -e " $SUITE_DIR/webapps/geoserver/WEB-INF/lib"
+  echo
+fi
+
