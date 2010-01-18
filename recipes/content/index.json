@@ -13,8 +13,9 @@
     }, {
         "id": "basic/layertree",
         "title": "Layer Tree",
-        "description": "This recipe demonstrates a layer tree.",
-        "components": ["GeoExt", "GeoWebCache"]
+        "description": "List map layers in a tree..",
+        "components": ["GeoExt", "GeoWebCache"],
+        "reference": "basic/layertree-ref"
     }, {
         "id": "basic/popup",
         "title": "Feature Popups",
