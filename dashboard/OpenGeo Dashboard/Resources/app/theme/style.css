@@ -138,6 +138,13 @@ a.app-disabled:hover {
     margin: 0 150px 0 0;
 }
 
+.dash-panel-content-pref {
+    margin: 0px;
+}
+.dash-panel-content-pref h4 {
+    margin: 0 150px 0 10px; 
+}
+
 div.dash-panel-startup {
     padding: 5px;
 }
