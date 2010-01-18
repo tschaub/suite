@@ -72,7 +72,6 @@ Build the Suite Package
 
 Unzip the "suite-<VERSION>-doc.zip" and "suite-<VERSION>-ext.zip" artifacts created in the first section into the "pkg" directory:
 
-  unzip ../../target/opengeosuite-<VERSION>-doc.zip -d pkg
   unzip ../../target/opengeosuite-<VERSION>-ext.zip -d pkg
 
 Open the "suite.pmdoc" PackageMaker project:
