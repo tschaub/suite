@@ -245,8 +245,8 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                     deferredRender: false,
                     items: [
                         this.recipeFrame,
-                        this.referenceFrame,
-                        this.sourcePanel
+                        this.sourcePanel,
+                        this.referenceFrame
                     ]
                 }]
             }],
