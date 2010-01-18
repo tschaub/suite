@@ -142,7 +142,7 @@
     <Ref id="requestLog">
       <Set name="requestLog">
         <New id="requestLogImpl" class="org.mortbay.jetty.NCSARequestLog">
-          <Arg><SystemProperty name="jetty.logs" default="./logs"/>/yyyy_mm_dd.request.log</Arg>
+          <Arg><SystemProperty name="user.home" default="./logs"/>/.opengeo/logs/yyyy_mm_dd.request.log</Arg>
           <Set name="retainDays">90</Set>
           <Set name="append">true</Set>
           <Set name="extended">false</Set>
