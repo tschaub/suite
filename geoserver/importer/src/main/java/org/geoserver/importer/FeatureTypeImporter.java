@@ -138,6 +138,8 @@ public class FeatureTypeImporter  implements Runnable {
                         catalog.add(featureType);
                         try {
                             catalog.add(layer);
+                            // get a proxy that we can modify
+                            layer = catalog.getLayer(layer.getId());
                         } catch(Exception e) {
                             // will be caught by the external try/catch, here we just try to undo 
                             // the feature type saving (transactions, where are you...)
