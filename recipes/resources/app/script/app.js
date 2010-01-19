@@ -272,19 +272,27 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
     },
     
     initRecipeTree: function() {
+        
         var selecting = false;
+        var highlight = function(id) {
+            var node = this.recipeTree.getNodeById(id);
+            if (node) {
+                node.ensureVisible();
+                selecting = true;
+                this.recipeTree.getSelectionModel().select(node);
+                selecting = false;
+            }
+        };
+
         this.recipeTree = new Ext.tree.TreePanel({
             border: false,
             animate: false,
             autoScroll: true,
-            dataUrl: "content/tree.json",
             selModel: new Ext.tree.DefaultSelectionModel({
                 listeners: {
                     selectionchange: function(model, node) {
-                        if (node.leaf) {
-                            selecting = true;
+                        if (node.leaf && !selecting) {
                             this.loadRecipe(node.id);
-                            selecting = false;
                         }
                     },
                     scope: this
@@ -294,18 +302,23 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                 nodeType: "async",
                 expanded: true,
                 text: "Recipes"
+            },
+            loader: {
+                dataUrl: "content/tree.json",
+                listeners: {
+                    load: function() {
+                        this.recipeTree.root.expand(true);
+                        if (this.currentRecipe) {
+                            highlight.call(this, this.currentRecipe);
+                        }
+                    },
+                    scope: this
+                }
             }
         });
         
         this.on({
-            recipeload: function(id) {
-                if (!selecting) {
-                    var node = this.recipeTree.getNodeById(id);
-                    if (node) {
-                        this.recipeTree.getSelectionModel().select(node);
-                    }
-                }
-            },
+            recipeload: highlight,
             scope: this
         });
         
@@ -471,8 +484,8 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                 this.referenceFrame.setSrc("about:blank");
                 this.referenceFrame.ownerCt.hideTabStripItem(this.referenceFrame);
             }
-            this.fireEvent("recipeload", id);
         }
+        this.fireEvent("recipeload", id);
         this.selectRecipe(id);
     },
     
