@@ -43,7 +43,12 @@
         "title": "Map Tools",
         "description": "Display map tools in a toolbar.",
         "components": ["GeoExt", "OpenLayers"]
-    }, {
+    },  {
+        "id": "basic/button",
+        "title": "Simple Button",
+        "description": "A simple button for measuring distance.",
+        "components": ["GeoExt", "OpenLayers"]
+    },  {
         "id": "vector/external-graphic",
         "title": "External Graphic",
         "description": "Style points with an external graphic.",
