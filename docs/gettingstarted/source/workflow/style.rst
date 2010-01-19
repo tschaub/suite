@@ -7,42 +7,35 @@ The Layer Importer will generate a distinct style for each layer.  To alter and 
 
 These example instructions will change the color of one of the default styles created during the import process.  If you would like to keep the default styles, you may skip to the next section, :ref:`composeyourmap`.
 
-.. note:: For more information on Styler, please see the Styler Documentation. You can access this by clicking the :guilabel:`Styler Documentation` link in the Dashboard.
+.. note:: For more information on Styler, please see the Styler Documentation. You can access this by clicking the :guilabel:`Styler Documentation` link in the :ref:`dashboard`.
 
-#. Launch Styler.  Styler can be launched from the :guilabel:`Style Layers` link in the Dashboard.
+#. Launch Styler.  Styler can be launched from the :guilabel:`Style Layers` link in the :ref:`dashboard`.
 
    .. figure:: img/styler.png
       :align: center
 
       *Styler*
 
-#. A list of all the loaded layers in GeoServer will be displayed in the :guilabel:`Layers` column.  Select the layer you would like to style by clicking the radio button next to the layer name.  While styling your layer, you can show or hide other layers for context by checking or unchecking the boxes next to the layers.
+#. A list of all the loaded layers will be displayed in the :guilabel:`Layers` column.  Select the layer you would like to style by clicking the radio button next to the layer name.
 
-   .. note:: Only one layer can be styled at a time.
+   .. note:: Only one layer can be styled at a time, although you can show or hide other layers for context by checking the boxes next to the layers.
 
    .. figure:: img/stylerselectlayer.png
       :align: center
 
       *Selecting a layer for styling*
 
-#. Click on a feature of the layer that you are styling.  A window will pop up showing current style information including attributes and metadata.
-
-   .. figure:: img/stylerfeatureinfo.png
-      :align: center
-
-      *Feature information for a selected feature*
-
-#. To change the style used for the layer, click on the rule in the pop up (under the heading :guilabel:`Rules used to render this feature`).
+#. The :guilabel:`Legend` panel displays the style rules associated with that layer.  Click on a rule to view and edit it.   An editor window is launched.  
 
    .. figure:: img/editstyle1.png
       :align: center
 
       *The style edit window*
 
-#. A style editor window is launched.  Change the style as you see fit, selecting from symbol, size, color, opacity, and many other options.
+#. Change the style as you see fit, selecting from symbol, size, color, opacity, external graphics, filters, and many other options.
 
-   .. note:: Please see the Styler Documentation for details on what can be styled using Styler.
- 
+   .. note:: Please see the Styler Documentation for more about what can be styled using Styler. 
+
    .. figure:: img/editstyle2.png
       :align: center
 
@@ -57,4 +50,4 @@ These example instructions will change the color of one of the default styles cr
 
 #. Repeat this process for every layer that you wish to style.
 
-   .. warning:: Any changes made through Styler will be immediately saved in GeoServer and will persist.
+   .. warning:: Any changes made through Styler will be immediately saved and will persist.
