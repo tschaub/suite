@@ -62,6 +62,11 @@
         "description": "Display map tools in a toolbar.",
         "components": ["GeoExt", "OpenLayers"]
     },  {
+        "id": "vector/wfs",
+        "title": "Vector Layer (WFS)",
+        "description": "Render features from a WFS",
+        "components": ["OpenLayers", "GeoServer"]
+    },  {
         "id": "vector/external-graphic",
         "title": "External Graphic",
         "description": "Style points with an external graphic.",

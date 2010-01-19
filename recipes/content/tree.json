@@ -53,6 +53,10 @@
 }, {
     "text": "Vector Features",
     "children": [{
+        "id": "vector/wfs",
+        "text": "Vector Layer (WFS)",
+        "leaf": true
+    }, {
         "id": "vector/external-graphic",
         "text": "External Graphic",
         "leaf": true
