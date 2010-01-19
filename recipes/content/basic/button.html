@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Simple Button</title>
+        <title>Button Control</title>
         <script type="text/javascript" src="../../resources/ext/adapter/ext/ext-base.js"></script>
         <script type="text/javascript" src="../../resources/ext/ext-all.js"></script>
         <link rel="stylesheet" type="text/css" href="../../resources/ext/resources/css/ext-all.css" />
@@ -19,6 +19,7 @@
             
                 // create a new map to be drawn in the page element with id "map-id"
                 measureTool = new OpenLayers.Control.Measure(OpenLayers.Handler.Path, {
+                    geodesic: true,
                     eventListeners: {
                         measure: function(evt) {
                             alert("The measurement was " + evt.measure + evt.units);
@@ -42,7 +43,7 @@
                         )
                     ],
                     buttons: [{
-                        text: "Measure Things",
+                        text: "Measure Distance",
                         enableToggle: true,
                         handler: function(toggled){
                             if (toggled) {
@@ -61,7 +62,7 @@
         
     </head>
     <body class="recipe-body">
-        <h1>Simple Button</h1>
+        <h1>Button Control</h1>
         <div class="description">
             A simple button for measuring distance.
         </div>

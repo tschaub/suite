@@ -34,12 +34,12 @@
         "text": "Popup with Feature Information",
         "leaf": true
     }, {
-        "id": "basic/tools",
-        "text": "Map Tools",
+        "id": "basic/button",
+        "text": "Button Control",
         "leaf": true
     }, {
-        "id": "basic/button",
-        "text": "Simple Button",
+        "id": "basic/tools",
+        "text": "Map Tools",
         "leaf": true
     }]
 }, {

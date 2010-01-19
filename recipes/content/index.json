@@ -44,17 +44,17 @@
         "title": "Popup with Feature Information",
         "description": "Use a GetFeatureInfo control and display results in a popup.",
         "components": ["GeoExt", "OpenLayers"]
+    },  {
+        "id": "basic/button",
+        "title": "Button Control",
+        "description": "Create a simple button for measuring distance.",
+        "components": ["GeoExt", "OpenLayers"],
+        "reference": "basic/button-ref"
     }, {
         "id": "basic/tools",
         "title": "Map Tools",
         "description": "Display map tools in a toolbar.",
         "components": ["GeoExt", "OpenLayers"]
-    },  {
-        "id": "basic/button",
-        "title": "Simple Button",
-        "description": "Create a simple button for measuring distance.",
-        "components": ["GeoExt", "OpenLayers"],
-        "reference": "basic/button-ref"
     },  {
         "id": "vector/external-graphic",
         "title": "External Graphic",
