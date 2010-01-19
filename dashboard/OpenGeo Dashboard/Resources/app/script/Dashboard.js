@@ -171,50 +171,48 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 tabWidth: 130,
                 activeGroup: 0,
                 items: [{
-                    defaults: {border: false, autoScroll: true},
+                    defaults: {
+                        border: false, 
+                        autoScroll: true,
+                        listeners: dashPanelListeners
+                    },
                     items: [{
                         title: "Home",
                         tabTip: "OpenGeo Suite Dashboard",
                         cls: "dash-panel",
                         bodyStyle: '',
                         html: og.util.loadSync("app/markup/dash/main.html"),
-                        id: "app-panels-dash-main",
-                        listeners: dashPanelListeners
+                        id: "app-panels-dash-main"
                     },  {
                         title: "Quickstart",
                         tabTip: "Learn about the components of the OpenGeo Suite",
                         cls: "dash-panel",
                         html: og.util.loadSync("app/markup/dash/quickstart.html"),
-                        id: "app-panels-dash-quickstart",
-                        listeners: dashPanelListeners
+                        id: "app-panels-dash-quickstart"
                     },  {
                         title: "GeoExplorer",
                         tabTip: "Learn about GeoExplorer",
                         cls: "dash-panel",
                         html: og.util.loadSync("app/markup/dash/geoexplorer.html"),
-                        id: "app-panels-dash-geoexplorer",
-                        listeners: dashPanelListeners
+                        id: "app-panels-dash-geoexplorer"
                     }, {
                         title: "Styler",
                         tabTip: "Learn about Styler",
                         cls: "dash-panel",
                         html: og.util.loadSync("app/markup/dash/styler.html"),
-                        id: "app-panels-dash-styler",
-                        listeners: dashPanelListeners
+                        id: "app-panels-dash-styler"
                     },  {
                         title: "GeoServer",
                         tabTip: "Learn about GeoServer",
                         cls: "dash-panel",
                         html: og.util.loadSync("app/markup/dash/geoserver.html"),
-                        id: "app-panels-dash-geoserver",
-                        listeners: dashPanelListeners
+                        id: "app-panels-dash-geoserver"
                     }, {
                         title: "GeoWebCache",
                         tabTip: "Learn about GeoWebCache",
                         cls: "dash-panel",
                         html: og.util.loadSync("app/markup/dash/geowebcache.html"),
-                        id: "app-panels-dash-geowebcache",
-                        listeners: dashPanelListeners
+                        id: "app-panels-dash-geowebcache"
                     }]
                 }, {
                     defaults: {border: false, autoScroll: true},
@@ -243,20 +241,23 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         }]
                     }]
                 }, {
-                    defaults: {border: false, autoScroll: true}, 
+                    defaults: {
+                        border: false, 
+                        autoScroll: true,
+                        listeners: dashPanelListeners
+                    },
                     items: [{
                         title: "Help",
                         tabTip: "Help",
                         cls: "dash-panel",
-                        id: "app-panels-help",
+                        id: "app-panels-help-main",
                         html: og.util.loadSync("app/markup/help/main.html")
                     },  {
                         title: "FAQ",
                         tabTip: "Frequently Asked Questions",
                         cls: "dash-panel",
                         html: og.util.loadSync("app/markup/help/faq.html"),
-                        id: "app-panels-help-faq",
-                        listeners: dashPanelListeners
+                        id: "app-panels-help-faq"
                     }, {
                         xtype: "container",
                         layout: "fit",
@@ -270,8 +271,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         tabTip: "Learn more about OpenGeo",
                         cls: "dash-panel",
                         html: og.util.loadSync("app/markup/help/opengeo.html"),
-                        id: "app-panels-help-about",
-                        listeners: dashPanelListeners
+                        id: "app-panels-help-about"
                     }]
                 }]
             }, {
