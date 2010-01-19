@@ -18,8 +18,7 @@
             Ext.onReady(function() {
             
                 // create a new map to be drawn in the page element with id "map-id"
-
-                control = new OpenLayers.Control.Measure(OpenLayers.Handler.Path, {
+                measureTool = new OpenLayers.Control.Measure(OpenLayers.Handler.Path, {
                     eventListeners: {
                         measure: function(evt) {
                             alert("The measurement was " + evt.measure + evt.units);
@@ -32,6 +31,9 @@
                     renderTo: "map-id",
                     height: 300,
                     width: "100%",
+                    map: {controls:[
+                        measureTool
+                    ]},
                     layers: [
                         new OpenLayers.Layer.WMS(
                             "World Map",
@@ -44,17 +46,15 @@
                         enableToggle: true,
                         handler: function(toggled){
                             if (toggled) {
-                                control.activate();
+                                measureTool.activate();
                             } else {
-                                control.deactivate();
+                                measureTool.deactivate();
                             }
                         }
                     }],
                     center: [-100, 40],
                     zoom: 3
                 });
-                
-
                 
             });
         </script>
