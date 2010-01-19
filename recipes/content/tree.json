@@ -1,0 +1,67 @@
+[{
+    "id": "basic",
+    "text": "Basics",
+    "children": [{
+        "id": "basic/map",
+        "text": "Basic Map",
+        "leaf": true
+    }, {
+        "id": "basic/mappanel",
+        "text": "Map Panel",
+        "leaf": true        
+    }, {
+        "id": "basic/grid",
+        "text": "Layer Grid",
+        "leaf": true
+    }, {
+        "id": "basic/layertree",
+        "text": "Layer Tree",
+        "leaf": true
+    }, {
+        "id": "basic/treefilter",
+        "text": "Layer Tree with Filter",
+        "leaf": true
+    }, {
+        "id": "basic/sublayer",
+        "text": "Layer Tree with Sub-layers",
+        "leaf": true
+    }, {
+        "id": "basic/popup",
+        "text": "Feature Popups",
+        "leaf": true
+    }, {
+        "id": "basic/info",
+        "text": "Popup with Feature Information",
+        "leaf": true
+    }, {
+        "id": "basic/tools",
+        "text": "Map Tools",
+        "leaf": true
+    }, {
+        "id": "basic/button",
+        "text": "Simple Button",
+        "leaf": true
+    }]
+}, {
+    "text": "Vector Features",
+    "children": [{
+        "id": "vector/external-graphic",
+        "text": "External Graphic",
+        "leaf": true
+    }]
+}, {
+    "text": "Editing",
+    "children": [{
+        "id": "editing/draw",
+        "text": "Drawing Vector Features",
+        "leaf": true
+    }, {
+        "id": "editing/attributes",
+        "text": "Feature Attribute Editing",
+        "leaf": true
+    }, {
+        "id": "editing/snap-split",
+        "text": "Snapping & Splitting",
+        "leaf": true
+    }]
+}]

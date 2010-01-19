@@ -12,7 +12,7 @@
         "components": ["GeoExt", "GeoWebCache"]
     }, {
         "id": "basic/grid",
-        "title": "Grid Panel",
+        "title": "Layer Grid",
         "description": "List map layers in a grid.",
         "components": ["GeoExt", "GeoWebCache"],
         "reference": "basic/grid-ref"

@@ -55,6 +55,8 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
         parts.pop();
         this.recipeBase = parts.join("/") + "/" + dir;
         
+        this.addEvents("recipeload");
+        
         og.Recipes.superclass.constructor.call(this);
         
         var queue = [
@@ -138,6 +140,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
 
         Ext.QuickTips.init();
         this.initRecipeList();
+        this.initRecipeTree();
         this.initRecipeFrame();
         this.initSourcePanel();
         this.initReferenceFrame();
@@ -171,7 +174,10 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                 autoScroll: true,
                 items:[{
                     title: "Contents",
-                    html: "<p>A tree like table of contents could go here.</p>"
+                    defaults: {
+                        border: false
+                    },
+                    items: [this.recipeTree]
                 }, {
                     title: "Search",
                     layout: "fit",
@@ -261,6 +267,46 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                     delay: 1
                 }
             }
+        });
+        
+    },
+    
+    initRecipeTree: function() {
+        var selecting = false;
+        this.recipeTree = new Ext.tree.TreePanel({
+            border: false,
+            animate: false,
+            autoScroll: true,
+            dataUrl: "content/tree.json",
+            selModel: new Ext.tree.DefaultSelectionModel({
+                listeners: {
+                    selectionchange: function(model, node) {
+                        if (node.leaf) {
+                            selecting = true;
+                            this.loadRecipe(node.id);
+                            selecting = false;
+                        }
+                    },
+                    scope: this
+                }
+            }),
+            root: {
+                nodeType: "async",
+                expanded: true,
+                text: "Recipes"
+            }
+        });
+        
+        this.on({
+            recipeload: function(id) {
+                if (!selecting) {
+                    var node = this.recipeTree.getNodeById(id);
+                    if (node) {
+                        this.recipeTree.getSelectionModel().select(node);
+                    }
+                }
+            },
+            scope: this
         });
         
     },
@@ -425,6 +471,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                 this.referenceFrame.setSrc("about:blank");
                 this.referenceFrame.ownerCt.hideTabStripItem(this.referenceFrame);
             }
+            this.fireEvent("recipeload", id);
         }
         this.selectRecipe(id);
     },
