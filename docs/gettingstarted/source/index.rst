@@ -11,6 +11,8 @@ Now let's make a map!
    :maxdepth: 2
 
    whatis.rst
-   howtouse/index.rst
+   dashboard.rst
+   workflow/index.rst
+   recipes.rst
    builtindemos.rst
    moreinfo.rst
