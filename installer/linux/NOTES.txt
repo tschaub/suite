@@ -1,4 +1,7 @@
 Obtain bin.tar.gz artifact
+Obtain jre-linux.tgz
+Unpack bin.tar.gz and unpack jre-linux.tgz into the root
+Repackage bin.tar.gz
 Obtain ext.tar.gz artifact
 Obtain dashboard
 Unpack dashboard and manually add a .installed file under the root
