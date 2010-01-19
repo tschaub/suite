@@ -2,13 +2,13 @@
     "recipes": [{
         "id": "basic/map",
         "title": "Basic Map",
-        "description": "This recipe describes how to add a map to any web page.",
+        "description": "Add a map to any web page.",
         "components": ["OpenLayers", "GeoWebCache"],
         "reference": "basic/map-ref"
     }, {
         "id": "basic/mappanel",
         "title": "Map Panel",
-        "description": "This recipe demonstrates the use of a GeoExt MapPanel.",
+        "description": "Use of a GeoExt MapPanel.",
         "components": ["GeoExt", "GeoWebCache"]
     }, {
         "id": "basic/grid",
@@ -25,7 +25,7 @@
     },  {
         "id": "basic/treefilter",
         "title": "Layer Tree with Filter",
-        "description": "Filtered list of map layers in a tree.",
+        "description": "Filter a list of map layers.",
         "components": ["GeoExt", "GeoWebCache"],
         "reference": "basic/treefilter-ref"
     }, {
@@ -46,8 +46,9 @@
     },  {
         "id": "basic/button",
         "title": "Simple Button",
-        "description": "A simple button for measuring distance.",
-        "components": ["GeoExt", "OpenLayers"]
+        "description": "Create a simple button for measuring distance.",
+        "components": ["GeoExt", "OpenLayers"],
+        "reference": "basic/button-ref"
     },  {
         "id": "vector/external-graphic",
         "title": "External Graphic",
