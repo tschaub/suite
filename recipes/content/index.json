@@ -28,7 +28,13 @@
         "description": "Filter a list of map layers.",
         "components": ["GeoExt", "GeoWebCache"],
         "reference": "basic/treefilter-ref"
-    }, {
+    },  {
+        "id": "basic/sublayer",
+        "title": "Layer Tree with Sub-layers",
+        "description": "Make a layer tree with sub-layers.",
+        "components": ["GeoExt", "OpenLayers", "GeoWebCache"],
+        "reference": "basic/sublayer-ref"
+    },{
         "id": "basic/popup",
         "title": "Feature Popups",
         "description": "Learn how to open a popup when a feature is selected.",
