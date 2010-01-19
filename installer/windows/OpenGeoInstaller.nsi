@@ -6,7 +6,7 @@
 !define VERSION "1.0"
 !define LONGVERSION "1.0.0.1" ; must be a.b.c.d
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
-!define SOURCEPATHROOT "..\..\target\opengeosuite-1.0-SNAPSHOT-win"
+!define SOURCEPATHROOT "..\..\target\opengeosuite-1.0-win"
 !define STARTMENU_FOLDER "${APPNAMEANDVERSION}"
 
 ; Main Install settings
