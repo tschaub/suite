@@ -38,16 +38,8 @@
         "text": "Button Control",
         "leaf": true
     },  {
-        "id": "basic/togglebuttons",
-        "text": "Toggle Buttons",
-        "leaf": true
-    },  {
         "id": "basic/tools",
         "text": "Map Tools",
-        "leaf": true
-    },  {
-        "id": "basic/button",
-        "text": "Simple Button",
         "leaf": true
     }]
 }, {

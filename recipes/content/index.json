@@ -51,12 +51,6 @@
         "components": ["GeoExt", "OpenLayers"],
         "reference": "basic/button-ref"
     },  {
-        "id": "basic/togglebuttons",
-        "title": "Toggle Buttons",
-        "description": "Alternate between multiple buttons with a toggleGroup.",
-        "components": ["GeoExt", "OpenLayers"],
-        "reference": "basic/togglebuttons-ref"
-    },  {
         "id": "basic/tools",
         "title": "Map Tools",
         "description": "Display map tools in a toolbar.",
