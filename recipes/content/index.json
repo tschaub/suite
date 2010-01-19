@@ -66,6 +66,11 @@
         "description": "Draw points, lines, and polygons on a vector layer.",
         "components": ["OpenLayers", "GeoExt"]
     }, {
+        "id": "editing/drag",
+        "title": "Dragging Vector Features",
+        "description": "Drag features on a vector layer.",
+        "components": ["OpenLayers", "GeoExt"]
+    }, {
         "id": "editing/attributes",
         "title": "Feature Attribute Editing",
         "description": "Edit feature attributes in a property grid.",

@@ -56,6 +56,10 @@
         "text": "Drawing Vector Features",
         "leaf": true
     }, {
+        "id": "editing/drag",
+        "text": "Dragging Vector Features",
+        "leaf": true
+    }, {
         "id": "editing/attributes",
         "text": "Feature Attribute Editing",
         "leaf": true
