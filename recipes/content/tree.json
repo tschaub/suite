@@ -10,7 +10,7 @@
         "text": "Map Panel",
         "leaf": true        
     }, {
-        "id": "basic/grid",
+        "id": "basic/layergrid",
         "text": "Layer Grid",
         "leaf": true
     }, {

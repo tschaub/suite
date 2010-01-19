@@ -11,11 +11,11 @@
         "description": "Use of a GeoExt MapPanel.",
         "components": ["GeoExt", "GeoWebCache"]
     }, {
-        "id": "basic/grid",
+        "id": "basic/layergrid",
         "title": "Layer Grid",
         "description": "List map layers in a grid.",
         "components": ["GeoExt", "GeoWebCache"],
-        "reference": "basic/grid-ref"
+        "reference": "basic/layergrid-ref"
     },  {
         "id": "basic/layertree",
         "title": "Layer Tree",
