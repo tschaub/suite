@@ -3,7 +3,7 @@
 ; Define your application name
 !define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
-!define VERSION "1.0-SNAPSHOT"
+!define VERSION "1.0"
 !define LONGVERSION "1.0.0.1" ; must be a.b.c.d
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
 !define SOURCEPATHROOT "..\..\target\opengeosuite-1.0-SNAPSHOT-win"
@@ -443,6 +443,12 @@ Section "-Jetty" SectionJetty ; dash = hidden
  
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
 
+  CreateDirectory "$PROFILE\.opengeo"
+  CreateDirectory "$PROFILE\.opengeo\logs"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\OpenGeo Suite Logs.lnk" \
+                 "$PROFILE\.opengeo\logs"
+
+
 SectionEnd
 
 SectionGroup /e "Suite Services" SectionServices
@@ -462,12 +468,10 @@ Section "GeoServer" SectionGS
   CreateDirectory "$PROFILE\.opengeo"
   SetOutPath "$PROFILE\.opengeo"
   File /r "${SOURCEPATHROOT}\data_dir"
-  ;Next line is lame, but I can't figure out where this directory is being created
-  ;RMDir /r "$CommonAppData\${COMPANYNAME}\${APPNAMEANDVERSION}\geoserver"
-
-  ; Shortcuts
+  
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer Data Directory.lnk" \
                  "$PROFILE\.opengeo\data_dir"
+
 
 SectionEnd
 
