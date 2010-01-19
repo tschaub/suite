@@ -58,8 +58,8 @@ class GeneralStoreParamPanel extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 dialog.setTitle(new ParamResourceModel("dialogTitle", GeneralStoreParamPanel.this));
                 dialog.setInitialWidth(400);
-                dialog.setInitialHeight(130);
-                dialog.setMinimalHeight(130);
+                dialog.setInitialHeight(150);
+                dialog.setMinimalHeight(150);
                 
                 dialog.showOkCancel(target, new DialogDelegate() {
                     String wsName;
