@@ -26,20 +26,30 @@
 
 """Package a Titanium application in the cloud.
 
+    This script automates the cloud packaging process for a Titanium
+    application.  It can be run on a system without Titanium Developer and
+    can package applications for Win32, OS X, and Linux regardless of the
+    host system.
+    
+    In order to use the script, you must first run Titanium Developer and
+    package your application with the desired configuration (target OS, bundled
+    vs. network, etc.).  This will create the "timanifest" file that this script
+    depends on.  After packaging once with Titanium Developer, you initiate application
+    packaging on a system without Developer.
+    
+    Example usage:
+    
+        $ python cloud.py -u user@example.com -p userpass MyApp
+
     For command line options, run with the --help flag.
-    $ python cloud.py -h
+    
+        $ python cloud.py -h
+    
+    Requires Python 2.6 (for json and ZipFile.extractall)
 
 """
 
-import sys, os, logging, time, urllib, urllib2, zipfile, tarfile, StringIO, shutil
-
-try:
-    import json
-except ImportError:
-    try:
-        import simplejson as json
-    except ImportError:
-        raise "Requires either simplejson or Python 2.6"
+import os, logging, time, urllib, urllib2, zipfile, tarfile, StringIO, shutil, json
 
 
 logger = logging.getLogger("titanium.cloud")
@@ -54,6 +64,7 @@ logger.addHandler(NullHandler())
 cloud_url = "https://api.appcelerator.net/p/v1/"
 
 def login(app_path, user, password):
+    """Authenticate given user credentials."""
 
     url = cloud_url + "sso-login"    
 
@@ -79,6 +90,7 @@ def login(app_path, user, password):
 
 
 def bundle(app_path, ignore=(".svn",)):
+    """Generate a zip archive of the application."""
 
     def add_entry(path, archive):
         if os.path.isdir(path):
@@ -106,6 +118,7 @@ def bundle(app_path, ignore=(".svn",)):
 
 
 def package(zip_data, sid=None, token=None, uid=None, uidt=None):
+    """Post the application archive to the packaging service."""
 
     url = cloud_url + "publish"
     params = urllib.urlencode({
@@ -136,7 +149,8 @@ def package(zip_data, sid=None, token=None, uid=None, uidt=None):
 
 
 def get_status(ticket):
-    
+    """Check packaging status."""
+
     logger.info("Checking status for ticket %s", ticket)
     url = cloud_url + "publish-status"
     params = urllib.urlencode({"ticket": ticket})
@@ -149,6 +163,7 @@ def get_status(ticket):
 
 
 def wait(ticket, interval=30, timeout=300, start=None):
+    """Wait for packaging to finish, periodically checking status."""
 
     if start is None:
         start = time.time()
@@ -178,6 +193,7 @@ def wait(ticket, interval=30, timeout=300, start=None):
 
 
 def download(releases, dir=os.getcwd(), extract=True):
+    """Download packages for target systems."""
     
     # only grab one per os (service occassionally returns two entries for same os)
     platforms = {}
