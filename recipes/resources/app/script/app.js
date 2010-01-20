@@ -2,6 +2,8 @@ Ext.namespace("og");
 
 og.IFrameComponent = Ext.extend(Ext.BoxComponent, {
     
+    url: "about:blank",
+    
     setSrc: function(url) {
         this.el.dom.contentWindow.location.href = url;
     },
