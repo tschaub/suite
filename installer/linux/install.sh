@@ -118,7 +118,7 @@ INCLUDE_SDE=`parse $INCLUDE_SDE n`
 #
 # include Oracle support?
 #
-echo -n "Would you like to include additional suppport for Oracle? [y|N]: "
+echo -n "Would you like to include additional support for Oracle? [y|N]: "
 read INCLUDE_ORACLE
 INCLUDE_ORACLE=`parse $INCLUDE_ORACLE n` 
 
