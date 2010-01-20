@@ -2,7 +2,7 @@ Ext.namespace("og");
 
 og.IFrameComponent = Ext.extend(Ext.BoxComponent, {
     
-    setUrl: function(url) {
+    setSrc: function(url) {
         this.el.dom.contentWindow.location.href = url;
     },
     
@@ -269,6 +269,8 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
             }
         });
         
+        
+        
     },
     
     initRecipeTree: function() {
@@ -371,7 +373,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
     },
     
     initRecipeFrame: function() {
-        this.recipeFrame = new Ext.ux.ManagedIFrame.Component({
+        this.recipeFrame = new og.IFrameComponent({
             title: "Demo",
             focusOnLoad: true,
             listeners: {
@@ -394,7 +396,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
     },
     
     initReferenceFrame: function() {
-        this.referenceFrame = new Ext.ux.ManagedIFrame.Component({
+        this.referenceFrame = new og.IFrameComponent({
             title: "Documentation",
             focusOnLoad: true
         });
