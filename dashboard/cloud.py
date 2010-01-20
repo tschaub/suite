@@ -104,7 +104,7 @@ def package(zip_data, sid=None, token=None, uid=None, uidt=None):
     else:
         logger.warning("App archive rejected:\n%s", response)
     
-    return details["ticket"]
+    return details
 
 
 def get_status(ticket):
@@ -282,10 +282,12 @@ def main():
     zip_data = bundle(app_path)
     
     # post app bundle for packaging (can't use **details here given unicode keys)
-    ticket = package(zip_data, sid=details['sid'], token=details['token'], uid=details['uid'], uidt=details['uidt'])
+    p_details = package(zip_data, sid=details['sid'], token=details['token'], uid=details['uid'], uidt=details['uidt'])
+    assert p_details.has_key("ticket"), "Packaging response doesn't contain ticket number."
     
     # keep checking status until complete
-    job = wait(ticket)
+    job = wait(p_details["ticket"])
+    assert job.has_key("releases"), "Job response doesn't contain releases list."
 
     # download all releases
     output = options.output or os.getcwd()
