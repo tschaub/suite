@@ -174,13 +174,8 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                 activeTab: 0,
                 height: "100%",
                 autoScroll: true,
-                items:[{
-                    title: "Contents",
-                    defaults: {
-                        border: false
-                    },
-                    items: [this.recipeTree]
-                }, {
+                items:[
+                    this.recipeTree, {
                     title: "Search",
                     layout: "fit",
                     items: [{
@@ -290,6 +285,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
         };
 
         this.recipeTree = new Ext.tree.TreePanel({
+            title: "Contents",
             border: false,
             animate: false,
             autoScroll: true,
