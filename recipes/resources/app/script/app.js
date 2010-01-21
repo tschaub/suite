@@ -200,6 +200,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                                         var value = field.getValue();
                                         this.query.keywords = value;
                                         this.filterRecipes();
+                                        field.focus();
                                     },
                                     scope: this
                                 }
