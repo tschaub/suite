@@ -9,13 +9,11 @@ Prerequisites
 
 The OpenGeo Suite has the following system requirements:
 
-* **Operating System**: Windows XP, Vista, 7, Server 2000, Server 2003, Server 2008 (all 32 bit)
+* **Operating System**: Windows XP, Vista, 7 (all 32 and 64 bit)
 * **Memory**: 512MB minimum (1GB recommended)
-* **Disk space**: 450MB minimum (plus optional extra space for loaded data)
-* **Browser**: Any modern web browser is supported (Internet Explorer 7+, Firefox 2+, Chrome 1+)
+* **Disk space**: 300MB minimum (plus extra space for any loaded data)
+* **Browser**: Any modern web browser is supported (Internet Explorer 6+, Firefox 3+, Chrome 2+)
 * **Permissions**: Administrative rights
-
-
 
 Installation
 ------------
@@ -50,40 +48,21 @@ Installation
 
       *Start Menu folder to be created*
 
-#. Select the components you wish to install and click :guilabel:`Next`.
+#. Select the components you wish to install.
 
    .. figure:: img/components.png
       :align: center
 
       *Component selection*
 
-#. You can install the OpenGeo Suite in one of two ways.:
-  
-     * :guilabel:`Run manually` - The OpenGeo Suite is run like a standard application.  This is useful for evaluating the software.
-     * :guilabel:`Install as a service` - The OpenGeo Suite is integrated with Windows Services.  This is more secure, and is the preferred method of running in a production environment.  This will also launch the OpenGeo Suite automatically with Windows.
+   .. note::  All components will be installed by default except for optional ArcSDE and Oracle Spatial extensions.  If enabling these extensions, certain additional files will need to be manually copied to the installation directory.  For the ArcSDE extension, the files :file:`jsde*.jar` and :file:`jpe*.jar` are required.  For Oracle, the file :file:`ojdbc*.jar` is required.  These file(s) must be copied to the following path :file:`<installation_folder>\\webapps\\geoserver\\WEB-INF\\lib`.  
 
-   If you are not sure which option to choose, select :guilabel:`Run manually`.
-
-   .. figure:: img/installtype.png
-      :align: center
-
-      *Select the type of installation*
-
-#. Enter a username and password for configuring GeoServer, and also the port that the OpenGeo Suite will respond on.  When finished, click :guilabel:`Next`.
-
-      .. note:: Please make sure that no other applications are running on this port.
-
-   .. figure:: img/creds.png
-      :align: center
-
-      *Enter credentials and port information*
-
-#. Verify all the information and click :guilabel:`Back` to make any changes.  Click :guilabel:`Install` to perform the installation.
+#. Click :guilabel:`Install` to perform the installation.
 
    .. figure:: img/ready.png
       :align: center
 
-      *Verify all settings before continuing*
+      *Ready to install*
 
 #. Please wait while the installation proceeds.
 
@@ -99,38 +78,9 @@ Installation
 
       *The OpenGeo Suite successfully installed*
 
-For more information, please see the document titled **Getting Started**, which is available in the Start Menu at :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Documentation --> Getting Started`.
+For more information, please see the document titled **Getting Started**, which is available from the Dashboard, or in the Start Menu at :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Documentation --> Getting Started`.
 
-.. note:: The OpenGeo Suite must be running in order to view all documentation.
-
-
-Upgrading
----------
-
-It is possible to run two different versions of the OpenGeo Suite (ex: 1.0 and 1.1) simultaneously on the same machine.  This is useful for evaluation puposes, and to ensure that upgrading will not cause unwanted functionality.
-
-If you wish to upgrade to a newer version, you should uninstall the current version (making sure to back up your data directory), and then install the newer version, overwriting the new data directory with the old.
-
-Example upgrade (from 1.0 to 1.1)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#. Stop OpenGeo Suite 1.0.
-
-#. Back up the current data directory.
-
-   .. note:: On Windows XP this is by default stored in :file:`C:\\Documents and Settings\\All Users\\Application Data\\OpenGeo\\OpenGeo Suite 1.0\\data_dir`.
-
-#. Uninstall OpenGeo Suite 1.0.
-
-#. Install OpenGeo Suite 1.1.
-
-#. Stop OpenGeo Suite 1.1 (if it is running).
-
-#. Overwrite data directory with saved data directory.
-
-   .. note:: On Windows XP this is by default stored in :file:`C:\\Documents and Settings\\All Users\\Application Data\\OpenGeo\\OpenGeo Suite 1.1\\data_dir`.
-
-#. Restart OpenGeo Suite 1.1.
+.. note:: The OpenGeo Suite must be online in order to view documentation from the Dashboard.  If you would like to view the documentation when the Suite is offline, please use the shortcuts in the Start Menu.
 
 
 Uninstallation
@@ -147,14 +97,7 @@ Uninstallation
 
       *Ready to uninstall the OpenGeo Suite*
 
-#. The uninstaller will warn you to back up your data directory if you are upgrading.  When ready to continue, click :guilabel:`OK`.
-
-   .. warning:: Deleting the data directory is *not* undoable!
-
-   .. figure:: img/datadir.png
-      :align: center
-
-      *Backup your existing data directory if desired*
+   .. warning:: Uninstalling will delete the default GeoServer Data Directory, installed by default at :file:`<user_home_directory>\\.opengeo\\data_dir`.  Please make a backup if you would like to save this directory.
 
 #. When done, click :guilabel:`Close`.
 
@@ -164,14 +107,7 @@ Uninstallation
       *The OpenGeo Suite is successfully uninstalled*
 
 
-Credits
--------
-
-All text content created by OpenGeo and licensed under the `Creative Commons Share-Alike license <http://creativecommons.org/licenses/by-sa/3.0>`_.
-
-All code is open source under various licenses including, but not limited to, the `GNU Public License <http://www.gnu.org/licenses/gpl.html>`_.
-
 For More Information
 --------------------
 
-Please visit http://opengeo.org or email inquiry@opengeo.org .
+Please visit http://opengeo.org or see the documentation included with this software.
