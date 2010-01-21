@@ -9,7 +9,7 @@ Prerequisites
 
 The OpenGeo Suite has the following system requirements:
 
-* **Operating System**: Windows XP, Vista, 7 (all 32 and 64 bit)
+* **Operating System**: Windows XP, Windows Vista, Windows 7 (each 32 and 64 bit)
 * **Memory**: 512MB minimum (1GB recommended)
 * **Disk space**: 300MB minimum (plus extra space for any loaded data)
 * **Browser**: Any modern web browser is supported (Internet Explorer 6+, Firefox 3+, Chrome 2+)
@@ -88,7 +88,7 @@ Uninstallation
 
 #. Navigate to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Uninstall`
 
-   .. note:: Uninstallation is also available via the standard Windows program removal workflow (i.e. **Add/Remove Programs** for Windows XP, **Installed Programs** for Windows Vista, etc.)
+   .. note:: Uninstallation is also available via the standard Windows program removal workflow.  (**Add/Remove Programs** for Windows XP, **Installed Programs** for Windows Vista, etc.)
 
 #. Click :guilabel:`Uninstall` to start the uninstallation process.
 
