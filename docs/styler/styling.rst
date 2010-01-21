@@ -1,8 +1,7 @@
 .. _styler.styling:
 
-========
 Styling
-========
+=======
 
 Basic Styling
 -------------
@@ -46,6 +45,7 @@ Basic Styling
 
 Label Styling
 -------------
+
 The :guilabel:`Labels` tab defines how to display text labels. Options set here correlate to a block 
 of code in the SLD called the ``<TextSymbolizer>``.  
 

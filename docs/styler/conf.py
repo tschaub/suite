@@ -44,9 +44,9 @@ copyright = u'2009 OpenGeo'
 # other places throughout the built documents.
 #
 # The short X.Y version.
-version = '0.2'
+#version = '0.2'
 # The full version, including alpha/beta/rc tags.
-release = '0.2'
+#release = '0.2'
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
@@ -91,7 +91,7 @@ html_theme_path = ['../themes']
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-#html_title = None
+html_title = project + " Documentation"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None
