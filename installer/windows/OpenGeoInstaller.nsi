@@ -3,10 +3,10 @@
 ; Define your application name
 !define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
-!define VERSION "1.0"
+!define VERSION "1.0l"
 !define LONGVERSION "1.0.0.1" ; must be a.b.c.d
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
-!define SOURCEPATHROOT "..\..\target\opengeosuite-1.0-win"
+!define SOURCEPATHROOT "..\..\target\opengeosuite-1.0r1-win"
 !define STARTMENU_FOLDER "${APPNAMEANDVERSION}"
 
 ; Main Install settings
@@ -748,9 +748,9 @@ Section Uninstall
   ; Wait for Start GeoServer window to go away
   Sleep 5000
 
-  MessageBox MB_OKCANCEL                    "Your data directory will be deleted!$\r$\n$\r$\n\
-                                             Your data directory is located at:\
-                                             $\r$\n     $INSTDIR\data_dir$\r$\n$\r$\n\
+  MessageBox MB_OKCANCEL                    "The default data directory will be deleted!$\r$\n$\r$\n\
+                                             This data directory is located at:\
+                                             $\r$\n     $PROFILE\.opengeo\data_dir$\r$\n$\r$\n\
                                              If you wish to save this directory for future use, \
                                              please take a moment to back it up now.$\r$\n\
                                              Click OK when ready to proceed." IDOK 0 IDCANCEL Die
@@ -773,6 +773,7 @@ Section Uninstall
 
   Try:
 
+    RMDir /r "$PROFILE\.opengeo"
     RMDir /r "$INSTDIR\dashboard"
     RMDir /r "$INSTDIR\data_dir"
     RMDir /r "$INSTDIR\etc"
