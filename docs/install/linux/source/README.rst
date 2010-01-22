@@ -1,7 +1,7 @@
 Installing the OpenGeo Suite
 ============================
 
-This document will discuss how to install the OpenGeo Suite.  More detailed operating instructions are available once the software is installed.
+This document will describe how to install the OpenGeo Suite.  More detailed operating instructions are available once the software is installed.
 
 
 Prerequisites
@@ -9,82 +9,126 @@ Prerequisites
 
 The OpenGeo Suite has the following system requirements:
 
-* **Operating System**: Ubuntu 9.10, Redhat 5, Centos 5, Fedora 11 (each 32 and 64 bit)
+* **Operating System**: Ubuntu 9.10, Redhat 5, CentOS 5, Fedora 11 (each 32 and 64 bit)
 * **Memory**: 512MB minimum (1GB recommended)
 * **Disk space**: 300MB minimum (plus extra space for any loaded data)
 * **Browser**: Any modern web browser is supported (Internet Explorer 6+, Firefox 3+, Chrome 2+)
-* **Permissions**: Administrative rights
+* **Permissions**: Runs in a user account; superuser not required
 
 Installation
 ------------
 
-#. Make the :file:`OpenGeoSuite-1.0r1.bin` file executable by setting the appropriate permisions.
+.. note:: The installation process runs in a terminal.
 
-   :command:`> chmod +x OpenGeoSuite-1.0r1.bin`
+#. Make the :file:`OpenGeoSuite-1.0.bin` file executable by setting the appropriate permissions:
 
-#. Begin the install by executing the OpenGeoSuite-1.0r1.bin file
+   .. code-block:: bash
 
-   :command:`> ./OpenGeoSuite-1.0r1.bin`
+     chmod +x OpenGeoSuite-1.0.bin
 
-#. Proceed with the install and read the **License Agreement** then click :guilabel:`I Agree`.
+#. Begin the install by executing the :file:`OpenGeoSuite-1.0.bin` file:
 
-   :command:`Do you accept the license agreement? [Y|n]: Y`
+   .. code-block:: bash
 
-#. Choose the installation directory
+     ./OpenGeoSuite-1.0.bin
 
-   :command:`Choose an installation directory [/home/gisuser]:`
+#. The archive will verify its integrity, and then ask if you wish to proceed (default is Yes)::
 
-#. Choose if the OpenGeo Suite should include ArcSDE support 
+     Would you like to proceed with installing OpenGeo Suite? [Y|n]: 
 
-   :command:`Would you like to include additional support for ArcSDE? [y|N]:`
+#. Read and accept the License Agreement (default is Yes)::
 
-#. Choose if the OpenGeo Suite should include Oracle support 
+     Do you accept the license agreement? [Y|n]:
 
-   :command:`Would you like to include additional support for Oracle? [y|N]:`
+#. Choose the installation directory.  The default is ``$HOME``::
 
-#. Choose if you would like to create links to executable files 
+     Choose an installation directory [/home/user]:
 
-   :command:`Would you like to create links to executable files? [Y|n]:`
+#. Choose if the OpenGeo Suite should include ArcSDE support (default is No):
+
+   .. note:: You will be prompted for additional required libraries later in the installation.
+
+   ::
+
+     Would you like to include additional support for ArcSDE? [y|N]:
+
+#. Choose if the OpenGeo Suite should include Oracle Spatial support (default is No):
+
+   .. note:: You will be prompted for additional required libraries later in the installation.
+
+   ::
+
+     Would you like to include additional support for Oracle? [y|N]:
+
+#. Choose if you would like to create links to executable files (default is Yes)::
+
+     Would you like to create links to executable files? [Y|n]:
+     
+#. If you selected "yes", choose the directory where the links will be created.  The default is ``$HOME/bin``::
+
+     What directory should links be created in? [/home/user/bin]:
       
-   If yes, select the directory where the links will be created   
-
-   :command:`What directory should links be created in? [/home/gisuser/bin]:`
-      
-   If the directory does not exist, create them.
+#. If this directory does not exist, you will be asked if you want to create it::
    
-   :command:`/home/gisuser/bin does not exist. Would you like to create it now? [Y|n]:`
+     /home/user/bin does not exist. Would you like to create it now? [Y|n]:
             
-#. The instaler will provide a summary and ask for confirmation.
+#. The installer will provide a summary and ask for confirmation::
    
-      Installation summary: 
+      Installation summary:
 
-	     Installation directory: 	 /home/gisuser/opengeosuite-1.0-SNAPSHOT
-
+	     Installation directory: 	 /home/user/opengeosuite-1.0
 	     Install ArcSDE support: 	 No
-
-	     Install Oracle support: 	 Yes
-
-	     Install executables: 		 /home/gisuser/bin
+	     Install Oracle support: 	 No
+	     Install executables:        /home/user/bin
 
       Proceed with installation? [Y|n]: 
 
-#. If you choose to add support for ArcSDE or Oracle, the installer will ask you for the location of the necessary libraries.
-   
-   :command:`The Oracle extension the Oracle JDBC driver to function. Where is ojdbc jar located on your system? [Leave blank to skip]:`
+#. The installation will begin.  
+
+#. If you chose to add support for ArcSDE, the installer will ask you for the location of the necessary external libraries::
+
+     The ArcSDE extension requires the Java ESRI client libraries to function.
+     Where are the libraries located on your system? [Leave blank to skip]:
+
+#. If you chose to add support for Oracle, the installer will ask you for the location of the necessary external libraries::
+
+     The Oracle extension requires the Oracle JDBC driver to function.
+     Where is ojdbc jar located on your system? [Leave blank to skip]:
 
 #. The installation is complete.
+
+#. To run the Dashboard, navigate to ``$HOME/bin`` and type:
+ 
+   .. code-block:: bash
+
+     $ ./opengeo-dashboard
+
+   .. note:: The Dashboard requires X11 or equivalent windowing environment.
+
+#. To start or stop the OpenGeo Suite, navigate to ``$HOME/bin`` and type::
+
+   .. code-block:: bash
+
+     $ ./opengeo-suite start
+     $ ./opengeo-suite stop  
 
 
 Uninstallation
 --------------
 
-#. Change directory to the OpenGeo Suite installation directory
+.. note:: Please make sure the OpenGeo Suite is offline and the Dashboard is closed before uninstalling.
 
-   :command:`>cd opengeosuite-1.0-SNAPSHOT/`
+#. Navigate to the OpenGeo Suite installation directory:
+
+   .. code-block:: bash
+
+     $ cd /home/user/opengeosuite-1.0
 
 #. Execute the uninstall.sh script
 
-   :command:`>./uninstall.sh`
+   .. code-block:: bash
+
+     $ ./uninstall.sh
 
 
 For More Information
