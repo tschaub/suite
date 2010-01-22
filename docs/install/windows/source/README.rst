@@ -86,6 +86,8 @@ For more information, please see the document titled **Getting Started**, which 
 Uninstallation
 --------------
 
+.. note:: Please make sure that the Dashboard is closed before starting the uninstallation.
+
 #. Navigate to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Uninstall`
 
    .. note:: Uninstallation is also available via the standard Windows program removal workflow.  (**Add/Remove Programs** for Windows XP, **Installed Programs** for Windows Vista, etc.)
