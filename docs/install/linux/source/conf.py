@@ -37,7 +37,7 @@ source_suffix = '.rst'
 #source_encoding = 'utf-8'
 
 # The master toctree document.
-master_doc = 'README'
+master_doc = 'README-linux'
 
 # General information about the project.
 project = u'OpenGeo Suite Linux Installation'
@@ -176,7 +176,7 @@ htmlhelp_basename = 'OpenGeoSuiteInstallationdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('README', 'README.tex', u'OpenGeo Suite for Linux',
+  ('README-linux', 'README-linux.tex', u'OpenGeo Suite for Linux',
    u'OpenGeo', 'howto'),
 ]
 

@@ -12,7 +12,7 @@ The OpenGeo Suite has the following system requirements:
 * **Operating System**: 10.5 Leopard, 10.6 Snow Leopard
 * **Memory**: 1GB minimum (higher recommended)
 * **Disk space**: 400MB minimum (plus extra space for any loaded data)
-* **Browser**: Any modern web browser is supported (Firefox 3+, Safari 4+, Chrome 2+)
+* **Browser**: Any modern web browser is supported (Internet Explorer 6+, Firefox 3+, Chrome 2+, Safari 3+)
 * **Permissions**: Administrative rights
 
 Installation

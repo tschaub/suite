@@ -12,7 +12,7 @@ The OpenGeo Suite has the following system requirements:
 * **Operating System**: Ubuntu 9.10, Redhat 5, CentOS 5, Fedora 11 (each 32 and 64 bit)
 * **Memory**: 512MB minimum (1GB recommended)
 * **Disk space**: 300MB minimum (plus extra space for any loaded data)
-* **Browser**: Any modern web browser is supported (Internet Explorer 6+, Firefox 3+, Chrome 2+)
+* **Browser**: Any modern web browser is supported (Internet Explorer 6+, Firefox 3+, Chrome 2+, Safari 3+)
 * **Permissions**: Runs in a user account; superuser not required
 
 Installation
