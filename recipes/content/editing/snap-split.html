@@ -42,7 +42,9 @@
                             zoomWheelEnabled: false
                         }),
                         new OpenLayers.Control.PanZoom()
-                    ]
+                    ],
+                    maxResolution: 0.00002,
+                    numZoomLevels: 4
                 });
                 var styles = new OpenLayers.StyleMap({
                     "default": new OpenLayers.Style(null, {
@@ -105,7 +107,7 @@
                     }),
                     styleMap: styles,
                     maxExtent: new OpenLayers.Bounds(
-                        1549471.9221, 6403610.94, 1550001.32545, 6404015.8
+                        13.9191, 49.7530, 13.9239, 49.7554
                     )
                 });
                 map.addLayer(vectors);
@@ -119,7 +121,7 @@
                 split = new OpenLayers.Control.Split({
                     layer: vectors,
                     source: vectors,
-                    tolerance: 0.0001,
+                    tolerance: 0.000001,
                     eventListeners: {
                         aftersplit: function(event) {
                             flashFeatures(event.features);
