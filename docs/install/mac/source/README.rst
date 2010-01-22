@@ -17,12 +17,12 @@ The OpenGeo Suite has the following system requirements:
 
 Installation
 ------------
-#. Double click on the :file:`OpenGeoSuite.dmg` file.
+#. Double click to mount the :file:`OpenGeoSuite-1.0.dmg` file.  Inside the mounted image, double click on :file:`OpenGeo Suite.mpkg`
 
     .. figure:: img/files.png
        :align: center
 
-       *The OpenGeoSuite.dmg file*
+       *The contents of the mounted image*
 
 #. At the **Welcome** screen, click :guilabel:`Continue`.
 
@@ -38,14 +38,12 @@ Installation
 
          *License Agreement*
 
-#. To install the Suite on your hard drive click :guilabel:`Install`.
+#. To install the Suite on your hard drive click :guilabel:`Install`.  You will be prompted for your administrator password.  
 
     .. figure:: img/directory.png
        :align: center
 
-       *Destination folder for the installation*
-       
-#. You will be prompted for your machine password.  
+       *Destination selection*
 
 #. Please wait while the installation proceeds.
 
@@ -54,14 +52,14 @@ Installation
 
        *Installation*
       
-#. You have successfully installed the OpenGeo Suite!  For you to manage and launch your Suite, The OpenGeo Dashboard will automatically start.
+#. You have successfully installed the OpenGeo Suite!   The OpenGeo Dashboard will automatically start, allowing you to manage and launch the OpenGeo Suite.
 
     .. figure:: img/success.png
        :align: center
 
        *The OpenGeo Suite successfully installed*
 
-For more information, please see the document titled **Getting Started**, which is available from the Dashboard, or in the Suite Contents folder:
+For more information, please see the document titled **Getting Started**, which is available from the Dashboard, or inside the OpenGeo Suite package contents folder:
 
 `<file:///Applications/OpenGeo%20Suite.app/Contents/Resources/Java/webapps/docs/gettingstarted/index.html>`_
 
@@ -70,7 +68,7 @@ For more information, please see the document titled **Getting Started**, which 
         
 Uninstallation
 --------------
-#. Before uninstalling, make sure the OpenGeo Suite is offline and the Dashboard is shutdown.  You can turn off the Suite from any page on the dashboard, by clicking the :guilabel:`Stop` button.
+#. Before uninstalling, make sure the OpenGeo Suite is offline.  You can turn off the Suite from any page on the dashboard, by clicking the :guilabel:`Stop` button.
 
     .. figure:: img/offline.png
         :align: center
@@ -87,17 +85,17 @@ Uninstallation
         
         sudo /Applications/OpenGeo\ Suite.app/Contents/Resources/uninstaller.sh 
     
-    .. note::
-    
-        sudo stands for "su do", and means "do something as the supervisor." Here the sudo command allows you superuser privileges.  
-        
-#. You will be promoted to enter your root password.  This is the administrator password for your computer.  
+    .. note:: The command ``sudo`` means to execute a command as a superuser.  The ``sudo`` command allows you temporary superuser privileges.
 
-#.  When asked to continue, type ``y`` (for yes) then hit :guilabel:`Return`.
+    .. warning:: Make sure you are not in the :file:`/Applications/OpenGeo\ Suite.app` directory when running the uninstaller.  If unsure, type ``cd ~`` and press :guilabel:`Return` before running the above command.
+
+#. You will be promoted to enter your root password.  This is the administrator password for your computer.
+
+#.  When asked to continue, type ``y`` (for yes) then :guilabel:`Return`.
 
 #. Your OpenGeo Suite was successfully uninstalled!
 
-#. After uninstalling Suite applications, we recommend removing the OpenGeo Suite configuration file.   To remove this file, type the following in the terminal window.
+#. After uninstalling the OpenGeo Suite, we recommend removing the OpenGeo Suite configuration file.   To remove this file, type the following in the Terminal window.
 
     .. code-block:: bash
     
@@ -107,20 +105,3 @@ For More Information
 --------------------
 
 Please visit http://opengeo.org or see the documentation included with this software.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
