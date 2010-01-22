@@ -105,7 +105,7 @@ Installation
 
    .. note:: The Dashboard requires X11 or equivalent windowing environment.
 
-#. To start or stop the OpenGeo Suite, navigate to ``$HOME/bin`` and type::
+#. To start or stop the OpenGeo Suite, navigate to ``$HOME/bin`` and type:
 
    .. code-block:: bash
 
