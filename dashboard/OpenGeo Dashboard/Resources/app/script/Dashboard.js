@@ -766,18 +766,23 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
     updateOnlineLinks: function(online) {
         var olinks = Ext.select(".app-online");
         olinks.each(function(el, c, idx) {
+            var dom = el.dom;
             if (online == true) {
                 el.removeClass('app-disabled');
-                if (el.dom.href_off) {
-                    el.dom['href'] = el.dom.href_off;
-                    el.dom.removeAttribute('href_off');
+                Ext.QuickTips.unregister(dom);
+                if (dom.href_off) {
+                    dom.href = dom.href_off;
+                    dom.removeAttribute('href_off');
                 }
-            }
-            else {
+            } else {
                 el.addClass('app-disabled');
-                if (el.dom.href) {
-                    el.dom['href_off'] = el.dom.href; 
-                    el.dom.removeAttribute('href');
+                Ext.QuickTips.register({
+                    target: dom,
+                    text: "Start the Suite to activate this link."
+                });
+                if (dom.href) {
+                    dom.href_off = dom.href; 
+                    dom.removeAttribute('href');
                 }
             }
         });

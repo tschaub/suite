@@ -20,11 +20,11 @@ a:hover {
 }
 
 a.app-disabled {
-  color: #0A2742;
+  color: #999999;
 }
 
 a.app-disabled:hover {
-  color: #0A2742;
+  color: #999999;
 }
 
 .app-strong {
