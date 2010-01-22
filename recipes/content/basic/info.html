@@ -54,9 +54,8 @@
                     getfeatureinfo: function(event) {
                         // close existing popup
                         if (popup) {
-                            popup.close();
+                            popup.destroy();
                         }
-                        try {
                         popup = new GeoExt.Popup({
                             title: "Popup",
                             map: panel.map,
@@ -67,9 +66,6 @@
                             bodyStyle: {padding: 5},
                             html: event.text
                         });
-                        } catch (err) {
-                            console.log("pfukd", err);
-                        }
                         popup.show();
                     }
                 });
