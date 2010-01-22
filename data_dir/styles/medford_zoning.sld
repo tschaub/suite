@@ -17,7 +17,7 @@
           <Title>Suburban: 1 Acre Minimum</Title>
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>SR-1</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -57,7 +57,7 @@
           <Title>Suburban: 2.5 Acre Minimum</Title>
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>SR-2.5</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -97,7 +97,7 @@
           <Title>Rural: 5 Acre Minimum</Title>
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>RR-5</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -137,7 +137,7 @@
           <Title>Residential: Farm 5 Acre Minimum</Title>
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>F-5</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -177,7 +177,7 @@
           <Title>Commercial: General</Title>
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>GC</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -217,7 +217,7 @@
           <Title>Commercial: Neighborhood</Title>
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>NC</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -257,7 +257,7 @@
           <Title>Resource: Exclusive Farm Use</Title>
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>EFU</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -297,7 +297,7 @@
           <Title>Resource: Open Space Reserve</Title>
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>OSR</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -337,7 +337,7 @@
           <Title>Industrial: General</Title>
             <ogc:Filter>
               <ogc:PropertyIsEqualTo>
-                <ogc:PropertyName>zoning</ogc:PropertyName>
+                <ogc:PropertyName>zone</ogc:PropertyName>
                 <ogc:Literal>GI</ogc:Literal>
               </ogc:PropertyIsEqualTo>  
             </ogc:Filter>
@@ -377,7 +377,7 @@
           <Title>Industrial: Light</Title>
             <ogc:Filter>
               <ogc:PropertyIsEqualTo>
-                <ogc:PropertyName>zoning</ogc:PropertyName>
+                <ogc:PropertyName>zone</ogc:PropertyName>
                 <ogc:Literal>LI</ogc:Literal>
               </ogc:PropertyIsEqualTo>  
             </ogc:Filter>
@@ -417,7 +417,7 @@
           <Title>Industrial: Airport Development-Multi-Use</Title>
             <ogc:Filter>
               <ogc:PropertyIsEqualTo>
-                <ogc:PropertyName>zoning</ogc:PropertyName>
+                <ogc:PropertyName>zone</ogc:PropertyName>
                 <ogc:Literal>AD-MU</ogc:Literal>
               </ogc:PropertyIsEqualTo>  
             </ogc:Filter>
@@ -460,7 +460,7 @@
 
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>MFR-30</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -484,7 +484,7 @@
 
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>MFR-20</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -508,7 +508,7 @@
 
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>MFR-15</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -532,7 +532,7 @@
 
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>SFR-10</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -556,7 +556,7 @@
 
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>SFR-6</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -580,7 +580,7 @@
 
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>SFR-4</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -604,7 +604,7 @@
 
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>SFR-2</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -628,7 +628,7 @@
 
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>SFR-00</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -652,7 +652,7 @@
 
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>C-H</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -675,7 +675,7 @@
           <Title>Commercial: Regional</Title>
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>C-R</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -698,7 +698,7 @@
           <Title>Commercial: Community</Title>
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-                <ogc:PropertyName>zoning</ogc:PropertyName>
+                <ogc:PropertyName>zone</ogc:PropertyName>
                 <ogc:Literal>C-C</ogc:Literal>
               </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -721,7 +721,7 @@
           <Title>Commercial: Neighborhood</Title>
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>C-N</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -744,7 +744,7 @@
           <Title>Commercial: Service/Professional</Title>
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>C-S/P</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -767,7 +767,7 @@
           <Title>Industrial: Heavy</Title>
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>I-H</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -790,7 +790,7 @@
           <Title>Industrial: General</Title>
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>I-G</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>
@@ -813,7 +813,7 @@
           <Title>Industrial: Light</Title>
           <ogc:Filter>
             <ogc:PropertyIsEqualTo>
-              <ogc:PropertyName>zoning</ogc:PropertyName>
+              <ogc:PropertyName>zone</ogc:PropertyName>
               <ogc:Literal>I-L</ogc:Literal>
             </ogc:PropertyIsEqualTo>  
           </ogc:Filter>

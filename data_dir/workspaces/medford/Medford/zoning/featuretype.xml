@@ -50,7 +50,7 @@
       <nillable>true</nillable>
     </attribute>
     <attribute>
-      <name>zoning</name>
+      <name>zone</name>
       <minOccurs>0</minOccurs>
       <maxOccurs>1</maxOccurs>
       <nillable>true</nillable>
