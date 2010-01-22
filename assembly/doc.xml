@@ -27,4 +27,11 @@
       <outputDirectory>install</outputDirectory>
     </fileSet>
   </fileSets>
+  <files>
+    <file>
+      <source>docs/index.html</source>
+      <outputDirectory>/</outputDirectory>
+      <fileMode>744</fileMode>
+    </file>
+  </files>
 </assembly>

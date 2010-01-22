@@ -82,5 +82,10 @@
       <outputDirectory>/</outputDirectory>
       <fileMode>544</fileMode>
     </file>
-  </files>
+    <file>
+      <source>docs/index.html</source>
+      <outputDirectory>webapps/docs</outputDirectory>
+      <fileMode>644</fileMode>
+    </file>
+ </files>
 </assembly>

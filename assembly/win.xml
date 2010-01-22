@@ -120,5 +120,10 @@
       <outputDirectory>/</outputDirectory>
       <fileMode>544</fileMode>
     </file>
+    <file>
+      <source>docs/index.html</source>
+      <outputDirectory>webapps/docs</outputDirectory>
+      <fileMode>644</fileMode>
+    </file>
   </files>
 </assembly>
