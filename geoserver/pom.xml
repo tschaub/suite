@@ -239,8 +239,9 @@
  </build>
 
  <modules>
-  <module>importer</module>
   <module>extension</module>
+  <module>importer</module>
+  <module>monitoring</module>
   <module>web</module>
  </modules>
 
@@ -321,8 +322,8 @@
   </profiles>
   
  <properties>
-  <gs.version>2.0.2-OGS</gs.version>
-  <gt.version>2.6.2-OGS</gt.version>
+  <gs.version>2.0.2-SNAPSHOT</gs.version>
+  <gt.version>2.6-SNAPSHOT</gt.version>
   <java.awt.headless>true</java.awt.headless>
   <test.maxHeapSize>512M</test.maxHeapSize>
   <sde.version>9.2</sde.version>

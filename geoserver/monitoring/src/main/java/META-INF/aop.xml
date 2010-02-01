@@ -1,0 +1,8 @@
+<aspectj>
+
+ <aspects>
+   <aspect name="org.geoserver.monitoring.aspects.MonitoringAspect"/>
+   <aspect name="org.geoserver.monitoring.aspects.LoggingAspect"/>
+ </aspects>
+
+</aspectj>
