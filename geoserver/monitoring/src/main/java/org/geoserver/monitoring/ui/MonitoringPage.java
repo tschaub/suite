@@ -68,6 +68,12 @@ public class MonitoringPage extends GeoServerBasePage {
     private static class RequestStatsProvider extends GeoServerDataProvider<RequestStats> {
 
         private static final long serialVersionUID = 1L;
+        
+        static final Property<RequestStats> HOST = new BeanProperty<RequestStats>("Host",
+        "host");
+        
+        static final Property<RequestStats> REMOTEADDR = new BeanProperty<RequestStats>("Client",
+        "remoteAddr");
 
         static final Property<RequestStats> STATUS = new BeanProperty<RequestStats>("Status",
                 "status");
@@ -116,7 +122,7 @@ public class MonitoringPage extends GeoServerBasePage {
 
         @SuppressWarnings("unchecked")
         private static final List<Property<RequestStats>> PROPERTIES = Collections
-                .unmodifiableList(Arrays.asList(STATUS, SERVICE, VERSION, OPERATION, LAYERS,
+                .unmodifiableList(Arrays.asList(HOST, REMOTEADDR, STATUS, SERVICE, VERSION, OPERATION, LAYERS,
                         START_TIME, TOTAL_TIME, RESPONSE_LENGTH, CONTENT_TYPE));
 
         @Override
@@ -160,47 +166,18 @@ public class MonitoringPage extends GeoServerBasePage {
             final Object propertyValue = property.getPropertyValue((RequestStats) itemModel
                     .getObject());
 
-            if (property == RequestStatsProvider.STATUS) {
 
-                return new Label(id, String.valueOf(propertyValue));
-
-            } else if (property == RequestStatsProvider.SERVICE) {
-
-                return new Label(id, String.valueOf(propertyValue));
-
-            } else if (property == RequestStatsProvider.VERSION) {
-
-                return new Label(id, String.valueOf(propertyValue));
-
-            } else if (property == RequestStatsProvider.OPERATION) {
-
-                return new Label(id, String.valueOf(propertyValue));
-
-            } else if (property == RequestStatsProvider.LAYERS) {
-
-                return new Label(id, String.valueOf(propertyValue));
-
-            } else if (property == RequestStatsProvider.START_TIME) {
-
+            if (property == RequestStatsProvider.START_TIME) {
                 String startTime = DATE_FORMAT.format(new Date(((Long) propertyValue).longValue()));
                 return new Label(id, startTime);
-
             } else if (property == RequestStatsProvider.TOTAL_TIME) {
-
-                return new Label(id, String.valueOf(propertyValue));
-
+                return new Label(id, String.valueOf(propertyValue) + "ms");
             } else if (property == RequestStatsProvider.RESPONSE_LENGTH) {
-
                 String length = toLengthString(((Long) propertyValue).longValue());
                 return new Label(id, length);
-
-            } else if (property == RequestStatsProvider.CONTENT_TYPE) {
-
-                return new Label(id, String.valueOf(propertyValue));
-
-            } else {
-                throw new IllegalArgumentException("Unknown property: " + property);
             }
+            // use default label
+            return null;
         }
 
         private static final NumberFormat LENGTH_FORMAT = NumberFormat.getNumberInstance();

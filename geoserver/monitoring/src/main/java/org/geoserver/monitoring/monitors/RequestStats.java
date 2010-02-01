@@ -89,6 +89,11 @@ public class RequestStats implements Serializable {
      * form of the IP address.
      */
     private String remoteHost;
+    
+    /**
+     * The server host (useful in case we are dealing with a cluster of GeoServer instances)
+     */
+    private String host;
 
     /**
      * The query string that is contained in the request URL after the path, or {@code null} if the
@@ -98,6 +103,14 @@ public class RequestStats implements Serializable {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
     }
 
     public Status getStatus() {
