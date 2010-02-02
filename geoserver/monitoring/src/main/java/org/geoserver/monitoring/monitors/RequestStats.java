@@ -59,7 +59,7 @@ public class RequestStats implements Serializable {
     /**
      * The HTTP response length, in bytes
      */
-    private long respponseLength;
+    private long responseLength;
 
     private String userName;
 
@@ -177,12 +177,12 @@ public class RequestStats implements Serializable {
         return totalTime;
     }
 
-    public void setRespponseLength(long respponseLength) {
-        this.respponseLength = respponseLength;
+    public void setResponseLength(long respponseLength) {
+        this.responseLength = respponseLength;
     }
 
-    public long getRespponseLength() {
-        return respponseLength;
+    public long getResponseLength() {
+        return responseLength;
     }
 
     public void setUserName(String userName) {

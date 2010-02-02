@@ -18,6 +18,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.geoserver.monitoring.monitors.RequestMonitor;
 import org.geoserver.monitoring.monitors.RequestStats;
+import org.geoserver.web.GeoServerApplication;
 import org.geoserver.web.GeoServerBasePage;
 import org.geoserver.web.wicket.GeoServerDataProvider;
 import org.geoserver.web.wicket.GeoServerTablePanel;
@@ -28,7 +29,6 @@ public class MonitoringPage extends GeoServerBasePage {
     private RequestStatsPanel table;
 
     public MonitoringPage() {
-        super();
         Form form = new Form("theform");
         add(form);
 
@@ -115,11 +115,11 @@ public class MonitoringPage extends GeoServerBasePage {
                 "Total Time", "totalTime");
 
         static final Property<RequestStats> RESPONSE_LENGTH = new BeanProperty<RequestStats>(
-                "Response Length", "respponseLength");
+                "Response Length", "responseLength");
 
         static final Property<RequestStats> CONTENT_TYPE = new BeanProperty<RequestStats>(
                 "Content Type", "responseContentType");
-
+        
         @SuppressWarnings("unchecked")
         private static final List<Property<RequestStats>> PROPERTIES = Collections
                 .unmodifiableList(Arrays.asList(HOST, REMOTEADDR, STATUS, SERVICE, VERSION, OPERATION, LAYERS,
@@ -127,7 +127,8 @@ public class MonitoringPage extends GeoServerBasePage {
 
         @Override
         protected List<RequestStats> getItems() {
-            return RequestMonitor.getInstance().getLastNRequests(50);
+            RequestMonitor monitor = (RequestMonitor) GeoServerApplication.get().getBean("requestMonitor");
+            return monitor.getLastNRequests(50);
         }
 
         @Override

@@ -34,42 +34,25 @@ public class MonitoringCallback implements DispatcherCallback {
     
     static final Logger LOGGER = Logging.getLogger(MonitoringCallback.class); 
 
-    /**
-     * A very simple unique id generator for {@link RequestStats} objects
-     */
-    private static final AtomicLong REQ_ID_GEN = new AtomicLong();
+    
+    
+    RequestMonitor monitor;
 
-    String host;
-
-    public MonitoringCallback() {
-        try { 
-            InetAddress addr = InetAddress.getLocalHost(); 
-            host = addr.getHostName(); 
-        } catch (Throwable t) { 
-            LOGGER.log(Level.SEVERE, "Could not get host name of the server", t);
-        } 
+    public MonitoringCallback(RequestMonitor monitor) {
+        this.monitor = monitor;
     }
 
     public Request init(Request request) {
         HttpServletRequest req = request.getHttpRequest();
         HttpServletResponse resp = request.getHttpResponse();
 
-        RequestStats reqStats = new RequestStats();
-        RequestMonitor.getThreadRequestStats().set(reqStats);
-
-        reqStats.setHost(host);
-        reqStats.setRequestId(REQ_ID_GEN.incrementAndGet());
+        RequestStats reqStats = monitor.newRequestStats();
 
         reqStats.setHttpMethod(req.getMethod());
         reqStats.setQueryString(req.getQueryString());
         reqStats.setStatus(Status.RUNNING);
 
         reqStats.setStartTime(System.currentTimeMillis());
-
-        /*
-         * Send it to the Monitor so it knows this request is alive
-         */
-        RequestMonitor.getInstance().add(reqStats);
 
         // replace the servlet response parameter in the pointcut by one that counts the number of
         // bytes written
@@ -79,65 +62,69 @@ public class MonitoringCallback implements DispatcherCallback {
     }
 
     public void finished(Request request) {
-        RequestStats reqStats = RequestMonitor.getThreadRequestStats().get();
-
-        /*
-         * After calling the actual handleRequestInternal method
-         */
-        reqStats.setTotalTime(System.currentTimeMillis() - reqStats.getStartTime());
-        RequestMonitor.getThreadRequestStats().remove();
-
-        HttpServletResponse httpResponse = request.getHttpResponse();
-        HttpServletRequest httpRequest = request.getHttpRequest();
-
-        if (httpResponse instanceof CountingServletResponse)
-            reqStats.setRespponseLength(((CountingServletResponse) httpResponse).getWrittenCount());
-        reqStats.setResponseContentType(httpResponse.getContentType());
-        // handle reverse proxies that might hide the actual original IP.
-        // TODO: this should probably be GUI configurable, what if the incoming request
-        // is poisoned with a fake X-Forwarded-For header and there is no actual reverse proxy?
-        String forwardedFor = httpRequest.getHeader("X-Forwarded-For");
-        if (forwardedFor != null) {
-            String[] ips = forwardedFor.split(", ");
-            reqStats.setRemoteAddr(ips[0]);
-        } else {
-            reqStats.setRemoteAddr(httpRequest.getRemoteAddr());
-        }
-
-        /*
-         * Ask for remotHost here after the request finished execution to prevent a possible DNS
-         * lookup to slow down the request processing
-         */
-        reqStats.setRemoteHost(httpRequest.getRemoteHost());
-
-        if (reqStats.getStatus() != Status.FAILED) {
-            reqStats.setStatus(Status.FINISHED);
-        }
-
-        if (reqStats != null && request.getError() != null) {
-            reqStats.setStatus(Status.FAILED);
-            reqStats.setServiceException(request.getError().getMessage());
-            StringWriter out = new StringWriter();
-
-            Throwable cause = request.getError();
-            while (cause.getCause() != null) {
-                /*
-                 * Usually the top most exception adds no value and it's stack trace is larger than
-                 * MAX_STACK_TRACE_CHARS without even getting to the first cause
-                 */
-                cause = cause.getCause();
+        try {
+            RequestStats reqStats = monitor.getCurrentRequestStats();
+    
+            /*
+             * After calling the actual handleRequestInternal method
+             */
+            reqStats.setTotalTime(System.currentTimeMillis() - reqStats.getStartTime());
+    
+            HttpServletResponse httpResponse = request.getHttpResponse();
+            HttpServletRequest httpRequest = request.getHttpRequest();
+    
+            if (httpResponse instanceof CountingServletResponse)
+                reqStats.setResponseLength(((CountingServletResponse) httpResponse).getWrittenCount());
+            reqStats.setResponseContentType(httpResponse.getContentType());
+            // handle reverse proxies that might hide the actual original IP.
+            // TODO: this should probably be GUI configurable, what if the incoming request
+            // is poisoned with a fake X-Forwarded-For header and there is no actual reverse proxy?
+            String forwardedFor = httpRequest.getHeader("X-Forwarded-For");
+            if (forwardedFor != null) {
+                String[] ips = forwardedFor.split(", ");
+                reqStats.setRemoteAddr(ips[0]);
+            } else {
+                reqStats.setRemoteAddr(httpRequest.getRemoteAddr());
             }
-
-            cause.printStackTrace(new PrintWriter(out));
-            // NOTE: this constant doesn't belong here, but... config option? (note 1024 was too low
-            // a limit as to even get to the first cause)
-            final int MAX_STACK_TRACE_CHARS = 4096;
-            reqStats.setExceptionStackTrace(out.getBuffer().substring(0, MAX_STACK_TRACE_CHARS));
+    
+            /*
+             * Ask for remotHost here after the request finished execution to prevent a possible DNS
+             * lookup to slow down the request processing
+             */
+            reqStats.setRemoteHost(httpRequest.getRemoteHost());
+    
+            if (reqStats.getStatus() != Status.FAILED) {
+                reqStats.setStatus(Status.FINISHED);
+            }
+    
+            if (reqStats != null && request.getError() != null) {
+                reqStats.setStatus(Status.FAILED);
+                reqStats.setServiceException(request.getError().getMessage());
+                StringWriter out = new StringWriter();
+    
+                Throwable cause = request.getError();
+                while (cause.getCause() != null) {
+                    /*
+                     * Usually the top most exception adds no value and it's stack trace is larger than
+                     * MAX_STACK_TRACE_CHARS without even getting to the first cause
+                     */
+                    cause = cause.getCause();
+                }
+    
+                cause.printStackTrace(new PrintWriter(out));
+                // NOTE: this constant doesn't belong here, but... config option? (note 1024 was too low
+                // a limit as to even get to the first cause)
+                final int MAX_STACK_TRACE_CHARS = 4096;
+                reqStats.setExceptionStackTrace(out.getBuffer().substring(0, MAX_STACK_TRACE_CHARS));
+            }
+        } finally {
+            monitor.requestCompleted();
         }
     }
 
     public Operation operationDispatched(Request request, Operation operation) {
-        RequestStats reqStats = RequestMonitor.getThreadRequestStats().get();
+        RequestStats reqStats = monitor.getCurrentRequestStats();
+        
         if (reqStats != null) {
             Service serviceDescriptor = operation.getService();
             reqStats.setServiceName(serviceDescriptor.getId());

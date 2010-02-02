@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx.xsd" 
+  default-autowire="byName">
+
+  <!--
+    Hibernate data source with a runtime fallback that will make it work against an H2 stored in the data dir 
+    if not configured before
+  -->
+  <bean id="monitoringDataSource" class="org.geoserver.monitoring.monitors.hb.MonitoringDataSource" depends-on="geoServerLoader" >
+    <property name="dataDirectory" ref="dataDirectory" />
+  </bean>
+
+  <!-- The local entity manager -->
+  <bean id="entityManagerFactory"
+    class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+    <property name="dataSource" ref="monitoringDataSource" />
+    <property name="jpaVendorAdapter">
+      <bean
+        class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+        <property name="database" value="H2" />
+        <property name="databasePlatform"
+          value="org.geoserver.monitoring.monitors.hb.H2Dialect" />
+        <property name="showSql" value="false" />
+        <property name="generateDdl" value="true" />
+      </bean>
+    </property>
+
+    <property name="jpaPropertyMap">
+      <map>
+        <entry key="hibernate.hbm2ddl.auto" value="update" />
+
+        <entry key="hibernate.generate_statistics" value="true" />
+        <entry key="hibernate.session_factory_name" value="SessionFactory" />
+
+        <entry key="hibernate.bytecode.use_reflection_optimizer"
+          value="true" />
+
+        <entry key="hibernate.show_sql" value="false" />
+        <entry key="hibernate.use_sql_comments" value="true" />
+        <entry key="hibernate.format_sql" value="true" />
+      </map>
+    </property>
+  </bean>
+
+
+  <!-- Transaction manager for a single JPA EntityManagerFactory -->
+  <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+    <property name="entityManagerFactory" ref="entityManagerFactory" />
+  </bean>
+
+  <!-- Have Spring look for annotated classes -->
+  <tx:annotation-driven />
+
+  <!--
+    PostProcessors to perform resource injection according to the JPA
+    specification (@PersistenceContext, @PersistenceUnit).
+  -->
+  <bean
+    class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+
+  <!--
+    PostProcessors to perform exception translation on @Repository
+    classes (from native exceptions such as JPAPersistenceExceptions to
+    Spring's DataAccessException hierarchy).
+  -->
+  <bean
+    class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+  <bean id="requestMonitorDAO"
+    class="org.geoserver.monitoring.monitors.hb.RequestMonitorDAOImpl" />
+
+  <bean id="requestMonitor" class="org.geoserver.monitoring.monitors.RequestMonitor">
+    <constructor-arg index="0" ref="requestMonitorDAO" />
+  </bean>
+
+  <bean id="monitoringCallback" class="org.geoserver.monitoring.callbacks.MonitoringCallback">
+    <constructor-arg index="0" ref="requestMonitor" />
+  </bean>
+
+  <!-- 
+   Menu categories
+   -->
+  <bean id="monitoringCategory" class="org.geoserver.web.Category">
+    <property name="nameKey" value="category.monitoring" />
+    <property name="order" value="260" />
+  </bean>
+
+  <!-- 
+   menu items
+    -->
+  <bean id="monitoringMenuPage" class="org.geoserver.web.MenuPageInfo">
+    <property name="id" value="monitoring.ui.MonitoringPage" />
+    <property name="titleKey" value="MonitoringPage.shortTitle" />
+    <property name="descriptionKey" value="MonitoringPage.description" />
+    <property name="componentClass" value="org.geoserver.monitoring.ui.MonitoringPage" />
+    <property name="category" ref="monitoringCategory" />
+    <!--property name="icon" value="../img/icons/silk/server_chart.png"/-->
+    <property name="order" value="10" />
+  </bean>
+
+
+</beans>
