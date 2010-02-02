@@ -327,6 +327,7 @@
   <java.awt.headless>true</java.awt.headless>
   <test.maxHeapSize>512M</test.maxHeapSize>
   <sde.version>9.2</sde.version>
+  <spring.version>2.5.5</spring.version>
  </properties>
 
 </project>
