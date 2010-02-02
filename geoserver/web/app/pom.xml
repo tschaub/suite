@@ -49,11 +49,6 @@
       <artifactId>importer</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.opengeo.geoserver</groupId>
-      <artifactId>monitoring</artifactId>
-      <version>${project.version}</version>
-    </dependency>
    <!-- Jetty test deps so that we can start GeoServer from an IDE as well -->
     <dependency>
       <groupId>org.mortbay.jetty</groupId>
@@ -119,5 +114,18 @@
 
    </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>monitoring</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.opengeo.geoserver</groupId>
+          <artifactId>monitoring</artifactId>
+          <version>${project.version}</version>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
 
 </project>

@@ -319,6 +319,12 @@
       </dependency>
     </dependencies>
    </profile>
+   <profile>
+     <id>monitoring</id>
+     <modules>
+       <module>monitoring</module>
+     </modules>
+   </profile>
   </profiles>
   
  <properties>
