@@ -2,11 +2,9 @@ package org.geoserver.monitoring.callbacks;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.InetAddress;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +50,7 @@ public class MonitoringCallback implements DispatcherCallback {
         reqStats.setQueryString(req.getQueryString());
         reqStats.setStatus(Status.RUNNING);
 
-        reqStats.setStartTime(System.currentTimeMillis());
+        reqStats.setStartTime(new Date());
 
         // replace the servlet response parameter in the pointcut by one that counts the number of
         // bytes written
@@ -68,7 +66,7 @@ public class MonitoringCallback implements DispatcherCallback {
             /*
              * After calling the actual handleRequestInternal method
              */
-            reqStats.setTotalTime(System.currentTimeMillis() - reqStats.getStartTime());
+            reqStats.setTotalTime(System.currentTimeMillis() - reqStats.getStartTime().getTime());
     
             HttpServletResponse httpResponse = request.getHttpResponse();
             HttpServletRequest httpRequest = request.getHttpRequest();

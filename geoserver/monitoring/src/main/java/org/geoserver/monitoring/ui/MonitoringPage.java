@@ -127,9 +127,26 @@ public class MonitoringPage extends GeoServerBasePage {
 
         @Override
         protected List<RequestStats> getItems() {
-            RequestMonitor monitor = (RequestMonitor) GeoServerApplication.get().getBean("requestMonitor");
-            return monitor.getLastNRequests(50);
+            throw new UnsupportedOperationException("We don't want to load all of the data from the DB, use iterator(start, to)");
         }
+        
+        @Override
+        public Iterator<RequestStats> iterator(int first, int count) {
+            RequestMonitor monitor = (RequestMonitor) GeoServerApplication.get().getBean("requestMonitor");
+            return monitor.getPagedRequests(new Date(System.currentTimeMillis() - 3600 * 1000 * 24), new Date(), first, count).iterator();
+        }
+        
+        @Override
+        public int size() {
+            RequestMonitor monitor = (RequestMonitor) GeoServerApplication.get().getBean("requestMonitor");
+            return (int) monitor.getRequetsCount(new Date(System.currentTimeMillis() - 3600 * 1000 * 24), new Date());
+        }
+        
+        @Override
+        public int fullSize() {
+            return size();
+        }
+        
 
         @Override
         protected List<GeoServerDataProvider.Property<RequestStats>> getProperties() {
@@ -169,7 +186,7 @@ public class MonitoringPage extends GeoServerBasePage {
 
 
             if (property == RequestStatsProvider.START_TIME) {
-                String startTime = DATE_FORMAT.format(new Date(((Long) propertyValue).longValue()));
+                String startTime = DATE_FORMAT.format(((Date) propertyValue));
                 return new Label(id, startTime);
             } else if (property == RequestStatsProvider.TOTAL_TIME) {
                 return new Label(id, String.valueOf(propertyValue) + "ms");

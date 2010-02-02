@@ -2,6 +2,7 @@ package org.geoserver.monitoring.monitors;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.geoserver.ows.Dispatcher;
@@ -37,6 +38,9 @@ public class RequestStats implements Serializable {
      */
     private String operationName;
 
+    /**
+     * The layers requested
+     */
     private List<String> layerNames = new ArrayList<String>(1);
 
     /**
@@ -48,7 +52,7 @@ public class RequestStats implements Serializable {
      * The request start timestamp in the Server's local time (as per
      * {@link System#currentTimeMillis()})
      */
-    private long startTime;
+    private Date startTime;
 
     /**
      * The total time, in milliseconds, the request took to complete, since the {@link Dispatcher}
@@ -161,11 +165,11 @@ public class RequestStats implements Serializable {
         return httpMethod;
     }
 
-    public void setStartTime(long startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public long getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
@@ -234,7 +238,11 @@ public class RequestStats implements Serializable {
     }
 
     public void setQueryString(String queryString) {
-        this.queryString = queryString;
+        // we have storage only for 1024 characters in the database
+        if(queryString.length() > 1024)
+            this.queryString = queryString.substring(0, 1024);
+        else
+            this.queryString = queryString;
     }
 
     public String getQueryString() {
