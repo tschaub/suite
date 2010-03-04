@@ -24,14 +24,14 @@ a, a:visited {
 /* selectors for the index page */
 
 .header { 
-    height: 75px;
+    height: 65px;
 }
 
 .header h1 a {
     color: #333333;
     padding: 10px 210px;
     font-size:48px;
-    background: transparent url(img/recipe.png) no-repeat 10px 15px;
+    background: transparent url(img/recipe.png) no-repeat 15px 18px;
     text-decoration: none;
 }
 
@@ -132,4 +132,16 @@ tt {
     padding-top: 8px;
 }
 
-
+/* overriding syntax highlighter declarations */
+.syntaxhighlighter table td {
+    white-space: nowrap;
+}
+.syntaxhighlighter table td {
+    font-size: 0.75em !important;
+}
+.syntaxhighlighter .script {
+    background-color: #ffffcc !important;
+}
+.syntaxhighlighter .line .content {
+    border: transparent 0px none important!;
+}

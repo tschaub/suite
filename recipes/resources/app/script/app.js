@@ -505,25 +505,18 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                             var div = document.createElement("div");
                             Ext.DomHelper.append(div, {
                                 tag: "pre",
-                                children: [{
-                                    tag: "code",
-                                    cls: "javascript",
-                                    html: Ext.util.Format.htmlEncode(request.responseText)
-                                }]
+                                cls: "brush: js; html-script: true",
+                                html: Ext.util.Format.htmlEncode(request.responseText)
                             });
-                            hljs.highlightBlock(div.firstChild.firstChild);
+                            SyntaxHighlighter.highlight({}, div.firstChild);
                             
                             panel.removeAll();
                             panel.add({
                                 xtype: "box",
                                 height: "100%",
                                 autoEl: {
-                                    tag: "pre",
-                                    children: [{
-                                        tag: "code",
-                                        cls: "javascript",
-                                        html: div.firstChild.firstChild.innerHTML
-                                    }]
+                                    tag: "div",
+                                    html: div.innerHTML
                                 }
                             });
                             panel.doLayout();
