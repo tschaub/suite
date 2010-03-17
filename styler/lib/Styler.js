@@ -3,7 +3,6 @@
  *
  * @include Styler/dispatch.js
  * @include Styler/widgets/RulePanel.js
- * @include Styler/widgets/LegendPanel.js
  * @include Styler/SchemaManager.js
  * @include Styler/SLDManager.js
  * @include Styler/Util.js
@@ -639,10 +638,10 @@ var Styler = Ext.extend(Ext.util.Observable, {
      */
     addLegend: function(layer, rules, type) {
         var deleteButton = this.getDeleteButton();
-        var legend = new Styler.LegendPanel({
+        var legend = new GeoExt.VectorLegend({
             rules: rules,
             symbolType: type,
-            border: false,
+            enableDD: true,
             style: {padding: "10px"},
             selectOnClick: true,
             currentScaleDenominator: this.map.getScale(),
