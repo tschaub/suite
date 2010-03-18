@@ -3,7 +3,6 @@
  */
 
 /**
- * @include Styler/widgets/FilterBuilder.js
  * @include Styler/widgets/ScaleLimitPanel.js
  * @include Styler/widgets/PointSymbolizer.js
  * @include Styler/widgets/LineSymbolizer.js
@@ -169,7 +168,7 @@ Styler.RulePanel = Ext.extend(Ext.TabPanel, {
             }
         });
         
-        this.filterBuilder = new Styler.FilterBuilder({
+        this.filterBuilder = new gxp.FilterBuilder({
             allowGroups: this.nestedFilters,
             filter: this.rule && this.rule.filter,
             attributes: this.attributes,
