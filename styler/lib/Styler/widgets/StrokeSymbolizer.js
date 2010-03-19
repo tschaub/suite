@@ -101,7 +101,7 @@ Styler.StrokeSymbolizer = Ext.extend(Ext.FormPanel, {
                 xtype: "slider",
                 name: "opacity",
                 fieldLabel: "Opacity",
-                value: (this.symbolizer["strokeOpacity"] == null) ? 100 : this.symbolizer["strokeOpacity"] * 100,
+                values: [(this.symbolizer["strokeOpacity"] == null) ? 100 : this.symbolizer["strokeOpacity"] * 100],
                 isFormField: true,
                 listeners: {
                     changecomplete: function(slider, value) {

@@ -136,8 +136,7 @@ Styler.PointSymbolizer = Ext.extend(Ext.Panel, {
                 xtype: "slider",
                 name: "opacity",
                 fieldLabel: "Opacity",
-                width: 100,
-                value: (this.symbolizer["graphicOpacity"] == null) ? 100 : this.symbolizer["graphicOpacity"] * 100,
+                value: [(this.symbolizer["graphicOpacity"] == null) ? 100 : this.symbolizer["graphicOpacity"] * 100],
                 isFormField: true,
                 listeners: {
                     changecomplete: function(slider, value) {

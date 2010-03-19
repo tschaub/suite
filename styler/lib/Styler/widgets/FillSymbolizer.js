@@ -58,7 +58,7 @@ Styler.FillSymbolizer = Ext.extend(Ext.FormPanel, {
                 xtype: "slider",
                 fieldLabel: "Opacity",
                 name: "opacity",
-                value: (this.symbolizer["fillOpacity"] == null) ? 100 : this.symbolizer["fillOpacity"] * 100,
+                values: [(this.symbolizer["fillOpacity"] == null) ? 100 : this.symbolizer["fillOpacity"] * 100],
                 isFormField: true,
                 listeners: {
                     changecomplete: function(slider, value) {
