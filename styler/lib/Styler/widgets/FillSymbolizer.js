@@ -3,7 +3,6 @@
  */
 
 /**
- * @include Styler/widgets/tips/SliderTip.js
  * @include Styler/widgets/form/ColorField.js
  * @include Styler/ColorManager.js
  */
@@ -69,7 +68,7 @@ Styler.FillSymbolizer = Ext.extend(Ext.FormPanel, {
                     scope: this
                 },
                 plugins: [
-                    new Styler.SliderTip({
+                    new gxp.SliderTip({
                         getText: function(slider) {
                             return slider.getValue() + "%";
                         }
