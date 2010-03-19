@@ -146,7 +146,7 @@ Styler.PointSymbolizer = Ext.extend(Ext.Panel, {
                     scope: this
                 },
                 plugins: [
-                    new gxp.SliderTip({
+                    new GeoExt.SliderTip({
                         getText: function(slider) {
                             return slider.getValue() + "%";
                         }

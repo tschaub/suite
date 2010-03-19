@@ -68,7 +68,7 @@ Styler.FillSymbolizer = Ext.extend(Ext.FormPanel, {
                     scope: this
                 },
                 plugins: [
-                    new gxp.SliderTip({
+                    new GeoExt.SliderTip({
                         getText: function(slider) {
                             return slider.getValue() + "%";
                         }
