@@ -1,13 +1,7 @@
 /**
- * Copyright (c) 2008 The Open Planning Project
- */
-
-/**
+ * Copyright (c) 2008-2010 The Open Planning Project
+ * 
  * @include Styler/widgets/ScaleLimitPanel.js
- * @include Styler/widgets/PointSymbolizer.js
- * @include Styler/widgets/LineSymbolizer.js
- * @include Styler/widgets/PolygonSymbolizer.js
- * @include Styler/widgets/TextSymbolizer.js
  */
 
 Ext.namespace("Styler");
@@ -131,7 +125,7 @@ Styler.RulePanel = Ext.extend(Ext.TabPanel, {
         
         this.activeTab = 0;
         
-        this.textSymbolizer = new Styler.TextSymbolizer({
+        this.textSymbolizer = new gxp.TextSymbolizer({
             symbolizer: this.rule.symbolizer["Text"],
             attributes: this.attributes,
             fonts: this.fonts,
