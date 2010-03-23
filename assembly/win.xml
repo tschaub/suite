@@ -103,6 +103,14 @@
       <directory>assembly/gdal</directory>
       <outputDirectory>gdal</outputDirectory>
     </fileSet>
+    <fileSet>
+      <directory>assembly/postgres</directory>
+      <outputDirectory>postgres</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>assembly/postgis</directory>
+      <outputDirectory>postgis</outputDirectory>
+    </fileSet>
   </fileSets>
   <files>
     <file>
