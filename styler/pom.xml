@@ -57,6 +57,20 @@
             </goals>
           </execution>
           <execution>
+            <id>install</id>
+            <phase>install</phase>
+            <configuration>
+              <tasks>
+                <war destfile="${build.directory}/styler.war" webxml="${basedir}/src/main/webapp/WEB-INF/web.xml">
+                  <fileset dir="${build.directory}/styler" includes="**/*"/>
+                </war>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+          <execution>
             <id>clean</id>
             <phase>clean</phase>
             <configuration>
