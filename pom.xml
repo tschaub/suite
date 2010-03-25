@@ -111,6 +111,7 @@
            <descriptor>assembly/mac.xml</descriptor>
            <descriptor>assembly/doc.xml</descriptor>
            <descriptor>assembly/ext.xml</descriptor>
+           <descriptor>assembly/war.xml</descriptor>
          </descriptors>
        </configuration>
      </plugin>

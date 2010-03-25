@@ -1,0 +1,30 @@
+<assembly>
+  <id>war</id>
+  <formats>
+    <format>zip</format>
+    <format>tar.gz</format>
+  </formats>
+  <fileSets>
+    <fileSet>
+      <directory>geoserver/web/app/target</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>geoserver.war</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>styler/target</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>styler.war</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>geoexplorer/build</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>geoexplorer.war</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>
