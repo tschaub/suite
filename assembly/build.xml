@@ -12,10 +12,10 @@
     <get src="${data}/suite_gdal.zip" dest="gdal.zip" usetimestamp="yes"/>
     <unzip src="gdal.zip" dest="gdal" overwrite="false"/>
 
-    <get src="http://downloads.enterprisedb.com/postgresql/postgresql-8.4.2-1-windows-binaries.zip" dest="postgres.zip" usetimestamp="yes" />
+    <get src="http://downloads.enterprisedb.com/postgresql/postgresql-8.4.3-1-windows-binaries.zip" dest="postgres.zip" usetimestamp="yes" />
     <unzip src="postgres.zip" dest="postgres" overwrite="false"/>
 
-    <get src="http://data.opengeo.org/suite/pgsql-postgis-1.5.0-1.zip" dest="postgis.zip" usetimestamp="yes"/>
+    <get src="http://data.opengeo.org/suite/pgsql-postgis-1.5.1-1.zip" dest="postgis.zip" usetimestamp="yes"/>
     <unzip src="postgis.zip" dest="postgis" overwrite="false"/>
 
   </target>
