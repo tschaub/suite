@@ -96,7 +96,7 @@
       </excludes>
     </fileSet>
     <fileSet>
-      <directory>assembly/jre-win</directory>
+      <directory>assembly/jre-win/jre</directory>
       <outputDirectory>jre</outputDirectory>
     </fileSet>
     <fileSet>
@@ -104,7 +104,7 @@
       <outputDirectory>gdal</outputDirectory>
     </fileSet>
     <fileSet>
-      <directory>assembly/postgres-win</directory>
+      <directory>assembly/postgres-win/pgsql</directory>
       <outputDirectory>pgsql</outputDirectory>
     </fileSet>
   </fileSets>

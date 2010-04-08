@@ -18,7 +18,7 @@
     <get src="${data}/postgresql-8.4.3-1-windows-binaries.zip" dest="postgres-win.zip" usetimestamp="yes" /> 
     <unzip src="postgres-win.zip" dest="postgres-win" overwrite="false"/>
     <get src="${data}/pgsql-postgis-1.5.1-1.zip" dest="postgis-win.zip" usetimestamp="yes"/>
-    <unzip src="postgis-win.zip" dest="postgres-win" overwrite="true"/>
+    <unzip src="postgis-win.zip" dest="postgres-win/pgsql" overwrite="true"/>
 
     <!-- MacOSX PostgreSQL / PostGIS -->
     <!-- OSX assembly uses PgSQL/PostGIS precombined during the build process -->

@@ -23,25 +23,24 @@ platform, for example:
  * pgsql-8.4.3-postgis-1.5.1-1-win.zip
  * pgsql-8.4.3-postgis-1.5.1-1-osx.zip
 
-Inside the zip file there will be no "containing" root directory, so 
-for example, the structure of gdal will not be ./gdal/gdal.dll it 
-will just be ./gdal.dll. Similarly you will not see ./pgsql/bin, but
-just ./bin in the pgsql zip files.
+Zip File Information
+--------------------
 
-PostGIS/PostgreSQL
-------------------
+PgSQL/PostGIS Windows files come separately and are combined at assembly time.
+PgSQL Windows zip file from EDB come with a ./pgsql/ prefix.
+PostGIS Windows zip file comes without a prefix.
 
-PostGIS/PostgreSQL binaries will be delivered in a single unified zip file,
-with no directory prefix, so expect the following directories in the file:
+PgSQL/PostGIS OSX files come in a single zip file.
+PgSQL/PostGIS OSX zip file comes without a prefix.
 
- ./bin
- ./lib
- ./share
- ./etc
+JRE Windows zip file comes with a ./jre/ prefix
+JRE Linux zip file comes with a ./jre/ prefix
 
-In OS/X the user applications (pgShapeLoader.app and pgAdminIII.app) will be
-stored under the root and contain all their dependencies, so they can be
-relocated into /Applications if so desired.
+GDAL Windows zip file comes without a prefix.
+
+In OSX, the user applications pgShapeLoader and pgAdmin come in the 
+root of the zip file and contain all their dependencies and 
+may be relocated into /Applications if so desired.
 
 In Windows, the user applications shp2pgsql-gui.exe and pgadmin.exe will be in 
 the ./bin directory alongside their shared dependencies, and should be 
