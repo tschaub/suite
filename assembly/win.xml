@@ -96,20 +96,16 @@
       </excludes>
     </fileSet>
     <fileSet>
-      <directory>assembly/jre</directory>
+      <directory>assembly/jre-win</directory>
       <outputDirectory>jre</outputDirectory>
     </fileSet>
     <fileSet>
-      <directory>assembly/gdal</directory>
+      <directory>assembly/gdal-win</directory>
       <outputDirectory>gdal</outputDirectory>
     </fileSet>
     <fileSet>
-      <directory>assembly/postgres</directory>
-      <outputDirectory>postgres</outputDirectory>
-    </fileSet>
-    <fileSet>
-      <directory>assembly/postgis</directory>
-      <outputDirectory>postgis</outputDirectory>
+      <directory>assembly/postgres-win</directory>
+      <outputDirectory>pgsql</outputDirectory>
     </fileSet>
   </fileSets>
   <files>

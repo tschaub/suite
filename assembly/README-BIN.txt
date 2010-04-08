@@ -23,6 +23,10 @@ platform, for example:
  * pgsql-8.4.3-postgis-1.5.1-1-win.zip
  * pgsql-8.4.3-postgis-1.5.1-1-osx.zip
 
+Inside the zip file there will be no "containing" root directory, so 
+for example, the structure of gdal will not be ./gdal/gdal.dll it 
+will just be ./gdal.dll. Similarly you will not see ./pgsql/bin, but
+just ./bin in the pgsql zip files.
 
 PostGIS/PostgreSQL
 ------------------

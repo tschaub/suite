@@ -6,17 +6,24 @@
   <target name="build"> 
     <tstamp/>
 
-    <get src="${data}/suite_jre.zip" dest="jre.zip" usetimestamp="yes"/>
-    <unzip src="jre.zip" dest="." overwrite="false"/>
+    <get src="${data}/suite-jre-6-win.zip" dest="jre-win.zip" usetimestamp="yes"/>
+    <unzip src="jre-win.zip" dest="jre-win" overwrite="false"/>
 
-    <get src="${data}/suite_gdal.zip" dest="gdal.zip" usetimestamp="yes"/>
-    <unzip src="gdal.zip" dest="gdal" overwrite="false"/>
+    <get src="${data}/suite-gdal-1.4.5-win.zip" dest="gdal-win.zip" usetimestamp="yes"/>
+    <unzip src="gdal-win.zip" dest="gdal-win" overwrite="false"/>
 
-    <get src="http://downloads.enterprisedb.com/postgresql/postgresql-8.4.3-1-windows-binaries.zip" dest="postgres.zip" usetimestamp="yes" />
-    <unzip src="postgres.zip" dest="postgres" overwrite="false"/>
+    <!-- Windows PostgreSQL / PostGIS -->
+    <!-- http://downloads.enterprisedb.com/postgresql/postgresql-8.4.3-1-windows-binaries.zip -->
+    <!-- Windows assembly combines PostGIS binaries with PgSQL binaries at assembly time -->
+    <get src="${data}/postgresql-8.4.3-1-windows-binaries.zip" dest="postgres-win.zip" usetimestamp="yes" /> 
+    <unzip src="postgres-win.zip" dest="postgres-win" overwrite="false"/>
+    <get src="${data}/pgsql-postgis-1.5.1-1.zip" dest="postgis-win.zip" usetimestamp="yes"/>
+    <unzip src="postgis-win.zip" dest="postgres-win" overwrite="true"/>
 
-    <get src="http://data.opengeo.org/suite/pgsql-postgis-1.5.1-1.zip" dest="postgis.zip" usetimestamp="yes"/>
-    <unzip src="postgis.zip" dest="postgis" overwrite="false"/>
+    <!-- MacOSX PostgreSQL / PostGIS -->
+    <!-- OSX assembly uses PgSQL/PostGIS precombined during the build process -->
+    <get src="${data}/pgsql-8.4.3-postgis-1.5.1-2-osx.zip" dest="postgres-osx.zip" usetimestamp="yes"/>
+    <unzip src="postgres-osx.zip" dest="postgres-osx" overwrite="false"/>
 
   </target>
 
