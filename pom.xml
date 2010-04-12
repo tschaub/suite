@@ -109,6 +109,7 @@
            <descriptor>assembly/bin.xml</descriptor>
            <descriptor>assembly/win.xml</descriptor>
            <descriptor>assembly/mac.xml</descriptor>
+           <descriptor>assembly/mac-postgis.xml</descriptor>
            <descriptor>assembly/doc.xml</descriptor>
            <descriptor>assembly/ext.xml</descriptor>
            <descriptor>assembly/war.xml</descriptor>

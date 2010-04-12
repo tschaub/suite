@@ -1,0 +1,13 @@
+<assembly>
+  <id>mac-postgis</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>assembly/postgres-osx</directory>
+      <outputDirectory>pgsql</outputDirectory>
+    </fileSet>
+  </fileSets>
+</assembly>
