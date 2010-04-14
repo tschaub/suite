@@ -144,7 +144,7 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
                 },
                 scope: this
             },
-            plugins: [new Styler.slider.Tip({
+            plugins: [new gxp.slider.Tip({
                 getText: (function(thumb) {
                     var index = thumb.slider.thumbs.indexOf(thumb);
                     var value = thumb.value;
