@@ -1,13 +1,18 @@
 /**
- * Copyright (c) 2008 The Open Planning Project
+ * Copyright (c) 2008-2010 The Open Planning Project
  */
 
-Ext.namespace("Styler");
+Ext.namespace("Styler.slider");
 
-Styler.MultiSliderTip = Ext.extend(Ext.Tip, {
+/**
+ * See http://trac.geoext.org/ticket/262
+ *
+ * This tip matches the Ext.slider.Tip but addes the hover functionality.
+ */
+Styler.slider.Tip = Ext.extend(Ext.slider.Tip, {
 
     /**
-     * Property: hover
+     * APIProperty: hover
      * {Boolean} Display the tip when hovering over a thumb.  If false, tip
      *     will only be displayed while dragging.  Default is true.
      */
@@ -19,17 +24,12 @@ Styler.MultiSliderTip = Ext.extend(Ext.Tip, {
      */
     dragging: false,
 
-    minWidth: 10,
-    offsets: [0, -10],
     init: function(slider) {
-        slider.on('dragstart', this.onSlide, this);
-        slider.on('drag', this.onSlide, this);
-        slider.on('dragend', this.hide, this);
-        slider.on('destroy', this.destroy, this);
         if(this.hover) {
-            slider.on('render', this.registerThumbListeners, this);
+            slider.on("render", this.registerThumbListeners, this);
         }
         this.slider = slider;
+        Styler.slider.Tip.superclass.init.apply(this, arguments);
     },
     
     registerThumbListeners: function() {
@@ -55,14 +55,7 @@ Styler.MultiSliderTip = Ext.extend(Ext.Tip, {
 
     onSlide: function(slider, e, thumb) {
         this.dragging = true;
-        this.show();
-        this.body.update(this.getText(thumb));
-        this.doAutoWidth();
-        this.el.alignTo(thumb.el, 'b-t?', this.offsets);
-    },
-
-    getText: function(thumb) {
-        return thumb.value;
+        Styler.slider.Tip.superclass.onSlide.apply(this, arguments);
     }
 
 });

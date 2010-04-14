@@ -3,7 +3,7 @@
  */
 
 /**
- * @include Styler/widgets/tips/MultiSliderTip.js
+ * @include Styler/widgets/tips/SliderTip.js
  */
 
 Ext.namespace("Styler");
@@ -144,7 +144,7 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
                 },
                 scope: this
             },
-            plugins: [new Styler.MultiSliderTip({
+            plugins: [new Styler.slider.Tip({
                 getText: (function(thumb) {
                     var index = thumb.slider.thumbs.indexOf(thumb);
                     var value = thumb.value;
