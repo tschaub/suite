@@ -25,16 +25,10 @@
 
     <!-- MacOSX PostgreSQL / PostGIS -->
     <!-- OSX assembly uses PgSQL/PostGIS precombined during the build process -->
-    <get src="${data}/pgsql-8.4.3-postgis-1.5.1-2-osx.tgz" dest="postgres-osx.tgz" usetimestamp="yes"/>
+    <get src="${data}/pgsql-8.4.3-postgis-1.5.1-2-osx.zip" dest="postgres-osx.zip" usetimestamp="yes"/>
     <delete dir="postgres-osx"/>
     <mkdir dir="postgres-osx"/>
-    <exec executable="tar">
-      <arg value="-z"/>
-      <arg value="-x"/>
-      <arg value="-fpostgres-osx.tgz"/>
-      <arg value="-Cpostgres-osx"/>
-    </exec>
-<!--    <untar src="postgres-osx.tgz" compression="gzip" dest="postgres-osx" overwrite="false"/> -->
+    <unzip src="postgis-osx.zip" dest="postgres-osx/pgsql" overwrite="true"/>
 
   </target>
 
