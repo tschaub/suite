@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2008-2010 The Open Planning Project
  * 
- * @include Styler/widgets/ScaleLimitPanel.js
+ * @ include widgets/ScaleLimitPanel.js
  */
 
 Ext.namespace("Styler");
