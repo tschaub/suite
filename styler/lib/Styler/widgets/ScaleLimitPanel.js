@@ -3,7 +3,6 @@
  */
 
 /**
- * @include Styler/widgets/MultiSlider.js
  * @include Styler/widgets/tips/MultiSliderTip.js
  */
 
@@ -130,25 +129,29 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
             1 / (this.scaleLevels - 1)
         );
         
-        this.scaleSlider = new Styler.MultiSlider({
+        this.scaleSlider = new Ext.Slider({
             vertical: true,
             height: 100,
+            values: [0, 100],
             listeners: {
-                changecomplete: this.updateScaleValues,
+                changecomplete: function(slider, value) {
+                    this.updateScaleValues(slider);
+                },
                 render: function(slider) {
-                    slider.thumbs[0].setVisible(this.limitMaxScaleDenominator);
-                    slider.thumbs[1].setVisible(this.limitMinScaleDenominator);
+                    slider.thumbs[0].el.setVisible(this.limitMaxScaleDenominator);
+                    slider.thumbs[1].el.setVisible(this.limitMinScaleDenominator);
                     slider.setDisabled(!this.limitMinScaleDenominator && !this.limitMaxScaleDenominator);
                 },
                 scope: this
             },
             plugins: [new Styler.MultiSliderTip({
-                getText: (function(slider, index) {
-                    var values = slider.getValues();
-                    var scales = this.sliderValuesToScale(values);
+                getText: (function(thumb) {
+                    var index = thumb.slider.thumbs.indexOf(thumb);
+                    var value = thumb.value;
+                    var scales = this.sliderValuesToScale([thumb.value]);
                     var data = {
-                        scale: String(scales[index]),
-                        zoom: (values[index] * (this.scaleLevels / 100)).toFixed(1),
+                        scale: String(scales[0]),
+                        zoom: (thumb.value * (this.scaleLevels / 100)).toFixed(1),
                         type: (index === 0) ? "Max" : "Min",
                         scaleType: (index === 0) ? "Min" : "Max"
                     };
@@ -234,12 +237,10 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
                         check: function(box, checked) {
                             this.limitMinScaleDenominator = checked;
                             var slider = this.scaleSlider;
-                            var values = slider.getValues();
-                            values[1] = 100;
-                            slider.setValues(values);
-                            slider.thumbs[1].setVisible(checked);
+                            slider.setValue(1, 100);
+                            slider.thumbs[1].el.setVisible(checked);
                             this.minScaleDenominatorInput.setDisabled(!checked);
-                            this.updateScaleValues(slider, values);
+                            this.updateScaleValues(slider);
                             slider.setDisabled(!this.limitMinScaleDenominator && !this.limitMaxScaleDenominator);
                         },
                         scope: this
@@ -260,12 +261,10 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
                         check: function(box, checked) {
                             this.limitMaxScaleDenominator = checked;
                             var slider = this.scaleSlider;
-                            var values = slider.getValues();
-                            values[0] = 0;
-                            slider.setValues(values);
-                            slider.thumbs[0].setVisible(checked);
+                            slider.setValue(0, 0);
+                            slider.thumbs[0].el.setVisible(checked);
                             this.maxScaleDenominatorInput.setDisabled(!checked);
-                            this.updateScaleValues(slider, values);
+                            this.updateScaleValues(slider);
                             slider.setDisabled(!this.limitMinScaleDenominator && !this.limitMaxScaleDenominator);
                         },
                         scope: this
@@ -297,8 +296,9 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
     /**
      * Method: updateScaleValues
      */
-    updateScaleValues: function(slider, values) {
+    updateScaleValues: function(slider) {
         if(!this.changing) {
+            var values = slider.getValues();
             var resetSlider = false;
             if(!this.limitMaxScaleDenominator) {
                 if(values[0] > 0) {
@@ -313,7 +313,8 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
                 }
             }
             if(resetSlider) {
-                slider.setValues(values);
+                slider.setValue(0, values[0]);
+                slider.setValue(1, values[1]);
             } else {
                 var scales = this.sliderValuesToScale(values);
                 var max = scales[0];
@@ -340,7 +341,8 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
             var max = this.maxScaleDenominator;
             var values = this.scaleToSliderValues([max, min]);
             this.changing = true;
-            this.scaleSlider.setValues(values);
+            this.scaleSlider.setValue(0, values[0]);
+            this.scaleSlider.setValue(1, values[1]);
             this.changing = false;
             this.fireEvent(
                 "change", this,

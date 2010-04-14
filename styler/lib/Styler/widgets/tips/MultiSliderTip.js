@@ -34,7 +34,7 @@ Styler.MultiSliderTip = Ext.extend(Ext.Tip, {
     
     registerThumbListeners: function() {
         for(var i=0, len=this.slider.thumbs.length; i<len; ++i) {
-            this.slider.thumbs[i].on({
+            this.slider.thumbs[i].el.on({
                 "mouseover": this.createHoverListener(i),
                 "mouseout": function() {
                     if(!this.dragging) {
@@ -48,20 +48,21 @@ Styler.MultiSliderTip = Ext.extend(Ext.Tip, {
     
     createHoverListener: function(index) {
         return (function() {
-            this.onSlide(this.slider, index);
+            this.onSlide(this.slider, {}, this.slider.thumbs[index]);
             this.dragging = false;
         }).createDelegate(this);
     },
 
-    onSlide: function(slider, index) {
+    onSlide: function(slider, e, thumb) {
         this.dragging = true;
         this.show();
-        this.body.update(this.getText(slider, index));
+        this.body.update(this.getText(thumb));
         this.doAutoWidth();
-        this.el.alignTo(slider.thumbs[index], 'b-t?', this.offsets);
+        this.el.alignTo(thumb.el, 'b-t?', this.offsets);
     },
 
-    getText: function(slider, index) {
-        return slider.getValues()[index];
+    getText: function(thumb) {
+        return thumb.value;
     }
+
 });
