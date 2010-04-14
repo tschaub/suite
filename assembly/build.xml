@@ -28,7 +28,7 @@
     <get src="${data}/pgsql-8.4.3-postgis-1.5.1-2-osx.zip" dest="postgres-osx.zip" usetimestamp="yes"/>
     <delete dir="postgres-osx"/>
     <mkdir dir="postgres-osx"/>
-    <unzip src="postgis-osx.zip" dest="postgres-osx/pgsql" overwrite="true"/>
+    <unzip src="postgres-osx.zip" dest="postgres-osx/pgsql" overwrite="true"/>
 
   </target>
 

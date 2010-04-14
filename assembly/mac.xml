@@ -60,6 +60,10 @@
       <directory>data_dir</directory>
       <outputDirectory>data_dir</outputDirectory>
     </fileSet>
+    <fileSet>
+      <directory>assembly/postgres-osx</directory>
+      <outputDirectory>pgsql</outputDirectory>
+    </fileSet>
   </fileSets>
   <files>
     <file>
