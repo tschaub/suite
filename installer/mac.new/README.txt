@@ -1,0 +1,173 @@
+#!/bin/bash
+
+# OpenGeo Suite Mac Requirements
+# ========================================
+
+# Get the Titanium SDK
+# --------------------
+#
+# http://www.appcelerator.com/products/download/
+#
+# Get the Iceberg package maker
+# -----------------------------
+#
+# http://s.sudre.free.fr/Software/Iceberg.html
+#
+
+# OpenGeo Suite Mac Layout
+# ========================
+# 
+# The Mac install is made up of multiple pkg installers that are bundled into
+# a single mpkg for installation.
+#
+# PostGIS Server.pkg
+#  /opt/opengeo/pgsql/*
+#  /Library/LaunchDaemons/org.opengeo.postgis
+#  /etc/paths.d/opengeo-postgis
+#  /etc/manpaths.d/opengeo-postgis
+#  Preinstall scripts to alter shmmem and add _opengeo:_opengeo 
+#  Postinstall scripts to create /opt/opengeo/pgsql/*/data area and template_postgis
+#
+# GeoServer.pkg
+#  /opt/opengeo/geoserver/*
+#  /Library/LaunchDaemons/org.opengeo.geoserver
+#  Preinstall scripts to add _opengeo:_opengeo 
+#  Preinstall scripts to find existing data_dir and preserve it
+#  Preinstall scripts to wipe out existing OpenGeo Suite.app
+#  Postinstall scripts to ensure webapp area is owned by _opengeo:_opengeo
+#  Postinstall scripts to bring in any existing data_dir
+#
+# PostGIS Client.pkg
+#  /Applications/OpenGeo/pgShapeLoader.app
+#  /Applications/OpenGeo/pgAdmin III.app
+#
+# DashBoard.pkg
+#  Preinstall scripts to wipe out any existing OpenGeo Dashboard.app
+#  /Applications/OpenGeo/Dashboard.app
+#
+# OpenGeo Suite.mpkg
+#  Master package container.
+#
+
+# OpenGeo Suite Mac Build
+# =======================
+
+# Build the Suite Distribution
+# ----------------------------
+#
+#  From the root of the suite source tree build a distribution with the commands:
+#
+  cd ../..
+  mvn clean install -Dfull
+  mvn assembly:attached
+  cd installer/mac.new
+#
+# Upon success the artifact 'target/suite-<VERSION>-mac.zip' will be created.
+#
+
+# Build the Dashboard
+# -------------------
+#
+# Change directory to the 'dashboard' module directly under the root 
+# of the suite source tree.
+#
+  cd ../../dashboard
+#
+# Ensure the 'tibuild.py' script is on your PATH. It is located under:
+#  
+  titanium_version=1.0.0
+  export PATH=$PATH:/Library/Application\ Support/Titanium/sdk/osx/$titanium_version
+#
+# Build the dashboard app by executing the following command:
+#
+  tibuild.py -d . \
+             -s /Library/Application\ Support/Titanium \
+             -a /Library/Application\ Support/Titanium/sdk/osx/0.8.0/ \
+             OpenGeo\ Dashboard/
+
+#
+# Note: If the command errors out with a message about 
+# "OpenGeo Dashboard.dmg" that is OK.
+#
+# Upon success the directory "OpenGeo Dashboard.app" will be created. 
+# To test that the artifact was built properly execute the command:
+#
+#  open OpenGeo\ Dashboard.app
+#
+# This should run the dashboard.
+#
+#
+# Build the Dashboard Package
+# ---------------------------
+#
+#
+# Move the "OpenGeo Dashboard.app" directory from the previous section 
+# into the 'binaries' directory:
+#
+  cd ../installer/mac.new
+  mv ../../dashboard/OpenGeo\ Dashboard.app binaries
+#
+# Build the dashboard using the Iceberg 'freeze' commandline
+#
+   freeze ./dashboard.packproj
+#
+# The Dashboard.pkg will be built into the ./build/ subdirectory
+#
+
+# Build the Geoserver Package
+# --------------------------------
+#
+# Unzip the "opengeosuite-<VERSION>-mac.zip" artifact created in the 
+# first section into the "app/OpenGeo Suite.app/Contents/Resources/Java" 
+# directory:
+#
+  set suite_version=1.0
+  unzip ../../target/opengeosuite-$suite_version-mac.zip \
+        -d binaries/geoserver
+#
+# Build the geoserver pkg using the Iceberg 'freeze' commandline
+#
+  freeze ./geoserver.packproj
+#
+# The GeoServer.pkg will be built into the ./build/ subdirectory
+#
+
+# Build the PostGIS Package
+# -------------------------
+#
+# Unzip the postgres-osx.zip artifact downloaded from data.opengeo.org 
+# into the binaries directory.
+#
+  unzip ../../assembly/postgres-osx.zip \
+        -d binaries/
+#
+# Move the apps down one directory level
+#
+  mv binaries/pgsql/pgShapeLoader.app/ binaries/
+  mv binaries/pgsql/pgAdmin3.app/ binaries/
+  mv binaries/pgsql/stackbuilder.app/ binaries/
+#
+# Give all the files root ownership
+# sudo chown -R root:admin app/OpenGeo\ PostGIS/
+#
+# Build the postgis project using the Iceberg 'freeze' commandline
+#
+  freeze ./postgis.packproj
+#
+# The PostGIS.pkg will be built into the ./build/ subdirectory
+#
+
+# Build the Suite Package
+# -----------------------
+#
+# Unzip the "suite-<VERSION>-doc.zip" and "suite-<VERSION>-ext.zip" 
+# artifacts created in the first section into the "pkg" directory:
+
+  unzip ../../target/opengeosuite-$suite_version-ext.zip -d binaries
+# 
+# Build the suite project using the Iceberg 'freeze' commandline
+#
+  freeze ./suite.pmdoc
+#
+# The OpenGeo Suite.mpkg will be built into the ./build/ subdirectory
+#
