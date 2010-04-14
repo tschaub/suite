@@ -142,7 +142,7 @@ Styler.RulePanel = Ext.extend(Ext.TabPanel, {
          * no scale value.  If someone thinks that a scale value of zero should have
          * a different interpretation, this needs to be changed.
          */
-        this.scaleLimitPanel = new Styler.ScaleLimitPanel({
+        this.scaleLimitPanel = new gxp.ScaleLimitPanel({
             maxScaleDenominator: this.rule.maxScaleDenominator || undefined,
             limitMaxScaleDenominator: !!this.rule.maxScaleDenominator,
             maxScaleDenominatorLimit: this.maxScaleDenominatorLimit,
