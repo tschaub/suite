@@ -365,7 +365,9 @@ Styler.RulePanel = Ext.extend(Ext.TabPanel, {
             },
             listeners: {
                 change: function(symbolizer) {
-                    this.symbolizerSwatch.setSymbolizers([symbolizer]);
+                    this.symbolizerSwatch.setSymbolizers(
+                        [symbolizer], {draw: this.symbolizerSwatch.rendered}
+                    );
                     this.fireEvent("change", this, this.rule);
                 },
                 scope: this
