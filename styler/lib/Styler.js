@@ -568,9 +568,10 @@ var Styler = Ext.extend(Ext.util.Observable, {
         // this is getting a bit sloppy - the remainder only works after initEditor
         // and require that setCurrentLayer be called again in initEditor
         if(this.getFeatureControl.active) {
-            this.getFeatureControl.protocol = OpenLayers.Protocol.WFS.fromWMSLayer(
-                layer, {geometryName: this.schemaManager.getGeometryName(layer)}
-            );
+            this.getFeatureControl.protocol = OpenLayers.Protocol.WFS.fromWMSLayer(layer, {
+                url: "/geoserver/ows",
+                geometryName: this.schemaManager.getGeometryName(layer)
+            });
         }
     },
     
