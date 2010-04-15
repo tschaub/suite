@@ -802,7 +802,7 @@ var Styler = Ext.extend(Ext.util.Observable, {
                 border: false,
                 autoHeight: true,
                 items: [{
-                    xtype: "gx_legendpanel",
+                    xtype: "gx_vectorlegend",
                     title: "Rules used to render this feature:",
                     bodyStyle: {paddingLeft: "5px"},
                     symbolType: this.getSymbolTypeFromFeature(feature),
