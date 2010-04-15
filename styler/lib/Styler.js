@@ -850,7 +850,7 @@ var Styler = Ext.extend(Ext.util.Observable, {
             layout: "fit",
             x: this.windowPositions.ruleDlg.x,
             y: this.windowPositions.ruleDlg.y,
-            width: 270,
+            width: 315,
             constrainHeader: true,
             items: [{
                 xtype: "gx_rulepanel",
