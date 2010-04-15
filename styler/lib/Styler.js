@@ -331,6 +331,7 @@ var Styler = Ext.extend(Ext.util.Observable, {
             width: 250,
             split: true,
             collapsible: true,
+            hideCollapseTool: true,
             collapseMode: "mini",
             items: [
                 this.layersContainer, this.legendContainer
