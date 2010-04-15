@@ -11,7 +11,7 @@
 				<key>Background Image</key>
 				<dict>
 					<key>IFPkgFlagBackgroundAlignment</key>
-					<integer>0</integer>
+					<integer>4</integer>
 					<key>IFPkgFlagBackgroundScaling</key>
 					<integer>1</integer>
 					<key>Mode</key>
@@ -26,11 +26,11 @@
 					<key>International</key>
 					<dict>
 						<key>Mode</key>
-						<integer>1</integer>
+						<integer>0</integer>
 						<key>Path</key>
-						<string>resources/postgis_license.txt</string>
+						<string></string>
 						<key>Path Type</key>
-						<integer>2</integer>
+						<integer>1</integer>
 					</dict>
 				</dict>
 				<key>ReadMe</key>
@@ -38,11 +38,11 @@
 					<key>International</key>
 					<dict>
 						<key>Mode</key>
-						<integer>1</integer>
+						<integer>0</integer>
 						<key>Path</key>
-						<string>resources/postgis_readme.txt</string>
+						<string></string>
 						<key>Path Type</key>
-						<integer>2</integer>
+						<integer>1</integer>
 					</dict>
 				</dict>
 				<key>Welcome</key>
@@ -50,11 +50,11 @@
 					<key>International</key>
 					<dict>
 						<key>Mode</key>
-						<integer>1</integer>
+						<integer>0</integer>
 						<key>Path</key>
-						<string>resources/postgis_welcome.txt</string>
+						<string></string>
 						<key>Path Type</key>
-						<integer>2</integer>
+						<integer>1</integer>
 					</dict>
 				</dict>
 			</dict>
@@ -153,89 +153,6 @@
 							<array>
 								<dict>
 									<key>Children</key>
-									<array>
-										<dict>
-											<key>Children</key>
-											<array/>
-											<key>GID</key>
-											<integer>80</integer>
-											<key>Path</key>
-											<string>binaries/manpaths.d/opengeo-pgsql</string>
-											<key>Path Type</key>
-											<integer>2</integer>
-											<key>Privileges</key>
-											<integer>420</integer>
-											<key>Type</key>
-											<integer>3</integer>
-											<key>UID</key>
-											<integer>0</integer>
-										</dict>
-									</array>
-									<key>GID</key>
-									<integer>80</integer>
-									<key>Path</key>
-									<string>manpaths.d</string>
-									<key>Path Type</key>
-									<integer>1</integer>
-									<key>Privileges</key>
-									<integer>509</integer>
-									<key>Type</key>
-									<integer>2</integer>
-									<key>UID</key>
-									<integer>0</integer>
-								</dict>
-								<dict>
-									<key>Children</key>
-									<array>
-										<dict>
-											<key>Children</key>
-											<array/>
-											<key>GID</key>
-											<integer>80</integer>
-											<key>Path</key>
-											<string>binaries/paths.d/opengeo-pgsql</string>
-											<key>Path Type</key>
-											<integer>2</integer>
-											<key>Privileges</key>
-											<integer>420</integer>
-											<key>Type</key>
-											<integer>3</integer>
-											<key>UID</key>
-											<integer>0</integer>
-										</dict>
-									</array>
-									<key>GID</key>
-									<integer>80</integer>
-									<key>Path</key>
-									<string>paths.d</string>
-									<key>Path Type</key>
-									<integer>1</integer>
-									<key>Privileges</key>
-									<integer>509</integer>
-									<key>Type</key>
-									<integer>2</integer>
-									<key>UID</key>
-									<integer>0</integer>
-								</dict>
-							</array>
-							<key>GID</key>
-							<integer>80</integer>
-							<key>Path</key>
-							<string>etc</string>
-							<key>Path Type</key>
-							<integer>1</integer>
-							<key>Privileges</key>
-							<integer>509</integer>
-							<key>Type</key>
-							<integer>2</integer>
-							<key>UID</key>
-							<integer>0</integer>
-						</dict>
-						<dict>
-							<key>Children</key>
-							<array>
-								<dict>
-									<key>Children</key>
 									<array/>
 									<key>GID</key>
 									<integer>80</integer>
@@ -311,39 +228,6 @@
 									<integer>509</integer>
 									<key>Type</key>
 									<integer>1</integer>
-									<key>UID</key>
-									<integer>0</integer>
-								</dict>
-								<dict>
-									<key>Children</key>
-									<array>
-										<dict>
-											<key>Children</key>
-											<array/>
-											<key>GID</key>
-											<integer>80</integer>
-											<key>Path</key>
-											<string>binaries/LaunchDaemons/org.opengeo.postgis</string>
-											<key>Path Type</key>
-											<integer>2</integer>
-											<key>Privileges</key>
-											<integer>420</integer>
-											<key>Type</key>
-											<integer>3</integer>
-											<key>UID</key>
-											<integer>0</integer>
-										</dict>
-									</array>
-									<key>GID</key>
-									<integer>80</integer>
-									<key>Path</key>
-									<string>LaunchDaemons</string>
-									<key>Path Type</key>
-									<integer>1</integer>
-									<key>Privileges</key>
-									<integer>509</integer>
-									<key>Type</key>
-									<integer>2</integer>
 									<key>UID</key>
 									<integer>0</integer>
 								</dict>
@@ -449,170 +333,6 @@
 									<array>
 										<dict>
 											<key>Children</key>
-											<array>
-												<dict>
-													<key>Children</key>
-													<array>
-														<dict>
-															<key>Children</key>
-															<array/>
-															<key>GID</key>
-															<integer>80</integer>
-															<key>Path</key>
-															<string>binaries/bin</string>
-															<key>Path Type</key>
-															<integer>2</integer>
-															<key>Privileges</key>
-															<integer>493</integer>
-															<key>Type</key>
-															<integer>3</integer>
-															<key>UID</key>
-															<integer>0</integer>
-														</dict>
-														<dict>
-															<key>Children</key>
-															<array/>
-															<key>GID</key>
-															<integer>80</integer>
-															<key>Path</key>
-															<string>binaries/doc</string>
-															<key>Path Type</key>
-															<integer>2</integer>
-															<key>Privileges</key>
-															<integer>493</integer>
-															<key>Type</key>
-															<integer>3</integer>
-															<key>UID</key>
-															<integer>0</integer>
-														</dict>
-														<dict>
-															<key>Children</key>
-															<array/>
-															<key>GID</key>
-															<integer>80</integer>
-															<key>Path</key>
-															<string>binaries/include</string>
-															<key>Path Type</key>
-															<integer>2</integer>
-															<key>Privileges</key>
-															<integer>493</integer>
-															<key>Type</key>
-															<integer>3</integer>
-															<key>UID</key>
-															<integer>0</integer>
-														</dict>
-														<dict>
-															<key>Children</key>
-															<array/>
-															<key>GID</key>
-															<integer>80</integer>
-															<key>Path</key>
-															<string>binaries/lib</string>
-															<key>Path Type</key>
-															<integer>2</integer>
-															<key>Privileges</key>
-															<integer>493</integer>
-															<key>Type</key>
-															<integer>3</integer>
-															<key>UID</key>
-															<integer>0</integer>
-														</dict>
-														<dict>
-															<key>Children</key>
-															<array/>
-															<key>GID</key>
-															<integer>80</integer>
-															<key>Path</key>
-															<string>binaries/share</string>
-															<key>Path Type</key>
-															<integer>2</integer>
-															<key>Privileges</key>
-															<integer>493</integer>
-															<key>Type</key>
-															<integer>3</integer>
-															<key>UID</key>
-															<integer>0</integer>
-														</dict>
-													</array>
-													<key>GID</key>
-													<integer>80</integer>
-													<key>Path</key>
-													<string>8.4</string>
-													<key>Path Type</key>
-													<integer>1</integer>
-													<key>Privileges</key>
-													<integer>509</integer>
-													<key>Type</key>
-													<integer>2</integer>
-													<key>UID</key>
-													<integer>0</integer>
-												</dict>
-												<dict>
-													<key>Children</key>
-													<array/>
-													<key>GID</key>
-													<integer>80</integer>
-													<key>Path</key>
-													<string>scripts/postgis_uninstall.sh</string>
-													<key>Path Type</key>
-													<integer>2</integer>
-													<key>Privileges</key>
-													<integer>493</integer>
-													<key>Type</key>
-													<integer>3</integer>
-													<key>UID</key>
-													<integer>0</integer>
-												</dict>
-											</array>
-											<key>GID</key>
-											<integer>80</integer>
-											<key>Path</key>
-											<string>pgsql</string>
-											<key>Path Type</key>
-											<integer>1</integer>
-											<key>Privileges</key>
-											<integer>509</integer>
-											<key>Type</key>
-											<integer>2</integer>
-											<key>UID</key>
-											<integer>0</integer>
-										</dict>
-									</array>
-									<key>GID</key>
-									<integer>80</integer>
-									<key>Path</key>
-									<string>opengeo</string>
-									<key>Path Type</key>
-									<integer>1</integer>
-									<key>Privileges</key>
-									<integer>509</integer>
-									<key>Type</key>
-									<integer>2</integer>
-									<key>UID</key>
-									<integer>0</integer>
-								</dict>
-							</array>
-							<key>GID</key>
-							<integer>80</integer>
-							<key>Path</key>
-							<string>opt</string>
-							<key>Path Type</key>
-							<integer>1</integer>
-							<key>Privileges</key>
-							<integer>509</integer>
-							<key>Type</key>
-							<integer>2</integer>
-							<key>UID</key>
-							<integer>0</integer>
-						</dict>
-						<dict>
-							<key>Children</key>
-							<array>
-								<dict>
-									<key>Children</key>
-									<array>
-										<dict>
-											<key>Children</key>
 											<array/>
 											<key>GID</key>
 											<integer>0</integer>
@@ -670,7 +390,7 @@
 					<integer>0</integer>
 				</dict>
 				<key>IFPkgFlagDefaultLocation</key>
-				<string>/</string>
+				<string>/Applications</string>
 				<key>Imported Package</key>
 				<false/>
 				<key>Package Path</key>
@@ -738,11 +458,11 @@
 					<key>IFInstallationScriptsPostflight</key>
 					<dict>
 						<key>Path</key>
-						<string>scripts/postgis_postflight.sh</string>
+						<string></string>
 						<key>Path Type</key>
 						<integer>2</integer>
 						<key>Status</key>
-						<true/>
+						<false/>
 					</dict>
 					<key>IFInstallationScriptsPostinstall</key>
 					<dict>
@@ -763,18 +483,16 @@
 					<key>IFInstallationScriptsPreflight</key>
 					<dict>
 						<key>Path</key>
-						<string>scripts/postgis_preflight.sh</string>
+						<string></string>
 						<key>Path Type</key>
 						<integer>2</integer>
 						<key>Status</key>
-						<true/>
+						<false/>
 					</dict>
 					<key>IFInstallationScriptsPreinstall</key>
 					<dict>
 						<key>Path</key>
 						<string></string>
-						<key>Path Type</key>
-						<integer>2</integer>
 						<key>Status</key>
 						<false/>
 					</dict>
@@ -787,7 +505,36 @@
 					</dict>
 				</dict>
 				<key>Requirements</key>
-				<array/>
+				<array>
+					<dict>
+						<key>AlertDialog</key>
+						<dict>
+							<key>International</key>
+							<dict>
+								<key>MessageKey</key>
+								<string></string>
+								<key>TitleKey</key>
+								<string></string>
+							</dict>
+						</dict>
+						<key>LabelKey</key>
+						<string>Intel Architecture</string>
+						<key>Level</key>
+						<integer>0</integer>
+						<key>SpecArgument</key>
+						<string>hw.machine</string>
+						<key>SpecTag</key>
+						<integer>6</integer>
+						<key>SpecType</key>
+						<string>sysctl</string>
+						<key>Status</key>
+						<true/>
+						<key>TestObject</key>
+						<string>i386</string>
+						<key>TestOperator</key>
+						<string>=</string>
+					</dict>
+				</array>
 			</dict>
 			<key>Settings</key>
 			<dict>
@@ -798,27 +545,27 @@
 						<key>IFPkgDescriptionDeleteWarning</key>
 						<string></string>
 						<key>IFPkgDescriptionDescription</key>
-						<string>A spatial database management system, that provides type, indexes and functions necessary to manage and analyze geographic data.</string>
+						<string>The PostGIS client tools are pgShapeLoader for bringing GIS data into the database, and pgAdmin for managing users and data inside the database.</string>
 						<key>IFPkgDescriptionTitle</key>
-						<string>PostGIS</string>
+						<string>PostGIS Client Tools</string>
 						<key>IFPkgDescriptionVersion</key>
-						<string>1.5.1-1</string>
+						<string>1.5</string>
 					</dict>
 				</dict>
 				<key>Display Information</key>
 				<dict>
 					<key>CFBundleGetInfoString</key>
-					<string>PostGIS 1.5.1 Copyrights © 2010 OpenGeo</string>
+					<string>Copyrights © 2010 OpenGeo</string>
 					<key>CFBundleIconFile</key>
-					<string></string>
+					<string>resources/PostGIS.icns</string>
 					<key>CFBundleIconFile Path Type</key>
-					<integer>1</integer>
+					<integer>2</integer>
 					<key>CFBundleIdentifier</key>
-					<string>org.opengeo.postgis</string>
+					<string>org.opengeo.postgisclient</string>
 					<key>CFBundleName</key>
-					<string>PostGIS</string>
+					<string>PostGIS Client Tools</string>
 					<key>CFBundleShortVersionString</key>
-					<string>1.5.1</string>
+					<string>1.5</string>
 				</dict>
 				<key>Options</key>
 				<dict>
@@ -837,7 +584,7 @@
 					<key>IFPkgFlagRestartAction</key>
 					<integer>0</integer>
 					<key>IFPkgFlagRootVolumeOnly</key>
-					<true/>
+					<false/>
 					<key>IFPkgFlagUpdateInstalledLanguages</key>
 					<false/>
 				</dict>
@@ -853,7 +600,7 @@
 		<key>IFPkgFlagPackageSelection</key>
 		<integer>0</integer>
 		<key>Name</key>
-		<string>postgis</string>
+		<string>PostGIS Client</string>
 		<key>Status</key>
 		<integer>1</integer>
 		<key>Type</key>
@@ -864,7 +611,7 @@
 	<key>Settings</key>
 	<dict>
 		<key>10.1 Compatibility</key>
-		<false/>
+		<true/>
 		<key>Build Path</key>
 		<string>build</string>
 		<key>Build Path Type</key>
@@ -876,7 +623,7 @@
 		<key>Remove .pbdevelopment</key>
 		<true/>
 		<key>Remove CVS</key>
-		<true/>
+		<false/>
 	</dict>
 </dict>
 </plist>

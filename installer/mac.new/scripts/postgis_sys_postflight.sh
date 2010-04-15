@@ -54,8 +54,6 @@ chgrp -R $postgres_group "$postgres_data"
 if [ $initdb ]
 then
   $su "$pgbin/initdb --username=$pgsu --pgdata $postgres_data --encoding=UTF8 >> /dev/null"
-  echo "$pgbin" > /etc/paths.d/opengeo-pgsql
-  echo "$pgman" > /etc/manpaths.d/opengeo-pgsql
 fi
 
 launchctl load /Library/LaunchDaemons/org.opengeo.postgis

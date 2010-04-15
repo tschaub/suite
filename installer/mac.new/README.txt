@@ -18,23 +18,24 @@
 # ========================
 # 
 # The Mac install is made up of multiple pkg installers that are bundled into
-# a single mpkg for installation.
+# a single mpkg for installation. Note that both server components include a 
+# VERSION file, so that components can be kept in synch in the future (avoid
+# installing a new version of one component next to old version of another).
 #
 # PostGIS Server.pkg
 #  /opt/opengeo/pgsql/*
+#  /opt/opengeo/suite/VERSION
 #  /Library/LaunchDaemons/org.opengeo.postgis
-#  /etc/paths.d/opengeo-postgis
-#  /etc/manpaths.d/opengeo-postgis
-#  Preinstall scripts to alter shmmem and add _opengeo:_opengeo 
-#  Postinstall scripts to create /opt/opengeo/pgsql/*/data area and template_postgis
+#  Preinstall scripts to alter shmmem and create
+#    /etc/paths.d/opengeo-postgis
+#    /etc/manpaths.d/opengeo-postgis
 #
 # GeoServer.pkg
 #  /opt/opengeo/geoserver/*
+#  /opt/opengeo/suite/VERSION
 #  /Library/LaunchDaemons/org.opengeo.geoserver
-#  Preinstall scripts to add _opengeo:_opengeo 
 #  Preinstall scripts to find existing data_dir and preserve it
 #  Preinstall scripts to wipe out existing OpenGeo Suite.app
-#  Postinstall scripts to ensure webapp area is owned by _opengeo:_opengeo
 #  Postinstall scripts to bring in any existing data_dir
 #
 # PostGIS Client.pkg
@@ -84,7 +85,6 @@
              -s /Library/Application\ Support/Titanium \
              -a /Library/Application\ Support/Titanium/sdk/osx/0.8.0/ \
              OpenGeo\ Dashboard/
-
 #
 # Note: If the command errors out with a message about 
 # "OpenGeo Dashboard.dmg" that is OK.
@@ -105,7 +105,8 @@
 # into the 'binaries' directory:
 #
   cd ../installer/mac.new
-  mv ../../dashboard/OpenGeo\ Dashboard.app binaries
+  rm -rf "binaries/Dashboard.app"
+  cp -r "../../dashboard/OpenGeo Dashboard.app" "binaries/Dashboard.app"
 #
 # Build the dashboard using the Iceberg 'freeze' commandline
 #
@@ -121,7 +122,8 @@
 # first section into the "app/OpenGeo Suite.app/Contents/Resources/Java" 
 # directory:
 #
-  set suite_version=1.0
+  suite_version=1.0
+  rm -rf binaries/geoserver
   unzip ../../target/opengeosuite-$suite_version-mac.zip \
         -d binaries/geoserver
 #
@@ -148,11 +150,15 @@
   mv binaries/pgsql/stackbuilder.app/ binaries/
 #
 # Give all the files root ownership
-# sudo chown -R root:admin app/OpenGeo\ PostGIS/
+# sudo chown -R root:admin "app/OpenGeo PostGIS/"
 #
 # Build the postgis project using the Iceberg 'freeze' commandline
 #
-  freeze ./postgis.packproj
+  rm -r "./build/PostGIS client.pkg/"
+  freeze ./postgisclient.packproj
+
+  rm -r "./build/PostGIS Server.pkg/"
+  freeze ./postgisserver.packproj
 #
 # The PostGIS.pkg will be built into the ./build/ subdirectory
 #
