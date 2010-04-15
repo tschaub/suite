@@ -142,7 +142,7 @@ var Styler = Ext.extend(Ext.util.Observable, {
             OpenLayers.Util.getParameters(window.location.href)
         ).NAMESPACE;
         Ext.Ajax.request({
-            url: "/geoserver/wms?",
+            url: "/geoserver/ows",
             method: "GET",
             disableCaching: false,
             success: this.parseWMSCapabilities,
@@ -151,7 +151,8 @@ var Styler = Ext.extend(Ext.util.Observable, {
             },
             params: Ext.apply(namespace ? {NAMESPACE: namespace} : {}, {
                 VERSION: "1.1.1",
-                REQUEST: "GetCapabilities"
+                REQUEST: "GetCapabilities",
+                SERVICE: "WMS"
             }),
             options: {callback: callback},
             scope: this
@@ -163,7 +164,7 @@ var Styler = Ext.extend(Ext.util.Observable, {
      */
     getWFSCapabilities: function(callback) {
         Ext.Ajax.request({
-            url: "/geoserver/wfs?",
+            url: "/geoserver/ows",
             method: "GET",
             disableCaching: false,
             success: this.parseWFSCapabilities,
@@ -172,7 +173,8 @@ var Styler = Ext.extend(Ext.util.Observable, {
             },
             params: {
                 VERSION: "1.1.0",
-                REQUEST: "GetCapabilities"
+                REQUEST: "GetCapabilities",
+                SERVICE: "WFS"
             },
             options: {callback: callback},
             scope: this
