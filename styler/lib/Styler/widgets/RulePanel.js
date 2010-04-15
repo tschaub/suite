@@ -195,6 +195,17 @@ Styler.RulePanel = Ext.extend(Ext.TabPanel, {
                         this.fireEvent("change", this, this.rule);
                     },
                     expand: function() {
+                        /**
+                         * Start workaround for
+                         * http://projects.opengeo.org/suite/ticket/676
+                         */
+                        var tab = this.getActiveTab();
+                        this.activeTab = null;
+                        this.setActiveTab(tab);
+                        /**
+                         * End workaround for
+                         * http://projects.opengeo.org/suite/ticket/676
+                         */
                         this.rule.symbolizer["Text"] = this.textSymbolizer.symbolizer;
                         this.fireEvent("change", this, this.rule);
                     },
@@ -223,12 +234,23 @@ Styler.RulePanel = Ext.extend(Ext.TabPanel, {
                     autoHeight: true,
                     items: [this.scaleLimitPanel],
                     listeners: {
-                        collapse: function(){
+                        collapse: function() {
                             delete this.rule.minScaleDenominator;
                             delete this.rule.maxScaleDenominator;
                             this.fireEvent("change", this, this.rule)
                         },
-                        expand: function(){
+                        expand: function() {
+                            /**
+                             * Start workaround for
+                             * http://projects.opengeo.org/suite/ticket/676
+                             */
+                            var tab = this.getActiveTab();
+                            this.activeTab = null;
+                            this.setActiveTab(tab);
+                            /**
+                             * End workaround for
+                             * http://projects.opengeo.org/suite/ticket/676
+                             */
                             var changed = false;
                             if (this.scaleLimitPanel.limitMinScaleDenominator) {
                                 this.rule.minScaleDenominator = this.scaleLimitPanel.minScaleDenominator;
