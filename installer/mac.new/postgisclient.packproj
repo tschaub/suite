@@ -572,7 +572,7 @@
 					<key>IFPkgFlagAllowBackRev</key>
 					<false/>
 					<key>IFPkgFlagAuthorizationAction</key>
-					<integer>1</integer>
+					<integer>0</integer>
 					<key>IFPkgFlagFollowLinks</key>
 					<false/>
 					<key>IFPkgFlagIsRequired</key>

@@ -1,4 +1,4 @@
 #!/bin/bash
 
-open /Applications/OpenGeo\ Dashboard.app
+open /Applications/OpenGeo/Dashboard.app
 exit 0

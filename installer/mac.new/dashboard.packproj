@@ -451,7 +451,7 @@
 					<key>IFInstallationScriptsPostinstall</key>
 					<dict>
 						<key>Path</key>
-						<string>scripts/dashboard_postinstall.sh</string>
+						<string></string>
 						<key>Path Type</key>
 						<integer>2</integer>
 						<key>Status</key>
@@ -556,7 +556,7 @@
 					<key>IFPkgFlagAllowBackRev</key>
 					<false/>
 					<key>IFPkgFlagAuthorizationAction</key>
-					<integer>1</integer>
+					<integer>0</integer>
 					<key>IFPkgFlagFollowLinks</key>
 					<false/>
 					<key>IFPkgFlagIsRequired</key>

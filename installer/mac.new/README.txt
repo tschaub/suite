@@ -154,26 +154,33 @@
 #
 # Build the postgis project using the Iceberg 'freeze' commandline
 #
-  rm -r "./build/PostGIS client.pkg/"
+  rm -rf "./build/PostGIS Client.pkg/"
   freeze ./postgisclient.packproj
 
-  rm -r "./build/PostGIS Server.pkg/"
+  rm -rf "./build/PostGIS Server.pkg/"
   freeze ./postgisserver.packproj
 #
 # The PostGIS.pkg will be built into the ./build/ subdirectory
 #
 
-# Build the Suite Package
-# -----------------------
+# Build the Suite Scripts Package
+# -------------------------------
+#
+  freeze ./suitescripts.packproj
+
+# Build the GeoServer Extensions Package
+# --------------------------------------
 #
 # Unzip the "suite-<VERSION>-doc.zip" and "suite-<VERSION>-ext.zip" 
 # artifacts created in the first section into the "pkg" directory:
 
+  suite_version=1.0
   unzip ../../target/opengeosuite-$suite_version-ext.zip -d binaries
 # 
-# Build the suite project using the Iceberg 'freeze' commandline
+# Build the Suite Package
+# -----------------------
 #
-  freeze ./suite.pmdoc
-#
-# The OpenGeo Suite.mpkg will be built into the ./build/ subdirectory
+  freeze ./suite.packproj
+
+# The "OpenGeo Suite.mpkg" will be built into the ./suitebuild directory
 #

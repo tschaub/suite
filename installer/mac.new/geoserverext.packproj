@@ -11,7 +11,7 @@
 				<key>Background Image</key>
 				<dict>
 					<key>IFPkgFlagBackgroundAlignment</key>
-					<integer>0</integer>
+					<integer>4</integer>
 					<key>IFPkgFlagBackgroundScaling</key>
 					<integer>1</integer>
 					<key>Mode</key>
@@ -26,11 +26,11 @@
 					<key>International</key>
 					<dict>
 						<key>Mode</key>
-						<integer>1</integer>
+						<integer>0</integer>
 						<key>Path</key>
-						<string>resources/postgis_license.txt</string>
+						<string></string>
 						<key>Path Type</key>
-						<integer>2</integer>
+						<integer>1</integer>
 					</dict>
 				</dict>
 				<key>ReadMe</key>
@@ -38,11 +38,11 @@
 					<key>International</key>
 					<dict>
 						<key>Mode</key>
-						<integer>1</integer>
+						<integer>0</integer>
 						<key>Path</key>
-						<string>resources/postgis_readme.txt</string>
+						<string></string>
 						<key>Path Type</key>
-						<integer>2</integer>
+						<integer>1</integer>
 					</dict>
 				</dict>
 				<key>Welcome</key>
@@ -50,11 +50,11 @@
 					<key>International</key>
 					<dict>
 						<key>Mode</key>
-						<integer>1</integer>
+						<integer>0</integer>
 						<key>Path</key>
-						<string>resources/postgis_welcome.txt</string>
+						<string></string>
 						<key>Path Type</key>
-						<integer>2</integer>
+						<integer>1</integer>
 					</dict>
 				</dict>
 			</dict>
@@ -284,103 +284,106 @@
 									<array>
 										<dict>
 											<key>Children</key>
-											<array/>
-											<key>GID</key>
-											<integer>80</integer>
-											<key>Path</key>
-											<string>pgdata</string>
-											<key>Path Type</key>
-											<integer>1</integer>
-											<key>Privileges</key>
-											<integer>511</integer>
-											<key>Type</key>
-											<integer>2</integer>
-											<key>UID</key>
-											<integer>0</integer>
-										</dict>
-										<dict>
-											<key>Children</key>
 											<array>
 												<dict>
 													<key>Children</key>
 													<array>
 														<dict>
 															<key>Children</key>
-															<array/>
+															<array>
+																<dict>
+																	<key>Children</key>
+																	<array>
+																		<dict>
+																			<key>Children</key>
+																			<array>
+																				<dict>
+																					<key>Children</key>
+																					<array/>
+																					<key>GID</key>
+																					<integer>80</integer>
+																					<key>Path</key>
+																					<string>binaries/ext/arcsde/gt-arcsde-2.6-SNAPSHOT.jar</string>
+																					<key>Path Type</key>
+																					<integer>2</integer>
+																					<key>Privileges</key>
+																					<integer>420</integer>
+																					<key>Type</key>
+																					<integer>3</integer>
+																					<key>UID</key>
+																					<integer>0</integer>
+																				</dict>
+																				<dict>
+																					<key>Children</key>
+																					<array/>
+																					<key>GID</key>
+																					<integer>80</integer>
+																					<key>Path</key>
+																					<string>binaries/ext/arcsde/gt-arcsde-common-2.6-SNAPSHOT.jar</string>
+																					<key>Path Type</key>
+																					<integer>2</integer>
+																					<key>Privileges</key>
+																					<integer>420</integer>
+																					<key>Type</key>
+																					<integer>3</integer>
+																					<key>UID</key>
+																					<integer>0</integer>
+																				</dict>
+																				<dict>
+																					<key>Children</key>
+																					<array/>
+																					<key>GID</key>
+																					<integer>80</integer>
+																					<key>Path</key>
+																					<string>binaries/ext/oracle/gt-jdbc-oracle-2.6-SNAPSHOT.jar</string>
+																					<key>Path Type</key>
+																					<integer>2</integer>
+																					<key>Privileges</key>
+																					<integer>420</integer>
+																					<key>Type</key>
+																					<integer>3</integer>
+																					<key>UID</key>
+																					<integer>0</integer>
+																				</dict>
+																			</array>
+																			<key>GID</key>
+																			<integer>80</integer>
+																			<key>Path</key>
+																			<string>lib</string>
+																			<key>Path Type</key>
+																			<integer>1</integer>
+																			<key>Privileges</key>
+																			<integer>509</integer>
+																			<key>Type</key>
+																			<integer>2</integer>
+																			<key>UID</key>
+																			<integer>0</integer>
+																		</dict>
+																	</array>
+																	<key>GID</key>
+																	<integer>80</integer>
+																	<key>Path</key>
+																	<string>WEB-INF</string>
+																	<key>Path Type</key>
+																	<integer>1</integer>
+																	<key>Privileges</key>
+																	<integer>509</integer>
+																	<key>Type</key>
+																	<integer>2</integer>
+																	<key>UID</key>
+																	<integer>0</integer>
+																</dict>
+															</array>
 															<key>GID</key>
 															<integer>80</integer>
 															<key>Path</key>
-															<string>binaries/pgsql/bin</string>
+															<string>geoserver</string>
 															<key>Path Type</key>
-															<integer>2</integer>
+															<integer>1</integer>
 															<key>Privileges</key>
-															<integer>493</integer>
+															<integer>509</integer>
 															<key>Type</key>
-															<integer>3</integer>
-															<key>UID</key>
-															<integer>0</integer>
-														</dict>
-														<dict>
-															<key>Children</key>
-															<array/>
-															<key>GID</key>
-															<integer>80</integer>
-															<key>Path</key>
-															<string>binaries/pgsql/doc</string>
-															<key>Path Type</key>
 															<integer>2</integer>
-															<key>Privileges</key>
-															<integer>493</integer>
-															<key>Type</key>
-															<integer>3</integer>
-															<key>UID</key>
-															<integer>0</integer>
-														</dict>
-														<dict>
-															<key>Children</key>
-															<array/>
-															<key>GID</key>
-															<integer>80</integer>
-															<key>Path</key>
-															<string>binaries/pgsql/include</string>
-															<key>Path Type</key>
-															<integer>2</integer>
-															<key>Privileges</key>
-															<integer>493</integer>
-															<key>Type</key>
-															<integer>3</integer>
-															<key>UID</key>
-															<integer>0</integer>
-														</dict>
-														<dict>
-															<key>Children</key>
-															<array/>
-															<key>GID</key>
-															<integer>80</integer>
-															<key>Path</key>
-															<string>binaries/pgsql/lib</string>
-															<key>Path Type</key>
-															<integer>2</integer>
-															<key>Privileges</key>
-															<integer>493</integer>
-															<key>Type</key>
-															<integer>3</integer>
-															<key>UID</key>
-															<integer>0</integer>
-														</dict>
-														<dict>
-															<key>Children</key>
-															<array/>
-															<key>GID</key>
-															<integer>80</integer>
-															<key>Path</key>
-															<string>binaries/pgsql/share</string>
-															<key>Path Type</key>
-															<integer>2</integer>
-															<key>Privileges</key>
-															<integer>493</integer>
-															<key>Type</key>
-															<integer>3</integer>
 															<key>UID</key>
 															<integer>0</integer>
 														</dict>
@@ -388,7 +391,7 @@
 													<key>GID</key>
 													<integer>80</integer>
 													<key>Path</key>
-													<string>8.4</string>
+													<string>webapps</string>
 													<key>Path Type</key>
 													<integer>1</integer>
 													<key>Privileges</key>
@@ -398,27 +401,11 @@
 													<key>UID</key>
 													<integer>0</integer>
 												</dict>
-												<dict>
-													<key>Children</key>
-													<array/>
-													<key>GID</key>
-													<integer>80</integer>
-													<key>Path</key>
-													<string>scripts/postgis_uninstall.sh</string>
-													<key>Path Type</key>
-													<integer>2</integer>
-													<key>Privileges</key>
-													<integer>420</integer>
-													<key>Type</key>
-													<integer>3</integer>
-													<key>UID</key>
-													<integer>0</integer>
-												</dict>
 											</array>
 											<key>GID</key>
 											<integer>80</integer>
 											<key>Path</key>
-											<string>pgsql</string>
+											<string>geoserver</string>
 											<key>Path Type</key>
 											<integer>1</integer>
 											<key>Privileges</key>
@@ -447,106 +434,6 @@
 							<integer>80</integer>
 							<key>Path</key>
 							<string>opt</string>
-							<key>Path Type</key>
-							<integer>1</integer>
-							<key>Privileges</key>
-							<integer>509</integer>
-							<key>Type</key>
-							<integer>2</integer>
-							<key>UID</key>
-							<integer>0</integer>
-						</dict>
-						<dict>
-							<key>Children</key>
-							<array>
-								<dict>
-									<key>Children</key>
-									<array>
-										<dict>
-											<key>Children</key>
-											<array>
-												<dict>
-													<key>Children</key>
-													<array/>
-													<key>GID</key>
-													<integer>80</integer>
-													<key>Path</key>
-													<string>binaries/manpaths.d/opengeo-pgsql</string>
-													<key>Path Type</key>
-													<integer>2</integer>
-													<key>Privileges</key>
-													<integer>420</integer>
-													<key>Type</key>
-													<integer>3</integer>
-													<key>UID</key>
-													<integer>0</integer>
-												</dict>
-											</array>
-											<key>GID</key>
-											<integer>80</integer>
-											<key>Path</key>
-											<string>manpaths.d</string>
-											<key>Path Type</key>
-											<integer>1</integer>
-											<key>Privileges</key>
-											<integer>509</integer>
-											<key>Type</key>
-											<integer>2</integer>
-											<key>UID</key>
-											<integer>0</integer>
-										</dict>
-										<dict>
-											<key>Children</key>
-											<array>
-												<dict>
-													<key>Children</key>
-													<array/>
-													<key>GID</key>
-													<integer>80</integer>
-													<key>Path</key>
-													<string>binaries/paths.d/opengeo-pgsql</string>
-													<key>Path Type</key>
-													<integer>2</integer>
-													<key>Privileges</key>
-													<integer>420</integer>
-													<key>Type</key>
-													<integer>3</integer>
-													<key>UID</key>
-													<integer>0</integer>
-												</dict>
-											</array>
-											<key>GID</key>
-											<integer>80</integer>
-											<key>Path</key>
-											<string>paths.d</string>
-											<key>Path Type</key>
-											<integer>1</integer>
-											<key>Privileges</key>
-											<integer>509</integer>
-											<key>Type</key>
-											<integer>2</integer>
-											<key>UID</key>
-											<integer>0</integer>
-										</dict>
-									</array>
-									<key>GID</key>
-									<integer>80</integer>
-									<key>Path</key>
-									<string>etc</string>
-									<key>Path Type</key>
-									<integer>1</integer>
-									<key>Privileges</key>
-									<integer>509</integer>
-									<key>Type</key>
-									<integer>2</integer>
-									<key>UID</key>
-									<integer>0</integer>
-								</dict>
-							</array>
-							<key>GID</key>
-							<integer>80</integer>
-							<key>Path</key>
-							<string>private</string>
 							<key>Path Type</key>
 							<integer>1</integer>
 							<key>Privileges</key>
@@ -621,7 +508,7 @@
 					<integer>0</integer>
 				</dict>
 				<key>IFPkgFlagDefaultLocation</key>
-				<string>/</string>
+				<string>/opt/opengeo</string>
 				<key>Imported Package</key>
 				<false/>
 				<key>Package Path</key>
@@ -689,7 +576,7 @@
 					<key>IFInstallationScriptsPostflight</key>
 					<dict>
 						<key>Path</key>
-						<string></string>
+						<string>scripts/dashboard_postflight.sh</string>
 						<key>Path Type</key>
 						<integer>2</integer>
 						<key>Status</key>
@@ -698,7 +585,7 @@
 					<key>IFInstallationScriptsPostinstall</key>
 					<dict>
 						<key>Path</key>
-						<string></string>
+						<string>scripts/dashboard_postinstall.sh</string>
 						<key>Path Type</key>
 						<integer>2</integer>
 						<key>Status</key>
@@ -714,18 +601,16 @@
 					<key>IFInstallationScriptsPreflight</key>
 					<dict>
 						<key>Path</key>
-						<string>scripts/postgis_preflight.sh</string>
+						<string></string>
 						<key>Path Type</key>
 						<integer>2</integer>
 						<key>Status</key>
-						<true/>
+						<false/>
 					</dict>
 					<key>IFInstallationScriptsPreinstall</key>
 					<dict>
 						<key>Path</key>
 						<string></string>
-						<key>Path Type</key>
-						<integer>2</integer>
 						<key>Status</key>
 						<false/>
 					</dict>
@@ -767,6 +652,36 @@
 						<key>TestOperator</key>
 						<string>=</string>
 					</dict>
+					<dict>
+						<key>AlertDialog</key>
+						<dict>
+							<key>International</key>
+							<dict>
+								<key>MessageKey</key>
+								<string></string>
+								<key>TitleKey</key>
+								<string></string>
+							</dict>
+						</dict>
+						<key>LabelKey</key>
+						<string>GeoServer Install</string>
+						<key>Level</key>
+						<integer>0</integer>
+						<key>SpecArgument</key>
+						<string>/opt/opengeo/geoserver/webapps/geoserver/WEB-INF/lib</string>
+						<key>SpecProperty</key>
+						<string>NSFileCreationDate</string>
+						<key>SpecTag</key>
+						<integer>1</integer>
+						<key>SpecType</key>
+						<string>file</string>
+						<key>Status</key>
+						<true/>
+						<key>TestObject</key>
+						<date>2001-04-16T20:57:00Z</date>
+						<key>TestOperator</key>
+						<string>&gt;</string>
+					</dict>
 				</array>
 			</dict>
 			<key>Settings</key>
@@ -778,27 +693,27 @@
 						<key>IFPkgDescriptionDeleteWarning</key>
 						<string></string>
 						<key>IFPkgDescriptionDescription</key>
-						<string>A spatial database management system, that provides type, indexes and functions necessary to manage and analyze geographic data.</string>
+						<string>Extra libraries necessary to support ArcSDE and Oracle in GeoServer.</string>
 						<key>IFPkgDescriptionTitle</key>
-						<string>PostGIS Server Components</string>
+						<string>GeoServer Extensions</string>
 						<key>IFPkgDescriptionVersion</key>
-						<string>1.5.1-1</string>
+						<string>1.5</string>
 					</dict>
 				</dict>
 				<key>Display Information</key>
 				<dict>
 					<key>CFBundleGetInfoString</key>
-					<string>PostGIS 1.5.1 Copyrights © 2010 OpenGeo</string>
+					<string>OpenGeo Suite 1.5 Copyrights © 2010 OpenGeo</string>
 					<key>CFBundleIconFile</key>
-					<string>resources/PostGIS.icns</string>
+					<string>resources/OpenGeo.icns</string>
 					<key>CFBundleIconFile Path Type</key>
 					<integer>2</integer>
 					<key>CFBundleIdentifier</key>
-					<string>org.opengeo.pkg.postgis</string>
+					<string>org.opengeo.pkg.geoserverext</string>
 					<key>CFBundleName</key>
-					<string>PostGIS</string>
+					<string>GeoServer Extensions</string>
 					<key>CFBundleShortVersionString</key>
-					<string>1.5.1</string>
+					<string>1.5</string>
 				</dict>
 				<key>Options</key>
 				<dict>
@@ -817,7 +732,7 @@
 					<key>IFPkgFlagRestartAction</key>
 					<integer>0</integer>
 					<key>IFPkgFlagRootVolumeOnly</key>
-					<true/>
+					<false/>
 					<key>IFPkgFlagUpdateInstalledLanguages</key>
 					<false/>
 				</dict>
@@ -833,7 +748,7 @@
 		<key>IFPkgFlagPackageSelection</key>
 		<integer>0</integer>
 		<key>Name</key>
-		<string>PostGIS Server</string>
+		<string>GeoServer Extensions</string>
 		<key>Status</key>
 		<integer>1</integer>
 		<key>Type</key>
@@ -844,7 +759,7 @@
 	<key>Settings</key>
 	<dict>
 		<key>10.1 Compatibility</key>
-		<false/>
+		<true/>
 		<key>Build Path</key>
 		<string>build</string>
 		<key>Build Path Type</key>
@@ -856,7 +771,7 @@
 		<key>Remove .pbdevelopment</key>
 		<true/>
 		<key>Remove CVS</key>
-		<true/>
+		<false/>
 	</dict>
 </dict>
 </plist>
