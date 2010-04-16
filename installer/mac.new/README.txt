@@ -1,5 +1,21 @@
 #!/bin/bash
 
+# Useful Apple Packaging References
+# ========================================
+#
+# Guidelines for Developers
+# http://developer.apple.com/tools/installerpolicy.html
+#
+# Packagemaker Howto
+# http://s.sudre.free.fr/Stuff/PackageMaker_Howto.html
+#
+# Packagemaker Man Page
+# http://developer.apple.com/mac/library/documentation/Darwin/Reference/ManPages/man1/packagemaker.1.html
+#
+# Software Delivery Guide
+# http://developer.apple.com/mac/library/documentation/DeveloperTools/Conceptual/SoftwareDistribution/Introduction/Introduction.html
+
+
 # OpenGeo Suite Mac Requirements
 # ========================================
 
