@@ -38,4 +38,16 @@ Linux follows:
 
     $ python cloud.py -u user@example.com -p userpass OpenGeo\ Dashboard
 
-The result is three packages for the dashboard application downloaded to the current directory (or other if specified).
+The result is three packages for the dashboard application downloaded to the
+current directory (or other if specified).
+
+Distributing the Dashboard
+--------------------------
+
+The dashboard packages created above are bundled the Titanium runtime
+dependencies.  They are designed to be installed by a user.  To avoid the 
+install step, the package contents should be extracted and a file named
+.installed should be placed at the extracted directory.  If the resulting 
+directory is distributed with a file named .installed, a user can run the 
+dashboard by executing the included OpenGeo Dashboard executable and they won't
+be prompted to install first.
