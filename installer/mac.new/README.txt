@@ -15,7 +15,17 @@
 # Software Delivery Guide
 # http://developer.apple.com/mac/library/documentation/DeveloperTools/Conceptual/SoftwareDistribution/Introduction/Introduction.html
 
+#
+# Receipts
+# ========
+#
+# The presence or absense of a receipt determines whether the Apple 
+# Installer runs in install or upgrade mode. In Leopard and earlier,
+# receipts were in /Library/Receipts. In Snow Leopard and up, they
+# are in /var/db/receipts
+#
 
+#
 # OpenGeo Suite Mac Requirements
 # ========================================
 
