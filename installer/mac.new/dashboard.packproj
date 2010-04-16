@@ -442,27 +442,29 @@
 					<key>IFInstallationScriptsPostflight</key>
 					<dict>
 						<key>Path</key>
-						<string></string>
+						<string>scripts/dashboard_postflight.sh</string>
 						<key>Path Type</key>
 						<integer>2</integer>
 						<key>Status</key>
-						<false/>
+						<true/>
 					</dict>
 					<key>IFInstallationScriptsPostinstall</key>
 					<dict>
 						<key>Path</key>
-						<string></string>
+						<string>scripts/dashboard_postinstall.sh</string>
 						<key>Path Type</key>
 						<integer>2</integer>
 						<key>Status</key>
-						<false/>
+						<true/>
 					</dict>
 					<key>IFInstallationScriptsPostupgrade</key>
 					<dict>
 						<key>Path</key>
-						<string></string>
+						<string>scripts/dashboard_postinstall.sh</string>
+						<key>Path Type</key>
+						<integer>2</integer>
 						<key>Status</key>
-						<false/>
+						<true/>
 					</dict>
 					<key>IFInstallationScriptsPreflight</key>
 					<dict>

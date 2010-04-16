@@ -1666,11 +1666,11 @@
 					<key>IFInstallationScriptsPostflight</key>
 					<dict>
 						<key>Path</key>
-						<string>scripts/dashboard_postflight.sh</string>
+						<string></string>
 						<key>Path Type</key>
 						<integer>2</integer>
 						<key>Status</key>
-						<true/>
+						<false/>
 					</dict>
 					<key>IFInstallationScriptsPostinstall</key>
 					<dict>
@@ -1737,6 +1737,34 @@
 						<string>i386</string>
 						<key>TestOperator</key>
 						<string>=</string>
+					</dict>
+					<dict>
+						<key>AlertDialog</key>
+						<dict>
+							<key>International</key>
+							<dict>
+								<key>MessageKey</key>
+								<string>OpenGeo Suite can only be installed on Mac OSX Panther (10.5) or greater</string>
+								<key>TitleKey</key>
+								<string>Mac OSX Minimum Version</string>
+							</dict>
+						</dict>
+						<key>LabelKey</key>
+						<string>OSX Panther+</string>
+						<key>Level</key>
+						<integer>0</integer>
+						<key>SpecArgument</key>
+						<string>sysv</string>
+						<key>SpecTag</key>
+						<integer>2</integer>
+						<key>SpecType</key>
+						<string>gestalt</string>
+						<key>Status</key>
+						<true/>
+						<key>TestObject</key>
+						<string>4176</string>
+						<key>TestOperator</key>
+						<string>&gt;=</string>
 					</dict>
 				</array>
 			</dict>
