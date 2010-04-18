@@ -25,7 +25,7 @@
 
     <!-- MacOSX PostgreSQL / PostGIS -->
     <!-- OSX assembly uses PgSQL/PostGIS precombined during the build process -->
-    <get src="${data}/pgsql-8.4.3-postgis-1.5.1-2-osx.zip" dest="postgres-osx.zip" usetimestamp="yes"/>
+    <get src="${data}/pgsql-8.4.3-postgis-1.5.1-3-osx.zip" dest="postgres-osx.zip" usetimestamp="yes"/>
     <delete dir="postgres-osx"/>
     <mkdir dir="postgres-osx"/>
     <unzip src="postgres-osx.zip" dest="postgres-osx/pgsql" overwrite="true"/>
