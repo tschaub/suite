@@ -194,6 +194,7 @@
 # Build the Suite Scripts Package
 # -------------------------------
 #
+  find ./binaries -name "*.sh" -exec chmod 755 {} ';'
   freeze ./suitescripts.packproj
 
 # Build the GeoServer Extensions Package

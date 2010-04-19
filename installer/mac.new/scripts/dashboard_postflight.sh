@@ -10,5 +10,5 @@ then
   sed -i .bak 's/@GEOSERVER_DATA_DIR@/\/opt\/opengeo\/geoserver\/data_dir/g' "$configini"
 fi
 
-open /Applications/OpenGeo/Dashboard.app
+#open /Applications/OpenGeo/Dashboard.app
 exit 0

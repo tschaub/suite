@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Remove GUI Apps
-if [ -d /Applicatons/OpenGeo ]; then
+if [ -d /Applications/OpenGeo ]; then
   rm -rf /Applications/OpenGeo
 fi
 
 # Remove Server Apps
 if [ -d /opt/opengeo ]; then
-  rm -rf /opt/opengeo/
+  rm -rf /opt/opengeo
 fi
 
 # Remove Config Files
