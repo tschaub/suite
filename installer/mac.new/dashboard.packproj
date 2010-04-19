@@ -78,7 +78,7 @@
 											<key>GID</key>
 											<integer>80</integer>
 											<key>Path</key>
-											<string>binaries/Dashboard.app</string>
+											<string>binaries/OpenGeo Dashboard.app</string>
 											<key>Path Type</key>
 											<integer>2</integer>
 											<key>Privileges</key>
@@ -451,20 +451,20 @@
 					<key>IFInstallationScriptsPostinstall</key>
 					<dict>
 						<key>Path</key>
-						<string>scripts/dashboard_postinstall.sh</string>
+						<string></string>
 						<key>Path Type</key>
 						<integer>2</integer>
 						<key>Status</key>
-						<true/>
+						<false/>
 					</dict>
 					<key>IFInstallationScriptsPostupgrade</key>
 					<dict>
 						<key>Path</key>
-						<string>scripts/dashboard_postinstall.sh</string>
+						<string></string>
 						<key>Path Type</key>
 						<integer>2</integer>
 						<key>Status</key>
-						<true/>
+						<false/>
 					</dict>
 					<key>IFInstallationScriptsPreflight</key>
 					<dict>

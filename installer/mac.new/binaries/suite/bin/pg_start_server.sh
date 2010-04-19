@@ -26,6 +26,7 @@ fi
 
 # We need to trick pgautovacuum into using the right superuser
 export PGUSER=postgres
+export DYLD_LIBRARY_PATH="$pg_lib_dir"
 
 # Start the database
 "$pg_bin_dir/pg_ctl" start \

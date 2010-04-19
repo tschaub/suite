@@ -70,7 +70,7 @@
 #
 # DashBoard.pkg
 #  Preinstall scripts to wipe out any existing OpenGeo Dashboard.app
-#  /Applications/OpenGeo/Dashboard.app
+#  /Applications/OpenGeo/OpenGeo Dashboard.app
 #
 # OpenGeo Suite.mpkg
 #  Master package container.
@@ -131,11 +131,12 @@
 # into the 'binaries' directory:
 #
   cd ../installer/mac.new
-  rm -rf "binaries/Dashboard.app"
-  cp -r "../../dashboard/OpenGeo Dashboard.app" "binaries/Dashboard.app"
+  rm -rf "binaries/OpenGeo Dashboard.app"
+  cp -r "../../dashboard/OpenGeo Dashboard.app" "binaries/"
 #
 # Build the dashboard using the Iceberg 'freeze' commandline
 #
+   rm -rf "./build/Dashboard.pkg/"
    freeze ./dashboard.packproj
 #
 # The Dashboard.pkg will be built into the ./build/ subdirectory
@@ -155,6 +156,7 @@
 #
 # Build the geoserver pkg using the Iceberg 'freeze' commandline
 #
+  rm -rf ./build/GeoServer.pkg
   freeze ./geoserver.packproj
 #
 # The GeoServer.pkg will be built into the ./build/ subdirectory
@@ -197,8 +199,8 @@
 # Build the GeoServer Extensions Package
 # --------------------------------------
 #
-# Unzip the "suite-<VERSION>-doc.zip" and "suite-<VERSION>-ext.zip" 
-# artifacts created in the first section into the "pkg" directory:
+# Unzip the "suite-<VERSION>-ext.zip" 
+# artifact created in the first section into the "binaries" directory:
 
   suite_version=1.0
   unzip ../../target/opengeosuite-$suite_version-ext.zip -d binaries
