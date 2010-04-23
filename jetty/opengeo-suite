@@ -10,15 +10,16 @@ if [ "$1" == "" ]; then
 fi
 
 pushd "`dirname "$0"`" > /dev/null
+dir=`pwd`
  
-if [ ! -e "`pwd`/og-jetty.jar" ]; then
+if [ ! -e "$dir/og-jetty.jar" ]; then
   echo "Could not find og-jetty.jar"
   exit -1
 fi
 
 _RUNJAVA=""
-if [ -e "`pwd`/jre" ]; then
-  _RUNJAVA="`pwd`/jre/bin/java"
+if [ -e "$dir/jre" ]; then
+  _RUNJAVA="$dir/jre/bin/java"
 else
   if [ "$JAVA_HOME" != "" ] && [ -e $JAVA_HOME/bin/java ]; then
     _RUNJAVA=$JAVA_HOME/bin/java
@@ -41,13 +42,19 @@ case "$1" in
   start)
     #GDD=$GEOSERVER_DATA_DIR
     #if [ "$GDD" == "" ]; then
-    #  GDD=`pwd`/data_dir
+    #  GDD="$dir/data_dir"
     #fi
 
+    if [ -x ../suite/bin/postgis ]; then
+      ../suite/bin/postgis start
+    fi
     exec "$_RUNJAVA" $VMOPTS $OPTS org.opengeo.jetty.Start
     ;;
 
   stop)
+    if [ -x ../suite/bin/postgis ]; then
+      ../suite/bin/postgis stop
+    fi
     exec "$_RUNJAVA" $VMOPTS $OPTS org.opengeo.jetty.Start --stop
     ;;
    
