@@ -1431,9 +1431,11 @@
 								<key>IFInstallationScriptsPostflight</key>
 								<dict>
 									<key>Path</key>
-									<string></string>
+									<string>build/Dashboard.pkg/Contents/Resources/postflight</string>
+									<key>Path Type</key>
+									<integer>2</integer>
 									<key>Status</key>
-									<false/>
+									<true/>
 								</dict>
 								<key>IFInstallationScriptsPostinstall</key>
 								<dict>

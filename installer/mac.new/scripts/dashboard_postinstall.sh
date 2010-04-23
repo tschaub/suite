@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dashboard="/Applications/OpenGeo/Dashboard.app"
+dashboard="/Applications/OpenGeo/OpenGeo Dashboard.app"
 configini="$dashboard/Contents/Resources/config.ini"
 
 if [ -d "$dashboard" ] 

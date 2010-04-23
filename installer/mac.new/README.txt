@@ -153,6 +153,9 @@
   rm -rf binaries/geoserver
   unzip ../../target/opengeosuite-$suite_version-mac.zip \
         -d binaries/geoserver
+  chmod 755 binaries/geoserver/opengeo-suite
+  find binaries/geoserver/data_dir -type d -exec chmod 775 {} ';'
+  find binaries/geoserver/data_dir -type f -exec chmod 664 {} ';'
 #
 # Build the geoserver pkg using the Iceberg 'freeze' commandline
 #
@@ -176,6 +179,8 @@
   mv binaries/pgsql/pgShapeLoader.app/ binaries/
   mv binaries/pgsql/pgAdmin3.app/ binaries/
   mv binaries/pgsql/stackbuilder.app/ binaries/
+  chmod 755 binaries/pgAdmin3.app/Contents/MacOS/pgAdmin3
+  chmod 755 binaries/pgShapeLoader.app/Contents/MacOS/pgShapeLoader*
 #
 # Give all the files root ownership
 # sudo chown -R root:admin "app/OpenGeo PostGIS/"
