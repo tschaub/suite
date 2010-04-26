@@ -2,12 +2,12 @@
 
 gs10app1="/Applications/OpenGeo Suite.app/"
 gs10app2="/Applications/OpenGeo Dashboard.app/"
-gs10del=0
+gs10del=1
 
 gs10data="/Applications/OpenGeo Suite.app/Contents/Resources/Java/data_dir/"
 gs15data="/opt/opengeo/geoserver/data_dir/"
 
-gssave=/tmp/opengeo_data_dir.zip
+gssave=/tmp/opengeo_data_dir.sav
 
 #
 # Remove any existing package
@@ -22,16 +22,14 @@ fi
 #
 if [ -d "$gs15data" ]
 then
-  cd "$gs15data"
-  zip -rq9 "$gssave" *
+  mv "$gs15data" "$gssave"
 else
   # 
   # No 1.5 data? How about 1.0 data?
   # 
   if [ -d "$gs10data" ]
   then
-    cd "$gs10data"
-    zip -r9 "$gssave" *
+    mv "$gs10data" "$gssave"
   fi
 fi
 

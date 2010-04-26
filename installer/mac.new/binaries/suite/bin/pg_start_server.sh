@@ -34,7 +34,7 @@ export DYLD_LIBRARY_PATH="$pg_lib_dir"
   --log "$pg_log" \
   --silent \
   -w \
-  -o "-p $pg_port"
+  -o "-p $pg_port -i"
 
 # Catch any failure
 rv=$?

@@ -3,6 +3,7 @@
 #
 pg_version=8.4
 postgis_version=1.5
+pg_default_port=54321
 
 pg_data_dir=/opt/opengeo/pgdata/${USER}
 pg_log=/opt/opengeo/pgdata/${USER}_pgsql.log
@@ -18,7 +19,7 @@ function pg_check_ini {
   local port
   local ini="$HOME/.opengeo/config.ini"
   # Set defaults
-  pg_port=5432
+  pg_port=$pg_default_port
   # Read ini
   if [ -f "$ini" ]; then
     port=`grep pgsql_port "$ini" | cut -f2 -d= | tr -d ' '`

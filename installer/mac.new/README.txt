@@ -102,6 +102,9 @@
 #
 # Ensure the 'tibuild.py' script is on your PATH. It is located under:
 #  
+dashboard=0
+if [ $dashboard ]; then
+
   titanium_version=1.0.0
   export PATH=$PATH:/Library/Application\ Support/Titanium/sdk/osx/$titanium_version
 #
@@ -111,6 +114,8 @@
              -s /Library/Application\ Support/Titanium \
              -a /Library/Application\ Support/Titanium/sdk/osx/0.8.0/ \
              OpenGeo\ Dashboard/
+fi
+
 #
 # Note: If the command errors out with a message about 
 # "OpenGeo Dashboard.dmg" that is OK.
@@ -131,8 +136,10 @@
 # into the 'binaries' directory:
 #
   cd ../installer/mac.new
+if [ $dashboard ]; then
   rm -rf "binaries/OpenGeo Dashboard.app"
-  cp -r "../../dashboard/OpenGeo Dashboard.app" "binaries/"
+  cp -r "../../dashboard/OpenGeo Dashboard.app" "binaries/OpenGeo Dashboard.app"
+fi
 #
 # Build the dashboard using the Iceberg 'freeze' commandline
 #
@@ -171,6 +178,7 @@
 # Unzip the postgres-osx.zip artifact downloaded from data.opengeo.org 
 # into the binaries directory.
 #
+  rm -rf binaries/pgsql
   unzip ../../assembly/postgres-osx.zip \
         -d binaries/
 #
@@ -209,11 +217,15 @@
 # artifact created in the first section into the "binaries" directory:
 
   suite_version=1.0
+  rm -rf ./binaries/ext
   unzip ../../target/opengeosuite-$suite_version-ext.zip -d binaries
+  rm -rf "./build/GeoServer Extensions.pkg"
+  freeze ./geoserverext.packproj
 # 
 # Build the Suite Package
 # -----------------------
 #
+  rm -rf ./suitebuild/*
   freeze ./suite.packproj
 
 # The "OpenGeo Suite.mpkg" will be built into the ./suitebuild directory
