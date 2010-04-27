@@ -112,7 +112,7 @@ if [ $dashboard ]; then
 #
   tibuild.py -d . \
              -s /Library/Application\ Support/Titanium \
-             -a /Library/Application\ Support/Titanium/sdk/osx/0.8.0/ \
+             -a /Library/Application\ Support/Titanium/sdk/osx/$titanium_version/ \
              OpenGeo\ Dashboard/
 fi
 
