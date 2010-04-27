@@ -190,6 +190,18 @@ fi
   chmod 755 binaries/pgAdmin3.app/Contents/MacOS/pgAdmin3
   chmod 755 binaries/pgShapeLoader.app/Contents/MacOS/pgShapeLoader*
 #
+# Put custom resources into pgAdmin3
+#
+  cp -f resources/pgadmin/settings.ini \
+     binaries/pgAdmin3.app/Contents/SharedSupport
+  cp -f resources/pgadmin/branding.ini \
+     binaries/pgAdmin3.app/Contents/SharedSupport/branding
+  cp -f resources/pgadmin/pgadmin_splash.gif \
+     binaries/pgAdmin3.app/Contents/SharedSupport/branding
+  cat resources/pgadmin/plugins.ini \
+     >> binaries/pgAdmin3.app/Contents/SharedSupport/plugins.ini
+
+#
 # Give all the files root ownership
 # sudo chown -R root:admin "app/OpenGeo PostGIS/"
 #
