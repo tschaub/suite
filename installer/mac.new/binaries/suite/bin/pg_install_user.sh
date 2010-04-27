@@ -3,6 +3,11 @@
 d=`dirname $0`
 source ${d}/pg_config.sh
 
+# Read the pg port from the ini file or set
+# up the defaults
+pg_check_ini
+
+# Make sure the executables are there
 bin=$(pg_check_bin)
 if [ "$bin" != "good" ]; then
   echo "Cannot find PgSQL component: $bin"
@@ -11,6 +16,7 @@ fi
 
 # We want to run all these as postgres superuser
 export PGUSER=postgres
+export PGPORT=$pg_port
 
 "$pg_bin_dir/createuser" --createdb --superuser $USER >> "$pg_log"
 rv=$?
