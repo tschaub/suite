@@ -8,6 +8,7 @@ then
   sed -i .bak 's/@SUITE_EXE@/\/opt\/opengeo\/geoserver\/opengeo-suite/g' "$configini"
   sed -i .bak 's/@SUITE_DIR@/\/opt\/opengeo\/geoserver/g' "$configini"
   sed -i .bak 's/@GEOSERVER_DATA_DIR@/\/opt\/opengeo\/geoserver\/data_dir/g' "$configini"
+  sed -i .bak 's/@PGSQL_PORT@/54321/g' "$configini"
 fi
 
 #open "/Applications/OpenGeo/OpenGeo Dashboard.app"
