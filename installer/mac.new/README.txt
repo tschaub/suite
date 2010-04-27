@@ -184,14 +184,22 @@ fi
 #
 # Move the apps down one directory level
 #
+  rm -rf binaries/pgShapeLoader.app
   mv binaries/pgsql/pgShapeLoader.app/ binaries/
-  mv binaries/pgsql/pgAdmin3.app/ binaries/
+  rm -rf binaries/stackbuilder.app
   mv binaries/pgsql/stackbuilder.app/ binaries/
-  chmod 755 binaries/pgAdmin3.app/Contents/MacOS/pgAdmin3
   chmod 755 binaries/pgShapeLoader.app/Contents/MacOS/pgShapeLoader*
+
 #
-# Put custom resources into pgAdmin3
+# Prepare pgAdmin3 for packaging
 #
+  rm -rf binaries/pgAdmin3.app
+  mv binaries/pgsql/pgAdmin3.app/ binaries/
+  chmod 755 binaries/pgAdmin3.app/Contents/MacOS/pgAdmin3
+  chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/pg_dump
+  chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/pg_dumpall
+  chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/pg_restore
+  chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/psql
   cp -f resources/pgadmin/settings.ini \
      binaries/pgAdmin3.app/Contents/SharedSupport
   cp -f resources/pgadmin/branding.ini \
