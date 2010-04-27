@@ -34,7 +34,7 @@ public class RequestMonitor {
 
     RequestMonitorDAO dao;
     
-    Queue<RequestStats> liveRequests = new ConcurrentLinkedQueue();
+    Queue<RequestStats> liveRequests = new ConcurrentLinkedQueue<RequestStats>();
     
     String host;
     
