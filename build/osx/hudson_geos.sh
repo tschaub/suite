@@ -25,11 +25,17 @@ case "$1" in
 
   build)
 
-    rm -rf ${buildroot}/geos
-    mkdir ${buildroot}/geos
     ./autogen.sh
     CXX=g++-4.0 CC=gcc-4.0 CXXFLAGS="-O2 -arch i386 -arch ppc -mmacosx-version-min=10.4" CFLAGS="-O2 -arch i386 -arch ppc -mmacosx-version-min=10.4" ./configure --prefix=${buildroot}/geos --disable-dependency-tracking
-    make clean all
+    make clean
+    make all
+    if [ $rv -gt 0 ]; then
+      echo "GEOS build failed with return value $rv"
+      exit 1
+    fi
+
+    rm -rf ${buildroot}/geos
+    mkdir ${buildroot}/geos
     make install
     ;;
 
