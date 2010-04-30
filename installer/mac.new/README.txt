@@ -102,7 +102,7 @@
 #
 # Ensure the 'tibuild.py' script is on your PATH. It is located under:
 #  
-dashboard=0
+dashboard=1
 if [ $dashboard ]; then
 
   titanium_version=1.0.0
