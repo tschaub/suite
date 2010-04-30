@@ -11,5 +11,5 @@ then
   sed -i .bak 's/@PGSQL_PORT@/54321/g' "$configini"
 fi
 
-#open "/Applications/OpenGeo/OpenGeo Dashboard.app"
+open "/Applications/OpenGeo/OpenGeo Dashboard.app"
 exit 0
