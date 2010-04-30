@@ -8,15 +8,19 @@
 pg_shmall=65536    # 64kb
 pg_shmmax=67108864 # 64Mb
 
+# Current values
+shmall=`sysctl -n kern.sysv.shmall`
+shmmax=`sysctl -n kern.sysv.shmmax`
+
 function dosysctl {
   if [ "$2" -lt "$3" ]
   then
-    if [ -f /etc/sysctl.conf ]
+    if [ -f /private/etc/sysctl.conf ]
     then
-      cat /etc/sysctl.conf | grep -v $1 > /tmp/sysctl
-      mv -f /tmp/sysctl /etc/sysctl.conf
+      cat /private/etc/sysctl.conf | grep -v $1 > /tmp/sysctl
+      mv -f /tmp/sysctl /private/etc/sysctl.conf
     fi
-    echo "$1=$3" >> /etc/sysctl.conf
+    echo "$1=$3" >> /private/etc/sysctl.conf
     /usr/sbin/sysctl -w $1=$3 > /dev/null
   fi
 }
