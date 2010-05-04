@@ -60,7 +60,7 @@ Download http://downloads.sourceforge.net/sourceforge/gtk-osx/gtk-osx-build-setu
 
 Edit .jhbuildrc-custom:
 line  39:  moduleset="http://github.com/jralls/gtk-osx-build/raw/master/modulesets-stable/gtk-osx.modules"
-line  43:  modules = [ "meta-gtk-osx-bootstrap", "meta-gtk-osx-core" ]
+line  43:  modules = [ "meta-gtk-osx-bootstrap", "meta-gtk-osx-core", "gtk-quartz-engine", "ige-mac-integration" ]
 line 118:  setup_sdk(target="10.4", sdk_version="10.4u", architectures=["i386"])
 
  # we ignore system so we build gettext too
@@ -69,7 +69,7 @@ line 118:  setup_sdk(target="10.4", sdk_version="10.4u", architectures=["i386"])
  jhbuild build meta-gtk-osx-core
  # so we can skin the app like OS/X sorta
  jhbuild build gtk-quartz-engine
-
+ jhbuild build ige-mac-integration
 
 
 PostGIS Build

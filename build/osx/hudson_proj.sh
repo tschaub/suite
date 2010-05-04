@@ -41,6 +41,9 @@ case "$1" in
     rm -rf ${buildroot}/proj
     mkdir ${buildroot}/proj
     make install
+    cd ${buildroot}/proj
+    rm -f ~/Sites/proj.zip
+    zip -r9 ~/Sites/proj.zip *
     ;;
 
 esac
