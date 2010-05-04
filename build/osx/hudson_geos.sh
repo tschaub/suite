@@ -37,6 +37,9 @@ case "$1" in
     rm -rf ${buildroot}/geos
     mkdir ${buildroot}/geos
     make install
+    cd ${buildroot}/geos
+    rm -f ~/Sites/geos.zip
+    zip -r9 ~/Sites/geos.zip *
     ;;
 
 esac
