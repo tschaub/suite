@@ -115,6 +115,19 @@ case "$1" in
     jhbuild run make clean all
     cp -f shp2pgsql-gui ${buildroot}/pgsql/bin
     popd
+
+    # Bundle the pgShapeLoader.app
+    cd ..
+    pushd shp2pgsql-ige-mac-bundle
+    jhbuild run ige-mac-bundler ShapeLoader.bundle
+    popd
+
+    # Zip up the results and put on the web
+    pushd ${buildroot}
+    rm -f ~/Sites/postgis-osx.zip
+    zip -r9 ~/Sites/postgis-osx.zip pgsql
+    popd
+
     ;;
 
 

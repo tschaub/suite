@@ -1,5 +1,6 @@
 # Where do we build into (our --prefix)
 buildroot=$HOME/buildroot/
+export buildroot
 
 # Versions we are going to continuously integrate...
 geos_version=3.2

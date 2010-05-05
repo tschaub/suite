@@ -43,8 +43,8 @@ case "$1" in
     mkdir ${buildroot}/geos
     make install
     cd ${buildroot}/geos
-    rm -f ~/Sites/geos.zip
-    zip -r9 ~/Sites/geos.zip *
+    rm -f ~/Sites/geos-osx.zip
+    zip -r9 ~/Sites/geos-osx.zip *
     ;;
 
   *)

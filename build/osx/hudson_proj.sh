@@ -47,8 +47,8 @@ case "$1" in
     mkdir ${buildroot}/proj
     make install
     cd ${buildroot}/proj
-    rm -f ~/Sites/proj.zip
-    zip -r9 ~/Sites/proj.zip *
+    rm -f ~/Sites/proj-osx.zip
+    zip -r9 ~/Sites/proj-osx.zip *
     ;;
 
   *)
