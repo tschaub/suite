@@ -158,6 +158,10 @@ Shp2Pgsql-GUI Bundling
 Download and install the ige-mac-bundler
 http://sourceforge.net/apps/trac/gtk-osx/wiki/Bundle
 
+Copy libpq into the gtk lib directory (!!)
+
+ cp pgsql/lib/libpq.*.dylib ~/gtk/inst/lib
+
  # Enter the jhbuild shell
  jhbuild shell
  cd shp2pgsql-bundle

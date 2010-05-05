@@ -116,6 +116,10 @@ case "$1" in
     cp -f shp2pgsql-gui ${buildroot}/pgsql/bin
     popd
 
+    # Copy the latest libpq libraries into a place the
+    # bundler can find them...
+    cp -f ${buildroot}/pgsql/lib/libpq.*.dylib ${HOME}/gtk/inst/lib
+
     # Bundle the pgShapeLoader.app
     cd ..
     pushd shp2pgsql-ige-mac-bundle
