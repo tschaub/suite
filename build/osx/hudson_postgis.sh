@@ -87,9 +87,19 @@ export CXXFLAGS="-O2 -arch i386 -arch ppc -mmacosx-version-min=10.4"
   --with-projdir=${buildroot}/pgsql \
   --with-xml2config=/usr/bin/xml2-config \
   --disable-dependency-tracking 
+rv=$?
+if [ $rv -gt 0 ]; then
+  echo "configure failed with return value $rv"
+  exit 1
+fi
 
 # Build PostGIS
 make clean && make && make install
+rv=$?
+if [ $rv -gt 0 ]; then
+  echo "build failed with return value $rv"
+  exit 1
+fi
 
 # Re-Configure without ppc arch so we can link to GTK
 export CFLAGS="-O2 -arch i386 -mmacosx-version-min=10.4" 
@@ -104,12 +114,27 @@ jhbuild run \
   --with-xml2config=/usr/bin/xml2-config \
   --with-gui \
   --disable-dependency-tracking
+rv=$?
+if [ $rv -gt 0 ]; then
+  echo "configure failed with return value $rv"
+  exit 1
+fi
 
 pushd liblwgeom
 jhbuild run make clean all
+rv=$?
+if [ $rv -gt 0 ]; then
+  echo "build failed with return value $rv"
+  exit 1
+fi
 popd
 pushd loader
 jhbuild run make clean all
+rv=$?
+if [ $rv -gt 0 ]; then
+  echo "build failed with return value $rv"
+  exit 1
+fi
 cp -f shp2pgsql-gui ${buildroot}/pgsql/bin
 popd
 
@@ -123,12 +148,22 @@ pushd shp2pgsql-ige-mac-bundle
 echo buildroot = $buildroot
 export buildroot
 jhbuild run ige-mac-bundler ShapeLoader.bundle
+rv=$?
+if [ $rv -gt 0 ]; then
+  echo "app bundle failed with return value $rv"
+  exit 1
+fi
 popd
 
 # Zip up the results and put on the web
 pushd ${buildroot}
 rm -f ~/Sites/postgis-osx.zip
 zip -r9 ~/Sites/postgis-osx.zip pgsql
+rv=$?
+if [ $rv -gt 0 ]; then
+  echo "zip failed with return value $rv"
+  exit 1
+fi
 popd
 
 # Exit cleanly
