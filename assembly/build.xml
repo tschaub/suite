@@ -30,6 +30,55 @@
     <mkdir dir="postgres-osx"/>
     <unzip src="postgres-osx.zip" dest="postgres-osx/pgsql" overwrite="true"/>
 
+    <!-- Dashboard Mac OSX -->
+    <get src="${data}/dashboard-1.2.1-osx.zip" dest="dashboard-osx.zip" usetimestamp="yes"/>
+    <delete dir="dashboard-osx"/>
+    <mkdir dir="dashboard-osx"/>
+    <unzip src="dashboard-osx.zip" dest="dashboard-osx" overwrite="true"/>
+    <copy todir="dashboard-osx/OpenGeo Dashboard.app/Contents/Resources">
+        <fileset dir="../dashboard/OpenGeo Dashboard/Resources">
+            <exclude name="**/.svn/"/>
+            <exclude name="**/.svn*"/>
+        </fileset>
+    </copy>
+    <copy todir="dashboard-osx/OpenGeo Dashboard.app/Contents">
+        <filelist dir="../dashboard/OpenGeo Dashboard"
+                  files="CHANGELOG.txt,LICENSE.txt,manifest,tiapp.xml,timanifest"/>
+    </copy>
+    
+    <!-- Dashboard Linux32 -->
+    <get src="${data}/dashboard-1.2.1-lin32.zip" dest="dashboard-lin32.zip" usetimestamp="yes"/>
+    <delete dir="dashboard-lin32"/>
+    <mkdir dir="dashboard-lin32"/>
+    <unzip src="dashboard-lin32.zip" dest="dashboard-lin32" overwrite="true"/>
+    <copy todir="dashboard-lin32/OpenGeo Dashboard/Resources">
+        <fileset dir="../dashboard/OpenGeo Dashboard/Resources">
+            <exclude name="**/.svn/"/>
+            <exclude name="**/.svn*"/>
+        </fileset>
+    </copy>
+    <copy todir="dashboard-lin32/OpenGeo Dashboard/">
+        <filelist dir="../dashboard/OpenGeo Dashboard"
+                  files="CHANGELOG.txt,LICENSE.txt,manifest,tiapp.xml,timanifest"/>
+    </copy>
+
+    <!-- Dashboard Win32 -->
+    <get src="${data}/dashboard-1.2.1-win32.zip" dest="dashboard-win32.zip" usetimestamp="yes"/>
+    <delete dir="dashboard-win32"/>
+    <mkdir dir="dashboard-win32"/>
+    <unzip src="dashboard-win32.zip" dest="dashboard-win32" overwrite="true"/>
+    <copy todir="dashboard-win32/OpenGeo Dashboard/Resources">
+        <fileset dir="../dashboard/OpenGeo Dashboard/Resources">
+            <exclude name="**/.svn/"/>
+            <exclude name="**/.svn*"/>
+        </fileset>
+    </copy>
+    <copy todir="dashboard-win32/OpenGeo Dashboard/">
+        <filelist dir="../dashboard/OpenGeo Dashboard"
+                  files="CHANGELOG.txt,LICENSE.txt,manifest,tiapp.xml,timanifest"/>
+    </copy>
+    
+
   </target>
 
 </project>
