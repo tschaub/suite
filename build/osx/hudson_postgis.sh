@@ -142,30 +142,6 @@ popd
 # bundler can find them...
 cp -f ${buildroot}/pgsql/lib/libpq.*.dylib ${HOME}/gtk/inst/lib
 
-# Bundle the pgShapeLoader.app
-cd ..
-pushd shp2pgsql-ige-mac-bundle
-echo buildroot = $buildroot
-export buildroot
-jhbuild run ige-mac-bundler ShapeLoader.bundle
-rv=$?
-if [ $rv -gt 0 ]; then
-  echo "app bundle failed with return value $rv"
-  exit 1
-fi
-popd
-
-# Zip up the results and put on the web
-pushd ${buildroot}
-rm -f ~/Sites/postgis-osx.zip
-zip -r9 ~/Sites/postgis-osx.zip pgsql
-rv=$?
-if [ $rv -gt 0 ]; then
-  echo "zip failed with return value $rv"
-  exit 1
-fi
-popd
-
 # Exit cleanly
 exit 0
     

@@ -36,6 +36,14 @@ if [ $rv -gt 0 ]; then
   exit 1
 fi
 
+# Build bundle
+${d}/hudson_bundle.sh suite-build
+rv=$?
+if [ $rv -gt 0 ]; then
+  echo "hudson_bundle failed with return value $rv"
+  exit 1
+fi
+
 # Done!
 exit 0
 
