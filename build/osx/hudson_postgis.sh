@@ -138,10 +138,6 @@ fi
 cp -f shp2pgsql-gui ${buildroot}/pgsql/bin
 popd
 
-# Copy the latest libpq libraries into a place the
-# bundler can find them...
-cp -f ${buildroot}/pgsql/lib/libpq.*.dylib ${HOME}/gtk/inst/lib
-
 # Exit cleanly
 exit 0
     
