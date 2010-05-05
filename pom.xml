@@ -112,6 +112,7 @@
            <descriptor>assembly/doc.xml</descriptor>
            <descriptor>assembly/ext.xml</descriptor>
            <descriptor>assembly/war.xml</descriptor>
+           <descriptor>assembly/war-jboss.xml</descriptor>
          </descriptors>
        </configuration>
      </plugin>

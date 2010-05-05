@@ -78,7 +78,18 @@
                  includes="CHANGELOG.txt,LICENSE.txt,manifest,tiapp.xml,timanifest"/>
     </copy>
     
-
+    <!-- geoserver jboss war -->
+    <antcall target="geoserver-war-jboss"/>
   </target>
 
+  <target name="geoserver-war-jboss">
+    <mkdir dir="target"/>
+    <jar destfile="target/geoserver-jboss.war">
+      <fileset dir="../geoserver/web/app/target/geoserver">
+        <exclude name="**/lib/xalan*.jar"/>
+        <exclude name="**/lib/xerces*.jar"/>
+      </fileset>
+      <fileset dir="geoserver" includes="WEB-INF/jboss-classloading.xml"/>
+    </jar>
+  </target>
 </project>
