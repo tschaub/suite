@@ -119,6 +119,7 @@ case "$1" in
     # Bundle the pgShapeLoader.app
     cd ..
     pushd shp2pgsql-ige-mac-bundle
+    echo buildroot = $buildroot
     jhbuild run ige-mac-bundler ShapeLoader.bundle
     popd
 
