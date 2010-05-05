@@ -20,8 +20,8 @@ From the "Test & Package" panel in Titanium Developer, you can launch the
 Dashboard application.
 
 
-Packaging the Dashboard
------------------------
+Packaging the Dashboard (for testing)
+-------------------------------------
 
 The dashboard can be packaged for your operating system by using Titanium
 Developer.  Appcelerator also allows for packaging in the "cloud."  This is 
@@ -41,13 +41,22 @@ Linux follows:
 The result is three packages for the dashboard application downloaded to the
 current directory (or other if specified).
 
-Distributing the Dashboard
---------------------------
+Packaging the Dashboard (for distribution)
+------------------------------------------
 
-The dashboard packages created above are bundled the Titanium runtime
-dependencies.  They are designed to be installed by a user.  To avoid the 
-install step, the package contents should be extracted and a file named
-.installed should be placed at the extracted directory.  If the resulting 
-directory is distributed with a file named .installed, a user can run the 
-dashboard by executing the included OpenGeo Dashboard executable and they won't
-be prompted to install first.
+For distribution in the Suite, the dashboard is packaged by copying resources
+into application shells created for each operating system.  These shells are
+created by packaging with Titanium Developer and installing the result on each
+target OS.  The dashboard assembly process in the Suite copies updated resources
+into the application directory created by the above installation.  The updated
+application is then bundled for distribution by the installers.
+
+The dashboard was most recently packaged with Titanium Developer 1.2.1 (using
+desktop 1.0.0 SDK).  The resulting packages can be downloaded from the location
+below.
+
+    http://api.appcelerator.net/p/pages/app_page?token=64jRYZ56
+    
+The resulting application shells (not runnable) are downloaded from the Suite
+data directory (http://data.opengeo.org/suite/).  Resources are copied into the
+shells by Maven (assembly/build.xml).
