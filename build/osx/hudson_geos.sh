@@ -8,10 +8,11 @@ source ${d}/hudson_config.sh
 
 function usage() {
   echo "Usage: $0 <setup|build>"
+  exit 1
 }
 
 if [ $# -lt 1 ]; then
-  usage;
+  usage
 fi
 
 case "$1" in
@@ -24,6 +25,10 @@ case "$1" in
 
 
   build)
+
+    if [ -d geos-svn ]; then
+      cd geos-svn
+    fi
 
     ./autogen.sh
     CXX=g++-4.0 CC=gcc-4.0 CXXFLAGS="-O2 -arch i386 -arch ppc -mmacosx-version-min=10.4" CFLAGS="-O2 -arch i386 -arch ppc -mmacosx-version-min=10.4" ./configure --prefix=${buildroot}/geos --disable-dependency-tracking
@@ -40,6 +45,10 @@ case "$1" in
     cd ${buildroot}/geos
     rm -f ~/Sites/geos.zip
     zip -r9 ~/Sites/geos.zip *
+    ;;
+
+  *)
+    usage
     ;;
 
 esac

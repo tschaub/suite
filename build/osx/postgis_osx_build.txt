@@ -90,7 +90,7 @@ Building on OS/X 10.6 you may need to do the sudo symlinking steps below. This i
  jhbuild shell
 
  # paths to find and link to pgsql stuffs
- export PATH=$HOME/osxbuild/pgsql/bin:$PATH
+ export PATH=$HOME/osxbuild/pgsql/bin:$HOME/gtk/inst/bin:$PATH
  export DYLD_LIBRARY_PATH=$HOME/osxbuild/pgsql/lib
 
  cd $HOME/osxbuild
