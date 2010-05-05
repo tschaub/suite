@@ -13,13 +13,13 @@
          either define your own or just hardcode the path here.
     -->
     <prefix name="default">${env:JHBUILD_PREFIX}</prefix>
-    <prefix name="pgsql">${env:buildroot}/pgsql/</prefix>
+    <prefix name="pgsql">${env:buildroot}/pgsql</prefix>
 
     <!-- The project directory is the default location of the created
          app. If you leave out the path, the current directory is
          used. Note the usage of an environment variable here again.
     -->
-    <destination overwrite="yes">${env:buildroot}/pgsql/}</destination>
+    <destination overwrite="yes">${prefix:pgsql}</destination>
 
     <image>
       <!-- Not implemented yet (DMG image). -->

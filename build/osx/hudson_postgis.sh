@@ -120,6 +120,7 @@ case "$1" in
     cd ..
     pushd shp2pgsql-ige-mac-bundle
     echo buildroot = $buildroot
+    export buildroot
     jhbuild run ige-mac-bundler ShapeLoader.bundle
     popd
 
