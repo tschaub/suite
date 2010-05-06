@@ -18,7 +18,7 @@ ${d}/hudson_proj.sh proj-svn
 rv=$?
 if [ $rv -gt 0 ]; then
   echo "hudson_proj failed with return value $rv"
-  exit 1
+  exit $rv
 fi
 
 # Build geos
@@ -27,7 +27,7 @@ ${d}/hudson_geos.sh geos-svn
 rv=$?
 if [ $rv -gt 0 ]; then
   echo "hudson_geos failed with return value $rv"
-  exit 1
+  exit $rv
 fi
 
 # Build postgis
@@ -36,7 +36,7 @@ ${d}/hudson_postgis.sh postgis-svn
 rv=$?
 if [ $rv -gt 0 ]; then
   echo "hudson_postgis failed with return value $rv"
-  exit 1
+  exit $rv
 fi
 
 # Build bundle
@@ -45,7 +45,7 @@ ${d}/hudson_bundle.sh suite-build
 rv=$?
 if [ $rv -gt 0 ]; then
   echo "hudson_bundle failed with return value $rv"
-  exit 1
+  exit $rv
 fi
 
 # Done!

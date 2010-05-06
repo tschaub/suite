@@ -48,19 +48,19 @@ jhbuild run ige-mac-bundler ShapeLoader.bundle
 rv=$?
 if [ $rv -gt 0 ]; then
   echo "app bundle failed with return value $rv"
-  exit 1
+  exit $rv
 fi
 popd
 
 # Zip up the results and put on the web
 pushd ${buildroot}
-rm -f ~/Sites/postgis-osx.zip
-zip -r9 ~/Sites/postgis-osx.zip pgsql
+zip -r9 ~/Sites/new-postgis-osx.zip pgsql
 rv=$?
 if [ $rv -gt 0 ]; then
   echo "zip failed with return value $rv"
-  exit 1
+  exit $rv
 fi
+mv -f ~/Sites/new-postgis-osx.zip ~/Sites/postgis-osx.zip
 popd
 
 # Exit cleanly
