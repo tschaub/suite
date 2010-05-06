@@ -35,25 +35,19 @@ public class Start {
             System.out.println(f.getAbsolutePath() + " not found, continuing with default parameters.");
         }
         
-        String startPort = ini.get("suite", "port");
-        if (startPort == null) {
-            startPort = ini.get("?", "port");
-        }
+        String startPort = ini.get("?", "suite_port");
         if (startPort != null) {
             System.setProperty("jetty.port", startPort);
         }
         
-        String stopPort = ini.get("suite", "stop_port");
-        if (stopPort == null) {
-            stopPort = ini.get("?", "stop_port");
-        }
+        String stopPort = ini.get("?", "suite_stop_port");
         if (stopPort == null) {
             stopPort = "8079";
         }
         System.setProperty("STOP.PORT", stopPort);
         System.setProperty("STOP.KEY", "opengeo");
         
-        String gsDataDirectory = ini.get("geoserver", "data_dir" );
+        String gsDataDirectory = ini.get("?", "geoserver_data_dir" );
         if (gsDataDirectory == null) {
             //look in config directory
             File dd = new File( ogConfigDir, "data_dir");
