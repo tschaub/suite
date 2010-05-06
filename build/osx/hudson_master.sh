@@ -13,6 +13,7 @@ if [ $# -ne 0 ]; then
 fi
 
 # Build proj
+echo "Running hudson_proj.sh..."
 ${d}/hudson_proj.sh proj-svn
 rv=$?
 if [ $rv -gt 0 ]; then
@@ -21,6 +22,7 @@ if [ $rv -gt 0 ]; then
 fi
 
 # Build geos
+echo "Running hudson_geos.sh..."
 ${d}/hudson_geos.sh geos-svn
 rv=$?
 if [ $rv -gt 0 ]; then
@@ -29,6 +31,7 @@ if [ $rv -gt 0 ]; then
 fi
 
 # Build postgis
+echo "Running hudson_postgis.sh..."
 ${d}/hudson_postgis.sh postgis-svn
 rv=$?
 if [ $rv -gt 0 ]; then
@@ -37,6 +40,7 @@ if [ $rv -gt 0 ]; then
 fi
 
 # Build bundle
+echo "Running hudson_bundle.sh..."
 ${d}/hudson_bundle.sh suite-build
 rv=$?
 if [ $rv -gt 0 ]; then
