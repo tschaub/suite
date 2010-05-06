@@ -324,8 +324,8 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             }]
         });
         win.show();
-        console.log(win.el.dom);
         this.processLinks(win.el.dom);
+        this.renderConfigValues(win.el.dom);
         
         Ext.select("#app-start-pref-link").on({
             click: function() {
@@ -543,6 +543,30 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         ilinks.removeClass("app-ilink");
         
         this.updateOnlineLinks(this.suite.online);
+    },
+    
+    /** private: method[renderConfigValues]
+     *  :arg root: ``Element`` or ``String`` Optional element or element id
+     *      that is the root of any elements that need behavior modification.
+     *
+     *  Replace content of elements with configuration values.
+     */
+    renderConfigValues: function(root) {
+        var els = Ext.select(".app-config-value", false, root);
+        els.each(function(el) {
+            var id = el.dom.id;
+            if (id) {
+                var parts = id.split("-");
+                if (parts.length > 1) {
+                    var key = parts.pop();
+                    var value = this.config[key];
+                    if (value) {
+                        el.dom.innerHTML = value;
+                    }
+                }
+            }
+        }, this);
+        els.removeClass("app-config-value");
     },
     
     initControlPanel: function() {
