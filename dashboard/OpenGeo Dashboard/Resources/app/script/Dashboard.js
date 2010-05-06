@@ -58,7 +58,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         this.initialConfig = config;
         this.config = Ext.apply({}, config);
         
-        this.suite = new og.Suite(config.suite);
+        this.suite = new og.Suite(config); // TODO: extract just suite config?
         og.util.tirun(function() {
             this.platform = og.platform[Titanium.Platform.name];
         }, this, function(){}    );
@@ -84,7 +84,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 
                 //if the current config is dirty, update the suite config
                 if (this.configDirty == true) {
-                    Ext.apply(this.suite.config, this.config.suite);
+                    Ext.apply(this.suite.config, this.config); // TODO: extract just suite config?
                     this.configDirty = false;
                 }
                 
@@ -370,12 +370,12 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 },
                 items: [{ 
                     fieldLabel: "Primary Port",
-                    name: "port",
-                    value: this.config.suite.port
+                    name: "suite_port",
+                    value: this.config["suite_port"]
                 },  {
                     fieldLabel: "Shutdown Port",
-                    name: "stop_port",
-                    value: this.config.suite.stop_port
+                    name: "suite_stop_port",
+                    value: this.config["suite_stop_port"]
                 }]
             }, {
                 xtype: "fieldset",
@@ -389,26 +389,26 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 items: [{ 
                     xtype: 'textfield',
                     fieldLabel: "Data Directory",
-                    name: "data_dir",
-                    value: this.config.geoserver.data_dir
+                    name: "geoserver_data_dir",
+                    value: this.config["geoserver_data_dir"]
                 }, {
                     xtype: 'textfield',
                     fieldLabel: "Username",
                     toolTip: "GeoServer adminstrator username",
-                    name: "username",
-                    value: this.config.geoserver.username
+                    name: "geoserver_username",
+                    value: this.config["geoserver_username"]
                 }, {
                     xtype: "textfield",
                     id: "geoserver-admin-password",
                     inputType: "password",
                     fieldLabel: "Password",
                     toolTip: "GeoServer adminstrator password",
-                    name: "password",
-                    value: this.config.geoserver.password,
+                    name: "geoserver_password",
+                    value: this.config["geoserver_password"],
                     listeners: {
                         change: function(f, e) {
                             //reset the password confiformation form
-                            var confirm = this.prefPanel.getForm().findField('password_confirm');
+                            var confirm = this.prefPanel.getForm().findField("geoserver_password_confirm");
                             confirm.setValue("");
                         }, 
                         scope: this
@@ -418,8 +418,8 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     inputType: "password",
                     fieldLabel: "Confirm",
                     vtype: "password",
-                    name: "password_confirm", 
-                    value: this.config.geoserver.password,
+                    name: "geoserver_password_confirm", 
+                    value: this.config["geoserver_password"],
                     initialPasswordField: "geoserver-admin-password"
                 }]
             },  {
@@ -433,12 +433,12 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 },
                 items: [{
                     //xtype: 'fileuploadfield',
-                    xtype: 'textfield',
-                    id: 'exe',
-                    //emptyText: this.config.suite.exe,
-                    value: this.config.suite.exe,
+                    xtype: "textfield",
+                    id: "suite_exe",
+                    //emptyText: this.config["suite_exe"],
+                    value: this.config["suite_exe"],
                     fieldLabel: "Suite Executable",
-                    name: "exe",
+                    name: "suite_exe",
                     /*buttonCfg: {
                         text:'', 
                         tooltip: 'Browse for your Suite executable file'
@@ -450,25 +450,24 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 formBind: true,
                 handler: function(btn, evt) {
                     var form = this.prefPanel.getForm();
+                    var config = this.config;
                     
-                    //save suite config
-                    var suite = this.config.suite;
-                    suite.exe = form.findField('exe').getValue();
-                    suite.port = form.findField('port').getValue();
-                    suite.stop_port =  form.findField('stop_port').getValue();
+                    // update suite config
+                    config["suite_exe"] = form.findField("suite_exe").getValue();
+                    config["suite_port"] = form.findField("suite_port").getValue();
+                    config["suite_stop_port"] =  form.findField("suite_stop_port").getValue();
 
-                    //save geoserver config
-                    var gs = this.config.geoserver;
-                    var username = form.findField("username").getValue();
-                    var password = form.findField("password").getValue();
-                    if (username != gs.username || password != gs.password) {
+                    // update geoserver config
+                    var username = form.findField("geoserver_username").getValue();
+                    var password = form.findField("geoserver_password").getValue();
+                    if (username != config["geoserver_username"] || password != config["geoserver_password"]) {
                         //username password change
                         this.updateGeoServerUserPass(username, password);
-                        gs.username = username;
-                        gs.password = password;
+                        config["geoserver_username"] = username;
+                        config["geoserver_password"] = password;
                     }
                     
-                    gs.data_dir = form.findField("data_dir").getValue();
+                    config["geoserver_data_dir"] = form.findField("geoserver_data_dir").getValue();
         
                     og.util.saveConfig(this.config, 'config.ini');
                     this.info("Configuration saved. The suite must be restarted for changes to take effect.");
@@ -478,9 +477,8 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     // flag and we update the suite config after it shuts down
                     if (this.suite.online == true) {
                         this.configDirty = true;
-                    }
-                    else {
-                        Ext.apply(this.suite.config, this.config.suite);
+                    } else {
+                        Ext.apply(this.suite.config, this.config);
                     }
                 },
                 scope: this
@@ -503,25 +501,20 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         var xlinks = Ext.select(".app-xlink", false, root);
         xlinks.on({
             click: function(evt, el) {
-                var port = this.config.suite.port;
-                var path;
+                var port = this.config["suite_port"];
+                var host = this.config["suite_host"];
+                var id, parts, key, path, url, title;
                 if (el.href.indexOf("#") >= 0) {
-                    var id = el.href.split("#").pop();
-                    var parts = id.split("-");
-                    var path, url, title;
+                    id = el.href.split("#").pop();
+                    parts = id.split("-");
                     if (parts.length > 1) {
-                        var tmp = parts.shift();
-                        parts.unshift("config");
-                        parts.unshift(tmp);
-                        
                         // lookup URL in config
-                        var section = eval(parts.slice(0, 3).join("."));
-                        var key = parts.pop();
-                        path = section[key];
+                        key = parts.pop();
+                        path = this.config[key];
                         if (path) {
-                            title = section[key + "_title"];
+                            title = this.config[key + "_title"];
                             if (!path.match(/^(https?|file):\/\//)) {
-                                url = "http://" + section.host + (port ? ":" + port : "") + section[key];
+                                url = "http://" + host + (port ? ":" + port : "") + path;
                             }
                         }
                     }                    
@@ -800,16 +793,16 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
     updateGeoServerUserPass: function(username, password) {
         og.util.tirun(function() {
             //load the GeoServer users.properties file
-            var gs = this.config.geoserver;
-            var f = Titanium.Filesystem.getFile(gs.data_dir, "security", "users.properties");
+            var config = this.config;
+            var f = Titanium.Filesystem.getFile(config["geoserver_data_dir"], "security", "users.properties");
             if (f.exists() === true) {
                 var props = Titanium.App.loadProperties(f.nativePath());
                 
                 //has the username changed?
-                if (username != gs.username) {
+                if (username != config["geoserver_username"]) {
                     //kill the old entry
-                    if (props.hasProperty(gs.username)) {
-                        props.setString(gs.username, "dummy, ROLE_DUMMY");    
+                    if (props.hasProperty(config["geoserver_username"])) {
+                        props.setString(config["geoserver_username"], "dummy, ROLE_DUMMY");    
                     }
                     
                     //add the new one
@@ -817,10 +810,10 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 }
                 else {
                     //just update the entry
-                    if (props.hasProperty(gs.username)) {
-                        var entry = props.getString(gs.username).split(",");
+                    if (props.hasProperty(config["geoserver_username"])) {
+                        var entry = props.getString(config["geoserver_username"]).split(",");
                         entry[0] = password;
-                        props.setString(gs.username, entry.join(", "));                        
+                        props.setString(config["geoserver_username"], entry.join(", "));                        
                     }
                     else {
                         //for some reason did not exist, just add a new one
