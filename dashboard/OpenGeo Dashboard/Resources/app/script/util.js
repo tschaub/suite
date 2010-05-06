@@ -74,40 +74,18 @@ og.util = {
      parseConfig: function(text) {
         var lines = text.split(/[\n\r]/);
         var config = {};
-        var defaults = {};
-        var line, pair, key, value, match, section;
+        var line, pair, key, value, match;
         for (var i=0, len=lines.length; i<len; ++i) {
             line = lines[i].trim();
-            match = line.match(/^\s*\[(.*?)\]\s*$/);
-            if (match) {
-                section = match[1];
-            } else if (line) {
+            if (line) {
                 pair = line.split("=");
                 if (pair.length > 1) {
                     key = pair.shift().trim();
                     value = pair.join("=").trim();
-                    if (section) {
-                        if (!config[section]) {
-                            config[section] = {};
-                        }
-                        config[section][key] = value;
-                    } else {
-                        // defaults are pairs before all sections
-                        defaults[key] = value;
-                    }
+                    config[key] = value;
                 }
             }
         }
-        // apply all defaults to each section
-        for (section in config) {
-            for (var key in defaults) {
-                if (!(key in config[section])) {
-                    config[section][key] = defaults[key];
-                }
-            }
-        }
-        
-        config['defaults'] = defaults;
         return config;
     }, 
     
@@ -120,36 +98,16 @@ og.util = {
         this.tirun(function() {
             var fs = Titanium.Filesystem;
             var sep = fs.getSeparator();
-            var file = fs.getFileStream(fs.getUserDirectory() +sep+ ".opengeo"
-                                        +sep+ "config.ini");
+            var file = fs.getFileStream(
+                fs.getUserDirectory() +sep+ ".opengeo" +sep+ "config.ini"
+            );
 
             if (file.open(fs.MODE_WRITE) == true) {
-                //write out defaults first
-                for (key in config["defaults"]) {
-                    file.writeLine(key + "=" + config["defaults"][key]);
-                }
-                
-                //write out rest of sections
-                for (section in config) {
-                    if (section == "defaults") {
-                        continue;
-                    }
-                    file.writeLine(" ");
-                    file.writeLine("["+section+"]");
-
-                    for (key in config[section]) {
-                        //if the key has a default key only write it 
-                        // out if its value is different
-                        if (key in config["defaults"] && config[section][key] == config["defaults"][key]){
-                            continue;
-                        }
-                        
-                        file.writeLine(key + "=" + config[section][key]);
-                    }
+                for (key in config) {
+                    file.writeLine(key + "=" + config[key]);
                 }
                 file.close();
-            }
-            else {
+            } else {
                 Ext.Msg.alert("Warning",
                               "Could not write to " + file.toString());
             }
