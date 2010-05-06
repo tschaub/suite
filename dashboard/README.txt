@@ -61,6 +61,7 @@ linux and osx:
 
 The dashboard assembly process in the Suite downloads the dashboard skeletons
 from the Suite data directory (http://data.opengeo.org/suite/) and copies
-updated dashboard resources into the extracted directories.  The updated
-application is then bundled for distribution by the installers.
+updated dashboard resources into the extracted directories.  Copying of updated
+resources is handled by the assembly/build.xml script.  The updated application
+is then bundled for distribution by the installers.
 
