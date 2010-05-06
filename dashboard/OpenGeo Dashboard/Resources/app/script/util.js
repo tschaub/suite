@@ -22,12 +22,18 @@ og.util = {
      *  Load and parse a config file given the URL.
      */
     loadConfig: function(url) {
+        var config;
         if (window.Titanium) {
-            return this.loadConfigFS(url);
+            config = this.loadConfigFS(url);
+        } else {
+            config = this.loadConfigHTTP(url);
         }
-        else {
-            return this.loadConfigHTTP(url);
+        var version = config["suite_version"];
+        if (!version) {
+            // 1.0.0 or invalid config
+            window.alert("You are using an outdated config.ini file.  Upgrade not yet supported.");
         }
+        return config;
     }, 
     
     /** private: method[loadConfig]
