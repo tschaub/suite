@@ -48,7 +48,7 @@ if [ $OS = "osx" ]; then
     # don't remove English.lproj or others
     ls -d "$RESDIR"/* | grep -v .lproj | sed 's/ /\\ /g' | xargs rm -rf
 else
-    APPDIR=$APP
+    APPDIR="$DIR/$APP"
     RESDIR="$APPDIR"/Resources
     rm -rf "$RESDIR"/*
 fi
