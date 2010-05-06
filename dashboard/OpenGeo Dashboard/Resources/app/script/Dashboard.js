@@ -485,7 +485,9 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             }, {
                 text: "Reset", 
                 handler: function(btn, evt) {
-                }
+                    this.prefPanel.getForm().reset();
+                },
+                scope: this
             }]
         })
         return this.prefPanel;
