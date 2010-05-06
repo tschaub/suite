@@ -101,8 +101,7 @@ og.Suite = Ext.extend(Ext.util.Observable, {
             }, 
             this, 
             function() {
-                // TODO: sep not defined here
-                return this.config["suite_dir"] +sep+ "logs" +sep+ "opengeosuite.log";
+                return this.config["suite_dir"] + "/logs/opengeosuite.log";
             }
         );
     }, 
