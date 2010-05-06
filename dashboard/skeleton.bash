@@ -1,3 +1,11 @@
+## skeleton.bash
+# 
+# Creates an application skeleton from the provided
+# Titanium application.
+#
+# Usage:
+# skeleton "My App"
+#
 set -e
 
 APP=$1
