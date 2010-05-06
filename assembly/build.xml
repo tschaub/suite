@@ -34,7 +34,7 @@
     <get src="${data}/dashboard-1.0.0-osx.zip" dest="dashboard-1.0.0-osx.zip" usetimestamp="yes"/>
     <delete dir="dashboard-1.0.0-osx"/>
     <mkdir dir="dashboard-1.0.0-osx"/>
-    <exec executable="unzip">
+    <exec executable="unzip" failonerror="true">
         <arg value="dashboard-1.0.0-osx.zip"/>
     </exec>
     <copy todir="dashboard-1.0.0-osx/OpenGeo Dashboard.app/Contents/Resources">
@@ -51,7 +51,7 @@
     <!-- Dashboard Linux32 -->
     <get src="${data}/dashboard-1.0.0-linux.zip" dest="dashboard-1.0.0-linux.zip" usetimestamp="yes"/>
     <delete dir="dashboard-1.0.0-linux"/>
-    <exec executable="unzip">
+    <exec executable="unzip" failonerror="true">
         <arg value="dashboard-1.0.0-linux.zip"/>
     </exec>
     <copy todir="dashboard-1.0.0-linux/OpenGeo Dashboard/Resources">
@@ -69,7 +69,7 @@
     <get src="${data}/dashboard-1.0.0-win32.zip" dest="dashboard-1.0.0-win32.zip" usetimestamp="yes"/>
     <delete dir="dashboard-1.0.0-win32"/>
     <mkdir dir="dashboard-1.0.0-win32"/>
-    <exec executable="unzip">
+    <exec executable="unzip" failonerror="true">
         <arg value="dashboard-1.0.0-win32.zip"/>
     </exec>
     <copy todir="dashboard-1.0.0-win32/OpenGeo Dashboard/Resources">
