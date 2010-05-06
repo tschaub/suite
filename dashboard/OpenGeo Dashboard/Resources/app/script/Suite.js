@@ -10,7 +10,7 @@ og.Suite = Ext.extend(Ext.util.Observable, {
     
     /** api: property[config]
      *  ``Object``
-     *  The dashboard configuration.
+     *  The suite configuration.
      */
     config: null,
     
@@ -101,7 +101,8 @@ og.Suite = Ext.extend(Ext.util.Observable, {
             }, 
             this, 
             function() {
-                return this.config.dir +sep+ "logs" +sep+ "opengeosuite.log";
+                // TODO: sep not defined here
+                return this.config["suite_dir"] +sep+ "logs" +sep+ "opengeosuite.log";
             }
         );
     }, 
@@ -123,8 +124,8 @@ og.Suite = Ext.extend(Ext.util.Observable, {
      *  Monitors the status of the suite.
      */
     monitor: function() {
-        var port = this.config.port || "80";
-        var url = "http://" + this.config.host + ":" + port + "/geoserver"
+        var port = this.config["suite_port"] || "80";
+        var url = "http://" + this.config["suite_host"] + ":" + port + "/geoserver"
         var client = new XMLHttpRequest();
         client.open("HEAD", url);
         client.onreadystatechange = (function() {
@@ -147,7 +148,7 @@ og.Suite = Ext.extend(Ext.util.Observable, {
         og.util.tirun(
             function() {
                 var p = Titanium.Process.createProcess({
-                    args: [this.config.exe, "start"]
+                    args: [this.config["suite_exe"], "start"]
                 });
                 p.launch();
                 
@@ -164,7 +165,7 @@ og.Suite = Ext.extend(Ext.util.Observable, {
     stop: function() {
         og.util.tirun(function() {
             var p = Titanium.Process.createProcess({
-                args: [this.config.exe, "stop"]
+                args: [this.config["suite_exe"], "stop"]
             });
             p.launch();
 
