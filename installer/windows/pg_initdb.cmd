@@ -17,7 +17,7 @@ if not exist "%pg_bin_dir%" (
 
 REM Check for exisitng pg data directory
 if not exist "%pg_data_dir%\PG_VERSION" (
-  mkdir ..\pgdata 2>nul
+  mkdir "%USERPROFILE%\.opengeo\pgdata" 2>nul
   "%pg_bin_dir%\initdb.exe" --pgdata="%pg_data_dir%" --username=postgres --encoding=UTF8 2>nul >> "%pg_log%"
 ) else (
   REM nothing to do
