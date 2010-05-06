@@ -49,7 +49,7 @@ mkdir "$DIR"
 # run the tibuild.py packager
 python "$TITANIUM/sdk/$OS/$RUNTIME"/tibuild.py -s "$TITANIUM" -a "$TITANIUM/sdk/$OS/$RUNTIME" -v -n -d "$DIR" -t bundle "$APP"
 
-# strip our contents of resources dir
+# strip out contents of resources dir
 if [ $OS = "osx" ]; then
     APPDIR="$DIR"/$(basename "$APP").app
     RESDIR="$APPDIR"/Contents/Resources
