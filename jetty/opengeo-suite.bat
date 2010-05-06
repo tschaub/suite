@@ -43,6 +43,7 @@ set OPTS=-Dslf4j=false -cp %CLASSPATH%
 REM Start
 if "%1" == "start" (
   echo Starting the OpenGeo Suite...
+  call bin\postgis.cmd start
   %COMMAND% %VMOPTS% %OPTS% org.opengeo.jetty.Start
   goto Done
 )
@@ -51,6 +52,7 @@ if "%1" == "start" (
 REM Stop
 if "%1" == "stop" (
   echo Stopping the OpenGeo Suite...
+  call bin\postgis.cmd stop
   %COMMAND% %VMOPTS% %OPTS% org.opengeo.jetty.Start --stop
   goto Done
 )
