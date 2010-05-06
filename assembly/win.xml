@@ -94,7 +94,7 @@
     </fileSet>
     <fileSet>
       <directory>assembly/postgres-win/pgsql</directory>
-      <outputDirectory>pgsql</outputDirectory>
+      <outputDirectory>pgsql/8.4</outputDirectory>
     </fileSet>
   </fileSets>
   <files>
