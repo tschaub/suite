@@ -3,16 +3,17 @@
 ; Define your application name
 !define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
-!define VERSION "1.0"
-!define LONGVERSION "1.0.0.1" ; must be a.b.c.d
+!define VERSION "1.9.0"
+!define LONGVERSION "1.9.0.0" ; must be a.b.c.d
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
 !define SOURCEPATHROOT "..\..\target\opengeosuite-1.0-win"
-!define STARTMENU_FOLDER "${APPNAMEANDVERSION}"
+!define STARTMENU_FOLDER "${APPNAME}"
+!define UNINSTALLREGPATH "Software\Microsoft\Windows\CurrentVersion\Uninstall"
 
 ; Main Install settings
 Name "${APPNAMEANDVERSION}"
-InstallDir "$PROGRAMFILES\${COMPANYNAME}\${APPNAMEANDVERSION}"
-InstallDirRegKey HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" ""
+InstallDir "$PROGRAMFILES\${COMPANYNAME}\${APPNAME}"
+InstallDirRegKey HKLM "Software\${COMPANYNAME}\${APPNAME}" ""
 OutFile "OpenGeoSuite-${VERSION}.exe"
 
 ;Compression options
@@ -53,6 +54,8 @@ RequestExecutionLevel admin
 
 ; Might be the same as !define
 Var STARTMENU_FOLDER
+Var Upgrade
+Var OldInstallDir
 ;Var CommonAppData
 ;Var DataDirPath
 ;Var FolderName
@@ -65,6 +68,7 @@ Var OracleCheckBox
 Var OracleCheckBoxPrior
 ;Var SDEPathHWND
 ;Var BrowseSDEHWND
+
 
 ; Version Information (Version tab for EXE properties)
 VIProductVersion ${LONGVERSION}
@@ -94,7 +98,7 @@ LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be ins
 
 ; Start Menu Folder Page Configuration
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM" 
-!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" 
+!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${COMPANYNAME}\${APPNAME}" 
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
 
 ; "Are you sure you wish to cancel" dialog.
@@ -107,7 +111,7 @@ LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be ins
 
 ; What to do when done
 !define MUI_FINISHPAGE_RUN
-!define MUI_FINISHPAGE_RUN_TEXT "Start the OpenGeo Suite and launch the Dashboard"
+!define MUI_FINISHPAGE_RUN_TEXT "Launch the Dashboard"
 !define MUI_FINISHPAGE_RUN_FUNCTION "RunAfterInstall"
 
 
@@ -117,7 +121,7 @@ Function RunAfterInstall
   IfSilent SilentSkip
 
   ;Start Suite
-  ExecWait '"$INSTDIR\opengeo-suite.bat" start'
+  ;ExecWait '"$INSTDIR\opengeo-suite.bat" start'
 
   ClearErrors
   ExecShell "open" "$INSTDIR\dashboard\OpenGeo Dashboard.exe" SW_SHOWMAXIMIZED
@@ -210,29 +214,78 @@ Function CheckUserType
 FunctionEnd
 
 
-; Checks for existing versions
+; Checks for existing prior installs
 Function PriorInstall
 
   ClearErrors
 
   ; Is this version already installed?
-  ReadRegStr $R1 HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" "InstallDir"
-  IfErrors NoPriorInstall ; This specific version is not installed
+  ;ReadRegStr $R1 HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" "InstallDir"
+  EnumRegKey $R1 HKLM "SOFTWARE\${COMPANYNAME}" 0 ; Checks if the key even exists
+  IfErrors NoPriorInstall ; Not installed
 
+  ReadRegStr $R2 HKLM "Software\${COMPANYNAME}\${APPNAME}" "Version"
+  IfErrors Upgrade1.0 ; v1.0 and v1.0r1 did not have this key, so if not there, mmust be 1.0 or 1.0r1
+
+  StrCmp $R2 "1.9.0" SameVersion UnknownVersion
+
+
+  Upgrade1.0:
   ClearErrors
-  ; Fail!  This exact version is installed!
+  ReadRegStr $R1 HKLM "Software\${COMPANYNAME}\OpenGeo Suite 1.0" "InstallDir"
+  IfErrors Upgrade1.0r1
+  StrCpy $Upgrade "1.0"
+  StrCpy $OldInstallDir $R1
+  Goto Continue
 
-  MessageBox MB_ICONSTOP "Setup has found this version (${VERSION}) of the OpenGeo Suite \
-                          installed on your machine.  If you wish to reinstall the \
-                          OpenGeo Suite, please uninstall first.  After you have \
-                          uninstalled, you may run Setup again.$\r$\n$\r$\nPlease note that \
-                          it is also possible to run different versions of the OpenGeo Suite \
-                          on your machine simultaneously."
+  Upgrade1.0r1:
+  ClearErrors
+  ReadRegStr $R1 HKLM "Software\${COMPANYNAME}\OpenGeo Suite 1.0r1" "InstallDir"
+  IfErrors UhOh
+  StrCpy $Upgrade "1.0r1"
+  StrCpy $OldInstallDir $R1
+  Goto Continue
+
+  UhOh:
+  MessageBox MB_ICONSTOP "Sorry, there was an exception thrown when trying to figure out the \
+                          current version of the OpenGeo Suite.  Maybe there is a corrupt \
+                          registry entry?"
+  MessageBox MB_OK "Setup will now exit..."
+  Quit
+
+  SameVersion:
+  MessageBox MB_ICONSTOP "This version of the OpenGeo Suite is already installed.  \
+                          If you wish to reinstall the OpenGeo Suite, please uninstall the \
+                          existing version first and then run Setup again."
+  MessageBox MB_OK "Setup will now exit..."
+  Quit
+
+  UnknownVersion:
+  ; Fail!  An unknown version is installed!
+  MessageBox MB_ICONSTOP "Setup has found a conflicting version of the OpenGeo Suite \
+                          installed on your machine.  If you wish to install this version \
+                          of the OpenGeo Suite, please uninstall your existing version first \
+                          and then run Setup again.  (Version found was $R2)"
   MessageBox MB_OK "Setup will now exit..."
   Quit
 
   NoPriorInstall:
+  StrCpy $Upgrade "Clean"
+
+  Continue:
   ClearErrors
+  StrCmp $Upgrade "Clean" End 0
+  MessageBox MB_OKCANCEL "Setup has found a previous version of the OpenGeo Suite on your system.  \
+                          This version will be upgraded.  Your existing data will not be affected, \
+                          but this operation is not undoable.  Click OK to continue, or Cancel to \
+                          exit." IDOK End IDCANCEL Die
+
+  Die:
+  MessageBox MB_OK "Setup will now exit..."
+  Quit
+
+  End:
+
 
 FunctionEnd
 
@@ -409,6 +462,41 @@ Section -Prerequisites
 
 SectionEnd
 
+  ; This section removes files from 1.0 or 1.0r1 install, before continuing
+Section "-Upgrade" SectionUpgrade1.0 ; dash = hidden
+
+  !insertmacro DisplayImage "slide_1_suite.bmp"
+
+  StrCmp $Upgrade "Clean" Skip
+
+  ;Remove files
+  RMDir /r "$OldInstallDir"
+  RMDir /r "$OldInstallDir\dashboard"
+  RMDir /r "$OldInstallDir\data_dir"
+  RMDir /r "$OldInstallDir\etc"
+  RMDir /r "$OldInstallDir\lib"
+  RMDir /r "$OldInstallDir\logs"
+  RMDir /r "$OldInstallDir\resources"
+  RMDir /r "$OldInstallDir\webapps"
+  RMDir /r "$OldInstallDir\jre"
+  RMDir /r "$OldInstallDir\icons"
+  RMDir /r "$OldInstallDir\recipes"
+  RMDir /r "$OldInstallDir\trace.db" ; shouldn't need this
+  Delete "$OldInstallDir\*.*"
+  RMDir "$OldInstallDir"
+
+  ;Remove start menu entries
+  ;Tricky because we don't quite know where this is.
+  ;Non standard locations won't be found, regrattably.
+  RMDir /r "$SMPROGRAMS\${APPNAME} $Upgrade"
+
+  ;Remove registry
+  DeleteRegKey HKLM "Software\${COMPANYNAME}"
+  DeleteRegKey HKLM "${UNINSTALLREGPATH}\${APPNAME} $Upgrade"
+
+Skip:
+
+SectionEnd
 
 ; The webapp container
 Section "-Jetty" SectionJetty ; dash = hidden
@@ -443,10 +531,38 @@ Section "-Jetty" SectionJetty ; dash = hidden
  
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
 
-  CreateDirectory "$PROFILE\.opengeo"
-  CreateDirectory "$PROFILE\.opengeo\logs"
+
+
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\OpenGeo Suite Logs.lnk" \
                  "$PROFILE\.opengeo\logs"
+
+  ; Only do if new install
+  StrCmp $Upgrade "Clean" 0 Skip
+  CreateDirectory "$PROFILE\.opengeo"
+  CreateDirectory "$PROFILE\.opengeo\logs"
+
+  Skip:
+
+SectionEnd
+
+Section "PostGIS" SectionPostGIS
+
+  SectionIn RO  ; Mandatory
+  SetOverwrite on ; Set Section properties
+
+  !insertmacro DisplayImage "slide_2_postgis.bmp"
+  SetOutPath "$INSTDIR"
+  ; The main binaries
+  File /r  "${SOURCEPATHROOT}\pgsql"
+
+  ; Our custom scripts to start/stop
+  SetOutPath "$INSTDIR\bin"
+  File /a postgis.cmd
+  File /a pg_*.cmd
+
+  ; Shortcuts
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Manage PostGIS.lnk" \
+                 "$INSTDIR\pgsql\8.4\bin\pgAdmin3.exe"
 
 
 SectionEnd
@@ -464,14 +580,15 @@ Section "GeoServer" SectionGS
   SetOutPath "$INSTDIR\webapps"
   File /r /x jai*.* "${SOURCEPATHROOT}\webapps\geoserver"
 
-  ; Copy data_dir
-  CreateDirectory "$PROFILE\.opengeo"
+ 
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer Data Directory.lnk" \
+                 "$PROFILE\.opengeo\data_dir\"
+
+  ; Copy data_dir if new install
+  StrCmp $Upgrade "Clean" 0 Skip
   SetOutPath "$PROFILE\.opengeo"
   File /r "${SOURCEPATHROOT}\data_dir"
-  
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer Data Directory.lnk" \
-                 "$PROFILE\.opengeo\data_dir"
-
+  Skip:
 
 SectionEnd
 
@@ -499,10 +616,6 @@ Section "GeoExplorer" SectionGX
   SetOutPath "$INSTDIR\webapps\"
   File /r "${SOURCEPATHROOT}\webapps\geoexplorer"
 
-  ; Persevere
-  SetOutPath "$PROFILE\.opengeo"
-  File /r "${SOURCEPATHROOT}\persevere"
-
 
 SectionEnd
 
@@ -517,6 +630,7 @@ Section "Styler" SectionStyler
   File /r "${SOURCEPATHROOT}\webapps\styler"
 
 SectionEnd
+
 
 SectionGroupEnd
 
@@ -640,6 +754,8 @@ Section "-Dashboard" SectionDashboard ;dash means hidden
   File /r "${SOURCEPATHROOT}\dashboard"
   SetOutPath "$INSTDIR\dashboard\Resources"
 
+  StrCmp $Upgrade "Clean" 0 Skip
+
   ${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
                                 "$INSTDIR\dashboard\Resources\config.ini" \
                                 "@SUITE_EXE@" "$INSTDIR\opengeo-suite.bat" \ 
@@ -652,11 +768,20 @@ Section "-Dashboard" SectionDashboard ;dash means hidden
                                 "$INSTDIR\dashboard\Resources\config.ini" \
                                 "@GEOSERVER_DATA_DIR@" "$PROFILE\.opengeo\data_dir" \ 
                                 "/S=1" $1
-
+  ${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
+                                "$INSTDIR\dashboard\Resources\config.ini" \
+                                "@PGSQL_PORT@" "54321" \ 
+                                "/S=1" $1
+  Skip:
 
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\OpenGeo Suite Dashboard.lnk" \
 		         "$INSTDIR\dashboard\OpenGeo Dashboard.exe" \
                  "" "$INSTDIR\icons\opengeo.ico" 0
+
+  ; Titanium requirement for MSVCRT, this is unfortunate
+  SetOutPath "$INSTDIR\dashboard"
+  File /a vcredist_x86.exe
+  ExecWait '"$INSTDIR\dashboard\vcredist_x86.exe" /q'
 
 SectionEnd
 
@@ -696,11 +821,12 @@ SectionEnd
 Section -FinishSection
 
   ; Reg Keys
-  WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" "" ""
-  WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}" "InstallDir" "$INSTDIR"
+  WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}" "" ""
+  WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}" "InstallDir" "$INSTDIR"
+  WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}" "Version" "${VERSION}"
+  WriteRegStr HKLM "Software\${COMPANYNAME}\${APPNAME}" "StartMenu" "$SMPROGRAMS\$STARTMENU_FOLDER"
 
   ; For the Add/Remove programs area
-  !define UNINSTALLREGPATH "Software\Microsoft\Windows\CurrentVersion\Uninstall"
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "DisplayName" "${APPNAMEANDVERSION}"
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "UninstallString" "$INSTDIR\uninstall.exe"
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "InstallLocation" "$INSTDIR"
@@ -718,7 +844,9 @@ SectionEnd
 ; Modern install component descriptions
 ; Yes, this needs to go after the install sections. 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionUpgrade1.0} "Deals with the upgrade from 1.0 or 1.0r1."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionJetty} "Installs Jetty, a web server."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionPostGIS} "Installs PostGIS, a spatial database."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionServices} "A list of all of the services contained in the OpenGeo Suite."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGS} "Installs GeoServer, a spatial data server."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSExt} "Includes GeoServer Extensions."
@@ -726,7 +854,7 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSGDAL} "Adds support for GDAL image formats."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSOracle} "Adds support for Oracle databases.  Requires additional Oracle files."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGWC} "Includes GeoWebCache, a tile cache server."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGX} "Installs GeoExplorer, a graphical map editor."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGX} "Installs GeoExplorer, a graphical map composer."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionStyler} "Installs Styler, a graphical map style editor."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionDocs} "Includes full documentation for all applications."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionDashboard} "Installs the OpenGeo Suite Dashboard for access to all components."
@@ -748,19 +876,15 @@ Section Uninstall
   ; Wait for Start GeoServer window to go away
   Sleep 5000
 
-  MessageBox MB_OKCANCEL                    "The default data directory will be deleted!$\r$\n$\r$\n\
-                                             This data directory is located at:\
-                                             $\r$\n     $PROFILE\.opengeo\data_dir$\r$\n$\r$\n\
-                                             If you wish to save this directory for future use, \
-                                             please take a moment to back it up now.$\r$\n\
-                                             Click OK when ready to proceed." IDOK 0 IDCANCEL Die
-
+  MessageBox MB_OK  "Your data and settings directory will not be deleted.$\r$\n$\r$\n\
+                     This directory is located at:\
+                     $\r$\n     $PROFILE\.opengeo"
+                    
   ; Have to move out of the directory to delete it
   SetOutPath $TEMP
 
   ; Remove all reg entries
-  DeleteRegKey HKLM "Software\${COMPANYNAME}\${APPNAMEANDVERSION}"
-  DeleteRegKey /ifempty HKLM "Software\${COMPANYNAME}"
+  DeleteRegKey HKLM "Software\${COMPANYNAME}"
   DeleteRegKey HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}"
 
   ; Delete self
@@ -773,7 +897,8 @@ Section Uninstall
 
   Try:
 
-    RMDir /r "$PROFILE\.opengeo"
+    ;RMDir /r "$PROFILE\.opengeo"
+    RMDir /r "$INSTDIR\bin"
     RMDir /r "$INSTDIR\dashboard"
     RMDir /r "$INSTDIR\data_dir"
     RMDir /r "$INSTDIR\etc"
@@ -785,6 +910,7 @@ Section Uninstall
     RMDir /r "$INSTDIR\icons"
     RMDir /r "$INSTDIR\recipes"
     RMDir /r "$INSTDIR\trace.db" ; shouldn't need this
+    RMDir /r "$INSTDIR\pgsql"
     Delete "$INSTDIR\*.*"
     RMDir "$INSTDIR"
     IfFileExists "$INSTDIR" Warn Succeed
@@ -796,9 +922,9 @@ Section Uninstall
     MessageBox MB_ICONINFORMATION "WARNING: Some files and folders could not be removed from:$\r$\n   $INSTDIR\$\r$\nYou will have to manually remove these files and folders."
     Goto Succeed
 
-  Die:
-    MessageBox MB_OK "Uninstallation was interrupted..."
-    Quit
+;  Die:
+;    MessageBox MB_OK "Uninstallation was interrupted..."
+;    Quit
 
   Succeed:
     RMDir "$PROGRAMFILES\${COMPANYNAME}"
