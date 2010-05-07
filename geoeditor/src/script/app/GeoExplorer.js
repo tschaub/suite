@@ -121,12 +121,14 @@ var GeoExplorer = Ext.extend(Ext.util.Observable, {
     load: function() {
         gxp.util.dispatch(
             [
-                // create layout as soon as Ext says ready
                 function(done) {
-                    Ext.onReady(function() {
-                        this.createLayout();
-                        done();
-                    }, this);
+                    // fetch wfs caps and create layout when dom ready
+                    this.initFeatureTypes(function() {
+                        Ext.onReady(function() {
+                            this.createLayout();
+                            done();
+                        }, this);
+                    });
                 },
                 // load capabilities immediately
                 function(done) {
@@ -139,6 +141,38 @@ var GeoExplorer = Ext.extend(Ext.util.Observable, {
             // activate app when the above are both done
             this.activate, this
         );
+    },
+    
+    /**
+     * Method: initFeatureTypes
+     */
+    initFeatureTypes: function(callback) {
+        var format = new OpenLayers.Format.WFSCapabilities();
+        OpenLayers.Request.GET({
+            // TODO: use ol method
+            url: this.wfs + "?SERVICE=WFS&VERSION=1.1.0&REQUEST=GetCapabilities",
+            callback: function(request) {
+                var doc = request.responseXML;
+                var capabilities = format.read(doc);
+                var list = capabilities.featureTypeList.featureTypes;
+                var num = list.length;
+                this.featureTypes = new Array(num);
+                var ftype, parts;
+                for (var i=0; i<num; ++i) {
+                    ftype = list[i];
+                    parts = ftype.name.split(":");
+                    this.featureTypes[i] = {
+                        title: ftype.title || parts[1],
+                        name: parts[1],
+                        namespace: doc.documentElement.getAttribute("xmlns:" + parts[0]),
+                        url: this.wfs,
+                        schema: this.wfs + "?version=1.1.0&request=DescribeFeatureType&typeName=" + ftype.name
+                    };
+                }
+                callback.call(this);
+            },
+            scope: this
+        });
     },
     
     /**
@@ -430,7 +464,7 @@ var GeoExplorer = Ext.extend(Ext.util.Observable, {
             map: this.map,
             maxFeatures: 100,
             layerStore: new Ext.data.JsonStore({
-                data: {layers: this.initialConfig.featureTypes},
+                data: {layers: this.featureTypes},
                 root: "layers",
                 fields: ["title", "name", "namespace", "url", "schema"]
             }),
