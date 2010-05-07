@@ -222,6 +222,12 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         cls: "dash-panel",
                         html: og.util.loadSync("app/markup/dash/geowebcache.html"),
                         id: "app-panels-dash-geowebcache"
+                    }, {
+                        title: "PostGIS",
+                        tabTip: "Learn about PostGIS",
+                        cls: "dash-panel",
+                        html: og.util.loadSync("app/markup/dash/postgis.html"),
+                        id: "app-panels-dash-postgis"
                     }]
                 }, {
                     defaults: {border: false, autoScroll: true},

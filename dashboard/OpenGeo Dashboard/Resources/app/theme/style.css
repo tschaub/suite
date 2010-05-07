@@ -163,30 +163,27 @@ div.dash-panel-startup {
 .dash-panel-content-item {
     margin-bottom: 10px;
     min-height: 55px;
+    padding-left: 65px;
+    margin-top: 15px;
+    width: 175px;    
 }
 
 .dash-panel-content-item.geoserver {
-    padding-left: 65px;
     background: url(img/geoserver-sm.png) no-repeat;
-    margin-top: 15px;
 }
 .dash-panel-content-item.geoexplorer {
-    padding-left: 65px;
     background: url(img/geoexplorer-sm.png) no-repeat;
-    margin-top: 15px;
 }
 .dash-panel-content-item.styler {
-    padding-left: 65px;
     background: url(img/styler_sm.png) no-repeat;
-    margin-top: 15px;
 }
 
 .dash-panel-content-item.geowebcache {
-    padding-left: 65px;
     background: url(img/geowebcache_sm.png) no-repeat;
-    margin-top: 15px;
 }
-
+.dash-panel-content-item.postgis {
+    background: url(img/postgis_sm.png) no-repeat;
+}
 .dash-panel-tasks {
     position: absolute;
     right: 0px;
@@ -206,9 +203,10 @@ div.dash-panel-startup {
     margin-left: 10px;
 }
 
-.quick-links li {
+.quick-links li,.dash-panel-content-item ul.quick-links {
     display: inline;
     padding:10px 10px 10px 0;
+    font-size: 12px;
 }
 
 .dash-warning-header {
@@ -261,6 +259,12 @@ a.icon-styler {
     display: block;
     height: 101px;
     background: transparent url(img/styler.png) no-repeat center;
+}
+
+a.icon-postgis {
+    display: block;
+    height: 101px;
+    background: transparent url(img/postgis.png) no-repeat center;
 }
 
 /* override left hand menu*/

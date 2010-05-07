@@ -3,39 +3,70 @@
     <h4>Welcome to the OpenGeo Suite!</h4>
     <p>The OpenGeo Suite is a free, fully-featured web mapping environment that's easy to install, configure, and use.  With this dashboard, you can directly launch the primary features of the Suite. To get started making your own maps, please view the <a href="#app-panels-dash-quickstart" class="app-ilink">Quickstart</a> guide.</p>
       
-    <div class="dash-panel-content-item geoexplorer">
-      <h1><a href="#app-geoexplorer_path" class="app-xlink app-online">GeoExplorer</a></h1>
-      <ul class="quick-links">
-        <li><a href="#app-panels-dash-geoexplorer" class="app-ilink">About</a></li>
-        <li><a href="#app-geoexplorer_path" class="app-xlink app-online">Launch</a></li>
-      </ul>
-    </div>
+    <table>
+        <tr>
+          <td>
+            <div class="dash-panel-content-item geoexplorer">
+              <h1><a href="#app-geoexplorer_path" class="app-xlink app-online">GeoExplorer</a></h1>
+              <ul class="quick-links">
+                <li><a href="#app-panels-dash-geoexplorer" class="app-ilink">About</a></li>
+                <li><a href="#app-geoexplorer_path" class="app-xlink app-online">Launch</a></li>
+              </ul>
+            </div>
+          </td>
     
-    <div class="dash-panel-content-item styler">
-      <h1><a href="#app-styler_path" class="app-xlink app-online">Styler</a></h1>
-      <ul class="quick-links">
-        <li><a href="#app-panels-dash-styler" class="app-ilink">About</a></li>
-        <li><a href="#app-styler_path" class="app-xlink app-online">Launch</a></li>
-        </ul>
+          <td>
+            <div class="dash-panel-content-item styler">
+              <h1><a href="#app-styler_path" class="app-xlink app-online">Styler</a></h1>
+              <ul class="quick-links">
+                <li><a href="#app-panels-dash-styler" class="app-ilink">About</a></li>
+                <li><a href="#app-styler_path" class="app-xlink app-online">Launch</a></li>
+              </ul>
+            </div>
+          </td>
+        </tr>  
+        <tr>
+          <td>
+            <div class="dash-panel-content-item geoserver">
+              <h1><a href="#app-geoserver_admin" class="app-xlink app-online">GeoServer</a></h1>
+              <ul class="quick-links">
+                <li><a href="#app-panels-dash-geoserver" class="app-ilink">About</a></li>
+                <li><a href="#app-geoserver_admin" class="app-xlink app-online">Configure</a></li>
+              </ul>
+            </div>
+          </td>
+          <td>
+          <div class="dash-panel-content-item geoserver">
+            <h1><a href="#app-geoserver_admin" class="app-xlink app-online">GeoServer</a></h1>
+            <ul class="quick-links">
+              <li><a href="#app-panels-dash-geoserver" class="app-ilink">About</a></li>
+              <li><a href="#app-geoserver_admin" class="app-xlink app-online">Configure</a></li>
+            </ul>
+          </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="dash-panel-content-item geowebcache">
+              <h1><a href="#app-geowebcache_path" class="app-xlink app-online">GeoWebCache</a></h1>
+              <ul class="quick-links">
+                <li><a href="#app-panels-dash-geowebcache" class="app-ilink">About</a></li>
+                <li><a href="#app-geowebcache_path" class="app-xlink app-online">Configure</a></li>
+              </ul>
+            </div>
+          </td>
+          <td>
+            <div class="dash-panel-content-item postgis">
+              <h1><a href="#app-postgis_path" class="app-xlink app-online">PostGIS</a></h1>
+              <ul class="quick-links">
+                <li><a href="#app-panels-dash-postgis" class="app-ilink">About</a></li>
+                <li><a href="#app-postgis_path" class="app-xlink app-online">Manage</a></li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      </table>  
     </div>
-    
-    <div class="dash-panel-content-item geoserver">
-      <h1><a href="#app-geoserver_admin" class="app-xlink app-online">GeoServer</a></h1>
-      <ul class="quick-links">
-        <li><a href="#app-panels-dash-geoserver" class="app-ilink">About</a></li>
-        <li><a href="#app-geoserver_admin" class="app-xlink app-online">Configure</a></li>
-      </ul>
-    </div>
-    
-    <div class="dash-panel-content-item geowebcache">
-      <h1><a href="#app-geowebcache_path" class="app-xlink app-online">GeoWebCache</a></h1>
-      <ul class="quick-links">
-        <li><a href="#app-panels-dash-geowebcache" class="app-ilink">About</a></li>
-        <li><a href="#app-geowebcache_path" class="app-xlink app-online">Configure</a></li>
-      </ul>
-    </div>
-    
-  </div>
     
   <div class="dash-panel-tasks">
     <div class="iconlaunch">
@@ -54,6 +85,7 @@
       
     <h2>Suite Tools</h2>
     <ul>
+      <li><a href="#app-postgis_path" class="app-xlink app-online">Manage PostGIS</a></li>
       <li><a href="#app-geoserver_importer" class="app-xlink app-online">Import Layers</a></li>
       <li><a href="#app-styler_path" class="app-xlink app-online">Style Layers</a></li>
       <li><a href="#app-geoexplorer_path" class="app-xlink app-online">Publish Layers</a></li>     
