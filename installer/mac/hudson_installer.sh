@@ -8,6 +8,8 @@
 dashboard_version=1.0.0
 
 dashboard_url=http://suite.opengeo.org/builds/dashboard-latest-osx.zip
+dashboard_url=http://localhost/~pramsey/dashboard.zip
+
 suite_url=http://suite.opengeo.org/builds/opengeosuite-latest-mac.zip
 ext_url=http://suite.opengeo.org/builds/opengeosuite-latest-ext.zip
 pgsql_url=http://10.52.11.40/suite/postgis-osx.zip
@@ -37,15 +39,11 @@ fi
 #
 curl $dashboard_url > binaries/dashboard.zip
 checkrv $? "Dashboard download"
-if [ -d "./binaries/dashboard-${dashboard_version}-osx" ]; then
- rm -rf "./binaries/dashboard-${dashboard_version}-osx"
-fi
-unzip -o binaries/dashboard.zip -d binaries
-checkrv $? "Dashboard unzip"
 if [ -d "./binaries/OpenGeo Dashboard.app" ]; then
  rm -rf "./binaries/OpenGeo Dashboard.app"
 fi
-mv "./binaries/dashboard-${dashboard_version}-osx/OpenGeo Dashboard.app" binaries/
+unzip -o binaries/dashboard.zip -d binaries
+checkrv $? "Dashboard unzip"
 if [ -d "./build/Dashboard.pkg" ]; then
    rm -rf "./build/Dashboard.pkg"
 fi
