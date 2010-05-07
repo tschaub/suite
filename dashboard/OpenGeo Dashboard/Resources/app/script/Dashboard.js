@@ -204,7 +204,13 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         cls: "dash-panel",
                         html: og.util.loadSync("app/markup/dash/geoexplorer.html"),
                         id: "app-panels-dash-geoexplorer"
-                    }, {
+                    },  {
+                        title: "GeoEditor",
+                        tabTip: "Learn about GeoEditor",
+                        cls: "dash-panel",
+                        html: og.util.loadSync("app/markup/dash/geoeditor.html"),
+                        id: "app-panels-dash-geoeditor"
+                    },  {
                         title: "Styler",
                         tabTip: "Learn about Styler",
                         cls: "dash-panel",

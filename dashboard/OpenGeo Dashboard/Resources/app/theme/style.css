@@ -177,13 +177,16 @@ div.dash-panel-startup {
 .dash-panel-content-item.styler {
     background: url(img/styler_sm.png) no-repeat;
 }
-
+.dash-panel-content-item.geoeditor {
+    background: url(img/geoeditor-sm.png) no-repeat;
+}
 .dash-panel-content-item.geowebcache {
     background: url(img/geowebcache_sm.png) no-repeat;
 }
 .dash-panel-content-item.postgis {
     background: url(img/postgis_sm.png) no-repeat;
 }
+
 .dash-panel-tasks {
     position: absolute;
     right: 0px;
@@ -259,6 +262,12 @@ a.icon-styler {
     display: block;
     height: 101px;
     background: transparent url(img/styler.png) no-repeat center;
+}
+
+a.icon-geoeditor {
+    display: block;
+    height: 101px;
+    background: transparent url(img/geoeditor.png) no-repeat center;
 }
 
 a.icon-postgis {
