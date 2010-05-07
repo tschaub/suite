@@ -69,6 +69,12 @@ public class Dashboard {
             cxt.setWar("../styler");
             contexts.add(cxt);
             
+            //geoeditor context
+            cxt = new WebAppContext();
+            cxt.setContextPath("/geoeditor");
+            cxt.setWar("../geoeditor/target/geoeditor");
+            contexts.add(cxt);
+
             //geoexplorer context
             cxt = new WebAppContext();
             cxt.setContextPath("/geoexplorer");
