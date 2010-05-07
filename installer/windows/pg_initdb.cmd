@@ -17,8 +17,8 @@ if not exist "%pg_bin_dir%" (
 
 REM Check for exisitng pg data directory
 if not exist "%pg_data_dir%\PG_VERSION" (
-  mkdir "%USERPROFILE%\.opengeo\pgdata" 2>nul
-  "%pg_bin_dir%\initdb.exe" --pgdata="%pg_data_dir%" --username=postgres --encoding=UTF8 2>nul >> "%pg_log%"
+  mkdir "%pg_data_dir%" 2>nul
+  "%pg_bin_dir%\initdb.exe" --pgdata="%pg_data_dir%" --username=postgres --encoding=UTF8 >nul 2>nul
 ) else (
   REM nothing to do
   echo Error: PgSQL data directory already created.

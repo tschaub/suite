@@ -5,10 +5,10 @@ set pg_version=8.4
 set postgis_version=1.5
 set pg_default_port=54321
 
-set pg_data_dir="%USERPROFILE%\.opengeo\pgdata\%USERNAME%"
-set pg_log="%USERPROFILE%\.opengeo\pgdata\%USERNAME%_pgsql.log"
+set pg_data_dir=%USERPROFILE%\.opengeo\pgdata\%USERNAME%
+set pg_log=%USERPROFILE%\.opengeo\pgdata\%USERNAME%_pgsql.log
 
-set pg_dir="..\pgsql\%pg_version%"
+set pg_dir=%CD%\..\pgsql\%pg_version%
 set pg_bin_dir=%pg_dir%\bin
 set pg_lib_dir=%pg_dir%\lib
 set pg_port=%pg_default_port%
