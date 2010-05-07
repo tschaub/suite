@@ -29,9 +29,8 @@ og.util = {
             config = this.loadConfigHTTP(url);
         }
         var version = config["suite_version"];
-        if (!version) {
-            // 1.0.0 or invalid config
-            window.alert("You are using an outdated config.ini file.  Upgrade not yet supported.");
+        if (version !== og.VERSION) {
+            config = this.upgradeConfig(config);
         }
         return config;
     }, 
@@ -70,6 +69,42 @@ og.util = {
         
         return this.parseConfig(config.read().toString());
     }, 
+    
+    /** private: method[upgradeConfig]
+     *  :arg oldConfig: ``Object`` Existing config.
+     *  :returns: ``Object`` Upgraded config.
+     *
+     *  Upgrades an existing configuration.
+     */
+    upgradeConfig: function(oldConfig) {
+        var version = oldConfig["suite_version"] || "1.0.0";
+        // grab the bundled config.ini
+        var newConfig = this.loadConfigHTTP("config.ini");
+        // at this point, we only have to deal with 1.0.0 -> 1.9.0
+        if (version === "1.0.0") {
+            // respect old username, password, port, and stop_port
+            Ext.apply(newConfig, {
+                geoserver_username: oldConfig["username"] || newConfig["geoserver_username"],
+                geoserver_password: oldConfig["password"] || newConfig["geoserver_password"],
+                suite_port: oldConfig["port"] || newConfig["suite_port"],
+                suite_stop_port: oldConfig["stop_port"] || newConfig["suite_stop_port"]
+            });
+            // respect custom data_dir
+            if (oldConfig["data_dir"] !== newConfig["data_dir"]) {
+                // osx default data_dir changed between 1.0.0 and 1.9.0
+                if (Titanium.Platform.name === "Darwin") {
+                    // only update if different than the old default
+                    if (oldConfig["data_dir"] !== "/Applications/OpenGeo Suite.app/Contents/Resources/Java/data_dir") {
+                        newConfig["geoserver_data_dir"] = oldConfig["data_dir"];
+                    }
+                } else {
+                    newConfig["geoserver_data_dir"] = oldConfig["data_dir"];
+                }
+            }
+        }
+        this.saveConfig(newConfig);
+        return newConfig;
+    },
     
     /** private: method[loadConfig]
      *  :arg url: ``String``

@@ -1,5 +1,14 @@
 Ext.namespace("og");
 
+/** api: constant[VERSION]
+ *  ``String``
+ *  This is the Suite version number.  The dashboard will use this to compare
+ *  with any existing "suite_version" key in the user's config.ini.  If the 
+ *  values are different when the dashboard starts up, then it does the 
+ *  necessary upgrade work.
+ */
+og.VERSION = "1.9.0";
+
 og.Dashboard = Ext.extend(Ext.util.Observable, {
     
     /** api: property[debug]
