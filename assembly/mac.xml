@@ -30,6 +30,10 @@
       <outputDirectory>webapps/styler</outputDirectory>
     </fileSet>
     <fileSet>
+      <directory>geoeditor/target/geoeditor</directory>
+      <outputDirectory>webapps/geoeditor</outputDirectory>
+    </fileSet>
+    <fileSet>
       <directory>geoexplorer/build/geoexplorer</directory>
       <outputDirectory>webapps/geoexplorer</outputDirectory>
       <excludes>

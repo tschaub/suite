@@ -29,6 +29,11 @@
   </dependency>
   <dependency>
    <groupId>org.opengeo</groupId>
+   <artifactId>geoeditor</artifactId>
+   <version>${project.version}</version>
+  </dependency>
+  <dependency>
+   <groupId>org.opengeo</groupId>
    <artifactId>geoexplorer</artifactId>
    <version>${project.version}</version>
   </dependency>

@@ -130,6 +130,7 @@
   <module>geoserver</module>
   <module>styler</module>
   <module>geoexplorer</module>
+  <module>geoeditor</module>
   <module>dashboard</module>
   <module>jetty</module>
  </modules>

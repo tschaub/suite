@@ -20,6 +20,13 @@
       </includes>
     </fileSet>
     <fileSet>
+      <directory>geoeditor/target</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>geoeditor.war</include>
+      </includes>
+    </fileSet>
+    <fileSet>
       <directory>geoexplorer/build</directory>
       <outputDirectory>/</outputDirectory>
       <includes>
