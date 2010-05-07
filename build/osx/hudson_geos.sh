@@ -39,8 +39,8 @@ rm -rf ${buildroot}/geos
 mkdir ${buildroot}/geos
 make install
 pushd ${buildroot}/geos
-rm -f ~/Sites/geos-osx.zip
-zip -r9 ~/Sites/geos-osx.zip *
+rm -f ${webroot}/geos-osx.zip
+zip -r9 ${webroot}/geos-osx.zip *
 popd
 
 popd

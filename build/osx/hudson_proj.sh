@@ -48,8 +48,8 @@ mkdir ${buildroot}/proj
 make install
 
 pushd ${buildroot}/proj
-rm -f ~/Sites/proj-osx.zip
-zip -r9 ~/Sites/proj-osx.zip *
+rm -f ${webroot}/proj-osx.zip
+zip -r9 ${webroot}/proj-osx.zip *
 popd
 
 popd

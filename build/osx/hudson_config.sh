@@ -1,6 +1,7 @@
 # Where do we build into (our --prefix)
 buildroot=$HOME/buildroot/
 export buildroot
+webroot=/Library/WebServer/Documents/suite/
 
 # Versions we are going to continuously integrate...
 geos_version=3.2

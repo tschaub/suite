@@ -54,13 +54,13 @@ popd
 
 # Zip up the results and put on the web
 pushd ${buildroot}
-zip -r9 ~/Sites/new-postgis-osx.zip pgsql
+zip -r9 ${webroot}/new-postgis-osx.zip pgsql
 rv=$?
 if [ $rv -gt 0 ]; then
   echo "zip failed with return value $rv"
   exit $rv
 fi
-mv -f ~/Sites/new-postgis-osx.zip ~/Sites/postgis-osx.zip
+mv -f ${webroot}/new-postgis-osx.zip ${webroot}/postgis-osx.zip
 popd
 
 # Exit cleanly
