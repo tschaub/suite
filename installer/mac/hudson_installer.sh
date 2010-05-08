@@ -12,6 +12,8 @@ suite_url=http://suite.opengeo.org/builds/opengeosuite-latest-mac.zip
 ext_url=http://suite.opengeo.org/builds/opengeosuite-latest-ext.zip
 pgsql_url=http://10.52.11.40/suite/postgis-osx.zip
 
+export PATH=$PATH:/usr/local/bin
+
 #
 # Utility function to check return values on commands
 #
