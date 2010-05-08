@@ -60,7 +60,7 @@ if [ -d binaries/geoserver ]; then
 fi
 unzip -o binaries/suite.zip -d binaries/geoserver
 checkrv $? "GeoServer unzip"
-chmod 755 binares/geoserver/opengeo-suite
+chmod 755 binaries/geoserver/opengeo-suite
 find binaries/geoserver/data_dir -type d -exec chmod 775 {} ';'
 find binaries/geoserver/data_dir -type f -exec chmod 664 {} ';'
 if [ -d "./build/GeoServer.pkg" ]; then
