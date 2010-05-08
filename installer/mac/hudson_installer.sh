@@ -8,8 +8,6 @@
 dashboard_version=1.0.0
 
 dashboard_url=http://suite.opengeo.org/builds/dashboard-latest-osx.zip
-dashboard_url=http://localhost/~pramsey/dashboard.zip
-
 suite_url=http://suite.opengeo.org/builds/opengeosuite-latest-mac.zip
 ext_url=http://suite.opengeo.org/builds/opengeosuite-latest-ext.zip
 pgsql_url=http://10.52.11.40/suite/postgis-osx.zip
