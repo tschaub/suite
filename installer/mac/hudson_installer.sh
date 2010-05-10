@@ -25,6 +25,43 @@ function checkrv {
 }
 
 #
+# Utility function to download only files that have changed since 
+# last download.
+#
+function getfile {
+
+  local url
+  local file
+
+  url=$1
+  file=$2
+
+  url_tag=`curl -s -I $url | grep ETag | tr -d \" | cut -f2 -d' '`
+  checkrv $? "Download $url"
+
+  if [ -f "${file}" ]; then
+    if [ -f "${file}.etag" ]; then
+      file_tag=`cat "${file}.etag"`
+      if [ $url_tag = $file_tag ]; then
+        echo "$file is already up to date"
+      else
+        echo "downloading fresh copy of $file"
+        curl $url > $file
+        checkrv $? "Download $url"
+        echo $url_tag > "${file}.etag"
+      fi
+    fi
+  else
+    echo "downloading fresh copy of $file"
+    curl $url > $file
+    checkrv $? "Download $url"
+    echo $url_tag > "${file}.etag"
+  fi
+
+}
+
+
+#
 # Check for expected subdirectories
 #
 if [ ! -d binaries ]; then
@@ -37,8 +74,7 @@ fi
 #
 # Retrieve and build the Dashboard pkg
 #
-curl $dashboard_url > binaries/dashboard.zip
-checkrv $? "Dashboard download"
+getfile $dashboard_url binaries/dashboard.zip
 if [ -d "./binaries/OpenGeo Dashboard.app" ]; then
  rm -rf "./binaries/OpenGeo Dashboard.app"
 fi
@@ -53,8 +89,7 @@ checkrv $? "Dashboard packaging"
 #
 # Retrieve and build the Geoserver pkg
 #
-curl $suite_url > binaries/suite.zip
-checkrv $? "GeoServer download"
+getfile $suite_url binaries/suite.zip
 if [ -d binaries/geoserver ]; then
   rm -rf binaries/geoserver
 fi
@@ -72,8 +107,7 @@ checkrv $? "GeoServer packaging"
 #
 # Retrieve and build the PostGIS pkg
 #
-curl $pgsql_url > binaries/pgsql.zip
-checkrv $? "PostGIS download"
+getfile $pgsql_url binaries/pgsql.zip
 if [ -d binaries/pgsql ]; then
   rm -rf binaries/pgsql
 fi
@@ -135,8 +169,7 @@ checkrv $? "Suite scripts packaging"
 #
 # Build the GeoServer Extensions Package
 #
-curl $ext_url > binaries/ext.zip
-checkrv $? "Ext download"
+getfile $ext_url binaries/ext.zip
 if [ -d binaries/ext ]; then
   rm -rf binaries/ext
 fi
