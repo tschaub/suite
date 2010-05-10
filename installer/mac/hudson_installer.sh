@@ -190,12 +190,33 @@ fi
 mkdir suitebuild
 freeze ./suite.packproj
 checkrv $? "Suite packaging"
+
 # 
-# Zip the mpkg
+# Prepare for DMG
 #
-pushd suitebuild
-zip -r9 ../OpenGeoSuite.zip "OpenGeo Suite.mpkg" 
-checkrv $? "Suite zipping"
-popd
+#mkdir suitebuild/background
+#cp resources/dmg_background.bmp suitebuild/background/background.bmp
+cp -f resources/OpenGeo.icns suitebuild/.VolumeIcon.icns
+#
+# Build the DMG volume
+#
+VOL="OpenGeoSuite"
+DMG="tmp-${VOL}.dmg"
+DMGFINAL="${VOL}"
+if [ -d "${DMGFINAL}" ]; then
+  rm -rf "${DMGFINAL}"
+fi
+mv suitebuild "${DMGFINAL}"
+hdiutil create "$DMG" -srcfolder "${DMGFINAL}"
+checkrv $? "Suite volume create"
+# convert to compressed image, delete temp image
+if [ -f "${DMGFINAL}.dmg" ]; then 
+  rm -f "${DMGFINAL}.dmg"
+fi
+hdiutil convert "$DMG" -format UDZO -o "${DMGFINAL}.dmg"
+checkrv $? "Suite compressing"
+if [ -f "${DMG}" ]; then 
+  rm -f "${DMG}"
+fi
 
 exit 0
