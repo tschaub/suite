@@ -27,4 +27,3 @@ if not errorlevel 0 (
 )
 
 :End
-popd

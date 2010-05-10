@@ -111,7 +111,7 @@ LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be ins
 
 ; What to do when done
 !define MUI_FINISHPAGE_RUN
-!define MUI_FINISHPAGE_RUN_TEXT "Launch the Dashboard"
+!define MUI_FINISHPAGE_RUN_TEXT "Launch the OpenGeo Suite Dashboard"
 !define MUI_FINISHPAGE_RUN_FUNCTION "RunAfterInstall"
 
 
@@ -468,6 +468,9 @@ Section "-Upgrade" SectionUpgrade1.0 ; dash = hidden
   !insertmacro DisplayImage "slide_1_suite.bmp"
 
   StrCmp $Upgrade "Clean" Skip
+  
+  ;Stop existing Suite if necessary
+  ExecWait '"$OldInstallDir\opengeo-suite.bat" stop'
 
   ;Remove files
   RMDir /r "$OldInstallDir"
@@ -531,16 +534,12 @@ Section "-Jetty" SectionJetty ; dash = hidden
  
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
 
-
-
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\OpenGeo Suite Logs.lnk" \
-                 "$PROFILE\.opengeo\logs"
-
   ; Only do if new install
   StrCmp $Upgrade "Clean" 0 Skip
   CreateDirectory "$PROFILE\.opengeo"
   CreateDirectory "$PROFILE\.opengeo\logs"
-
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\OpenGeo Suite Logs.lnk" \
+                 "$PROFILE\.opengeo\logs\"
   Skip:
 
 SectionEnd
@@ -579,15 +578,13 @@ Section "GeoServer" SectionGS
   ; Copy GeoServer
   SetOutPath "$INSTDIR\webapps"
   File /r /x jai*.* "${SOURCEPATHROOT}\webapps\geoserver"
-
  
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer Data Directory.lnk" \
-                 "$PROFILE\.opengeo\data_dir\"
-
   ; Copy data_dir if new install
   StrCmp $Upgrade "Clean" 0 Skip
   SetOutPath "$PROFILE\.opengeo"
   File /r "${SOURCEPATHROOT}\data_dir"
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer Data Directory.lnk" \
+                 "$PROFILE\.opengeo\data_dir\"
   Skip:
 
 SectionEnd
@@ -628,6 +625,18 @@ Section "Styler" SectionStyler
 
   SetOutPath "$INSTDIR\webapps\"
   File /r "${SOURCEPATHROOT}\webapps\styler"
+
+SectionEnd
+
+Section "GeoEditor" SectionGE
+
+  SectionIn RO ; mandatory
+  SetOverwrite on
+
+  !insertmacro DisplayImage "slide_6_geoext.bmp"
+
+  SetOutPath "$INSTDIR\webapps\"
+  File /r "${SOURCEPATHROOT}\webapps\geoeditor"
 
 SectionEnd
 
@@ -754,7 +763,12 @@ Section "-Dashboard" SectionDashboard ;dash means hidden
   File /r "${SOURCEPATHROOT}\dashboard"
   SetOutPath "$INSTDIR\dashboard\Resources"
 
-  StrCmp $Upgrade "Clean" 0 Skip
+  ;StrCmp $Upgrade "Clean" 0 Skip
+  ${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
+                                "$INSTDIR\dashboard\Resources\config.ini" \
+                                "@GEOSERVER_DATA_DIR@" "$PROFILE\.opengeo\data_dir" \ 
+                                "/S=1" $1
+
 
   ${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
                                 "$INSTDIR\dashboard\Resources\config.ini" \
@@ -764,15 +778,12 @@ Section "-Dashboard" SectionDashboard ;dash means hidden
                                 "$INSTDIR\dashboard\Resources\config.ini" \
                                 "@SUITE_DIR@" "$INSTDIR" \ 
                                 "/S=1" $1
-  ${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
-                                "$INSTDIR\dashboard\Resources\config.ini" \
-                                "@GEOSERVER_DATA_DIR@" "$PROFILE\.opengeo\data_dir" \ 
-                                "/S=1" $1
+
   ${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
                                 "$INSTDIR\dashboard\Resources\config.ini" \
                                 "@PGSQL_PORT@" "54321" \ 
                                 "/S=1" $1
-  Skip:
+  ;Skip:
 
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\OpenGeo Suite Dashboard.lnk" \
 		         "$INSTDIR\dashboard\OpenGeo Dashboard.exe" \
@@ -856,6 +867,7 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGWC} "Includes GeoWebCache, a tile cache server."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGX} "Installs GeoExplorer, a graphical map composer."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionStyler} "Installs Styler, a graphical map style editor."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGE} "Installs GeoEditor, a graphical map editor."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionDocs} "Includes full documentation for all applications."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionDashboard} "Installs the OpenGeo Suite Dashboard for access to all components."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionRecipes} "Installs examples and demos to help you build your own mapping applications."

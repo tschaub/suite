@@ -66,4 +66,3 @@ goto End
 echo Template database creation failed.
 
 :End
-popd

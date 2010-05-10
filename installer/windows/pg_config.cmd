@@ -21,7 +21,6 @@ set port=1
 findstr pgsql_port "%USERPROFILE%\.opengeo\config.ini" > "%TEMP%\portini.txt"
 set /p portini=<"%TEMP%\portini.txt"
 del "%TEMP%\portini.txt"
-for /f "tokens=1,2,3 delims=/ " %%a in ("%portini%") do set trash1=%%a&set trash2=%%b&set pg_port=%%c
+for /f "tokens=1,2,3 delims=/=" %%a in ("%portini%") do set trash1=%%a&set pg_port=%%b
 REM should add a check for bad ports here
-
 :End

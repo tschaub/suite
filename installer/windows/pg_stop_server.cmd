@@ -16,5 +16,4 @@ if exist "%pg_data_dir%\PG_VERSION" (
   REM nothing to do
   echo Error: PgSQL data directory not found.
 )
-
 popd

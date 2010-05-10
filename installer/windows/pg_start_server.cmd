@@ -20,8 +20,7 @@ if exist "%pg_data_dir%\PG_VERSION" (
 ) else (
   REM nothing to do
   echo Error: PgSQL data directory not found.
-  goto End
-)
 
-:End
+)
 popd
+
