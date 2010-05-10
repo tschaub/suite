@@ -31,7 +31,7 @@ pushd nad
 unzip -o ${buildroot}/${proj_nad}
 popd
 
-./configure --prefix=${buildroot}/proj 
+./configure --prefix=${buildroot}/proj --without-mutex
 make clean all
 checkrv $? "Proj build"
 
