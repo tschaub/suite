@@ -90,11 +90,11 @@ checkrv $? "Dashboard packaging"
 #
 # Retrieve and build the Geoserver pkg
 #
-getfile $suite_url binaries/opengeosuite.zip
+getfile $suite_url binaries/suite.zip
 if [ -d binaries/suite ]; then
   rm -rf binaries/suite
 fi
-unzip -o binaries/opengeosuite.zip -d binaries/suite
+unzip -o binaries/suite.zip -d binaries/suite
 checkrv $? "GeoServer unzip"
 chmod 755 binaries/suite/opengeo-suite
 cp binaries/scripts/suite_uninstall.sh binaries/suite/
@@ -121,8 +121,8 @@ checkrv $? "PostGIS unzip"
 #
 pgscriptdir=binaries/pgsql/scripts
 mkdir ${pgscriptdir}
-cp -f binaries/scripts/bin/*.sh ${pgscriptdir}
-cp -f binaries/scripts/bin/postgis ${pgscriptdir}
+cp -f binaries/scripts/*.sh ${pgscriptdir}
+cp -f binaries/scripts/postgis ${pgscriptdir}
 rm -f ${pgscriptdir}/suite_uninstall.sh
 #
 # Move the apps down one directory level
