@@ -38,10 +38,7 @@ export CXXFLAGS="-O2 -arch i386 -arch ppc -mmacosx-version-min=10.4"
 export CFLAGS="-O2 -arch i386 -arch ppc -mmacosx-version-min=10.4"
 ./configure --prefix=${buildroot}/proj --disable-dependency-tracking
 make clean all
-if [ $rv -gt 0 ]; then
-  echo "Proj build failed with return value $rv"
-  exit 1
-fi
+checkrv $? "Proj build"
 
 rm -rf ${buildroot}/proj
 mkdir ${buildroot}/proj
@@ -50,6 +47,7 @@ make install
 pushd ${buildroot}/proj
 rm -f ${webroot}/proj-osx.zip
 zip -r9 ${webroot}/proj-osx.zip *
+checkrv $? "Proj zip"
 popd
 
 popd

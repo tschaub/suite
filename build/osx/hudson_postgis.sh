@@ -42,11 +42,7 @@ unzip ${buildroot}/${edb_zip} -d ${buildroot}
 # Patch PGXS
 pushd ${buildroot}/pgsql/lib/postgresql/pgxs/src
 patch -p0 < ${p}/pgxs.patch
-rv=$?
-if [ $rv -gt 0 ]; then
-  echo "patch failed with return value $rv"
-  exit 1
-fi
+checkrv $? "PostGIS makefile patch"
 popd
 
 # Copy the Proj libraries into the pgsql build directory
@@ -87,19 +83,11 @@ export CXXFLAGS="-O2 -arch i386 -arch ppc -mmacosx-version-min=10.4"
   --with-projdir=${buildroot}/pgsql \
   --with-xml2config=/usr/bin/xml2-config \
   --disable-dependency-tracking 
-rv=$?
-if [ $rv -gt 0 ]; then
-  echo "configure failed with return value $rv"
-  exit 1
-fi
+checkrv $? "PostGIS configure"
 
 # Build PostGIS
 make clean && make && make install
-rv=$?
-if [ $rv -gt 0 ]; then
-  echo "build failed with return value $rv"
-  exit 1
-fi
+checkrv $? "PostGIS build"
 
 # Re-Configure without ppc arch so we can link to GTK
 export CFLAGS="-O2 -arch i386 -mmacosx-version-min=10.4" 
@@ -114,27 +102,15 @@ jhbuild run \
   --with-xml2config=/usr/bin/xml2-config \
   --with-gui \
   --disable-dependency-tracking
-rv=$?
-if [ $rv -gt 0 ]; then
-  echo "configure failed with return value $rv"
-  exit 1
-fi
+checkrv $? "PostGIS configure GUI"
 
 pushd liblwgeom
 jhbuild run make clean all
-rv=$?
-if [ $rv -gt 0 ]; then
-  echo "build failed with return value $rv"
-  exit 1
-fi
+checkrv $? "PostGIS build GUI liblwgeom"
 popd
 pushd loader
 jhbuild run make clean all
-rv=$?
-if [ $rv -gt 0 ]; then
-  echo "build failed with return value $rv"
-  exit 1
-fi
+checkrv $? "PostGIS build GUI loader"
 cp -f shp2pgsql-gui ${buildroot}/pgsql/bin
 popd
 

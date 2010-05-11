@@ -24,3 +24,11 @@ edb_url=http://downloads.enterprisedb.com/postgresql/${edb_zip}
 if [ ! -d $buildroot ]; then
   mkdir $buildroot
 fi
+
+function checkrv {
+  if [ $1 -gt 0 ]; then
+    echo "$2 failed with return value $1"
+    exit 1
+  fi
+}
+

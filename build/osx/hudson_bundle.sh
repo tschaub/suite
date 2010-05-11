@@ -45,21 +45,13 @@ pushd shp2pgsql-ige-mac-bundle
 echo buildroot = $buildroot
 export buildroot
 jhbuild run ige-mac-bundler ShapeLoader.bundle
-rv=$?
-if [ $rv -gt 0 ]; then
-  echo "app bundle failed with return value $rv"
-  exit $rv
-fi
+checkrv $? "Bundle pgshapeloader"
 popd
 
 # Zip up the results and put on the web
 pushd ${buildroot}
 zip -r9 ${webroot}/new-postgis-osx.zip pgsql
-rv=$?
-if [ $rv -gt 0 ]; then
-  echo "zip failed with return value $rv"
-  exit $rv
-fi
+checkrv $? "Bundle zip"
 mv -f ${webroot}/new-postgis-osx.zip ${webroot}/postgis-osx.zip
 popd
 

@@ -30,10 +30,7 @@ export CXXFLAGS="-O2 -arch i386 -arch ppc -mmacosx-version-min=10.4"
 export CFLAGS="-O2 -arch i386 -arch ppc -mmacosx-version-min=10.4" 
 ./configure --prefix=${buildroot}/geos --disable-dependency-tracking
 make clean && make all
-if [ $rv -gt 0 ]; then
-  echo "GEOS build failed with return value $rv"
-  exit 1
-fi
+checkrv $? "GEOS build"
 
 rm -rf ${buildroot}/geos
 mkdir ${buildroot}/geos
@@ -41,6 +38,7 @@ make install
 pushd ${buildroot}/geos
 rm -f ${webroot}/geos-osx.zip
 zip -r9 ${webroot}/geos-osx.zip *
+checkrv $? "GEOS zip"
 popd
 
 popd
