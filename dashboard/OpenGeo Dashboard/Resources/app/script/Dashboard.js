@@ -563,7 +563,40 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         });
         ilinks.removeClass("app-ilink");
         
+        var plinks = Ext.select(".app-plink", false, root);
+        plinks.on({
+            click: function(evt, el) {
+                var key = el.href.split("#").pop();
+                this.launchProcess(key);
+            },
+            scope: this
+        });
+        plinks.removeClass("app-plink");        
+        
         this.updateOnlineLinks(this.suite.online);
+    },
+    
+    /** private: method[launchProcess]
+     *  :arg key: ``String`` Configuration key for process.
+     */
+    launchProcess: function(key) {
+        var app = this.config[key] || "";
+        var file = Titanium.Filesystem.getFile(app);
+        if (file.exists()) {
+            var args;
+            if (this.platform.name === "Mac") {
+                args = ["open", app]
+            } else {
+                args = [app]
+            }
+            var process = Titanium.Process.createProcess(args);
+            process.launch();
+        } else {
+            Ext.Msg.alert(
+                "Warning",
+                "Could not launch application: " + app
+            );
+        }
     },
     
     /** private: method[renderConfigValues]
