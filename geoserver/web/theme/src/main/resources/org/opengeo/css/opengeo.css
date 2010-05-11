@@ -122,23 +122,22 @@ background: transparent url(../img_opengeo/shape_square_blue.png) scroll no-repe
 padding: 2px 0px 2px 20px;
 }
 
-form li.primary,
-ul.form-data li.primary {
+form div.group {
+overflow: auto;
+} 
+
+div.group li:first-child{
 clear: both;
 float: left;
 }
-
-form li.secondary,
-ul.form-data li.secondary {
+div.group li:last-child{
 display:block;
 float:right;
 margin:0 0 0.3em;
 padding:4px 5px 2px 0;
 width:35%;
 }
-
-form li.secondary input.text,
-ul.form-data li.secondary input.text {
+div.group li:last-child input.text{
 width:10em;
 }
 

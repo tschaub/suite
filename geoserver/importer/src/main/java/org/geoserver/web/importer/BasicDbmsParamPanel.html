@@ -1,16 +1,18 @@
 <html xmlns:wicket="http://wicket.apache.org/">
 <body>
 <wicket:panel>
-  <li class="primary"><label for="host"><wicket:message key="host">host</wicket:message> *</label> <input
-    type="text"
-    class="text"
-    wicket:id="host"
-    size="32" /></li>
-  <li class="secondary"><label for="port"><wicket:message key="port">port</wicket:message> *</label> <input
-    type="text"
-    class="text"
-    wicket:id="port"
-    size="6" /></li>
+  <div class="group">
+    <li><label for="host"><wicket:message key="host">host</wicket:message> *</label> <input
+      type="text"
+      class="text"
+      wicket:id="host"
+      size="32" /></li>
+    <li><label for="port"><wicket:message key="port">port</wicket:message> *</label> <input
+      type="text"
+      class="text"
+      wicket:id="port"
+      size="6" /></li>
+  </div>
   <li><label for="database"><wicket:message key="database">database</wicket:message> *</label>
   <input
     type="text"
