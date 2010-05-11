@@ -5,13 +5,13 @@
   <NamedLayer>
     <Name>Default Line</Name>
     <UserStyle>
-      <Title>1 px blue line</Title>
-      <Abstract>Default line style, 1 pixel wide blue</Abstract>
+      <Title>1 px black line</Title>
+      <Abstract>Default line style, 1 pixel wide black</Abstract>
 
       <FeatureTypeStyle>
         <!--FeatureTypeName>Feature</FeatureTypeName-->
         <Rule>
-          <Title>Blue Line</Title>
+          <Title>Black Line</Title>
           <Abstract>A 1 pixel wide black line</Abstract>
           <LineSymbolizer>
             <Stroke>
