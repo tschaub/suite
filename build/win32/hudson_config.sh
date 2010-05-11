@@ -1,3 +1,6 @@
+# Ensure system utils are on the path
+export PATH=/bin:/usr/bin/:${PATH}
+
 # Where do we build into (our --prefix)
 buildroot=/c/build/
 export buildroot

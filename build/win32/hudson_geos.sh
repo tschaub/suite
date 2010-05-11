@@ -25,7 +25,7 @@ fi
 
 ./autogen.sh
 ./configure --prefix=${buildroot}/geos 
-make clean && make all
+make clean && make 
 checkrv $? "GEOS build"
 
 rm -rf ${buildroot}/geos
