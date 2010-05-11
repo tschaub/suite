@@ -97,7 +97,7 @@ fi
 unzip -o binaries/suite.zip -d binaries/suite
 checkrv $? "GeoServer unzip"
 chmod 755 binaries/suite/opengeo-suite
-cp binaries/scripts/suite_uninstall.sh binaries/suite/
+cp -vf binaries/scripts/suite_uninstall.sh binaries/suite/
 chmod 755 binaries/suite/suite_uninstall.sh
 find binaries/suite/data_dir -type d -exec chmod 775 {} ';'
 find binaries/suite/data_dir -type f -exec chmod 664 {} ';'
@@ -121,8 +121,8 @@ checkrv $? "PostGIS unzip"
 #
 pgscriptdir=binaries/pgsql/scripts
 mkdir ${pgscriptdir}
-cp -f binaries/scripts/*.sh ${pgscriptdir}
-cp -f binaries/scripts/postgis ${pgscriptdir}
+cp -vf binaries/scripts/*.sh ${pgscriptdir}
+cp -vf binaries/scripts/postgis ${pgscriptdir}
 rm -f ${pgscriptdir}/suite_uninstall.sh
 #
 # Move the apps down one directory level
@@ -148,11 +148,11 @@ chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/pg_dump
 chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/pg_dumpall
 chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/pg_restore
 chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/psql
-cp -f resources/pgadmin/settings.ini \
+cp -vf resources/pgadmin/settings.ini \
       binaries/pgAdmin3.app/Contents/SharedSupport
-cp -f resources/pgadmin/branding.ini \
+cp -vf resources/pgadmin/branding.ini \
       binaries/pgAdmin3.app/Contents/SharedSupport/branding
-cp -f resources/pgadmin/pgadmin_splash.gif \
+cp -vf resources/pgadmin/pgadmin_splash.gif \
       binaries/pgAdmin3.app/Contents/SharedSupport/branding
 cat resources/pgadmin/plugins.ini \
  >> binaries/pgAdmin3.app/Contents/SharedSupport/plugins.ini
@@ -207,7 +207,7 @@ checkrv $? "Suite packaging"
 #
 #mkdir suitebuild/background
 #cp resources/dmg_background.bmp suitebuild/background/background.bmp
-cp -f resources/OpenGeo.icns suitebuild/.VolumeIcon.icns
+cp -vf resources/OpenGeo.icns suitebuild/.VolumeIcon.icns
 #
 # Build the DMG volume
 #
