@@ -22,6 +22,12 @@ if [ -f /private/etc/manpaths.d/opengeo-pgsql ]; then
 fi
 
 # Remove receipts entries
-find /Library/Receipts -name "org.opengeo.*" -exec /bin/rm -rf {} ';'
-find /var/db/receipts -name "org.opengeo.*" -exec /bin/rm -rf {} ';'
+if [ -d /Library/Receipts ]; then
+  find /Library/Receipts -name "org.opengeo.*" -exec /bin/rm -rf {} ';'
+fi
+if [ -d /var/db/receipts ]; then
+  find /var/db/receipts -name "org.opengeo.*" -exec /bin/rm -rf {} ';'
+fi
+
+echo "The OpenGeo Suite is now uninstalled."
 
