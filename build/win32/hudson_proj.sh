@@ -44,7 +44,7 @@ patch -p0 < ../suite-build/proj_mutex.patch
 checkrv $? "Proj mutex patch"
 
 # Build proj
-./configure --prefix=${buildroot}/proj --without-mutex
+./configure --prefix=${buildroot}/proj 
 make clean all
 checkrv $? "Proj build"
 
