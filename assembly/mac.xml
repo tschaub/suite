@@ -34,7 +34,7 @@
       <outputDirectory>webapps/geoeditor</outputDirectory>
     </fileSet>
     <fileSet>
-      <directory>geoexplorer/build/geoexplorer</directory>
+      <directory>geoexplorer/target/geoexplorer</directory>
       <outputDirectory>webapps/geoexplorer</outputDirectory>
       <excludes>
         <exclude>doc/**</exclude>

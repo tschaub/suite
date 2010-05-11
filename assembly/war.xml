@@ -27,7 +27,7 @@
       </includes>
     </fileSet>
     <fileSet>
-      <directory>geoexplorer/build</directory>
+      <directory>geoexplorer/target</directory>
       <outputDirectory>/</outputDirectory>
       <includes>
         <include>geoexplorer.war</include>
