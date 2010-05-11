@@ -33,26 +33,24 @@ function getfile {
 
   local url
   local file
+  local dodownload
 
   url=$1
   file=$2
+  dodownload=yes
 
   url_tag=`curl -s -I $url | grep ETag | tr -d \" | cut -f2 -d' '`
   checkrv $? "Download $url"
 
-  if [ -f "${file}" ]; then
-    if [ -f "${file}.etag" ]; then
-      file_tag=`cat "${file}.etag"`
-      if [ $url_tag = $file_tag ]; then
-        echo "$file is already up to date"
-      else
-        echo "downloading fresh copy of $file"
-        curl $url > $file
-        checkrv $? "Download $url"
-        echo $url_tag > "${file}.etag"
-      fi
+  if [ -f "${file}" ] && [ -f "${file}.etag" ]; then
+    file_tag=`cat "${file}.etag"`
+    if [ $url_tag = $file_tag ]; then
+      echo "$file is already up to date"
+      dodownload=no
     fi
-  else
+  fi
+
+  if [ $dodownload = "yes" ]; then
     echo "downloading fresh copy of $file"
     curl $url > $file
     checkrv $? "Download $url"
