@@ -2,12 +2,7 @@
 
 export PATH=/bin:/usr/bin:${PATH}
 
-# Script directory
-d=`dirname $0`
-
-# Load versions
-source ${d}/hudson_config.sh
-
+# Usage test
 function usage() {
   echo "Usage: $0 <srcdir>"
   exit 1
@@ -16,6 +11,12 @@ function usage() {
 if [ $# -lt 1 ]; then
   usage
 fi
+
+# Script directory
+d=`dirname $0`
+
+# Load versions and utility functions
+source ${d}/hudson_config.sh
 
 srcdir=$1
 

@@ -2,12 +2,7 @@
 
 export PATH=/bin:/usr/bin:${PATH}
 
-# Script directory
-d=`dirname $0`
-
-# Load versions
-source ${d}/hudson_config.sh
-
+# Check parameters
 function usage() {
   echo "Usage: $0 <srcdir>"
   exit 1
@@ -16,6 +11,12 @@ function usage() {
 if [ $# -lt 1 ]; then
   usage
 fi
+
+# Script directory
+d=`dirname $0`
+
+# Load version information and utility functions
+source ${d}/hudson_config.sh
 
 srcdir=$1
 
@@ -33,7 +34,9 @@ fi
 pushd nad
 # Unzip the NAD grids files
 if [ ! -f ${buildroot}/${proj_nad} ]; then
-unzip -o ${buildroot}/${proj_nad}
+  unzip -o ${buildroot}/${proj_nad}
+  checkrv $? "Proj unzip NAD file"
+fi
 popd
 
 # Patch a current build issue with MinGW and proj
@@ -62,4 +65,4 @@ popd
 
 # Done
 exit 0
-    
+
