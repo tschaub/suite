@@ -128,6 +128,7 @@
 
  <modules>
   <module>geoserver</module>
+  <module>geowebcache</module>
   <module>styler</module>
   <module>geoexplorer</module>
   <module>geoeditor</module>
