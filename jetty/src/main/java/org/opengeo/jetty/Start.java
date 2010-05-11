@@ -64,14 +64,18 @@ public class Start {
             System.setProperty("GEOSERVER_DATA_DIR", gsDataDirectory);    
         }
         
+        //
+        // Set this parameter to tell geoserver not to set up a log4j configuration
+        // since we do custom logging as part of the suite
         System.setProperty("RELINQUISH_LOG4J_CONTROL", "true");
         
-        //on some verison of windows we can't write to the installation directory to look for 
-        // a .opengeo/persevere directory and if there set persevere.home to it
-        File persevereHome = new File(ogConfigDir, "persevere");
-        if (persevereHome.exists()) {
-            System.setProperty("persevere.home", persevereHome.getCanonicalPath());
+        // initialize the location where gxp writes it data
+        String gxpDataDirectory = ini.get("?", "geoexplorer_data_dir");
+        if (gxpDataDirectory == null) {
+            gxpDataDirectory = ogConfigDir.getCanonicalPath();
         }
+        
+        System.setProperty("GEOEXPLORER_DATA", gxpDataDirectory);
         
         org.mortbay.start.Main.main(args);
     }
