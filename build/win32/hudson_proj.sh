@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export PATH=/bin:/usr/bin:${PATH}
+
 # Script directory
 d=`dirname $0`
 
