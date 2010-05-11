@@ -1,6 +1,6 @@
 #!/bin/bash
 
-gs15data="/opt/opengeo/geoserver/data_dir/"
+gs15data="/opt/opengeo/suite/data_dir/"
 gssave=/tmp/opengeo_data_dir.sav
 
 #

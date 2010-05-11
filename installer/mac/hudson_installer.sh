@@ -6,6 +6,7 @@
 # suite .mpkg file with 'freeze' also.
 
 dashboard_version=1.0.0
+pgsql_version=8.4
 
 dashboard_url=http://suite.opengeo.org/builds/dashboard-latest-osx.zip
 suite_url=http://suite.opengeo.org/builds/opengeosuite-latest-mac.zip
@@ -89,15 +90,17 @@ checkrv $? "Dashboard packaging"
 #
 # Retrieve and build the Geoserver pkg
 #
-getfile $suite_url binaries/suite.zip
-if [ -d binaries/geoserver ]; then
-  rm -rf binaries/geoserver
+getfile $suite_url binaries/opengeosuite.zip
+if [ -d binaries/suite ]; then
+  rm -rf binaries/suite
 fi
-unzip -o binaries/suite.zip -d binaries/geoserver
+unzip -o binaries/opengeosuite.zip -d binaries/suite
 checkrv $? "GeoServer unzip"
-chmod 755 binaries/geoserver/opengeo-suite
-find binaries/geoserver/data_dir -type d -exec chmod 775 {} ';'
-find binaries/geoserver/data_dir -type f -exec chmod 664 {} ';'
+chmod 755 binaries/suite/opengeo-suite
+cp binaries/scripts/suite_uninstall.sh binaries/suite/
+chmod 755 binaries/suite/suite_uninstall.sh
+find binaries/suite/data_dir -type d -exec chmod 775 {} ';'
+find binaries/suite/data_dir -type f -exec chmod 664 {} ';'
 if [ -d "./build/GeoServer.pkg" ]; then
   rm -rf ./build/GeoServer.pkg
 fi
@@ -113,6 +116,14 @@ if [ -d binaries/pgsql ]; then
 fi
 unzip -o binaries/pgsql.zip -d binaries/
 checkrv $? "PostGIS unzip"
+#
+# Copy the startup scripts into pgsql
+#
+pgscriptdir=binaries/pgsql/scripts
+mkdir ${pgscriptdir}
+cp -f binaries/scripts/bin/*.sh ${pgscriptdir}
+cp -f binaries/scripts/bin/postgis ${pgscriptdir}
+rm -f ${pgscriptdir}/suite_uninstall.sh
 #
 # Move the apps down one directory level
 #

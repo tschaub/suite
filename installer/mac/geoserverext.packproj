@@ -405,7 +405,7 @@
 											<key>GID</key>
 											<integer>80</integer>
 											<key>Path</key>
-											<string>geoserver</string>
+											<string>suite</string>
 											<key>Path Type</key>
 											<integer>1</integer>
 											<key>Privileges</key>
@@ -576,7 +576,7 @@
 					<key>IFInstallationScriptsPostflight</key>
 					<dict>
 						<key>Path</key>
-						<string>scripts/dashboard_postflight.sh</string>
+						<string></string>
 						<key>Path Type</key>
 						<integer>2</integer>
 						<key>Status</key>
@@ -585,7 +585,7 @@
 					<key>IFInstallationScriptsPostinstall</key>
 					<dict>
 						<key>Path</key>
-						<string>scripts/dashboard_postinstall.sh</string>
+						<string></string>
 						<key>Path Type</key>
 						<integer>2</integer>
 						<key>Status</key>
@@ -668,7 +668,7 @@
 						<key>Level</key>
 						<integer>0</integer>
 						<key>SpecArgument</key>
-						<string>/opt/opengeo/geoserver/webapps/geoserver/WEB-INF/lib</string>
+						<string>/opt/opengeo/suite/webapps/geoserver/WEB-INF/lib</string>
 						<key>SpecProperty</key>
 						<string>NSFileCreationDate</string>
 						<key>SpecTag</key>

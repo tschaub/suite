@@ -5,7 +5,7 @@ gs10app2="/Applications/OpenGeo Dashboard.app/"
 gs10del=1
 
 gs10data="/Applications/OpenGeo Suite.app/Contents/Resources/Java/data_dir/"
-gs15data="/opt/opengeo/geoserver/data_dir/"
+gs15data="/opt/opengeo/suite/data_dir/"
 
 gssave=/tmp/opengeo_data_dir.sav
 
