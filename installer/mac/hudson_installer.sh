@@ -122,6 +122,7 @@ mkdir ${pgscriptdir}
 cp -vf binaries/scripts/*.sh ${pgscriptdir}
 cp -vf binaries/scripts/postgis ${pgscriptdir}
 rm -f ${pgscriptdir}/suite_uninstall.sh
+chmod 755 ${pgscriptdir}/*
 #
 # Move the apps down one directory level
 #
@@ -167,13 +168,6 @@ if [ -d "./build/PostGIS Server.pkg/" ]; then
 fi
 freeze ./postgisserver.packproj
 checkrv $? "PostGIS server packaging"
-
-#
-# Build the Suite Scripts Package
-#
-find ./binaries -name "*.sh" -exec chmod 755 {} ';'
-freeze ./suitescripts.packproj
-checkrv $? "Suite scripts packaging"
 
 #
 # Build the GeoServer Extensions Package
