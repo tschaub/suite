@@ -12,3 +12,4 @@ del dashboard-latest-win32.zip
 rd /s /q ..\..\target\opengeosuite-1.0-win\dashboard\assembly
 
 makensis OpenGeoInstaller.nsi
+
