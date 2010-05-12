@@ -76,11 +76,11 @@ fi
 xcodebuild -project "uninstaller/OpenGeo Suite Uninstaller.xcodeproj" -alltargets
 checkrv $? "Uninstaller build"
 if [ -d "binaries/OpenGeo Suite Uninstaller.app" ]; then
-  rm -rf "binaries/OpenGeo Suite Uninstaller.app"
+  rm -rvf "binaries/OpenGeo Suite Uninstaller.app"
 fi
-mv "uninstaller/build/Release/OpenGeo Suite Uninstaller.app" binaries
+mv -v "uninstaller/build/Release/OpenGeo Suite Uninstaller.app" binaries
 if [ -d "./build/Uninstaller.pkg" ]; then
-   rm -rf "./build/Uninstaller.pkg"
+   rm -rvf "./build/Uninstaller.pkg"
 fi
 freeze ./uninstaller.packproj
 checkrv $? "Uninstaller packaging"
