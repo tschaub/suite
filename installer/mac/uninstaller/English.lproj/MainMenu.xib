@@ -12,6 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="372"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -216,7 +217,7 @@
 				<nil key="NSViewClass"/>
 				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
 				<object class="NSView" key="NSWindowView" id="439893737">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -247,7 +248,7 @@
 						<object class="NSButton" id="379310176">
 							<reference key="NSNextResponder" ref="439893737"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{181, 12}, {133, 32}}</string>
+							<string key="NSFrame">{{318, 12}, {133, 32}}</string>
 							<reference key="NSSuperview" ref="439893737"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="395664142">
@@ -267,7 +268,7 @@
 						<object class="NSTextField" id="1002674884">
 							<reference key="NSNextResponder" ref="439893737"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{30, 312}, {233, 22}}</string>
+							<string key="NSFrame">{{30, 324}, {233, 22}}</string>
 							<reference key="NSSuperview" ref="439893737"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="600414242">
@@ -336,7 +337,7 @@
 													<string>public.url</string>
 												</object>
 											</object>
-											<string key="NSFrameSize">{395, 41}</string>
+											<string key="NSFrameSize">{395, 75}</string>
 											<reference key="NSSuperview" ref="823345015"/>
 											<object class="NSTextContainer" key="NSTextContainer" id="477079410">
 												<object class="NSLayoutManager" key="NSLayoutManager">
@@ -418,7 +419,7 @@
 											<nil key="NSDelegate"/>
 										</object>
 									</object>
-									<string key="NSFrame">{{1, 1}, {395, 216}}</string>
+									<string key="NSFrame">{{1, 1}, {395, 250}}</string>
 									<reference key="NSSuperview" ref="729067328"/>
 									<reference key="NSNextKeyView" ref="644523647"/>
 									<reference key="NSDocView" ref="644523647"/>
@@ -432,7 +433,7 @@
 								<object class="NSScroller" id="47761105">
 									<reference key="NSNextResponder" ref="729067328"/>
 									<int key="NSvFlags">256</int>
-									<string key="NSFrame">{{396, 1}, {15, 216}}</string>
+									<string key="NSFrame">{{396, 1}, {15, 250}}</string>
 									<reference key="NSSuperview" ref="729067328"/>
 									<reference key="NSTarget" ref="729067328"/>
 									<string key="NSAction">_doScroller:</string>
@@ -451,7 +452,7 @@
 									<double key="NSPercent">0.94565218687057495</double>
 								</object>
 							</object>
-							<string key="NSFrame">{{33, 70}, {412, 218}}</string>
+							<string key="NSFrame">{{33, 58}, {412, 252}}</string>
 							<reference key="NSSuperview" ref="439893737"/>
 							<reference key="NSNextKeyView" ref="823345015"/>
 							<int key="NSsFlags">18</int>
@@ -461,6 +462,7 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{480, 360}</string>
+					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1920, 1178}}</string>
 				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
@@ -570,6 +572,14 @@
 						<reference key="destination" ref="700907892"/>
 					</object>
 					<int key="connectionID">561</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">appWindow</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="439893737"/>
+					</object>
+					<int key="connectionID">562</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -719,9 +729,9 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="700907892"/>
-							<reference ref="379310176"/>
-							<reference ref="1002674884"/>
 							<reference ref="729067328"/>
+							<reference ref="1002674884"/>
+							<reference ref="379310176"/>
 						</object>
 						<reference key="parent" ref="972006081"/>
 					</object>
@@ -923,9 +933,9 @@
 					<integer value="1"/>
 					<string>{74, 862}</string>
 					<string>{{6, 978}, {478, 20}}</string>
-					<string>{{448, 105}, {480, 360}}</string>
+					<string>{{305, 53}, {480, 360}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{448, 105}, {480, 360}}</string>
+					<string>{{305, 53}, {480, 360}}</string>
 					<integer value="1"/>
 					<string>{{33, 99}, {480, 360}}</string>
 					<string>{3.40282e+38, 3.40282e+38}</string>
@@ -971,7 +981,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">561</int>
+			<int key="maxID">562</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1000,12 +1010,14 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>appWindow</string>
 							<string>quitButton</string>
 							<string>textField</string>
 							<string>uninstallButton</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -1496,7 +1508,7 @@
 			<integer value="3000" key="NS.object.0"/>
 		</object>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
-		<string key="IBDocument.LastKnownRelativeProjectPath">../SuiteUninstaller.xcodeproj</string>
+		<string key="IBDocument.LastKnownRelativeProjectPath">../OpenGeo Suite Uninstaller.xcodeproj</string>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<object class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
 			<bool key="EncodedWithXMLCoder">YES</bool>

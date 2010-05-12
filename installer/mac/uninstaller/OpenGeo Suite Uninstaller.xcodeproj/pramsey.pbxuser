@@ -1,13 +1,13 @@
 // !$*UTF8*$!
 {
-	0408B0D5119B64F200B62333 /* PBXTextBookmark */ = {
+	042E91BB119B6A6C00CF2085 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 3B92A9F80F6ED2CB0023785B /* SuiteUninstallerAppDelegate.applescript */;
-		name = "SuiteUninstallerAppDelegate.applescript: 59";
+		name = "SuiteUninstallerAppDelegate.applescript: 61";
 		rLen = 0;
-		rLoc = 1762;
+		rLoc = 1852;
 		rType = 0;
-		vrLen = 743;
+		vrLen = 662;
 		vrLoc = 0;
 	};
 	043CECEA119B653C008A7568 /* PBXTextBookmark */ = {
@@ -15,7 +15,7 @@
 		fRef = 3B92A9F80F6ED2CB0023785B /* SuiteUninstallerAppDelegate.applescript */;
 		name = "SuiteUninstallerAppDelegate.applescript: 59";
 		rLen = 0;
-		rLoc = 1762;
+		rLoc = 1852;
 		rType = 0;
 		vrLen = 743;
 		vrLoc = 0;
@@ -114,7 +114,7 @@
 	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
 		activeArchitecturePreference = i386;
-		activeBuildConfigurationName = Release;
+		activeBuildConfigurationName = Debug;
 		activeExecutable = 0452D402119B4AD600F4C901 /* OpenGeo Suite Uninstaller */;
 		activeTarget = 8D1107260486CEB800E47090 /* OpenGeo Suite Uninstaller */;
 		codeSenseManager = 0452D413119B4AFE00F4C901 /* Code sense */;
@@ -144,11 +144,11 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 295396614;
-			PBXWorkspaceStateSaveDate = 295396614;
+			PBXPerProjectTemplateStateSaveDate = 295397469;
+			PBXWorkspaceStateSaveDate = 295397469;
 		};
 		perUserProjectItems = {
-			0408B0D5119B64F200B62333 /* PBXTextBookmark */ = 0408B0D5119B64F200B62333 /* PBXTextBookmark */;
+			042E91BB119B6A6C00CF2085 /* PBXTextBookmark */ = 042E91BB119B6A6C00CF2085 /* PBXTextBookmark */;
 			043CECEA119B653C008A7568 /* PBXTextBookmark */ = 043CECEA119B653C008A7568 /* PBXTextBookmark */;
 			0452D464119B64B900F4C901 /* PBXTextBookmark */ = 0452D464119B64B900F4C901 /* PBXTextBookmark */;
 			0452D465119B64B900F4C901 /* PBXTextBookmark */ = 0452D465119B64B900F4C901 /* PBXTextBookmark */;
@@ -175,9 +175,9 @@
 	};
 	3B92A9F80F6ED2CB0023785B /* SuiteUninstallerAppDelegate.applescript */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {805, 885}}";
-			sepNavSelRange = "{1762, 0}";
-			sepNavVisRange = "{0, 743}";
+			sepNavIntBoundsRect = "{{0, 0}, {805, 915}}";
+			sepNavSelRange = "{1852, 0}";
+			sepNavVisRange = "{0, 662}";
 			sepNavWindowFrame = "{{265, 153}, {750, 558}}";
 		};
 	};

@@ -13,6 +13,7 @@ script SuiteUninstallerAppDelegate
 	property textField : missing value
 	property quitButton : missing value
 	property uninstallButton : missing value
+	property appWindow : missing value
 	
 	-- IBActions
 	on startUninstall_(sender)
@@ -44,7 +45,8 @@ script SuiteUninstallerAppDelegate
 
 Click \"Uninstall\" to begin.")
 		textField's setEditable_(false)
-		quitButton's makeFirstResponder_(quitButton)
+		textField's setTextContainerInset_({8.0, 8.0})
+		appWindow's setInitialFirstResponder_(quitButton)
 	end awakeFromNib
 	
 	on applicationWillFinishLaunching_(aNotification)
