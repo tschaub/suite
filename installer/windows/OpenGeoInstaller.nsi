@@ -768,8 +768,6 @@ Section "-Dashboard" SectionDashboard ;dash means hidden
                                 "$INSTDIR\dashboard\Resources\config.ini" \
                                 "@GEOSERVER_DATA_DIR@" "$PROFILE\.opengeo\data_dir" \ 
                                 "/S=1" $1
-
-
   ${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
                                 "$INSTDIR\dashboard\Resources\config.ini" \
                                 "@SUITE_EXE@" "$INSTDIR\opengeo-suite.bat" \ 
@@ -778,10 +776,17 @@ Section "-Dashboard" SectionDashboard ;dash means hidden
                                 "$INSTDIR\dashboard\Resources\config.ini" \
                                 "@SUITE_DIR@" "$INSTDIR" \ 
                                 "/S=1" $1
-
   ${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
                                 "$INSTDIR\dashboard\Resources\config.ini" \
                                 "@PGSQL_PORT@" "54321" \ 
+                                "/S=1" $1
+  ${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
+                                "$INSTDIR\dashboard\Resources\config.ini" \
+                                "@PGADMIN_PATH@" "$INSTDIR\pgsql\bin\pgadmin3.exe" \ 
+                                "/S=1" $1
+  ${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
+                                "$INSTDIR\dashboard\Resources\config.ini" \
+                                "@PGSHAPELOADER_PATH@" "$INSTDIR\pgsql\bin\shp2pgsql-gui.exe" \ 
                                 "/S=1" $1
   ;Skip:
 
