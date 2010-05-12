@@ -782,11 +782,11 @@ Section "-Dashboard" SectionDashboard ;dash means hidden
                                 "/S=1" $1
   ${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
                                 "$INSTDIR\dashboard\Resources\config.ini" \
-                                "@PGADMIN_PATH@" "$INSTDIR\pgsql\bin\pgadmin3.exe" \ 
+                                "@PGADMIN_PATH@" "$INSTDIR\pgsql\8.4\bin\pgadmin3.exe" \ 
                                 "/S=1" $1
   ${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
                                 "$INSTDIR\dashboard\Resources\config.ini" \
-                                "@PGSHAPELOADER_PATH@" "$INSTDIR\pgsql\bin\shp2pgsql-gui.exe" \ 
+                                "@PGSHAPELOADER_PATH@" "$INSTDIR\pgsql\8.4\bin\shp2pgsql-gui.exe" \ 
                                 "/S=1" $1
   ;Skip:
 
