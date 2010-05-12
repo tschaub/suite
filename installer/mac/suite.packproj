@@ -1360,7 +1360,9 @@
 							<key>Imported Package</key>
 							<true/>
 							<key>Package Path</key>
-							<string>/Users/pramsey/Code/opengeo-suite/installer/mac/build/Uninstaller.pkg</string>
+							<string>build/Uninstaller.pkg</string>
+							<key>Package Path Type</key>
+							<integer>2</integer>
 						</dict>
 						<key>Plugins</key>
 						<dict>
@@ -1418,7 +1420,9 @@
 								<array>
 									<dict>
 										<key>Path</key>
-										<string>/Users/pramsey/Code/opengeo-suite/installer/mac/build/Uninstaller.pkg/Contents/Resources/background</string>
+										<string>build/Uninstaller.pkg/Contents/Resources/background</string>
+										<key>Path Type</key>
+										<integer>2</integer>
 										<key>Status</key>
 										<true/>
 									</dict>
