@@ -11,12 +11,19 @@ function usage() {
   exit 1
 }
 
-if [ $# -lt 2 ]; then
+if [ $# -lt 1 ]; then
   usage
 fi
 
 srcdir=$1
-destdir=$2
+
+if [ "x$2" = "x" ]; then
+  destdir=$webroot
+else
+  destdir=$2
+fi
+ 
+exit
 
 if [ ! -d $srcdir ]; then
   exit 1
