@@ -21,4 +21,10 @@
       </includes>
     </fileSet>
   </fileSets>
+  <files>
+    <file>
+      <source>target/version.ini</source>
+      <outputDirectory>/</outputDirectory>
+    </file>
+  </files>
 </assembly>

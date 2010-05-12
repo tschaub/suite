@@ -10,5 +10,9 @@
       <outputDirectory>/</outputDirectory>
       <destName>geoserver.war</destName>
     </file>
+    <file>
+      <source>target/version.ini</source>
+      <outputDirectory>/</outputDirectory>
+    </file>
   </files>
 </assembly>
