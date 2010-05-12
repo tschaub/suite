@@ -7,15 +7,16 @@ d=`dirname $0`
 source ${d}/hudson_config.sh
 
 function usage() {
-  echo "Usage: $0 <srcdir>"
+  echo "Usage: $0 <srcdir> <destdir>"
   exit 1
 }
 
-if [ $# -lt 1 ]; then
+if [ $# -lt 2 ]; then
   usage
 fi
 
 srcdir=$1
+destdir=$2
 
 if [ ! -d $srcdir ]; then
   exit 1
@@ -36,8 +37,8 @@ rm -rf ${buildroot}/geos
 mkdir ${buildroot}/geos
 make install
 pushd ${buildroot}/geos
-rm -f ${webroot}/geos-osx.zip
-zip -r9 ${webroot}/geos-osx.zip *
+rm -f ${destdir}/geos-osx.zip
+zip -r9 ${destdir}/geos-osx.zip *
 checkrv $? "GEOS zip"
 popd
 

@@ -7,15 +7,16 @@ d=`dirname $0`
 source ${d}/hudson_config.sh
 
 function usage() {
-  echo "Usage: $0 <srcdir>"
+  echo "Usage: $0 <srcdir> <destdir>"
   exit 1
 }
 
-if [ $# -lt 1 ]; then
+if [ $# -lt 2 ]; then
   usage
 fi
 
 srcdir=$1
+destdir=$2
 
 if [ ! -d $srcdir ]; then
   exit 1
@@ -45,8 +46,8 @@ mkdir ${buildroot}/proj
 make install
 
 pushd ${buildroot}/proj
-rm -f ${webroot}/proj-osx.zip
-zip -r9 ${webroot}/proj-osx.zip *
+rm -f ${destdir}/proj-osx.zip
+zip -r9 ${destdir}/proj-osx.zip *
 checkrv $? "Proj zip"
 popd
 
