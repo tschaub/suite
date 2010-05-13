@@ -23,6 +23,7 @@
   <module>geoserver</module>
   <module>styler</module>
   <module>postgis</module>
+  <module>geowebcache</module>
  </modules>
 
 </project>
