@@ -163,7 +163,10 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         
         var dashPanelListeners = {
             render: {
-                fn: function() {this.processLinks()},
+                fn: function() {
+                    this.processLinks();
+                    this.renderConfigValues();
+                },
                 scope: this,
                 delay: 1
             }
