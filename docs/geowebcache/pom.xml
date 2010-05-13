@@ -38,6 +38,12 @@
             <phase>compile</phase>
             <configuration>
               <tasks>
+                <!-- remove this copy when gwc #153 is fixed -->
+                <copy file="conf.py" todir="src" overwrite="true"/>
+
+                <exec executable="sphinx-build" failonerror="true" dir="${basedir}/src">
+                  <arg line="-D html_theme='opengeo' -b html -d ${build.directory}/doctrees . ${build.directory}/html"/>
+                </exec>
               </tasks>
             </configuration>
             <goals>

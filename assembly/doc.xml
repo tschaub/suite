@@ -23,6 +23,10 @@
       <outputDirectory>postgis</outputDirectory>
     </fileSet>
     <fileSet>
+      <directory>docs/geowebcache/target/html</directory>
+      <outputDirectory>geowebcache</outputDirectory>
+    </fileSet>
+    <fileSet>
       <directory>docs/gettingstarted/target/html</directory>
       <outputDirectory>gettingstarted</outputDirectory>
     </fileSet>

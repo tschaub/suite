@@ -61,6 +61,10 @@
       <outputDirectory>webapps/docs/postgis</outputDirectory>
     </fileSet>
     <fileSet>
+      <directory>docs/geowebcache/target/html</directory>
+      <outputDirectory>webapps/docs/geowebcache</outputDirectory>
+    </fileSet>
+    <fileSet>
       <directory>recipes</directory>
       <outputDirectory>webapps/recipes</outputDirectory>
     </fileSet>

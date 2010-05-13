@@ -1,4 +1,4 @@
-<assembly>
+<eassembly>
   <id>win</id>
   <formats>
     <format>zip</format>
@@ -71,6 +71,10 @@
     <fileSet>
       <directory>docs/postgis/target/html</directory>
       <outputDirectory>webapps/docs/postgis</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>docs/geowebcache/target/html</directory>
+      <outputDirectory>webapps/docs/geowebcache</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>recipes</directory>
