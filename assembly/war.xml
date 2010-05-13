@@ -13,13 +13,6 @@
       </includes>
     </fileSet>
     <fileSet>
-      <directory>styler/target</directory>
-      <outputDirectory>/</outputDirectory>
-      <includes>
-        <include>styler.war</include>
-      </includes>
-    </fileSet>
-    <fileSet>
       <directory>geoeditor/target</directory>
       <outputDirectory>/</outputDirectory>
       <includes>
