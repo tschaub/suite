@@ -38,7 +38,7 @@
             <phase>compile</phase>
             <configuration>
               <tasks>
-                <get src="http://demo.cleverelephant.ca/~pramsey/doc.zip" dest="doc.zip" usetimestamp="true"/>
+                <get src="http://data.opengeo.org/suite/postgis-docs.zip" dest="doc.zip" usetimestamp="true"/>
                 <unzip src="doc.zip" dest="target"/>
                 <copy file="style.css" todir="target/html" overwrite="true"/>
               </tasks>
