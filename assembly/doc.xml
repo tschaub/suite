@@ -19,6 +19,10 @@
       <outputDirectory>geoserver</outputDirectory>
     </fileSet>
     <fileSet>
+      <directory>docs/postgis/target/html</directory>
+      <outputDirectory>postgis</outputDirectory>
+    </fileSet>
+    <fileSet>
       <directory>docs/gettingstarted/target/html</directory>
       <outputDirectory>gettingstarted</outputDirectory>
     </fileSet>

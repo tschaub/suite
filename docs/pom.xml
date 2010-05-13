@@ -22,6 +22,7 @@
   <module>geoexplorer</module>
   <module>geoserver</module>
   <module>styler</module>
+  <module>postgis</module>
  </modules>
 
 </project>

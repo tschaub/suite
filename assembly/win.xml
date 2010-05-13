@@ -69,6 +69,10 @@
       <outputDirectory>webapps/docs/geoserver</outputDirectory>
     </fileSet>
     <fileSet>
+      <directory>docs/postgis/target/html</directory>
+      <outputDirectory>webapps/docs/postgis</outputDirectory>
+    </fileSet>
+    <fileSet>
       <directory>recipes</directory>
       <outputDirectory>webapps/recipes</outputDirectory>
     </fileSet>

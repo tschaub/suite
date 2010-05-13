@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+  http://maven.apache.org/maven-v4_0_0.xsd">
+ <modelVersion>4.0.0</modelVersion>
+
+ <parent>
+  <groupId>org.opengeo</groupId>
+  <artifactId>docs</artifactId>
+  <version>1.9-SNAPSHOT</version>
+ </parent>
+
+ <groupId>org.opengeo.docs</groupId>
+ <artifactId>postgis</artifactId>
+ <packaging>jar</packaging>
+ <name>OpenGeo PostGIS Doc Module</name>
+
+ <build>
+   <plugins>
+     <plugin>
+       <artifactId>maven-antrun-plugin</artifactId>
+       <dependencies>
+          <dependency>
+            <groupId>ant</groupId>
+            <artifactId>ant</artifactId>
+            <version>${ant.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>ant-contrib</groupId>
+            <artifactId>ant-contrib</artifactId>
+            <version>1.0b3</version>
+          </dependency>
+        </dependencies>
+        <executions>
+          <execution>
+            <id>compile</id>
+            <phase>compile</phase>
+            <configuration>
+              <tasks>
+                <get src="http://demo.cleverelephant.ca/~pramsey/doc.zip" dest="doc.zip" usetimestamp="true"/>
+                <unzip src="doc.zip" dest="target"/>
+                <copy file="style.css" todir="target/html" overwrite="true"/>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+     </plugin>
+   </plugins>
+ </build>
+
+</project>
