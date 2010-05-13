@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.opengeo.geoserver</groupId>
     <artifactId>web</artifactId>
-    <version>1.0</version>
+    <version>1.9-SNAPSHOT</version>
   </parent>
 
   <groupId>org.opengeo.geoserver</groupId>
