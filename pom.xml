@@ -111,8 +111,11 @@
            <descriptor>assembly/mac.xml</descriptor>
            <descriptor>assembly/doc.xml</descriptor>
            <descriptor>assembly/ext.xml</descriptor>
-           <descriptor>assembly/war.xml</descriptor>
-           <descriptor>assembly/war-jboss.xml</descriptor>
+           <descriptor>assembly/war-geoserver.xml</descriptor>
+           <descriptor>assembly/war-geoexplorer.xml</descriptor>
+           <descriptor>assembly/war-geoeditor.xml</descriptor>
+           <descriptor>assembly/war-geowebcache.xml</descriptor>
+           <descriptor>assembly/war-geoserver-jboss.xml</descriptor>
          </descriptors>
        </configuration>
      </plugin>
