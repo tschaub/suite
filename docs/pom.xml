@@ -24,6 +24,7 @@
   <module>styler</module>
   <module>postgis</module>
   <module>geowebcache</module>
+  <module>production</module>
  </modules>
 
 </project>
