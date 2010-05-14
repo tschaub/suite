@@ -12,7 +12,7 @@ body { font: 90% 'Lucida Grande', Verdana, Geneva, Arial, Helvetica, sans-serif;
 
 a {text-decoration: none; color: #418acd; }
 a:hover, li a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover {color: #e9cb2b; }
-p,form,td,th,dt,li{font-size:10pt}
+/*p,form,td,th,dt,li{font-size:10pt}*/
 h1, h2 {color: #282e5b;}
 h3,h4,th,dt,b {color: #213780;}
 h1 { font-size: 24px; line-height: 24px; margin-bottom: 24px;}
@@ -51,13 +51,28 @@ pre, .literallayout { border-right-width: 0px; border-left-width: 0px; border-bo
 /* X. OpenGeo Overrides
 ----------------------------------------------------- */
 
-/* 1 */
-body { font-family: Helvetica, Arial, FreeSans, sans-serif; }
+body { 
+font-family: Helvetica, Arial, FreeSans, sans-serif; 
+margin: 0 1em 0 0;
+padding: 0;
+}
 
-/* 2 */
-h1, h2, h3,h4,th,dt { font-family: Optima, Georgia, serif }
-h1, h2 {color: #0A2742;}
-h3,h4,th,dt,b {color: #0A2742;}
+a {
+color:#0A2742;
+outline:medium none !important;
+text-decoration: underline;
+}
+
+/*p,form,td,th,dt,li{font-size:10pt}
+th,dt { font-family: Optima, Georgia, serif }*/
+th,dt,b {color: #0A2742;}
+
+h1, h2, h3, h4, h5, h6 {
+color:#0A2742;
+font-family:"Century Gothic",Optima,Verdana,Arial,Helvetica,sans-serif;
+font-weight: normal;
+height:auto;
+}
 
 /* 3 */
 pre, .literallayout { border-color: #6C9400; }
@@ -67,3 +82,28 @@ pre, .literallayout { border-color: #6C9400; }
 .term { color: #0A2742;}
 .styledtable table thead th,
 .styledtable > table { border-color: #6C9400; }
+
+.navheader tr:first-child { display: none; }
+.navheader hr { display: none; }
+.titlepage hr { display: none; }
+
+.titlepage h1 { 
+font-size: 2em;
+background:none repeat scroll 0 0 #F3F3F3; 
+padding:4px
+}
+
+.chapter {
+margin-top: 0;
+}
+
+.toc dt {
+height: 1.5em;
+}
+ 
+.sect1 h2 {
+color:#486300;
+font-size:1.7em;
+border-bottom:1px solid #486300;
+padding:0 4px;
+}

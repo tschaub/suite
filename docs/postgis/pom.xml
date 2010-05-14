@@ -38,9 +38,15 @@
             <phase>compile</phase>
             <configuration>
               <tasks>
+                <exec executable="sphinx-build" failonerror="true" dir="${basedir}/src">
+                  <arg line="-D html_theme='pg' -b html -d ${build.directory}/doctrees . ${build.directory}/html"/>
+                </exec>
+                
                 <get src="http://data.opengeo.org/suite/postgis-docs.zip" dest="doc.zip" usetimestamp="true"/>
-                <unzip src="doc.zip" dest="target"/>
-                <copy file="style.css" todir="target/html" overwrite="true"/>
+                <property name="pgdoc" value="${build.directory}/html/postgis"/>
+                <mkdir dir="${pgdoc}"/>
+                <unzip src="doc.zip" dest="${pgdoc}"/>
+                <copy file="style.css" todir="${pgdoc}/html" overwrite="true"/>
               </tasks>
             </configuration>
             <goals>
