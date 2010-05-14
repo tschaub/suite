@@ -11,18 +11,14 @@ The OpenGeo Suite has the following system requirements:
 
 * **Operating System**: 10.5 Leopard, 10.6 Snow Leopard
 * **Memory**: 1GB minimum (higher recommended)
-* **Disk space**: 400MB minimum (plus extra space for any loaded data)
+* **Disk space**: 600MB minimum (plus extra space for any loaded data)
 * **Browser**: Any modern web browser is supported (Internet Explorer 6+, Firefox 3+, Chrome 2+, Safari 3+)
 * **Permissions**: Administrative rights
 
 Installation
 ------------
-#. Double click to mount the :file:`OpenGeoSuite-1.0.dmg` file.  Inside the mounted image, double click on :file:`OpenGeo Suite.mpkg`
 
-    .. figure:: img/files.png
-       :align: center
-
-       *The contents of the mounted image*
+#. Double click to mount the :file:`OpenGeoSuite-1.9.0.dmg` file.  Inside the mounted image, double click on :file:`OpenGeo Suite.mpkg`
 
 #. At the **Welcome** screen, click :guilabel:`Continue`.
 
@@ -38,12 +34,19 @@ Installation
 
          *License Agreement*
 
-#. To install the Suite on your hard drive click :guilabel:`Install`.  You will be prompted for your administrator password.  
+#. To install the OpenGeo Suite on your hard drive click :guilabel:`Next`.  You will be prompted for your administrator password.  
 
     .. figure:: img/directory.png
        :align: center
 
        *Destination selection*
+
+#. When ready to install, click :guilabel:`Install`.
+
+    .. figure:: img/ready.png
+       :align: center
+
+       *Ready to Install*
 
 #. Please wait while the installation proceeds.
 
@@ -52,55 +55,45 @@ Installation
 
        *Installation*
       
-#. You have successfully installed the OpenGeo Suite!   The OpenGeo Dashboard will automatically start, allowing you to manage and launch the OpenGeo Suite.
+#. You will receive confirmation that the installation was successful.  
 
     .. figure:: img/success.png
        :align: center
 
        *The OpenGeo Suite successfully installed*
 
-For more information, please see the document titled **Getting Started**, which is available from the Dashboard, or inside the OpenGeo Suite package contents folder:
+After installation, the OpenGeo Dashboard will automatically start, allowing you to manage and launch the OpenGeo Suite.
 
-`<file:///Applications/OpenGeo%20Suite.app/Contents/Resources/Java/webapps/docs/gettingstarted/index.html>`_
+For more information, please see the document titled **Getting Started**, which is available from the Dashboard.
 
-.. note:: The OpenGeo Suite must be online in order to view documentation from the Dashboard.  If you would like to view the documentation when the Suite is offline, please use the file link above.
+.. note:: The OpenGeo Suite must be online in order to view documentation from the Dashboard.  If you would like to view the documentation when the Suite is offline, please paste the following link into your browser::
 
-        
+   file:///opt/opengeo/suite/webapps/docs/gettingstarted/index.html
+
+Upgrade
+-------
+
+You can upgrade from a previous version of the OpenGeo Suite, and your settings and data will be preserved.  To do this, follow the regular installation procedure, and if a previous version is detected, the software will be automatically upgraded.
+ 
 Uninstallation
 --------------
-#. Before uninstalling, make sure the OpenGeo Suite is offline.  You can turn off the Suite from any page on the dashboard, by clicking the :guilabel:`Stop` button.
 
-    .. figure:: img/offline.png
-        :align: center
+.. warning:: All data and settings will be deleted during the uninstallation process.  If you wish to retain your data nd settings, please make a backup of the directory :file:`~/.opengeo` before uninstalling.
 
-        *Turning off the OpenGeo Suite*   
-   
-#. Shutdown the Dashboard by quitting the application.  From within the Dashboard, navigate to :menuselection:`OpenGeo Dashboard --> Quit OpenGeo Dashboard` or use the keyboard shotcut :guilabel:`Command-Q`.
-
+.. note:: Please make sure that the Dashboard is closed and the OpenGeo Suite is offline before starting the uninstallation.
+  
 #. To run the uninstaller, open a Terminal window by going to :menuselection:`Applications --> Utilities --> Terminal`.
 
 #. From the terminal window, run the uninstaller shell script by typing the following.  
 
     .. code-block:: bash
         
-        sudo /Applications/OpenGeo\ Suite.app/Contents/Resources/uninstaller.sh 
+       sudo /opt/opengeo/suite/suite-uninstall.sh
     
-    .. note:: The command ``sudo`` means to execute a command as a superuser.  The ``sudo`` command allows you temporary superuser privileges.
+#. Enter the administrator password for your computer.
 
-    .. warning:: Make sure you are not in the :file:`/Applications/OpenGeo\ Suite.app` directory when running the uninstaller.  If unsure, type ``cd ~`` and press :guilabel:`Return` before running the above command.
+#. Your OpenGeo Suite will be uninstalled.
 
-#. You will be promoted to enter your root password.  This is the administrator password for your computer.
-
-#.  When asked to continue, type ``y`` (for yes) then :guilabel:`Return`.
-
-#. Your OpenGeo Suite was successfully uninstalled!
-
-#. After uninstalling the OpenGeo Suite, we recommend removing the OpenGeo Suite configuration file.   To remove this file, type the following in the Terminal window.
-
-    .. code-block:: bash
-    
-        rm -rf ~/.opengeo 
-        
 For More Information
 --------------------
 

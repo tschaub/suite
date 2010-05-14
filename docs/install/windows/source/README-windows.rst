@@ -11,14 +11,14 @@ The OpenGeo Suite has the following system requirements:
 
 * **Operating System**: Windows XP, Windows Vista, Windows 7 (each 32 and 64 bit)
 * **Memory**: 512MB minimum (1GB recommended)
-* **Disk space**: 300MB minimum (plus extra space for any loaded data)
+* **Disk space**: 600MB minimum (plus extra space for any loaded data)
 * **Browser**: Any modern web browser is supported (Internet Explorer 6+, Firefox 3+, Chrome 2+, Safari 3+)
 * **Permissions**: Administrative rights
 
 Installation
 ------------
 
-#. Double click on the :file:`OpenGeoSuite.exe` file.
+#. Double click on the :file:`OpenGeoSuite-1.9.0.exe` file.
 
 #. At the **Welcome** screen, click :guilabel:`Next`.
 
@@ -48,7 +48,7 @@ Installation
 
       *Start Menu folder to be created*
 
-#. Select the components you wish to install.
+#. Select the components you wish to install, and click :guilabel:`Next`.
 
    .. figure:: img/components.png
       :align: center
@@ -71,22 +71,31 @@ Installation
 
       *Installation*
 
-#. After installation, click :guilabel:`Finish` to start the OpenGeo Suite and launch the Dashboard.  If you would like to start the OpenGeo Suite at a later time, uncheck the box and then click :guilabel:`Finish`.
+#. After installation, click :guilabel:`Finish` to launch the OpenGeo Suite Dashboard, from which you can start the OpenGeo Suite.  If you would like to start the OpenGeo Suite Dashboard at a later time, uncheck the box and then click :guilabel:`Finish`.
 
    .. figure:: img/finish.png
       :align: center
 
       *The OpenGeo Suite successfully installed*
 
-For more information, please see the document titled **Getting Started**, which is available from the Dashboard, or in the Start Menu at :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Documentation --> Getting Started`.
+For more information, please see the document titled **Getting Started**, which is available through the Dashboard, or in the Start Menu at :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Documentation --> Getting Started`.
 
 .. note:: The OpenGeo Suite must be online in order to view documentation from the Dashboard.  If you would like to view the documentation when the Suite is offline, please use the shortcuts in the Start Menu.
 
+Upgrade
+-------
+
+You can upgrade from a previous version of the OpenGeo Suite, and your settings and data will be preserved.  To do this, follow the regular installation procedure, and if a previous version is detected, a notice will display saying so.
+
+   .. figure:: img/upgrade.png
+      :align: center
+
+      *Upgrading from a previous version*
 
 Uninstallation
 --------------
 
-.. note:: Please make sure that the Dashboard is closed before starting the uninstallation.
+.. note:: Please make sure that the Dashboard is closed and the OpenGeo Suite is offline before starting the uninstallation.
 
 #. Navigate to :menuselection:`Start Menu --> Programs --> OpenGeo Suite --> Uninstall`
 
@@ -99,7 +108,7 @@ Uninstallation
 
       *Ready to uninstall the OpenGeo Suite*
 
-   .. warning:: Uninstalling will delete the default GeoServer Data Directory, installed by default at :file:`<user_home_directory>\\.opengeo\\data_dir`.  Please make a backup if you would like to save this directory.
+   .. note:: Uninstalling will not delete your settings and data.  Should you wish to delete this, you will need to do this manually.  The uninstallation process will display the location of your settings directory, typically :file:`<user_home_directory>\\.opengeo`.
 
 #. When done, click :guilabel:`Close`.
 
@@ -107,7 +116,6 @@ Uninstallation
       :align: center
 
       *The OpenGeo Suite is successfully uninstalled*
-
 
 For More Information
 --------------------
