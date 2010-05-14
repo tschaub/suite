@@ -7,12 +7,12 @@ body {
 p {
   color:#333333;
   line-height:1.5;
-  margin:10px;
+  margin:0 0 10px;
   text-align: justify;
 }
 a {
-    color: #3366CC;
-    text-decoration: none;
+   color: #3366CC;
+   text-decoration: none;
 }
 
 a:hover {
@@ -41,56 +41,46 @@ a.app-disabled:hover {
 }
 .dash-panel-body {
     width: 100%;
+    margin: 10px;
 }
 
-.dash-panel-body h1 a {
+.dash-panel-body h1,
+.dash-panel-body h1 a,
+.dash-panel-body h2,
+.dash-panel-body h3,
+.dash-panel-body h4 {
     color:#0A2742;
     font-family:Optima,Georgia, serif;
     font-size:24px;
     font-weight:normal;
+    margin:0 0 10px;
 }
-.dash-panel-body h2 {
-  color:#0A2742;
-  font-family:Optima, Georgia, serif;
-  font-size:16px;
-  font-weight:normal;    
-  margin: 10px 0 0;
-}
-.dash-panel-body h3 {
-    color:#0A2742;
-    font-family:Optima,Georgia, serif;
+.dash-panel-body h2,
+.dash-panel-body h3,
+.dash-panel-body .stepheading,
+.dash-panel-body .faq h1 {
     font-size:16px;
-    font-weight:normal;    
+    color:#486300;
 }
-  
+
 .dash-panel-body h4 {
     border-bottom:1px solid #486300;
-    color:#0A2742;
-    font-family:Optima,Georgia, serif;
     font-size:24px;
-    font-weight:normal;
-    margin:0 10px 0 10px;
-  }
-
-/*QuickStart Styling*/
-.dash-panel-body .steps {
-    font-weight:normal;
-    margin:10px 0 0 10px;
 }
 
-.dash-panel-body .stepheading {
-    color:#486300;
-    font-family:Optima,Georgia,serif;
-    font-size:15px;
-    margin-top:10px;
-}
-
+.dash-panel-body ol,
+.dash-panel-body ul,
 .dash-panel-body .steps ul {
     line-height:1.5;
     list-style-image:none;
     list-style-position:inside;
     list-style-type:square;
     text-align:justify;
+    margin: 0 0 10px;
+}
+
+.dash-panel-body ol {
+    list-style-type:decimal;
 }
 
 .dash-panel-body .launch {
@@ -359,16 +349,4 @@ a.icon-postgis {
 
 #app-panels-pref-form {
     margin: 10px 150px 0 10px;
-}
-
-/*FAQ page Styling*/
-.dash-panel-body .faq {
-}
-
-.dash-panel-body .faq h1 {
-  color:#486300;
-  font-family:Optima,Georgia,serif;
-  font-size:15px;
-  font-weight: normal;
-  margin:10px;
 }
