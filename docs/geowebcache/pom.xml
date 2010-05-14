@@ -42,7 +42,7 @@
                 <copy file="conf.py" todir="src" overwrite="true"/>
 
                 <exec executable="sphinx-build" failonerror="true" dir="${basedir}/src">
-                  <arg line="-D html_theme='opengeo' -b html -d ${build.directory}/doctrees . ${build.directory}/html"/>
+                  <arg line="-D html_theme='gwc' -b html -d ${build.directory}/doctrees . ${build.directory}/html"/>
                 </exec>
               </tasks>
             </configuration>
