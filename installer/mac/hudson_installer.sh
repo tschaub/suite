@@ -227,10 +227,10 @@ dmg_bottomright_x=`expr $dmg_topleft_x + $dmg_width`
 dmg_bottomright_y=`expr $dmg_topleft_y + $dmg_height`
 
 # Clean up intermediate steps
-if [ -d "${DMGFINAL}" ]; then
+if [ -f "${DMGFINAL}" ]; then
   rm -f "${DMGFINAL}"
 fi
-if [ -d "${DMGTMP}" ]; then
+if [ -f "${DMGTMP}" ]; then
   rm -f "${DMGTMP}"
 fi
 
