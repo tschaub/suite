@@ -11,7 +11,7 @@ pgsql_version=8.4
 dashboard_url=http://suite.opengeo.org/builds/dashboard-latest-osx.zip
 suite_url=http://suite.opengeo.org/builds/opengeosuite-latest-mac.zip
 ext_url=http://suite.opengeo.org/builds/opengeosuite-latest-ext.zip
-pgsql_url=http://10.52.11.40/suite/postgis-osx.zip
+pgsql_url=http://suite.opengeo.org/osxbuilds/postgis-osx.zip
 
 export PATH=$PATH:/usr/local/bin
 
@@ -44,7 +44,7 @@ function getfile {
 
   if [ -f "${file}" ] && [ -f "${file}.etag" ]; then
     file_tag=`cat "${file}.etag"`
-    if [ $url_tag = $file_tag ]; then
+    if [ "x$url_tag" = "x$file_tag" ]; then
       echo "$file is already up to date"
       dodownload=no
     fi
