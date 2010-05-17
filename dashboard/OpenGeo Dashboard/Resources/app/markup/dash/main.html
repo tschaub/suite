@@ -1,97 +1,117 @@
 <div class="dash-panel-body">
   <div class="dash-panel-content">
-    <h4>Welcome to the OpenGeo Suite!</h4>
-    <p>The OpenGeo Suite is a free, fully-featured web mapping environment that's easy to install, configure, and use.  With this dashboard, you can directly launch the primary features of the Suite. To get started making your own maps, please view the <a href="#app-panels-dash-quickstart" class="app-ilink">Quickstart</a> guide.</p>
+    <h1>OpenGeo Suite<small> 1.9.0</small></h1>
+
       
-    <table>
+    <table class="dash-panel-table">
+      <thead>
         <tr>
-          <td>
-            <div class="dash-panel-content-item geoexplorer">
-              <h1><a href="#app-geoexplorer_path" class="app-xlink app-online">GeoExplorer</a></h1>
-              <ul class="quick-links">
-                <li><a href="#app-panels-dash-geoexplorer" class="app-ilink">About</a></li>
-                <li><a href="#app-geoexplorer_path" class="app-xlink app-online">Launch</a></li>
-              </ul>
-            </div>
-          </td>
-    
-          <td>
-            <div class="dash-panel-content-item styler">
-              <h1><a href="#app-styler_path" class="app-xlink app-online">Styler</a></h1>
-              <ul class="quick-links">
-                <li><a href="#app-panels-dash-styler" class="app-ilink">About</a></li>
-                <li><a href="#app-styler_path" class="app-xlink app-online">Launch</a></li>
-              </ul>
-            </div>
-          </td>
-        </tr>  
+          <th scope="col" colspan="2">At a Glance</th>
+        </tr>
+      </thead>
+      <tbody>
         <tr>
-          <td>
-            <div class="dash-panel-content-item geoserver">
-              <h1><a href="#app-geoserver_admin" class="app-xlink app-online">GeoServer</a></h1>
-              <ul class="quick-links">
-                <li><a href="#app-panels-dash-geoserver" class="app-ilink">About</a></li>
-                <li><a href="#app-geoserver_admin" class="app-xlink app-online">Configure</a></li>
-              </ul>
-            </div>
-          </td>
-          <td>
-          <div class="dash-panel-content-item geoeditor">
-            <h1><a href="#app-geoeditor_path" class="app-xlink app-online">GeoEditor</a></h1>
+          <td class="dash-panel-table-primary"><strong></strong> Data</td>
+          <td class="dash-panel-table-actions">
             <ul class="quick-links">
-              <li><a href="#app-panels-dash-geoeditor" class="app-ilink">About</a></li>
-              <li><a href="#app-geoeditor_path" class="app-xlink app-online">Launch</a></li>
+              <li><a href="#app-geoserver-importer" class="app-xlink app-online">Import data</a></li>
+              <li><a href="#app-geoserver-admin" class="app-xlink app-online">Publish data</a></li>
             </ul>
-          </div>
           </td>
         </tr>
         <tr>
-          <td>
-            <div class="dash-panel-content-item geowebcache">
-              <h1><a href="#app-geowebcache_path" class="app-xlink app-online">GeoWebCache</a></h1>
-              <ul class="quick-links">
-                <li><a href="#app-panels-dash-geowebcache" class="app-ilink">About</a></li>
-                <li><a href="#app-geowebcache_path" class="app-xlink app-online">Configure</a></li>
-              </ul>
-            </div>
-          </td>
-          <td>
-            <div class="dash-panel-content-item postgis">
-              <h1><a href="#pgadmin_path" class="app-plink app-online">PostGIS</a></h1>
-              <ul class="quick-links">
-                <li><a href="#app-panels-dash-postgis" class="app-ilink">About</a></li>
-                <li><a href="#pgadmin_path" class="app-plink app-online">Manage</a></li>
-              </ul>
-            </div>
+          <td class="dash-panel-table-primary"><strong></strong> Layers</td>
+          <td class="dash-panel-table-actions">
+            <ul class="quick-links">
+              <li><a href="#app-styler-path" class="app-xlink app-online">Style layers</a></li>
+              <li><a href="#app-edit-path" class="app-xlink app-online">Edit layers</a></li>
+              <li><a href="#app-geowebcache-path" class="app-xlink app-online">Cache layers</a></li>
+            </ul>
           </td>
         </tr>
-      </table>  
-    </div>
-    
-  <div class="dash-panel-tasks">
-    <div class="iconlaunch">
-      <div class="iconlaunch"><a href="http://opengeo.org" class="app-xlink icon-opengeo">&nbsp;</a></div>
-    </div>
-        
-    <h3>Documentation</h3>
-      <ul>
-        <li><a href="#app-gettingstarted_docs" class="app-xlink app-online">Getting Started</a></li>
-        <li><a href="#app-recipes_docs" class="app-xlink app-online">Recipe Book</a></li>
-        <li><a href="#app-geoexplorer_docs" class="app-xlink app-online">GeoExplorer</a></li>
-        <li><a href="#app-styler_docs" class="app-xlink app-online">Styler</a></li>
-        <li><a href="#app-geoserver_docs" class="app-xlink app-online">GeoServer</a></li>
-        <li><a href="#app-geowebcache_docs" class="app-xlink app-online">GeoWebCache</a></li>
-      </ul>
-      
-    <h2>Suite Tools</h2>
-    <ul>
-      <li><a href="#app-postgis_path" class="app-xlink app-online">Manage PostGIS</a></li>
-      <li><a href="#app-geoserver_importer" class="app-xlink app-online">Import Layers</a></li>
-      <li><a href="#app-styler_path" class="app-xlink app-online">Style Layers</a></li>
-      <li><a href="#app-geoexplorer_path" class="app-xlink app-online">Publish Layers</a></li>     
-      <li><a href="#app-geowebcache_path" class="app-xlink app-online">Configure Cache</a></li>           
-    </ul>
-            
-    </div>
-  
+        <tr>
+          <td class="dash-panel-table-primary"><strong></strong>Maps</td>
+          <td class="dash-panel-table-actions">
+            <ul class="quick-links">
+              <li><a href="#app-geoexplorer-path" class="app-xlink app-online">Publish maps</a></li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+          
+    <table class="dash-panel-table">
+      <thead>
+        <tr>
+          <th scope="col" colspan="2">Components</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="dash-panel-table-primary geoexplorer"><a href="#app-geoexplorer-path" class="app-xlink app-online">GeoExplorer</a></td>
+          <td class="dash-panel-table-actions">
+            <ul class="quick-links">
+              <li><a href="#app-geoexplorer-path" class="app-xlink app-online">Launch</a></li>
+              <li><a href="#app-panels-dash-components" class="app-ilink">About</a></li>
+              <li><a href="#app-geoexplorer-docs" class="app-xlink app-online">Help</a></li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="dash-panel-table-primary styler"><a href="#app-styler-path" class="app-xlink app-online">Styler</a></td>
+          <td class="dash-panel-table-actions">
+            <ul class="quick-links">
+              <li><a href="#app-styler-path" class="app-xlink app-online">Launch</a></li>
+              <li><a href="#app-panels-dash-components" class="app-ilink">About</a></li>
+              <li><a href="#app-styler-docs" class="app-xlink app-online">Help</a></li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="dash-panel-table-primary geoeditor"><a href="#app-geoeditor_path" class="app-xlink app-online">GeoEditor</a></td>
+          <td class="dash-panel-table-actions">
+            <ul class="quick-links">
+              <li><a href="#app-geoeditor_path" class="app-xlink app-online">Launch</a></li>
+              <li><a href="#app-panels-dash-components" class="app-ilink">About</a></li>
+              <li><a href="#" class="app-xlink app-online">Help</a></li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="dash-panel-table-primary geowebcache"><a href="#app-geowebcache-path" class="app-xlink app-online">GeoWebCache</a></td>
+          <td class="dash-panel-table-actions">
+            <ul class="quick-links">
+              <li><a href="#app-geowebcache-path" class="app-xlink app-online">Configure</a></li>
+              <li>Logs</li>
+              <li><a href="#app-panels-dash-components" class="app-ilink">About</a></li>
+              <li><a href="#app-geowebcache-docs" class="app-xlink app-online">Help</a></li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="dash-panel-table-primary geoserver"><a href="#app-geoserver-admin" class="app-xlink app-online">GeoServer</a></td>
+          <td class="dash-panel-table-actions">
+            <ul class="quick-links">
+              <li><a href="#app-geoserver-admin" class="app-xlink app-online">Configure</a></li>
+              <li><a href="#app-panels-help-logs" class="app-ilink">Logs</a></li>
+              <li><a href="#app-panels-dash-components" class="app-ilink">About</a></li>
+              <li><a href="#app-geoserver-docs" class="app-xlink app-online">Help</a></li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="dash-panel-table-primary postgis"><a href="#" class="app-xlink app-online">PostGIS</a></td>
+          <td class="dash-panel-table-actions">
+            <ul class="quick-links">
+              <li><a href="#">pgAdmin</a></li>
+              <li>Logs</li>
+              <li><a href="#app-panels-dash-components" class="app-ilink">About</a></li>
+              <li>Help</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+ 
+    </div>  
 </div>

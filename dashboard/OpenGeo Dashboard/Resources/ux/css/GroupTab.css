@@ -90,7 +90,7 @@
     position: absolute;
     width: 3px;
     top: 1px;
-    background: #fff;
+    /* background: #fff; */
     z-index: 9999;
 }
 

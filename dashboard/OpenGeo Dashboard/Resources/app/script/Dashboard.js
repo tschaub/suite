@@ -196,11 +196,25 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         html: og.util.loadSync("app/markup/dash/main.html"),
                         id: "app-panels-dash-main"
                     },  {
-                        title: "Quickstart",
+                        title: "Getting Started",
                         tabTip: "Learn about the components of the OpenGeo Suite",
                         cls: "dash-panel",
                         html: og.util.loadSync("app/markup/dash/quickstart.html"),
                         id: "app-panels-dash-quickstart"
+                    },  {
+                        title: "Components",
+                        tabTip: "Learn about the components of the OpenGeo Suite",
+                        cls: "dash-panel",
+                        html: og.util.loadSync("app/markup/dash/components.html"),
+                        id: "app-panels-dash-components"
+                    }, {
+                        xtype: "container",
+                        layout: "fit",
+                        title: "Logs",
+                        tabTip: "View the console log output",
+                        cls: "dash-panel",
+                        id: "app-panels-help-logs",
+                        items: [this.logPanel]
                     } //,  {     
                         //     title: "GeoExplorer",
                         //     tabTip: "Learn about GeoExplorer",
@@ -283,14 +297,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         cls: "dash-panel",
                         html: og.util.loadSync("app/markup/help/faq.html"),
                         id: "app-panels-help-faq"
-                    }, {
-                        xtype: "container",
-                        layout: "fit",
-                        title: "Logs",
-                        tabTip: "View the console log output",
-                        cls: "dash-panel",
-                        id: "app-panels-help-logs",
-                        items: [this.logPanel]
                     }, {
                         title: "About",
                         tabTip: "Learn more about OpenGeo",
@@ -745,7 +751,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     cls: "dash-panel-content",
                     autoEl: {
                         tag: "div",
-                        html: "<h4>Logs</h4>",
+                        html: "<h1>Logs</h1>",
                     }
                 }]
             }, 
