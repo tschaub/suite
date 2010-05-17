@@ -115,7 +115,10 @@ chmod 755 binaries/suite/suite_uninstall.sh
 find binaries/suite/data_dir -type d -exec chmod 775 {} ';'
 find binaries/suite/data_dir -type f -exec chmod 664 {} ';'
 if [ -d "./build/GeoServer.pkg" ]; then
+  find ./build/GeoServer.pkg -type f -exec chmod 644 {} ';'
+  find ./build/GeoServer.pkg -type d -exec chmod 755 {} ';'
   rm -rf ./build/GeoServer.pkg
+  checkrv $? "GeoServer.pkg tidy"
 fi
 freeze ./geoserver.packproj
 checkrv $? "GeoServer packaging"
