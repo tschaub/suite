@@ -209,32 +209,84 @@ mkdir suitebuild
 freeze ./suite.packproj
 checkrv $? "Suite packaging"
 
-# 
-# Prepare for DMG
-#
-#mkdir suitebuild/background
-#cp resources/dmg_background.bmp suitebuild/background/background.bmp
-cp -vf resources/OpenGeo.icns suitebuild/.VolumeIcon.icns
 #
 # Build the DMG volume
 #
-VOL="OpenGeoSuite"
-DMG="tmp-${VOL}.dmg"
-DMGFINAL="${VOL}"
+VOL="OpenGeo Suite"
+DMGTMP="tmp-${VOL}.dmg"
+DMGFINAL="${VOL}.dmg"
+BACKGROUND="dmg_background.bmp"
+APP="${VOL}.mpkg"
+
+# DMG window dimensions
+dmg_width=497
+dmg_height=313
+dmg_topleft_x=200
+dmg_topleft_y=200
+dmg_bottomright_x=`expr $dmg_topleft_x + $dmg_width`
+dmg_bottomright_y=`expr $dmg_topleft_y + $dmg_height`
+
+# Clean up intermediate steps
 if [ -d "${DMGFINAL}" ]; then
-  rm -rf "${DMGFINAL}"
+  rm -f "${DMGFINAL}"
 fi
-mv suitebuild "${DMGFINAL}"
-hdiutil create "$DMG" -srcfolder "${DMGFINAL}"
+if [ -d "${DMGTMP}" ]; then
+  rm -f "${DMGTMP}"
+fi
+
+# Create the DMG
+hdiutil create \
+    -srcfolder suitebuild \
+    -volname "${VOL}" \
+    -fs HFS+ \
+    -fsargs "-c c=64,a=16,e=16" \
+    -format UDRW \
+    "${DMGTMP}"
 checkrv $? "Suite volume create"
+
+# Mount the DMG
+sleep 2
+device=$(hdiutil attach -readwrite -noverify -noautoopen "${DMGTMP}" | egrep '^/dev/' | sed 1q | awk '{print $1}')
+sleep 5
+
+echo "DEVICE: ${device}"
+
+# Copy the background image in
+mkdir "/Volumes/${VOL}/.background"
+checkrv $? "Suite make background dir"
+cp -v resources/${BACKGROUND} "/Volumes/${VOL}/.background/${BACKGROUND}"
+checkrv $? "Suite copy background img"
+
+# Set the background image and icon location
+echo '
+   tell application "Finder"
+     tell disk "'${VOL}'"
+           open
+           set current view of container window to icon view
+           set toolbar visible of container window to false
+           set statusbar visible of container window to false
+           set the bounds of container window to {'${dmg_topleft_x}', '${dmg_topleft_y}', '${dmg_bottomright_x}', '${dmg_bottomright_y}'}
+           set theViewOptions to the icon view options of container window
+           set arrangement of theViewOptions to not arranged
+           set icon size of theViewOptions to 72
+           set background picture of theViewOptions to file ".background:'${BACKGROUND}'"
+           set position of item "'${APP}'" of container window to {335, 130}
+           close
+           open
+           update without registering applications
+           delay 5
+           eject
+           delay 5
+     end tell
+   end tell
+' | osascript
+checkrv $? "Applescript dimension change"
+
 # convert to compressed image, delete temp image
-if [ -f "${DMGFINAL}.dmg" ]; then 
-  rm -f "${DMGFINAL}.dmg"
-fi
-hdiutil convert "$DMG" -format UDZO -o "${DMGFINAL}.dmg"
+hdiutil convert "${DMGTMP}" -format UDZO -imagekey zlib-level=9 -o "${DMGFINAL}"
 checkrv $? "Suite compressing"
-if [ -f "${DMG}" ]; then 
-  rm -f "${DMG}"
+if [ -f "${DMGTMP}" ]; then 
+  rm -f "${DMGTMP}"
 fi
 
 exit 0
