@@ -22,6 +22,8 @@ function checkrv {
   if [ $1 -gt 0 ]; then
     echo "$2 failed with return value $1"
     exit 1
+  else
+    echo "$2 succeeded return value $1"
   fi
 }
 
