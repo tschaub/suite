@@ -3,7 +3,7 @@
 Recipe Book
 ===========
 
-The OpenGeo Suite includes an application called the **Recipe Book**, which contains code examples (or "recipes") for building applications using the OpenGeo Suite.  The Recipe Book can be launched from teh :ref:`dashboard`.
+The OpenGeo Suite includes an application called the **Recipe Book**, which contains code examples (or "recipes") for building applications using the OpenGeo Suite.  The Recipe Book can be launched from the :ref:`dashboard`.
 
 .. figure:: img/recipebook.png
    :align: center

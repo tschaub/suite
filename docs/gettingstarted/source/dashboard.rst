@@ -3,64 +3,64 @@
 Dashboard
 =========
 
-The OpenGeo Suite contains a Dashboard.  This software runs on the host machine (not in a web browser) and contains information about the software as well as convenient links to common tasks.  All links referred to in this guide can be accessed directly from the Dashboard.
+The OpenGeo Suite comes with a Dashboard.  The OpenGeo Suite Dashboard is a single interface that allows you to access all components of the OpenGeo Suite, including links to common tasks, configuration, and management.  It runs on the host machine as an application, not in a web browser.
 
-.. figure:: img/dashboard.png
-   :align: center
+(IMAGE)
 
-   *The OpenGeo Suite Dashboard*
+.. note:: When you first launch the OpenGeo Suite Dashbaord, you will be presented with the GeoServer username and password.  These credentials are used to administer GeoServer.  You can change this information on the :ref:`dashboard.prefs` pane.
+
+(IMAGE)
 
 Starting and Stopping
 ---------------------
 
-The Dashboard can start and stop the OpenGeo Suite service.  Simply click on the Start or Stop button at the bottom right of the Dashboard.  
+The Dashboard can start and stop the OpenGeo Suite.  Simply click on the Start or Stop button at the bottom right of the Dashboard.  Many links in the Dashboard will be disabled unless the OpenGeo Suite is online.
 
-.. note:: Some links in the Dashboard will be disabled when the OpenGeo Suite is offline.
+.. note:: The first time the OpenGeo Suite is started might take a few minutes to initialize the software.  Subsequent starting times will be greatly reduced.
 
-.. figure:: img/offline.png
-   :align: center
+(IMAGES)
 
-   *Click to Start the OpenGeo Suite*
+You can also start and stop the OpenGeo Suite from the command prompt.  Navigate to the root of your installation directory and run::
 
-.. figure:: img/working.png
-   :align: center
+   > opengeo-suite start
+   > opengeo-suite stop
 
-   *Starting the service*
 
-.. figure:: img/online.png
-   :align: center
+Quickstart
+----------
 
-   *The OpenGeo Suite service is now online.*
+The Dashboard contains a Quickstart page, which is designed to show a sample workflow for publishing your data and creating your maps.  A more detailed discussion is available here in the :ref:`workflow`.
 
-.. note:: You can also start and stop the OpenGeo Suite from the command prompt.  Navigate to the root of your installation directory and run::
+(IMAGE)
 
-      > opengeo-suite start
-      > opengeo-suite stop
 
+Dashboard Pages
+---------------
+
+Contained in the dashboard are brief introductions to each of the components of the OpenGeo Suite, including links to documentation and common tools.
+
+(IMAGE)
+
+.. _dashboard.prefs:
 
 Preferences
 -----------
 
-You can administer the OpenGeo Suite through the Preferences page.
+You can configure the OpenGeo Suite through the Preferences page.
 
 .. warning:: You must stop and start the OpenGeo Suite for any changes to take effect.
 
-.. figure:: img/preferences.png
-   :align: center
-
-   *The Preferences page*
+(IMAGE)
 
 Service Ports
 ~~~~~~~~~~~~~
 
-The OpenGeo Suite runs a web server on your host machine that reponds on a specific port (the default is **8080**).  You can change this by going to the Preferences page and changing the :guilabel:`Port` value.  Click :guilabel:`Save` when done.  Restart the OpenGeo Suite for the change to take effect.
-
-  .. note:: You can also change the Shutdown Port in a similar way.
+The OpenGeo Suite runs a web server on your host machine that responds on a specific port (the default is **8080**).  You can change this by  changing the :guilabel:`Port` value.  Click :guilabel:`Save` when done.  Restart the OpenGeo Suite for the change to take effect.  
 
 GeoServer Data Directory
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-GeoServer's data and configuration is stored in what is known as the data directory.  By default, this data directory is located in your user's home directory in a directory called ``.opengeo/data_dir``.  You can point the OpenGeo Suite to a different GeoServer data directory if you'd like.  This can be helpful if you are an experienced GeoServer user (or if you'd like to move the data directory elsewhere).  You can change the path by going to the Preferences page and changing the value of :guilabel:`Data Directory`.  Click :guilabel:`Save` when done.  Restart the OpenGeo Suite for the change to take effect.
+GeoServer's data and configuration is stored in what is known as the data directory.  You can point the OpenGeo Suite to a different GeoServer data directory if you'd like (or move the existing data directory to another location) by changing the value of :guilabel:`Data Directory`.  Click :guilabel:`Save` when done.  Restart the OpenGeo Suite for the change to take effect.
 
 GeoServer Administration
 ~~~~~~~~~~~~~~~~~~~~~~~~

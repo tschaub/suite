@@ -1,6 +1,6 @@
-.. _publishyourmap:
+.. _workflow.publish:
 
-Step 4: Publish Your Map
+Step 7: Publish Your Map
 ========================
 
 After you have created and composed your map in **GeoExplorer**, you can save it via a URL bookmark.  The URL can also be embedded in a web page.
@@ -36,7 +36,7 @@ To embed your map in a web page:
 
       *The Publish Map button will generate a block of HTML*
 
-#. A dialog will show HTML code that can be copied and included in a web page in order to embed the map.  You can change the values for the map size in the :guilabel:`Map Size` pulldown boxes, or by changing the :guilabel:`Height` and :guilabel:`Width` values.  The changes will automatically be reflected in the HTML.
+#. A dialog will show HTML code that can be copied and included in a web page in order to embed the map.  You can change the values for the map size in the :guilabel:`Map Size` dropdown boxes, or by changing the :guilabel:`Height` and :guilabel:`Width` values.  The changes will automatically be reflected in the HTML.
 
    .. figure:: img/publishmapdialog.png
       :align: center

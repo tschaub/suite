@@ -1,13 +1,14 @@
-.. _styleyourlayers:
+.. _workflow.style:
 
-Step 2: Style Your Layers
+Step 5: Style Your Layers
 =========================
 
-The Layer Importer will generate a distinct style for each layer.  To alter and improve the styling of your layers, use the **Styler** application.  
+.. note:: This section is optional, although recommended.  If you don't wish to edit any layer styles, you can skip to the next section, :ref:`workflow.compose`.
 
-These example instructions will change the color of one of the default styles created during the import process.  If you would like to keep the default styles, you may skip to the next section, :ref:`composeyourmap`.
+When data was imported via the Layer Importer, a distinct style was generated for each layer.  To alter and improve the styling of your layers, use the **Styler** application.
 
-.. note:: For more information on Styler, please see the Styler Documentation. You can access this by clicking the :guilabel:`Styler Documentation` link in the :ref:`dashboard`.
+These example instructions will change the color of one of the default styles created during the import process.
+
 
 #. Launch Styler.  Styler can be launched from the :guilabel:`Style Layers` link in the :ref:`dashboard`.
 
@@ -50,4 +51,6 @@ These example instructions will change the color of one of the default styles cr
 
 #. Repeat this process for every layer that you wish to style.
 
-   .. warning:: Any changes made through Styler will be immediately saved and will persist.
+   .. warning:: There is no "undo" for changes made through Styler.
+
+.. note:: For more information on Styler, please see the Styler Documentation. You can access this by clicking the :guilabel:`Styler Documentation` link in the :ref:`dashboard`.

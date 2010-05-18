@@ -5,22 +5,19 @@ More Information
 
 Below are links to various resources to help you learn more about the OpenGeo Suite.
 
-GeoServer
----------
+Project details
+---------------
 
-**Homepage:**  For the latest in GeoServer development, see `<http://geoserver.org>`_.  
+For more information on individual components, please see OpenGeo's project pages:
 
-**Documentation:** Links to GeoServer documentation are available in the :ref:`dashboard`.
+* `PostGIS <http://opengeo.org/community/postgis/>`_
+* `GeoServer <http://opengeo.org/community/geoserver/>`_
+* `GeoWebCache <http://opengeo.org/community/geowebcache/>`_
+* `OpenLayers <http://opengeo.org/community/openlayers/>`_
+* `GeoExt <http://opengeo.org/community/geoext/>`_
 
-GeoExplorer and Styler
-----------------------
+About OpenGeo
+-------------
 
-**Homepage:** GeoExplorer and Styler are applications built using GeoExt. For more information visit `http://geoext.org <http://geoext.org>`_.
-
-**Documentation:** Links to GeoExplorer and Styler documentation are available in the :ref:`dashboard`.
-
-OpenGeo
--------
-
-`OpenGeo <http://opengeo.org>`_, a social enterprise, provides support and services around GeoServer, OpenLayers, PostGIS, GeoWebCache, and GeoExt.  OpenGeo is the geospatial division of `The Open Planning Project <http://openplans.org>`_, a 503(c)(3) organization. For more information, visit us online at `http://opengeo.org <http://opengeo.org>`_ or email us at inquiry@opengeo.org .
+`OpenGeo <http://opengeo.org>`_, a social enterprise, provides support and services around PostGIS, GeoServer, GeoWebCache, OpenLayers, and GeoExt.  OpenGeo is the geospatial division of `OpenPlans <http://openplans.org>`_, a 503(c)(3) organization. For more information, visit us online at `http://opengeo.org <http://opengeo.org>`_ or email us at inquiry@opengeo.org .
   

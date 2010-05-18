@@ -1,6 +1,6 @@
-.. _composeyourmap:
+.. _workflow.compose:
 
-Step 3: Compose Your Map
+Step 6: Compose Your Map
 ========================
 
 Now that the data is imported and styled, you can organize and compose your layers into a map.  **GeoExplorer** allows you to create web maps based on layers served through GeoServer.
@@ -41,7 +41,6 @@ Now that the data is imported and styled, you can organize and compose your laye
       :align: center
 
       *The map zoomed in*
-
 
 #. Use the toolbar at the top of the screen to compose your map.  Adjust the placement of layers by dragging them in the Layers panel.
 
