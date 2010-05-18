@@ -75,7 +75,6 @@ a.app-disabled:hover {
     list-style-type: decimal;
 }
 
-
 /* COMPONENTS PAGE ITEMS */
 .dash-panel-content-item {
     margin: 10px 0 20px;
@@ -207,6 +206,11 @@ ul.quick-links {
     padding-top: 4px;
 }
 
+/* override grouptabs position */
+.x-tab-panel-left .x-grouptabs-bwrap {
+    top: 50px;
+}
+
 /* override left hand menu*/
 .x-tab-panel-left ul.x-grouptabs-strip a.x-grouptabs-text {
     font-family: Helvetica,Arial,FreeSans,sans-serif;
@@ -226,12 +230,24 @@ ul.quick-links {
 
 /* control panel */
 .app-panels-control {
-    border: solid #291C17;
-    border-width: 0px 15px 5px 145px;
-    background: #FFFFFF url('img/x-grouptabs-corners-bot-left.png') no-repeat;
-    background-position: bottom left;
-    padding: 1em;
-    height: 2em;
+    background: transparent;
+    position: absolute;
+    top: 15px;
+    width: 100%;
+    z-index: 2;
+    height: 50px;
+}
+
+.app-panels-control>div {
+    background: #FFFFFF url('img/x-grouptabs-corners-top-right.png') no-repeat;
+    background-position: top right;
+    margin-left: 145px;
+    margin-right: 15px;
+    padding: 20px 20px 15px 20px;
+}
+
+.app-panels-wrap {
+    top: 0 !important;
 }
 
 .app-panels-control-msg {

@@ -178,8 +178,15 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         this.viewport = new Ext.Viewport({
             layout: "border",
             items: [{
+//                region: "north",
+                floating: true,
+                xtype: "container",
+                cls: "app-panels-control",
+                items: [this.controlPanel]                
+            }, {
                 xtype: "grouptabpanel",
                 region: "center", 
+                cls: "app-panels-wrap",
                 tabWidth: 130,
                 activeGroup: 0,
                 items: [{
@@ -268,11 +275,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         id: "app-panels-help-about"
                     }]
                 }]
-            }, {
-                region: "south",
-                xtype: "container",
-                cls: "app-panels-control",
-                items: [this.controlPanel]
             }], 
             listeners: {
                 render: {
