@@ -178,8 +178,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         this.viewport = new Ext.Viewport({
             layout: "border",
             items: [{
-//                region: "north",
-                floating: true,
                 xtype: "container",
                 cls: "app-panels-control",
                 items: [this.controlPanel]                

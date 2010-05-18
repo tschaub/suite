@@ -206,11 +206,6 @@ ul.quick-links {
     padding-top: 4px;
 }
 
-/* override grouptabs position */
-.x-tab-panel-left .x-grouptabs-bwrap {
-    top: 50px;
-}
-
 /* override left hand menu*/
 .x-tab-panel-left ul.x-grouptabs-strip a.x-grouptabs-text {
     font-family: Helvetica,Arial,FreeSans,sans-serif;
@@ -226,6 +221,11 @@ ul.quick-links {
 /* override background color */
 .x-border-layout-ct {
     background-color: #ffffff;
+}
+
+/* override grouptabs body padding to accommodate control panel */
+.x-tab-panel-body-left.x-grouptabs-panel-body {
+    padding-top: 50px;
 }
 
 /* control panel */
