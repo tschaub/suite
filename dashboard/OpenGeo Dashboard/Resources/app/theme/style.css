@@ -239,6 +239,20 @@ ul.quick-links {
     height: 50px;
 }
 
+.app-panels-control h1 {
+    color: #0A2742;
+    font-family: Optima, Georgia, serif;
+    font-size: 24px;
+    font-weight: 600;
+}
+.app-panels-control h1 small {
+    color: #333333;
+    font-family: Helvetica,Arial,sans-serif;
+    font-size: 10px;
+    padding-left: 5px;
+    font-weight: normal;
+}
+
 .app-panels-control>div {
     background: #FFFFFF url('img/x-grouptabs-corners-top-right.png') no-repeat;
     background-position: top right;
