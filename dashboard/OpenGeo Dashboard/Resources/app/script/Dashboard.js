@@ -88,7 +88,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 stoppingDialog.show();
             }, 
             stopped: function() {
-                this.warn("The OpenGeo Suite is offline.");
+                this.warn("Offline");
                 stoppingDialog.hide();
                 
                 //if the current config is dirty, update the suite config
@@ -663,7 +663,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         });
 
         var stopButton = new Ext.Button({
-            text: "Stop",
+            text: "Shutdown",
             iconCls: "stop-button",
             cls: "control-button",
             disabled: !this.suite.online,
