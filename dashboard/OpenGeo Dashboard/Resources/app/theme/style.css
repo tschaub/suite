@@ -208,9 +208,8 @@ ul.quick-links {
 }
 
 /* override left hand menu*/
-.x-tab-panel-left .x-tab-panel-header ul.x-grouptabs-strip a.x-grouptabs-text {
+.x-tab-panel-left ul.x-grouptabs-strip a.x-grouptabs-text {
     font-family: Helvetica,Arial,FreeSans,sans-serif;
-    padding-left: 18px;
     color: #0A2742;
     font-size: 12px;
 }
