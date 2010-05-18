@@ -215,44 +215,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         cls: "dash-panel",
                         id: "app-panels-help-logs",
                         items: [this.logPanel]
-                    } //,  {     
-                        //     title: "GeoExplorer",
-                        //     tabTip: "Learn about GeoExplorer",
-                        //     cls: "dash-panel",
-                        //     html: og.util.loadSync("app/markup/dash/geoexplorer.html"),
-                        //     id: "app-panels-dash-geoexplorer"
-                        // },  {
-                        //     title: "GeoEditor",
-                        //     tabTip: "Learn about GeoEditor",
-                        //     cls: "dash-panel",
-                        //     html: og.util.loadSync("app/markup/dash/geoeditor.html"),
-                        //     id: "app-panels-dash-geoeditor"
-                        // },  {
-                        //     title: "Styler",
-                        //     tabTip: "Learn about Styler",
-                        //     cls: "dash-panel",
-                        //     html: og.util.loadSync("app/markup/dash/styler.html"),
-                        //     id: "app-panels-dash-styler"
-                        // },  {
-                        //     title: "GeoServer",
-                        //     tabTip: "Learn about GeoServer",
-                        //     cls: "dash-panel",
-                        //     html: og.util.loadSync("app/markup/dash/geoserver.html"),
-                        //     id: "app-panels-dash-geoserver"
-                        // }, {
-                        //     title: "GeoWebCache",
-                        //     tabTip: "Learn about GeoWebCache",
-                        //     cls: "dash-panel",
-                        //     html: og.util.loadSync("app/markup/dash/geowebcache.html"),
-                        //     id: "app-panels-dash-geowebcache"
-                        // }, {
-                        //     title: "PostGIS",
-                        //     tabTip: "Learn about PostGIS",
-                        //     cls: "dash-panel",
-                        //     html: og.util.loadSync("app/markup/dash/postgis.html"),
-                        //     id: "app-panels-dash-postgis"
-                        // }
-                        ]
+                    }]
                 }, {
                     defaults: {border: false, autoScroll: true},
                     items: [{
