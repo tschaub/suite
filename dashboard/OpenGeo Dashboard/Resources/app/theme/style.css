@@ -169,6 +169,12 @@ td.dash-panel-table-actions {
 tr.dash-glance-component {
     height: 34px;
 }
+
+tr:nth-child(odd).dash-glance-component:hover,
+tr.dash-glance-component:hover  {
+    background-color: #CCCCCC;
+} 
+
 tr.dash-glance-component ul {
     display: none;
 }
