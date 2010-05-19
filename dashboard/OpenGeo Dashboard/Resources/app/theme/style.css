@@ -52,12 +52,11 @@ a.app-disabled:hover {
     font-weight: 600;
     margin: 0 0 12px;
 }
-.dash-panel-body h2,
-.dash-panel-body h3,
+.dash-panel-body h3/*,
 .dash-panel-body .stepheading,
-.dash-panel-body .faq h1 {
-    font-size: 16px;
+.dash-panel-body .faq h1*/ {
     color: #486300;
+    font-size: 14px;
 }
 
 .dash-panel-body ol,
@@ -172,7 +171,7 @@ tr.dash-glance-component {
 
 tr:nth-child(odd).dash-glance-component:hover,
 tr.dash-glance-component:hover  {
-    background-color: #CCCCCC;
+    background-color: #EEE;
 } 
 
 tr.dash-glance-component ul {
@@ -189,10 +188,10 @@ ul.quick-links {
 }
 .quick-links li {
     display: inline-block;
-    min-width: 4.5em;
+    min-width: 4em;
     margin: 4px 0;
     padding: 0 8px;
-    border-left: 1px solid #CCC;
+    border-left: 1px solid #999;
     text-align: center;
 }
 .quick-links li:first-child {
@@ -227,11 +226,6 @@ ul.quick-links {
     font-family: Helvetica,Arial,FreeSans,sans-serif;
     color: #0A2742;
     font-size: 12px;
-}
-
-/* override group table panel bottom border */
-.x-grouptabs-panel {
-    border-bottom-width: 5px;
 }
 
 /* override background color */
@@ -304,9 +298,6 @@ ul.quick-links {
     padding-left: 0.4em;
 }
 
-table.x-btn .x-btn-small td.x-btn-mc em a {
-}
-
 .control-button .x-btn-text.stop-button,
 .control-button .x-btn-text.start-button {
     font-size: 12px;
@@ -343,15 +334,6 @@ table.x-btn .x-btn-small td.x-btn-mc em a {
     background-image: url("img/btn.gif") !important;
 }
 
-
-/*.x-btn {
-background-image: url(img/server_go.png);
-}
-
-.x-btn .stop-button {
-background-image: url(img/server_delete.png);
-}
-*/
 .x-btn .cancel-button {
     background-image: url(img/cancel.png);
 }
@@ -373,10 +355,6 @@ background-image: url(img/server_delete.png);
     padding: 0.5em 1em 2em;
     margin-bottom: 1em;
     background: transparent url(img/indicator.gif) no-repeat bottom center;
-}
-
-#app-panels-pref-form {
-    margin: 10px 150px 0 10px;
 }
 
 a.app-home-link {
