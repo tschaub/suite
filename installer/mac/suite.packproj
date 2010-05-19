@@ -1569,7 +1569,7 @@
 						<key>Mode</key>
 						<integer>1</integer>
 						<key>Path</key>
-						<string>resources/gpl_license.txt</string>
+						<string>../common/license.txt</string>
 						<key>Path Type</key>
 						<integer>2</integer>
 					</dict>
