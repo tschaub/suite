@@ -194,7 +194,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         listeners: dashPanelListeners
                     },
                     items: [{
-                        title: "Home",
+                        title: "Dashboard",
                         tabTip: "OpenGeo Suite Dashboard",
                         cls: "dash-panel",
                         bodyStyle: '',
