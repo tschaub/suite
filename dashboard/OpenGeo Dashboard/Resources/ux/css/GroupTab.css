@@ -240,13 +240,6 @@
   display: none;
 }
 
-.x-tab-panel-left .x-tab-panel-header ul.x-grouptabs-strip a.x-grouptabs-text,
-.x-tab-panel-left .x-tab-panel-header ul.x-grouptabs-sub a.x-grouptabs-text {
-/* Adjusting indentation on group tabs */
-  padding-left: 0;
-  margin-left: 0;
-}
-
 .x-tab-joint {
 /* Fixing visual inconsistency when background is 'greyed out' for modal dialog */
   background: transparent;
@@ -273,7 +266,20 @@
   -moz-border-radius-bottomleft: 8px;
 }
 
-.x-grouptabs-panel ul.x-grouptabs-strip li {
+.x-grouptabs-panel ul.x-grouptabs-strip li,
+.x-grouptabs-panel li.x-grouptabs-strip-active ul.x-grouptabs-sub li.x-grouptabs-strip-active {
 /* New background color */
   background: #DEE6F5;
+}
+
+.x-tab-panel-left ul.x-grouptabs-strip li {
+/* Adjusting indentation on group tabs, see below */
+  padding-left: 0;
+}
+
+.x-tab-panel-left .x-tab-panel-header ul.x-grouptabs-strip a.x-grouptabs-text,
+.x-tab-panel-left .x-tab-panel-header ul.x-grouptabs-sub a.x-grouptabs-text {
+/* Adjusting indentation on group tabs, see above */
+  margin-left: 0;
+  padding-left: 8px;
 }
