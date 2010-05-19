@@ -52,16 +52,13 @@ a.app-disabled:hover {
     font-weight: 600;
     margin: 0 0 12px;
 }
-.dash-panel-body h3/*,
-.dash-panel-body .stepheading,
-.dash-panel-body .faq h1*/ {
+.dash-panel-body h3 {
     color: #486300;
     font-size: 14px;
 }
 
 .dash-panel-body ol,
-.dash-panel-body ul,
-.dash-panel-body .steps ul {
+.dash-panel-body ul {
     line-height: 1.5;
     list-style-image: none;
     list-style-position: inside;
