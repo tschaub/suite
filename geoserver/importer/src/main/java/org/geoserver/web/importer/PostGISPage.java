@@ -34,8 +34,17 @@ public class PostGISPage extends AbstractDBMSPage {
     protected LinkedHashMap<String, Component> buildParamPanels() {
         LinkedHashMap<String, Component> result = new LinkedHashMap<String, Component>();
 
+        //
+        // suite postgis defaults:
+        //  port = 54321
+        //  database = username = <current user> 
+        //
+        int port = 54321;
+        String db = System.getProperty("user.name");
+        String user = db;
+        
         // basic panel
-        basicDbmsPanel = new BasicDbmsParamPanel("01", "localhost", 5432, true);
+        basicDbmsPanel = new BasicDbmsParamPanel("01", "localhost", port, db, user, true);
         result.put(CONNECTION_DEFAULT, basicDbmsPanel);
 
         // jndi param panels

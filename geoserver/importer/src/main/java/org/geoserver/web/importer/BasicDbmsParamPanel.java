@@ -38,9 +38,15 @@ class BasicDbmsParamPanel extends Panel {
     Component connPoolLink;
 
     public BasicDbmsParamPanel(String id, String host, int port, boolean databaseRequired) {
+        this(id, host, port, null, null, databaseRequired);
+    }
+    
+    public BasicDbmsParamPanel(String id, String host, int port, String database, String username, boolean databaseRequired) {
         super(id);
         this.host = host;
         this.port = port;
+        this.database = database;
+        this.username = username;
 
         add(new TextField("host", new PropertyModel(this, "host")).setRequired(true));
         add(new TextField("port", new PropertyModel(this, "port")).setRequired(true));
