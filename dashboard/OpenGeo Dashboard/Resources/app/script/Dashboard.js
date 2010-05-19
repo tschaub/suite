@@ -415,28 +415,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     value: this.config["geoserver_password"],
                     initialPasswordField: "geoserver-admin-password"
                 }]
-            },  {
-                xtype: "fieldset",
-                style: "margin-top: 0.5em;",
-                collapsible: true,
-                title: "Advanced",
-                collapsed: true,
-                defaults: { 
-                    width: 250
-                },
-                items: [{
-                    //xtype: 'fileuploadfield',
-                    xtype: "textfield",
-                    id: "suite_exe",
-                    //emptyText: this.config["suite_exe"],
-                    value: this.config["suite_exe"],
-                    fieldLabel: "Suite Executable",
-                    name: "suite_exe",
-                    /*buttonCfg: {
-                        text:'', 
-                        tooltip: 'Browse for your Suite executable file'
-                    }*/
-                }]
             }],
             buttons: [{
                 text: "Save",
@@ -446,7 +424,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     var config = this.config;
                     
                     // update suite config
-                    config["suite_exe"] = form.findField("suite_exe").getValue();
                     config["suite_port"] = form.findField("suite_port").getValue();
                     config["suite_stop_port"] =  form.findField("suite_stop_port").getValue();
 
