@@ -1,9 +1,9 @@
 /*!
-* Ext JS Library 3.0.0
-* Copyright(c) 2006-2009 Ext JS, LLC
-* licensing@extjs.com
-* http://www.extjs.com/license
-*/
+ * Ext JS Library 3.0.0
+ * Copyright(c) 2006-2009 Ext JS, LLC
+ * licensing@extjs.com
+ * http://www.extjs.com/license
+ */
 .x-grouptabs-panel {
     background-color: #291C17;
     border: solid 15px #291C17;
@@ -15,7 +15,7 @@
     background: transparent;
 }
 .x-tab-panel-right .x-grouptabs-panel-header {
-    float: right;
+    float:right;
 }
 .x-tab-panel-left .x-grouptabs-bwrap {
     float: right;
@@ -28,7 +28,7 @@
 .x-tab-panel-left ul.x-grouptabs-strip,
 .x-tab-panel-right ul.x-grouptabs-strip {
     width: auto;
-    display: block;
+	display: block;
 }
 .x-tab-panel-left ul.x-grouptabs-strip li,
 .x-tab-panel-right ul.x-grouptabs-strip li {
@@ -40,21 +40,33 @@
     border-left: 1px solid #999;
 }
 .x-tab-panel-left .x-tab-panel-header ul.x-grouptabs-strip a.x-grouptabs-text,
-.x-tab-panel-right .x-tab-panel-header ul.x-grouptabs-strip a.x-grouptabs-text {
-    font-size: 14px;
-    line-height: 20px;
-    cursor: pointer;
+.x-tab-panel-right .x-tab-panel-header ul.x-grouptabs-strip a.x-grouptabs-text{
+	font-size: 13px;
+	line-height: 18px;
+	cursor: pointer;
 }
 
-
+.x-tab-panel-left .x-tab-panel-header ul.x-grouptabs-strip a.x-grouptabs-text{
+    padding-left: 18px;
+}
+.x-tab-panel-right .x-tab-panel-header ul.x-grouptabs-strip a.x-grouptabs-text{
+    padding-right: 18px;
+}
 
 .x-tab-panel-left .x-tab-panel-header ul.x-grouptabs-sub a.x-grouptabs-text,
-.x-tab-panel-right .x-tab-panel-header ul.x-grouptabs-sub a.x-grouptabs-text {
-    font-size: 12px;
-    padding: 0;
+.x-tab-panel-right .x-tab-panel-header ul.x-grouptabs-sub a.x-grouptabs-text{
+	font-size: 12px;
+    padding: 0;  
 }
 
-.x-grouptabs-panel .x-grouptabs-strip a.x-grouptabs-text {
+.x-tab-panel-left .x-tab-panel-header ul.x-grouptabs-sub a.x-grouptabs-text{
+	margin-left: 4px;
+}
+.x-tab-panel-right .x-tab-panel-header ul.x-grouptabs-sub a.x-grouptabs-text{
+	margin-right: 4px;
+}
+
+.x-grouptabs-panel .x-grouptabs-strip a.x-grouptabs-text{
     overflow: hidden;
     white-space: nowrap;
     display: block;
@@ -72,33 +84,26 @@
 }
 
 .x-grouptabs-panel ul.x-grouptabs-sub a.x-grouptabs-text {
-    font-weight: normal;
+	font-weight: normal;
 }
 .x-tab-joint {
     position: absolute;
     width: 3px;
     top: 1px;
-    /* background: #fff; */
+    background: #fff;
     z-index: 9999;
 }
 
 .x-grouptabs-panel .x-grouptabs-panel-body {
     border: 1px solid #fff;
-    -webkit-border-top-right-radius: 8px;
-    -moz-border-radius-topright: 8px;
 }
 
 .x-grouptabs-panel ul.x-grouptabs-strip li {
-    background: #DEE6F5;
-    border-top: 1px solid transparent;
-    border-bottom: 1px solid transparent;
-    border-left: 1px solid transparent;
-    margin-bottom: 10px;
-    -webkit-border-top-left-radius: 8px;
-    -webkit-border-bottom-left-radius: 8px;
-    /* For debugging in Firefox */
-    -moz-border-radius-topleft: 8px;
-    -moz-border-radius-bottomleft: 8px;
+  background: #EDEEF0;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-left: 1px solid transparent;
+  margin-bottom: 10px;
 }
 
 .x-grouptabs-panel ul.x-grouptabs-strip li.x-grouptabs-strip-active {
@@ -117,18 +122,8 @@
     border-right: 1px solid #999;
 }
 
-.x-grouptabs-panel li.x-grouptabs-strip-active ul.x-grouptabs-sub li.x-grouptabs-strip-active {
-    background-color: #e8ecf5;
-    margin-left: -10px;
-    -webkit-border-top-left-radius: 0px;
-    -webkit-border-bottom-left-radius: 0px;
-    /* For debugging in Firefox */
-    -moz-border-radius-topleft: 0px;
-    -moz-border-radius-bottomleft: 0px;
-}
-
-.x-grouptabs-panel li.x-grouptabs-strip-active ul.x-grouptabs-sub li.x-grouptabs-strip-active a {
-    margin-left: 10px;
+.x-grouptabs-panel li.x-grouptabs-strip-active ul.x-grouptabs-sub li.x-grouptabs-strip-active{
+    background-color: #A8BCCF;
 }
 
 .x-grouptabs-panel li.x-grouptabs-strip-active ul.x-grouptabs-sub {
@@ -136,57 +131,56 @@
 }
 
 .x-grouptabs-panel li.x-grouptabs-strip-active ul.x-grouptabs-sub li {
-    background: #fff;
-    border-color: #fff;
+    background:#fff;
+    border-color:#fff;
 }
 
-
+/* Tab corners */
+.x-grouptabs-panel .x-grouptabs-corner {
+    background-image: url('../images/x-grouptabs-corners.png');
+    display: block;
+    width: 11px;
+    height: 11px;
+    position: absolute;
+    font-size: 1px;
+    line-height: 6px;
+    overflow: hidden;
+    zoom:1;
+}
 .x-grouptabs-panel .x-grouptabs-strip-active .x-grouptabs-corner {
     display: block;
 }
 .x-grouptabs-panel .x-grouptabs-main.x-grouptabs-strip-active ul.x-grouptabs-sub .x-grouptabs-corner {
-    display: none;
+	display: none;
 }
 
 .x-grouptabs-panel .x-grouptabs-corner-top-left {
     background-position: top left;
-    left: 0;
-    top: -4px;
-    left: -4px;
+    left: 0; top: -4px; left: -4px;
 }
 .x-grouptabs-panel .x-grouptabs-corner-bottom-left {
     background-position: bottom left;
-    left: 0;
-    bottom: -4px;
-    left: -4px;
+    left: 0; bottom: -4px; left: -4px;
 }
 .x-grouptabs-panel .x-grouptabs-corner-top-right {
     background-position: top right;
-    right: 0;
-    top: -4px;
-    right: -4px;;
+    right: 0; top: -4px; right: -4px;;
 }
 .x-grouptabs-panel .x-grouptabs-corner-bottom-right {
     background-position: bottom right;
-    right: 0;
-    bottom: -4px;
-    right: -4px;;
+    right: 0; bottom: -4px; right: -4px;;
 }
-.x-grouptabs-panel li.x-grouptabs-strip-active .x-grouptabs-corner-bottom-left {
-    bottom: -4px;
-    left: -4px;
+.x-grouptabs-panel li.x-grouptabs-strip-active .x-grouptabs-corner-bottom-left{
+    bottom: -4px; left: -4px;
 }
-.x-grouptabs-panel li.x-grouptabs-strip-active .x-grouptabs-corner-bottom-right {
-    bottom: -4px;
-    right: -4px;
+.x-grouptabs-panel li.x-grouptabs-strip-active .x-grouptabs-corner-bottom-right{
+    bottom: -4px; right: -4px;
 }
-.x-grouptabs-panel li.x-grouptabs-strip-active .x-grouptabs-corner-top-left {
-    top: -4px;
-    left: -4px;
+.x-grouptabs-panel li.x-grouptabs-strip-active .x-grouptabs-corner-top-left{
+    top: -4px; left: -4px;
 }
-.x-grouptabs-panel li.x-grouptabs-strip-active .x-grouptabs-corner-top-right {
-    top: -4px;
-    right: -4px;
+.x-grouptabs-panel li.x-grouptabs-strip-active .x-grouptabs-corner-top-right{
+    top: -4px; right: -4px;
 }
 
 .x-grouptabs-panel ul.x-grouptabs-sub li.x-tab-with-icon a.x-grouptabs-text {
@@ -196,42 +190,90 @@
 
 /* General tab styling */
 .x-grouptabs-panel .x-grouptabs-expand {
-    /*background: transparent url('../images/elbow-plus-nl.gif') no-repeat;*/
-    width: 16px;
-    height: 16px;
-    position: absolute;
-    left: 7px;
-    top: 6px;
+	background: transparent url('../images/elbow-plus-nl.gif') no-repeat;
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	left: 7px;
+	top: 6px;
 }
 
 .ext-ie6 .x-grouptabs-panel .x-grouptabs-expand,
 .ext-border-box .x-grouptabs-panel .x-grouptabs-expand {
-    left: 0;
+	left: 0;
 }
 
 .x-grouptabs-expanded .x-grouptabs-expand {
-    /*background-image: url('../images/elbow-minus-nl.gif'); */
+	background-image: url('../images/elbow-minus-nl.gif');
 }
 
 /* GroupTabs sub group styling */
 .x-grouptabs-sub {
-    display: none;
+	display: none;
+	margin-top: 4px;
 }
 
 .x-grouptabs-expanded .x-grouptabs-sub {
-    display: block;
+	display: block;
 }
 
 .x-grouptabs-panel ul.x-grouptabs-sub li {
-    height: 18px;
-    margin: 0 0 2px;
+	height: 18px;
+	margin: 0 0 2px;
     padding: 0;
 }
 
 .x-grouptabs-panel ul.x-grouptabs-sub .x-grouptabs-main-item {
-    display: none;
+	display: none;
 }
 
-.x-tab-with-icon {
-    border-style: none !important;
+.x-tab-with-icon{
+   border-style:none !important;
+}
+
+
+
+/* OVERRIDES for OpenGeo Dashboard */
+
+.x-grouptabs-expand {
+/* Remove tab expanders */
+  display: none;
+}
+
+.x-tab-panel-left .x-tab-panel-header ul.x-grouptabs-strip a.x-grouptabs-text,
+.x-tab-panel-left .x-tab-panel-header ul.x-grouptabs-sub a.x-grouptabs-text {
+/* Adjusting indentation on group tabs */
+  padding-left: 0;
+  margin-left: 0;
+}
+
+.x-tab-joint {
+/* Fixing visual inconsistency when background is 'greyed out' for modal dialog */
+  background: transparent;
+}
+
+.x-grouptabs-panel .x-grouptabs-corner,
+.x-grouptabs-panel li.x-grouptabs-strip-active .x-grouptabs-corner-top-left,
+.x-grouptabs-panel li.x-grouptabs-strip-active .x-grouptabs-corner-bottom-left {
+/* Removing image-based corners */
+  display: none;
+}
+
+ .x-grouptabs-panel .x-grouptabs-panel-body {
+/* Smoother rounded corners */
+   -webkit-border-top-right-radius: 8px;
+   -moz-border-radius-topright: 8px;
+ }
+ 
+.x-grouptabs-panel ul.x-grouptabs-strip>li {
+/* Smoother rounded corners */
+  -webkit-border-top-left-radius: 8px;
+  -webkit-border-bottom-left-radius: 8px;
+  -moz-border-radius-topleft: 8px;
+  -moz-border-radius-bottomleft: 8px;
+}
+
+.x-grouptabs-panel ul.x-grouptabs-strip li {
+/* New background color */
+  background: #DEE6F5;
 }
