@@ -214,10 +214,9 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         cls: "dash-panel",
                         id: "app-panels-help-logs",
                         items: [this.logPanel]
-                    }]
-                }, {
-                    defaults: {border: false, autoScroll: true},
-                    items: [{
+                    }, {
+                        border: false,
+                        autoScroll: true,
                         defaults: {border: false, autoScroll: true},
                         title: "Preferences", 
                         tabTip: "Configure the OpenGeo Suite",
