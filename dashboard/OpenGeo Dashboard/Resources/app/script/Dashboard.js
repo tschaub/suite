@@ -647,8 +647,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         this.controlPanel = new Ext.Container({
             layout: "hbox",
             layoutConfig: {
-                padding:'5',
-                align:'middle'
+                align: "middle"
             },
             items: [
                 {
@@ -656,11 +655,9 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     autoEl: {
                         tag: "div",
                         html: "<h1>OpenGeo Suite <small>" + this.config["suite_version"] + "</small></h1>"
-                    },
-                    flex:30
+                    }
                 },
-                this.messageBox, 
-                {xtype: "spacer", flex: 2},
+                {xtype: "spacer", flex: 1},
                 startButton, 
                 stopButton
             ]
@@ -943,14 +940,16 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
      *  Displays a message in the status panel.
      */
     message: function(msg, cls) {
-        var classes = this.messageBox.el.dom.getAttribute("class").split(" ");
-        for (var i = 0; i < classes.length; i++) {
-            if (classes[i].search("app-msg-") != -1){
-                this.messageBox.el.removeClass(classes[i]);
-            }
-        }
-        this.messageBox.el.addClass("app-msg-"+cls);
-        this.messageBox.el.dom.innerHTML = msg;
+        // TODO: decide whether we need a regular place for messages
+        
+        // var classes = this.messageBox.el.dom.getAttribute("class").split(" ");
+        // for (var i = 0; i < classes.length; i++) {
+        //     if (classes[i].search("app-msg-") != -1){
+        //         this.messageBox.el.removeClass(classes[i]);
+        //     }
+        // }
+        // this.messageBox.el.addClass("app-msg-"+cls);
+        // this.messageBox.el.dom.innerHTML = msg;
     }, 
 
 });
