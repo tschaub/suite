@@ -1,7 +1,7 @@
 # Where do we build into (our --prefix)
 buildroot=$HOME/buildroot/
+webroot=/var/www/htdocs
 export buildroot
-webroot=/Library/WebServer/Documents/suite/
 
 # Versions we are going to continuously integrate...
 geos_version=3.2
@@ -29,6 +29,8 @@ function checkrv {
   if [ $1 -gt 0 ]; then
     echo "$2 failed with return value $1"
     exit 1
+  else
+    echo "$2 succeeded with return value $1"
   fi
 }
 

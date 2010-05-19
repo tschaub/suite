@@ -16,8 +16,16 @@ if [ $# -lt 1 ]; then
   usage
 fi
 
-# Enter source directory
+workdir=`pwd`
+
 srcdir=$1
+if [ "x$2" = "x" ]; then
+  destdir=$webroot
+else
+  destdir=$2
+fi
+
+# Enter source directory
 if [ ! -d $srcdir ]; then
   exit 1
 else
@@ -26,9 +34,17 @@ fi
 
 # Check for the existence of the GTK environment
 if [ ! -d $HOME/gtk ]; then
+  echo "Missing GTK install."
   exit 1
 fi
 if [ ! -d $HOME/.local ]; then
+  echo "Missing jhbuild install."
+  exit 1
+fi
+
+# Check that we have a mostly-built pgsql in the buildroot...
+if [ ! -d ${buildroot}/pgsql ]; then
+  echo "Missing pgsql buildroot! ${buildroot}/pgsql"
   exit 1
 fi
 
@@ -48,13 +64,19 @@ jhbuild run ige-mac-bundler ShapeLoader.bundle
 checkrv $? "Bundle pgshapeloader"
 popd
 
-# Zip up the results and put on the web
+# Zip up the results 
 pushd ${buildroot}
-zip -r9 ${webroot}/new-postgis-osx.zip pgsql
+if [ -f ${workdir}/postgis-osx.zip ]; then
+  rm -f ${workdir}/postgis-osx.zip
+fi
+zip -r9 ${workdir}/postgis-osx.zip pgsql
 checkrv $? "Bundle zip"
-mv -f ${webroot}/new-postgis-osx.zip ${webroot}/postgis-osx.zip
+echo "Wrote postgis-osx.zip to $workdir"
 popd
+
+# Move the results to the web directory
+mv -fv ${workdir}/postgis-osx.zip ${destdir}
+checkrv $? "Move zip to web"
 
 # Exit cleanly
 exit 0
-    
