@@ -116,7 +116,7 @@ if test -f "$bundle_lib/charset.alias"; then
 fi
 
 # Extra arguments can be added in environment.sh.
-EXTRA_ARGS=
+EXTRA_ARGS="-p 54321"
 if test -f "$bundle_res/environment.sh"; then
   source "$bundle_res/environment.sh"
 fi
