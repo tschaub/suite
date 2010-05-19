@@ -201,12 +201,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         html: og.util.loadSync("app/markup/dash/main.html"),
                         id: "app-panels-dash-main"
                     },  {
-                        title: "Getting Started",
-                        tabTip: "Learn about the components of the OpenGeo Suite",
-                        cls: "dash-panel",
-                        html: og.util.loadSync("app/markup/dash/quickstart.html"),
-                        id: "app-panels-dash-quickstart"
-                    },  {
                         title: "Components",
                         tabTip: "Learn about the components of the OpenGeo Suite",
                         cls: "dash-panel",
@@ -259,6 +253,12 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         cls: "dash-panel",
                         id: "app-panels-help-main",
                         html: og.util.loadSync("app/markup/help/main.html")
+                    },  {
+                        title: "Getting Started",
+                        tabTip: "Learn about the components of the OpenGeo Suite",
+                        cls: "dash-panel",
+                        html: og.util.loadSync("app/markup/help/quickstart.html"),
+                        id: "app-panels-dash-quickstart"
                     },  {
                         title: "FAQ",
                         tabTip: "Frequently Asked Questions",
