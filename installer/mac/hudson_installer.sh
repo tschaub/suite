@@ -167,12 +167,14 @@ chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/pg_dump
 chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/pg_dumpall
 chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/pg_restore
 chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/psql
+cp -vf resources/PostGIS.icns \
+       binaries/pgAdmin3.app/Contents/Resources/pgAdmin3.icns
 cp -vf ../common/postgis/settings.ini \
-      binaries/pgAdmin3.app/Contents/SharedSupport
+       binaries/pgAdmin3.app/Contents/SharedSupport
 cp -vf ../common/postgis/branding.ini \
-      binaries/pgAdmin3.app/Contents/SharedSupport/branding
+       binaries/pgAdmin3.app/Contents/SharedSupport/branding
 cp -vf ../common/postgis/pgadmin_splash.gif \
-      binaries/pgAdmin3.app/Contents/SharedSupport/branding
+       binaries/pgAdmin3.app/Contents/SharedSupport/branding
 cat ../common/postgis/plugins.ini \
  >> binaries/pgAdmin3.app/Contents/SharedSupport/plugins.ini
 #
