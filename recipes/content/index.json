@@ -86,5 +86,216 @@
         "description": "Learn how to enable snapping and splitting while editing features in OpenLayers.",
         "components": ["OpenLayers"],
         "reference": "editing/snap-split-ref"
-    }]
+    }, {
+        "id": "sld/point/simplepoint",
+        "title": "Simple Point",
+        "description": "Points styled as red circles with a diameter of 6 pixels.",
+        "components": ["GeoServer"],
+        "reference": "sld/point/simplepoint-ref",
+        "sourcepath": "sld/point/simplepoint.sld"
+    }, {
+        "id": "sld/point/simplepointwithstroke",
+        "title": "Simple Point with Stroke",
+        "description": "Add a stroke (or border) around a Simple point",
+        "components": ["GeoServer"],
+        "reference": "sld/point/simplepointwithstroke-ref",
+        "sourcepath": "sld/point/simplepointwithstroke.sld"
+    }, {
+        "id": "sld/point/rotatedsquare",
+        "title": "Simple Point with Stroke",
+        "description": "Create a square instead of a circle",
+        "components": ["GeoServer"],
+        "reference": "sld/point/rotatedsquare-ref",
+        "sourcepath": "sld/point/rotatedsquare.sld"
+    }, {
+        "id": "sld/point/transparenttriangle",
+        "title": "Transparent Triangle",
+        "description": "Draw a triangle with 20% opacity",
+        "components": ["GeoServer"],
+        "reference": "sld/point/transparenttriangle-ref",
+        "sourcepath": "sld/point/transparenttriangle.sld"
+    }, {
+        "id": "sld/point/pointasgraphic",
+        "title": "Transparent Triangle",
+        "description": "Style a point as a graphic",
+        "components": ["GeoServer"],
+        "reference": "sld/point/pointasgraphic-ref",
+        "sourcepath": "sld/point/pointasgraphic.sld"
+    }, {
+        "id": "sld/point/pointwithdefaultlabel",
+        "title": "Point with Default Lavel",
+        "description": "Display a default label",
+        "components": ["GeoServer"],
+        "reference": "sld/point/pointwithdefaultlabel-ref",
+        "sourcepath": "sld/point/pointwithdefaultlabel.sld"
+    }, {
+        "id": "sld/point/pointwithstyledlabel",
+        "title": "Point with Styled Lavel",
+        "description": "Display a styled label",
+        "components": ["GeoServer"],
+        "reference": "sld/point/pointwithstyledlabel-ref",
+        "sourcepath": "sld/point/pointwithstyledlabel.sld"
+    }, {
+        "id": "sld/point/pointwithrotatedlabel",
+        "title": "Point with Rotated Lavel",
+        "description": "Rotate a label 45 degress",
+        "components": ["GeoServer"],
+        "reference": "sld/point/pointwithrotatedlabel-ref",
+        "sourcepath": "sld/point/pointwithrotatedlabel.sld"
+    }, {
+        "id": "sld/point/pointattribute",
+        "title": "Point with Rotated Lavel",
+        "description": "Alter a symbol based on an attribute",
+        "components": ["GeoServer"],
+        "reference": "sld/point/pointattribute-ref",
+        "sourcepath": "sld/point/pointattribute.sld"
+    }, {
+        "id": "sld/point/zoombasedpoint",
+        "title": "Point with Rotated Lavel",
+        "description": "Alter a point style at different zoom levels",
+        "components": ["GeoServer"],
+        "reference": "sld/point/zoombasedpoint-ref",
+        "sourcepath": "sld/point/zoombasedpoint.sld"
+    }, {
+        "id": "sld/line/simpleline",
+        "title": "Simple Line",
+        "description": "Lines Styled with black 3 pixel stroke",
+        "components": ["GeoServer"],
+        "reference": "sld/line/simpleline-ref",
+        "sourcepath": "sld/line/simpleline.sld"
+    }, {
+        "id": "sld/line/linewithborder",
+        "title": "Line with Border",
+        "description": "Styled stroke with a border",
+        "components": ["GeoServer"],
+        "reference": "sld/line/linewithborder-ref",
+        "sourcepath": "sld/line/linewithborder.sld"
+    }, {
+        "id": "sld/line/dashedline",
+        "title": "Dashed Line",
+        "description": "Create dashed lines",
+        "components": ["GeoServer"],
+        "reference": "sld/line/dashedline-ref",
+        "sourcepath": "sld/line/dashedline.sld"
+    }, {
+        "id": "sld/line/railroad",
+        "title": "Railroad",
+        "description": "Use hatching to create a railroad style",
+        "components": ["GeoServer"],
+        "reference": "sld/line/railroad-ref",
+        "sourcepath": "sld/line/railroad.sld"
+    }, {
+        "id": "sld/line/linewithdefaultlabel",
+        "title": "Line with Default Label",
+        "description": "Show a text label on the simple line",
+        "components": ["GeoServer"],
+        "reference": "sld/line/linewithdefaultlabel-ref",
+        "sourcepath": "sld/line/linewithdefaultlabel.sld"
+    }, {
+        "id": "sld/line/labelfollowingline",
+        "title": "Label Following Line",
+        "description": "Render a label to follow a line",
+        "components": ["GeoServer"],
+        "reference": "sld/line/labelfollowingline-ref",
+        "sourcepath": "sld/line/labelfollowingline.sld"
+    }, {
+        "id": "sld/line/optimizedlabel",
+        "title": "Optimized Label",
+        "description": "Optimize label placement for lines",
+        "components": ["GeoServer"],
+        "reference": "sld/line/optimizedlabel-ref",
+        "sourcepath": "sld/line/optimizedlabel.sld"
+    }, {
+        "id": "sld/line/optimizedstyledlabel",
+        "title": "Optimized Styled Label",
+        "description": "Style optimally placed labels",
+        "components": ["GeoServer"],
+        "reference": "sld/line/optimizedstyledlabel-ref",
+        "sourcepath": "sld/line/optimizedstyledlabel.sld"
+    }, {
+        "id": "sld/line/attributebasedlabel",
+        "title": "Attribute-based Line",
+        "description": "Alter a line based on road type",
+        "components": ["GeoServer"],
+        "reference": "sld/line/attributebasedlabel-ref",
+        "sourcepath": "sld/line/attributebasedlabel.sld"
+    }, {
+        "id": "sld/line/zoombasedline",
+        "title": "Zoom-based Line",
+        "description": "Style a line based on zoom level",
+        "components": ["GeoServer"],
+        "reference": "sld/line/zoombasedline-ref",
+        "sourcepath": "sld/line/zoombasedline.sld"
+    }, {
+        "id": "sld/polygon/simplepolygon",
+        "title": "Simple Polygon",
+        "description": "Polygon filled with blue",
+        "components": ["GeoServer"],
+        "reference": "sld/polygon/simplepolygon-ref",
+        "sourcepath": "sld/polygon/simplepolygon.sld"
+    }, {
+        "id": "sld/polygon/simplepolygonwithstroke",
+        "title": "Polygon with Stroke",
+        "description": "Blue polygon with a white stroke",
+        "components": ["GeoServer"],
+        "reference": "sld/polygon/simplepolygonwithstroke-ref",
+        "sourcepath": "sld/polygon/simplepolygonwithstroke.sld"
+    }, {
+        "id": "sld/polygon/transparentpolygon",
+        "title": "Transparent Polygon",
+        "description": "Style a polygon with a transparent fill",
+        "components": ["GeoServer"],
+        "reference": "sld/polygon/transparentpolygon-ref",
+        "sourcepath": "sld/polygon/transparentpolygon.sld"
+    }, {
+        "id": "sld/polygon/graphicfill",
+        "title": "Graphic Fill",
+        "description": "Style polygons with a tiled graphic",
+        "components": ["GeoServer"],
+        "reference": "sld/polygon/graphicfill-ref",
+        "sourcepath": "sld/polygon/graphicfill.sld"
+    }, {
+        "id": "sld/polygon/hatchingfill",
+        "title": "Hatching Fill",
+        "description": "Style polygons with a hatching pattern",
+        "components": ["GeoServer"],
+        "reference": "sld/polygon/hatchingfill-ref",
+        "sourcepath": "sld/polygon/hatchingfill.sld"
+    }, {
+        "id": "sld/polygon/polygonwithdefaultlabel",
+        "title": "Polygon with Default Label",
+        "description": "Add a text label to a polygon",
+        "components": ["GeoServer"],
+        "reference": "sld/polygon/polygonwithdefaultlabel-ref",
+        "sourcepath": "sld/polygon/polygonwithdefaultlabel.sld"
+    }, {
+        "id": "sld/polygon/labelhalo",
+        "title": "Label Halo",
+        "description": "Add a white halo to a label",
+        "components": ["GeoServer"],
+        "reference": "sld/polygon/labelhalo-ref",
+        "sourcepath": "sld/polygon/labelhalo.sld"
+    }, {
+        "id": "sld/polygon/polygonwithstyledlabel",
+        "title": "Polygon with Default Label",
+        "description": "Add a styled label to a polygon",
+        "components": ["GeoServer"],
+        "reference": "sld/polygon/polygonwithstyledlabel-ref",
+        "sourcepath": "sld/polygon/polygonwithstyledlabel.sld"        
+    }, {
+        "id": "sld/polygon/attributebasedpolygon",
+        "title": "Style a polygon based on population",
+        "description": "Attribute-based polygon",
+        "components": ["GeoServer"],
+        "reference": "sld/polygon/attributebasedpolygon-ref",
+        "sourcepath": "sld/polygon/attributebasedpolygon.sld"
+    }, {
+        "id": "sld/polygon/zoombasedpolygon",
+        "title": "Style a polygon based on zoom levl",
+        "description": "Zoom-based polygon",
+        "components": ["GeoServer"],
+        "reference": "sld/polygon/zoombasedpolygon-ref",
+        "sourcepath": "sld/polygon/zoombasedpolygon.sld"
+    }  
+]
 }

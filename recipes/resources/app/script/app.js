@@ -98,6 +98,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                 "description",
                 "components",
                 "reference",
+                "sourcepath",
                 {name: "source", type: "boolean", defaultValue: true}
             ],
             idIndex: 0,
@@ -308,7 +309,7 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
                 dataUrl: "content/tree.json",
                 listeners: {
                     load: function() {
-                        this.recipeTree.root.expand(true);
+                       // this.recipeTree.root.expand(true);
                         if (this.currentRecipe) {
                             highlight.call(this, this.currentRecipe);
                         }
@@ -444,7 +445,12 @@ og.Recipes = Ext.extend(Ext.util.Observable, {
     },
     
     getSourceUrl: function(id) {
-        return this.recipeBase + "/" + id + ".html";
+        var rec = this.recipeStore.getById(id);
+        if (rec.get("sourcepath") !== "") {
+            return this.recipeBase + "/" + rec.get("sourcepath");            
+        } else {
+            return this.recipeBase + "/" + id + ".html";
+        }
     },
     
     getReferenceUrl: function(id) {
