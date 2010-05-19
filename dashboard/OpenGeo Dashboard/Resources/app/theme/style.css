@@ -272,7 +272,7 @@ ul.quick-links {
 .app-panels-control>div {
     background: #FFFFFF url('img/x-grouptabs-corners-top-right.png') no-repeat;
     background-position: top right;
-    padding: 20px 20px 15px 20px;
+    padding: 20px 20px 0px 20px;
 }
 
 .app-panels-wrap {
