@@ -284,6 +284,7 @@ ul.quick-links {
 .app-msg-warn {
     background: url('img/delete.png') no-repeat;
     color: #ff4748;
+    top: 8px !important;
 }
 
 .app-msg-info {
@@ -293,6 +294,8 @@ ul.quick-links {
 .app-msg-ok {
     background: url('img/tick.png') no-repeat;
     color: #81cb77;
+    top: 8px !important;
+    
 }
 
 .control-button {

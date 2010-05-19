@@ -646,17 +646,21 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
 
         this.controlPanel = new Ext.Container({
             layout: "hbox",
-            align: "top",
+            layoutConfig: {
+                padding:'5',
+                align:'middle'
+            },
             items: [
                 {
                     xtype: "box",
                     autoEl: {
                         tag: "div",
                         html: "<h1>OpenGeo Suite <small>" + this.config["suite_version"] + "</small></h1>"
-                    }
+                    },
+                    flex:30
                 },
                 this.messageBox, 
-                {xtype: "spacer", flex: 1},
+                {xtype: "spacer", flex: 2},
                 startButton, 
                 stopButton
             ]
