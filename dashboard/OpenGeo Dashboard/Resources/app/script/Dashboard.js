@@ -415,6 +415,20 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     value: this.config["geoserver_password"],
                     initialPasswordField: "geoserver-admin-password"
                 }]
+            }, {
+                xtype: "fieldset",
+                style: "margin-top: 0.5em;",
+                collapsible: true,
+                title: "PostGIS",
+                defaults: { 
+                    width: 50
+                },
+                defaultType: "textfield",
+                items: [{ 
+                    fieldLabel: "Port",
+                    name: "pgsql_port",
+                    value: this.config["pgsql_port"]
+                }]
             }],
             buttons: [{
                 text: "Save",
@@ -438,6 +452,9 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     }
                     
                     config["geoserver_data_dir"] = form.findField("geoserver_data_dir").getValue();
+                    
+                    // update postgres port
+                    config["pgsql_port"] = form.findField("pgsql_port").getValue();
         
                     og.util.saveConfig(this.config, 'config.ini');
                     Ext.Msg.alert("Configuration saved", "The suite must be restarted for changes to take effect.");
