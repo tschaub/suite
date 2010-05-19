@@ -42,7 +42,7 @@ function getfile {
   dodownload=yes
 
   url_tag=`curl -s -I $url | grep ETag | tr -d \" | cut -f2 -d' '`
-  checkrv $? "Download $url"
+  checkrv $? "ETag check at $url"
 
   if [ -f "${file}" ] && [ -f "${file}.etag" ]; then
     file_tag=`cat "${file}.etag"`
@@ -55,7 +55,7 @@ function getfile {
   if [ $dodownload = "yes" ]; then
     echo "downloading fresh copy of $file"
     curl $url > $file
-    checkrv $? "Download $url"
+    checkrv $? "Download from $url"
     echo $url_tag > "${file}.etag"
   fi
 
