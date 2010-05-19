@@ -165,6 +165,16 @@ td.dash-panel-table-actions {
     font-size: 12px;
 }
 
+/* Only display quick links on hover */
+tr.dash-glance-component {
+    height: 34px;
+}
+tr.dash-glance-component ul {
+    display: none;
+}
+tr.dash-glance-component:hover ul {
+    display: block;
+}
 
 /* QUICK LINKS */
 
