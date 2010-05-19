@@ -464,7 +464,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     config["geoserver_data_dir"] = form.findField("geoserver_data_dir").getValue();
         
                     og.util.saveConfig(this.config, 'config.ini');
-                    this.info("Configuration saved. The suite must be restarted for changes to take effect.");
+                    Ext.Msg.alert("Configuration saved", "The suite must be restarted for changes to take effect.");
                     
                     //if the suite is running then we need to keep the old
                     // config around in order to shut it down, so set the dirty
