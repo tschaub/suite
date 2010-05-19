@@ -275,10 +275,6 @@ ul.quick-links {
     padding: 20px 20px 0px 20px;
 }
 
-.app-panels-wrap {
-    top: 0 !important;
-}
-
 .app-panels-control-msg {
 /*background: #FFFFFF url('img/information.png') no-repeat;*/
     font-size: 16px;
