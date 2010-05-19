@@ -378,3 +378,13 @@ background-image: url(img/server_delete.png);
 #app-panels-pref-form {
     margin: 10px 150px 0 10px;
 }
+
+a.app-home-link {
+    display: block;
+    position: absolute;
+    width: 96px;
+    height: 26px;
+    bottom: 10px;
+    left: 15px;
+    background: #291C17 url(img/opengeo-small.png) no-repeat;
+}
