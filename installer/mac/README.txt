@@ -14,7 +14,6 @@
 #
 # Software Delivery Guide
 # http://developer.apple.com/mac/library/documentation/DeveloperTools/Conceptual/SoftwareDistribution/Introduction/Introduction.html
-
 #
 # Receipts
 # ========
@@ -24,11 +23,10 @@
 # receipts were in /Library/Receipts. In Snow Leopard and up, they
 # are in /var/db/receipts
 #
-
 #
 # OpenGeo Suite Mac Requirements
 # ========================================
-
+#
 # Get the Titanium SDK
 # --------------------
 #
@@ -39,7 +37,7 @@
 #
 # http://s.sudre.free.fr/Software/Iceberg.html
 #
-
+#
 # OpenGeo Suite Mac Layout
 # ========================
 # 
@@ -78,7 +76,9 @@
 
 # OpenGeo Suite Mac Build
 # =======================
-
+#
+# See the hudson_installer.sh build script for details of the build process...
+#
 # Build the Suite Distribution
 # ----------------------------
 #
@@ -126,127 +126,4 @@ fi
 #  open OpenGeo\ Dashboard.app
 #
 # This should run the dashboard.
-#
-#
-# Build the Dashboard Package
-# ---------------------------
-#
-#
-# Move the "OpenGeo Dashboard.app" directory from the previous section 
-# into the 'binaries' directory:
-#
-  cd ../installer/mac.new
-if [ $dashboard ]; then
-  rm -rf "binaries/OpenGeo Dashboard.app"
-  cp -r "../../dashboard/OpenGeo Dashboard.app" "binaries/OpenGeo Dashboard.app"
-fi
-#
-# Build the dashboard using the Iceberg 'freeze' commandline
-#
-   rm -rf "./build/Dashboard.pkg/"
-   freeze ./dashboard.packproj
-#
-# The Dashboard.pkg will be built into the ./build/ subdirectory
-#
-
-# Build the Geoserver Package
-# --------------------------------
-#
-# Unzip the "opengeosuite-<VERSION>-mac.zip" artifact created in the 
-# first section into the "app/OpenGeo Suite.app/Contents/Resources/Java" 
-# directory:
-#
-  suite_version=1.0
-  rm -rf binaries/geoserver
-  unzip ../../target/opengeosuite-$suite_version-mac.zip \
-        -d binaries/geoserver
-  chmod 755 binaries/geoserver/opengeo-suite
-  find binaries/geoserver/data_dir -type d -exec chmod 775 {} ';'
-  find binaries/geoserver/data_dir -type f -exec chmod 664 {} ';'
-#
-# Build the geoserver pkg using the Iceberg 'freeze' commandline
-#
-  rm -rf ./build/GeoServer.pkg
-  freeze ./geoserver.packproj
-#
-# The GeoServer.pkg will be built into the ./build/ subdirectory
-#
-
-# Build the PostGIS Package
-# -------------------------
-#
-# Unzip the postgres-osx.zip artifact downloaded from data.opengeo.org 
-# into the binaries directory.
-#
-  rm -rf binaries/pgsql
-  unzip ../../assembly/postgres-osx.zip \
-        -d binaries/
-#
-# Move the apps down one directory level
-#
-  rm -rf binaries/pgShapeLoader.app
-  mv binaries/pgsql/pgShapeLoader.app/ binaries/
-  rm -rf binaries/stackbuilder.app
-  mv binaries/pgsql/stackbuilder.app/ binaries/
-  chmod 755 binaries/pgShapeLoader.app/Contents/MacOS/pgShapeLoader*
-
-#
-# Prepare pgAdmin3 for packaging
-#
-  rm -rf binaries/pgAdmin3.app
-  mv binaries/pgsql/pgAdmin3.app/ binaries/
-  chmod 755 binaries/pgAdmin3.app/Contents/MacOS/pgAdmin3
-  chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/pg_dump
-  chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/pg_dumpall
-  chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/pg_restore
-  chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/psql
-  cp -f resources/pgadmin/settings.ini \
-     binaries/pgAdmin3.app/Contents/SharedSupport
-  cp -f resources/pgadmin/branding.ini \
-     binaries/pgAdmin3.app/Contents/SharedSupport/branding
-  cp -f resources/pgadmin/pgadmin_splash.gif \
-     binaries/pgAdmin3.app/Contents/SharedSupport/branding
-  cat resources/pgadmin/plugins.ini \
-     >> binaries/pgAdmin3.app/Contents/SharedSupport/plugins.ini
-
-#
-# Give all the files root ownership
-# sudo chown -R root:admin "app/OpenGeo PostGIS/"
-#
-# Build the postgis project using the Iceberg 'freeze' commandline
-#
-  rm -rf "./build/PostGIS Client.pkg/"
-  freeze ./postgisclient.packproj
-
-  rm -rf "./build/PostGIS Server.pkg/"
-  freeze ./postgisserver.packproj
-#
-# The PostGIS.pkg will be built into the ./build/ subdirectory
-#
-
-# Build the Suite Scripts Package
-# -------------------------------
-#
-  find ./binaries -name "*.sh" -exec chmod 755 {} ';'
-  freeze ./suitescripts.packproj
-
-# Build the GeoServer Extensions Package
-# --------------------------------------
-#
-# Unzip the "suite-<VERSION>-ext.zip" 
-# artifact created in the first section into the "binaries" directory:
-
-  suite_version=1.0
-  rm -rf ./binaries/ext
-  unzip ../../target/opengeosuite-$suite_version-ext.zip -d binaries
-  rm -rf "./build/GeoServer Extensions.pkg"
-  freeze ./geoserverext.packproj
-# 
-# Build the Suite Package
-# -----------------------
-#
-  rm -rf ./suitebuild/*
-  freeze ./suite.packproj
-
-# The "OpenGeo Suite.mpkg" will be built into the ./suitebuild directory
 #
