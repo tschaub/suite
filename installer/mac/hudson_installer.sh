@@ -167,13 +167,13 @@ chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/pg_dump
 chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/pg_dumpall
 chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/pg_restore
 chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/psql
-cp -vf resources/pgadmin/settings.ini \
+cp -vf ../common/postgis/settings.ini \
       binaries/pgAdmin3.app/Contents/SharedSupport
-cp -vf resources/pgadmin/branding.ini \
+cp -vf ../common/postgis/branding.ini \
       binaries/pgAdmin3.app/Contents/SharedSupport/branding
-cp -vf resources/pgadmin/pgadmin_splash.gif \
+cp -vf ../common/postgis/pgadmin_splash.gif \
       binaries/pgAdmin3.app/Contents/SharedSupport/branding
-cat resources/pgadmin/plugins.ini \
+cat ../common/postgis/plugins.ini \
  >> binaries/pgAdmin3.app/Contents/SharedSupport/plugins.ini
 #
 # Package up the results
