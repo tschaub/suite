@@ -371,9 +371,9 @@ ul.quick-links {
 a.app-home-link {
     display: block;
     position: absolute;
-    width: 96px;
-    height: 26px;
-    bottom: 10px;
+    width: 115px;
+    height: 33px;
+    bottom: 15px;
     left: 15px;
-    background: #291C17 url(img/opengeo-small.png) no-repeat;
+    background: transparent url(img/opengeo-small.png) no-repeat;
 }
