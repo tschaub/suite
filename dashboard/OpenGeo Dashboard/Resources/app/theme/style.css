@@ -277,6 +277,7 @@ ul.quick-links {
     -webkit-border-top-left-radius: 8px;
     -moz-border-radius-topright: 8px;
     -moz-border-radius-topleft: 8px;
+    height: 30px;
     padding: 10px 15px;
 }
 

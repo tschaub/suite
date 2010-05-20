@@ -254,7 +254,7 @@
 
 .x-grouptabs-panel .x-grouptabs-panel-body {
 /* Bump down to accommodate control panel */
-  padding-top: 47px;
+  padding-top: 50px;
 /* Smoother rounded corners */
   -webkit-border-top-right-radius: 8px;
   -moz-border-radius-topright: 8px;
@@ -265,7 +265,7 @@
 .x-tab-panel-left ul.x-grouptabs-strip,
 .x-tab-panel-right ul.x-grouptabs-strip {
 /* Bump down tab start position */
-  margin-top: 46px;
+  margin-top: 50px;
 }
 
 .x-grouptabs-panel ul.x-grouptabs-strip>li {
