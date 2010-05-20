@@ -25,7 +25,7 @@ function parse() {
 }
 
 # get version
-VERSION=`ls opengeosuite-*.tar.gz`
+VERSION=`ls opengeosuite-*-bin.tar.gz`
 x=`expr index "$VERSION" -`
 y=`expr length "$VERSION" - "$x" - 11`
 VERSION=${VERSION:$x:$y}

@@ -7,6 +7,7 @@
 
 dashboard_version=1.0.0
 pgsql_version=8.4
+suite_version=1.9
 
 dashboard_url=http://suite.opengeo.org/builds/dashboard-latest-linux.zip
 suite_url=http://suite.opengeo.org/builds/opengeosuite-latest-bin.tar.gz
@@ -15,6 +16,7 @@ jre_url=http://data.opengeo.org/suite/suite-jre-6-lin.tgz
 #pgsql_url=http://suite.opengeo.org/osxbuilds/postgis-osx.zip
 
 export PATH=$PATH:/usr/local/bin
+
 
 #
 # Utility function to check return values on commands
@@ -98,7 +100,8 @@ checkrv $? "JRE untar"
 #
 pushd binaries/suite
 NAME=`ls`
-tar cfz ../root/${NAME}.tar.gz *
+mv ${NAME} opengeosuite-${suite_version}
+tar cfz ../root/opengeosuite-${suite_version}-bin.tar.gz *
 checkrv $? "Suite retar"
 rm -rf *
 popd
