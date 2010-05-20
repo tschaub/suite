@@ -646,7 +646,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         });
         
         var refreshButton = new Ext.Button({
-            text: "refresh",
+            text: "read",
             iconCls: "refresh-button",
             handler: function() {
                  this.refreshLog();
