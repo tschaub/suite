@@ -293,6 +293,26 @@ ul.quick-links {
     padding-top: 1px;
 }
 
+.app-panels-control .x-btn.control-button {
+    position: absolute;
+    left: auto !important;
+    right: 0;
+    padding: 3px 4px 4px;
+    background: green;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+}
+
+.app-panels-control .x-btn.control-button.x-btn-pressed {
+    background: maroon;
+}
+
+.app-panels-control .x-btn.control-button button {
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+}
+
 .app-msg-warn {
     background: url('img/delete.png') no-repeat;
     color: #ff4748;
