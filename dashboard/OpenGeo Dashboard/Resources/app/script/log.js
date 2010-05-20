@@ -3,29 +3,18 @@
  */
 
 function readBuffer(file) {
-    //only read the last 1000 elements
     var buf = [];
-    
-    file = Titanium.Filesystem.getFileStream(file.nativePath());
-    if (file.open(Titanium.Filesystem.MODE_READ) == true) {
-        var line = file.readLine();
-        while(line !== null && buf.length < 1000) {
-            buf.push(line);
-            line = file.readLine();
-        }
-    
-        //if we still have lines to read means the queue is full
-        while(line !== null) {
+    for (var line = file.readLine(); line !== null; line=file.readLine()) {
+        buf.push(line);
+        // only keep the last 1000 lines
+        if (buf.length > 1000) {
             buf.shift();
-            buf.push(line);
-            line = file.readLine();
         }
-        file.close();
-        return buf.join("\n");
     }
-    else {
-        return "Could not read log file";
+    if (buf.length === 0) {
+        buf = ["Could not read log file."];
     }
+    return buf.join("\n");
 }
 
 function readOffset(file) {
