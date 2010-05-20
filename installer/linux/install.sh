@@ -60,7 +60,7 @@ fi
 #
 # license agreement
 #
-cat license-header.txt license.txt | more
+cat license.txt | more
 echo -n "Do you accept the license agreement? [Y|n]: "
 read ACCEPT_LICENSE
 ACCEPT_LICENSE=`parse $ACCEPT_LICENSE y`
@@ -164,9 +164,9 @@ echo -e "\t Install ArcSDE support: \t $INCLUDE_SDE"
 echo -e "\t Install Oracle support: \t $INCLUDE_ORACLE"
 
 if [ "$CREATE_SYMLINKS" == "Yes" ]; then
-  echo -e "\t Install executables: \t\t $SYMLINK_DIR"
+  echo -e "\t Link executables in: \t\t $SYMLINK_DIR"
 else
-  echo -e "\t Install executables: \t\t No"
+  echo -e "\t Link executables in: \t\t No"
 fi
 
 echo
@@ -180,7 +180,7 @@ fi
 SUITE_DIR=$INSTALL_DIR/opengeosuite-$VERSION
 
 echo "Installing OpenGeo Suite..." &&
-tar xzf opengeosuite-$VERSION.tar.gz -C "$INSTALL_DIR" &&
+tar xzf opengeosuite-$VERSION-bin.tar.gz -C "$INSTALL_DIR" &&
 
 echo "Installing OpenGeo Dashboard..." &&
 tar xzf "OpenGeo Dashboard.tar.gz" -C "$SUITE_DIR" &&
@@ -190,6 +190,7 @@ ln -sf "`find "$SUITE_DIR" -type f -name "OpenGeo Dashboard"`" "$SUITE_DIR/openg
 sed -i "s#@SUITE_DIR@#$SUITE_DIR#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
 sed -i "s#@SUITE_EXE@#$SUITE_DIR/opengeo-suite#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
 sed -i "s#@GEOSERVER_DATA_DIR@#$SUITE_DIR/data_dir#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
+sed -i "s#@PGSQL_PORT@#54321#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
 
 if [ "$?" != "0" ]; then
   exit 1
