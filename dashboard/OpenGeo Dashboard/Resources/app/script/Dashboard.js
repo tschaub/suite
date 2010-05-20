@@ -647,7 +647,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     xtype: "box",
                     autoEl: {
                         tag: "div",
-                        html: "<h1>OpenGeo Suite <small>" + this.config["suite_version"] + "</small></h1>"
+                        html: "<strong>OpenGeo Suite <small>" + this.config["suite_version"] + "</small></strong>"
                     }
                 },
                 {xtype: "spacer", flex: 1},

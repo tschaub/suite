@@ -252,12 +252,22 @@
   display: none;
 }
 
- .x-grouptabs-panel .x-grouptabs-panel-body {
+.x-grouptabs-panel .x-grouptabs-panel-body {
+/* Bump down to accommodate control panel */
+  padding-top: 47px;
 /* Smoother rounded corners */
-   -webkit-border-top-right-radius: 8px;
-   -moz-border-radius-topright: 8px;
- }
- 
+  -webkit-border-top-right-radius: 8px;
+  -moz-border-radius-topright: 8px;
+  -webkit-border-top-left-radius: 8px;
+  -moz-border-radius-topleft: 8px;
+}
+
+.x-tab-panel-left ul.x-grouptabs-strip,
+.x-tab-panel-right ul.x-grouptabs-strip {
+/* Bump down tab start position */
+  margin-top: 48px;
+}
+
 .x-grouptabs-panel ul.x-grouptabs-strip>li {
 /* Smoother rounded corners */
   -webkit-border-top-left-radius: 8px;

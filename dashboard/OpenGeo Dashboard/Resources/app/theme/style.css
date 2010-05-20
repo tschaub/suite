@@ -30,7 +30,7 @@ a.app-disabled:hover {
 }
 
 .dash-panel-body {
-    padding: 10px 15px;
+    padding: 15px 15px 10px;
 }
 
 .dash-panel-body h1,
@@ -51,14 +51,14 @@ a.app-disabled:hover {
 .dash-panel-body h2,
 .dash-panel-body h3,
 .dash-panel-body h4 {
-    color: #0A2742;
+    color: #486300;
     font-family: Optima,Georgia, serif;
     font-size: 18px;
     font-weight: 600;
     margin: 0 0 12px;
 }
 .dash-panel-body h3 {
-    color: #486300;
+    color: #6C9400;
     font-size: 14px;
 }
 
@@ -241,11 +241,6 @@ ul.quick-links {
     background-color: #ffffff;
 }
 
-/* override grouptabs body padding to accommodate control panel */
-.x-tab-panel-body-left.x-grouptabs-panel-body {
-    padding-top: 50px;
-}
-
 /* control panel */
 .app-panels-control {
     background: transparent;
@@ -257,14 +252,17 @@ ul.quick-links {
     height: 50px;
 }
 
-.app-panels-control h1 {
-    color: #0A2742;
+.app-panels-control * {
+    background: transparent;
+}
+
+.app-panels-control strong {
+    color: #291C17;
     font-family: Optima, Georgia, serif;
     font-size: 24px;
     font-weight: 600;
 }
-.app-panels-control h1 small {
-    color: #333333;
+.app-panels-control strong small {
     font-family: Helvetica,Arial,sans-serif;
     font-size: 10px;
     padding-left: 5px;
@@ -272,9 +270,12 @@ ul.quick-links {
 }
 
 .app-panels-control>div {
-    background: #FFFFFF url('img/x-grouptabs-corners-top-right.png') no-repeat;
-    background-position: top right;
-    padding: 20px 20px 0px 20px;
+    background: -webkit-gradient(linear, left top, left bottom, from(#CCC), to(#999));
+    background: -moz-linear-gradient(top, #CCC, #999);
+    -webkit-border-top-right-radius: 8px;
+    -moz-border-radius-topright: 8px;
+    -moz-border-radius-topleft: 8px;
+    padding: 10px 15px;
 }
 
 .app-panels-control-msg {
