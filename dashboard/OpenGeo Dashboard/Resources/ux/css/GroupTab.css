@@ -276,7 +276,24 @@
   -moz-border-radius-bottomleft: 8px;
 }
 
-.x-grouptabs-panel ul.x-grouptabs-strip li,
+.x-grouptabs-panel ul.x-grouptabs-strip li {
+/* New background color */
+  background: #DEE6F5;
+  background: -webkit-gradient(
+      linear,
+      left bottom,
+      right bottom,
+      color-stop(0.44, rgb(222,230,245)),
+      color-stop(0.88, rgb(222,230,245)),
+      color-stop(1, rgb(204,204,204))
+  );
+  background: -moz-linear-gradient(
+      left center,
+      rgb(222,230,245) 44%,
+      rgb(222,230,245) 88%,
+      rgb(204,204,204) 100%
+  );
+}
 .x-grouptabs-panel li.x-grouptabs-strip-active ul.x-grouptabs-sub li.x-grouptabs-strip-active {
 /* New background color */
   background: #DEE6F5;
