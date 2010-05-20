@@ -36,7 +36,7 @@ a.app-disabled:hover {
 .dash-panel-body h1,
 .dash-panel-body h1 a {
     color: #0A2742;
-    font-family: Optima,Georgia, serif;
+    font-family: Optima,Helvetica,Arial,sans-serif;
     font-size: 24px;
     font-weight: 600;
     margin: 0 0 12px;
@@ -52,12 +52,13 @@ a.app-disabled:hover {
 .dash-panel-body h3,
 .dash-panel-body h4 {
     color: #486300;
-    font-family: Optima,Georgia, serif;
+    font-family: Optima,Helvetica,Arial,sans-serif;
     font-size: 18px;
     font-weight: 600;
     margin: 0 0 12px;
 }
 .dash-panel-body h3 {
+    font-family: Helvetica,Arial,sans-serif;
     color: #6C9400;
     font-size: 14px;
 }
@@ -262,7 +263,7 @@ ul.quick-links {
 
 .app-panels-control strong {
     color: #291C17;
-    font-family: Optima, Georgia, serif;
+    font-family: Optima,Helvetica,Arial,sans-serif;
     font-size: 24px;
     font-weight: 600;
 }
@@ -309,41 +310,12 @@ ul.quick-links {
     
 }
 
-.x-btn.control-button {
-    position: absolute;
-    left: auto !important;
-    right: 0;
-    padding: 3px 4px 4px;
-    background: green;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-}
-
-.x-btn.control-button.x-btn-pressed {
-    background: maroon;
-}
-
-.x-btn.control-button button {
-    color: #fff;
-    font-size: 13px;
-    font-weight: bold;
-}
-
-.x-btn .cancel-button {
-    background-image: url(img/cancel.png);
-}
-
-.x-btn .refresh-button {
-    background-image: url(img/arrow_refresh.png);
-}
-
-.x-btn .view-button {
-    background-image: url(img/page_white_magnify.png);
-}
-
-.x-btn .delete-button {
-    background-image: url(img/delete.png);
-}
+/* Buttons on Logs page */
+.x-btn .cancel-button, .x-btn .refresh-button,.x-btn .view-button, .x-btn .delete-button { text-transform: capitalize; }
+.x-btn .cancel-button { background-image: url(img/cancel.png); }
+.x-btn .refresh-button { background-image: url(img/arrow_refresh.png); }
+.x-btn .view-button { background-image: url(img/page_white_magnify.png); }
+.x-btn .delete-button { background-image: url(img/delete.png); }
 
 .working-dialog {
     text-align: center;
