@@ -715,7 +715,8 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     xtype: "box",
                     cls: "dash-panel-content",
                     autoEl: {
-                        tag: "div"
+                        tag: "div",
+                        html: "<h1>Logs</h1>"
                     }
                 }]
             }, 
