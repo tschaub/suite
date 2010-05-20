@@ -2,6 +2,7 @@
  * Copyright (c) 2008 The Open Planning Project
  *
  * @include Styler/dispatch.js
+ * @include Styler/ColorManager.js
  * @include Styler/widgets/RulePanel.js
  * @include Styler/SchemaManager.js
  * @include Styler/SLDManager.js
@@ -228,6 +229,15 @@ var Styler = Ext.extend(Ext.util.Observable, {
      * Create the layout with a map panel, a layers panel, and a legend panel.
      */
     createLayout: function() {
+        
+        // register the color manager with every color field
+        Ext.util.Observable.observeClass(gxp.form.ColorField);
+        gxp.form.ColorField.on({
+            render: function(field) {
+                var manager = new Styler.ColorManager();
+                manager.register(field);
+            }
+        });
 
         this.getFeatureControl = new OpenLayers.Control.GetFeature({});
         this.getFeatureControl.events.on({
