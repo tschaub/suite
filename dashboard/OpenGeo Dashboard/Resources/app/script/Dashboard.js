@@ -549,14 +549,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         var app = this.config[key] || "";
         var file = Titanium.Filesystem.getFile(app);
         if (file.exists()) {
-            var args;
-            if (this.platform.name === "Mac") {
-                args = ["open", app]
-            } else {
-                args = [app]
-            }
-            var process = Titanium.Process.createProcess(args);
-            process.launch();
+            Titanium.Desktop.openApplication(app);
         } else {
             Ext.Msg.alert(
                 "Warning",
