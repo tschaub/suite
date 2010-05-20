@@ -180,10 +180,10 @@ fi
 SUITE_DIR=$INSTALL_DIR/opengeosuite-$VERSION
 
 echo "Installing OpenGeo Suite..." &&
-tar xzf opengeosuite-$VERSION-bin.tar.gz -C "$INSTALL_DIR" &&
+tar xzf opengeosuite-$VERSION.tar.gz -C "$INSTALL_DIR" &&
 
 echo "Installing OpenGeo Dashboard..." &&
-tar xzf "OpenGeo Dashboard.tgz" -C "$SUITE_DIR" &&
+tar xzf "OpenGeo Dashboard.tar.gz" -C "$SUITE_DIR" &&
 
 echo "Creating symlinks..." &&
 ln -sf "`find "$SUITE_DIR" -type f -name "OpenGeo Dashboard"`" "$SUITE_DIR/opengeo-dashboard" &&
@@ -215,7 +215,7 @@ fi
 
 if [ "$INCLUDE_SDE" == "Yes" ]; then
   echo "Installing ArcSDE Extension..."
-  tar xzvf opengeosuite-$VERSION-ext.tar.gz -C "$SUITE_DIR/webapps/geoserver/WEB-INF/lib" "ext/arcsde"
+  tar xzvf opengeosuite-latest-ext.tar.gz -C "$SUITE_DIR/webapps/geoserver/WEB-INF/lib" "ext/arcsde"
 
   echo
   echo -n "The ArcSDE extension requires the Java ESRI client libraries to function. Where are the libraries located on your system? [Leave blank to skip]: "
@@ -225,7 +225,7 @@ fi
 
 if [ "$INCLUDE_ORACLE" == "Yes" ]; then
   echo "Installing Oracle Extension..."
-  tar xzvf opengeosuite-$VERSION-ext.tar.gz -C "$SUITE_DIR/webapps/geoserver/WEB-INF/lib" "ext/oracle"
+  tar xzvf opengeosuite-latest-ext.tar.gz -C "$SUITE_DIR/webapps/geoserver/WEB-INF/lib" "ext/oracle"
 
   echo
   echo -n "The Oracle extension the Oracle JDBC driver to function. Where is ojdbc jar located on your system? [Leave blank to skip]: "

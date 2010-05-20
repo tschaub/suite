@@ -9,8 +9,9 @@ dashboard_version=1.0.0
 pgsql_version=8.4
 
 dashboard_url=http://suite.opengeo.org/builds/dashboard-latest-linux.zip
-suite_url=http://suite.opengeo.org/builds/opengeosuite-latest-bin.zip
-ext_url=http://suite.opengeo.org/builds/opengeosuite-latest-ext.zip
+suite_url=http://suite.opengeo.org/builds/opengeosuite-latest-bin.tar.gz
+ext_url=http://suite.opengeo.org/builds/opengeosuite-latest-ext.tar.gz
+jre_url=http://data.opengeo.org/suite/suite-jre-6-lin.tgz
 #pgsql_url=http://suite.opengeo.org/osxbuilds/postgis-osx.zip
 
 export PATH=$PATH:/usr/local/bin
@@ -42,7 +43,7 @@ function getfile {
   dodownload=yes
 
   url_tag=`curl -s -I $url | grep ETag | tr -d \" | cut -f2 -d' '`
-  checkrv $? "Download $url"
+  checkrv $? "ETag check at $url"
 
   if [ -f "${file}" ] && [ -f "${file}.etag" ]; then
     file_tag=`cat "${file}.etag"`
@@ -55,7 +56,7 @@ function getfile {
   if [ $dodownload = "yes" ]; then
     echo "downloading fresh copy of $file"
     curl $url > $file
-    checkrv $? "Download $url"
+    checkrv $? "Download from $url"
     echo $url_tag > "${file}.etag"
   fi
 
@@ -64,127 +65,77 @@ function getfile {
 
 #
 # Check for expected subdirectories
+# Clean up and prepare
 #
 if [ ! -d binaries ]; then
-  exit 1
+  mkdir binaries
 fi
+if [ -d binaries/root ]; then
+  rm -rf binaries/root
+fi
+mkdir binaries/root
 
 #
-# Retrieve and build the Dashboard pkg
+# Retrieve the suite assembly 
 #
-getfile $dashboard_url binaries/dashboard.zip
-if [ -d "./binaries/OpenGeo Dashboard.app" ]; then
- rm -rf "./binaries/OpenGeo Dashboard.app"
-fi
-unzip -o binaries/dashboard.zip -d binaries
-checkrv $? "Dashboard unzip"
-
-#
-# Retrieve and build the Geoserver pkg
-#
-getfile $suite_url binaries/suite.zip
+getfile $suite_url binaries/suite.tgz
 if [ -d binaries/suite ]; then
   rm -rf binaries/suite
 fi
-unzip -o binaries/suite.zip -d binaries/suite
-checkrv $? "GeoServer unzip"
-chmod 755 binaries/suite/opengeo-suite
-cp -vf binaries/scripts/suite_uninstall.sh binaries/suite/
-chmod 755 binaries/suite/suite_uninstall.sh
-find binaries/suite/data_dir -type d -exec chmod 775 {} ';'
-find binaries/suite/data_dir -type f -exec chmod 664 {} ';'
-if [ -d "./build/GeoServer.pkg" ]; then
-  find ./build/GeoServer.pkg -type f -exec chmod 644 {} ';'
-  find ./build/GeoServer.pkg -type d -exec chmod 755 {} ';'
-  rm -rf ./build/GeoServer.pkg
-  checkrv $? "GeoServer.pkg tidy"
-fi
-
-#
-# Retrieve and build the PostGIS pkg
-#
-#getfile $pgsql_url binaries/pgsql.zip
-#if [ -d binaries/pgsql ]; then
-#  rm -rf binaries/pgsql
-#fi
-#unzip -o binaries/pgsql.zip -d binaries/
-#checkrv $? "PostGIS unzip"
-#
-# Copy the startup scripts into pgsql
-#
-#pgscriptdir=binaries/pgsql/scripts
-#mkdir ${pgscriptdir}
-#cp -vf binaries/scripts/*.sh ${pgscriptdir}
-#cp -vf binaries/scripts/postgis ${pgscriptdir}
-#rm -f ${pgscriptdir}/suite_uninstall.sh
-#chmod 755 ${pgscriptdir}/*
-#
-# Move the apps down one directory level
-#
-#if [ -d binaries/pgShapeLoader.app ]; then
-#  rm -rf binaries/pgShapeLoader.app
-#fi
-#mv binaries/pgsql/pgShapeLoader.app/ binaries/
-#if [ -d binaries/stackbuilder.app ]; then
-#  rm -rf binaries/stackbuilder.app
-#fi
-#mv binaries/pgsql/stackbuilder.app/ binaries/
-#if [ -d binaries/pgAdmin3.app ]; then
-#  rm -rf binaries/pgAdmin3.app
-#fi
-#mv binaries/pgsql/pgAdmin3.app/ binaries/
-#
-# Set exec bits on all apps and copy in resources
-#
-#chmod 755 binaries/pgShapeLoader.app/Contents/MacOS/pgShapeLoader*
-#chmod 755 binaries/pgAdmin3.app/Contents/MacOS/pgAdmin3
-#chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/pg_dump
-#chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/pg_dumpall
-#chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/pg_restore
-#chmod 755 binaries/pgAdmin3.app/Contents/SharedSupport/psql
-#cp -vf resources/pgadmin/settings.ini \
-#      binaries/pgAdmin3.app/Contents/SharedSupport
-#cp -vf resources/pgadmin/branding.ini \
-#      binaries/pgAdmin3.app/Contents/SharedSupport/branding
-#cp -vf resources/pgadmin/pgadmin_splash.gif \
-#      binaries/pgAdmin3.app/Contents/SharedSupport/branding
-#cat resources/pgadmin/plugins.ini \
-# >> binaries/pgAdmin3.app/Contents/SharedSupport/plugins.ini
-#
-# Package up the results
-#
-#if [ -d "./build/PostGIS Client.pkg/" ]; then
-#  rm -rf "./build/PostGIS Client.pkg/"
-#fi
-#freeze ./postgisclient.packproj
-#checkrv $? "PostGIS client packaging"
-#if [ -d "./build/PostGIS Server.pkg/" ]; then
-#  rm -rf "./build/PostGIS Server.pkg/"
-#fi
-#freeze ./postgisserver.packproj
-#checkrv $? "PostGIS server packaging"
-
-#
-# Build the GeoServer Extensions Package
-#
-getfile $ext_url binaries/ext.zip
-if [ -d binaries/ext ]; then
-  rm -rf binaries/ext
-fi
-unzip -o binaries/ext.zip -d binaries
-checkrv $? "Ext unzip"
+mkdir binaries/suite
+tar xfz binaries/suite.tgz -C binaries/suite
+checkrv $? "GeoServer untar"
 
 # 
-# Build the Suite package
+# Retrieve the Linux JRE
 #
-if [ -d ./suitebuild ]; then
-  rm -rf ./suitebuild
-fi
-mkdir suitebuild
-freeze ./suite.packproj
-checkrv $? "Suite packaging"
+getfile $jre_url binaries/jre.tgz
+tar xfz binaries/jre.tgz -C binaries/suite/*
+checkrv $? "JRE untar"
 
 #
-# Exit cleanly
+# Repackage the Suite component 
 #
-exit 0
+pushd binaries/suite
+NAME=`ls`
+tar cfz ../root/${NAME}.tar.gz *
+checkrv $? "Suite retar"
+rm -rf *
+popd
+
+#
+# Retrieve and build the Dashboard 
+#
+getfile $dashboard_url binaries/dashboard.zip
+if [ -d "./binaries/root/OpenGeo Dashboard" ]; then
+ rm -rf "./binaries/root/OpenGeo Dashboard"
+fi
+unzip -q -o binaries/dashboard.zip -d binaries/suite
+checkrv $? "Dashboard unzip"
+touch "./binaries/root/OpenGeo Dashboard/.installed"
+pushd binaries/suite
+NAME=`ls`
+tar cfz "../root/${NAME}.tar.gz" *
+checkrv $? "Dashboard retar"
+rm -rf *
+popd
+
+#
+# Retreive the GeoServer extensions package
+#
+EXTFILE=`basename $ext_url`
+getfile $ext_url binaries/${EXTFILE}
+cp binaries/${EXTFILE} binaries/root
+
+# 
+# Copy in some useful files
+#
+cp ../common/license.txt binaries/root
+
+#
+# Build installer script
+#
+makeself-2.1.5/makeself.sh binaries/root OpenGeoSuite-bin "OpenGeo Suite" ./install.sh
+
+exit
+
