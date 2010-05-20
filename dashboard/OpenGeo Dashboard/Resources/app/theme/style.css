@@ -114,9 +114,12 @@ a.app-disabled:hover {
 /* AT A GLANCE TABLE */
 .dash-panel-table {
     border-collapse: collapse;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     width: 100%;
     border-bottom: 1px solid #DEE6F5;
+}
+.dash-panel-table:last-child {
+    margin-bottom: 0;
 }
 .dash-panel-table th {
     padding: 8px;
@@ -310,40 +313,45 @@ ul.quick-links {
     padding-left: 0.4em;
 }
 
-.control-button .x-btn-text.stop-button,
-.control-button .x-btn-text.start-button {
-    font-size: 12px;
-    font-family: Helvetica,Arial,FreeSans,sans-serif;
-    cursor: pointer !important;
-    cursor: hand !important;
-    border: none !important;
-    /* Disable the button-style */
-    background-color: transparent !important;
-    background: none !important;
-    background-image: none !important;
-    padding: 0px 5px 0px 5px !important;
-    color: #FF0000; !important;
-}
-
-.control-button .x-btn-text.start-button {
-    color: #0ab25d;
-}
-
 /* Override button images */
 .control-button .x-btn-tl,
 .control-button .x-btn-tr,
 .control-button .x-btn-tc,
 .control-button .x-btn-ml,
 .control-button .x-btn-mc,
+.control-button .x-btn-mr,
 .control-button .x-btn-bl,
 .control-button .x-btn-br,
 .control-button .x-btn-bc {
     background-image: none !important;
 }
 
-/*right button border*/
-.control-button .x-btn-mr {
-    background-image: url("img/btn.gif") !important;
+.control-button.x-item-disabled {
+  display: none;
+}
+
+.control-button .x-btn-text.stop-button,
+.control-button .x-btn-text.start-button {
+    font-size: 13px;
+    font-weight: bold;
+    font-family: Helvetica,Arial,FreeSans,sans-serif;
+    border: none;
+    /* Override the button-style */
+    height: auto;
+    padding: 5px;
+    background: none;
+    color: #FFF;
+    /* Smoother rounded corners */
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+}
+
+.control-button .x-btn-text.start-button {
+    background: #0ab25d;
+}
+
+.control-button .x-btn-text.stop-button {
+    background: maroon;
 }
 
 .x-btn .cancel-button {
