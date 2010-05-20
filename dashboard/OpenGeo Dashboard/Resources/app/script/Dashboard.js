@@ -595,7 +595,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         var controlButton = new Ext.Button({
             text: !!this.suite.online ? "Shutdown" : "Start",
             enableToggle: true,
-            iconCls: "control-button",
+            cls: "control-button",
             pressed: !!this.suite.online,
             handler: function(btn) {
                 if (btn.pressed) {
