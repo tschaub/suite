@@ -309,55 +309,24 @@ ul.quick-links {
     
 }
 
-.control-button {
-    padding-left: 0.4em;
-}
-
-/* Override button images */
-.control-button .x-btn-tl,
-.control-button .x-btn-tr,
-.control-button .x-btn-tc,
-.control-button .x-btn-ml,
-.control-button .x-btn-mc,
-.control-button .x-btn-mr,
-.control-button .x-btn-bl,
-.control-button .x-btn-br,
-.control-button .x-btn-bc {
-    background-image: none !important;
-}
-
 .x-btn.control-button {
     position: absolute;
     left: auto !important;
-    right: 10px;
+    right: 0;
+    padding: 3px 4px 4px;
     background: green;
-}
-.x-btn.control-button.x-btn-pressed {
-    background: red;
-}
-
-.control-button .x-btn-text.stop-button,
-.control-button .x-btn-text.start-button {
-    font-size: 13px;
-    font-weight: bold;
-    font-family: Helvetica,Arial,FreeSans,sans-serif;
-    border: none;
-    /* Override the button-style */
-    height: auto;
-    padding: 5px;
-    background: none;
-    color: #FFF;
-    /* Smoother rounded corners */
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
 }
 
-.control-button .x-btn-text.start-button {
-    background: #0ab25d;
+.x-btn.control-button.x-btn-pressed {
+    background: maroon;
 }
 
-.control-button .x-btn-text.stop-button {
-    background: maroon;
+.x-btn.control-button button {
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
 }
 
 .x-btn .cancel-button {
