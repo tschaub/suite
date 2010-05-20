@@ -326,8 +326,14 @@ ul.quick-links {
     background-image: none !important;
 }
 
-.control-button.x-item-disabled {
-  display: none;
+.x-btn.control-button {
+    position: absolute;
+    left: auto !important;
+    right: 10px;
+    background: green;
+}
+.x-btn.control-button.x-btn-pressed {
+    background: red;
 }
 
 .control-button .x-btn-text.stop-button,
