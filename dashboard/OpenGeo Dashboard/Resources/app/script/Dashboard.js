@@ -640,32 +640,27 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
     },
     
     initLogPanel: function() {
+
         this.logTextArea = new Ext.form.TextArea({
-             region: "center",
-             margins: "10 10 0 10"
+            readOnly: true,
+            border: false,
+            style: {
+                padding: 10
+            }
         });
         
         var refreshButton = new Ext.Button({
-            text: "read",
+            text: "Refresh",
+            tooltip: "View the logs",
             iconCls: "refresh-button",
             handler: function() {
                  this.refreshLog();
-            }, 
-            scope: this
-        });
-        
-        var clearButton = new Ext.Button({
-            text: "clear",
-            tooltip: "Clear logs view",
-            iconCls: "delete-button",
-            handler: function() {
-                this.clearLog();
-            }, 
+            },
             scope: this
         });
         
         var viewButton = new Ext.Button({
-            text: "open",
+            text: "Open",
             tooltip: "Open logs with default system viewer",
             iconCls: "view-button",
             handler: function() {
@@ -674,34 +669,26 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             scope: this
         });
         
-        this.logPanel = new Ext.Container({
-            layout: "border",
-            items: [{
-                xtype: "container",
-                region: "north",
-                layout: "fit",
-                cls: "dash-panel-body",
-                items: [{
-                    xtype: "box",
-                    cls: "dash-panel-content",
-                    autoEl: {
-                        tag: "div",
-                        html: "<h1>Logs</h1>"
+        var refreshing = false;
+        this.logPanel = new Ext.Panel({
+            border: false,
+            layout: "fit",
+            items: [this.logTextArea],
+            bbar: [
+                "->",
+                refreshButton,
+                viewButton
+            ],
+            listeners: {
+                afterlayout: function() {
+                    if (!refreshing) {
+                        refreshing = true;
+                        this.refreshLog();
+                        refreshing = false;
                     }
-                }]
-            }, 
-            this.logTextArea, {
-                xtype: "container",
-                region: "south",
-                layout: "hbox",
-                margins: "2 10 10 10",
-                items: [
-                    {xtype: "spacer", flex: 1},
-                    refreshButton,
-                    clearButton,
-                    viewButton
-                ]
-            }]
+                },
+                scope: this
+            } 
         });
     }, 
     

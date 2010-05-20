@@ -331,11 +331,10 @@ ul.quick-links {
 }
 
 /* Buttons on Logs page */
-.x-btn .cancel-button, .x-btn .refresh-button,.x-btn .view-button, .x-btn .delete-button { text-transform: capitalize; }
+.x-btn .cancel-button, .x-btn .refresh-button,.x-btn .view-button { text-transform: capitalize; }
 .x-btn .cancel-button { background-image: url(img/cancel.png); }
 .x-btn .refresh-button { background-image: url(img/arrow_refresh.png); }
 .x-btn .view-button { background-image: url(img/page_white_magnify.png); }
-.x-btn .delete-button { background-image: url(img/delete.png); }
 
 .working-dialog {
     text-align: center;
