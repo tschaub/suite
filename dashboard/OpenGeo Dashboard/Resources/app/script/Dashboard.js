@@ -654,14 +654,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             scope: this
         });
         
-        //hack for windows, we need to disable the refresh log while the suite is
-        // online
-        if (this.platform && this.platform.name == "Windows") {
-            refreshButton.setDisabled(true);
-            refreshButton.setTooltip("Logs display not yet implemented. Please"+ 
-                " view with system viewer instead.");
-        }
-        
         var clearButton = new Ext.Button({
             text: "clear",
             tooltip: "Clear logs view",
