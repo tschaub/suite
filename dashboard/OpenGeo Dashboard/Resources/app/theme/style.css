@@ -54,7 +54,7 @@ a.app-disabled:hover {
     font-family: Optima,Helvetica,Arial,sans-serif;
     font-size: 18px;
     font-weight: 600;
-    margin: 0 0 12px;
+    margin: 12px 0 8px;
 }
 .dash-panel-body h3,
 .dash-panel-body h4 {
