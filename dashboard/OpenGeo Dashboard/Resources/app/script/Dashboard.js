@@ -591,42 +591,32 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 cls: "app-panels-control-msg"
             }
         });
-
-        var startButton = new Ext.Button({
-            text: "Start",
-            iconCls: "start-button",
-            cls: "control-button",
-            disabled: !!this.suite.online,
-            handler: function() {
-                this.suite.start();
+        
+        var controlButton = new Ext.Button({
+            text: !!this.suite.online ? "Shutdown" : "Start",
+            enableToggle: true,
+            iconCls: "control-button",
+            pressed: !!this.suite.online,
+            handler: function(btn) {
+                if (btn.pressed) {
+                    controlButton.setText("Shutdown");
+                    this.suite.start();                        
+                } else {
+                    controlButton.setText("Start");
+                    this.suite.stop();                        
+                }
             },
             scope: this
-        });
-        this.suite.on({
-            started: function() {
-                startButton.disable();
-            },
-            stopped: function() {
-                startButton.enable();
-            }
-        });
+        })
 
-        var stopButton = new Ext.Button({
-            text: "Shutdown",
-            iconCls: "stop-button",
-            cls: "control-button",
-            disabled: !this.suite.online,
-            handler: function() {
-                this.suite.stop();
-            },
-            scope: this
-        });
         this.suite.on({
-            stopped: function() {
-                stopButton.disable();
-            },
             started: function() {
-                stopButton.enable();
+                controlButton.toggle(true);
+                controlButton.setText("Shutdown");
+            },
+            stopped: function() {
+                controlButton.toggle(false);
+                controlButton.setText("Start");
             }
         });
 
@@ -643,9 +633,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         html: "<strong>OpenGeo Suite <small>" + this.config["suite_version"] + "</small></strong>"
                     }
                 },
-                {xtype: "spacer", flex: 1},
-                startButton, 
-                stopButton
+                controlButton
             ]
         });
 
