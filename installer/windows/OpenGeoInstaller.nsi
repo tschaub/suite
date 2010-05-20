@@ -1,14 +1,15 @@
 ; OpenGeo Suite Windows installer creation file
 
-; Define your application name
+; Initial definitions
 !define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
-!define VERSION "1.9.0"
-!define LONGVERSION "1.9.0.0" ; must be a.b.c.d
+!define VERSION "1.9-SNAPSHOT"
+!define LONGVERSION "1.9.1.0"
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
-!define SOURCEPATHROOT "..\..\target\opengeosuite-1.0-win"
+!define SOURCEPATHROOT "..\..\target\win"
 !define STARTMENU_FOLDER "${APPNAME}"
 !define UNINSTALLREGPATH "Software\Microsoft\Windows\CurrentVersion\Uninstall"
+
 
 ; Main Install settings
 Name "${APPNAMEANDVERSION}"
@@ -52,6 +53,8 @@ RequestExecutionLevel admin
 !include "defines.nsh" ; For nice UI-file/folder dialogs
 
 
+
+
 ; Might be the same as !define
 Var STARTMENU_FOLDER
 Var Upgrade
@@ -69,16 +72,15 @@ Var OracleCheckBoxPrior
 ;Var SDEPathHWND
 ;Var BrowseSDEHWND
 
-
 ; Version Information (Version tab for EXE properties)
-VIProductVersion ${LONGVERSION}
-VIAddVersionKey ProductName "${APPNAME}"
-VIAddVersionKey CompanyName "OpenGeo"
-VIAddVersionKey LegalCopyright "Copyright (c) 2001 - 2010 OpenGeo"
-VIAddVersionKey FileDescription "OpenGeo Suite Installer"
-VIAddVersionKey ProductVersion "${VERSION}"
-VIAddVersionKey FileVersion "${VERSION}"
-VIAddVersionKey Comments "http://opengeo.org"
+;VIProductVersion ${LONGVERSION}
+;VIAddVersionKey ProductName "${APPNAME}"
+;VIAddVersionKey CompanyName "OpenGeo"
+;VIAddVersionKey LegalCopyright "Copyright (c) 2001 - 2010 OpenGeo"
+;VIAddVersionKey FileDescription "OpenGeo Suite Installer"
+;VIAddVersionKey ProductVersion "${VERSION}"
+;VIAddVersionKey FileVersion "${VERSION}"
+;VIAddVersionKey Comments "http://opengeo.org"
 
 ; Page headers for pages
 ;LangString TEXT_ARCSDE_TITLE ${LANG_ENGLISH} "ArcSDE Libraries"
@@ -89,12 +91,12 @@ LangString TEXT_READY_TITLE ${LANG_ENGLISH} "Ready to Install"
 LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be installed."
 
 ; Interface Settings
-!define MUI_ICON "opengeo.ico"
-!define MUI_UNICON "uninstall.ico"
+!define MUI_ICON "icons\opengeo.ico"
+!define MUI_UNICON "icons\uninstall.ico"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_RIGHT
-!define MUI_HEADERIMAGE_BITMAP header.bmp
-!define MUI_WELCOMEFINISHPAGE_BITMAP side_left.bmp
+!define MUI_HEADERIMAGE_BITMAP "graphics\header.bmp"
+!define MUI_WELCOMEFINISHPAGE_BITMAP "graphics\side_left.bmp"
 
 ; Start Menu Folder Page Configuration
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKLM" 
@@ -105,9 +107,16 @@ LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be ins
 !define MUI_ABORTWARNING
 
 ; Optional welcome text here
-!define MUI_WELCOMEPAGE_TEXT "Welcome to the OpenGeo Suite.\r\n\r\n\
-                              We recommend that you close all other applications before starting Setup.\r\n\r\n\
-	                          Click Next to continue."
+!define MUI_WELCOMEPAGE_TEXT  "Thank you for choosing the OpenGeo Suite.\r\n\r\n\
+                               The OpenGeo Suite provides a complete package for building \
+                               geospatial web applications.\r\n\r\n\
+                               Built from the best open source geospatial software available \
+                               today, the OpenGeo Suite is a complete and fully integrated \
+                               web mapping solution.\r\n\r\n\
+                               This installer will now guide you through the installation process. \
+                               We recommend that you close all other applications before starting \
+                               Setup.\r\n\r\n\
+	                           Click Next to continue."
 
 ; What to do when done
 !define MUI_FINISHPAGE_RUN
@@ -136,6 +145,9 @@ FunctionEnd
 
 ; Install Page order
 ; This is the main list of installer pages
+
+
+
 !insertmacro MUI_PAGE_WELCOME                                 ; Hello
 Page custom CheckUserType                                     ; Die if not admin
 Page custom PriorInstall                                      ; Check to see if previously installed
@@ -168,15 +180,14 @@ Page custom Ready
 Function .onInit
 
   ; Init vars
-  StrCpy $SDECheckBoxPrior 0
-  StrCpy $OracleCheckBoxPrior 0
+  ;StrCpy $SDECheckBoxPrior 0
+  ;StrCpy $OracleCheckBoxPrior 0
 
   IfSilent SilentSkip
 
-
   ; Splash screen
   SetOutPath $TEMP
-  File /oname=spltmp.bmp "splash.bmp" ; transparent splash
+  File /oname=spltmp.bmp "graphics\splash.bmp" ; transparent splash
   advsplash::show 2500 500 500 0xEC008C $TEMP\spltmp
   ;advsplash::show Delay FadeIn FadeOut KeyColor FileName
   Pop $0 ; '1' if the user closed the splash screen early
@@ -184,8 +195,20 @@ Function .onInit
          ; '-1' if some error occurred.
   Delete $TEMP\spltmp.bmp
 
-  SilentSkip:
+  ; Get ${VERSION} number from version.ini
+  ;ClearErrors
+  ;FileOpen $0 "${SOURCEPATHROOT}\version.ini" r
+  ;FileRead $0 $1 ; we read until the end of line 
+  ;FileClose $0 ; and close the file
+  ;StrLen $2 $1 ; find length of string
+  ;IntOp $3 14 - $2 ; "suite_version=" is 14 chars, output is length of everything but that
+  ;StrCpy $4 $1 "" $3 ; trim the "suite_version=" from the string
+  ;StrCpy $Version $4 ; This is the version number
+  ;StrCpy $5 $4 3 ; grab only the a.b portion
+  ;StrCpy $6 "$5.0.0"
+  ;!define LONGVERSION $6 ; a.b.0.0
 
+  SilentSkip:
 
 FunctionEnd
 
@@ -465,7 +488,7 @@ SectionEnd
   ; This section removes files from 1.0 or 1.0r1 install, before continuing
 Section "-Upgrade" SectionUpgrade1.0 ; dash = hidden
 
-  !insertmacro DisplayImage "slide_1_suite.bmp"
+  !insertmacro DisplayImage "graphics\slide_1_suite.bmp"
 
   StrCmp $Upgrade "Clean" Skip
   
@@ -507,7 +530,7 @@ Section "-Jetty" SectionJetty ; dash = hidden
   SectionIn RO  ; Mandatory
   SetOverwrite on ; Set Section properties
 
-  !insertmacro DisplayImage "slide_1_suite.bmp"
+  !insertmacro DisplayImage "graphics\slide_1_suite.bmp"
 
   SetOutPath "$INSTDIR"
   File /a "${SOURCEPATHROOT}\*.jar" ; custom startup jars
@@ -529,8 +552,8 @@ Section "-Jetty" SectionJetty ; dash = hidden
   CreateDirectory "$INSTDIR\webapps"
   CreateDirectory "$INSTDIR\icons"
   SetOutPath "$INSTDIR\icons"
-  File /a opengeo.ico
-  File /a uninstall.ico
+  File /a "icons\opengeo.ico"
+  File /a "icons\uninstall.ico"
  
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
 
@@ -549,20 +572,32 @@ Section "PostGIS" SectionPostGIS
   SectionIn RO  ; Mandatory
   SetOverwrite on ; Set Section properties
 
-  !insertmacro DisplayImage "slide_2_postgis.bmp"
+  !insertmacro DisplayImage "graphics\slide_2_postgis.bmp"
   SetOutPath "$INSTDIR"
   ; The main binaries
-  File /r  "${SOURCEPATHROOT}\pgsql"
+  File /r /x plugins.ini "${SOURCEPATHROOT}\pgsql"
 
   ; Our custom scripts to start/stop
   SetOutPath "$INSTDIR\bin"
-  File /a postgis.cmd
-  File /a pg_*.cmd
+  File /a "scripts\postgis.cmd"
+  File /a "scripts\pg_*.cmd"
+
+  SetOutPath "$INSTDIR\pgsql\8.4\pgAdmin III"
+  File /a "..\common\postgis\plugins.ini" ; Adds the link to shp2pgsql-gui
+  File /a "..\common\postgis\settings.ini" ; Adds the default entry in PgAdmin
+
+  SetOutPath "$INSTDIR\icons"
+  File /a "icons\postgis.ico"
+
+  CreateDirectory "$INSTDIR\pgsql\8.4\pgAdmin III\branding"
+  SetOutPath "$INSTDIR\pgsql\8.4\pgAdmin III\branding"
+  File /a "..\common\postgis\branding.ini" ; Adds the custom splash
+  File /a "..\common\postgis\pgadmin_splash.gif" ; Ditto
 
   ; Shortcuts
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Manage PostGIS.lnk" \
-                 "$INSTDIR\pgsql\8.4\bin\pgAdmin3.exe"
-
+                 "$INSTDIR\pgsql\8.4\bin\pgAdmin3.exe" \
+                 "" "$INSTDIR\icons\postgis.ico" 0
 
 SectionEnd
 
@@ -573,7 +608,7 @@ Section "GeoServer" SectionGS
   SectionIn RO  ; Makes this install mandatory
   SetOverwrite on  
 
-  !insertmacro DisplayImage "slide_3_geoserver.bmp"
+  !insertmacro DisplayImage "graphics\slide_3_geoserver.bmp"
 
   ; Copy GeoServer
   SetOutPath "$INSTDIR\webapps"
@@ -597,7 +632,7 @@ Section "GeoWebCache" SectionGWC
   SetOverwrite on
 
   ; Too Short to display graphic
-  ; !insertmacro DisplayImage "slide_4_gwc.bmp"
+  ; !insertmacro DisplayImage "graphics\slide_4_gwc.bmp"
 
   ; Yes, this is a fake section.
 
@@ -608,7 +643,7 @@ Section "GeoExplorer" SectionGX
   SectionIn RO ; mandatory
   SetOverwrite on
 
-  !insertmacro DisplayImage "slide_6_geoext.bmp"
+  !insertmacro DisplayImage "graphics\slide_5_ol.bmp"
 
   SetOutPath "$INSTDIR\webapps\"
   File /r "${SOURCEPATHROOT}\webapps\geoexplorer"
@@ -621,7 +656,7 @@ Section "Styler" SectionStyler
   SectionIn RO ; mandatory
   SetOverwrite on
 
-  !insertmacro DisplayImage "slide_6_geoext.bmp"
+  !insertmacro DisplayImage "graphics\slide_6_geoext.bmp"
 
   SetOutPath "$INSTDIR\webapps\"
   File /r "${SOURCEPATHROOT}\webapps\styler"
@@ -633,7 +668,7 @@ Section "GeoEditor" SectionGE
   SectionIn RO ; mandatory
   SetOverwrite on
 
-  !insertmacro DisplayImage "slide_6_geoext.bmp"
+  !insertmacro DisplayImage "graphics\slide_6_geoext.bmp"
 
   SetOutPath "$INSTDIR\webapps\"
   File /r "${SOURCEPATHROOT}\webapps\geoeditor"
@@ -704,14 +739,14 @@ Section "Documentation" SectionDocs
   SetOverwrite on
 
   ; yes this isn't the GWC section, but it's a good place for GWC to go
-  !insertmacro DisplayImage "slide_4_gwc.bmp"
+  !insertmacro DisplayImage "graphics\slide_4_gwc.bmp"
 
   SetOutPath "$INSTDIR\icons"
-  File /a geoserver.ico
-  File /a geoexplorer.ico
-  File /a styler.ico
-  File /a geowebcache.ico
-  ;File /a documentation.ico
+  File /a "icons\geoserver.ico"
+  File /a "icons\geoexplorer.ico"
+  File /a "icons\styler.ico"
+  File /a "icons\geowebcache.ico"
+  ;File /a "icons\documentation.ico"
   
   SetOutPath "$INSTDIR\webapps"
 
@@ -744,7 +779,7 @@ Section "Recipes" SectionRecipes
   SectionIn RO ; mandatory
   SetOverwrite on
 
-  !insertmacro DisplayImage "slide_1_suite.bmp"
+  !insertmacro DisplayImage "graphics\slide_1_suite.bmp"
 
   SetOutPath "$INSTDIR\webapps"
   File /r "${SOURCEPATHROOT}\webapps\recipes"
@@ -756,7 +791,7 @@ Section "-Dashboard" SectionDashboard ;dash means hidden
   SectionIn RO  ; Makes this install mandatory
   SetOverwrite on
  
-  !insertmacro DisplayImage "slide_1_suite.bmp"
+  !insertmacro DisplayImage "graphics\slide_1_suite.bmp"
 
   SetOutPath "$INSTDIR"
   ;File /r /x config.ini "${SOURCEPATHROOT}\dashboard"
@@ -796,7 +831,7 @@ Section "-Dashboard" SectionDashboard ;dash means hidden
 
   ; Titanium requirement for MSVCRT, this is unfortunate
   SetOutPath "$INSTDIR\dashboard"
-  File /a vcredist_x86.exe
+  File /a "misc\vcredist_x86.exe"
   ExecWait '"$INSTDIR\dashboard\vcredist_x86.exe" /q'
 
 SectionEnd
@@ -807,8 +842,8 @@ Section "-StartStop" SectionStartStop
   ; Create Start/Stop shortcuts
 
   SetOutPath "$INSTDIR\icons"
-  File /a opengeo-start.ico
-  File /a opengeo-stop.ico
+  File /a "icons\opengeo-start.ico"
+  File /a "icons\opengeo-stop.ico"
 
   SetOutPath "$INSTDIR"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Start OpenGeo Suite.lnk" \
@@ -829,6 +864,9 @@ Section "-Misc" SectionMisc
   ; Changelog
   SetOutPath $INSTDIR
   File /a ..\common\changelog.txt
+
+  ; version.ini
+  File /a "${SOURCEPATHROOT}\version.ini"
 
 SectionEnd
 
