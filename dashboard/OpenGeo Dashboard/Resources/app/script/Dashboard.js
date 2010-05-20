@@ -648,7 +648,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         var refreshButton = new Ext.Button({
             text: "refresh",
             iconCls: "refresh-button",
-            cls: "control-button",
             handler: function() {
                  this.refreshLog();
             }, 
@@ -667,7 +666,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             text: "clear",
             tooltip: "Clear logs view",
             iconCls: "delete-button",
-            cls: "control-button",
             handler: function() {
                 this.clearLog();
             }, 
@@ -678,7 +676,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             text: "open",
             tooltip: "Open logs with default system viewer",
             iconCls: "view-button",
-            cls: "control-button",
             handler: function() {
                 this.openLog();
             }, 
