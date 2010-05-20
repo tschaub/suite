@@ -76,8 +76,8 @@
             <phase>compile</phase>
             <configuration>
               <tasks>
-                <mkdir dir="${build.directory}/dashboard"/>
-                <copy todir="${build.directory}/dashboard">
+                <mkdir dir="${build.directory}/resources"/>
+                <copy todir="${build.directory}/resources">
                   <fileset dir="${basedir}/OpenGeo Dashboard/Resources" includes="**/*"/>
                   <filterset>
                     <filter token="SUITE_VERSION" value="${project.version}"/>
@@ -86,7 +86,7 @@
                   </filterset>
                 </copy>
                 <mkdir dir="../target"/>
-                <copy file="${build.directory}/dashboard/version.ini" tofile="../target/version.ini"/>
+                <copy file="${build.directory}/resources/version.ini" tofile="../target/version.ini"/>
               </tasks>
             </configuration>
             <goals>

@@ -38,7 +38,7 @@
         <arg value="dashboard-1.0.0-osx.zip"/>
     </exec>
     <copy todir="dashboard-1.0.0-osx/OpenGeo Dashboard.app/Contents/Resources">
-        <fileset dir="../dashboard/OpenGeo Dashboard/Resources">
+        <fileset dir="../dashboard/target/resources">
             <exclude name="**/.svn/"/>
             <exclude name="**/.svn*"/>
         </fileset>
@@ -55,7 +55,7 @@
         <arg value="dashboard-1.0.0-linux.zip"/>
     </exec>
     <copy todir="dashboard-1.0.0-linux/OpenGeo Dashboard/Resources">
-        <fileset dir="../dashboard/OpenGeo Dashboard/Resources">
+        <fileset dir="../dashboard/target/resources">
             <exclude name="**/.svn/"/>
             <exclude name="**/.svn*"/>
         </fileset>
@@ -73,7 +73,7 @@
         <arg value="dashboard-1.0.0-win32.zip"/>
     </exec>
     <copy todir="dashboard-1.0.0-win32/OpenGeo Dashboard/Resources">
-        <fileset dir="../dashboard/OpenGeo Dashboard/Resources">
+        <fileset dir="../dashboard/target/resources">
             <exclude name="**/.svn/"/>
             <exclude name="**/.svn*"/>
         </fileset>
