@@ -700,11 +700,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
      */
     refreshLog: function() {
 
-        if (!this.refreshingLogDialog) {
-            this.refreshingLogDialog = this.createWorkingDialog("Refreshing logs");
-        }
-        this.refreshingLogDialog.show();
-        
         //start a worker to read the log
         og.util.tirun(function() {
             var worker = Titanium.Worker.createWorker("app/script/log.js");
@@ -713,7 +708,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 var area = self.logTextArea;
                 area.setValue(e.message);
                 area.el.dom.scrollTop = area.el.dom.scrollHeight
-                self.refreshingLogDialog.hide();
                 worker.terminate();
             }
             worker.start();
