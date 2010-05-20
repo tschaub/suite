@@ -9,14 +9,14 @@ function readBuffer(file) {
     file = Titanium.Filesystem.getFileStream(file.nativePath());
     if (file.open(Titanium.Filesystem.MODE_READ) == true) {
         var line = file.readLine();
-        while(line != null && buf.length < 1000) {
+        while(line !== null && buf.length < 1000) {
             buf.push(line);
             line = file.readLine();
         }
     
         //if we still have lines to read means the queue is full
-        while(line != null) {
-            buf.pop();
+        while(line !== null) {
+            buf.shift();
             buf.push(line);
             line = file.readLine();
         }
