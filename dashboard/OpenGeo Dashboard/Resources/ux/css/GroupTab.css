@@ -265,7 +265,7 @@
 .x-tab-panel-left ul.x-grouptabs-strip,
 .x-tab-panel-right ul.x-grouptabs-strip {
 /* Bump down tab start position */
-  margin-top: 48px;
+  margin-top: 46px;
 }
 
 .x-grouptabs-panel ul.x-grouptabs-strip>li {

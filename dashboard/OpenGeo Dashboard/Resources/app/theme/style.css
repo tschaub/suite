@@ -30,7 +30,7 @@ a.app-disabled:hover {
 }
 
 .dash-panel-body {
-    padding: 15px 15px 10px;
+    padding: 16px 14px 10px;
 }
 
 .dash-panel-body h1,
@@ -116,6 +116,7 @@ a.app-disabled:hover {
     border-collapse: collapse;
     margin-bottom: 20px;
     width: 100%;
+    border-bottom: 1px solid #DEE6F5;
 }
 .dash-panel-table th {
     padding: 8px;
@@ -273,6 +274,7 @@ ul.quick-links {
     background: -webkit-gradient(linear, left top, left bottom, from(#CCC), to(#999));
     background: -moz-linear-gradient(top, #CCC, #999);
     -webkit-border-top-right-radius: 8px;
+    -webkit-border-top-left-radius: 8px;
     -moz-border-radius-topright: 8px;
     -moz-border-radius-topleft: 8px;
     padding: 10px 15px;
