@@ -2,7 +2,7 @@
  * worker whose job is to read the opengeo server log.
  */
 
-readbuffer = function(file) {
+function readBuffer(file) {
     //only read the last 1000 elements
     var buf = [];
     
@@ -28,7 +28,7 @@ readbuffer = function(file) {
     }
 }
 
-readoffset = function(file) {
+function readOffset(file) {
      var offset = file.size() - 100*1024;
      var buf = [];
      var count = 0;
@@ -54,24 +54,26 @@ readoffset = function(file) {
      }
 }
 
-var fs = Titanium.Filesystem;
-var file = fs.getFile(fs.getResourcesDirectory().toString(), "log");
-var message = null;
-if (file.exists() === true) {
-    var logfile = file.read();
-    
-    if (logfile != null) {
-        file = fs.getFile(logfile.toString());    
-        if (file.exists() === true) {
-            //readoffset(file);
-            message = readbuffer(file);
-        }
+function readFile(path) {
+    var file = Titanium.Filesystem.getFile(path);
+    var message;
+    if (file.exists() === true) {
+        //readOffset(file);
+        message = readBuffer(file);
     }
+
+    if (message == null) {
+        message = "Unable to read log from '" + path + "'.";
+    }
+
+    postMessage(message);    
 }
 
-if (message == null) {
-    message = "Unable to read log";
-}
-
-postMessage(message);
-
+// handler for messages to worker
+onmessage = function(evt) {
+    if (evt.message.path) {
+        readFile(evt.message.path);
+    } else {
+        postMessage("bad message to log read worker");
+    }
+};

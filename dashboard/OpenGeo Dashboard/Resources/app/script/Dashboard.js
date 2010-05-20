@@ -665,7 +665,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         });
         
         var refreshButton = new Ext.Button({
-            text: "",
+            text: "refresh",
             iconCls: "refresh-button",
             cls: "control-button",
             handler: function() {
@@ -683,7 +683,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         }
         
         var clearButton = new Ext.Button({
-            text: "",
+            text: "clear",
             tooltip: "Clear logs view",
             iconCls: "delete-button",
             cls: "control-button",
@@ -694,7 +694,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         });
         
         var viewButton = new Ext.Button({
-            text: "",
+            text: "open",
             tooltip: "Open logs with default system viewer",
             iconCls: "view-button",
             cls: "control-button",
@@ -742,18 +742,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
      * displaying the contents in the log view text area.
      */
     refreshLog: function() {
-        //this is a hack, i don't see any good way to pass parameters into a worker
-        // so that it can run without blocking the main user interface thread
-        // so we write out a file that contains the location of the log file, then 
-        // the worker looks for this file and reads the location of the log file
-        og.util.tirun(function() {
-            var fs = Titanium.Filesystem;
-            var f = fs.getFile(fs.getResourcesDirectory().toString(), "log");
-            if (f.exists() === false) {
-                f.write(this.suite.getLogFile());
-            }
-        }, this);
-        
+
         if (!this.refreshingLogDialog) {
             this.refreshingLogDialog = this.createWorkingDialog("Refreshing logs");
         }
@@ -769,7 +758,9 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 worker.terminate();
             }
             worker.start();
+            worker.postMessage({path: this.suite.getLogFile()});
         }, this);
+
     }, 
     
     /**
