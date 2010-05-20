@@ -112,7 +112,7 @@ if [ -d "./binaries/root/OpenGeo Dashboard" ]; then
 fi
 unzip -q -o binaries/dashboard.zip -d binaries/suite
 checkrv $? "Dashboard unzip"
-touch "./binaries/root/OpenGeo Dashboard/.installed"
+touch "./binaries/suite/OpenGeo Dashboard/.installed"
 pushd binaries/suite
 NAME=`ls`
 tar cfz "../root/${NAME}.tar.gz" *
