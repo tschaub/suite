@@ -99,6 +99,9 @@ a.app-disabled:hover {
 .dash-panel-content-item.styler {
     background: url(img/styler_sm.png) no-repeat;
 }
+.dash-panel-content-item.geoeditor {
+    background: url(img/geoeditor-sm.png) no-repeat;
+}
 .dash-panel-content-item.geowebcache {
     background: url(img/geowebcache_sm.png) no-repeat;
 }
