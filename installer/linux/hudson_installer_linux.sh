@@ -131,6 +131,7 @@ cp binaries/${EXTFILE} binaries/root
 # Copy in some useful files
 #
 cp ../common/license.txt binaries/root
+cp ./install.sh binaries/root
 
 #
 # Build installer script
