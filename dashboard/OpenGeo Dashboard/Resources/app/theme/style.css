@@ -49,15 +49,15 @@ a.app-disabled:hover {
     font-weight: normal;
 }
 .dash-panel-body h2,
-.dash-panel-body h3,
-.dash-panel-body h4 {
+.dash-panel-body h3 {
     color: #486300;
     font-family: Optima,Helvetica,Arial,sans-serif;
     font-size: 18px;
     font-weight: 600;
     margin: 0 0 12px;
 }
-.dash-panel-body h3 {
+.dash-panel-body h3,
+.dash-panel-body h4 {
     font-family: Helvetica,Arial,sans-serif;
     color: #6C9400;
     font-size: 14px;
