@@ -715,8 +715,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     xtype: "box",
                     cls: "dash-panel-content",
                     autoEl: {
-                        tag: "div",
-                        html: "<h1>Logs</h1>",
+                        tag: "div"
                     }
                 }]
             }, 
@@ -753,7 +752,9 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             var worker = Titanium.Worker.createWorker("app/script/log.js");
             var self = this;
             worker.onmessage = function(e) {
-                self.logTextArea.el.dom.innerHTML = e.message;
+                var area = self.logTextArea;
+                area.setValue(e.message);
+                area.el.dom.scrollTop = area.el.dom.scrollHeight
                 self.refreshingLogDialog.hide();
                 worker.terminate();
             }
@@ -794,7 +795,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
      * Clears the log view by clearing the contents of teh log view text area.
      */
     clearLog: function() {
-        this.logTextArea.el.dom.innerHTML = "";
+        this.logTextArea.setValue("");
     }, 
     
     /** private method[updateOnlineLinks]
