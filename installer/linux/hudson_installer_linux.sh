@@ -135,7 +135,7 @@ cp ../common/license.txt binaries/root
 #
 # Build installer script
 #
-makeself-2.1.5/makeself.sh binaries/root OpenGeoSuite-bin "OpenGeo Suite" ./install.sh
+makeself-2.1.5/makeself.sh ./binaries/root OpenGeoSuite.bin "OpenGeo Suite" ./install.sh
 
 exit
 
