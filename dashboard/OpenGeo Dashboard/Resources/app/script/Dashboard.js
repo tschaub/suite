@@ -290,6 +290,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         if (this.getPreferences("helpOnStart")) {
             this.showStartHelp();
         }
+        og.util.tirun(this.initStatsCollector, this, Ext.emptyFn);
 
     },
     
@@ -702,7 +703,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
 
         //start a worker to read the log
         og.util.tirun(function() {
-            var worker = Titanium.Worker.createWorker("app/script/log.js");
+            var worker = Titanium.Worker.createWorker("app/script/workers/log.js");
             var self = this;
             worker.onmessage = function(e) {
                 var area = self.logTextArea;
@@ -715,6 +716,54 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         }, this);
 
     }, 
+    
+    /** private: method[initStatsCollector]
+     *
+     *  Initialize the stats collection worker.
+     */
+    initStatsCollector: function() {
+        
+        var worker = Titanium.Worker.createWorker("app/script/workers/stats.js");
+        var self = this;
+        
+        worker.onmessage = function(e) {
+            console.log("posted", e);
+            if (e.message && e.message.stats) {
+                self.updateStats(e.message.stats);
+            }
+        }
+        worker.start();
+        
+        var timer;
+        var startCollecting = function() {
+            timer = window.setInterval(function() {
+                worker.postMessage({
+                    collect: true,
+                    config: self.config
+                });
+            }, 5000);
+        };
+        var stopCollecting = function() {
+            window.clearInterval(timer);
+        };
+        
+        this.suite.on({
+            started: startCollecting,
+            stopping: stopCollecting
+        });
+        
+        if (this.suite.online) {
+            startCollecting();
+        }
+        
+    },
+    
+    updateStats: function(stats) {
+        var layerCountEls = Ext.select(".app-stats-layers");
+        layerCountEls.each(function(el) {
+            el.dom.innerHTML = stats.layers || "?"
+        });
+    },
     
     /**
      * api: method[openLog]

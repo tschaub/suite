@@ -77,6 +77,9 @@ og.Suite = Ext.extend(Ext.util.Observable, {
             started: function() {
                 this.online = true;
             },
+            stopping: function() {
+                this.online = false;
+            },
             stopped: function() {
                 this.online = false;
             }, 
