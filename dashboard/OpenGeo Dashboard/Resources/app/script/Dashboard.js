@@ -247,7 +247,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         listeners: dashPanelListeners
                     },
                     items: [{
-                        title: "Help",
+                        title: "Documentation",
                         tabTip: "Help",
                         cls: "dash-panel",
                         id: "app-panels-help-main",
