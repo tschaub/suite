@@ -741,7 +741,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     collect: true,
                     config: self.config
                 });
-            }, 5000);
+            }, 10000);
         };
         var stopCollecting = function() {
             window.clearInterval(timer);
