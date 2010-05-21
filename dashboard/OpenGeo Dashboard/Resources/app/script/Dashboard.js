@@ -727,7 +727,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         var self = this;
         
         worker.onmessage = function(e) {
-            console.log("posted", e);
             if (e.message && e.message.stats) {
                 self.updateStats(e.message.stats);
             }
@@ -736,6 +735,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         
         var timer;
         var startCollecting = function() {
+            worker.postMessage({collect: true, config: self.config});
             timer = window.setInterval(function() {
                 worker.postMessage({
                     collect: true,
@@ -759,10 +759,23 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
     },
     
     updateStats: function(stats) {
-        var layerCountEls = Ext.select(".app-stats-layers");
-        layerCountEls.each(function(el) {
-            el.dom.innerHTML = stats.layers || "?"
+
+        var layerEls = Ext.select(".app-stats-layers");
+        layerEls.each(function(el) {
+            el.dom.innerHTML = stats.layers || "0"
         });
+
+        var mapEls = Ext.select(".app-stats-maps");
+        mapEls.each(function(el) {
+            el.dom.innerHTML = stats.maps || "0"
+        });
+
+        var storeEls = Ext.select(".app-stats-stores");
+        storeEls.each(function(el) {
+            el.dom.innerHTML = stats.stores || "0"
+        });
+
+
     },
     
     /**

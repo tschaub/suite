@@ -6,15 +6,17 @@ onmessage = function(e) {
     }
 };
 
-function getGSResource(url, username, password) {
+function getResource(url, username, password) {
 
     var client = Titanium.Network.createHTTPClient();
     
     client.open("GET", url, false);
-    client.setRequestHeader(
-        "Authorization", 
-        createAuthHeader(username, password)
-    );
+    if (username && password) {
+        client.setRequestHeader(
+            "Authorization", 
+            createAuthHeader(username, password)
+        );
+    }
     client.send(null);
     
     var resource = null;
@@ -28,23 +30,61 @@ function getGSResource(url, username, password) {
 
 }
 
-function getLayerCount(config) {
-    
-    var url = "http://" + config["suite_host"] + ":" + config["suite_port"] + "/geoserver/rest/layers.json";
-    var resource = getGSResource(
+function getWorkspaces(config) {
+    var url = "http://" + config["suite_host"] + ":" + config["suite_port"] + "/geoserver/rest/workspaces.json";
+    var resource = getResource(
         url, config["geoserver_username"], config["geoserver_password"]
     );
-    
-    return resource && resource.layers.layer.length;
-    
+    var workspaces = {};
+    if (resource && resource.workspaces) {
+        var list = resource.workspaces.workspace;
+        for (var i=0, ii=list.length; i<ii; ++i) {
+            workspaces[list[i].name] = list[i].href;
+        }
+    }
+    return workspaces;
 }
 
-function collectStats(config) {
-    
+function getStoreCount(config) {
+    var workspaces = getWorkspaces(config);
+    var username = config["geoserver_username"];
+    var password = config["geoserver_password"];
+    var base = "http://" + config["suite_host"] + ":" + config["suite_port"] + "/geoserver/rest/workspaces/";
+    var resource, count = 0;
+    for (var name in workspaces) {
+        resource = getResource(base + name + "/datastores.json", username, password);
+        if (resource && resource.dataStores && resource.dataStores.dataStore) {
+            count += resource.dataStores.dataStore.length;
+        }
+        resource = getResource(base + name + "/coveragestores.json", username, password);
+        if (resource && resource.coverageStores && resource.coverageStores.coverageStore) {
+            count += resource.coverageStores.coverageStore.length;
+        }
+    }
+    return count;
+}
+
+function getLayerCount(config) {
+    var url = "http://" + config["suite_host"] + ":" + config["suite_port"] + "/geoserver/rest/layers.json";
+    var resource = getResource(
+        url, config["geoserver_username"], config["geoserver_password"]
+    );
+    return resource && resource.layers.layer.length;
+}
+
+function getMapCount(config) {
+    var resource = getResource(
+        "http://" + config["suite_host"] + ":" + config["suite_port"] + "/geoexplorer/maps"
+    );
+    return resource && resource.ids.length;
+}
+
+function collectStats(config) {    
     var stats = {
-        layers: getLayerCount(config)
+        stores: getStoreCount(config),
+        layers: getLayerCount(config),
+        maps: getMapCount(config)
     };
-    
     postMessage({stats: stats});
 }
 
