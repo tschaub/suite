@@ -44,6 +44,14 @@ public class Start {
             int port = parsePort(portVariable);
             if(port <= 0)
             	port = 8080;
+            
+            //check for GEOSERVER_DATA_DIR
+            String gdd = System.getProperty("GEOSERVER_DATA_DIR");
+            if (gdd == null) {
+                gdd = new File("../../../data_dir").getCanonicalPath();
+                System.setProperty("GEOSERVER_DATA_DIR", gdd);
+            }
+            
             conn.setPort(port);
             conn.setThreadPool(tp);
             conn.setAcceptQueueSize(100);
