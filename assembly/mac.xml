@@ -41,6 +41,17 @@
       </excludes>
     </fileSet>
     <fileSet>
+      <directory>docs/install/mac/target/html</directory>
+      <outputDirectory>docs/install/html</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>docs/install/mac/target/latex</directory>
+      <outputDirectory>docs/install/pdf</outputDirectory>
+      <includes>
+        <include>*.pdf</include>
+      </includes>
+    </fileSet>
+    <fileSet>
       <directory>docs/gettingstarted/target/html</directory>
       <outputDirectory>webapps/docs/gettingstarted</outputDirectory>
     </fileSet>

@@ -49,8 +49,15 @@
       </includes>
     </fileSet>
     <fileSet>
-      <directory>docs/install/target/html</directory>
-      <outputDirectory>docs/install</outputDirectory>
+      <directory>docs/install/windows/target/latex</directory>
+      <outputDirectory>docs/install/pdf</outputDirectory>
+      <includes>
+         <include>*.pdf</include> 
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>docs/install/windows/target/html</directory>
+      <outputDirectory>docs/install/html</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>docs/gettingstarted/target/html</directory>

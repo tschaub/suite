@@ -38,9 +38,9 @@
             <phase>compile</phase>
             <configuration>
               <tasks>
-                <exec executable="sphinx-build" failonerror="true" dir="${basedir}/source">
-                  <arg line="-b html -d ${build.directory}/doctrees . ${build.directory}/html"/>
-                </exec>
+                <ant antfile="../build.xml" dir="${basedir}">
+                  <property name="build.directory" value="${build.directory}"/>
+                </ant>
               </tasks>
             </configuration>
             <goals>
