@@ -85,35 +85,43 @@ a.app-disabled:hover {
 
 /* COMPONENTS PAGE ITEMS */
 .dash-panel-content-item {
-    margin: 10px 0 20px;
-    padding-left: 65px;
+    margin: 10px 0;
+    padding: 10px 0 0 65px;
     min-height: 55px;
     position: relative;
+    border-top: 1px solid #EEE;
+    background-repeat: no-repeat;
+    background-position: left 10px;
+}
+.dash-panel-content-item h2 {
+    margin-top: 0;
+}
+.dash-panel-content-item p {
+    width: 33em;
 }
 .dash-panel-content-item.geoserver {
-    background: url(img/geoserver-sm.png) no-repeat;
+    background-image: url(img/geoserver-sm.png);
 }
 .dash-panel-content-item.geoexplorer {
-    background: url(img/geoexplorer-sm.png) no-repeat;
+    background-image: url(img/geoexplorer-sm.png);
 }
 .dash-panel-content-item.styler {
-    background: url(img/styler_sm.png) no-repeat;
+    background-image: url(img/styler_sm.png);
 }
 .dash-panel-content-item.geoeditor {
-    background: url(img/geoeditor-sm.png) no-repeat;
+    background-image: url(img/geoeditor-sm.png);
 }
 .dash-panel-content-item.geowebcache {
-    background: url(img/geowebcache_sm.png) no-repeat;
+    background-image: url(img/geowebcache_sm.png);
 }
 .dash-panel-content-item.postgis {
-    background: url(img/postgis_sm.png) no-repeat;
+    background-image: url(img/postgis_sm.png);
 }
 .dash-panel-content-item ul.quick-links {
     position: absolute;
-    top: 4px;
+    top: 8px;
     right: 0;
 }
-
 
 /* AT A GLANCE TABLE */
 .dash-panel-table {
@@ -149,27 +157,33 @@ a.app-disabled:hover {
 td.dash-panel-table-primary {
     width: 35%;
 }
-td.dash-panel-table-primary.geoexplorer a {
+td.dash-panel-table-primary.geoexplorer a,
+td.dash-panel-table-primary.geoexplorer span.icon {
     background: url(img/geoexplorer-16.png) no-repeat left top;
     padding-left: 20px;
 }
-td.dash-panel-table-primary.styler a {
+td.dash-panel-table-primary.styler a,
+td.dash-panel-table-primary.styler span.icon {
     background: url(img/styler-16.png) no-repeat left top;
     padding-left: 20px;
 }
-td.dash-panel-table-primary.geoeditor a {
+td.dash-panel-table-primary.geoeditor a,
+td.dash-panel-table-primary.geoeditor span.icon {
     background: url(img/geoeditor-16.png) no-repeat left top;
     padding-left: 20px;
 }
-td.dash-panel-table-primary.geowebcache a {
+td.dash-panel-table-primary.geowebcache a,
+td.dash-panel-table-primary.geowebcache span.icon {
     background: url(img/geowebcache-ent-16.png) no-repeat left top;
     padding-left: 20px;
 }
-td.dash-panel-table-primary.geoserver a {
+td.dash-panel-table-primary.geoserver a,
+td.dash-panel-table-primary.geoserver span.icon {
     background: url(img/geoserver-ent-16.png) no-repeat left top;
     padding-left: 20px;
 }
-td.dash-panel-table-primary.postgis a {
+td.dash-panel-table-primary.postgis a,
+td.dash-panel-table-primary.postgis span.icon {
     background: url(img/postgis-ent-16.png) no-repeat left top;
     padding-left: 20px;
 }
