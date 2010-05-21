@@ -333,8 +333,8 @@
   </profiles>
   
  <properties>
-  <gs.version>2.0.2-SNAPSHOT</gs.version>
-  <gt.version>2.6-SNAPSHOT</gt.version>
+  <gs.version>2.0.2</gs.version>
+  <gt.version>2.6.4</gt.version>
   <java.awt.headless>true</java.awt.headless>
   <test.maxHeapSize>512M</test.maxHeapSize>
   <sde.version>9.2</sde.version>
