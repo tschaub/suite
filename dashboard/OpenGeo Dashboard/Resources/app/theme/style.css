@@ -147,7 +147,7 @@ a.app-disabled:hover {
     background-color: #DEE6F5;
 }
 td.dash-panel-table-primary {
-    width: 50%;
+    width: 35%;
 }
 td.dash-panel-table-primary.geoexplorer a {
     background: url(img/geoexplorer-16.png) no-repeat left top;
