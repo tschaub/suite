@@ -588,6 +588,7 @@ Section "PostGIS" SectionPostGIS
 
   SetOutPath "$INSTDIR\icons"
   File /a "icons\postgis.ico"
+  File /a "icons\pgshapeloader.ico"
 
   CreateDirectory "$INSTDIR\pgsql\8.4\pgAdmin III\branding"
   SetOutPath "$INSTDIR\pgsql\8.4\pgAdmin III\branding"
@@ -598,6 +599,10 @@ Section "PostGIS" SectionPostGIS
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Manage PostGIS.lnk" \
                  "$INSTDIR\pgsql\8.4\bin\pgAdmin3.exe" \
                  "" "$INSTDIR\icons\postgis.ico" 0
+
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Convert shapefiles to PostGIS.lnk" \
+                 "$INSTDIR\pgsql\8.4\bin\shp2pgsql-gui.exe" \
+                 "" "$INSTDIR\icons\pgshapeloader.ico" 0
 
 SectionEnd
 
@@ -829,10 +834,16 @@ Section "-Dashboard" SectionDashboard ;dash means hidden
 		         "$INSTDIR\dashboard\OpenGeo Dashboard.exe" \
                  "" "$INSTDIR\icons\opengeo.ico" 0
 
+  ;Create dummy opengeosuite.log file
+  FileOpen $0 "$PROFILE\.opengeo\logs\opengeosuite.log" w
+  FileClose $0
+
   ; Titanium requirement for MSVCRT, this is unfortunate
   SetOutPath "$INSTDIR\dashboard"
   File /a "misc\vcredist_x86.exe"
   ExecWait '"$INSTDIR\dashboard\vcredist_x86.exe" /q'
+
+  
 
 SectionEnd
 
@@ -867,6 +878,9 @@ Section "-Misc" SectionMisc
 
   ; version.ini
   File /a "${SOURCEPATHROOT}\version.ini"
+
+  ; Add README
+  File /a "${SOURCEPATHROOT}\docs\pdf\*.pdf"
 
 SectionEnd
 
