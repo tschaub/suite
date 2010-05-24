@@ -880,7 +880,7 @@ Section "-Misc" SectionMisc
   File /a "${SOURCEPATHROOT}\version.ini"
 
   ; Add README
-  File /a "${SOURCEPATHROOT}\docs\pdf\*.pdf"
+  File /a "${SOURCEPATHROOT}\docs\install\pdf\*.pdf"
 
 SectionEnd
 
