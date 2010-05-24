@@ -9,9 +9,7 @@ This section will guide you through the process of loading data to a finished ma
    :maxdepth: 2
 
    load.rst
-   inspect.rst
    import.rst
    edit.rst
    style.rst
-   compose.rst
-   publish.rst
+   create.rst

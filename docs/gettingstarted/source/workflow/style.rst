@@ -1,14 +1,13 @@
 .. _workflow.style:
 
-Step 5: Style Your Layers
+Step 4: Style Your Layers
 =========================
 
-.. note:: This section is optional, although recommended.  If you don't wish to edit any layer styles, you can skip to the next section, :ref:`workflow.compose`.
+.. note:: This section is also optional, although recommended.  If you don't wish to edit any layer styles, you can skip to the next section, :ref:`workflow.create`.
 
-When data was imported via the Layer Importer, a distinct style was generated for each layer.  To alter and improve the styling of your layers, use the **Styler** application.
+When data was imported via the **Layer Importer** in GeoServer (see :ref:`workflow.import`), a unique style was generated for each layer.  To alter and improve the styling of your layers, use the **Styler** application.
 
 These example instructions will change the color of one of the default styles created during the import process.
-
 
 #. Launch Styler.  Styler can be launched from the :guilabel:`Style Layers` link in the :ref:`dashboard`.
 
@@ -44,6 +43,8 @@ These example instructions will change the color of one of the default styles cr
 
 #. Click :guilabel:`Save` to apply and view your change on the main map.
 
+   .. warning:: There is no "undo" for changes made through Styler.
+
    .. figure:: img/styleredited.png
       :align: center
 
@@ -51,6 +52,4 @@ These example instructions will change the color of one of the default styles cr
 
 #. Repeat this process for every layer that you wish to style.
 
-   .. warning:: There is no "undo" for changes made through Styler.
-
-.. note:: For more information on Styler, please see the Styler Documentation. You can access this by clicking the :guilabel:`Styler Documentation` link in the :ref:`dashboard`.
+For more information on Styler, please see the Styler Documentation. You can access this by clicking the :guilabel:`Styler Documentation` link in the :ref:`dashboard`.
