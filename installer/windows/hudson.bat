@@ -1,6 +1,9 @@
 REM job to build .EXE
-REM assumes that http://svn.opengeo.org/suite/trunk/installer has been checked out
-REM also assumes running inside installer\windows
+REM assumes that...
+REM   http://svn.opengeo.org/suite/trunk/installer/windows
+REM   http://svn.opengeo.org/suite/trunk/installer/common
+REM ...have both been checked out
+REM Also assumes that it is running inside installer\windows
 
 REM Start by cleaning up target
 rd /s /q ..\..\target\
