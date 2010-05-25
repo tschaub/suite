@@ -195,12 +195,14 @@ checkrv $? "PostGIS server packaging"
 # Build the GeoServer Extensions Package
 #
 getfile $ext_url binaries/ext.zip
-if [ -d binaries/ext ]; then
-  rm -rf binaries/ext
+if [ -d binaries/lib ]; then
+  rm -rf binaries/lib
 fi
-unzip -o binaries/ext.zip -d binaries
+unzip -j -o binaries/ext.zip -d binaries/lib
 checkrv $? "Ext unzip"
 if [ -d "./build/GeoServer Extensions.pkg" ]; then
+  find "./build/GeoServer Extensions.pkg" -type f -exec chmod 664 {} ';'
+  find "./build/GeoServer Extensions.pkg" -type d -exec chmod 775 {} ';'
   rm -rf "./build/GeoServer Extensions.pkg"
 fi
 freeze ./geoserverext.packproj
