@@ -78,7 +78,11 @@
               <tasks>
                 <mkdir dir="${build.directory}/resources"/>
                 <copy todir="${build.directory}/resources">
-                  <fileset dir="${basedir}/OpenGeo Dashboard/Resources" includes="**/*"/>
+                  <fileset dir="${basedir}/OpenGeo Dashboard/Resources" includes="**/*" excludes="version.ini"/>
+                </copy>
+                <copy todir="${build.directory}/resources">
+                  <fileset dir="${basedir}/OpenGeo Dashboard/Resources" includes="version.ini"/>
+
                   <filterset>
                     <filter token="SUITE_VERSION" value="${project.version}"/>
                     <filter token="SVN_REVISION" value="${svn.revision}"/>
