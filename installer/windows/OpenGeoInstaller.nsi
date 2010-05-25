@@ -3,8 +3,8 @@
 ; Initial definitions
 !define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
-!define VERSION "1.9-SNAPSHOT"
-!define LONGVERSION "1.9.1.0"
+!define VERSION "2.0-SNAPSHOT"
+!define LONGVERSION "2.0.0.0"
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
 !define SOURCEPATHROOT "..\..\target\win"
 !define STARTMENU_FOLDER "${APPNAME}"
@@ -39,26 +39,25 @@ RequestExecutionLevel admin
 
 ; WARNING!!! These plugins need to be installed spearately
 
-; See http://nsis.sourceforge.net/ModernUI_Mod_to_Display_Images_while_installing_files
-!include "Image.nsh" ; For graphics during the install 
+  ; See http://nsis.sourceforge.net/ModernUI_Mod_to_Display_Images_while_installing_files
+  !include "Image.nsh" ; For graphics during the install 
 
-; http://nsis.sourceforge.net/TextReplace_plugin
-!include "TextReplace.nsh" ; For text replacing
+  ; http://nsis.sourceforge.net/TextReplace_plugin
+  !include "TextReplace.nsh" ; For text replacing
 
-; AccessControl plugin needed as well for permissions changes
-; See http://nsis.sourceforge.net/AccessControl_plug-in
+  ; AccessControl plugin needed as well for permissions changes
+  ; See http://nsis.sourceforge.net/AccessControl_plug-in
 
-; See http://nsis.sourceforge.net/Dialogs_plug-in
-; Needs Dialogs.dll!
-!include "defines.nsh" ; For nice UI-file/folder dialogs
-
-
+  ; See http://nsis.sourceforge.net/Dialogs_plug-in
+  ; Needs Dialogs.dll!
+  !include "defines.nsh" ; For nice UI-file/folder dialogs
 
 
 ; Might be the same as !define
 Var STARTMENU_FOLDER
 Var Upgrade
 Var OldInstallDir
+Var OldStartMenu
 ;Var CommonAppData
 ;Var DataDirPath
 ;Var FolderName
@@ -72,15 +71,15 @@ Var OracleCheckBoxPrior
 ;Var SDEPathHWND
 ;Var BrowseSDEHWND
 
-; Version Information (Version tab for EXE properties)
-;VIProductVersion ${LONGVERSION}
-;VIAddVersionKey ProductName "${APPNAME}"
-;VIAddVersionKey CompanyName "OpenGeo"
-;VIAddVersionKey LegalCopyright "Copyright (c) 2001 - 2010 OpenGeo"
-;VIAddVersionKey FileDescription "OpenGeo Suite Installer"
-;VIAddVersionKey ProductVersion "${VERSION}"
-;VIAddVersionKey FileVersion "${VERSION}"
-;VIAddVersionKey Comments "http://opengeo.org"
+;Version Information (Version tab for EXE properties)
+VIProductVersion ${LONGVERSION}
+VIAddVersionKey ProductName "${APPNAME}"
+VIAddVersionKey CompanyName "OpenGeo"
+VIAddVersionKey LegalCopyright "Copyright (c) 2001 - 2010 OpenGeo"
+VIAddVersionKey FileDescription "OpenGeo Suite Installer"
+VIAddVersionKey ProductVersion "${VERSION}"
+VIAddVersionKey FileVersion "${VERSION}"
+VIAddVersionKey Comments "http://opengeo.org"
 
 ; Page headers for pages
 ;LangString TEXT_ARCSDE_TITLE ${LANG_ENGLISH} "ArcSDE Libraries"
@@ -247,16 +246,19 @@ Function PriorInstall
   EnumRegKey $R1 HKLM "SOFTWARE\${COMPANYNAME}" 0 ; Checks if the key even exists
   IfErrors NoPriorInstall ; Not installed
 
+  ; Check for 1.0 or 1.0r1
   ReadRegStr $R2 HKLM "Software\${COMPANYNAME}\${APPNAME}" "Version"
   IfErrors Upgrade1.0 ; v1.0 and v1.0r1 did not have this key, so if not there, mmust be 1.0 or 1.0r1
 
-  StrCmp $R2 "1.9.0" SameVersion UnknownVersion
+  ; Check for 1.9.0
+  StrCmp $R2 "1.9.0" Upgrade1.9 0
+  StrCmp $R2 "2.0.0" SameVersion UnknownVersion
 
 
   Upgrade1.0:
   ClearErrors
   ReadRegStr $R1 HKLM "Software\${COMPANYNAME}\OpenGeo Suite 1.0" "InstallDir"
-  IfErrors Upgrade1.0r1
+  IfErrors Upgrade1.0r1 ; It must be 1.0r1 then
   StrCpy $Upgrade "1.0"
   StrCpy $OldInstallDir $R1
   Goto Continue
@@ -264,24 +266,33 @@ Function PriorInstall
   Upgrade1.0r1:
   ClearErrors
   ReadRegStr $R1 HKLM "Software\${COMPANYNAME}\OpenGeo Suite 1.0r1" "InstallDir"
-  IfErrors UhOh
+  IfErrors UhOh ; Okay, give up
   StrCpy $Upgrade "1.0r1"
   StrCpy $OldInstallDir $R1
   Goto Continue
 
+  Upgrade1.9:
+  ClearErrors
+  ReadRegStr $R1 HKLM "Software\${COMPANYNAME}\OpenGeo Suite" "InstallDir"
+  IfErrors UhOh
+  ReadRegStr $R3 HKLM "Software\${COMPANYNAME}\OpenGeo Suite" "StartMenu"
+  IfErrors UhOh
+  StrCpy $Upgrade $R2
+  StrCpy $OldInstallDir $R1
+  StrCpy $OldStartMenu $R3
+  Goto Continue
+
   UhOh:
-  MessageBox MB_ICONSTOP "Sorry, there was an exception thrown when trying to figure out the \
+  MessageBox MB_ICONSTOP "Sorry, a problem occurred when trying to figure out the \
                           current version of the OpenGeo Suite.  Maybe there is a corrupt \
                           registry entry?"
-  MessageBox MB_OK "Setup will now exit..."
-  Quit
+  Goto Die
 
   SameVersion:
   MessageBox MB_ICONSTOP "This version of the OpenGeo Suite is already installed.  \
                           If you wish to reinstall the OpenGeo Suite, please uninstall the \
                           existing version first and then run Setup again."
-  MessageBox MB_OK "Setup will now exit..."
-  Quit
+  Goto Die
 
   UnknownVersion:
   ; Fail!  An unknown version is installed!
@@ -289,8 +300,7 @@ Function PriorInstall
                           installed on your machine.  If you wish to install this version \
                           of the OpenGeo Suite, please uninstall your existing version first \
                           and then run Setup again.  (Version found was $R2)"
-  MessageBox MB_OK "Setup will now exit..."
-  Quit
+  Goto Die
 
   NoPriorInstall:
   StrCpy $Upgrade "Clean"
@@ -486,7 +496,7 @@ Section -Prerequisites
 SectionEnd
 
   ; This section removes files from 1.0 or 1.0r1 install, before continuing
-Section "-Upgrade" SectionUpgrade1.0 ; dash = hidden
+Section "-Upgrade1.0" SectionUpgrade1.0 ; dash = hidden
 
   !insertmacro DisplayImage "graphics\slide_1_suite.bmp"
 
@@ -512,15 +522,23 @@ Section "-Upgrade" SectionUpgrade1.0 ; dash = hidden
   RMDir "$OldInstallDir"
 
   ;Remove start menu entries
-  ;Tricky because we don't quite know where this is.
-  ;Non standard locations won't be found, regrattably.
-  RMDir /r "$SMPROGRAMS\${APPNAME} $Upgrade"
 
+  StrCmp $Upgrade "1.9.0" v1.9.0 0 
+  ; Faking it for 1.0 + 1.0r1
+  RMDir /r "$SMPROGRAMS\${APPNAME} $Upgrade"
+  Goto Continue
+
+  ; Someday do a version greater/less than comparison instead of this
+  v1.9.0:
+  RMDir /r "$OldStartMenu"
+  Goto Continue
+
+  Continue:
   ;Remove registry
   DeleteRegKey HKLM "Software\${COMPANYNAME}"
   DeleteRegKey HKLM "${UNINSTALLREGPATH}\${APPNAME} $Upgrade"
 
-Skip:
+  Skip:
 
 SectionEnd
 
@@ -743,7 +761,7 @@ Section "Documentation" SectionDocs
   SectionIn RO ; mandatory
   SetOverwrite on
 
-  ; yes this isn't the GWC section, but it's a good place for GWC to go
+  ; yes this isn't the GWC section, but it's a good place for GWC logo to go
   !insertmacro DisplayImage "graphics\slide_4_gwc.bmp"
 
   SetOutPath "$INSTDIR\icons"
@@ -761,12 +779,15 @@ Section "Documentation" SectionDocs
   ; Shortcuts
   SetOutPath "$INSTDIR"
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation"
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoServer Documentation.lnk" \
-		         "$INSTDIR\webapps\docs\geoserver\index.html" \
-                 "" "$INSTDIR\icons\geoserver.ico" 0
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\PostGIS Documentation.lnk" \
+		         "$INSTDIR\webapps\docs\postgis\index.html" \
+                 "" "$INSTDIR\icons\postgis.ico" 0
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoExplorer Documentation.lnk" \
 		         "$INSTDIR\webapps\docs\geoexplorer\index.html" \
                  "" "$INSTDIR\icons\geoexplorer.ico" 0
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoEditor Documentation.lnk" \
+		         "$INSTDIR\webapps\docs\geoditor\index.html" \
+                 "" "$INSTDIR\icons\geoeditor.ico" 0
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\Styler Documentation.lnk" \
 		         "$INSTDIR\webapps\docs\styler\index.html" \
                  "" "$INSTDIR\icons\styler.ico" 0
@@ -873,8 +894,8 @@ Section "-Misc" SectionMisc
                  "" "$INSTDIR\icons\uninstall.ico" 0
 
   ; Changelog
-  SetOutPath $INSTDIR
-  File /a ..\common\changelog.txt
+  ; SetOutPath $INSTDIR
+  ; File /a ..\common\changelog.txt
 
   ; version.ini
   File /a "${SOURCEPATHROOT}\version.ini"
