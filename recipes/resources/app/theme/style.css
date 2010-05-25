@@ -85,13 +85,15 @@ a, a:visited {
 
 
 .index .recipe {
-    padding: 0 1em 1em;
+    padding: 1em 1em;
 }
 
 .index .recipe h3 {
+    margin: 0;
+    font-size: 14px;
     color: #486300;
-    font-weight: normal;
-    font-family: Optima,Georgia, serif;
+    font-weight: bold;
+    font-family: Helvetica, Arial, FreeSans, sans-serif;
 }
 
 .index .recipe p {
@@ -118,14 +120,14 @@ body.reference-body, body.recipe-body {
 .description {
     margin: 1em 0 1em 0;
     padding: 0.75em;
-    font-size: 12px;
+    font-size: 13px;
     background-color: #eeeeee;
 }
 
 .content {
-    margin: 1em 0 1em 0;
+    margin: 1em 0;
     padding: 0.75em;
-    font-size: 12px;
+    font-size: 13px;
 }
 
 .content p {
@@ -193,4 +195,8 @@ strong {
 }
 .syntaxhighlighter .line .content {
     border: transparent 0px none important!;
+}
+
+.x-tree-node { /* override size of nodes in tree */
+    font-size: 12px;
 }
