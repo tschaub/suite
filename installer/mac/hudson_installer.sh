@@ -228,8 +228,8 @@ BACKGROUND="dmg_background.bmp"
 APP="${VOL}.mpkg"
 
 # DMG window dimensions
-dmg_width=497
-dmg_height=313
+dmg_width=640
+dmg_height=314
 dmg_topleft_x=200
 dmg_topleft_y=200
 dmg_bottomright_x=`expr $dmg_topleft_x + $dmg_width`
@@ -242,6 +242,10 @@ fi
 if [ -f "${DMGTMP}" ]; then
   rm -f "${DMGTMP}"
 fi
+
+# Copy the README-mac.pdf file into the DMG root
+README=README.pdf
+cp -vf ./binaries/suite/docs/install/pdf/README-mac.pdf ./suitebuild/${README}
 
 # Create the DMG
 hdiutil create \
@@ -279,7 +283,8 @@ echo '
            set arrangement of theViewOptions to not arranged
            set icon size of theViewOptions to 72
            set background picture of theViewOptions to file ".background:'${BACKGROUND}'"
-           set position of item "'${APP}'" of container window to {335, 130}
+           set position of item "'${APP}'" of container window to {325, 130}
+           set position of item "'${README}'" of container window to {480, 130}
            close
            open
            update without registering applications
