@@ -83,6 +83,12 @@
                  includes="CHANGELOG.txt,LICENSE.txt,manifest,tiapp.xml,timanifest"/>
     </copy>
     
+    <!-- postgis medford data -->
+    <delete dir="pgdata"/>
+    <mkdir dir="pgdata"/>
+    <get src="${data}/medford_taxlots.zip" dest="medford_taxlots.zip" usetimestamp="yes"/>
+    <unzip src="medford_taxlots.zip" dest="pgdata"/>
+
     <!-- geoserver jboss war -->
     <antcall target="geoserver-war-jboss"/>
   </target>

@@ -83,6 +83,10 @@
       <directory>data_dir</directory>
       <outputDirectory>data_dir</outputDirectory>
     </fileSet>
+    <fileSet>
+      <directory>assembly/pgdata</directory>
+      <outputDirectory>pgdata</outputDirectory>
+    </fileSet>
 <!--
     <fileSet>
       <directory>assembly/postgres-osx</directory>

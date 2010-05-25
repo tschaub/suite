@@ -115,6 +115,10 @@
       <directory>assembly/postgres-win/pgsql</directory>
       <outputDirectory>pgsql/8.4</outputDirectory>
     </fileSet>
+    <fileSet>
+      <directory>assembly/pgdata</directory>
+      <outputDirectory>pgdata</outputDirectory>
+    </fileSet>
   </fileSets>
   <files>
     <file>
