@@ -20,6 +20,7 @@
   <module>install</module>
   <module>gettingstarted</module>
   <module>geoexplorer</module>
+  <module>geoeditor</module>
   <module>geoserver</module>
   <module>styler</module>
   <module>postgis</module>
