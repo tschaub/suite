@@ -5,19 +5,9 @@
 		fRef = 3B92A9F80F6ED2CB0023785B /* SuiteUninstallerAppDelegate.applescript */;
 		name = "SuiteUninstallerAppDelegate.applescript: 61";
 		rLen = 0;
-		rLoc = 1852;
+		rLoc = 1932;
 		rType = 0;
 		vrLen = 662;
-		vrLoc = 0;
-	};
-	043CECEA119B653C008A7568 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 3B92A9F80F6ED2CB0023785B /* SuiteUninstallerAppDelegate.applescript */;
-		name = "SuiteUninstallerAppDelegate.applescript: 59";
-		rLen = 0;
-		rLoc = 1852;
-		rType = 0;
-		vrLen = 743;
 		vrLoc = 0;
 	};
 	0452D402119B4AD600F4C901 /* OpenGeo Suite Uninstaller */ = {
@@ -112,6 +102,16 @@
 		path = /System/Library/Frameworks/AppKit.framework/Versions/C/Headers/NSScrollView.h;
 		sourceTree = "<absolute>";
 	};
+	04979B1F11AC4DCC0043A621 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 3B92A9F80F6ED2CB0023785B /* SuiteUninstallerAppDelegate.applescript */;
+		name = "SuiteUninstallerAppDelegate.applescript: 40";
+		rLen = 0;
+		rLoc = 1156;
+		rType = 0;
+		vrLen = 858;
+		vrLoc = 297;
+	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
 		activeArchitecturePreference = i386;
 		activeBuildConfigurationName = Debug;
@@ -144,16 +144,16 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 295397469;
-			PBXWorkspaceStateSaveDate = 295397469;
+			PBXPerProjectTemplateStateSaveDate = 296503392;
+			PBXWorkspaceStateSaveDate = 296503392;
 		};
 		perUserProjectItems = {
 			042E91BB119B6A6C00CF2085 /* PBXTextBookmark */ = 042E91BB119B6A6C00CF2085 /* PBXTextBookmark */;
-			043CECEA119B653C008A7568 /* PBXTextBookmark */ = 043CECEA119B653C008A7568 /* PBXTextBookmark */;
 			0452D464119B64B900F4C901 /* PBXTextBookmark */ = 0452D464119B64B900F4C901 /* PBXTextBookmark */;
 			0452D465119B64B900F4C901 /* PBXTextBookmark */ = 0452D465119B64B900F4C901 /* PBXTextBookmark */;
 			0452D466119B64B900F4C901 /* PlistBookmark */ = 0452D466119B64B900F4C901 /* PlistBookmark */;
 			0452D467119B64B900F4C901 /* PBXTextBookmark */ = 0452D467119B64B900F4C901 /* PBXTextBookmark */;
+			04979B1F11AC4DCC0043A621 /* PBXTextBookmark */ = 04979B1F11AC4DCC0043A621 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 0452D412119B4AFE00F4C901 /* Source Control */;
 		userBuildSettings = {
@@ -175,9 +175,9 @@
 	};
 	3B92A9F80F6ED2CB0023785B /* SuiteUninstallerAppDelegate.applescript */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {805, 915}}";
-			sepNavSelRange = "{1852, 0}";
-			sepNavVisRange = "{0, 662}";
+			sepNavIntBoundsRect = "{{0, 0}, {805, 964}}";
+			sepNavSelRange = "{1156, 0}";
+			sepNavVisRange = "{297, 858}";
 			sepNavWindowFrame = "{{265, 153}, {750, 558}}";
 		};
 	};

@@ -4,14 +4,22 @@ echo ""
 echo "Removing OpenGeo Suite files..."
 echo ""
 
+# Verbose?
+if [ "x$1" == "x" ]; then
+  echo "Running in verbose mode"
+  rmopts="v"
+else
+  rmopts=""
+fi
+
 # Remove GUI Apps
 if [ -d /Applications/OpenGeo ]; then
-  rm -rvf /Applications/OpenGeo
+  rm -rf$rmopts /Applications/OpenGeo
 fi
 
 # Remove Server Apps
 if [ -d /opt/opengeo ]; then
-  rm -rvf /opt/opengeo
+  rm -r$rmopts /opt/opengeo
 fi
 
 # Remove Config Files
@@ -19,10 +27,10 @@ find /Users -name .opengeo -maxdepth 2 -type d -exec /bin/rm -rvf {} ';'
 
 # Remove Path Entries
 if [ -f /private/etc/paths.d/opengeo-pgsql ]; then
-  rm -vf /private/etc/paths.d/opengeo-pgsql
+  rm -f$rmopts /private/etc/paths.d/opengeo-pgsql
 fi
 if [ -f /private/etc/manpaths.d/opengeo-pgsql ]; then
-  rm -vf /private/etc/manpaths.d/opengeo-pgsql
+  rm -f$rmopts /private/etc/manpaths.d/opengeo-pgsql
 fi
 
 # Remove receipts entries
