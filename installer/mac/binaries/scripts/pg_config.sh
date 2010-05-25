@@ -7,10 +7,12 @@ pg_default_port=54321
 
 pg_data_dir=/opt/opengeo/pgdata/${USER}
 pg_log=/opt/opengeo/pgdata/${USER}_pgsql.log
+pg_data_load_dir=/opt/opengeo/suite/pgdata
 
 pg_dir=/opt/opengeo/pgsql/$pg_version
 pg_bin_dir=$pg_dir/bin
 pg_lib_dir=$pg_dir/lib
+pg_share_dir=$pg_dir/share/postgresql/contrib
 
 #
 # FUNCTIONS

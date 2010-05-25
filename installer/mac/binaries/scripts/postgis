@@ -27,6 +27,7 @@ case "$1" in
     ${d}/pg_start_server.sh
     ${d}/pg_install_template.sh
     ${d}/pg_install_user.sh
+    ${d}/pg_install_data.sh
     ;;
 
   stop)
