@@ -41,12 +41,12 @@ body {
     background-image: url(img/silk/wrench.png);
 }
 
-.x-btn .icon-getfeatureinfo {
-    background-image: url(img/silk/information.png);
+.x-btn .icon-editfeature {
+    background-image: url(img/silk/map_edit.png);
 }
 
 .x-btn .icon-addfeature {
-    background-image: url(img/geosilk/vector_add.png);
+    background-image: url(img/silk/pencil_add.png);
 }
 .x-btn .icon-save {
     background-image: url(img/geosilk/map_save.png);

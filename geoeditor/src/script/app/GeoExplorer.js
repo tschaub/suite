@@ -1048,8 +1048,8 @@ var GeoExplorer = Ext.extend(Ext.util.Observable, {
         });
         
         var infoButton = new GeoExt.Action({
-            tooltip: "Get Feature Info",
-            iconCls: "icon-getfeatureinfo",
+            tooltip: "Edit existing feature",
+            iconCls: "icon-editfeature",
             toggleGroup: toolGroup,
             enableToggle: true,
             allowDepress: false,
