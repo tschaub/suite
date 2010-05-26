@@ -13,7 +13,7 @@
           </td>
           <td class="dash-panel-table-actions">
             <ul class="quick-links">
-              <li>Import data to <a href="#pgshapeloader_path" class="app-plink app-online">PostGIS</a> or  <a href="#app-geoserver_importer" class="app-xlink app-online">GeoServer</a></li>
+              <li>Import data to <a href="#{PGPORT:pgsql_port}pgshapeloader_path" class="app-plink app-online">PostGIS</a> or  <a href="#app-geoserver_importer" class="app-xlink app-online">GeoServer</a></li>
               <li><a href="#pgadmin_path" class="app-plink app-online">Manage databases</a></li>
             </ul>
           </td>
@@ -54,7 +54,7 @@
           <td class="dash-panel-table-actions">
             <ul class="quick-links">
               <li><a href="#pgadmin_path" class="app-plink app-online icon-postgis">Manage</a></li>
-              <li><a href="#pgshapeloader_path" class="app-plink app-online">Import shapefiles</a></li>
+              <li><a href="#{PGPORT:pgsql_port}pgshapeloader_path" class="app-plink app-online">Import shapefiles</a></li>
               <li><a href="#app-panels-dash-components" class="app-ilink">About</a></li>
               <li><a href="#app-postgis_docs" class="app-xlink app-online">Documentation</a></li>
             </ul>

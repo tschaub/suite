@@ -545,17 +545,37 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
     
     /** private: method[launchProcess]
      *  :arg key: ``String`` Configuration key for process.
+     *  
+     *  Launch a process identified by the given key.
+     *  Key syntax: {env_key1:env_val2,env_key2:env_val2}config_key
      */
     launchProcess: function(key) {
-        var app = this.config[key] || "";
-        var file = Titanium.Filesystem.getFile(app);
-        if (file.exists()) {
-            Titanium.Desktop.openApplication(app);
-        } else {
-            Ext.Msg.alert(
-                "Warning",
-                "Could not launch application: " + app
-            );
+        var match = key.match(/^(?:{\s*(.*?)\s*})?(\w+)/);
+        if (match) {
+            var env;
+            if (match[1]) {
+                // extract environment variables
+                env = {};
+                var pairs = match[1].split(/\s*,\s*/);
+                var pair, key, value;
+                for (var i=0, ii=pairs.length; i<ii; ++i) {
+                    pair = pairs[i].split(/\s*:\s*/);
+                    env[pair[0]] = this.config[pair[1]] || pair[1];
+                }
+            }
+            var app = this.config[match[2]] || match[2];
+            var file = Titanium.Filesystem.getFile(app);
+            if (file.exists()) {
+                var process = Titanium.Process.createProcess({
+                    args: [app], env: env
+                });
+                process.launch();
+            } else {
+                Ext.Msg.alert(
+                    "Warning",
+                    "Could not launch application: " + app
+                );
+            }
         }
     },
     
