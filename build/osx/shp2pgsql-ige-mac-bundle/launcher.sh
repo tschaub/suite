@@ -115,12 +115,15 @@ if test -f "$bundle_lib/charset.alias"; then
     export CHARSETALIASDIR="$bundle_lib"
 fi
 
-# Extra arguments can be added in environment.sh.
-ini="$HOME/.opengeo/config.ini"
-if test -f "$ini"; then
-  port=`grep pgsql_port "$ini" | cut -f2 -d= | tr -d ' '`
-  if [ "x$port" != "x" ]; then
-    export PGPORT=$port
+# If PGPORT exists already, respect it. 
+# If not, see if we can read it from config.ini
+if [ "x$PGPORT" = "x" ]; then
+  ini="$HOME/.opengeo/config.ini"
+  if [ -f "$ini" ]; then
+    port=`grep pgsql_port "$ini" | cut -f2 -d= | tr -d ' '`
+    if [ "x$port" != "x" ]; then
+      export PGPORT=$port
+    fi
   fi
 fi
 
