@@ -9,19 +9,19 @@ The first step of any workflow is to load your data into the OpenGeo Suite.  For
 
 #. Launch the OpenGeo Suite :ref:`dashboard` and Start the OpenGeo Suite, if you have not already done so.
 
-   (IMAGE)
+#. Click on the :guilabel:`Import Shapefiles` link.  This will load :guilabel:`pgShapeLoader` which will allow you to convert shapefiles to a tables in a PostGIS database.  Next, click on the box that is titled "Shape File."
 
-#. Click on the :guilabel:`Load Shapefiles` link.  (THIS LINK MAY CHANGE.)
+   .. figure:: img/pgshapeloader.png
+      :align: center
 
-   (IMAGE)
+      *pgShapeLoader*
 
-#. This will load :guilabel:`pgShapeLoader` which will allow you to convert shapefiles to a tables in a PostGIS database.  Next, click on the box that is titled "Shape File."
+#. In the folder dialog that appears, navigate to the location of your first shapefile, select it, then click :guilabel:`Open`.
 
-   (IMAGE)
+   .. figure:: img/pgshapeloader_selectfile.png
+      :align: center
 
-#. In the folder dialog that appears, navigate to the location of your first shapefile, then click :guilabel:`Open`.
-
-   (IMAGE)
+      *Selecting a shapefile to import*
 
 #.  Next, fill out the form:
 
@@ -35,7 +35,7 @@ The first step of any workflow is to load your data into the OpenGeo Suite.  For
       * - **Server Host**
         - localhost
       * - **Port**
-        - 54321
+        - **54321**
       * - **Database**
         - [your user name on your host operating system]
       * - **SRID**
@@ -43,13 +43,19 @@ The first step of any workflow is to load your data into the OpenGeo Suite.  For
 
    .. note:: If you don't know the projection code (sometimes known as SRID, SRS, CRS, or EPSG code) see the next section on :ref:`workflow.load.projection`.
 
-   (IMAGE)
+   .. figure:: img/pgshapeloader_beforeimport.png
+      :align: center
 
-#. When finished, click :guilabel:`Import`.
+      *Ready to import*
 
-   (IMAGE)
+#. When ready, click :guilabel:`Import`.
 
-#. Repeat the same process for every shapefile you wish to load.
+   .. figure:: img/pgshapeloader_afterimport.png
+      :align: center
+
+      *A successful import*
+
+#. The shapefile has been imported as a table in your PostGIS database.  Repeat the same process for any additional shapefiles.
 
 .. _workflow.load.projection:
 
@@ -75,8 +81,6 @@ Search spatialreference.org
 
 `spatialreference.org <http://spatialreference.org>`_ is a web site that offers information on projections.  You can use the site's search box to help determine the projection for your shapefile.
 
-   (IMAGE?)
-
 Shapefiles are comprised of multiple files, each with different extensions (``.shp``, ``.shx``, ``.prj`` and others).  Open the file with the ``.prj`` file in a text editor.  This file contains the technical details of the projection.  Copy the first block of text inside quotes and paste it into the search box of spatialreference.org .  Assuming a match, the site will return the likely projection code.  If the first text block fails, try the next block of text inside quotes.  Repeat this process if necessary to obtain the likely projection code.
 
 Workaround
@@ -84,27 +88,29 @@ Workaround
 
 If you are still unable to find the projection, you can instead load your shapefiles directly into GeoServer, bypassing PostGIS.  GeoServer may be able to intelligently determine the proper projection.  See the :ref:`workflow.import` section for details.
 
-Viewing/verifying data
-----------------------
+Verifying data
+--------------
 
 To verify that your data was loaded properly, you can use :guilabel:`pgAdmin`, a desktop GUI for database management.
 
-#. Launch pgAdmin by clicking the :guilabel:`Manage` link on the Dashboard.
+#. Launch pgAdmin by clicking the :guilabel:`PostGIS` link in the Dashboard.
 
-   (IMAGE)
+   .. figure:: img/pgadmin.png
+      :align: center
 
-#. Click on the database instance in the (WHAT) column.
+      *pgAdmin*
 
-   (IMAGE)
+#. Double click on the server instance called :guilabel:`PostGIS (localhost:54321)` in the Object Browser.
 
-#. If you are asked for a password, you can leave it blank.
+   .. note:: If you are asked for a password, you can leave it blank.
 
-   (IMAGE)
+#. Expand the tree to view :menuselection:`PostGIS (localhost:54321) --> Databases -> [username] -> Schemas -> public -> Tables`.  You should see a listing of tables corresponding to the shapefiles that you loaded.
 
-#. Expand the tree to view :menuselection:`localhost --> Databases -> [username] -> Tables`.  You should see a listing of tables corresponding to the shapefiles that you loaded.
+   .. note:: There will be two extra tables in the list, :guilabel:`geometry_columns`, and :guilabel:`spatial_ref_sys`.  Those two tables are automatically created by PostGIS.
 
-   .. note:: The two tables that don't correpsond to shapefiles are required by PostGIS.  They are automatically created.
+   .. figure:: img/pgadmin_tables.png
+      :align: center
 
-   (IMAGE)
+      *Database table listing*
 
-For more information about PostGIS and pgAdmin, please see the Styler Documentation. You can access this by clicking the :guilabel:`PostGIS Documentation` link in the :ref:`dashboard`.
+For more information about pgAdmin and PostGIS, please see the PostGIS Documentation. You can access this by clicking the :guilabel:`PostGIS Documentation` link in the :ref:`dashboard`.

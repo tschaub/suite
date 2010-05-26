@@ -5,41 +5,65 @@ Dashboard
 
 The OpenGeo Suite comes with a Dashboard.  The OpenGeo Suite Dashboard is a single interface that allows you to access all components of the OpenGeo Suite, including links to common tasks, configuration, and management.  It runs on the host machine as an application, not in a web browser.
 
-(IMAGE)
+.. figure:: img/dashboard.png
+   :align: center
 
-.. note:: When you first launch the OpenGeo Suite Dashbaord, you will be presented with the GeoServer username and password.  These credentials are used to administer GeoServer.  You can change this information on the :ref:`dashboard.prefs` pane.
+   *OpenGeo Suite Dashboard*
 
-(IMAGE)
+.. note:: When you first launch the OpenGeo Suite Dashboard, you will be presented with the GeoServer username and password.  These credentials are used to administer GeoServer.  You can change this information on the :ref:`dashboard.prefs` pane.
+
+.. figure:: img/dashboard_firstlaunch.png
+   :align: center
+
+   *Dashboard first launch*
 
 Starting and Stopping
 ---------------------
 
-The Dashboard can start and stop the OpenGeo Suite.  Simply click on the Start or Stop button at the bottom right of the Dashboard.  Many links in the Dashboard will be disabled unless the OpenGeo Suite is online.
+The Dashboard can start and stop the OpenGeo Suite.  Simply click on the Start or Shutdown button at the top right of the Dashboard.  Many links in the Dashboard will be disabled unless the OpenGeo Suite is online.
 
 .. note:: The first time the OpenGeo Suite is started might take a few minutes to initialize the software.  Subsequent starting times will be greatly reduced.
 
-(IMAGES)
+.. figure:: img/dashboard_starting.png
+   :align: center
 
-You can also start and stop the OpenGeo Suite from the command prompt.  Navigate to the root of your installation directory and run::
+   *OpenGeo Suite starting*
 
-   > opengeo-suite start
+.. figure:: img/dashboard_started.png
+   :align: center
+
+   *OpenGeo Suite started*
+
+You can also start and stop the OpenGeo Suite from the command prompt.   First, navigate to the root of your installation directory.
+
+To start::
+
+   > opengeo-suite start  
+
+To stop::
+
    > opengeo-suite stop
 
 
-Quickstart
-----------
-
-The Dashboard contains a Quickstart page, which is designed to show a sample workflow for publishing your data and creating your maps.  A more detailed discussion is available here in the :ref:`workflow`.
-
-(IMAGE)
-
-
-Dashboard Pages
+Getting Started
 ---------------
+
+The Dashboard contains a Getting Started page, which is designed to show a sample workflow for publishing your data and creating your maps.  A more detailed discussion is available here in the :ref:`workflow`.
+
+.. figure:: img/dashboard_gettingstarted.png
+   :align: center
+
+   *A sample workflow*
+
+Components
+----------
 
 Contained in the dashboard are brief introductions to each of the components of the OpenGeo Suite, including links to documentation and common tools.
 
-(IMAGE)
+.. figure:: img/dashboard_components.png
+   :align: center
+
+   *Components*
 
 .. _dashboard.prefs:
 
@@ -50,7 +74,10 @@ You can configure the OpenGeo Suite through the Preferences page.
 
 .. warning:: You must stop and start the OpenGeo Suite for any changes to take effect.
 
-(IMAGE)
+.. figure:: img/dashboard_preferences.png
+   :align: center
+
+   *Preferences*
 
 Service Ports
 ~~~~~~~~~~~~~

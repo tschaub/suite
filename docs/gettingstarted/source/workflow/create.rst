@@ -17,14 +17,14 @@ Now that your map layers are loaded and styled, you can organize and compose you
 
 #. You will see a basemap of the world.  To add your layers on top of this basemap, click on the :guilabel:`Add Layers` button (a green circle with a white plus) in the top left corner of the screen.
 
-   .. figure:: img/addlayersbutton.png
+   .. figure:: img/geoexplorer_addlayersbutton.png
       :align: center
 
       *This button will bring up the Add Layers dialog*
 
 #. A list of layers from GeoServer will be displayed.  Select the layers you wish to add, then click :guilabel:`Add layers`.  (You can Ctrl/Cmd-click to select multiple layers.)  Click :guilabel:`Done` when finished.
 
-   .. figure:: img/addlayersdialog.png
+   .. figure:: img/geoexplorer_addlayersdialog.png
       :align: center
 
       *Selecting layers to add to your map*
@@ -33,21 +33,21 @@ Now that your map layers are loaded and styled, you can organize and compose you
 
 #. The layers will be added to the map.  
 
-   .. figure:: img/mapbefore.png
+   .. figure:: img/geoexplorer_mapbefore.png
       :align: center
 
       *The initial view of layers*
 
 #. Right-click on one of the layers and select :guilabel:`Zoom to layer extent` to zoom in to your layer content.
 
-   .. figure:: img/mapzoombefore.png
+   .. figure:: img/geoexplorer_mapzoombefore.png
       :align: center
 
       *The map zoomed in*
 
 #. Use the toolbar at the top of the screen to compose your map.  Adjust the placement of layers by dragging them in the Layers panel.
 
-   .. figure:: img/mapafter.png
+   .. figure:: img/geoexplorer_mapafter.png
       :align: center
 
       *The composed map*
@@ -59,14 +59,14 @@ After you have composed your map in **GeoExplorer**, you can publish it via a UR
 
 #. Click on the :guilabel:`Save Map` icon.
 
-   .. figure:: img/savemap.png
+   .. figure:: img/geoexplorer_savemap.png
       :align: center
 
       *The Bookmark button will generate a URL*
 
 #. A URL will be displayed.  Copy and save this URL to regenerate this map at a later time.
 
-   .. figure:: img/savemapdialog.png
+   .. figure:: img/geoexplorer_savemapdialog.png
       :align: center
 
       *Copy this URL to save your map*
@@ -78,14 +78,14 @@ You can also publish your map by embedding it in a web page.
 
 #. Click on the :guilabel:`Publish Map` icon.
 
-   .. figure:: img/publishmap.png
+   .. figure:: img/geoexplorer_publishmap.png
       :align: center
 
       *The Publish Map button will generate a block of HTML*
 
 #. A dialog will show HTML code that can be copied and included in a web page in order to embed the map.  You can change the values for the map size in the :guilabel:`Map Size` dropdown boxes, or by changing the :guilabel:`Height` and :guilabel:`Width` values.  The changes will automatically be reflected in the HTML.
 
-   .. figure:: img/publishmapdialog.png
+   .. figure:: img/geoexplorer_publishmapdialog.png
       :align: center
 
       *HTML for embedding a map*

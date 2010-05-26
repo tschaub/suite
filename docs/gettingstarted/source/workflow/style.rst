@@ -20,14 +20,14 @@ These example instructions will change the color of one of the default styles cr
 
    .. note:: Only one layer can be styled at a time, although you can show or hide other layers for context by checking the boxes next to the layers.
 
-   .. figure:: img/stylerselectlayer.png
+   .. figure:: img/styler_selectlayer.png
       :align: center
 
       *Selecting a layer for styling*
 
 #. The :guilabel:`Legend` panel displays the style rules associated with that layer.  Click on a rule to view and edit it.   An editor window is launched.  
 
-   .. figure:: img/editstyle1.png
+   .. figure:: img/styler_editstyle.png
       :align: center
 
       *The style edit window*
@@ -36,7 +36,7 @@ These example instructions will change the color of one of the default styles cr
 
    .. note:: Please see the Styler Documentation for more about what can be styled using Styler. 
 
-   .. figure:: img/editstyle2.png
+   .. figure:: img/styler_editstyleform.png
       :align: center
 
       *Style parameters changed*
@@ -45,7 +45,7 @@ These example instructions will change the color of one of the default styles cr
 
    .. warning:: There is no "undo" for changes made through Styler.
 
-   .. figure:: img/styleredited.png
+   .. figure:: img/styler_editstylefinished.png
       :align: center
 
       *The newly restyled layer*
