@@ -6,7 +6,7 @@ REM Get global vars and config
 call pg_config.cmd
 
 REM pushd to current working directory
-pushd %~dp0%
+pushd "%~dp0%"
 
 REM Check for exisitng pg data directory
 if exist "%pg_data_dir%\PG_VERSION" (

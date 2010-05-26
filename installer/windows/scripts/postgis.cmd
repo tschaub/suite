@@ -9,7 +9,7 @@ if "%1" == "" (
 )
 
 REM pushd to current working directory
-pushd %~dp0%
+pushd "%~dp0%"
 
 REM Get global vars
 call pg_config.cmd
