@@ -116,9 +116,12 @@ if test -f "$bundle_lib/charset.alias"; then
 fi
 
 # Extra arguments can be added in environment.sh.
-EXTRA_ARGS="-p 54321"
-if test -f "$bundle_res/environment.sh"; then
-  source "$bundle_res/environment.sh"
+ini="$HOME/.opengeo/config.ini"
+if test -f "$ini"; then
+  port=`grep pgsql_port "$ini" | cut -f2 -d= | tr -d ' '`
+  if [ "x$port" != "x" ]; then
+    export PGPORT=$port
+  fi
 fi
 
 # Strip out the argument added by the OS.
