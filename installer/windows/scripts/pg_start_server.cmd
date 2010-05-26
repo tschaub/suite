@@ -13,7 +13,6 @@ if exist "%pg_data_dir%\PG_VERSION" (
 
   REM We need to trick pgautovacuum into using the right superuser
   set PGUSER=postgres
-  set DYLD_LIBRARY_PATH=%pg_lib_dir%
 
   REM Start the database
   "%pg_bin_dir%\pg_ctl" start --pgdata "%pg_data_dir%" --log "%pg_log%" --silent -w -o "-p %pg_port% -i"
