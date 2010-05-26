@@ -38,7 +38,7 @@
                     layers: [
                         new OpenLayers.Layer.WMS(
                             "World Map",
-                            "/geoserver/gwc/service/wms",
+                            "http://suite.opengeo.org/geoserver/wms",
                             {layers: "World", format: "image/png"}
                         ),
                         new OpenLayers.Layer.WMS(
@@ -49,8 +49,8 @@
                         ),
                         new OpenLayers.Layer.WMS(
                             "State Boundaries",
-                            "http://maps.opengeo.org/geowebcache/service/wms",
-                            {layers: "topp:states", format: "image/png"}
+                            "http://suite.opengeo.org/geoserver/wms",
+                            {layers: "usa:states", format: "image/png"}
                         )
                     ],
                     center: [-120, 48],

@@ -14,7 +14,7 @@
             There are three types of road classes in our fictional country, ranging from back roads to high-speed freeways: "highway", "secondary", and "local-road". In order to handle each case separately, there is more than one <FeatureTypeStyle>, each containing a single rule. This ensures that each road type is rendered in order, as each <FeatureTypeStyle> is drawn based on the order in which it appears in the SLD.
 
             <p>The three rules are designed as follows:</p>
-            <table>
+            <table class="reference">
               <tr>
                 <td><strong>Rule order</strong></td>
                 <td><strong>Rule name / type</strong></td>
@@ -41,11 +41,11 @@
               </tr>
             </table>
             
-            <p>Lines 2-16 comprise the first <Rule>. Lines 4-9 set the filter for this rule, such that the "type" attribute has a value of "local-road". If this condition is true for a particular line, the rule is rendered according to the <LineSymbolizer> which is on lines 10-15. Lines 12-13 set the color of the line to be a dark green (#009933) and the width to be 2 pixels.</p>
+            <p>Lines 2-16 comprise the first <Rule>. Lines 4-9 set the filter for this rule, such that the "type" attribute has a value of "local-road". If this condition is true for a particular line, the rule is rendered according to the &lt;LineSymbolizer&gt; which is on lines 10-15. Lines 12-13 set the color of the line to be a dark green (#009933) and the width to be 2 pixels.</p>
 
-            <p>Lines 19-33 comprise the second <Rule>. Lines 21-26 set the filter for this rule, such that the "type" attribute has a value of "secondary". If this condition is true for a particular line, the rule is rendered according to the <LineSymbolizer> which is on lines 27-32. Lines 29-30 set the color of the line to be a dark blue (#0055CC) and the width to be 3 pixels, making the lines slightly thicker than the "local-road" lines and also a different color.</p>
+            <p>Lines 19-33 comprise the second <Rule>. Lines 21-26 set the filter for this rule, such that the "type" attribute has a value of "secondary". If this condition is true for a particular line, the rule is rendered according to the &lt;LineSymbolizer&gt; which is on lines 27-32. Lines 29-30 set the color of the line to be a dark blue (#0055CC) and the width to be 3 pixels, making the lines slightly thicker than the "local-road" lines and also a different color.</p>
 
-            <p>Lines 36-50 comprise the third and final <Rule>. Lines 38-43 set the filter for this rule, such that the "type" attribute has a value of "primary". If this condition is true for a particular line, the rule is rendered according to the <LineSymbolizer> which is on lines 44-49. Lines 46-47 set the color of the line to be a bright red (#FF0000) and the width to be 6 pixels, so that these lines are rendered on top of and thicker than the other two road classes. In this way, the "primary" roads are given priority in the map rendering.</p>
+            <p>Lines 36-50 comprise the third and final &lt;Rule&gt;. Lines 38-43 set the filter for this rule, such that the "type" attribute has a value of "primary". If this condition is true for a particular line, the rule is rendered according to the &lt;LineSymbolizer&gt; which is on lines 44-49. Lines 46-47 set the color of the line to be a bright red (#FF0000) and the width to be 6 pixels, so that these lines are rendered on top of and thicker than the other two road classes. In this way, the "primary" roads are given priority in the map rendering.</p>
               
             <p>Note: Refer to the Example lines layer to see the attributes for the layer. This example has eschewed labels in order to simplify the style, but you can refer to the example Optimized and styled label to see which attributes correspond to which points.</p>
         </div>

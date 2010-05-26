@@ -19,9 +19,9 @@
                 
                 // create a WMS layer and add it to the map
                 var layer = new OpenLayers.Layer.WMS(
-                    "World Map",
-                    "/geoserver/gwc/service/wms",
-                    {layers: "World", format: "image/png"}
+                    "Global Imagery",
+                    "http://maps.opengeo.org/geowebcache/service/wms",
+                    {layers: "bluemarble"}
                 );
                 map.addLayer(layer);
             

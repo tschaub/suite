@@ -24,11 +24,10 @@
                     width: "100%",
                     layers: [
                         new OpenLayers.Layer.WMS(
-                            "World Map",
-                            "/geoserver/gwc/service/wms",
-                            {layers: "World", format: "image/png"}
-                        )
-                    ],
+                            "Global Imagery",
+                            "http://maps.opengeo.org/geowebcache/service/wms",
+                            {layers: "bluemarble"}
+                        )],
                     center: [-100, 40],
                     zoom: 3
                 });

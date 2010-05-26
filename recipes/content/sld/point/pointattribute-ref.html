@@ -16,16 +16,33 @@
             This style contains three rules. Each 
             <Rule> varies the style based on the value of the population ("pop") attribute for each point, with smaller values yielding a smaller circle, and larger values yielding a larger circle.
 
-                <p>The three rules are designed as follows:
-                </p>
-                <ul>
-                    <li>SmallPop: Less than 50,000  = size 
-                    </li>
-                    <li>MediumPop: 50,000 to 100,000 = size 12
-                    </li>
-                    <li>LargePop: Greater than 100,000 = size 16
-                    </li>
-                </ul>
+                <p>The three rules are designed as follows:</p>
+                <table class="reference">
+                  <tr>
+                    <td><strong>Rule order</strong></td>
+                    <td><strong>Rule name / type</strong></td>
+                    <td><strong>Scale denominator</strong></td>
+                    <td><strong>Point size</strong></td>
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                    <td>SmallPop</td>
+                    <td>Less than 50,000</td>
+                    <td>12</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>MediumPop</td>
+                    <td>50,000 to 100,000</td>
+                    <td>12</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>LargePop</td>
+                    <td>Greater than 100,000</td>
+                    <td>16</td>
+                  </tr>
+                </table>
                 <p>The order of the rules does not matter in this case, since each shape is only rendered by a single rule.
                 </p>
                 <p>

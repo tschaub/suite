@@ -8,7 +8,7 @@
     <body class="reference-body">
         <h1>Zoom-based Polygon</h1>
         <div class="description">
-          This example alters the style of the polygon at different zoom levels.
+             This example alters the style of the polygon at different zoom levels.
         </div>
         <div class="content">
           It is often desirable to make shapes larger at higher zoom levels when creating a natural-looking map. This example varies the thickness of the lines according to the zoom level. Polygons already do this by nature of being two dimensional, but another way to adjust styling of polygons based on zoom level is to adjust the thickness of the stroke (to be larger as the map is zoomed in) or to limit labels to only certain zoom levels. This is ensures that the size and quantity of strokes and labels remains legible and doesn't overshadow the polygons themselves.
@@ -18,7 +18,7 @@
           <p>Note: Determining the appropriate scale denominators (zoom levels) to use is beyond the scope of this example.</p>
 
           <p>This style contains three rules, defined as follows:</p>
-          <table>
+          <table class="reference">
             <tr>
               <td><strong>Rule order</strong></td>
               <td><strong>Rule name / type</strong></td>
@@ -49,11 +49,11 @@
             </tr>
           </table>
 
-          <p>The first rule, on lines 2-36, is for the smallest scale denominator, corresponding to when the view is "zoomed in". The scale rule is set on line 40 such that the rule will apply only where the scale denominator is 100,000,000 or less. Line 7 defines the fill as blue (#0000CC). Note that the fill is kept constant across all rules regardless of the scale denominator. As in the Polygon with default label or Polygon with styled label examples, the rule also contains a <TextSymbolizer> at lines 14-35 for drawing a text label on top of the polygon. Lines 19-22 set the font information to be Arial, 14 pixels, and bold with no italics. The label is centered both horizontally and vertically along the centroid of the polygon on by setting <AnchorPointX> and <AnchorPointY> to both be 0.5 (or 50%) on lines 27-28. Finally, the color of the font is set to white (#FFFFFF) in line 33.</p>
+          <p>The first rule, on lines 2-36, is for the smallest scale denominator, corresponding to when the view is "zoomed in". The scale rule is set on line 40 such that the rule will apply only where the scale denominator is 100,000,000 or less. Line 7 defines the fill as blue (#0000CC). Note that the fill is kept constant across all rules regardless of the scale denominator. As in the Polygon with default label or Polygon with styled label examples, the rule also contains a &lt;TextSymbolizer&gt; at lines 14-35 for drawing a text label on top of the polygon. Lines 19-22 set the font information to be Arial, 14 pixels, and bold with no italics. The label is centered both horizontally and vertically along the centroid of the polygon on by setting &lt;AnchorPointX&gt; and &lt;AnchorPointY&gt; to both be 0.5 (or 50%) on lines 27-28. Finally, the color of the font is set to white (#FFFFFF) in line 33.</p>
 
-          <p>The second rule, on lines 37-50, is for the intermediate scale denominators, corresponding to when the view is "partially zoomed". The scale rules on lines 39-40 set the rule such that it will apply to any map with a scale denominator between 100,000,000 and 200,000,000. (The <MinScaleDenominator> is inclusive and the <MaxScaleDenominator> is exclusive, so a zoom level of exactly 200,000,000 would not apply here.) Aside from the scale, there are two differences between this rule and the first: the width of the stroke is set to 4 pixels on line 47 and a <TextSymbolizer> is not present so that no labels will be displayed.</p>
+          <p>The second rule, on lines 37-50, is for the intermediate scale denominators, corresponding to when the view is "partially zoomed". The scale rules on lines 39-40 set the rule such that it will apply to any map with a scale denominator between 100,000,000 and 200,000,000. (The &lt;MinScaleDenominator&gt; is inclusive and the &lt;MaxScaleDenominator&gt; is exclusive, so a zoom level of exactly 200,000,000 would not apply here.) Aside from the scale, there are two differences between this rule and the first: the width of the stroke is set to 4 pixels on line 47 and a &lt;TextSymbolizer&gt; is not present so that no labels will be displayed.</p>
 
-          <p>The third rule, on lines 51-63, is for the largest scale denominator, corresponding to when the map is "zoomed out". The scale rule is set on line 53 such that the rule will apply to any map with a scale denominator of 200,000,000 or greater. Again, the only differences between this rule and the others are the width of the lines, which is set to 1 pixel on line 60, and the absence of a <TextSymbolizer> so that no labels will be displayed.</p>
+          <p>The third rule, on lines 51-63, is for the largest scale denominator, corresponding to when the map is "zoomed out". The scale rule is set on line 53 such that the rule will apply to any map with a scale denominator of 200,000,000 or greater. Again, the only differences between this rule and the others are the width of the lines, which is set to 1 pixel on line 60, and the absence of a &lt;TextSymbolizer&gt; so that no labels will be displayed.</p>
 
           <p>The resulting style produces a polygon stroke that gets larger as one zooms in and labels that only display when zoomed in to a sufficient level.</p>
             
