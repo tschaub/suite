@@ -557,7 +557,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 // extract environment variables
                 env = {};
                 var pairs = match[1].split(/\s*,\s*/);
-                var pair, key, value;
+                var pair;
                 for (var i=0, ii=pairs.length; i<ii; ++i) {
                     pair = pairs[i].split(/\s*:\s*/);
                     env[pair[0]] = this.config[pair[1]] || pair[1];
