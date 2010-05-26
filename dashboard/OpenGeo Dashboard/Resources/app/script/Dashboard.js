@@ -210,7 +210,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         xtype: "container",
                         layout: "fit",
                         title: "Logs",
-                        tabTip: "View the console log output",
+                        tabTip: "View the logs",
                         cls: "dash-panel",
                         id: "app-panels-help-logs",
                         items: [this.logPanel]
@@ -248,13 +248,13 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     },
                     items: [{
                         title: "Documentation",
-                        tabTip: "Help",
+                        tabTip: "Read the full documentation for each component",
                         cls: "dash-panel",
                         id: "app-panels-help-main",
                         html: og.util.loadSync("app/markup/help/main.html")
                     },  {
                         title: "Getting Started",
-                        tabTip: "Learn about the components of the OpenGeo Suite",
+                        tabTip: "A simple workflow to get started with the OpenGeo Suite",
                         cls: "dash-panel",
                         html: og.util.loadSync("app/markup/help/quickstart.html"),
                         id: "app-panels-dash-quickstart"
@@ -266,7 +266,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         id: "app-panels-help-faq"
                     }, {
                         title: "About",
-                        tabTip: "Learn more about OpenGeo",
+                        tabTip: "For more information",
                         cls: "dash-panel",
                         html: og.util.loadSync("app/markup/help/opengeo.html"),
                         id: "app-panels-help-about"
@@ -458,7 +458,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     config["pgsql_port"] = form.findField("pgsql_port").getValue();
         
                     og.util.saveConfig(this.config, 'config.ini');
-                    Ext.Msg.alert("Configuration saved", "The suite must be restarted for changes to take effect.");
+                    Ext.Msg.alert("Configuration saved", "The OpenGeo Suite must be restarted for changes to take effect.");
                     
                     //if the suite is running then we need to keep the old
                     // config around in order to shut it down, so set the dirty
@@ -852,7 +852,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 el.addClass('app-disabled');
                 Ext.QuickTips.register({
                     target: dom,
-                    text: "Start the Suite to activate this link."
+                    text: "Start the OpenGeo Suite to activate this link."
                 });
                 if (dom.href) {
                     dom.href_off = dom.href; 
