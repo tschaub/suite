@@ -26,6 +26,13 @@ if not exist "%pg_share%\contrib\postgis-%postgis_version%\spatial_ref_sys.sql" 
   set srs=%pg_share%\contrib\postgis-%postgis_version%\spatial_ref_sys.sql
 )
 
+if not exist "%pg_share%\contrib\adminpack.sql" (
+  echo Error: adminpack.sql file not found.
+  goto Fail
+) else (
+  set adminpack=%pg_share%\contrib\adminpack.sql
+)
+
 REM We want to run all these as postgres superuser
 set PGUSER=postgres
 set PGPORT=%pg_port%
@@ -51,6 +58,12 @@ if not errorlevel 0 (
 "%pg_bin_dir%\psql" -d template_postgis -f "%srs%" >> "%pg_log%" >nul
 if not errorlevel 0 (
   echo There was an error while loading spatial_ref_sys.sql.
+  goto Fail
+)
+
+"%pg_bin_dir%\psql" -d template_postgis -f "%adminpack%" >> "%pg_log%" >nul
+if not errorlevel 0 (
+  echo There was an error while loading adminpack.sql.
   goto Fail
 )
 
