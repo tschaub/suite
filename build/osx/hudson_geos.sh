@@ -23,8 +23,6 @@ else
   destdir=$2
 fi
  
-exit
-
 if [ ! -d $srcdir ]; then
   exit 1
 else 
