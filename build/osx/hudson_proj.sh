@@ -24,6 +24,7 @@ else
 fi
 
 if [ ! -d $srcdir ]; then
+  echo "Source directory is missing."
   exit 1
 else
   pushd $srcdir
