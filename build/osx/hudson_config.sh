@@ -7,7 +7,7 @@ export buildroot
 geos_version=3.2
 postgis_version=1.5
 proj_version=4.7
-pgsql_version=8.4.3-1
+pgsql_version=8.4.4-1
 
 # Special binaries
 proj_nad=proj-datumgrid-1.5.zip
