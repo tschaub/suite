@@ -29,6 +29,13 @@ a.app-disabled:hover {
     color: #999999;
 }
 
+.callout {
+  background: #F9F4B3;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  padding: 1em;
+}
+
 .dash-panel-body {
     padding: 16px 14px 10px;
 }
