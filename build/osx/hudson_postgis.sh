@@ -24,6 +24,7 @@ fi
 # Enter source directory
 srcdir=$1
 if [ ! -d $srcdir ]; then
+  echo "Source directory is missing."
   exit 1
 else
   pushd $srcdir
@@ -49,6 +50,7 @@ popd
 if [ -d ${buildroot}/proj ]; then
   cp -rf ${buildroot}/proj/* ${buildroot}/pgsql
 else
+  echo "Cannot find proj files."
   exit 1
 fi
 
@@ -56,14 +58,17 @@ fi
 if [ -d ${buildroot}/geos ]; then
   cp -rf ${buildroot}/geos/* ${buildroot}/pgsql
 else
+  echo "Cannot find GEOS files."
   exit 1
 fi
 
 # Check for the existence of the GTK environment
 if [ ! -d $HOME/gtk ]; then
+  echo "Cannot find GTK files."
   exit 1
 fi
 if [ ! -d $HOME/.local ]; then
+  echo "Cannot find JH build support."
   exit 1
 fi
 
