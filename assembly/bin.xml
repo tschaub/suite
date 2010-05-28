@@ -58,6 +58,10 @@
       <outputDirectory>webapps/docs/geowebcache</outputDirectory>
     </fileSet>
     <fileSet>
+      <directory>docs/geoeditor/target/html</directory>
+      <outputDirectory>webapps/docs/geoeditor</outputDirectory>
+    </fileSet>
+    <fileSet>
       <directory>recipes</directory>
       <outputDirectory>webapps/recipes</outputDirectory>
     </fileSet>

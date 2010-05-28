@@ -34,6 +34,10 @@
       <directory>docs/install/target/html</directory>
       <outputDirectory>install</outputDirectory>
     </fileSet>
+    <fileSet>
+      <directory>docs/geoeditor/target/html</directory>
+      <outputDirectory>geoeditor</outputDirectory>
+    </fileSet>
   </fileSets>
   <files>
     <file>
