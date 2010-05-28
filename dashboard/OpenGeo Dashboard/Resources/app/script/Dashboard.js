@@ -330,23 +330,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
     },
     
     createPrefForm: function() {
-        // create a password field validator
-        Ext.apply(Ext.form.VTypes, {
-           password: function(value, field)
-           {
-              if (field.initialPasswordField)
-              {
-                 var pwd = Ext.getCmp(field.initialPasswordField);
-                 this.passwordText = 'Passwords do not match.';
-                 return (value == pwd.getValue());
-              }
-         
-              return true;
-           },
-         
-           passwordText: ''
-        });
-        
         this.prefPanel = new Ext.FormPanel({
             renderTo: "app-panels-pref-form",
             //fileUpload: true,
@@ -401,9 +384,10 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     value: this.config["geoserver_password"],
                     listeners: {
                         change: function(f, e) {
-                            //reset the password confiformation form
-                            var confirm = this.prefPanel.getForm().findField("geoserver_password_confirm");
+                            //reset the password confirmation form
+                            var confirm = Ext.getCmp("geoserver_password_confirm");
                             confirm.setValue("");
+                            confirm.focus();
                         }, 
                         scope: this
                     }
@@ -411,10 +395,13 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     xtype: "textfield",
                     inputType: "password",
                     fieldLabel: "Confirm",
-                    vtype: "password",
+                    validator: function(value) {
+                        var pwd = Ext.getCmp("geoserver-admin-password");
+                        return (value === pwd.getValue()) || "Passwords do not match.";
+                    },
+                    id: "geoserver_password_confirm",
                     name: "geoserver_password_confirm", 
-                    value: this.config["geoserver_password"],
-                    initialPasswordField: "geoserver-admin-password"
+                    value: this.config["geoserver_password"]
                 }]
             }, {
                 xtype: "fieldset",
@@ -441,7 +428,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     // update suite config
                     config["suite_port"] = form.findField("suite_port").getValue();
                     config["suite_stop_port"] =  form.findField("suite_stop_port").getValue();
-
+                    
                     // update geoserver config
                     var username = form.findField("geoserver_username").getValue();
                     var password = form.findField("geoserver_password").getValue();
@@ -456,7 +443,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     
                     // update postgres port
                     config["pgsql_port"] = form.findField("pgsql_port").getValue();
-        
+                            
                     og.util.saveConfig(this.config, 'config.ini');
                     Ext.Msg.alert("Configuration saved", "The OpenGeo Suite must be restarted for changes to take effect.");
                     
