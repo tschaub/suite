@@ -491,30 +491,35 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         var xlinks = Ext.select(".app-xlink", false, root);
         xlinks.on({
             click: function(evt, el) {
-                var port = this.config["suite_port"];
-                var host = this.config["suite_host"];
-                var id, parts, key, path, url, title;
-                if (el.href.indexOf("#") >= 0) {
-                    id = el.href.split("#").pop();
-                    parts = id.split("-");
-                    if (parts.length > 1) {
-                        // lookup URL in config
-                        key = parts.pop();
-                        path = this.config[key];
-                        if (path) {
-                            title = this.config[key + "_title"];
-                            if (!path.match(/^(https?|file):\/\//)) {
-                                url = "http://" + host + (port ? ":" + port : "") + path;
+                var xEl = new Ext.Element(el);
+                var follow = xEl.hasClass("app-online") ? this.suite.online : true;
+                if (follow) {
+                    var port = this.config["suite_port"];
+                    var host = this.config["suite_host"];
+                    var id, parts, key, path, url, title;
+                    if (el.href.indexOf("#") >= 0) {
+                        id = el.href.split("#").pop();
+                        parts = id.split("-");
+                        if (parts.length > 1) {
+                            // lookup URL in config
+                            key = parts.pop();
+                            path = this.config[key];
+                            if (path) {
+                                title = this.config[key + "_title"];
+                                if (!path.match(/^(https?|file):\/\//)) {
+                                    url = "http://" + host + (port ? ":" + port : "") + path;
+                                }
                             }
-                        }
-                    }                    
+                        }                    
+                    }
+                    if (!path) {
+                        // href may be to arbitrary url
+                        url = el.href;
+                        el.href = "#";
+                    }
+                    this.openURL(url, title);
                 }
-                if (!path) {
-                    // href may be to arbitrary url
-                    url = el.href;
-                    el.href = "#";
-                }
-                this.openURL(url, title);
+                return follow;
             },
             scope: this
         });
@@ -533,8 +538,13 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         var plinks = Ext.select(".app-plink", false, root);
         plinks.on({
             click: function(evt, el) {
-                var key = el.href.split("#").pop();
-                this.launchProcess(key);
+                var xEl = new Ext.Element(el);
+                var follow = xEl.hasClass("app-online") ? this.suite.online : true;
+                if (follow) {
+                    var key = el.href.split("#").pop();
+                    this.launchProcess(key);
+                }
+                return follow;
             },
             scope: this
         });
@@ -856,7 +866,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 });
                 if (dom.href) {
                     dom.href_off = dom.href; 
-                    dom.removeAttribute('href');
+                    dom.href = "#";
                 }
             }
         });
