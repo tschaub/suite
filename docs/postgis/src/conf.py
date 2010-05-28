@@ -38,6 +38,7 @@ master_doc = 'index'
 
 # General substitutions.
 project = u'PostGIS'
+manual = u'User Manual' 
 copyright = u'2010 PostGIS'
 
 # The default replacements for |version| and |release|, also used in various
