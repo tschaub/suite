@@ -38,16 +38,15 @@ master_doc = 'index'
 
 # General substitutions.
 project = u'GeoWebCache'
-manual = u'User Manual'
-copyright = u'OpenGeo, License: Creative Commons 3.0 - Attribution Share Alike'
+copyright = u'2010 OpenGeo'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.
 #
 # The short X.Y version.
-version = '1.2'
+version = '1.2.2'
 # The full version, including alpha/beta/rc tags.
-release = 'trunk'
+release = '1.2.2'
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
@@ -103,7 +102,7 @@ html_title = project + " " + release + " " + manual
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-#html_favicon = None
+html_favicon = ['geowebcache.ico']
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

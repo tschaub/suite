@@ -44,9 +44,9 @@ copyright = u'20010 OpenGeo'
 # other places throughout the built documents.
 #
 # The short X.Y version.
-version = '0.2'
+version = '1.9.1'
 # The full version, including alpha/beta/rc tags.
-release = '0.2'
+release = '1.9.1'
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
@@ -103,7 +103,7 @@ html_theme_path = ['theme', '../../themes']
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-#html_favicon = None
+html_favicon = ['geoeditor.ico']
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
