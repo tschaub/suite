@@ -330,6 +330,12 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
     },
     
     createPrefForm: function() {
+        
+        var portValidator = function(value) {
+            // just check that it is numeric for now
+            return !!value.match(/^\d+$/) || "Invalid port number.";
+        };
+        
         this.prefPanel = new Ext.FormPanel({
             renderTo: "app-panels-pref-form",
             //fileUpload: true,
@@ -348,11 +354,13 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 items: [{ 
                     fieldLabel: "Primary Port",
                     name: "suite_port",
-                    value: this.config["suite_port"]
+                    value: this.config["suite_port"],
+                    validator: portValidator
                 },  {
                     fieldLabel: "Shutdown Port",
                     name: "suite_stop_port",
-                    value: this.config["suite_stop_port"]
+                    value: this.config["suite_stop_port"],
+                    validator: portValidator
                 }]
             }, {
                 xtype: "fieldset",
@@ -415,7 +423,8 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 items: [{ 
                     fieldLabel: "Port",
                     name: "pgsql_port",
-                    value: this.config["pgsql_port"]
+                    value: this.config["pgsql_port"],
+                    validator: portValidator
                 }]
             }],
             buttons: [{
