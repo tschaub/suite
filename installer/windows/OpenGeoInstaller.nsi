@@ -3,8 +3,8 @@
 ; Initial definitions
 !define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
-!define VERSION "2.0-SNAPSHOT"
-!define LONGVERSION "2.0.0.0"
+!define VERSION "1.9.1"
+!define LONGVERSION "1.9.1.0"
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
 !define SOURCEPATHROOT "..\..\target\win"
 !define STARTMENU_FOLDER "${APPNAME}"
@@ -251,8 +251,8 @@ Function PriorInstall
   IfErrors Upgrade1.0 ; v1.0 and v1.0r1 did not have this key, so if not there, mmust be 1.0 or 1.0r1
 
   ; Check for 1.9.0
-  StrCmp $R2 "1.9.0" Upgrade1.9 0
-  StrCmp $R2 "2.0.0" SameVersion UnknownVersion
+  StrCmp $R2 "1.9.0" Upgrade 0
+  StrCmp $R2 "${VERSION}" SameVersion UnknownVersion
 
 
   Upgrade1.0:
@@ -271,7 +271,7 @@ Function PriorInstall
   StrCpy $OldInstallDir $R1
   Goto Continue
 
-  Upgrade1.9:
+  Upgrade:
   ClearErrors
   ReadRegStr $R1 HKLM "Software\${COMPANYNAME}\OpenGeo Suite" "InstallDir"
   IfErrors UhOh
