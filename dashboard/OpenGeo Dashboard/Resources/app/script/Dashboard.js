@@ -375,7 +375,16 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     xtype: 'textfield',
                     fieldLabel: "Data Directory",
                     name: "geoserver_data_dir",
-                    value: this.config["geoserver_data_dir"]
+                    value: this.config["geoserver_data_dir"],
+                    validationEvent: "change",
+                    validator: function(value) {
+                        var valid = true;
+                        if (window.Titanium) {
+                            var file = Titanium.Filesystem.getFile(value);
+                            valid = file.exists() || "Directory does not exist.";
+                        }
+                        return valid;
+                    }
                 }, {
                     xtype: 'textfield',
                     fieldLabel: "Username",
