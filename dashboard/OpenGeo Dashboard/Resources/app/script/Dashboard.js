@@ -1,14 +1,5 @@
 Ext.namespace("og");
 
-/** api: constant[VERSION]
- *  ``String``
- *  This is the Suite version number.  The dashboard will use this to compare
- *  with any existing "suite_version" key in the user's config.ini.  If the 
- *  values are different when the dashboard starts up, then it does the 
- *  necessary upgrade work.
- */
-og.VERSION = "1.9.0";
-
 og.Dashboard = Ext.extend(Ext.util.Observable, {
     
     /** api: property[debug]
@@ -56,8 +47,21 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
     
     constructor: function(config) {
         
+        // deal with upgrades
+        var existingVersion = config["suite_version"];
+        var thisVersion = this.getPreferences("version");
+        if (!thisVersion) {
+            var info = og.util.loadConfigHTTP("version.ini")
+            thisVersion = info["suite_version"];
+            this.setPreferences({version: thisVersion});
+        }
+        if (existingVersion !== thisVersion) {
+            config = og.util.upgradeConfig(config, thisVersion);
+        }
+
         // apply default preferences
         this.setPreferences(Ext.applyIf(this.getPreferences(), this.DEFAULTS));
+
         
         // allow config via query string
         var str = window.location.search.substring(1);

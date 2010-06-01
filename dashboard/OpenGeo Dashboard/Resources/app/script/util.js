@@ -28,14 +28,10 @@ og.util = {
         } else {
             config = this.loadConfigHTTP(url);
         }
-        var version = config["suite_version"];
-        if (version !== og.VERSION) {
-            config = this.upgradeConfig(config);
-        }
         return config;
     }, 
     
-    /** private: method[loadConfig]
+    /** private: method[loadConfigHTTP]
      *  :arg url: ``String``
      *  :returns: ``Object`` A config object.
      *
@@ -45,7 +41,7 @@ og.util = {
         return this.parseConfig(this.loadSync(url));
     }, 
     
-    /** private: method[loadConfig]
+    /** private: method[loadConfigFS]
      *  :arg filename: ``String``
      *  :returns: ``Object`` A config object.
      *
@@ -72,15 +68,16 @@ og.util = {
     
     /** private: method[upgradeConfig]
      *  :arg oldConfig: ``Object`` Existing config.
+     *  :arg newVersion: ``String`` New version string.
      *  :returns: ``Object`` Upgraded config.
      *
      *  Upgrades an existing configuration.
      */
-    upgradeConfig: function(oldConfig) {
+    upgradeConfig: function(oldConfig, newVersion) {
         var version = oldConfig["suite_version"] || "1.0.0";
         // grab the bundled config.ini
         var newConfig = this.loadConfigHTTP("config.ini");
-        // at this point, we only have to deal with 1.0.0 -> 1.9.0
+        // v1.0.0 and fresh install look the same at this point
         if (version === "1.0.0") {
             // respect old username, password, port, and stop_port
             Ext.apply(newConfig, {
@@ -102,12 +99,13 @@ og.util = {
                 }
             }
         }
+        newConfig["suite_version"] = newVersion;
         this.saveConfig(newConfig);
         return newConfig;
     },
     
-    /** private: method[loadConfig]
-     *  :arg url: ``String``
+    /** private: method[parseConfig]
+     *  :arg text: ``String``
      *  :returns: ``Object`` A config object.
      *
      *  Parses the contents of a config file into a config object.
