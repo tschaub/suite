@@ -302,5 +302,6 @@ checkrv $? "Suite compressing"
 if [ -f "${DMGTMP}" ]; then 
   rm -f "${DMGTMP}"
 fi
+md5 "${DMGFINAL}" > "${DMGFINAL}.md5"
 
 exit 0
