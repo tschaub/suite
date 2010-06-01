@@ -12,7 +12,7 @@ function usage() {
 }
 
 # Check for one argument
-if [ $# -lt 1 ]; then
+if [ $# -lt 2 ]; then
   usage
 fi
 
