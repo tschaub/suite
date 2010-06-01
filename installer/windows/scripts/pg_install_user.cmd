@@ -12,6 +12,17 @@ REM We want to run all these as postgres superuser
 set PGUSER=postgres
 set PGPORT=%pg_port%
 
+
+REM Loading adminpack
+"%pg_bin_dir%\psql" -f "%pg_share%\contrib\adminpack.sql" -d %PGUSER% >> "%pg_log%" >nul
+if not errorlevel 0 (
+  echo There was an error while loading adminpack.sql.
+  goto Fail
+)
+
+
+REM Create user database
+
 "%pg_bin_dir%\createuser" --createdb --superuser %USERNAME% >> "%pg_log%" >nul
 
 REM Any errors?

@@ -13,6 +13,8 @@ set pg_bin_dir=%pg_dir%\bin
 set pg_lib_dir=%pg_dir%\lib
 set pg_port=%pg_default_port%
 
+set pg_data_load_dir=%CD%\..\pgdata
+
 REM Get the existing pgport number from config.ini
 if not exist "%USERPROFILE%\.opengeo\config.ini" goto End
 

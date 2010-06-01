@@ -27,6 +27,7 @@ if "%1" == "start" (
     call pg_start_server.cmd
     call pg_install_template.cmd
     call pg_install_user.cmd
+    call pg_install_data.cmd
 	echo.
 	echo PostGIS setup finished.
 	echo.
