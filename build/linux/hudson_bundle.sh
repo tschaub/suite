@@ -7,7 +7,7 @@ d=`dirname $0`
 source ${d}/hudson_config.sh
 
 function usage() {
-  echo "Usage: $0 <destdir>"
+  echo "Usage: $0 <destdir> <32|64>"
   exit 1
 }
 
@@ -18,6 +18,7 @@ fi
 
 workdir=`pwd`
 destdir=$1
+arch=$2
 
 # Check that we have a mostly-built pgsql in the buildroot...
 if [ ! -d ${buildroot}/pgsql ]; then
@@ -26,7 +27,7 @@ if [ ! -d ${buildroot}/pgsql ]; then
 fi
 
 # Tar up the results 
-binfile=pgsql-postgis-linux32.tar.gz
+binfile=pgsql-postgis-linux${arch}.tar.gz
 pushd ${buildroot}
 if [ -f ${workdir}/${binfile} ]; then
   rm -f ${workdir}/${binfile}
