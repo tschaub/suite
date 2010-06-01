@@ -18,7 +18,7 @@ The OpenGeo Suite has the following system requirements:
 Installation
 ------------
 
-#. Double click to mount the :file:`OpenGeoSuite-1.9.0.dmg` file.  Inside the mounted image, double click on :file:`OpenGeo Suite.mpkg`
+#. Double click to mount the :file:`OpenGeoSuite-1.9.1.dmg` file.  Inside the mounted image, double click on :file:`OpenGeo Suite.mpkg`
 
 #. At the **Welcome** screen, click :guilabel:`Continue`.
 
