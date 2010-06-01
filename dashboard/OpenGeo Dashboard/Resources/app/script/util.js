@@ -98,6 +98,13 @@ og.util = {
                     newConfig["geoserver_data_dir"] = oldConfig["data_dir"];
                 }
             }
+        } else {
+            // for all other upgrades, we respect the existing configuration
+            for (var key in newConfig) {
+                if (key in oldConfig) {
+                    newConfig[key] = oldConfig[key];
+                }
+            }
         }
         newConfig["suite_version"] = newVersion;
         this.saveConfig(newConfig);
