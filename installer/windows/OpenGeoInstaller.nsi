@@ -608,6 +608,10 @@ Section "PostGIS" SectionPostGIS
   File /a "icons\postgis.ico"
   File /a "icons\pgshapeloader.ico"
 
+  ; All .sql files here
+  SetOutPath "$INSTDIR"
+  File /r "${SOURCEPATHROOT}\pgdata"
+
   CreateDirectory "$INSTDIR\pgsql\8.4\pgAdmin III\branding"
   SetOutPath "$INSTDIR\pgsql\8.4\pgAdmin III\branding"
   File /a "..\common\postgis\branding.ini" ; Adds the custom splash
@@ -765,6 +769,7 @@ Section "Documentation" SectionDocs
   !insertmacro DisplayImage "graphics\slide_4_gwc.bmp"
 
   SetOutPath "$INSTDIR\icons"
+  File /a "icons\geoeditor.ico"
   File /a "icons\geoserver.ico"
   File /a "icons\geoexplorer.ico"
   File /a "icons\styler.ico"
@@ -889,8 +894,8 @@ SectionEnd
 
 Section "-Misc" SectionMisc
 
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" \
-                 "$INSTDIR\Uninstall.exe" \
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall OpenGeo Suite.lnk" \
+                 "$INSTDIR\Uninstall OpenGeo Suite.exe" \
                  "" "$INSTDIR\icons\uninstall.ico" 0
 
   ; Changelog
@@ -925,7 +930,7 @@ Section -FinishSection
   WriteRegDWORD HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "NoModify" "1"
   WriteRegDWORD HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "NoRepair" "1"
 
-  WriteUninstaller "$INSTDIR\uninstall.exe"
+  WriteUninstaller "$INSTDIR\Uninstall OpenGeo Suite.exe"
 
 SectionEnd
 
