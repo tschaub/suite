@@ -861,21 +861,23 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         olinks.each(function(el, c, idx) {
             var dom = el.dom;
             if (online == true) {
-                el.removeClass('app-disabled');
+                el.removeClass("app-disabled");
                 Ext.QuickTips.unregister(dom);
-                if (dom.href_off) {
-                    dom.href = dom.href_off;
-                    dom.removeAttribute('href_off');
+                var href = dom.getAttribute("href_off");
+                if (href) {
+                    dom.setAttribute("href", href);
+                    dom.removeAttribute("href_off");
                 }
             } else {
-                el.addClass('app-disabled');
+                el.addClass("app-disabled");
                 Ext.QuickTips.register({
                     target: dom,
                     text: "Start the OpenGeo Suite to activate this link."
                 });
-                if (dom.href) {
-                    dom.href_off = dom.href; 
-                    dom.href = "#";
+                var href = dom.getAttribute("href");
+                if (href && !dom.getAttribute("href_off")) {
+                    dom.setAttribute("href_off", href);
+                    dom.setAttribute("href", "#");
                 }
             }
         });
