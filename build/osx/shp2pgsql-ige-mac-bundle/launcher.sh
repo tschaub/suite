@@ -11,8 +11,7 @@ else
 fi
 
 name="`basename "$0"`"
-tmp="`pwd`/$0"
-tmp="`dirname "$tmp"`"
+tmp="`dirname "${BASH_SOURCE[0]}"`" 
 tmp="`dirname "$tmp"`"
 bundle="`dirname "$tmp"`"
 bundle_contents="$bundle"/Contents
