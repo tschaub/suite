@@ -74,13 +74,8 @@ running `ant`).
 2. Modify the "wms" configuration value in GeoEditor/index.html to reflect the
 path to your GeoServer WMS endpoint (usually "/geoserver/wms").
 
-3. Modify the "featureTypes" configuration array in GeoEditor/index.html to
-reference the feature types that you want to be available to the editor. The
-"name" property is the feature type (without the namespace alias). The
-"namespace" is the feature type namespace URI.  The "url" should be the relative
-URL to your WFS endpoint (usually "/geoserver/wfs"). If you use an absolute URL,
-you must specify a proxy as described above.  The "schema" should be the URL
-for the DescribeFeatureType response for the given feature type.
+3. Modify the "wfs" configuration value in GeoEditor/index.html to reflect the
+path to your GeoServer WFS endpoing (usually "/geoserver/wfs").
 
 4. Open the index.html page in a browser (e.g.
 http://localhost:8080/geoserver/www/GeoEditor/index.html)
