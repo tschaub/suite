@@ -31,16 +31,16 @@ else
 fi
 
 # Set up paths necessary to build
-export PATH=${buildroot}/pgsql/bin:${PATH}
-export LD_LIBRARY_PATH=${buildroot}/pgsql/lib
+export PATH=${buildroot}/pgsql_build/bin:${buildroot}/geos/bin:${buildroot}/proj/bin:${PATH}
+export LD_LIBRARY_PATH=${buildroot}/pgsql_build/lib:${buildroot}/proj/lib:${buildroot}/geos/lib
 
 # Configure PostGIS
 ./autogen.sh
 checkrv $? "PostGIS autogen"
 ./configure \
-  --with-pgconfig=${buildroot}/pgsql/bin/pg_config \
-  --with-geosconfig=${buildroot}/pgsql/bin/geos-config \
-  --with-projdir=${buildroot}/pgsql \
+  --with-pgconfig=${buildroot}/pgsql_build/bin/pg_config \
+  --with-geosconfig=${buildroot}/geos/bin/geos-config \
+  --with-projdir=${buildroot}/proj \
   --with-xml2config=/usr/bin/xml2-config \
   --with-gui
 checkrv $? "PostGIS configure"

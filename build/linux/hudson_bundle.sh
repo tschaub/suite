@@ -22,9 +22,14 @@ arch=$2
 
 # Check that we have a mostly-built pgsql in the buildroot...
 if [ ! -d ${buildroot}/pgsql ]; then
-  echo "Missing pgsql buildroot! ${buildroot}/pgsql"
-  exit 1
+  rm -rf ${buildroot}/pgsql
+  cp -r ${buildroot}/pgsql_build ${buildroot}/pgsql
 fi
+
+# Copy in other files
+for d in openssl geos proj pgadmin wxwidgets; do
+  cp -r ${buildroot}/${d}/* ${buildroot}/pgsql
+done
 
 # Tar up the results 
 binfile=pgsql-postgis-linux${arch}.tar.gz

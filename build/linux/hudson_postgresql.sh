@@ -21,21 +21,30 @@ tar xvfj ${pgsql_file}
 checkrv $? "PgSQL untar"
 popd
 
+export LD_LIBRARY_PATH=${buildroot}/openssl/lib
+export PATH=${buildroot}/openssl/bin:${PATH}
+
 pushd ${buildroot}/${pgsql_dir}
 ./configure \
-  --prefix=${buildroot}/pgsql \
+  --prefix=${buildroot}/pgsql_build \
   --with-openssl \
   --with-ldap \
   --with-pam \
   --with-gssapi
 checkrv $? "PgSQL configure"
-make && make install
-checkrv $? "PgSQL build"
+make && 
+pushd contrib &&
+make && 
 popd
-
-pushd ${buildroot}/${pgsql_dir}/contrib
-make && make install
-checkrv $? "PgSQL contrib build"
+checkrv $? "PgSQL build"
+if [ -d ${buildroot}/pgsql_build ]; then
+  rm -rf ${buildroot}/pgsql_build
+fi
+make install &&
+pushd contrib &&
+make install &&
+popd 
+checkrv $? "PgSQL install"
 popd
 
 exit 0

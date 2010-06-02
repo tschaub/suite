@@ -31,9 +31,14 @@ unzip -o ${buildroot}/${proj_nad}
 popd
 
 ./autogen.sh
-./configure --prefix=${buildroot}/pgsql
-make clean && make && make install
+./configure --prefix=${buildroot}/proj
+make clean && make
 checkrv $? "Proj build"
+if [ -d ${buildroot}/proj ]; then
+  rm -rf ${buildroot}/proj
+fi
+make install
+checkrv $? "Proj install"
 
 # exit srcdir
 popd

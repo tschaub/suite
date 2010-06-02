@@ -24,10 +24,14 @@ popd
 pushd ${buildroot}/${openssl_dir}
 ./config \
   shared \
-  --prefix=${buildroot}/pgsql 
+  --prefix=${buildroot}/openssl 
 checkrv $? "OpenSSL configure"
-make && make install
+make 
 checkrv $? "OpenSSL build"
+if [ -d ${buildroot}/openssl ]; then
+  rm -rf ${buildroot}/openssl
+fi
+make install
 popd
 
 exit 0

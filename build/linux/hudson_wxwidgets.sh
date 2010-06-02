@@ -23,13 +23,18 @@ popd
 
 pushd ${buildroot}/${wx_dir}
 ./configure \
-  --prefix=${buildroot}/pgsql \
+  --prefix=${buildroot}/wxwidgets \
   --with-gtk \
   --enable-gtk2 \
   --enable-unicode
 checkrv $? "WxWidgets configure"
-make && make install
+make 
 checkrv $? "WxWidgets build"
+if [ -d ${buildroot}/wxwidgets ]; then
+  rm -rf ${buildroot}/wxwidgets
+fi
+make install
+checkrv $? "WxWidgets install"
 popd
 
 pushd ${buildroot}/${wx_dir}/contrib

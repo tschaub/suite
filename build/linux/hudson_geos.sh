@@ -26,9 +26,14 @@ else
 fi
 
 ./autogen.sh
-./configure --prefix=${buildroot}/pgsql 
-make clean && make && make install
+./configure --prefix=${buildroot}/geos 
+make clean && make 
 checkrv $? "GEOS build"
+if [ -d ${buildroot}/geos ]; then
+  rm -rf ${buildroot}/geos
+fi
+make install
+checkrv $? "GEOS install"
 
 # Exit srcdir
 popd

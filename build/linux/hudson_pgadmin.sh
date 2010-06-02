@@ -11,7 +11,7 @@ function usage() {
   exit 1
 }
 
-# Unzip the PostgreSQL source 
+# Unzip the PgAdmin source 
 getfile ${pgadmin_url} ${buildroot}/${pgadmin_file}
 pushd ${buildroot}
 if [ -d ${pgadmin_dir} ]; then
@@ -21,14 +21,22 @@ tar xvfz ${pgadmin_file}
 checkrv $? "PgAdmin untar"
 popd
 
+export LD_LIBRARY_PATH=${buildroot}/pgsql_build/lib
+export PATH=${buildroot}/pgsql_build/bin:${PATH}
+
 pushd ${buildroot}/${pgadmin_dir}
 ./configure \
-  --prefix=${buildroot}/pgsql \
+  --prefix=${buildroot}/pgadmin \
   --with-pgsql=${buildroot}/pgsql \
-  --with-wx=${buildroot}/pgsql 
+  --with-wx=${buildroot}/wxwidgets 
 checkrv $? "PgAdmin configure"
-make && make install
+make 
 checkrv $? "PgAdmin build"
+if [ -d ${buildroot}/pgadmin ]; then
+  rm -rf ${buildroot}/pgadmin
+fi
+make install
+checkrv $? "PgAdmin install"
 popd
 
 exit
