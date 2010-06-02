@@ -38,7 +38,7 @@ if [ -f ${workdir}/${binfile} ]; then
   rm -f ${workdir}/${binfile}
 fi
 tar cvfz ${workdir}/${binfile} pgsql
-checkrv $? "Bundle zip"
+checkrv $? "Bundle tgz"
 echo "Wrote ${binfile} to $workdir"
 popd
 
