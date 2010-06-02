@@ -41,7 +41,7 @@ function getfile {
   file=$2
   dodownload=yes
 
-  url_tag=`curl -s -I $url | grep ETag | tr -d \" | cut -f2 -d' '`
+  url_tag=`curl -f -s -I $url | grep ETag | tr -d \" | cut -f2 -d' '`
   checkrv $? "ETag check at $url"
 
   if [ -f "${file}" ] && [ -f "${file}.etag" ]; then
@@ -54,7 +54,7 @@ function getfile {
 
   if [ $dodownload = "yes" ]; then
     echo "downloading fresh copy of $file"
-    curl $url > $file
+    curl -f $url > $file
     checkrv $? "Download from $url"
     echo $url_tag > "${file}.etag"
   fi
@@ -116,6 +116,19 @@ cp -vf binaries/scripts/suite_uninstall.sh binaries/suite/
 chmod 755 binaries/suite/suite_uninstall.sh
 find binaries/suite/data_dir -type d -exec chmod 775 {} ';'
 find binaries/suite/data_dir -type f -exec chmod 664 {} ';'
+
+# Read the verison info from the ini file
+ini=binaries/suite/version.ini
+if [ -f $ini ]; then
+  cat $ini
+  svn_revision=`grep svn_revision $ini | cut -f2 -d= | tr -d ' '`
+  suite_version=`grep suite_version $ini | cut -f2 -d= | tr -d ' '`
+else
+  svn_revision=r0000
+  suite_version=1.9
+fi
+
+# Build the pkg
 if [ -d "./build/GeoServer.pkg" ]; then
   find ./build/GeoServer.pkg -type f -exec chmod 644 {} ';'
   find ./build/GeoServer.pkg -type d -exec chmod 755 {} ';'
@@ -223,7 +236,7 @@ checkrv $? "Suite packaging"
 #
 VOL="OpenGeo Suite"
 DMGTMP="tmp-${VOL}.dmg"
-DMGFINAL="OpenGeoSuite.dmg"
+DMGFINAL="OpenGeoSuite-$suite_version-r$svn_revision.dmg"
 BACKGROUND="dmg_background.bmp"
 APP="${VOL}.mpkg"
 
@@ -236,12 +249,7 @@ dmg_bottomright_x=`expr $dmg_topleft_x + $dmg_width`
 dmg_bottomright_y=`expr $dmg_topleft_y + $dmg_height`
 
 # Clean up intermediate steps
-if [ -f "${DMGFINAL}" ]; then
-  rm -f "${DMGFINAL}"
-fi
-if [ -f "${DMGTMP}" ]; then
-  rm -f "${DMGTMP}"
-fi
+find . -name "*.dmg" -exec rm -f {} ';'
 
 # Copy the README-mac.pdf file into the DMG root
 README=README.pdf
