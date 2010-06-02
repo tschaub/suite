@@ -27,7 +27,7 @@ export PATH=${buildroot}/pgsql_build/bin:${PATH}
 pushd ${buildroot}/${pgadmin_dir}
 ./configure \
   --prefix=${buildroot}/pgadmin \
-  --with-pgsql=${buildroot}/pgsql \
+  --with-pgsql=${buildroot}/pgsql_build \
   --with-wx=${buildroot}/wxwidgets 
 checkrv $? "PgAdmin configure"
 make 
