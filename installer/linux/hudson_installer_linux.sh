@@ -1,21 +1,25 @@
 #!/bin/bash
 
 # This script downloads the binary artefacts from other build processes and 
-# assembles them in the ./binaries directory where they are packaged into
-# .pkg files by Iceberg using the 'freeze' command and finally into the 
-# suite .mpkg file with 'freeze' also.
+# assembles them in the ./binaries/root directory where they are packaged into
+# a self-extracting bin file with makeself.sh
 
-dashboard_version=1.0.0
 pgsql_version=8.4
-suite_version=1.9
+jre_version=1.6.0.20
+arch=$1
 
 dashboard_url=http://suite.opengeo.org/builds/dashboard-latest-linux.zip
 suite_url=http://suite.opengeo.org/builds/opengeosuite-latest-bin.tar.gz
 ext_url=http://suite.opengeo.org/builds/opengeosuite-latest-ext.tar.gz
-jre_url=http://data.opengeo.org/suite/suite-jre-6-lin.tgz
-#pgsql_url=http://suite.opengeo.org/osxbuilds/postgis-osx.zip
+jre_url=http://data.opengeo.org/suite/suite-jre-${jre_version}-lin${arch}.tgz
+pgsql_url=http://linuxbuild${arch}.dev.opengeo.org:8080/userContent/pgsql-postgis-linux${arch}.tar.gz
 
 export PATH=$PATH:/usr/local/bin
+
+if [ $# -lt 1 ]; then
+  echo "Usage: $0 <arch>"
+  exit 1
+fi
 
 
 #
@@ -44,7 +48,7 @@ function getfile {
   file=$2
   dodownload=yes
 
-  url_tag=`curl -s -I $url | grep ETag | tr -d \" | cut -f2 -d' '`
+  url_tag=`curl -f -s -I $url | grep ETag | tr -d \" | cut -f2 -d' '`
   checkrv $? "ETag check at $url"
 
   if [ -f "${file}" ] && [ -f "${file}.etag" ]; then
@@ -57,7 +61,7 @@ function getfile {
 
   if [ $dodownload = "yes" ]; then
     echo "downloading fresh copy of $file"
-    curl $url > $file
+    curl -f $url > $file
     checkrv $? "Download from $url"
     echo $url_tag > "${file}.etag"
   fi
@@ -100,10 +104,35 @@ checkrv $? "JRE untar"
 #
 pushd binaries/suite
 NAME=`ls`
-mv ${NAME} opengeosuite-${suite_version}
-tar cfz ../root/opengeosuite-${suite_version}-bin.tar.gz *
+mv ${NAME} suite
+if [ -f suite/version.ini ]; then
+  cat suite/version.ini
+  svn_revision=`grep svn_revision suite/version.ini | cut -f2 -d= | tr -d ' '`
+  suite_version=`grep suite_version suite/version.ini | cut -f2 -d= | tr -d ' '`
+  echo $suite_version > ../root/VERSION
+fi
+tar cfz ../root/opengeosuite-bin.tar.gz suite
 checkrv $? "Suite retar"
 rm -rf *
+popd
+
+# 
+# Retrieve the PostgreSQL build
+#
+PGSQLFILE=`basename $pgsql_url`
+getfile $pgsql_url binaries/$PGSQLFILE
+tar xfz binaries/$PGSQLFILE -C binaries
+checkrv $? "PgSQL untar"
+mkdir binaries/pgsql/scripts
+cp -v scripts/* binaries/pgsql/scripts
+checkrv $? "PgSQL script copy"
+pushd binaries
+mv pgsql ${pgsql_version}
+mkdir pgsql
+mv ${pgsql_version} pgsql/${pgsql_version}
+tar cfz ./root/pgsql-postgis.tar.gz pgsql
+checkrv $? "PgSQL retar"
+rm -rf pgsql
 popd
 
 #
@@ -124,7 +153,7 @@ rm -rf *
 popd
 
 #
-# Retreive the GeoServer extensions package
+# Retrieve the GeoServer extensions package
 #
 EXTFILE=`basename $ext_url`
 getfile $ext_url binaries/${EXTFILE}
@@ -139,7 +168,12 @@ cp ./install.sh binaries/root
 #
 # Build installer script
 #
-makeself-2.1.5/makeself.sh ./binaries/root OpenGeoSuite.bin "OpenGeo Suite" ./install.sh
+binfile=OpenGeoSuite.bin
+if [ "x$svn_revision" != "x" ]; then
+  binfile=OpenGeoSuite-r$svn_revision.bin
+fi
+
+makeself-2.1.5/makeself.sh ./binaries/root $binfile "OpenGeo Suite" ./install.sh
 
 exit
 

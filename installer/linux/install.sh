@@ -6,18 +6,18 @@
 # function to help parse input
 function parse() {
   in="$1"
-  if [ "$in" == "" ] && [ "$2" != "" ]; then
+  if [ "x$in" == "x" ] && [ "$2" != "" ]; then
     in=$2
   fi
 
   if [ "$in" != "" ]; then
-    in=`echo $in | tr -s " "`
-    in=`echo $in | tr [:upper:] [:lower:]`
-    if [ "$in" == "y" ] || [ "$in" == "yes" ]; then 
+    lcin=`echo $in | tr -s " "`
+    lcin=`echo $in | tr [:upper:] [:lower:]`
+    if [ "$lcin" == "y" ] || [ "$lcin" == "yes" ]; then 
       in="Yes"
     fi
 
-    if [ "$in" == "n" ] || [ "$in" == "no" ]; then 
+    if [ "$lcin" == "n" ] || [ "$lcin" == "no" ]; then 
       in="No"
     fi
   fi 
@@ -25,17 +25,14 @@ function parse() {
 }
 
 # get version
-VERSION=`ls opengeosuite-*-bin.tar.gz`
-x=`expr index "$VERSION" -`
-y=`expr length "$VERSION" - "$x" - 11`
-VERSION=${VERSION:$x:$y}
+VERSION=`cat VERSION`
 
 # default installation directory
 INSTALL_DIR_DEF=""
 if [ "`whoami`" == "root" ]; then 
-  INSTALL_DIR_DEF="/opt"
+  INSTALL_DIR_DEF="/opt/opengeosuite-$VERSION"
 else
-  INSTALL_DIR_DEF="$HOME"
+  INSTALL_DIR_DEF="$HOME/opengeosuite-$VERSION"
 fi
 
 # default symlink directory
@@ -158,7 +155,7 @@ fi
 echo
 echo "Installation summary: "
 echo 
-echo -e "\t Installation directory: \t $INSTALL_DIR/opengeosuite-$VERSION"
+echo -e "\t Installation directory: \t $INSTALL_DIR"
 #echo -e "\t Install documentation: \t $INCLUDE_DOCS"
 echo -e "\t Install ArcSDE support: \t $INCLUDE_SDE"
 echo -e "\t Install Oracle support: \t $INCLUDE_ORACLE"
@@ -177,19 +174,25 @@ if [ "$PROCEED" == "No" ]; then
   exit
 fi
 
-SUITE_DIR=$INSTALL_DIR/opengeosuite-$VERSION
+SUITE_DIR=$INSTALL_DIR/suite
+PGSQL_DIR=$INSTALL_DIR/pgsql
 
 echo "Installing OpenGeo Suite..." &&
-tar xzf opengeosuite-$VERSION-bin.tar.gz -C "$INSTALL_DIR" &&
+tar xzf opengeosuite-bin.tar.gz -C "$INSTALL_DIR" &&
 
 echo "Installing OpenGeo Dashboard..." &&
 tar xzf "OpenGeo Dashboard.tar.gz" -C "$SUITE_DIR" &&
+
+echo "Installing OpenGeo PostGIS..." &&
+tar xzf pgsql-postgis.tar.gz -C "$INSTALL_DIR" &&
 
 echo "Creating symlinks..." &&
 ln -sf "`find "$SUITE_DIR" -type f -name "OpenGeo Dashboard"`" "$SUITE_DIR/opengeo-dashboard" &&
 sed -i "s#@SUITE_DIR@#$SUITE_DIR#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
 sed -i "s#@SUITE_EXE@#$SUITE_DIR/opengeo-suite#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
 sed -i "s#@GEOSERVER_DATA_DIR@#$SUITE_DIR/data_dir#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
+sed -i "s#@PGADMIN_PATH@#$PGSQL_DIR/bin/pgadmin3#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
+sed -i "s#@PGSHAPELOADER_PATH@#$PGSQL_DIR/bin/shp2pgsql-gui#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
 sed -i "s#@PGSQL_PORT@#54321#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
 
 if [ "$?" != "0" ]; then
@@ -247,13 +250,11 @@ fi
 chmod +x "$UNINSTALLER"
  
 echo 
-echo 
 echo "Installation of the OpenGeo Suite has been successfully completed." 
 echo
 echo "An uninstaller has been created at:" 
 echo 
 echo "  $UNINSTALLER"
-echo 
 
 if [ "$INCLUDE_SDE" == "Yes" ]; then
   echo
@@ -271,3 +272,6 @@ if [ "$INCLUDE_ORACLE" == "Yes" ]; then
   echo
 fi
 
+echo 
+echo "To start the Suite, run the 'opengeo-dashboard' and click the Start button."
+echo 
