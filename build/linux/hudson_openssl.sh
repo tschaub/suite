@@ -17,7 +17,7 @@ pushd ${buildroot}
 if [ -d ${openssl_dir} ]; then
   rm -rf ${openssl_dir}
 fi
-tar xvfz ${openssl_file}
+tar xfz ${openssl_file}
 checkrv $? "OpenSSL untar"
 popd
 
