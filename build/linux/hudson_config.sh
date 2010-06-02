@@ -10,6 +10,7 @@ proj_version=4.7
 pgsql_version=8.4.4
 pgadmin_version=1.10.3
 wx_version=2.8.11
+openssl_version=0.9.8o
 
 # Special binaries
 proj_nad=proj-datumgrid-1.5.zip
@@ -18,6 +19,10 @@ proj_nad=proj-datumgrid-1.5.zip
 geos_svn=http://svn.osgeo.org/geos/branches
 postgis_svn=http://svn.osgeo.org/postgis/branches
 proj_svn=http://svn.osgeo.org/metacrs/proj/branches
+
+openssl_dir=openssl-${openssl_version}
+openssl_file=${openssl_dir}.tar.gz
+openssl_url=http://www.openssl.org/source/${openssl_file}
 
 pgsql_dir=postgresql-${pgsql_version}
 pgsql_file=${pgsql_dir}.tar.bz2
@@ -55,7 +60,7 @@ function getfile {
   file=$2
   dodownload=yes
 
-  url_tag=`curl -s -I $url | grep ETag | tr -d \" | cut -f2 -d' '`
+  url_tag=`curl -f -s -I $url | grep ETag | tr -d \" | cut -f2 -d' '`
   checkrv $? "ETag check at $url"
 
   if [ -f "${file}" ] && [ -f "${file}.etag" ]; then
@@ -68,7 +73,7 @@ function getfile {
 
   if [ $dodownload = "yes" ]; then
     echo "downloading fresh copy of $file"
-    curl $url > $file
+    curl -f $url > $file
     checkrv $? "Download from $url"
     echo $url_tag > "${file}.etag"
   fi
