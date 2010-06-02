@@ -1,8 +1,7 @@
 REM job to build .EXE
 REM assumes that...
-REM   http://svn.opengeo.org/suite/trunk/installer/windows
-REM   http://svn.opengeo.org/suite/trunk/installer/common
-REM ...have both been checked out
+REM   http://svn.opengeo.org/suite/trunk/installer
+REM ...has been checked out
 REM Also assumes that it is running inside installer\windows
 
 REM Start by cleaning up target
@@ -24,6 +23,10 @@ del dashboard-latest-win32.zip
 ren "..\..\target\win\OpenGeo Dashboard" dashboard
 
 makensis OpenGeoInstaller.nsi
+
+@echo.
+@echo version.ini contents:
+type "..\..\target\win\version.ini"
 
 REM Clean up
 rd /s /q ..\..\target\
