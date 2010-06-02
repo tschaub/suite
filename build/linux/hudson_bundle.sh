@@ -21,7 +21,7 @@ destdir=$1
 arch=$2
 
 # Check that we have a mostly-built pgsql in the buildroot...
-if [ ! -d ${buildroot}/pgsql ]; then
+if [ -d ${buildroot}/pgsql ]; then
   rm -rf ${buildroot}/pgsql
   cp -r ${buildroot}/pgsql_build ${buildroot}/pgsql
 fi
