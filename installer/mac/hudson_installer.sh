@@ -236,7 +236,7 @@ checkrv $? "Suite packaging"
 #
 VOL="OpenGeo Suite"
 DMGTMP="tmp-${VOL}.dmg"
-DMGFINAL="OpenGeoSuite-$suite_version-r$svn_revision.dmg"
+DMGFINAL="OpenGeoSuite-r$svn_revision.dmg"
 BACKGROUND="dmg_background.bmp"
 APP="${VOL}.mpkg"
 
