@@ -22,9 +22,6 @@ checkrv $? "PgSQL untar"
 popd
 
 pushd ${buildroot}/${pgsql_dir}
-if [ -d ${buildroot}/pgsql ]; then
-  rm -rf ${buildroot}/pgsql
-fi
 ./configure \
   --prefix=${buildroot}/pgsql \
   --with-openssl \
