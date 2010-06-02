@@ -45,29 +45,29 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
      */
     dbName: "org.opengeo.suite",
     
-    constructor: function(config) {
+    constructor: function() {
         
-        // deal with upgrades
-        var existingVersion = config["suite_version"];
-        var thisVersion = this.getPreferences("version");
-        if (!thisVersion) {
-            var info = og.util.loadConfigHTTP("version.ini")
-            thisVersion = info["suite_version"];
-            this.setPreferences({version: thisVersion});
-        }
-        if (existingVersion !== thisVersion) {
-            config = og.util.upgradeConfig(config, thisVersion);
+        var versionInfo = og.util.getVersionInfo();
+        var targetVersion = versionInfo["suite_version"];
+        var config = og.util.getUserConfig();
+        if (config) {
+            // previous install
+            if (targetVersion !== config["suite_version"]) {
+                // upgrade
+                config = og.util.upgradeConfig(config, targetVersion);
+            }
+        } else {
+            // fresh install
+            config = og.util.getBundledConfig();
+            config["suite_version"] = targetVersion;
+            // write to user's .opengeo dir
+            og.util.saveConfig(config);
         }
 
         // apply default preferences
         this.setPreferences(Ext.applyIf(this.getPreferences(), this.DEFAULTS));
 
-        
-        // allow config via query string
-        var str = window.location.search.substring(1);
-        if (str) {
-            Ext.apply(config, Ext.urlDecode(str));
-        }
+        // apply config
         this.initialConfig = config;
         this.config = Ext.apply({}, config);
         
@@ -467,7 +467,9 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     config["pgsql_port"] = form.findField("pgsql_port").getValue();
                             
                     og.util.saveConfig(this.config, 'config.ini');
-                    Ext.Msg.alert("Configuration saved", "The OpenGeo Suite must be restarted for changes to take effect.");
+                    if (this.suite.online) {
+                        Ext.Msg.alert("Configuration saved", "The OpenGeo Suite must be restarted for changes to take effect.");
+                    }
                     
                     //if the suite is running then we need to keep the old
                     // config around in order to shut it down, so set the dirty
