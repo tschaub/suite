@@ -28,18 +28,13 @@ pushd ${buildroot}/${wx_dir}
   --enable-gtk2 \
   --enable-unicode
 checkrv $? "WxWidgets configure"
-make 
+make && pushd contrib && make && popd
 checkrv $? "WxWidgets build"
 if [ -d ${buildroot}/wxwidgets ]; then
   rm -rf ${buildroot}/wxwidgets
 fi
-make install
+make install && pushd contrib && make install && popd
 checkrv $? "WxWidgets install"
-popd
-
-pushd ${buildroot}/${wx_dir}/contrib
-make && make install
-checkrv $? "WxWidgets contrib build"
 popd
 
 exit 0
