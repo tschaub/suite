@@ -25,7 +25,7 @@ function parse() {
 }
 
 # get version
-VERSION=`cat VERSION`
+VERSION=`cat VERSION | tr A-Z a-z`
 
 # default installation directory
 INSTALL_DIR_DEF=""
