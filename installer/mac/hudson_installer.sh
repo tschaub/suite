@@ -227,8 +227,10 @@ checkrv $? "Ext packaging"
 if [ -d ./suitebuild ]; then
   rm -rf ./suitebuild
 fi
+cat ./resources/suite_welcome.html.in | sed "s/@VERSION@/$suite_version/" > ./resources/suite_welcome.html
+cat ./suite.packproj | sed "s/@VERSION@/$suite_version/" > ./suite-ver.packproj
 mkdir suitebuild
-freeze ./suite.packproj
+freeze ./suite-ver.packproj
 checkrv $? "Suite packaging"
 
 #
