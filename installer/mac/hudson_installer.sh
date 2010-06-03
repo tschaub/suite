@@ -236,7 +236,7 @@ checkrv $? "Suite packaging"
 #
 # Build the DMG volume
 #
-VOL="OpenGeo Suite"
+VOL="OpenGeo Suite $suite_version"
 DMGTMP="tmp-${VOL}.dmg"
 DMGFINAL="OpenGeoSuite-r$svn_revision.dmg"
 BACKGROUND="dmg_background.bmp"
