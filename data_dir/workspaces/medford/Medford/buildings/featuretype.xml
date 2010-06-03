@@ -9,16 +9,16 @@
   <abstract>The building outlines for Medford, Oregon as of March 2009.</abstract>
   <srs>EPSG:4326</srs>
   <nativeBoundingBox>
-    <minx>-122.915</minx>
-    <maxx>-122.777</maxx>
-    <miny>42.287</miny>
-    <maxy>42.404</maxy>
+    <minx>-122.911</minx>
+    <maxx>-122.787</maxx>
+    <miny>42.291</miny>
+    <maxy>42.398</maxy>
   </nativeBoundingBox>
   <latLonBoundingBox>
-    <minx>-122.915</minx>
-    <maxx>-122.777</maxx>
-    <miny>42.287</miny>
-    <maxy>42.404</maxy>
+    <minx>-122.911</minx>
+    <maxx>-122.787</maxx>
+    <miny>42.291</miny>
+    <maxy>42.398</maxy>
     <crs>EPSG:4326</crs>
   </latLonBoundingBox>
   <projectionPolicy>FORCE_DECLARED</projectionPolicy>

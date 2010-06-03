@@ -1,12 +1,12 @@
 <layer>
-  <name>cities</name>
-  <id>LayerInfoImpl--443f995f:123c9690267:-7ff3</id>
+  <name>W_borders</name>
+  <id>LayerInfoImpl--443f995f:123c9690267:-7ff5</id>
   <type>VECTOR</type>
   <defaultStyle>
-    <id>StyleInfoImpl-182163b8:122807491c4:-7ffe</id>
+    <id>StyleInfoImpl-182163b8:122807491c4:-8000</id>
   </defaultStyle>
   <resource class="featureType">
-    <id>FeatureTypeInfoImpl--443f995f:123c9690267:-7ff4</id>
+    <id>FeatureTypeInfoImpl--443f995f:123c9690267:-7ff6</id>
   </resource>
   <enabled>true</enabled>
   <attribution>

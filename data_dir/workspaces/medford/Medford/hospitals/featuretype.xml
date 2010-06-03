@@ -16,17 +16,17 @@
   AXIS[&quot;Latitude&quot;, NORTH]]</nativeCRS>
   <srs>EPSG:4326</srs>
   <nativeBoundingBox>
-    <minx>-122.863</minx>
-    <maxx>-122.831</maxx>
-    <miny>42.317</miny>
-    <maxy>42.34</maxy>
+    <minx>-122.911</minx>
+    <maxx>-122.787</maxx>
+    <miny>42.291</miny>
+    <maxy>42.398</maxy>
     <crs>EPSG:4326</crs>
   </nativeBoundingBox>
   <latLonBoundingBox>
-    <minx>-122.863</minx>
-    <maxx>-122.831</maxx>
-    <miny>42.317</miny>
-    <maxy>42.34</maxy>
+    <minx>-122.911</minx>
+    <maxx>-122.787</maxx>
+    <miny>42.291</miny>
+    <maxy>42.398</maxy>
     <crs>EPSG:4326</crs>
   </latLonBoundingBox>
   <projectionPolicy>FORCE_DECLARED</projectionPolicy>

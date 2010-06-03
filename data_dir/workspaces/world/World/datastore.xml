@@ -8,7 +8,7 @@
     <id>WorkspaceInfoImpl-68b76edb:123c95ae60d:-7fff</id>
   </workspace>
   <connectionParameters>
-    <entry key="namespace">http://world.opengeo.org</entry>
+    <entry key="namespace">http://www.geoserver.org/world</entry>
     <entry key="url">file:data/world/</entry>
   </connectionParameters>
 </dataStore>
