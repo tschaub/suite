@@ -12,7 +12,7 @@ dashboard_url=http://suite.opengeo.org/builds/dashboard-latest-linux.zip
 suite_url=http://suite.opengeo.org/builds/opengeosuite-latest-bin.tar.gz
 ext_url=http://suite.opengeo.org/builds/opengeosuite-latest-ext.tar.gz
 jre_url=http://data.opengeo.org/suite/suite-jre-${jre_version}-lin${arch}.tgz
-pgsql_url=http://linuxbuild${arch}.dev.opengeo.org:8080/userContent/pgsql-postgis-linux${arch}.tar.gz
+pgsql_url=http://linuxbuild${arch}.dev.opengeo.org/suite/pgsql-postgis-linux${arch}.tar.gz
 
 export PATH=$PATH:/usr/local/bin
 
