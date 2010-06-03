@@ -347,6 +347,22 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             return !!value.match(/^\d+$/) || "Invalid port number.";
         };
         
+        this.suite.on({
+            "started": function() {
+                var cmp = Ext.getCmp("suite_stop_port");
+                if (cmp) {
+                    cmp.setDisabled(true);
+                }
+            },
+            "stopped": function() {
+                var cmp = Ext.getCmp("suite_stop_port");
+                if (cmp) {
+                    cmp.setDisabled(false);
+                }
+            },
+            scope: this
+        })
+        
         this.prefPanel = new Ext.FormPanel({
             renderTo: "app-panels-pref-form",
             //fileUpload: true,
@@ -369,9 +385,11 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     validator: portValidator
                 },  {
                     fieldLabel: "Shutdown Port",
+                    id: "suite_stop_port",
                     name: "suite_stop_port",
                     value: this.config["suite_stop_port"],
-                    validator: portValidator
+                    validator: portValidator,
+                    disabled: this.suite.online
                 }]
             }, {
                 xtype: "fieldset",
@@ -474,9 +492,10 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     config["pgsql_port"] = form.findField("pgsql_port").getValue();
                             
                     og.util.saveConfig(this.config, 'config.ini');
-                    if (this.suite.online) {
-                        Ext.Msg.alert("Configuration saved", "The OpenGeo Suite must be restarted for changes to take effect.");
-                    }
+                    Ext.Msg.alert(
+                        "Configuration saved", 
+                        !this.suite.online ? "Your changes have been saved." : "The OpenGeo Suite must be restarted for changes to take effect."
+                    );
                     
                     //if the suite is running then we need to keep the old
                     // config around in order to shut it down, so set the dirty
