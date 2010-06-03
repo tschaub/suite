@@ -48,10 +48,10 @@ function getfile {
   file=$2
   dodownload=yes
 
-  url_tag=`curl -f -s -I $url | grep ETag | tr -d \" | cut -f2 -d' '`
+  url_tag=`curl -f -s -I $url | grep ETag | tr -d \" | cut -f2 -d' ' | tr -d " "`
   checkrv $? "ETag check at $url"
 
-  if [ -f "${file}" ] && [ -f "${file}.etag" ]; then
+  if [ -f "${file}" ] && [ "x$url_tag" != "x" ] && [ -f "${file}.etag" ]; then
     file_tag=`cat "${file}.etag"`
     if [ "x$url_tag" = "x$file_tag" ]; then
       echo "$file is already up to date"
