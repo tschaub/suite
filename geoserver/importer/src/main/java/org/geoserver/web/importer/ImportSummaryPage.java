@@ -23,7 +23,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.geoserver.catalog.CascadeDeleteVisitor;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.CatalogBuilder;
 import org.geoserver.catalog.FeatureTypeInfo;
@@ -241,7 +240,7 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
             @Override
             protected void onClick(AjaxRequestTarget target) {
                 Catalog catalog = getCatalog();
-                CascadeDeleteVisitor deleteVisitor = new CascadeDeleteVisitor(catalog);
+                ImporterCascadeDeleteVisitor deleteVisitor = new ImporterCascadeDeleteVisitor(catalog);
                 String project = summary.getProject();
                 if (summary.isWorkspaceNew()) {
                     WorkspaceInfo ws = catalog.getWorkspaceByName(project);
