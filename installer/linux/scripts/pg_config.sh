@@ -16,7 +16,7 @@ pg_data_load_dir=${suite_dir}/suite/pgdata
 pg_dir=${suite_dir}/pgsql/${pg_version}
 pg_bin_dir=${pg_dir}/bin
 pg_lib_dir=${pg_dir}/lib
-pg_share_dir=${pg_dir}/share/postgresql/contrib
+pg_share_dir=${pg_dir}/share/contrib
 
 #
 # FUNCTIONS
