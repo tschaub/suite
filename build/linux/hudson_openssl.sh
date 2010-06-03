@@ -11,8 +11,12 @@ function usage() {
   exit 1
 }
 
+# Build .so files with version information embedded as Debian likes
+patchfile=openssl-so-version.patch
+
 # Unzip the OpenSSL source 
 getfile ${openssl_url} ${buildroot}/${openssl_file}
+cp ${patchfile} ${buildroot}
 pushd ${buildroot}
 if [ -d ${openssl_dir} ]; then
   rm -rf ${openssl_dir}
@@ -22,6 +26,7 @@ checkrv $? "OpenSSL untar"
 popd
 
 pushd ${buildroot}/${openssl_dir}
+patch -p1 < ../${patchfile}
 ./config \
   shared \
   --prefix=${buildroot}/openssl 
