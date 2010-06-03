@@ -9,6 +9,21 @@
       <Abstract></Abstract>
 
       <FeatureTypeStyle>
+<!--70K-35K--> 
+        <Rule>
+          <Name>Buildings 140K-70K</Name>
+          <Title>Buildings 140K-70K</Title>
+
+          <MinScaleDenominator> 70000 </MinScaleDenominator>
+          <MaxScaleDenominator> 140000 </MaxScaleDenominator> 
+
+          <PolygonSymbolizer>
+            <Fill>
+              <CssParameter name="fill">#333333</CssParameter>
+              <CssParameter name="fill-opacity">.5</CssParameter>   
+            </Fill>
+          </PolygonSymbolizer>  
+        </Rule>
 
 <!--70K-35K--> 
         <Rule>
