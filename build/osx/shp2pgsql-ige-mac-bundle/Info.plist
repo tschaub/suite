@@ -13,7 +13,7 @@
     <key>CFBundleGetInfoString</key>
     <string>(C) 2010 OpenGeo and others</string>
     <key>CFBundleIconFile</key>
-    <string>PostGIS.icns</string>
+    <string>pgShapeLoader.icns</string>
     <key>CFBundleIdentifier</key>
     <string>org.opengeo.ShapeLoader</string>
     <key>CFBundleInfoDictionaryVersion</key>
