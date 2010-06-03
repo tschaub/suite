@@ -25,4 +25,36 @@ For lines and polygon geometries, continue positioning vertices with a single cl
 
    *A line draft for Medford streets*
 
-By default, the :guilabel:`Create a new feature` tool changes to the :guilabel:`Edit existing feature` tool.  
+.. note:: You can delete vertices by positioning your pointer over a vertex and hitting the ``d`` key.
+
+By default, the :guilabel:`Create a new feature` changes to the :guilabel:`Edit existing feature` tool. Here you can edit new :term:`attribute` values. Attributes are descriptions of a geographic feature stored as a row in a table.
+
+You can input attributes after you create a feature by selecting the text field. Select :guilabel:`Save` to apply them to your data source. 
+
+.. figure:: images/modify2.png
+   :align: center
+   :width: 600px
+
+   *Attribute table for a new feature*
+
+Saving 
+------
+
+Any GeoEditor modifications are temporary until you choose to :guilabel:`Save` them.  Canceling or quitting will not save your changes, nor will bookmarking a map document.  To write edits to a data source, you need to specifically save the edits.
+
+Modifying Existing Features
+---------------------------
+
+To start modifying existing features, use the :guilabel:`Edit existing feature` tool and click anywhere within the feature component.  A feature 
+
+
+.. figure:: images/modify3.png
+   :align: center
+   :width: 600px
+
+   *Medford zone 230 selected for editing*
+
+A feature now selected in *draft* mode for editing.Activate your editing session by clicking the :guilabel:`Edit` button.  
+
+
+
