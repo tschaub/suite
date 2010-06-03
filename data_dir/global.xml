@@ -25,5 +25,6 @@
   <onlineResource>http://opengeo.org</onlineResource>
   <verbose>false</verbose>
   <verboseExceptions>false</verboseExceptions>
-  <updateSequence>57</updateSequence>
+  <updateSequence>95</updateSequence>
+  <featureTypeCacheSize>0</featureTypeCacheSize>
 </global>
