@@ -6,17 +6,17 @@ d=`dirname $0`
 # Load versions
 source ${d}/hudson_config.sh
 
+# Build .so files with version information embedded as Debian likes
+pushd ${d} && here=`pwd` && popd
+patchfile=${here}/openssl-so-version.patch
+
 function usage() {
   echo "Usage: $0"
   exit 1
 }
 
-# Build .so files with version information embedded as Debian likes
-patchfile=openssl-so-version.patch
-
 # Unzip the OpenSSL source 
 getfile ${openssl_url} ${buildroot}/${openssl_file}
-cp ${patchfile} ${buildroot}
 pushd ${buildroot}
 if [ -d ${openssl_dir} ]; then
   rm -rf ${openssl_dir}
