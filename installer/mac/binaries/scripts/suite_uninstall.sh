@@ -6,10 +6,18 @@ echo ""
 
 # Verbose?
 if [ "x$1" == "x" ]; then
-  echo "Running in verbose mode"
+  echo "Running in verbose mode..."
   rmopts="v"
 else
   rmopts=""
+fi
+
+# Check for running suite
+suite_port=8080
+netport=`netstat -f inet -n | cut -c 22-44 | grep -v "\*" | cut -f5 -d. | tr -d ' ' | sort | uniq | grep -x $suite_port`
+if [ "x$netport" != "x" ]; then
+  echo "Shutting down the Suite..."
+  /opt/opengeo/suite/opengeo-suite stop > /dev/null
 fi
 
 # Remove GUI Apps
