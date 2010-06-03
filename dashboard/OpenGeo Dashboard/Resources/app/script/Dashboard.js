@@ -39,6 +39,12 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         helpOnStart: true
     },
     
+    /** api: property[revision]
+     *  ``Number``
+     *  The subversion revision number of this build.
+     */
+    revision: null,
+    
     /** private: property[dbName]
      *  ``String``
      *  Database name for storage of user preferences.
@@ -48,6 +54,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
     constructor: function() {
         
         var versionInfo = og.util.getVersionInfo();
+        this.revision = versionInfo["svn_revision"];
         var targetVersion = versionInfo["suite_version"];
         var config = og.util.getUserConfig();
         if (config) {
@@ -672,7 +679,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     xtype: "box",
                     autoEl: {
                         tag: "div",
-                        html: "<strong>OpenGeo Suite <small>" + this.config["suite_version"] + "</small></strong>"
+                        html: "<strong>OpenGeo Suite <small ext:qtip='Revision " + this.revision + "'>" + this.config["suite_version"] + "</small></strong>"
                     }
                 },
                 controlButton
