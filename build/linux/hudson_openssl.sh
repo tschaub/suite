@@ -26,7 +26,7 @@ checkrv $? "OpenSSL untar"
 popd
 
 pushd ${buildroot}/${openssl_dir}
-patch -p1 < ../${patchfile}
+patch -p1 < ${patchfile}
 ./config \
   shared \
   --prefix=${buildroot}/openssl 
