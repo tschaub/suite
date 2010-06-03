@@ -18,6 +18,12 @@ netport=`lsof -iTCP:$suite_port | grep LISTEN | tr -d ' '`
 if [ "x$netport" != "x" ]; then
   echo "Shutting down the Suite..."
   /opt/opengeo/suite/opengeo-suite stop > /dev/null
+  echo '
+   tell application "OpenGeo Dashboard"
+   quit
+   end tell
+   ' | osascript
+  sleep 2
 fi
 
 # Remove GUI Apps
