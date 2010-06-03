@@ -250,6 +250,11 @@ dmg_topleft_y=200
 dmg_bottomright_x=`expr $dmg_topleft_x + $dmg_width`
 dmg_bottomright_y=`expr $dmg_topleft_y + $dmg_height`
 
+# Unmount existing mounts
+if [ -d "/Volumes/${VOL}" ]; then
+  umount "/Volumes/${VOL}"
+fi
+
 # Clean up intermediate steps
 find . -name "*.dmg" -exec rm -f {} ';'
 
