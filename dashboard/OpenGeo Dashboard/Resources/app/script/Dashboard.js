@@ -716,11 +716,21 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         })
 
         this.suite.on({
+            starting: function() {
+                controlButton.setText("Starting ...");
+                controlButton.disable();
+            },
             started: function() {
+                controlButton.enable();
                 controlButton.toggle(true);
                 controlButton.setText("Shutdown");
             },
+            stopping: function() {
+                controlButton.setText("Shutting down ...");
+                controlButton.disable();
+            },
             stopped: function() {
+                controlButton.enable();
                 controlButton.toggle(false);
                 controlButton.setText("Start");
             }
