@@ -5,7 +5,7 @@ REM Command file for Sphinx documentation
 set SPHINXBUILD=sphinx-build
 set ALLSPHINXOPTS=-d build/doctrees %SPHINXOPTS% .
 if NOT "%PAPER%" == "" (
-	set ALLSPHINXOPTS=-D latex_paper_size=%PAPER% %ALLSPHINXOPTS%
+	set ALLSPHINXOPTS=src -D latex_paper_size=%PAPER% %ALLSPHINXOPTS%
 )
 
 if "%1" == "" goto help
