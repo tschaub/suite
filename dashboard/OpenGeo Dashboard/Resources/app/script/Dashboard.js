@@ -90,6 +90,15 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             starting: function() {
                 startingDialog.show();
             }, 
+            startfailure: function(msg) {
+                startingDialog.hide();
+                Ext.Msg.show({
+                    title: "Trouble Starting the Suite",
+                    msg: msg,
+                    icon: Ext.MessageBox.WARNING,
+                    width: 300
+                });
+            },
             started: function() {
                 this.ok("The OpenGeo Suite is online.");
                 startingDialog.hide();
@@ -490,7 +499,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     
                     // update postgres port
                     config["pgsql_port"] = form.findField("pgsql_port").getValue();
-                            
+                    
                     og.util.saveConfig(this.config, 'config.ini');
                     Ext.Msg.alert(
                         "Configuration saved", 

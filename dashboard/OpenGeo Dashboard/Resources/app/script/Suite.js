@@ -45,6 +45,12 @@ og.Suite = Ext.extend(Ext.util.Observable, {
              */
             "starting", 
             
+            /** api: event[startfailure]
+             *
+             *  Fired when the suite starting fails.
+             */
+            "startfailure", 
+            
             /** api: event[started]
              *
              *  Fired when the suite has started.
@@ -147,17 +153,59 @@ og.Suite = Ext.extend(Ext.util.Observable, {
      *  Starts the suite.
      */
     start: function() {
-        og.util.tirun(
-            function() {
-                var p = Titanium.Process.createProcess({
-                    args: [this.config["suite_exe"], "start"]
-                });
-                p.launch();
-                
-                this.fireEvent("starting");
-            }, 
-            this
-        );
+        if (window.Titanium) {
+
+            if (this.startProcess) {
+                this.startProcess.terminate();
+            }
+            
+            this.startProcess = Titanium.Process.createProcess(
+                [this.config["suite_exe"], "start"]
+            );
+
+            // look for EXCEPTIONs related to port conflicts in stdout
+            var listenerId = this.startProcess.stdout.addEventListener(
+                Titanium.READ, 
+                 (function(event) {
+                    var msg = event.data.toString();
+                    if (msg.match(/org\.mortbay\.log\s+-\s+EXCEPTION/)) {
+                        this.startProcess.terminate();
+                        delete this.startProcess;
+                        this.fireEvent(
+                            "startfailure",
+                            "The Suite could not be started.  It is likely " +
+                            "there is another process running on the Suite " +
+                            "port.  Check the Suite logs for more detail and " +
+                            "change your primary service port on the " +
+                            "Preferences form."
+                        );
+                        // let the stop process do its business
+                        this.stop();
+                        // since it was never started, we manually fire stopped
+                        this.fireEvent("stopped");
+                    }
+                }).createDelegate(this)
+            );
+
+            var removeListener = function() {
+                try {
+                    this.startProcess.stdout.removeEventListener(
+                        Titanium.READ, listenerId
+                    );
+                } catch (err) {
+                    // pass
+                }
+            };
+
+            this.on({
+                started: removeListener,
+                stopping: removeListener,
+                scope: this
+            });
+            this.startProcess.launch();
+            this.fireEvent("starting");
+
+        }
     }, 
     
     /** api: method[stop]
