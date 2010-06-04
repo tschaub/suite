@@ -351,30 +351,34 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
     
     createPrefForm: function() {
         
-        var portValidator = function(value) {
-            // just check that it is numeric for now
-            return !!value.match(/^\d+$/) || "Invalid port number.";
-        };
-        
+        var onlineDisabled = ["suite_port", "suite_stop_port", "pgsql_port"];
         this.suite.on({
             "started": function() {
-                var cmp = Ext.getCmp("suite_stop_port");
-                if (cmp) {
-                    cmp.setDisabled(true);
-                }
+                Ext.each(onlineDisabled, function(cmpId) {
+                    var cmp = Ext.getCmp(cmpId);
+                    if (cmp) {
+                        cmp.setDisabled(true);
+                        Ext.QuickTips.register({
+                            target: cmp.el.dom.parentElement,
+                            text: "Stop the Suite to modify this value."
+                        });                        
+                    }
+                });
             },
             "stopped": function() {
-                var cmp = Ext.getCmp("suite_stop_port");
-                if (cmp) {
-                    cmp.setDisabled(false);
-                }
+                Ext.each(onlineDisabled, function(cmpId) {
+                    var cmp = Ext.getCmp(cmpId);
+                    if (cmp) {
+                        cmp.setDisabled(false);
+                        Ext.QuickTips.unregister(cmp.el.dom.parentElement);
+                    }
+                });
             },
             scope: this
         })
         
         this.prefPanel = new Ext.FormPanel({
             renderTo: "app-panels-pref-form",
-            //fileUpload: true,
             border: false,
             buttonAlign: "right",
             monitorValid: true,
@@ -388,16 +392,28 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     width: 50
                 },
                 items: [{ 
+                    xtype: "numberfield",
                     fieldLabel: "Primary Port",
+                    id: "suite_port",
                     name: "suite_port",
+                    allowDecimals: false,
+                    allowBlank: false,
+                    minValue: 1,
+                    maxValue: 65535,
+                    invalidText: "Invalid port number.",
                     value: this.config["suite_port"],
-                    validator: portValidator
+                    disabled: this.suite.online
                 },  {
+                    xtype: "numberfield",
                     fieldLabel: "Shutdown Port",
                     id: "suite_stop_port",
                     name: "suite_stop_port",
+                    allowDecimals: false,
+                    allowBlank: false,
+                    minValue: 1,
+                    maxValue: 65535,
+                    invalidText: "Invalid port number.",
                     value: this.config["suite_stop_port"],
-                    validator: portValidator,
                     disabled: this.suite.online
                 }]
             }, {
@@ -468,10 +484,17 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 },
                 defaultType: "textfield",
                 items: [{ 
+                    xtype: "numberfield",
                     fieldLabel: "Port",
+                    id: "pgsql_port",
                     name: "pgsql_port",
+                    allowDecimals: false,
+                    allowBlank: false,
+                    minValue: 1,
+                    maxValue: 65535,
+                    invalidText: "Invalid port number.",
                     value: this.config["pgsql_port"],
-                    validator: portValidator
+                    disabled: this.suite.online
                 }]
             }],
             buttons: [{
