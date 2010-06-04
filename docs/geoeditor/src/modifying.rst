@@ -27,7 +27,7 @@ For lines and polygon geometries, continue positioning vertices with a single cl
 
 .. note:: You can delete vertices by positioning your pointer over a vertex and hitting the ``d`` key.
 
-By default, the :guilabel:`Create a new feature` changes to the :guilabel:`Edit existing feature` tool. Here you can edit new :term:`attribute` values. Attributes are descriptions of a geographic feature stored as a row in a table.
+By default, the :guilabel:`Create a new feature` changes to the :guilabel:`Edit existing feature` tool. Here you can edit new attribute` values. Attributes are descriptions of a geographic feature stored as a row in a table.
 
 You can input attributes after you create a feature by selecting the text field. Select :guilabel:`Save` to apply them to your data source. 
 
@@ -48,13 +48,27 @@ Modifying Existing Features
 To start modifying existing features, use the :guilabel:`Edit existing feature` tool and click anywhere within the feature component.  A feature 
 
 
-.. figure:: images/modify3.png
+.. figure:: images/modify3.jpg
    :align: center
    :width: 600px
 
    *Medford zone 230 selected for editing*
 
-A feature now selected in *draft* mode for editing.Activate your editing session by clicking the :guilabel:`Edit` button.  
+A feature will now selected in *draft* mode for editing. Activate your editing session by clicking the :guilabel:`Edit` button.  
 
+.. figure:: images/modify4.jpg
+   :align: center
+   :width: 600px
 
+   *Medford zone 230 ready for editing*
+
+There are two, almost identical ways to reshape a feature.  You can either click a vertex and drag it to a new location.  You can also specify a new vertex by clicking and dragging a *phantom* vertex.   For instance, you can drag a vertex to restructure the boundaries of a zone with a fish tail.
+
+.. figure:: images/modify5.png
+   :align: center
+   :width: 600px
+
+   *Modified zone 230*
+
+As with adding a feature, you can also modify tabular attributes selecting the text field. Select :guilabel:`Save` to apply them to your data source. 
 
