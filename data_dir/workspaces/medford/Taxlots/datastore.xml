@@ -10,7 +10,7 @@
   <connectionParameters>
     <entry key="Connection timeout">20</entry>
     <entry key="port">54321</entry>
-    <entry key="passwd">alpw217</entry>
+    <entry key="passwd"></entry>
     <entry key="dbtype">postgis</entry>
     <entry key="host">localhost</entry>
     <entry key="validate connections">false</entry>
@@ -23,7 +23,7 @@
     <entry key="Max open prepared statements">50</entry>
     <entry key="fetch size">1000</entry>
     <entry key="preparedStatements">false</entry>
-    <entry key="user">awright</entry>
+    <entry key="user">postgres</entry>
     <entry key="min connections">1</entry>
   </connectionParameters>
 </dataStore>
