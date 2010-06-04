@@ -256,7 +256,8 @@ var GeoExplorer = Ext.extend(Ext.util.Observable, {
                        new OpenLayers.Control.ZoomPanel()],
             projection: this.initialConfig.map.projection,
             units: this.initialConfig.map.units,
-            maxResolution: this.initialConfig.map.maxResolution
+            maxResolution: this.initialConfig.map.maxResolution,
+            numZoomLevels: this.initialConfig.map.numZoomLevels || 20
         });
         
         // add a vector layer for display of queried features
