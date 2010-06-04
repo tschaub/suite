@@ -11,9 +11,9 @@ og.Suite = Ext.extend(Ext.util.Observable, {
     /** api: property[timeout]
      *  ``Number``
      *  Time in milliseconds to wait before givin up on the Suite starting.
-     *  Default is 90000 (a minute and a half).
+     *  Default is 300000 (five minutes).
      */
-    timeout: 90000,
+    timeout: 300000,
     
     /** api: property[config]
      *  ``Object``
@@ -161,36 +161,52 @@ og.Suite = Ext.extend(Ext.util.Observable, {
      */
     start: function() {
         if (window.Titanium) {
-
+            
             if (this.startProcess) {
                 this.startProcess.terminate();
                 delete this.startPorcess;
+            }
+            
+            // check for port conflict via HTTP
+            var client = new XMLHttpRequest();
+            var port = this.config["suite_port"];
+            var host = this.config["suite_host"];
+            var url = "http://" + host + (port ? ":" + port : "") + "/";
+            client.open("GET", url, false);
+            try {
+                client.send(null);
+            } catch (err) {
+                // pass
+            }
+            if (client.status > 0) {
+                this.fireEvent(
+                    "startfailure",
+                    "There is another service running on the Suite's primary " +
+                    "service port (" + port + ").  Go to the Preferences page " +
+                    "and set the primary service port to something unoccupied."
+                );
+                this.fireEvent("stopped");
+                return false;
+            }
+            
+            // check that the Suite executable exists
+            var exe = this.config["suite_exe"];
+            var file = Titanium.Filesystem.getFile(exe);
+            if (!file.exists()) {
+                this.fireEvent(
+                    "startfailure",
+                    "The Suite executable (" + exe + ") cannot be found. " +
+                    "The 'suite_exe' value must be set in your config.ini to a " +
+                    "valid executable."
+                );
+                this.fireEvent("stopped");
+                return false;
             }
             
             this.startProcess = Titanium.Process.createProcess(
                 [this.config["suite_exe"], "start"]
             );
 
-            // look for EXCEPTIONs related to port conflicts in stdout
-            var listenerId = this.startProcess.stdout.addEventListener(
-                Titanium.READ, 
-                 (function(event) {
-                    var msg = event.data.toString();
-                    if (msg.match(/org\.mortbay\.log\s+-\s+EXCEPTION/)) {
-                        this.fireEvent(
-                            "startfailure",
-                            "The Suite could not be started.  It is likely " +
-                            "there is another process running on the Suite " +
-                            "port.  Check the Suite logs for more detail and " +
-                            "change your primary service port on the " +
-                            "Preferences form."
-                        );
-                        // let the stop process do its business
-                        this.stop(true);
-                    }
-                }).createDelegate(this)
-            );
-            
             // don't let the user wait forever
             var timerId = window.setTimeout(
                 (function() {
@@ -210,13 +226,6 @@ og.Suite = Ext.extend(Ext.util.Observable, {
 
             var removeListener = function() { 
                 window.clearTimeout(timerId);
-                try {
-                    this.startProcess.stdout.removeEventListener(
-                        Titanium.READ, listenerId
-                    );
-                } catch (err) {
-                    // pass
-                }
             };
 
             this.on({
