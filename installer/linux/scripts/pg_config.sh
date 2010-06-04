@@ -18,6 +18,8 @@ pg_bin_dir=${pg_dir}/bin
 pg_lib_dir=${pg_dir}/lib
 pg_share_dir=${pg_dir}/share/contrib
 
+export LD_LIBRARY_PATH="$pg_lib_dir"
+
 #
 # FUNCTIONS
 #
