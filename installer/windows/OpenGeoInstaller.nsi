@@ -618,13 +618,13 @@ Section "PostGIS" SectionPostGIS
   File /a "..\common\postgis\pgadmin_splash.gif" ; Ditto
 
   ; Shortcuts
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Manage PostGIS.lnk" \
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\pgAdmin.lnk" \
                  "$INSTDIR\pgsql\8.4\bin\pgAdmin3.exe" \
                  "" "$INSTDIR\icons\postgis.ico" 0
 
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Convert shapefiles to PostGIS.lnk" \
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\pgShapeLoader.lnk" \
                  "$INSTDIR\pgsql\8.4\bin\shp2pgsql-gui.exe" \
-                 "" "$INSTDIR\icons\pgshapeloader.ico" 0
+                 "-p 54321" "$INSTDIR\icons\pgshapeloader.ico" 0
 
 SectionEnd
 
