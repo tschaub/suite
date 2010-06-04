@@ -444,7 +444,10 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     fieldLabel: "Username",
                     toolTip: "GeoServer adminstrator username",
                     name: "geoserver_username",
-                    value: this.config["geoserver_username"]
+                    value: this.config["geoserver_username"],
+                    validator: function(value) {
+                        return !value.match(/[=,:]/) || 'Invalid user name (cannot contain the following characters: "=,:").';
+                    }
                 }, {
                     xtype: "textfield",
                     id: "geoserver-admin-password",
@@ -453,6 +456,9 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     toolTip: "GeoServer adminstrator password",
                     name: "geoserver_password",
                     value: this.config["geoserver_password"],
+                    validator: function(value) {
+                        return !value.match(/[=,:]/) || 'Invalid password (cannot contain the following characters: "=,:").';
+                    },
                     listeners: {
                         change: function(f, e) {
                             //reset the password confirmation form
