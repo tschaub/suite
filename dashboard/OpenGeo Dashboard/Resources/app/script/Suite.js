@@ -4,9 +4,16 @@ og.Suite = Ext.extend(Ext.util.Observable, {
     
     /** api: property[statusInterval]
      *  ``Number``
-     *  Time in miliseconds between service status checks.  Default is 5000.
+     *  Time in milliseconds between service status checks.  Default is 2500.
      */
-    statusInterval: 5000,
+    statusInterval: 2500,
+    
+    /** api: property[timeout]
+     *  ``Number``
+     *  Time in milliseconds to wait before givin up on the Suite starting.
+     *  Default is 90000 (a minute and a half).
+     */
+    timeout: 90000,
     
     /** api: property[config]
      *  ``Object``
@@ -157,6 +164,7 @@ og.Suite = Ext.extend(Ext.util.Observable, {
 
             if (this.startProcess) {
                 this.startProcess.terminate();
+                delete this.startPorcess;
             }
             
             this.startProcess = Titanium.Process.createProcess(
@@ -169,8 +177,6 @@ og.Suite = Ext.extend(Ext.util.Observable, {
                  (function(event) {
                     var msg = event.data.toString();
                     if (msg.match(/org\.mortbay\.log\s+-\s+EXCEPTION/)) {
-                        this.startProcess.terminate();
-                        delete this.startProcess;
                         this.fireEvent(
                             "startfailure",
                             "The Suite could not be started.  It is likely " +
@@ -180,14 +186,30 @@ og.Suite = Ext.extend(Ext.util.Observable, {
                             "Preferences form."
                         );
                         // let the stop process do its business
-                        this.stop();
-                        // since it was never started, we manually fire stopped
-                        this.fireEvent("stopped");
+                        this.stop(true);
                     }
                 }).createDelegate(this)
             );
+            
+            // don't let the user wait forever
+            var timerId = window.setTimeout(
+                (function() {
+                    if (!this.online) {
+                        // we've waited long enough
+                        this.fireEvent(
+                            "startfailure",
+                            "Giving up on starting the Suite as it is taking " +
+                            "longer than expected.  Check the Suite logs for " +
+                            "detail."
+                        );
+                        this.stop(true);
+                    }
+                }).createDelegate(this), 
+                this.timeout
+            );
 
-            var removeListener = function() {
+            var removeListener = function() { 
+                window.clearTimeout(timerId);
                 try {
                     this.startProcess.stdout.removeEventListener(
                         Titanium.READ, listenerId
@@ -209,17 +231,27 @@ og.Suite = Ext.extend(Ext.util.Observable, {
     }, 
     
     /** api: method[stop]
-     * 
-     *  Stops the suite.
+     *  :arg hard: ``Boolean``
+     *
+     *  Stops the suite.  A hard stop will fire 'stopped' immediately after
+     *  firing 'stopping'.  This is required if stop is called after a start
+     *  failure.
      */
-    stop: function() {
+    stop: function(hard) {
         og.util.tirun(function() {
+            if (this.startProcess) {
+                this.startProcess.terminate();
+                delete this.startProcess;
+            }
             var p = Titanium.Process.createProcess({
                 args: [this.config["suite_exe"], "stop"]
             });
             p.launch();
 
             this.fireEvent("stopping");
+            if (hard) {
+                this.fireEvent("stopped");
+            }
         }, this);
     }
 
