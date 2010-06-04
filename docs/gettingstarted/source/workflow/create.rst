@@ -55,7 +55,10 @@ Now that your map layers are loaded and styled, you can organize and compose you
 Publish via URL Bookmark
 ------------------------
 
-After you have composed your map in **GeoExplorer**, you can publish it via a URL bookmark.
+After you have composed your map in GeoExplorer, you can publish it via a URL bookmark.
+
+.. note:: URLs that contain "localhost" will not be accessible to anyone other than those on the local machine.  Please use a web server such as Apache or IIS to proxy the OpenGeo Suite onto a web-accessible URL.
+
 
 #. Click on the :guilabel:`Save Map` icon.
 
@@ -75,6 +78,8 @@ Publish via Embedded Map
 ------------------------
 
 You can also publish your map by embedding it in a web page.
+
+.. note:: URLs that contain "localhost" will not be accessible to anyone other than those on the local machine.  Please use a web server such as Apache or IIS to proxy the OpenGeo Suite onto a web-accessible URL.
 
 #. Click on the :guilabel:`Publish Map` icon.
 
