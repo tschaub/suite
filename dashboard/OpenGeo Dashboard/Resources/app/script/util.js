@@ -90,12 +90,11 @@ og.util = {
                     newConfig["geoserver_data_dir"] = oldConfig["data_dir"];
                 }
             }
-        } else {
-            // respect old configuration for all other upgrades
-            for (var key in oldConfig) {
-                if (key in newConfig) {
-                    newConfig[key] = oldConfig[key];
-                }
+        }
+        // respect old configuration for all upgrades
+        for (var key in oldConfig) {
+            if (key in newConfig) {
+                newConfig[key] = oldConfig[key];
             }
         }
         // apply static config for all upgrades
