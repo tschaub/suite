@@ -82,7 +82,7 @@ pygments_style = 'sphinx'
 # Options for HTML output
 # -----------------------
 html_theme = 'opengeo'
-html_theme_path = ['theme', '../themes']
+html_theme_path = ['theme', '../../themes']
 
 # The style sheet to use for HTML and HTML Help pages. A file of that name
 # must exist either in Sphinx' static/ path, or in one of the custom paths

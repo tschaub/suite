@@ -38,8 +38,8 @@
             <phase>compile</phase>
             <configuration>
               <tasks>
-                <exec executable="sphinx-build" failonerror="true"> 
-                  <arg line="-b html -d ${build.directory}/doctrees . ${build.directory}/html"/>
+                <exec executable="sphinx-build" failonerror="true" dir="${basedir}/src">
+                  <arg line="-D html_theme='styler' -b html -d ${build.directory}/doctrees . ${build.directory}/html"/>
                 </exec>
               </tasks>
             </configuration>
