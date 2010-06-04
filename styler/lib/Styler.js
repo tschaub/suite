@@ -431,6 +431,7 @@ var Styler = Ext.extend(Ext.util.Observable, {
             }),
             root: {
                 nodeType: "async",
+                allowDrop: false,
                 children: [{
                     nodeType: "gx_overlaylayercontainer",
                     allowDrag: false,
