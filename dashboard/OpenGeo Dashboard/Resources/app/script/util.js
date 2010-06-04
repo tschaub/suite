@@ -22,8 +22,10 @@ og.util = {
     },
     
     getBundledConfig: function() {
-        var str = this.loadResourceFile("config.ini");
-        config = og.util.parseConfig(str);
+        var config = og.util.parseConfig(this.loadResourceFile("config.ini"));
+        Ext.apply(
+            config, og.util.parseConfig(this.loadResourceFile("static.ini"))
+        );
         return config;
     },
     
@@ -67,7 +69,7 @@ og.util = {
     upgradeConfig: function(oldConfig, newVersion) {
         var version = oldConfig["suite_version"] || "1.0.0";
         // grab the bundled config.ini
-        var newConfig = this.getBundledConfig();
+        var newConfig = og.util.parseConfig(this.loadResourceFile("config.ini"));
         if (version === "1.0.0") {
             // respect old username, password, port, and stop_port
             Ext.apply(newConfig, {
@@ -77,7 +79,7 @@ og.util = {
                 suite_stop_port: oldConfig["stop_port"] || newConfig["suite_stop_port"]
             });
             // respect custom data_dir
-            if (oldConfig["data_dir"] !== newConfig["data_dir"]) {
+            if (oldConfig["data_dir"] !== newConfig["geoserver_data_dir"]) {
                 // osx default data_dir changed between 1.0.0 and 1.9.0
                 if (Titanium.Platform.name === "Darwin") {
                     // only update if different than the old default
@@ -89,13 +91,17 @@ og.util = {
                 }
             }
         } else {
-            // for all other upgrades, we respect the existing configuration
-            for (var key in newConfig) {
-                if (key in oldConfig) {
+            // respect old configuration for all other upgrades
+            for (var key in oldConfig) {
+                if (key in newConfig) {
                     newConfig[key] = oldConfig[key];
                 }
             }
         }
+        // apply static config for all upgrades
+        Ext.apply(
+            newConfig, og.util.parseConfig(this.loadResourceFile("static.ini"))
+        );
         newConfig["suite_version"] = newVersion;
         this.saveConfig(newConfig);
         return newConfig;
