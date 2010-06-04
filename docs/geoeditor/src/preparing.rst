@@ -1,8 +1,10 @@
-==============
+.. _geoeditor.preparing:
+
 Preparing Data
 ==============
 
-Before modifying features with GeoEditor, you need to prepare an existing feature to edit.  Using the the :guilabel:`Layers panel` add layer(s) for editing.  Once you have added the data, you can follow a basic workflow.
+
+Before modifying features with GeoEditor, you need to prepare an existing feature to edit.  Using the the :guilabel:`Layers panel`, add any layers for viewing.  This should include the layer to be edited, but can also include other layers for context.  Once you have added the layers, you can follow a basic workflow.
 
 #. Select into an area you would like to edit. 
 #. Start an edit session by executing a feature query.
@@ -18,7 +20,7 @@ For a smooth zoom, you can also hold down Shift and drag a red rectangle around 
 
 .. figure:: images/prepare1.png
    :align: center
-   :width: 600px
+
 
    *Selecting an area for editing* 
 
@@ -29,7 +31,7 @@ Once your data frame is set, specify the layer for modification with the :guilab
 
 .. figure:: images/prepare2.png
    :align: center
-   :width: 600px
+
 
    *Selecting the Zoning layer for editing*
 
@@ -39,7 +41,7 @@ A query will return table results as well as a map display (in orange) with up t
 
 .. figure:: images/prepare3.png
    :align: center
-   :width: 600px
+
 
    *Search results for a location query. Notice the orange outlines of the Zoning feature set*
 
@@ -47,7 +49,7 @@ With the :guilabel:`Display on map` you can toggle visibility of the entire sear
 
 .. figure:: images/prepare4.png
    :align: center
-   :width: 600px
+
 
    *Display of selected Zones* 
 

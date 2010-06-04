@@ -1,13 +1,13 @@
-.. _glossary:
+.. _geoeditor.glossary:
 
-========
 Glossary
 ========
 
 .. glossary::
 
-    Attributes
-        Attributes are descriptions of a geographic feature stored as a row in a table. 
+    Attribute
+        An attribute is a description of a geographic feature stored as a row in a table. 
+
     OGC
         The `Open Geospatial Consortium <http://www.opengeospatial.org/>`_ (OGC)
         is a standards organization that develops specifications for geospatial

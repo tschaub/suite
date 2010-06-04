@@ -1,6 +1,7 @@
-============
-Editing Data
-============
+.. _geoeditor.modifying:
+
+Modifying Data
+==============
 
 With your dataset prepared, you are now ready to modify vector features and/or attribute information. The basic workflow for editing data includes:
 

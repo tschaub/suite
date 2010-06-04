@@ -1,20 +1,20 @@
-===========
+=========
 GeoEditor
-===========
+=========
 
-GeoEditor is a Javascript framework for editing geographic features without sacrificing data integrity.  The GeoEditor toolset for modifying simple and multi- points, lines, and polygons, as well as text and geometry collections minimizes the cost of data development and maintenance. Built upon the latest GeoExt features, GeoEditor will eventually merge with the design and composition capabilities of Styler and GeoExplorer.
+GeoEditor is a web-based JavaScript application for editing geographic features.  The GeoEditor toolset minimizes the cost of data development and maintenance without sacrificing data integrity.  With this application, you can edit any type of vector data, including attributes, when served through the Web Feature Service (WFS) protocol.
 
-The following resources provide a core overview of GeoEditor.
+Built upon GeoExt, GeoEditor will eventually merge with the design and composition capabilities of Styler and GeoExplorer.
+
+This guide provides a core overview of GeoEditor.
 
 .. toctree::
-    :maxdepth: 2
+   :maxdepth: 2
 
-    getting-started
-    introduction
-    preparing
-    modifying
-
-    glossary
+   introduction
+   preparing
+   modifying
+   glossary
     
 
 

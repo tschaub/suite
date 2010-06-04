@@ -1,36 +1,43 @@
+.. _geoeditor.introduction:
+
+Introduction
 ============
-Introduction 
-============
-The process for data editing can be divided into two categories of operations: preparing and modifying data.  Data preparation involve querying a select dataset by location or attribute, while data modification involves generating new spatial features.  
 
-Before diving into the specifics of these operations, we introduce the basics concepts of the user interface and managing layers. For those familiar with GeoExplorer's interface, feel free to skip to the :ref:`preparing` section.
+The process for data editing can be divided into two categories of operations: preparing and modifying data.  Data preparation involves querying a dataset filtered by location or attribute, while data modification involves generating new spatial features.
 
-Workspace Overview
-------------------
+Before diving into the specifics of these operations, we introduce the basics concepts of the user interface and managing layers. For those familiar with GeoExplorer's interface, feel free to skip to the :ref:`geoeditor.preparing` section.
 
-You can examine and manipulate your data using various controls, such as panels, buttons, and windows. GeoEditor arranges these elements into a single, integrated workspace.   
+Running GeoEditor
+-----------------
 
-The :guilabel:`Layers panel` lists selected layers with associated legend in the :guilabel:`Legend` tab. You can use the Layers panel to manage display options. 
+GeoEditor runs in a browser window.  By default, GeoEditor's URL is `http://localhost:8080/geoeditor <http://localhost:8080/geoeditor>`_
 
-The :guilabel:`Tools panel` contains tools for selecting, editing, and viewing layers. To view information about any tool, position the pointer over it. The name of the tool appears in a tool tip below the pointer.
+   .. figure:: images/geoeditor.png
+      :align: center
+   
+      *GeoEditor*
 
-The :guilabel:`Map window` displays the map you’re working on.  Maps windows can display layers and/or query results along with controls for modifying and deleting features.
+GeoEditor Workspace
+-------------------
 
-The :guilabel:`Query panel` displays query options and results for the currently selected layer. 
+GeoEditor has a single, integrated workspace where you can examine and manipulate your data.  There are three panels and one window:
+
+* The :guilabel:`Layers panel` lists selected layers with associated legend in the :guilabel:`Legend` tab. You can use the Layers panel to manage display options. 
+* The :guilabel:`Tools panel` contains tools for selecting, editing, and viewing layers. To view information about any tool, position the pointer over it. The name of the tool appears in a tool tip below the pointer.
+* The :guilabel:`Map window` displays the map you’re working on.  Maps windows can display layers and/or query results along with controls for modifying and deleting features.
+* The :guilabel:`Query panel` displays query options and results for the currently selected layer. 
 
 
 Layers panel
-```````````` 
-You can add layers by clicking on the (+) button in the layers panel. 
-The ``Available Layers`` dialog lists all layers on the current :term:`WMS` server. 
-To display meta information about the layer, click on the (+) next to each layer. Double click a 
-layer row in the grid, or select layers and click ``Add Layers`` to add them to the map.
+~~~~~~~~~~~~
 
-..note:: Unlike GeoExplorer, GeoEditor does not provide a direct way to access layers from a 
-different WMS server. 
+You can add layers by clicking on the (+) button.
 
-You can manage the composition of your layers through the :guilabel:`Layers` list. Right click 
-on a layer to zoom to a layer extent, remove a layer from the layer list, or view layer properties.  
+The :guilabel:`Available Layers` dialog lists all layers on the current :term:`WMS` server.  To display information about the layer, click on the (+) next to each layer. Select one or more layers and click ``Add Layers`` to add them to the list and the map window.
+
+.. note:: GeoEditor can only provide access to the default WMS server. 
+
+You can manage the composition of your layers through the :guilabel:`Layers` list. Right click on a layer to zoom to a layer extent, remove a layer from the list/map, or view layer properties.  
 
     .. list-table::
        :widths: 15 85 
@@ -42,14 +49,14 @@ on a layer to zoom to a layer extent, remove a layer from the layer list, or vie
        * - .. image:: /images/managing2.png
          - Click (-) to remove the currently selected layer.
        * - .. image:: /images/managing3.png
-         - For a selected later, presents *About* and *Display* information.
+         - For a selected layer, presents information and global settings (such as opacity and image format).
   
-When organizing layer order, first select a layer and then drag and drop the layer in the hierarchy. To toggle visibility you can either use the checkboxes or double click a layer
+You can adjust the layer ordering by dragging the order of layers in the list. To toggle visibility you can either use the checkboxes or double click a layer name.
 
-Tool Panel
-``````````
-The :guilabel:`Tools panel` contains a number of controls, including access to adding a new 
-feature.  The following tables outlines these buttons and associated functionality.
+Tools panel
+~~~~~~~~~~~
+
+The :guilabel:`Tools panel` contains a number of controls, including access to adding a new feature.  The following tables outlines these buttons and associated functionality.
 
     .. list-table::
        :widths: 15 15 70 
@@ -59,20 +66,28 @@ feature.  The following tables outlines these buttons and associated functionali
          - **Description**
        * - .. image:: /images/measure.png 
          - Measure
-         - An expandable button for measuring distance and area when active. To measure, click on the map, drawing a line for distance or a polygon for area measurement. Freehand measuring can be activated by pressing and holding the shift key. Double click on the map to draw the last vertex of the measurement line or polygon. The distance or area will be displayed in a small popup.
+         - Measures distance or area. To measure, click on the map, drawing a line for distance or a polygon for area measurement. Freehand measuring can be activated by pressing and holding the Shift key. When finished, double click on the map.  The total distance or area will be displayed.
        * - .. image:: /images/zoomin.png
-         - Zoom-In
-         - Zoom-in by one zoom level.
+         - Zoom In
+         - Zooms in by one zoom level.
        * - .. image:: /images/zoomout.png
-         - Zoom-Out
-         - Zoom-out by one zoom level.   
+         - Zoom Out
+         - Zooms out by one zoom level.   
        * - .. image:: /images/previousextent.png
-         - Zoom to previous extent
-         - Zoom to the extent you were previously viewing.
+         - Zoom to Previous Extent
+         - Zooms to the extent you were previously viewing.
        * - .. image:: /images/nextextent.png
          - Zoom to next extent
-         - After using the ``Zoom to previous extent`` button, click to zoom to the next extent.
+         - Activated after using the "Zoom to Previous Extent" button, zooms to the next most recent extent.
        * - .. image:: /images/extent.png
          - Zoom to visible extent
          - Click to view the largest possible area.
+
+Map Window
+~~~~~~~~~~
+
+The map window displays all of the layers listed in the :guilabel:`Layers panel`. 
+
+Query Panel
+~~~~~~~~~~~
 
