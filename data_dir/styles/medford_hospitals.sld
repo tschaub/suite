@@ -21,8 +21,8 @@
             <Graphic>
               <ExternalGraphic>
                 <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                  xlink:href="graphics/hospital.svg"/>
-                <Format>image/svg</Format>
+                  xlink:href="hospital10.png"/>
+                <Format>image/png</Format>
               </ExternalGraphic>
               <Mark/>
               <Size>10</Size>
@@ -43,8 +43,8 @@
            <Graphic>
              <ExternalGraphic>
                <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                 xlink:href="graphics/hospital.svg"/>
-               <Format>image/svg</Format>
+                 xlink:href="hospital13.png"/>
+               <Format>image/png</Format>
              </ExternalGraphic>
              <Mark/>
              <Size>13</Size>
@@ -65,8 +65,8 @@
             <Graphic>
               <ExternalGraphic>
                 <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                xlink:href="graphics/hospital.svg"/>
-                <Format>image/svg</Format>
+                xlink:href="hospital16.png"/>
+                <Format>image/png</Format>
               </ExternalGraphic>
               <Mark/>
               <Size>16</Size>
@@ -122,8 +122,8 @@
             <Graphic>
               <ExternalGraphic>
                 <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                  xlink:href="graphics/hospital.svg"/>
-                <Format>image/svg</Format>
+                  xlink:href="hospital20.png"/>
+                <Format>image/png</Format>
               </ExternalGraphic>
               <Mark/>
               <Size>20</Size>

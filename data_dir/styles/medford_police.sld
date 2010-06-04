@@ -27,8 +27,8 @@
             <Graphic>
               <ExternalGraphic>
                 <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                  xlink:href="graphics/police.svg"/>
-                <Format>image/svg</Format>
+                  xlink:href="police10.png"/>
+                <Format>image/png</Format>
               </ExternalGraphic>
               <Mark/>
               <Size>10</Size>
@@ -54,8 +54,8 @@
             <Graphic>
               <ExternalGraphic>
                 <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                 xlink:href="graphics/police.svg"/>
-                <Format>image/svg</Format>
+                 xlink:href="police13.png"/>
+                <Format>image/png</Format>
               </ExternalGraphic>
               <Mark/>
               <Size>13</Size>
@@ -81,8 +81,8 @@
             <Graphic>
               <ExternalGraphic>
                 <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                xlink:href="graphics/police.svg"/>
-                <Format>image/svg</Format>
+                xlink:href="police16.png"/>
+                <Format>image/png</Format>
               </ExternalGraphic>
               <Mark/>
               <Size>16</Size>
@@ -144,8 +144,8 @@
             <Graphic>
               <ExternalGraphic>
                 <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                  xlink:href="graphics/police.svg"/>
-                <Format>image/svg</Format>
+                  xlink:href="police20.png"/>
+                <Format>image/png</Format>
               </ExternalGraphic>
               <Mark/>
               <Size>20</Size>

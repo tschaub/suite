@@ -21,8 +21,8 @@
             <Graphic>
               <ExternalGraphic>
                 <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                  xlink:href="graphics/library.svg"/>
-                <Format>image/svg</Format>
+                  xlink:href="library.png"/>
+                <Format>image/png</Format>
               </ExternalGraphic>
               <Mark/>
               <Size>10</Size>
@@ -42,8 +42,8 @@
             <Graphic>
               <ExternalGraphic>
                 <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                 xlink:href="graphics/library.svg"/>
-                <Format>image/svg</Format>
+                 xlink:href="library.png"/>
+                <Format>image/png</Format>
               </ExternalGraphic>
               <Mark/>
               <Size>13</Size>
@@ -63,8 +63,8 @@
             <Graphic>
               <ExternalGraphic>
                 <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                xlink:href="graphics/library.svg"/>
-                <Format>image/svg</Format>
+                xlink:href="library.png"/>
+                <Format>image/png</Format>
               </ExternalGraphic>
               <Mark/>
               <Size>16</Size>
@@ -83,8 +83,8 @@
             <Graphic>
               <ExternalGraphic>
                 <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                  xlink:href="graphics/library.svg"/>
-                <Format>image/svg</Format>
+                  xlink:href="library.png"/>
+                <Format>image/png</Format>
               </ExternalGraphic>
               <Mark/>
               <Size>20</Size>

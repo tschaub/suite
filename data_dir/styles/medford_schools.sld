@@ -33,7 +33,7 @@
             <Graphic>
               <ExternalGraphic>
                 <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                  xlink:href="graphics/elementary_school.png"/>
+                  xlink:href="elementary_school10.png"/>
                 <Format>image/png</Format>
               </ExternalGraphic>
               <Mark/>
@@ -65,7 +65,7 @@
             <Graphic>
               <ExternalGraphic>
                 <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                  xlink:href="graphics/middle_school.png"/>
+                  xlink:href="middle_school10.png"/>
                 <Format>image/png</Format>
               </ExternalGraphic>
               <Mark/>
@@ -97,7 +97,7 @@
              <Graphic>
                <ExternalGraphic>
                  <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                   xlink:href="graphics/high_school.png"/>
+                   xlink:href="high_school10.png"/>
                  <Format>image/png</Format>
                </ExternalGraphic>
                <Mark/>
@@ -130,7 +130,7 @@
            <Graphic>
              <ExternalGraphic>
                <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                 xlink:href="graphics/elementary_school.png"/>
+                 xlink:href="elementary_school13.png"/>
                <Format>image/png</Format>
              </ExternalGraphic>
              <Mark/>
@@ -162,7 +162,7 @@
           <Graphic>
              <ExternalGraphic>
                <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                xlink:href="graphics/middle_school.png"/>
+                xlink:href="middle_school13.png"/>
                 <Format>image/png</Format>
              </ExternalGraphic>
             <Mark/>
@@ -194,7 +194,7 @@
             <Graphic>
               <ExternalGraphic>
                 <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                xlink:href="graphics/high_school.png"/>
+                xlink:href="high_schoo13l.png"/>
                 <Format>image/png</Format>
               </ExternalGraphic>
               <Mark/>
@@ -229,7 +229,7 @@
             <Graphic>
               <ExternalGraphic>
                 <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                xlink:href="graphics/elementary_school.png"/>
+                xlink:href="elementary_school16.png"/>
                 <Format>image/png</Format>
               </ExternalGraphic>
               <Mark/>
@@ -298,7 +298,7 @@
             <Graphic>
               <ExternalGraphic>
                 <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                xlink:href="graphics/middle_school.png"/>
+                xlink:href="middle_school16.png"/>
                 <Format>image/png</Format>
               </ExternalGraphic>
               <Mark/>
@@ -367,7 +367,7 @@
             <Graphic>
               <ExternalGraphic>
                 <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                xlink:href="graphics/high_school.png"/>
+                xlink:href="high_school16.png"/>
                 <Format>image/png</Format>
               </ExternalGraphic>
               <Mark/>
@@ -438,7 +438,7 @@
           <Graphic>
             <ExternalGraphic>
               <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                xlink:href="graphics/elementary_school.png"/>
+                xlink:href="elementary_school20.png"/>
               <Format>image/png</Format>
             </ExternalGraphic>
             <Mark/>
@@ -507,7 +507,7 @@
           <Graphic>
             <ExternalGraphic>
               <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                xlink:href="graphics/middle_school.png"/>
+                xlink:href="middle_school20.png"/>
               <Format>image/png</Format>
             </ExternalGraphic>
             <Mark/>
@@ -576,7 +576,7 @@
           <Graphic>
             <ExternalGraphic>
               <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                xlink:href="graphics/high_school.png"/>
+                xlink:href="high_school20.png"/>
               <Format>image/png</Format>
             </ExternalGraphic>
             <Mark/>
