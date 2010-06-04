@@ -559,7 +559,10 @@ var Styler = Ext.extend(Ext.util.Observable, {
     
     setCurrentLayer: function(layer) {
         if(layer != this.currentLayer) {
-            this.map.zoomToExtent(layer.maxExtent);
+            var extent = this.map.getExtent();
+            if (!extent || !layer.maxExtent.containsLonLat(extent.getCenterLonLat())) {
+                this.map.zoomToExtent(layer.maxExtent);
+            }
             this.currentLayer = layer;
             if(this.ruleDlg) {
                 this.ruleDlg.destroy();
