@@ -45,7 +45,7 @@ copyright = u'2010 PostGIS'
 # other places throughout the built documents.
 #
 # The short X.Y version.
-version = '1.5'
+version = '1.5.2'
 # The full version, including alpha/beta/rc tags.
 release = '1.5.2'
 
