@@ -569,30 +569,24 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 var xEl = new Ext.Element(el);
                 var follow = xEl.hasClass("app-online") ? this.suite.online : true;
                 if (follow) {
-                    var port = this.config["suite_port"];
-                    var host = this.config["suite_host"];
-                    var id, parts, key, path, url, title;
+                    var url;
                     if (el.href.indexOf("#") >= 0) {
-                        id = el.href.split("#").pop();
-                        parts = id.split("-");
-                        if (parts.length > 1) {
-                            // lookup URL in config
-                            key = parts.pop();
-                            path = this.config[key];
-                            if (path) {
-                                title = this.config[key + "_title"];
-                                if (!path.match(/^(https?|file):\/\//)) {
-                                    url = "http://" + host + (port ? ":" + port : "") + path;
-                                }
+                        var id = el.href.split("#").pop();
+                        var path = this.config[id];
+                        if (path) {
+                            if (!path.match(/^(https?|file):\/\//)) {
+                                var port = this.config["suite_port"];
+                                var host = this.config["suite_host"];
+                                url = "http://" + host + (port ? ":" + port : "") + path;
                             }
-                        }                    
+                        }
                     }
-                    if (!path) {
+                    if (!url) {
                         // href may be to arbitrary url
                         url = el.href;
                         el.href = "#";
                     }
-                    this.openURL(url, title);
+                    this.openURL(url);
                 }
                 return follow;
             },
@@ -1007,7 +1001,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         }, this);
     },
     
-    openURL: function(url, title) {
+    openURL: function(url) {
         url = encodeURI(url);
         if (window.Titanium) {
             Titanium.Desktop.openURL(url);
