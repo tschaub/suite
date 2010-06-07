@@ -3,8 +3,8 @@
 ; Initial definitions
 !define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
-!define VERSION "2.0.0"
-!define LONGVERSION "2.0.0.0" ; Must be a.b.c.d!
+!define VERSION "1.9.2"
+!define LONGVERSION "1.9.2.0" ; Must be a.b.c.d!
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
 !define SOURCEPATHROOT "..\..\target\win"
 !define STARTMENU_FOLDER "${APPNAME}"
@@ -992,7 +992,9 @@ Section Uninstall
 
   Try:
 
-    ;RMDir /r "$PROFILE\.opengeo"
+    Delete "$PROFILE\.opengeo\*.*"
+    RMDir /r "$PROFILE\.opengeo\logs"
+
     RMDir /r "$INSTDIR\bin"
     RMDir /r "$INSTDIR\dashboard"
     RMDir /r "$INSTDIR\data_dir"
