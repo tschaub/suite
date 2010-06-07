@@ -30,26 +30,14 @@ For lines and polygon geometries, continue positioning vertices with a single cl
 
 By default, the :guilabel:`Create a new feature` changes to the :guilabel:`Edit existing feature` tool. Here you can edit new attribute` values. Attributes are descriptions of a geographic feature stored as a row in a table.
 
-You can input attributes after you create a feature by selecting the text field. Select :guilabel:`Save` to apply them to your data source. 
-
-.. figure:: images/modify2.png
-   :align: center
-   :width: 600px
-
-   *Attribute table for a new feature*
-
-Saving 
-------
-
-Any GeoEditor modifications are temporary until you choose to :guilabel:`Save` them.  Canceling or quitting will not save your changes, nor will bookmarking a map document.  To write edits to a data source, you need to specifically save the edits.
 
 Modifying Existing Features
 ---------------------------
 
-To start modifying existing features, use the :guilabel:`Edit existing feature` tool and click anywhere within the feature component.  A feature 
+To start modifying existing features, use the :guilabel:`Edit existing feature` tool and click anywhere within the feature component.  
 
 
-.. figure:: images/modify3.jpg
+.. figure:: images/modify2.jpg
    :align: center
    :width: 600px
 
@@ -57,19 +45,56 @@ To start modifying existing features, use the :guilabel:`Edit existing feature` 
 
 A feature will now selected in *draft* mode for editing. Activate your editing session by clicking the :guilabel:`Edit` button.  
 
-.. figure:: images/modify4.jpg
+.. figure:: images/modify3.jpg
    :align: center
    :width: 600px
 
    *Medford zone 230 ready for editing*
 
-There are two, almost identical ways to reshape a feature.  You can either click a vertex and drag it to a new location.  You can also specify a new vertex by clicking and dragging a *phantom* vertex.   For instance, you can drag a vertex to restructure the boundaries of a zone with a fish tail.
+Reshaping
+`````````
+To reshape a feature, you can select a vertex and drag it to a new location.  You can also specify a new vertex by clicking and dragging a *phantom* vertex.   For instance, you can drag a vertex to restructure the boundaries of a zone with a fish tail.
 
-.. figure:: images/modify5.png
+.. figure:: images/modify4.png
    :align: center
    :width: 600px
 
    *Modified zone 230*
 
-As with adding a feature, you can also modify tabular attributes selecting the text field. Select :guilabel:`Save` to apply them to your data source. 
+Deleting Vertices
+`````````````````
+Position the your pointer over a vertex and press :guilabel:`Shift-D` to delete.  GeoEditor immediately previews the modified feature.  
+ 
+.. figure:: images/modify5.png
+   :align: center
+   :width: 600px
+
+   *Deleting a taxlot corner*
+
+Deleting Features
+`````````````````
+
+In order to delete a feature from the map and the datastore, select the :guilabel:`Edit existing feature` tool. Click within the feature you want to delete and select the :guilabel:`Delete` button in the resulting dialog. You will be prompted to confirm the feature deletion. 
+
+.. figure:: images/modify6.png
+   :align: center
+   :width: 600px
+
+   *Selecting a firestation to delete*
+   
+Inputting attributes 
+--------------------
+
+You can add or edit attributes by selecting the text field. Select :guilabel:`Save` to apply them to your data source. 
+
+   .. figure:: images/modify7.png
+      :align: center
+      :width: 600px
+
+      *Attribute table for a new feature*
+
+Saving 
+------
+
+Any GeoEditor modifications are temporary until you choose to :guilabel:`Save` them.  Canceling or quitting will not save your changes, nor will bookmarking a map document.  To write edits to a data source, you need to specifically save the edits.
 

@@ -33,7 +33,7 @@ Layers panel
 
 You can add layers by clicking on the (+) button.
 
-The :guilabel:`Available Layers` dialog lists all layers on the current :term:`WMS` server.  To display information about the layer, click on the (+) next to each layer. Select one or more layers and click ``Add Layers`` to add them to the list and the map window.
+The :guilabel:`Available Layers` dialog lists all layers on the current WMS server.  To display information about the layer, click on the (+) next to each layer. Select one or more layers and click ``Add Layers`` to add them to the list and the map window.
 
 .. note:: GeoEditor can only provide access to the default WMS server. 
 

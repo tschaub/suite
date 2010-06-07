@@ -14,7 +14,7 @@ Area Selection
 
 To select an area for editing, you first need to frame the data in an appropriate view.  Although you can edit data in any view, it is generally best to select a frame with the most detail. 
 
-There are several options for selecting your data frame.  Use can use the pan and zoom tools available in the ::guilabel:`Tools panel` along with the control options in the :guilabel:`Map window` to position and scale an image.  When you use these Zoom tools, each click or scale selection magnifies or reduces the image to the next preset around the current center point.  Double-clicking a point, allows you specify the center of an area you want to magnify.  
+There are several options for selecting your data frame.  Use can use the pan and zoom tools available in the :guilabel:`Tools panel` along with the control options in the :guilabel:`Map window` to position and scale an image.  When you use these Zoom tools, each click or scale selection magnifies or reduces the image to the next preset around the current center point.  Double-clicking a point, allows you specify the center of an area you want to magnify.  
 
 For a smooth zoom, you can also hold down Shift and drag a red rectangle around the area you want to magnify. For a smooth pan, you can use the :guilabel:`Pan Map` tool to nudge the map in the direction you want to view. 
 

@@ -14,7 +14,8 @@ This guide provides a core overview of GeoEditor.
    introduction
    preparing
    modifying
-   glossary
+   configuration
+   
     
 
 
