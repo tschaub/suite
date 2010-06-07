@@ -46,13 +46,13 @@
                 <p>The order of the rules does not matter in this case, since each shape is only rendered by a single rule.
                 </p>
                 <p>
-                    The first rule, on lines 2-22, specifies the styling of those points whose population attribute is less than 50,000. Lines 5-10 set this filter, with lines 6-9 setting the "less than" filter, line 7 denoting the attribute ("pop"), and line 8 the value of 50,000. The symbol is a circle (line 14), the color is dark blue (#0033CC, on line 16), and the size is 8 pixels in diameter (line 19).
+                    The first rule, on <strong>lines 7-27</strong>, specifies the styling of those points whose population attribute is less than 50,000. <strong>Lines 10-15</strong> set this filter, with lines 6-9 setting the "less than" filter, <strong>line 12</strong> denoting the attribute ("pop"), and <strong>line 13</strong> the value of 50,000. The symbol is a circle (<strong>line 19</strong>), the color is dark blue (#0033CC, on <strong>line 21</strong>), and the size is 8 pixels in diameter (<strong>line 24</strong>).
                 </p>
                 <p>
-                    The second rule, on lines 23-49, specifies a style for points whose population attribute is greater than or equal to 50,000 and less than 100,000. The population filter is set on lines 26-37. This filter is longer than in the first rule because two criteria need to be specified instead of one: a "greater than or equal to" and a "less than" filter. Notice the And on line 27 and line 36. This mandates that both filters need to be true for the rule to be applicable. The size of the graphic is set to 12 pixels on line 46. All other styling directives are identical to the first rule.
+                    The second rule, on <strong>lines 28-54</strong>, specifies a style for points whose population attribute is greater than or equal to 50,000 and less than 100,000. The population filter is set on <strong>lines 31-42</strong>. This filter is longer than in the first rule because two criteria need to be specified instead of one: a "greater than or equal to" and a "less than" filter. Notice the ``And`` on <strong>line 32</strong> and <strong>line 41</strong>. This mandates that both filters need to be true for the rule to be applicable. The size of the graphic is set to 12 pixels on <strong>line 51</strong>. All other styling directives are identical to the first rule.
                 </p>
                 <p>
-                    The third rule, on lines 50-70, specifies a style for points whose population attribute is greater than or equal to 100,000. The population filter is set on lines 53-58, and the only other difference is the size of the circle, which in this rule (line 67) is 16 pixels.
+                    The third rule, on <strong>lines 55-75</strong>, specifies a style for points whose population attribute is greater than or equal to 100,000. The population filter is set on <strong>lines 58-63</strong>, and the only other difference is the size of the circle, which in this rule (<strong>line 72</strong>) is 16 pixels.
                 </p>
                 <p>
                     The result of this style is that cities with larger populations have larger points.
