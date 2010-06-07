@@ -252,6 +252,7 @@ Function PriorInstall
 
   ; Check for 1.9.0
   StrCmp $R2 "1.9.0" Upgrade 0
+  StrCmp $R2 "1.9.1" Upgrade 0
   StrCmp $R2 "${VERSION}" SameVersion UnknownVersion
 
 
@@ -496,7 +497,7 @@ Section -Prerequisites
 SectionEnd
 
   ; This section removes files from 1.0 or 1.0r1 install, before continuing
-Section "-Upgrade1.0" SectionUpgrade1.0 ; dash = hidden
+Section "-Upgrade" SectionUpgrade ; dash = hidden
 
   !insertmacro DisplayImage "graphics\slide_1_suite.bmp"
 
@@ -523,13 +524,14 @@ Section "-Upgrade1.0" SectionUpgrade1.0 ; dash = hidden
 
   ;Remove start menu entries
 
-  StrCmp $Upgrade "1.9.0" v1.9.0 0 
+  ; Someday do a version greater/less than comparison instead of this
+  StrCmp $Upgrade "1.9.0" v1.9 0 
+  StrCmp $Upgrade "1.9.1" v1.9 0 
   ; Faking it for 1.0 + 1.0r1
   RMDir /r "$SMPROGRAMS\${APPNAME} $Upgrade"
   Goto Continue
 
-  ; Someday do a version greater/less than comparison instead of this
-  v1.9.0:
+  v1.9:
   RMDir /r "$OldStartMenu"
   Goto Continue
 
@@ -938,7 +940,7 @@ SectionEnd
 ; Modern install component descriptions
 ; Yes, this needs to go after the install sections. 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionUpgrade1.0} "Deals with the upgrade from 1.0 or 1.0r1."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionUpgrade} "Upgrades the OpenGeo Suite from a previous version."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionJetty} "Installs Jetty, a web server."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionPostGIS} "Installs PostGIS, a spatial database."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionServices} "A list of all of the services contained in the OpenGeo Suite."
