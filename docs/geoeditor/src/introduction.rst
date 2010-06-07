@@ -35,7 +35,7 @@ You can add layers by clicking on the (+) button.
 
 The :guilabel:`Available Layers` dialog lists all layers on the current WMS server.  To display information about the layer, click on the (+) next to each layer. Select one or more layers and click ``Add Layers`` to add them to the list and the map window.
 
-.. note:: GeoEditor can only provide access to the default WMS server. 
+.. note:: GeoEditor can only provide access to a single WMS server. To configure GeoEditor to work with a WMS server other than the local GeoServer see :ref:`configuration`.
 
 You can manage the composition of your layers through the :guilabel:`Layers` list. Right click on a layer to zoom to a layer extent, remove a layer from the list/map, or view layer properties.  
 
@@ -59,11 +59,23 @@ Tools panel
 The :guilabel:`Tools panel` contains a number of controls, including access to adding a new feature.  The following tables outlines these buttons and associated functionality.
 
     .. list-table::
-       :widths: 15 15 70 
+       :widths: 5 20 75 
 
        * - **Button**
          - **Name**
          - **Description**
+       * - .. image:: /images/map_save.png 
+         - Bookmark
+         - Create a permalink for a GeoEditor loaded with the layers and extent you are currently looking at.
+       * - .. image:: /images/pan.png 
+         - Pan
+         - Enabled by default, use for dragging the map with the mouse and zooming by Shift-Click-Dragging an extent rectangle.
+       * - .. image:: /images/map_edit.png 
+         - Edit
+         - Starts an editing session for an existing feature.
+       * - .. image:: /images/pencil_add.png 
+         - Add
+         - Activates the feature drawing tool. Once selected, you can begin drafting features. 
        * - .. image:: /images/measure.png 
          - Measure
          - Measures distance or area. To measure, click on the map, drawing a line for distance or a polygon for area measurement. Freehand measuring can be activated by pressing and holding the Shift key. When finished, double click on the map.  The total distance or area will be displayed.
@@ -74,20 +86,41 @@ The :guilabel:`Tools panel` contains a number of controls, including access to a
          - Zoom Out
          - Zooms out by one zoom level.   
        * - .. image:: /images/previousextent.png
-         - Zoom to Previous Extent
+         - Previous Extent
          - Zooms to the extent you were previously viewing.
        * - .. image:: /images/nextextent.png
-         - Zoom to next extent
+         - Next extent
          - Activated after using the "Zoom to Previous Extent" button, zooms to the next most recent extent.
        * - .. image:: /images/extent.png
-         - Zoom to visible extent
+         - Visible extent
          - Click to view the largest possible area.
 
 Map Window
 ~~~~~~~~~~
 
-The map window displays all of the layers listed in the :guilabel:`Layers panel`. 
+The map window displays all of the layers listed in the :guilabel:`Layers panel`.  As a preview area, the :guilabel:`Map Window` is used for selecting, modifying and searching features.   
+
+.. figure:: images/introduction1.png
+   :align: center
+   :width: 600px
+
+   *A map window of medford layers*
+
 
 Query Panel
 ~~~~~~~~~~~
+
+The :guilabel:`Query Panel` provides tools for analyzing and preparing features for editing.  The first 100 features that satisfy the specified query the within the current :guilabel:`Map Window` extent are displayed in tabular format.  These results can be sorted, reorganized, and activated to prepare a map for editing. 
+
+.. figure:: images/introduction2.png
+   :align: center
+   :width: 600px
+
+   *A query for Medford school fields*
+
+ 
+
+
+
+
 

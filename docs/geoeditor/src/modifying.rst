@@ -52,7 +52,7 @@ A feature will now selected in *draft* mode for editing. Activate your editing s
    *Medford zone 230 ready for editing*
 
 Reshaping
-`````````
+~~~~~~~~~
 To reshape a feature, you can select a vertex and drag it to a new location.  You can also specify a new vertex by clicking and dragging a *phantom* vertex.   For instance, you can drag a vertex to restructure the boundaries of a zone with a fish tail.
 
 .. figure:: images/modify4.png
@@ -62,7 +62,7 @@ To reshape a feature, you can select a vertex and drag it to a new location.  Yo
    *Modified zone 230*
 
 Deleting Vertices
-`````````````````
+~~~~~~~~~~~~~~~~~
 Position the your pointer over a vertex and press :guilabel:`Shift-D` to delete.  GeoEditor immediately previews the modified feature.  
  
 .. figure:: images/modify5.png
@@ -72,7 +72,7 @@ Position the your pointer over a vertex and press :guilabel:`Shift-D` to delete.
    *Deleting a taxlot corner*
 
 Deleting Features
-`````````````````
+~~~~~~~~~~~~~~~~~
 
 In order to delete a feature from the map and the datastore, select the :guilabel:`Edit existing feature` tool. Click within the feature you want to delete and select the :guilabel:`Delete` button in the resulting dialog. You will be prompted to confirm the feature deletion. 
 
