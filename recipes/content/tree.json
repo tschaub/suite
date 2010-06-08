@@ -205,8 +205,7 @@
         }]
     },  { 
         "text": "Rasters",
-        "children": [
-        {
+        "children": [{
             "id": "sld/raster/raster_twocolorgradient",
             "text": "Two-Color Gradient",
             "leaf": true
@@ -226,7 +225,10 @@
             "id": "sld/raster/raster_alphachannel",
             "text": "Alpha Channel Effect",
             "leaf": true
-        }
-        ]
+        }, {
+            "id": "sld/raster/raster_discretecolors",
+            "text": "Discrete Colors",
+            "leaf": true
+        }]
     }]
 }]

@@ -331,6 +331,14 @@
         "components": ["GeoServer"],
         "reference": "sld/raster/raster_alphachannel-ref",
         "sourcepath": "sld/raster/raster_alphachannel.sld"
-    }  
+    }, {
+        "id": "sld/raster/raster_discretecolors.sld",
+        "title": "Adjust a gradient to 3 discrete colors",
+        "description": "Discrete Colors",
+        "components": ["GeoServer"],
+        "reference": "sld/raster/raster_discretecolors-ref",
+        "sourcepath": "sld/raster/raster_discretecolors.sld"
+    }
+          
 ]
 }
