@@ -318,21 +318,21 @@
         "reference": "sld/raster/raster_brightnessandcontrast-ref",
         "sourcepath": "sld/raster/raster_brightnessandcontrast.sld"
     }, {
-        "id": "sld/raster/raster_threecolorgradient.sld",
+        "id": "sld/raster/raster_threecolorgradient",
         "title": "Render a three-color style",
         "description": "Three-color Gradient",
         "components": ["GeoServer"],
         "reference": "sld/raster/raster_threecolorgradient-ref",
         "sourcepath": "sld/raster/raster_threecolorgradient.sld"
     }, {
-        "id": "sld/raster/raster_alphachannel.sld",
+        "id": "sld/raster/raster_alphachannel",
         "title": "Create an alpha channel effect",
         "description": "Alpha Channel",
         "components": ["GeoServer"],
         "reference": "sld/raster/raster_alphachannel-ref",
         "sourcepath": "sld/raster/raster_alphachannel.sld"
     }, {
-        "id": "sld/raster/raster_discretecolors.sld",
+        "id": "sld/raster/raster_discretecolors",
         "title": "Adjust a gradient to 3 discrete colors",
         "description": "Discrete Colors",
         "components": ["GeoServer"],
