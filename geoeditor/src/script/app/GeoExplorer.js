@@ -257,6 +257,7 @@ var GeoExplorer = Ext.extend(Ext.util.Observable, {
             projection: this.initialConfig.map.projection,
             units: this.initialConfig.map.units,
             maxResolution: this.initialConfig.map.maxResolution,
+            maxExtent: this.initialConfig.map.maxExtent && OpenLayers.Bounds.fromArray(this.initialConfig.map.maxExtent),
             numZoomLevels: this.initialConfig.map.numZoomLevels || 20
         });
         
@@ -802,10 +803,18 @@ var GeoExplorer = Ext.extend(Ext.util.Observable, {
                         layer.maxExtent = new OpenLayers.Bounds(-180, -90, 180, 90);
                     } else {
                         layer = record.get("layer");
-                        /**
-                         * TODO: The WMSCapabilitiesReader should allow for creation
-                         * of layers in different SRS.
-                         */
+                        var maxExtent = OpenLayers.Bounds.fromArray(
+                            record.get("llbbox")
+                        ).transform(
+                            new OpenLayers.Projection("EPSG:4326"),
+                            this.mapPanel.map.getProjectionObject()
+                        );
+                        // make sure maxExtent is valid (transform does not succeed for all llbbox)
+                        if (!(1 / maxExtent.getHeight() > 0) || !(1 / maxExtent.getWidth() > 0)) {
+                            // maxExtent has infinite or non-numeric width or height
+                            // in this case, the map maxExtent must be specified in the config
+                            maxExtent = undefined;
+                        }
                         layer = new OpenLayers.Layer.WMS(
                             layer.name, layer.url,
                             {layers: layer.params["LAYERS"]},
@@ -813,12 +822,7 @@ var GeoExplorer = Ext.extend(Ext.util.Observable, {
                                 buffer: 0,
                                 tileSize: new OpenLayers.Size(512, 512),
                                 attribution: layer.attribution,
-                                maxExtent: OpenLayers.Bounds.fromArray(
-                                    record.get("llbbox")
-                                ).transform(
-                                    new OpenLayers.Projection("EPSG:4326"),
-                                    this.mapPanel.map.getProjectionObject()
-                                )
+                                maxExtent: maxExtent
                             }
                         );
                     }
