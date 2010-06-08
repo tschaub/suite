@@ -302,28 +302,35 @@
         "description": "Two-Color Gradient",
         "components": ["GeoServer"],
         "reference": "sld/raster/raster_twocolorgradient-ref",
-        "sourcepath": "sld/polygon/raster_twocolorgradient.sld"
+        "sourcepath": "sld/raster/raster_twocolorgradient.sld"
     }, {
         "id": "sld/raster/raster_trasnparentgradient",
         "title": "Add transparency to a color gradient",
         "description": "Transparent Gradient",
         "components": ["GeoServer"],
         "reference": "sld/raster/raster_transparentgradient-ref",
-        "sourcepath": "sld/polygon/raster_transparentgradient.sld"
+        "sourcepath": "sld/raster/raster_transparentgradient.sld"
     }, {
         "id": "sld/raster/raster_brightnessandcontrast",
         "title": "Increase the brightness and contrast",
         "description": "Brightness and contrast",
         "components": ["GeoServer"],
         "reference": "sld/raster/raster_brightnessandcontrast-ref",
-        "sourcepath": "sld/polygon/raster_brightnessandcontrast.sld"
+        "sourcepath": "sld/raster/raster_brightnessandcontrast.sld"
     }, {
         "id": "sld/raster/raster_threecolorgradient.sld",
         "title": "Render a three-color style",
         "description": "Three-color Gradient",
         "components": ["GeoServer"],
         "reference": "sld/raster/raster_threecolorgradient-ref",
-        "sourcepath": "sld/polygon/raster_threecolorgradient.sld"
+        "sourcepath": "sld/raster/raster_threecolorgradient.sld"
+    }, {
+        "id": "sld/raster/raster_alphachannel.sld",
+        "title": "Create an alpha channel effect",
+        "description": "Alpha Channel",
+        "components": ["GeoServer"],
+        "reference": "sld/raster/raster_alphachannel-ref",
+        "sourcepath": "sld/raster/raster_alphachannel.sld"
     }  
 ]
 }
