@@ -304,7 +304,7 @@
         "reference": "sld/raster/raster_twocolorgradient-ref",
         "sourcepath": "sld/raster/raster_twocolorgradient.sld"
     }, {
-        "id": "sld/raster/raster_trasnparentgradient",
+        "id": "sld/raster/raster_transparentgradient",
         "title": "Add transparency to a color gradient",
         "description": "Transparent Gradient",
         "components": ["GeoServer"],
