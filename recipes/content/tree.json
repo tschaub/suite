@@ -202,7 +202,22 @@
             "id": "sld/polygon/zoombasedpolygon",
             "text": "Zoom-based polygon",
             "leaf": true
-        } 
+        }]
+    },  { 
+        "text": "Rasters",
+        "children": [{
+            "id": "sld/raster/raster_twocolorgradient",
+            "text": "Two-Color Gradient",
+            "leaf": true
+        }, {
+            "id": "sld/raster/raster_transparentgradient",
+            "text": "Transparent Gradient",
+            "leaf": true
+        }, {
+            "id": "sld/raster/raster_brightnessandcontrast",
+            "text": "Brightness and Contrast",
+            "leaf": true
+        }
         ]
     }]
 }]
