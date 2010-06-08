@@ -163,7 +163,11 @@ og.Suite = Ext.extend(Ext.util.Observable, {
         if (window.Titanium) {
             
             if (this.startProcess) {
-                this.startProcess.terminate();
+                try {
+                    this.startProcess.terminate();                    
+                } catch (err) {
+                    // pass
+                }
                 delete this.startPorcess;
             }
             
@@ -218,6 +222,11 @@ og.Suite = Ext.extend(Ext.util.Observable, {
                             "longer than expected.  Check the Suite logs for " +
                             "detail."
                         );
+                        try {
+                            this.startProcess.terminate();
+                        } catch (err) {
+                            // pass
+                        }
                         this.stop(true);
                     }
                 }).createDelegate(this), 
@@ -248,10 +257,6 @@ og.Suite = Ext.extend(Ext.util.Observable, {
      */
     stop: function(hard) {
         og.util.tirun(function() {
-            if (this.startProcess) {
-                this.startProcess.terminate();
-                delete this.startProcess;
-            }
             var p = Titanium.Process.createProcess({
                 args: [this.config["suite_exe"], "stop"]
             });
