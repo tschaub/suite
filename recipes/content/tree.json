@@ -41,10 +41,6 @@
         "id": "basic/tools",
         "text": "Map Tools",
         "leaf": true
-    },  {
-        "id": "basic/simplepoint",
-        "text": "Simple Point",
-        "leaf": true
     }]
 }, {
     "text": "Vector Features",
