@@ -1,5 +1,14 @@
 #!/bin/bash
 
+if [ $USER != "root" ]; then
+  echo ""
+  echo "Please run the uninstall script as root. For example,"
+  echo ""
+  echo "   sudo $0"
+  echo ""
+  exit 1
+fi
+
 echo ""
 echo "Removing OpenGeo Suite files..."
 echo ""
