@@ -217,6 +217,10 @@
             "id": "sld/raster/raster_brightnessandcontrast",
             "text": "Brightness and Contrast",
             "leaf": true
+        }, {
+            "id": "sld/raster/raster_threecolorgradient",
+            "text": "Three-Color Gradient",
+            "leaf": true
         }
         ]
     }]

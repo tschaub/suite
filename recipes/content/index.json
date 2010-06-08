@@ -310,13 +310,20 @@
         "components": ["GeoServer"],
         "reference": "sld/raster/raster_transparentgradient-ref",
         "sourcepath": "sld/polygon/raster_transparentgradient.sld"
-    },     {
+    }, {
         "id": "sld/raster/raster_brightnessandcontrast",
         "title": "Increase the brightness and contrast",
-        "description": "Brightness and contras",
+        "description": "Brightness and contrast",
         "components": ["GeoServer"],
         "reference": "sld/raster/raster_brightnessandcontrast-ref",
         "sourcepath": "sld/polygon/raster_brightnessandcontrast.sld"
+    }, {
+        "id": "sld/raster/raster_threecolorgradient.sld",
+        "title": "Render a three-color style",
+        "description": "Three-color Gradient",
+        "components": ["GeoServer"],
+        "reference": "sld/raster/raster_threecolorgradient-ref",
+        "sourcepath": "sld/polygon/raster_threecolorgradient.sld"
     }  
 ]
 }
