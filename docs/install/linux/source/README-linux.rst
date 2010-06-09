@@ -9,9 +9,10 @@ Prerequisites
 
 The OpenGeo Suite has the following system requirements:
 
-* **Operating System**: Ubuntu 9.10, Redhat 5, CentOS 5, Fedora 11 (each 32 and 64 bit)
+* **Operating System**: Ubuntu 9.10, Redhat 5, CentOS 5, Fedora 11 (32bit)
+  * **Note**: The Dashboard is not available on 64bit systems, but the other components of the Suite run on 64bit systems.
 * **Memory**: 512MB minimum (1GB recommended)
-* **Disk space**: 300MB minimum (plus extra space for any loaded data)
+* **Disk space**: 500MB minimum (plus extra space for any loaded data)
 * **Browser**: Any modern web browser is supported (Internet Explorer 6+, Firefox 3+, Chrome 2+, Safari 3+)
 * **Permissions**: Runs in a user account; superuser not required
 
@@ -20,17 +21,11 @@ Installation
 
 .. note:: The installation process runs in a terminal.
 
-#. Make the :file:`OpenGeoSuite-1.0.bin` file executable by setting the appropriate permissions:
+#. Begin the install by executing the :file:`OpenGeoSuite-2.0.0.bin` file in a shell:
 
    .. code-block:: bash
 
-     chmod +x OpenGeoSuite-1.0.bin
-
-#. Begin the install by executing the :file:`OpenGeoSuite-1.0.bin` file:
-
-   .. code-block:: bash
-
-     ./OpenGeoSuite-1.0.bin
+     sh OpenGeoSuite-2.0.0.bin
 
 #. The archive will verify its integrity, and then ask if you wish to proceed (default is Yes)::
 
@@ -40,9 +35,9 @@ Installation
 
      Do you accept the license agreement? [Y|n]:
 
-#. Choose the installation directory.  The default is ``$HOME``::
+#. Choose the installation directory.  The default is in the ``$HOME`` directory::
 
-     Choose an installation directory [/home/user]:
+     Choose an installation directory [/home/user/opengeosuite-2.0.0]:
 
 #. Choose if the OpenGeo Suite should include ArcSDE support (default is No):
 
@@ -76,7 +71,7 @@ Installation
    
       Installation summary:
 
-	     Installation directory: 	 /home/user/opengeosuite-1.0
+	     Installation directory: 	 /home/user/opengeosuite-2.0.0
 	     Install ArcSDE support: 	 No
 	     Install Oracle support: 	 No
 	     Install executables:        /home/user/bin
@@ -122,7 +117,7 @@ Uninstallation
 
    .. code-block:: bash
 
-     $ cd /home/user/opengeosuite-1.0
+     $ cd /home/user/opengeosuite-2.0.0/suite
 
 #. Execute the uninstall.sh script
 
