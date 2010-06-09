@@ -84,6 +84,10 @@
       <outputDirectory>webapps/recipes</outputDirectory>
     </fileSet>
     <fileSet>
+      <directory>dashboard/target/resources</directory>
+      <outputDirectory>webapps/dashboard</outputDirectory>
+    </fileSet>
+    <fileSet>
       <directory>data_dir</directory>
       <outputDirectory>data_dir</outputDirectory>
     </fileSet>
