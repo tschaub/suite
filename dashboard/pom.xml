@@ -97,6 +97,20 @@
               <goal>run</goal>
             </goals>
           </execution>
+          <execution>
+            <id>install</id>
+            <phase>install</phase>
+            <configuration>
+              <tasks>
+                <war destfile="${build.directory}/dashboard.war" webxml="${basedir}/src/main/webapp/WEB-INF/web.xml">
+                  <fileset dir="${build.directory}/resources" includes="**/*"/>
+                </war>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
         </executions>
       </plugin>
       <plugin>
