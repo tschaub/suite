@@ -179,7 +179,6 @@ PGSQL_DIR=$INSTALL_DIR/pgsql
 
 echo "Installing OpenGeo Suite..." &&
 tar xzf opengeosuite-bin.tar.gz -C "$INSTALL_DIR" &&
-mv "$SUITE_DIR/data_dir" "$INSTALL_DIR/data_dir" &&
 
 echo "Installing OpenGeo Dashboard..." &&
 tar xzf "OpenGeo Dashboard.tar.gz" -C "$SUITE_DIR" &&
@@ -191,7 +190,7 @@ echo "Creating symlinks..." &&
 ln -sf "`find "$SUITE_DIR" -type f -name "OpenGeo Dashboard"`" "$SUITE_DIR/opengeo-dashboard" &&
 sed -i "s#@SUITE_DIR@#$SUITE_DIR#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
 sed -i "s#@SUITE_EXE@#$SUITE_DIR/opengeo-suite#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
-sed -i "s#@GEOSERVER_DATA_DIR@#$INSTALL_DIR/data_dir#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
+sed -i "s#@GEOSERVER_DATA_DIR@#$SUITE_DIR/data_dir#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
 sed -i "s#@PGADMIN_PATH@#$PGSQL_DIR/bin/pgadmin3#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
 sed -i "s#@PGSHAPELOADER_PATH@#$PGSQL_DIR/bin/shp2pgsql-gui#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
 sed -i "s#@PGSQL_PORT@#54321#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
@@ -242,10 +241,8 @@ fi
 UNINSTALLER=$SUITE_DIR/uninstall.sh
 echo '#!/bin/bash' > "$UNINSTALLER"
 echo "rm -rf \"$SUITE_DIR\"" >> "$UNINSTALLER"
-echo "datestamp=`date +%Y%m%d`" >> "$UNINSTALLER"
-echo "mv \"$INSTALL_DIR/data_dir\" \"$INSTALL_DIR/data_dir.$datestamp\"" >> "$UNINSTALLER"
-echo "rm -f \"$HOME/.opengeo/config.ini\"" >> "$UNINSTALLER"
 echo "rm -rf \"$PGSQL_DIR\"" >> "$UNINSTALLER"
+echo "rm -rf \"$HOME/.opengeo\"" >> "$UNINSTALLER"
 
 if [ "$CREATE_SYMLINKS" == "Yes" ]; then
   echo "rm -f \"$SYMLINK_DIR/opengeo-suite\"" >> "$UNINSTALLER"
