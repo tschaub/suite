@@ -18,7 +18,7 @@ The OpenGeo Suite has the following system requirements:
 Installation
 ------------
 
-#. Double click on the :file:`OpenGeoSuite-1.9.0.exe` file.
+#. Double click on the :file:`OpenGeoSuite.exe` file.
 
 #. At the **Welcome** screen, click :guilabel:`Next`.
 
@@ -116,6 +116,11 @@ Uninstallation
       :align: center
 
       *The OpenGeo Suite is successfully uninstalled*
+
+Known Issues
+------------
+
+For the current list of known issues, please see http://opengeo.org/products/suite/changelog/
 
 For More Information
 --------------------
