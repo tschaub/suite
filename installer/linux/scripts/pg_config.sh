@@ -5,7 +5,10 @@ pg_version=8.4
 postgis_version=1.5
 pg_default_port=54321
 
-pushd `dirname "$0"` && HERE=`pwd` && popd
+# Read the location of the script file itself
+pushd `dirname "$0"` > /dev/null && 
+HERE=`pwd` && 
+popd > /dev/null
 
 suite_dir=${HERE}/../..
 pg_data_root_dir=${suite_dir}/pgdata/
