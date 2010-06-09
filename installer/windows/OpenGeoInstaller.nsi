@@ -919,7 +919,7 @@ Section "-Misc" SectionMisc
                  "" "$INSTDIR\icons\uninstall.ico" 0
 
   ; Changelog
-  ; SetOutPath $INSTDIR
+  SetOutPath $INSTDIR
   ; File /a ..\common\changelog.txt
 
   ; version.ini
