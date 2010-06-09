@@ -212,6 +212,15 @@ if [ "$CREATE_SYMLINKS" == "Yes" ]; then
   echo "./opengeo-dashboard" >> "$SYMLINK_DIR/opengeo-dashboard"
   echo "popd >> /dev/null" >> "$SYMLINK_DIR/opengeo-dashboard"
   chmod +x "$SYMLINK_DIR/opengeo-dashboard"
+
+  echo "#!/bin/bash" > "$SYMLINK_DIR/pgadmin3"
+  echo "export LD_LIBRARY_PATH=$PGSQL_DIR/lib" >> "$SYMLINK_DIR/pgadmin3"
+  echo "$PGSQL_DIR/bin/pgadmin3 &" >> "$SYMLINK_DIR/pgadmin3"
+
+  echo "#!/bin/bash" > "$SYMLINK_DIR/pgshapeloader"
+  echo "export LD_LIBRARY_PATH=$PGSQL_DIR/lib" >> "$SYMLINK_DIR/pgshapeloader"
+  echo "$PGSQL_DIR/bin/shp2pgsql-gui &" >> "$SYMLINK_DIR/pgshapeloader"
+
 fi
 
 #if [ "$INCLUDE_DOCS" == "Yes" ]; then
