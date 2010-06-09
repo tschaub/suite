@@ -3,8 +3,8 @@
 ; Initial definitions
 !define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
-!define VERSION "1.9.2"
-!define LONGVERSION "1.9.2.0" ; Must be a.b.c.d!
+!define VERSION "2.0.0"
+!define LONGVERSION "2.0.0.0" ; Must be a.b.c.d!
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
 !define SOURCEPATHROOT "..\..\target\win"
 !define STARTMENU_FOLDER "${APPNAME}"
@@ -253,6 +253,7 @@ Function PriorInstall
   ; Check for 1.9.0
   StrCmp $R2 "1.9.0" Upgrade 0
   StrCmp $R2 "1.9.1" Upgrade 0
+  StrCmp $R2 "1.9.2" Upgrade 0
   StrCmp $R2 "${VERSION}" SameVersion UnknownVersion
 
 
@@ -527,6 +528,7 @@ Section "-Upgrade" SectionUpgrade ; dash = hidden
   ; Someday do a version greater/less than comparison instead of this
   StrCmp $Upgrade "1.9.0" v1.9 0 
   StrCmp $Upgrade "1.9.1" v1.9 0 
+  StrCmp $Upgrade "1.9.2" v1.9 0 
   ; Faking it for 1.0 + 1.0r1
   RMDir /r "$SMPROGRAMS\${APPNAME} $Upgrade"
   Goto Continue
