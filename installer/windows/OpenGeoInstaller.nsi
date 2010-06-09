@@ -37,7 +37,7 @@ RequestExecutionLevel admin
 !include "nsDialogs.nsh" ; For Custom page layouts (Radio buttons etc)
 !include "WordFunc.nsh" ; For VersionCompare
 
-; WARNING!!! These plugins need to be installed spearately
+; WARNING!!! These plugins need to be installed separately
 
   ; See http://nsis.sourceforge.net/ModernUI_Mod_to_Display_Images_while_installing_files
   !include "Image.nsh" ; For graphics during the install 
@@ -154,9 +154,9 @@ Page custom PriorInstall                                      ; Check to see if 
 !insertmacro MUI_PAGE_DIRECTORY                               ; Where to install
 !insertmacro MUI_PAGE_STARTMENU Application $STARTMENU_FOLDER ; Start menu location
 !insertmacro MUI_PAGE_COMPONENTS                              ; List of stuff to install
-;Page custom GetSDE                                            ; Look for exisitng ArcSDE library
+;Page custom GetSDE                                            ; Look for existing ArcSDE library
 ;Page custom SDE SDELeave                                      ; Set the ArcSDE Path
-;Page custom GetOracle                                        ; Look for exisitng Oracle library
+;Page custom GetOracle                                        ; Look for existing Oracle library
 ;Page custom Oracle OracleLeave                               ; Set the Oracle Path
 Page custom Ready
 !insertmacro MUI_PAGE_INSTFILES                               ; Actually do the install
@@ -248,7 +248,7 @@ Function PriorInstall
 
   ; Check for 1.0 or 1.0r1
   ReadRegStr $R2 HKLM "Software\${COMPANYNAME}\${APPNAME}" "Version"
-  IfErrors Upgrade1.0 ; v1.0 and v1.0r1 did not have this key, so if not there, mmust be 1.0 or 1.0r1
+  IfErrors Upgrade1.0 ; v1.0 and v1.0r1 did not have this key, so if not there, must be 1.0 or 1.0r1
 
   ; Check for 1.9.0
   StrCmp $R2 "1.9.0" Upgrade 0
@@ -736,7 +736,7 @@ SectionGroup "Extensions" SectionGSExt
 
 SectionGroupEnd
 
-; This MUST go after the Extensions section (so that the vars aredefined)
+; This MUST go after the Extensions section (so that the vars are defined)
 Function .onSelChange
 
   ;Sets $SDECheckBox to 1 if component is checked
@@ -795,7 +795,7 @@ Section "Documentation" SectionDocs
 		         "$INSTDIR\webapps\docs\geoexplorer\index.html" \
                  "" "$INSTDIR\icons\geoexplorer.ico" 0
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoEditor Documentation.lnk" \
-		         "$INSTDIR\webapps\docs\geoditor\index.html" \
+		         "$INSTDIR\webapps\docs\geoeditor\index.html" \
                  "" "$INSTDIR\icons\geoeditor.ico" 0
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\Styler Documentation.lnk" \
 		         "$INSTDIR\webapps\docs\styler\index.html" \
