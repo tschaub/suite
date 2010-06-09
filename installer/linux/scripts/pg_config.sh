@@ -13,10 +13,11 @@ pg_data_dir=${suite_dir}/pgdata/${USER}
 pg_log=${suite_dir}/pgdata/${USER}_pgsql.log
 pg_data_load_dir=${suite_dir}/suite/pgdata
 
-pg_dir=${suite_dir}/pgsql/${pg_version}
+pg_dir=${suite_dir}/pgsql
 pg_bin_dir=${pg_dir}/bin
 pg_lib_dir=${pg_dir}/lib
-pg_share_dir=${pg_dir}/share/contrib
+pg_share_dir=`${pg_bin_dir}/pg_config --sharedir`
+postgis_share_dir=${pg_share_dir}/contrib/postgis-${postgis_version}
 
 export LD_LIBRARY_PATH="$pg_lib_dir"
 

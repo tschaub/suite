@@ -19,7 +19,7 @@ export PGUSER=postgres
 export PGPORT=$pg_port
 
 # Update the postgres database to include the adminpack
-"$pg_bin_dir/psql" -f $pg_share_dir/adminpack.sql -d $PGUSER >> "$pg_log"
+"${pg_bin_dir}/psql" -f ${pg_share_dir}/contrib/adminpack.sql -d $PGUSER >> "$pg_log"
 rv=$?
 if [ $rv -gt 0 ]; then
   echo "Adminpack install failed with return value $rv"
@@ -29,7 +29,7 @@ fi
 # Create the User Database
 
 # Create the User
-"$pg_bin_dir/createuser" --createdb --superuser $USER >> "$pg_log"
+"${pg_bin_dir}/createuser" --createdb --superuser $USER >> "$pg_log"
 rv=$?
 if [ $rv -gt 0 ]; then
   echo "Create user failed with return value $rv"
@@ -37,7 +37,7 @@ if [ $rv -gt 0 ]; then
 fi
 
 # Create the User Database
-"$pg_bin_dir/createdb" --owner=$USER --template=template_postgis $USER >> "$pg_log"
+"${pg_bin_dir}/createdb" --owner=$USER --template=template_postgis $USER >> "$pg_log"
 rv=$?
 if [ $rv -gt 0 ]; then
   echo "Create user failed with return value $rv"

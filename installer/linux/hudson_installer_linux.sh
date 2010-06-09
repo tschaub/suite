@@ -4,7 +4,6 @@
 # assembles them in the ./binaries/root directory where they are packaged into
 # a self-extracting bin file with makeself.sh
 
-pgsql_version=8.4
 jre_version=1.6.0.20
 arch=$1
 
@@ -127,9 +126,6 @@ mkdir binaries/pgsql/scripts
 cp -v scripts/* binaries/pgsql/scripts
 checkrv $? "PgSQL script copy"
 pushd binaries
-mv pgsql ${pgsql_version}
-mkdir pgsql
-mv ${pgsql_version} pgsql/${pgsql_version}
 tar cfz ./root/pgsql-postgis.tar.gz pgsql
 checkrv $? "PgSQL retar"
 rm -rf pgsql

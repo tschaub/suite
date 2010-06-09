@@ -13,15 +13,14 @@ if [ "$bin" != "good" ]; then
   exit 1
 fi
 
-pg_share=`"$pg_bin_dir/pg_config" --sharedir`
-postgis="${pg_share}/contrib/postgis-${postgis_version}/postgis.sql"
+postgis="${postgis_share_dir}/postgis.sql"
 if [ ! -f "$postgis" ]
 then
   echo "PostGIS SQL file $postgis does not exist"
   exit 1
 fi
 
-srs="${pg_share}/contrib/postgis-${postgis_version}/spatial_ref_sys.sql"
+srs="${postgis_share_dir}/spatial_ref_sys.sql"
 if [ ! -f "$srs" ]
 then
   echo "PostGIS spatial ref sys $srs does not exist"
