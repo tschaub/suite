@@ -206,20 +206,25 @@ if [ "$CREATE_SYMLINKS" == "Yes" ]; then
   echo "popd > /dev/null" >> "$SYMLINK_DIR/opengeo-suite"
   chmod +x "$SYMLINK_DIR/opengeo-suite"
 
-  echo "#!/bin/bash" > "$SYMLINK_DIR/opengeo-dashboard"
+  echo '#!/bin/bash' > "$SYMLINK_DIR/opengeo-dashboard"
   echo "pushd $SUITE_DIR >> /dev/null" >> "$SYMLINK_DIR/opengeo-dashboard"
   echo "export LD_LIBRARY_PATH=$PGSQL_DIR/lib" >> "$SYMLINK_DIR/opengeo-dashboard"
   echo "./opengeo-dashboard" >> "$SYMLINK_DIR/opengeo-dashboard"
   echo "popd >> /dev/null" >> "$SYMLINK_DIR/opengeo-dashboard"
   chmod +x "$SYMLINK_DIR/opengeo-dashboard"
 
-  echo "#!/bin/bash" > "$SYMLINK_DIR/pgadmin3"
+  echo '#!/bin/bash' > "$SYMLINK_DIR/pgadmin3"
   echo "export LD_LIBRARY_PATH=$PGSQL_DIR/lib" >> "$SYMLINK_DIR/pgadmin3"
   echo "$PGSQL_DIR/bin/pgadmin3 &" >> "$SYMLINK_DIR/pgadmin3"
 
-  echo "#!/bin/bash" > "$SYMLINK_DIR/pgshapeloader"
+  echo '#!/bin/bash' > "$SYMLINK_DIR/pgshapeloader"
   echo "export LD_LIBRARY_PATH=$PGSQL_DIR/lib" >> "$SYMLINK_DIR/pgshapeloader"
   echo "$PGSQL_DIR/bin/shp2pgsql-gui &" >> "$SYMLINK_DIR/pgshapeloader"
+
+  echo '#!/bin/bash' > "$SYMLINK_DIR/psql"
+  echo "export LD_LIBRARY_PATH=$PGSQL_DIR/lib" >> "$SYMLINK_DIR/psql"
+  echo "export PGPORT=54321" >> "$SYMLINK_DIR/psql"
+  echo "$PGSQL_DIR/bin/psql \$*" >> "$SYMLINK_DIR/psql"
 
 fi
 
