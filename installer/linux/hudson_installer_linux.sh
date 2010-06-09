@@ -122,6 +122,18 @@ PGSQLFILE=`basename $pgsql_url`
 getfile $pgsql_url binaries/$PGSQLFILE
 tar xfz binaries/$PGSQLFILE -C binaries
 checkrv $? "PgSQL untar"
+
+# Copy branding and settings
+cp -vf ../common/postgis/settings.ini \
+       binaries/pgsql/share/pgadmin3/
+cp -vf ../common/postgis/branding.ini \
+       binaries/pgsql/share/pgadmin3/branding/
+cp -vf ../common/postgis/pgadmin_splash.gif \
+       binaries/pgsql/share/pgadmin3/branding
+cat ../common/postgis/plugins.ini \
+    >> binaries/pgsql/share/pgadmin3/plugins.ini
+
+# Copy scripts
 mkdir binaries/pgsql/scripts
 cp -v scripts/* binaries/pgsql/scripts
 checkrv $? "PgSQL script copy"

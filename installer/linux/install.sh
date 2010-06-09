@@ -208,6 +208,7 @@ if [ "$CREATE_SYMLINKS" == "Yes" ]; then
 
   echo "#!/bin/bash" > "$SYMLINK_DIR/opengeo-dashboard"
   echo "pushd $SUITE_DIR >> /dev/null" > "$SYMLINK_DIR/opengeo-dashboard"
+  echo "export LD_LIBRARY_PATH=$PGSQL_DIR/lib" > "$SYMLINK_DIR/opengeo-dashboard"
   echo "./opengeo-dashboard" >> "$SYMLINK_DIR/opengeo-dashboard"
   echo "popd >> /dev/null" >> "$SYMLINK_DIR/opengeo-dashboard"
   chmod +x "$SYMLINK_DIR/opengeo-dashboard"
