@@ -7,7 +7,7 @@ pg_default_port=54321
 
 pushd `dirname "$0"` && HERE=`pwd` && popd
 
-suite_dir=${HERE}/../../..
+suite_dir=${HERE}/../..
 pg_data_root_dir=${suite_dir}/pgdata/
 pg_data_dir=${suite_dir}/pgdata/${USER}
 pg_log=${suite_dir}/pgdata/${USER}_pgsql.log
