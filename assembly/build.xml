@@ -65,6 +65,24 @@
                  includes="CHANGELOG.txt,LICENSE.txt,manifest,tiapp.xml,timanifest"/>
     </copy>
 
+    <tstamp/>
+    <!-- Dashboard Linux64 -->
+    <get src="${data}/dashboard-1.0.0-lin64.zip" dest="dashboard-1.0.0-lin64.zip" usetimestamp="yes"/>
+    <delete dir="dashboard-1.0.0-lin64"/>
+    <exec executable="unzip" failonerror="true">
+        <arg value="dashboard-1.0.0-lin64.zip"/>
+    </exec>
+    <copy todir="dashboard-1.0.0-lin64/OpenGeo Dashboard/Resources">
+        <fileset dir="../dashboard/target/resources">
+            <exclude name="**/.svn/"/>
+            <exclude name="**/.svn*"/>
+        </fileset>
+    </copy>
+    <copy todir="dashboard-1.0.0-lin64/OpenGeo Dashboard/">
+        <fileset dir="../dashboard/OpenGeo Dashboard"
+                 includes="CHANGELOG.txt,LICENSE.txt,manifest,tiapp.xml,timanifest"/>
+    </copy>
+
     <!-- Dashboard Win32 -->
     <get src="${data}/dashboard-1.0.0-win32.zip" dest="dashboard-1.0.0-win32.zip" usetimestamp="yes"/>
     <delete dir="dashboard-1.0.0-win32"/>
