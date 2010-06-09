@@ -18,7 +18,7 @@ The OpenGeo Suite has the following system requirements:
 Installation
 ------------
 
-#. Double click to mount the :file:`OpenGeoSuite-1.9.1.dmg` file.  Inside the mounted image, double click on :file:`OpenGeo Suite.mpkg`
+#. Double click to mount the :file:`OpenGeoSuite.dmg` file.  Inside the mounted image, double click on :file:`OpenGeo Suite.mpkg`
 
 #. At the **Welcome** screen, click :guilabel:`Continue`.
 
@@ -66,9 +66,11 @@ After installation, the OpenGeo Dashboard will automatically start, allowing you
 
 For more information, please see the document titled **Getting Started**, which is available from the Dashboard.
 
-.. note:: The OpenGeo Suite must be online in order to view documentation from the Dashboard.  If you would like to view the documentation when the Suite is offline, please paste the following link into your browser::
+.. note:: The OpenGeo Suite must be online in order to view documentation from the Dashboard.  If you would like to view the documentation when the Suite is offline, please paste the following link into your browser:
 
-   file:///opt/opengeo/suite/webapps/docs/gettingstarted/index.html
+   .. code-block:: bash
+
+      file:///opt/opengeo/suite/webapps/docs/gettingstarted/index.html
 
 Upgrade
 -------
@@ -78,21 +80,20 @@ You can upgrade from a previous version of the OpenGeo Suite, and your settings 
 Uninstallation
 --------------
 
-.. warning:: All data and settings will be deleted during the uninstallation process.  If you wish to retain your data nd settings, please make a backup of the directory :file:`~/.opengeo` before uninstalling.
+.. warning:: All data and settings will be deleted during the uninstallation process.  If you wish to retain your data nd settings, please make a backup of the directory :file:`~/.opengeo` before proceeding.
 
 .. note:: Please make sure that the Dashboard is closed and the OpenGeo Suite is offline before starting the uninstallation.
   
-#. To run the uninstaller, open a Terminal window by going to :menuselection:`Applications --> Utilities --> Terminal`.
+To run the uninstaller, navigate to :menuselection:`Applications --> OpenGeo --> OpenGeo Suite Uninstaller`.  You can also uninstall the OpenGeo Suite from the Terminal by typing the following:
 
-#. From the terminal window, run the uninstaller shell script by typing the following.  
+  .. code-block:: bash
+       
+     sudo /opt/opengeo/suite/suite-uninstall.sh
 
-    .. code-block:: bash
-        
-       sudo /opt/opengeo/suite/suite-uninstall.sh
-    
-#. Enter the administrator password for your computer.
+Known Issues
+------------
 
-#. Your OpenGeo Suite will be uninstalled.
+For the current list of known issues, please see http://opengeo.org/products/suite/changelog/
 
 For More Information
 --------------------
