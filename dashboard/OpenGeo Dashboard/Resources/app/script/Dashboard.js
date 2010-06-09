@@ -307,10 +307,16 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         // parse hash to activate relevant tab
         this.openPanel(window.location.hash.substring(1));
         
-        if (this.getPreferences("helpOnStart")) {
+        if (window.Titanium && this.getPreferences("helpOnStart")) {
             this.showStartHelp();
         }
         og.util.tirun(this.initStatsCollector, this, Ext.emptyFn);
+        
+        // special logic for running in a browser
+        if (!window.Titanium) {
+            Ext.getCmp("app-panels-pref-main").disable();
+            Ext.getCmp("app-panels-help-logs").disable();
+        }
 
     },
     
