@@ -707,6 +707,12 @@ Section "GeoEditor" SectionGE
 SectionEnd
 
 
+
+
+
+
+
+
 SectionGroupEnd
 
 SectionGroup "Extensions" SectionGSExt
@@ -833,6 +839,10 @@ Section "-Dashboard" SectionDashboard ;dash means hidden
   File /r "${SOURCEPATHROOT}\dashboard"
   SetOutPath "$INSTDIR\dashboard\Resources"
 
+  ; Dashboard in a browser
+  SetOutPath "$INSTDIR\webapps\"
+  File /r "${SOURCEPATHROOT}\webapps\dashboard"
+
   ;StrCmp $Upgrade "Clean" 0 Skip
   ${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
                                 "$INSTDIR\dashboard\Resources\config.ini" \
@@ -873,7 +883,13 @@ Section "-Dashboard" SectionDashboard ;dash means hidden
   File /a "misc\vcredist_x86.exe"
   ExecWait '"$INSTDIR\dashboard\vcredist_x86.exe" /q'
 
-  
+SectionEnd
+
+; A place for users' apps
+Section "-Apps" SectionApps
+
+  SetOutPath "$INSTDIR\webapps\"
+  File /r "${SOURCEPATHROOT}\webapps\apps"
 
 SectionEnd
 
@@ -957,6 +973,7 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGE} "Installs GeoEditor, a graphical map editor."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionDocs} "Includes full documentation for all applications."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionDashboard} "Installs the OpenGeo Suite Dashboard for access to all components."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionApps} "Installs a place for users to put their applications."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionRecipes} "Installs examples and demos to help you build your own mapping applications."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionStartStop} "Creates shortcuts for starting and stopping the OpenGeo Suite."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionMisc} "Creates everything else."
