@@ -188,12 +188,12 @@ tar xzf pgsql-postgis.tar.gz -C "$INSTALL_DIR" &&
 
 echo "Creating symlinks..." &&
 ln -sf "`find "$SUITE_DIR" -type f -name "OpenGeo Dashboard"`" "$SUITE_DIR/opengeo-dashboard" &&
-sed -i "s#@SUITE_DIR@#$SUITE_DIR#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
-sed -i "s#@SUITE_EXE@#$SUITE_DIR/opengeo-suite#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
-sed -i "s#@GEOSERVER_DATA_DIR@#$SUITE_DIR/data_dir#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
-sed -i "s#@PGADMIN_PATH@#$PGSQL_DIR/bin/pgadmin3#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
-sed -i "s#@PGSHAPELOADER_PATH@#$PGSQL_DIR/bin/shp2pgsql-gui#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
-sed -i "s#@PGSQL_PORT@#54321#g" "`find "$SUITE_DIR" -type f -name config.ini`" &&
+sed -i "s#@SUITE_DIR@#$SUITE_DIR#g" "`find "$SUITE_DIR/OpenGeo Dashboard" -type f -name config.ini`" &&
+sed -i "s#@SUITE_EXE@#$SUITE_DIR/opengeo-suite#g" "`find "$SUITE_DIR/OpenGeo Dashboard" -type f -name config.ini`" &&
+sed -i "s#@GEOSERVER_DATA_DIR@#$SUITE_DIR/data_dir#g" "`find "$SUITE_DIR/OpenGeo Dashboard" -type f -name config.ini`" &&
+sed -i "s#@PGADMIN_PATH@#$PGSQL_DIR/bin/pgadmin3#g" "`find "$SUITE_DIR/OpenGeo Dashboard" -type f -name config.ini`" &&
+sed -i "s#@PGSHAPELOADER_PATH@#$PGSQL_DIR/bin/shp2pgsql-gui#g" "`find "$SUITE_DIR/OpenGeo Dashboard" -type f -name config.ini`" &&
+sed -i "s#@PGSQL_PORT@#54321#g" "`find "$SUITE_DIR/OpenGeo Dashboard" -type f -name config.ini`" &&
 
 if [ "$?" != "0" ]; then
   exit 1
@@ -209,7 +209,7 @@ if [ "$CREATE_SYMLINKS" == "Yes" ]; then
   echo '#!/bin/bash' > "$SYMLINK_DIR/opengeo-dashboard"
   echo "pushd $SUITE_DIR >> /dev/null" >> "$SYMLINK_DIR/opengeo-dashboard"
   echo "export LD_LIBRARY_PATH=$PGSQL_DIR/lib" >> "$SYMLINK_DIR/opengeo-dashboard"
-  echo "./opengeo-dashboard > ~/.opengeo/logs/opengeodashboard.log &" >> "$SYMLINK_DIR/opengeo-dashboard"
+  echo "./opengeo-dashboard > /dev/null &" >> "$SYMLINK_DIR/opengeo-dashboard"
   echo "popd >> /dev/null" >> "$SYMLINK_DIR/opengeo-dashboard"
   chmod +x "$SYMLINK_DIR/opengeo-dashboard"
 
