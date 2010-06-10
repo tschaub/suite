@@ -191,8 +191,8 @@ ln -sf "`find "$SUITE_DIR" -type f -name "OpenGeo Dashboard"`" "$SUITE_DIR/openg
 sed -i "s#@SUITE_DIR@#$SUITE_DIR#g" "`find "$SUITE_DIR/OpenGeo Dashboard" -type f -name config.ini`" &&
 sed -i "s#@SUITE_EXE@#$SUITE_DIR/opengeo-suite#g" "`find "$SUITE_DIR/OpenGeo Dashboard" -type f -name config.ini`" &&
 sed -i "s#@GEOSERVER_DATA_DIR@#$SUITE_DIR/data_dir#g" "`find "$SUITE_DIR/OpenGeo Dashboard" -type f -name config.ini`" &&
-sed -i "s#@PGADMIN_PATH@#$PGSQL_DIR/bin/pgadmin3#g" "`find "$SUITE_DIR/OpenGeo Dashboard" -type f -name config.ini`" &&
-sed -i "s#@PGSHAPELOADER_PATH@#$PGSQL_DIR/bin/shp2pgsql-gui#g" "`find "$SUITE_DIR/OpenGeo Dashboard" -type f -name config.ini`" &&
+sed -i "s#@PGADMIN_PATH@#$PGSQL_DIR/scripts/pgadmin3#g" "`find "$SUITE_DIR/OpenGeo Dashboard" -type f -name config.ini`" &&
+sed -i "s#@PGSHAPELOADER_PATH@#$PGSQL_DIR/scripts/pgshapeloader#g" "`find "$SUITE_DIR/OpenGeo Dashboard" -type f -name config.ini`" &&
 sed -i "s#@PGSQL_PORT@#54321#g" "`find "$SUITE_DIR/OpenGeo Dashboard" -type f -name config.ini`" &&
 
 if [ "$?" != "0" ]; then
@@ -216,15 +216,18 @@ if [ "$CREATE_SYMLINKS" == "Yes" ]; then
   echo '#!/bin/bash' > "$SYMLINK_DIR/pgadmin3"
   echo "export LD_LIBRARY_PATH=$PGSQL_DIR/lib" >> "$SYMLINK_DIR/pgadmin3"
   echo "$PGSQL_DIR/bin/pgadmin3 &" >> "$SYMLINK_DIR/pgadmin3"
+  chmod +x "$SYMLINK_DIR/pgadmin3"
 
   echo '#!/bin/bash' > "$SYMLINK_DIR/pgshapeloader"
   echo "export LD_LIBRARY_PATH=$PGSQL_DIR/lib" >> "$SYMLINK_DIR/pgshapeloader"
   echo "$PGSQL_DIR/bin/shp2pgsql-gui &" >> "$SYMLINK_DIR/pgshapeloader"
+  chmod +x "$SYMLINK_DIR/pgshapeloader"
 
   echo '#!/bin/bash' > "$SYMLINK_DIR/psql"
   echo "export LD_LIBRARY_PATH=$PGSQL_DIR/lib" >> "$SYMLINK_DIR/psql"
   echo "export PGPORT=54321" >> "$SYMLINK_DIR/psql"
   echo "$PGSQL_DIR/bin/psql \$*" >> "$SYMLINK_DIR/psql"
+  chmod +x "$SYMLINK_DIR/psql"
 
 fi
 

@@ -137,6 +137,7 @@ cat ../common/postgis/plugins.ini \
 mkdir binaries/pgsql/scripts
 cp -v scripts/* binaries/pgsql/scripts
 checkrv $? "PgSQL script copy"
+chmod 755 binaries/pgsql/scripts/*
 pushd binaries
 tar cfz ./root/pgsql-postgis.tar.gz pgsql
 checkrv $? "PgSQL retar"
