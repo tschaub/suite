@@ -140,7 +140,7 @@ og.Suite = Ext.extend(Ext.util.Observable, {
      */
     monitor: function() {
         var port = this.config["suite_port"] || "80";
-        var url = "http://" + this.config["suite_host"] + ":" + port + "/geoserver"
+        var url = "http://" + this.config["suite_host"] + ":" + port + "/dashboard/version.ini"
         var client = new XMLHttpRequest();
         client.open("HEAD", url);
         client.onreadystatechange = (function() {
