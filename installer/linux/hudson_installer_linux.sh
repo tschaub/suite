@@ -7,7 +7,7 @@
 jre_version=1.6.0.20
 arch=$1
 
-dashboard_url=http://suite.opengeo.org/builds/dashboard-latest-linux.zip
+dashboard_url=http://suite.opengeo.org/builds/dashboard-latest-lin${arch}.zip
 suite_url=http://suite.opengeo.org/builds/opengeosuite-latest-bin.tar.gz
 ext_url=http://suite.opengeo.org/builds/opengeosuite-latest-ext.tar.gz
 jre_url=http://data.opengeo.org/suite/suite-jre-${jre_version}-lin${arch}.tgz
