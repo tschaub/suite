@@ -127,11 +127,15 @@ og.Suite = Ext.extend(Ext.util.Observable, {
      *  Starts the opengeo suite monitor.
      */
     run: function() {
-        window.setInterval(
-            this.monitor.createDelegate(this),
-            this.statusInterval
-        );
-        this.monitor();
+        if (window.Titanium) {
+            window.setInterval(
+                this.monitor.createDelegate(this),
+                this.statusInterval
+            );
+            this.monitor();
+        } else {
+            this.fireEvent("started");
+        }
     }, 
     
     /** private: method[monitor]
