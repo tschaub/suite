@@ -581,9 +581,13 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         var path = this.config[id];
                         if (path) {
                             if (!path.match(/^(https?|file):\/\//)) {
-                                var port = this.config["suite_port"];
-                                var host = this.config["suite_host"];
-                                url = "http://" + host + (port ? ":" + port : "") + path;
+                                if (window.Titanium) {
+                                    var port = this.config["suite_port"];
+                                    var host = this.config["suite_host"];
+                                    url = "http://" + host + (port ? ":" + port : "") + path;                                    
+                                } else {
+                                    url = path;
+                                }
                             }
                         }
                     }
