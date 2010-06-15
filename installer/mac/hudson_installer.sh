@@ -240,7 +240,7 @@ checkrv $? "Suite packaging"
 VOL="OpenGeo Suite $suite_version"
 DMGTMP="tmp-${VOL}.dmg"
 DMGFINAL="OpenGeoSuite-r$svn_revision.dmg"
-BACKGROUND="dmg_background.bmp"
+BACKGROUND="dmg_background.tiff"
 APP="OpenGeo Suite.mpkg"
 
 # DMG window dimensions
