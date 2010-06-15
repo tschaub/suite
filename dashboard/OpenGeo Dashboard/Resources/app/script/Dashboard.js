@@ -703,6 +703,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             enableToggle: true,
             cls: "control-button",
             pressed: !!this.suite.online,
+            hidden: !window.Titanium,
             handler: function(btn) {
                 if (btn.pressed) {
                     controlButton.setText("Shutdown");
