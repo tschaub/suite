@@ -75,7 +75,8 @@ fi
 #
 # Build the uninstaller package
 #
-xcodebuild -project "uninstaller/OpenGeo Suite Uninstaller.xcodeproj" -alltargets -configuration Release 
+#xcodebuild -project "uninstaller/OpenGeo Suite Uninstaller.xcodeproj" -alltargets -configuration Release 
+xcodebuild -project "uninstaller/OpenGeo Suite Uninstaller.xcodeproj" -alltargets 
 checkrv $? "Uninstaller build"
 if [ -d "binaries/OpenGeo Suite Uninstaller.app" ]; then
   rm -rvf "binaries/OpenGeo Suite Uninstaller.app"
