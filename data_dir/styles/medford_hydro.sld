@@ -124,6 +124,7 @@
               <ogc:PropertyName>STREAM_NAM</ogc:PropertyName>
             </Label>
             <Font>
+              <CssParameter name="font-family">Sans-Serif</CssParameter>
               <CssParameter name="font-family">Arial</CssParameter>
               <CssParameter name="font-style">italic</CssParameter>
               <CssParameter name="font-size">10</CssParameter>
@@ -199,6 +200,7 @@
               <ogc:PropertyName>STREAM_NAM</ogc:PropertyName>
             </Label>
             <Font>
+              <CssParameter name="font-family">Sans-Serif</CssParameter>
               <CssParameter name="font-family">Arial</CssParameter>
               <CssParameter name="font-style">italic</CssParameter>
               <CssParameter name="font-size">11</CssParameter>
@@ -252,6 +254,7 @@
               <ogc:PropertyName>STREAM_NAM</ogc:PropertyName>
             </Label>
             <Font>
+              <CssParameter name="font-family">Sans-Serif</CssParameter>
               <CssParameter name="font-family">Arial</CssParameter>
               <CssParameter name="font-style">italic</CssParameter>
               <CssParameter name="font-size">10</CssParameter>

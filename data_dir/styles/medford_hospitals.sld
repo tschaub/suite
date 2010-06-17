@@ -78,6 +78,7 @@
               <ogc:PropertyName>name</ogc:PropertyName>
             </Label>
             <Font>
+              <CssParameter name="font-family">Sans-Serif</CssParameter>
               <CssParameter name="font-family">Arial</CssParameter>
               <CssParameter name="font-style">normal</CssParameter>
               <CssParameter name="font-size">11</CssParameter>
@@ -135,6 +136,7 @@
               <ogc:PropertyName>name</ogc:PropertyName>
             </Label>
             <Font>
+              <CssParameter name="font-family">Sans-Serif</CssParameter>
               <CssParameter name="font-family">Arial</CssParameter>
               <CssParameter name="font-style">normal</CssParameter>
               <CssParameter name="font-size">11</CssParameter>

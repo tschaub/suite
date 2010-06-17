@@ -22,6 +22,7 @@
            <ogc:PropertyName>NAME</ogc:PropertyName>
          </Label>
          <Font>
+           <CssParameter name="font-family">Sans-Serif</CssParameter>
            <CssParameter name="font-family">Arial</CssParameter>
            <CssParameter name="font-size">12</CssParameter>
            <CssParameter name="font-style">normal</CssParameter>
