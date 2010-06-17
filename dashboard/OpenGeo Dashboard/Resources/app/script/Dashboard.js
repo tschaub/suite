@@ -521,6 +521,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     config["suite_stop_port"] =  form.findField("suite_stop_port").getValue();
                     
                     // update geoserver config
+                    config["geoserver_data_dir"] = form.findField("geoserver_data_dir").getValue();                    
                     var username = form.findField("geoserver_username").getValue();
                     var password = form.findField("geoserver_password").getValue();
                     if (username != config["geoserver_username"] || password != config["geoserver_password"]) {
@@ -529,8 +530,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         config["geoserver_username"] = username;
                         config["geoserver_password"] = password;
                     }
-                    
-                    config["geoserver_data_dir"] = form.findField("geoserver_data_dir").getValue();
                     
                     // update postgres port
                     config["pgsql_port"] = form.findField("pgsql_port").getValue();
