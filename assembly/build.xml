@@ -49,18 +49,18 @@
     </copy>
     
     <!-- Dashboard Linux32 -->
-    <get src="${data}/dashboard-1.0.0-linux.zip" dest="dashboard-1.0.0-linux.zip" usetimestamp="yes"/>
-    <delete dir="dashboard-1.0.0-linux"/>
+    <get src="${data}/dashboard-1.0.0-lin32.zip" dest="dashboard-1.0.0-lin32.zip" usetimestamp="yes"/>
+    <delete dir="dashboard-1.0.0-lin32"/>
     <exec executable="unzip" failonerror="true">
-        <arg value="dashboard-1.0.0-linux.zip"/>
+        <arg value="dashboard-1.0.0-lin32.zip"/>
     </exec>
-    <copy todir="dashboard-1.0.0-linux/OpenGeo Dashboard/Resources">
+    <copy todir="dashboard-1.0.0-lin32/OpenGeo Dashboard/Resources">
         <fileset dir="../dashboard/target/resources">
             <exclude name="**/.svn/"/>
             <exclude name="**/.svn*"/>
         </fileset>
     </copy>
-    <copy todir="dashboard-1.0.0-linux/OpenGeo Dashboard/">
+    <copy todir="dashboard-1.0.0-lin32/OpenGeo Dashboard/">
         <fileset dir="../dashboard/OpenGeo Dashboard"
                  includes="CHANGELOG.txt,LICENSE.txt,manifest,tiapp.xml,timanifest"/>
     </copy>
