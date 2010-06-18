@@ -27,7 +27,7 @@ import org.geoserver.web.wicket.GeoServerDialog.DialogDelegate;
 @SuppressWarnings("serial")
 class GeneralStoreParamPanel extends Panel {
     WorkspaceDetachableModel workspace;
-    String name;
+    String name = "ogc";
     String description;
     GeoServerDialog dialog;
     private DropDownChoice wsChoice;
