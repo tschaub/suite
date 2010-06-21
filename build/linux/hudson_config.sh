@@ -11,6 +11,7 @@ pgsql_version=8.4.4
 pgadmin_version=1.10.3
 wx_version=2.8.11
 openssl_version=0.9.8o
+glib_version=2.24.1
 
 # Special binaries
 proj_nad=proj-datumgrid-1.5.zip
@@ -19,6 +20,10 @@ proj_nad=proj-datumgrid-1.5.zip
 geos_svn=http://svn.osgeo.org/geos/branches
 postgis_svn=http://svn.osgeo.org/postgis/branches
 proj_svn=http://svn.osgeo.org/metacrs/proj/branches
+
+glib_dir=glib-${glib_version}.1
+glib_file=${glib_dir}.tar.bz2
+glib_url=http://ftp.gnome.org/pub/gnome/sources/glib/${glib_version}/${glib_file}
 
 openssl_dir=openssl-${openssl_version}
 openssl_file=${openssl_dir}.tar.gz
