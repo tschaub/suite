@@ -265,9 +265,25 @@ echo "rm -rf \"$HOME/.opengeo\"" >> "$UNINSTALLER"
 if [ "$CREATE_SYMLINKS" == "Yes" ]; then
   echo "rm -f \"$SYMLINK_DIR/opengeo-suite\"" >> "$UNINSTALLER"
   echo "rm -f \"$SYMLINK_DIR/opengeo-dashboard\"" >> "$UNINSTALLER"
+  echo "rm -f \"$SYMLINK_DIR/pgadmin3\"" >> "$UNINSTALLER"
+  echo "rm -f \"$SYMLINK_DIR/pgshapeloader\"" >> "$UNINSTALLER"
+  echo "rm -f \"$SYMLINK_DIR/psql\"" >> "$UNINSTALLER"
 fi
 
 chmod +x "$UNINSTALLER"
+
+# Check for Ubuntu 10+ and "fix" the Dashboard
+if [ -f /etc/issue ]; then
+  is_u_ten=`cat /etc/issue | grep "Ubuntu 10"`
+  if [ "x$is_u_ten" != "x" ]; then
+    dash_dir=`find "$SUITE_DIR" -type d -name "OpenGeo Dashboard"`
+    run_dir=`find "$dash_dir" -type d -name "runtime"`
+    find "$run_dir" -name "libgobject-*" -exec rm -f {} ';'
+    find "$run_dir" -name "libglib-*"    -exec rm -f {} ';'
+    find "$run_dir" -name "libgio-*"     -exec rm -f {} ';'
+    find "$run_dir" -name "libgthread-*" -exec rm -f {} ';'
+  fi
+fi
  
 echo 
 echo "Installation of the OpenGeo Suite has been successfully completed." 
