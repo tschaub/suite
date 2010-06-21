@@ -30,7 +30,7 @@ pushd nad
 unzip -o ${buildroot}/${proj_nad}
 popd
 
-./autogen.sh
+#./autogen.sh
 ./configure --prefix=${buildroot}/proj
 make clean && make
 checkrv $? "Proj build"
