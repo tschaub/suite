@@ -23,8 +23,14 @@ arch=$2
 # Check that we have a mostly-built pgsql in the buildroot...
 if [ -d ${buildroot}/pgsql ]; then
   rm -rf ${buildroot}/pgsql
-  cp -r ${buildroot}/pgsql_build ${buildroot}/pgsql
 fi
+if [ -d ${buildroot}/pgsql_build ]; then
+  cp -r ${buildroot}/pgsql_build ${buildroot}/pgsql
+else
+  echo "No pgsql_build directory!"
+  exit 1
+fi
+
 
 # Copy in other files
 for d in openssl geos proj pgadmin wxwidgets; do
