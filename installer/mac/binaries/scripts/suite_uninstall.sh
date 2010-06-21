@@ -1,22 +1,17 @@
 #!/bin/bash
 
-if [ $USER != "root" ]; then
-  echo ""
-  echo "Please run the uninstall script as root. For example,"
-  echo ""
-  echo "   sudo $0"
-  echo ""
-  exit 1
-fi
-
-echo ""
-echo "Removing OpenGeo Suite files..."
-echo ""
-
 # Verbose?
 if [ "x$1" == "x" ]; then
   echo "Running in verbose mode..."
   rmopts="v"
+  if [ $USER != "root" ]; then
+    echo ""
+    echo "Please run the uninstall script as root. For example,"
+    echo ""
+    echo "   sudo $0"
+    echo ""
+    exit 0
+  fi
 else
   rmopts=""
 fi
@@ -34,6 +29,11 @@ if [ "x$netport" != "x" ]; then
    ' | osascript
   sleep 2
 fi
+
+# Notify that we're starting...
+echo ""
+echo "Removing OpenGeo Suite files..."
+echo ""
 
 # Remove GUI Apps
 if [ -d /Applications/OpenGeo ]; then

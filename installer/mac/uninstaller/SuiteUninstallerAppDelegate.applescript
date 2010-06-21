@@ -30,6 +30,7 @@ script SuiteUninstallerAppDelegate
 		end tell
 		-- If it does, run it with admin priv
 		if msg is "yes" then
+			textField's setString_("Starting un-install process...")
 			set uninstall_result to do shell script "/bin/bash " & uninstall & " quiet" with administrator privileges
 			uninstallButton's setEnabled_(false)
 			textField's setString_(uninstall_result)
