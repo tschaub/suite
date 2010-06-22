@@ -22,8 +22,6 @@ checkrv $? "WxWidgets untar"
 popd
 
 pushd ${buildroot}/${wx_dir}
-export PATH=${buildroot}/glib/bin:${PATH}
-export LD_LIBRARY_PATH=${buildroot}/glib/lib
 ./configure \
   --prefix=${buildroot}/wxwidgets \
   --with-gtk \
