@@ -11,7 +11,7 @@ pgsql_version=8.4.4
 pgadmin_version=1.10.3
 wx_version=2.8.11
 openssl_version=0.9.8o
-glib_version=2.24.1
+glib_version=2.24
 gtk_version=2.20
 pkg_version=0.19
 
@@ -29,11 +29,11 @@ pkg_url=http://ftp.gnome.org/pub/gnome/sources/pkg-config/${pkg_version}/${pkg_f
 
 glib_dir=glib-${glib_version}.1
 glib_file=${glib_dir}.tar.bz2
-glib_url=http://ftp.gnome.org/pub/gnome/sources/glib/${glib_version}/${glib_file}
+glib_url=http://caesar.acc.umu.se/pub/gnome/sources/glib/${glib_version}/${glib_file}
 
-gtk_dir=glib-${gtk_version}.1
+gtk_dir=gtk+-${gtk_version}.1
 gtk_file=${gtk_dir}.tar.bz2
-gtk_url=http://ftp.gnome.org/pub/gnome/sources/gtk+/${gtk_version}/${gtk_file}
+gtk_url=http://hammurabi.acc.umu.se/pub/gnome/sources/gtk+/${gtk_version}/${gtk_file}
 
 openssl_dir=openssl-${openssl_version}
 openssl_file=${openssl_dir}.tar.gz
@@ -75,7 +75,7 @@ function getfile {
   file=$2
   dodownload=yes
 
-  url_tag=`curl -f -s -I $url | grep ETag | tr -d \" | cut -f2 -d' '`
+  url_tag=`curl -L -f -s -I $url | grep ETag | tr -d \" | cut -f2 -d' '`
   checkrv $? "ETag check at $url"
 
   if [ -f "${file}" ] && [ -f "${file}.etag" ]; then
@@ -88,7 +88,7 @@ function getfile {
 
   if [ $dodownload = "yes" ]; then
     echo "downloading fresh copy of $file"
-    curl -f $url > $file
+    curl -L -f $url > $file
     checkrv $? "Download from $url"
     echo $url_tag > "${file}.etag"
   fi
