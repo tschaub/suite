@@ -23,17 +23,18 @@ geos_svn=http://svn.osgeo.org/geos/branches
 postgis_svn=http://svn.osgeo.org/postgis/branches
 proj_svn=http://svn.osgeo.org/metacrs/proj/branches
 
-pkg_dir=pkg-config-${pkg_version}
-pkg_file=${pkg_dir}.tar.bz2
-pkg_url=http://ftp.gnome.org/pub/gnome/sources/pkg-config/${pkg_version}/${pkg_file}
-
+glib_base_url=http://ftp.gnome.org/pub/gnome/sources
 glib_dir=glib-${glib_version}.1
 glib_file=${glib_dir}.tar.bz2
-glib_url=http://caesar.acc.umu.se/pub/gnome/sources/glib/${glib_version}/${glib_file}
+glib_url=${glib_base_url}/glib/${glib_version}/${glib_file}
+
+pkg_dir=pkg-config-${pkg_version}
+pkg_file=${pkg_dir}.tar.bz2
+pkg_url=${glib_base_url}/pkg-config/${pkg_version}/${pkg_file}
 
 gtk_dir=gtk+-${gtk_version}.1
 gtk_file=${gtk_dir}.tar.bz2
-gtk_url=http://hammurabi.acc.umu.se/pub/gnome/sources/gtk+/${gtk_version}/${gtk_file}
+gtk_url=${glib_base_url}/gtk+/${gtk_version}/${gtk_file}
 
 openssl_dir=openssl-${openssl_version}
 openssl_file=${openssl_dir}.tar.gz
