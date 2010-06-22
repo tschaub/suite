@@ -33,7 +33,7 @@ fi
 
 
 # Copy in other files
-for d in openssl geos proj pgadmin wxwidgets glib; do
+for d in openssl geos proj pgadmin wxwidgets; do
   cp -r ${buildroot}/${d}/* ${buildroot}/pgsql
 done
 
