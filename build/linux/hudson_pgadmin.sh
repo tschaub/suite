@@ -21,8 +21,8 @@ tar xvfz ${pgadmin_file}
 checkrv $? "PgAdmin untar"
 popd
 
-export LD_LIBRARY_PATH=${buildroot}/pgsql_build/lib:${buildroot}/glib/lib:${buildroot}/gtk/lib
-export PATH=${buildroot}/glib/bin:${buildroot}/gtk/bin:${buildroot}/pgsql_build/bin:${PATH}
+export LD_LIBRARY_PATH=${buildroot}/pgsql_build/lib:${buildroot}/glib/lib
+export PATH=${buildroot}/glib/bin:${buildroot}/pgsql_build/bin:${PATH}
 
 pushd ${buildroot}/${pgadmin_dir}
 ./configure \
