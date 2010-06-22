@@ -13,6 +13,7 @@ wx_version=2.8.11
 openssl_version=0.9.8o
 glib_version=2.24.1
 gtk_version=2.20
+pkg_version=0.19
 
 # Special binaries
 proj_nad=proj-datumgrid-1.5.zip
@@ -21,6 +22,10 @@ proj_nad=proj-datumgrid-1.5.zip
 geos_svn=http://svn.osgeo.org/geos/branches
 postgis_svn=http://svn.osgeo.org/postgis/branches
 proj_svn=http://svn.osgeo.org/metacrs/proj/branches
+
+pkg_dir=pkg-config-${pkg_version}
+pkg_file=${pkg_dir}.tar.bz2
+pkg_url=http://ftp.gnome.org/pub/gnome/sources/pkg-config/${pkg_version}/${pkg_file}
 
 glib_dir=glib-${glib_version}.1
 glib_file=${glib_dir}.tar.bz2
