@@ -250,7 +250,7 @@ if [ "$INCLUDE_ORACLE" == "Yes" ]; then
   tar xzvf opengeosuite-latest-ext.tar.gz -C "$SUITE_DIR/webapps/geoserver/WEB-INF/lib" "ext/oracle"
 
   echo
-  echo -n "The Oracle extension the Oracle JDBC driver to function. Where is ojdbc jar located on your system? [Leave blank to skip]: "
+  echo -n "The Oracle extension the Oracle JDBC driver to function. Where is the ojdbc jar located on your system? [Leave blank to skip]: "
   read ORACLE_LIB_DIR
   ORACLE_LIB_DIR=`parse $ORACLE_LIB_DIR`
 fi
