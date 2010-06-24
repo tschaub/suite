@@ -53,7 +53,7 @@
       <nillable>true</nillable>
     </attribute>
     <attribute>
-      <name>location</name>
+      <name>branchname</name>
       <minOccurs>0</minOccurs>
       <maxOccurs>1</maxOccurs>
       <nillable>true</nillable>
