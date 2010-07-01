@@ -3,8 +3,8 @@
 ; Initial definitions
 !define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
-!define VERSION "2.0.0"
-!define LONGVERSION "2.0.0.0" ; Must be a.b.c.d!
+!define VERSION "2.0.1"
+!define LONGVERSION "2.0.1.0" ; Must be a.b.c.d!
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
 !define SOURCEPATHROOT "..\..\target\win"
 !define STARTMENU_FOLDER "${APPNAME}"
