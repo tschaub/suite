@@ -1,5 +1,7 @@
 /**
  * Copyright (c) 2008 The Open Planning Project
+ * 
+ * @requires Styler.js
  */
 
 Ext.namespace("Styler");
