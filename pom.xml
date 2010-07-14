@@ -48,6 +48,10 @@
       <enabled>false</enabled>
     </snapshots>
   </repository>
+  <repository>
+    <id>org.mapfish</id>
+    <url>http://dev.mapfish.org/maven/repository</url>
+  </repository>
  </repositories>
 
  <pluginRepositories>

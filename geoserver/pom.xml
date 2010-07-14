@@ -64,6 +64,11 @@
      <artifactId>proxy</artifactId>
      <version>${gs.version}</version>
    </dependency>
+   <dependency>
+     <groupId>org.geoserver.community</groupId>
+     <artifactId>printing</artifactId>
+     <version>${gs.version}</version>
+   </dependency>
 
    <dependency>
     <groupId>com.mockrunner</groupId>
