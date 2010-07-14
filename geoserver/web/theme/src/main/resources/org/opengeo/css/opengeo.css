@@ -67,15 +67,12 @@ div.progress-bar span.bar {
 Themed Layout
 -----------------------*/
 body {
-  font-family: Helvetica, Arial. sans-serif;
+  font-family: Helvetica, Arial, FreeSans, sans-serif;
 }
 
-h1 {
-  font-family: Optima, Helvetica, Arial, sans-serif;
-}
-
-h2, h3, h4, h5, h6 {
-  font-family: "Century Gothic", Optima, Helvetica, Arial, sans-serif;
+h1, h2, h3, h4, h5, h6 {
+  font-family: Helvetica, Arial, FreeSans, sans-serif;
+  font-weight: bold;
 }
 
 #header h2 a {
@@ -118,7 +115,7 @@ Extras needed only in the Suite
   not find any working way of referencing it from there, so I ended up just copying the resource
 */
 .srs-link {
-background: transparent url(../img_opengeo/shape_square_blue.png) scroll no-repeat left center;
+background: transparent url(../silk/shape_square_blue.png) scroll no-repeat left center;
 padding: 2px 0px 2px 20px;
 }
 
@@ -151,7 +148,7 @@ font-weight: bold;
 }
 
 form a.collapsed {
-background-image: url(../geosilk/bullet_arrow_right.png);
+background-image: url(../silk/bullet_arrow_right.png);
 background-repeat: no-repeat;
 background-position: 0px 0px;
 padding-left: 16px;
