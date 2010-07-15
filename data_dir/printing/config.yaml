@@ -18,48 +18,14 @@ hosts:
         mask: 0.0.0.0
 
 layouts:
-    Legal:
-        metaData:
+
+    A4:
+        metaData: &commonMetaData
             title: "${mapTitle}"
             author: "GeoExplorer"
-            subject: "Simple layout"
+            subject: "Map printed with the OpenGeo Suite"
             keywords: "map,print"
-            creator: "GeoExplorer"
-
-        mainPage:
-            pageSize: LEGAL
-            items:
-                - !text
-                    text: "${mapTitle}"
-                    fontSize: 30
-                    spacingAfter: 30
-                - !map
-                    spacingAfter: 30
-                    width: 440
-                    height: 483
-                - !columns
-                    absoluteX: 410
-                    absoluteY: 210
-                    width: 100
-                    items:
-                        - !scalebar
-                            type: bar
-                            maxSize: 100
-                            barBgColor: white
-                            fontSize: 8
-                            align: right
-                - !text
-                    text: "${comment}"
-                    spacingAfter: 30
-
-    A4 portrait:
-        metaData:
-            title: "${mapTitle}"
-            author: "GeoExplorer"
-            subject: "Simple layout"
-            keywords: "map,print"
-            creator: "GeoExplorer"
-
+            creator: "OpenGeo Suite"
         mainPage:
             pageSize: A4
             rotation: true
@@ -68,21 +34,68 @@ layouts:
                     text: "${mapTitle}"
                     fontSize: 30
                     spacingAfter: 30
+                    align: center
                 - !map
-                    spacingAfter: 30
+                    spacingAfter: 10
                     width: 440
                     height: 600
-                - !columns
-                    absoluteX: 410
-                    absoluteY: 210
-                    width: 100
-                    items:
-                        - !scalebar
-                            type: bar
-                            maxSize: 100
-                            barBgColor: white
-                            fontSize: 8
-                            align: right
+                - !scalebar
+                    type: bar
+                    maxSize: 100
+                    barBgColor: white
+                    fontSize: 8
+                    align: right
+                    spacingAfter: 10
                 - !text
                     text: "${comment}"
+
+    Legal:
+        metaData: *commonMetaData
+        mainPage:
+            pageSize: LEGAL
+            rotation: true
+            items:
+                - !text
+                    text: "${mapTitle}"
+                    fontSize: 30
                     spacingAfter: 30
+                    align: center
+                - !map
+                    spacingAfter: 10
+                    width: 440
+                    height: 650
+                - !scalebar
+                    type: bar
+                    maxSize: 100
+                    barBgColor: white
+                    fontSize: 8
+                    align: right
+                    spacingAfter: 10
+                - !text
+                    text: "${comment}"
+
+    Letter:
+        metaData: *commonMetaData
+        mainPage:
+            pageSize: LETTER
+            rotation: true
+            items:
+                - !text
+                    text: "${mapTitle}"
+                    fontSize: 30
+                    spacingAfter: 30
+                    align: center
+                - !map
+                    spacingAfter: 10
+                    width: 440
+                    height: 550
+                - !scalebar
+                    type: bar
+                    maxSize: 100
+                    barBgColor: white
+                    fontSize: 8
+                    align: right
+                    spacingAfter: 10
+                - !text
+                    text: "${comment}"
+
