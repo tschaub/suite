@@ -22,10 +22,10 @@ scales:
 hosts:
   - !localMatch
     dummy: true
-  - !dnsMatch
-    host: v2.suite.opengeo.org
-  - !dnsMatch
-    host: terraservice.net
+  - !ipMatch
+    ip: 0.0.0.0
+    mask: 0.0.0.0
+
 
 layouts:
   #===========================================================================
