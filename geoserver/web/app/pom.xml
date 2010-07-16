@@ -139,6 +139,45 @@
        </execution>
       </executions>
     </plugin>
+    <plugin>
+       <artifactId>maven-antrun-plugin</artifactId>
+       <dependencies>
+          <dependency>
+            <groupId>ant</groupId>
+            <artifactId>ant</artifactId>
+            <version>${ant.version}</version>
+          </dependency>
+       </dependencies>
+       <executions>
+         <execution>
+           <id>hack-printing</id>
+           <phase>install</phase>
+            <configuration>
+              <tasks>
+                <property name="target" value="${build.directory}"/>
+                <property name="tmp" value="${target}/tmp"/>
+
+                <mkdir dir="${tmp}"/>
+                <unjar src="${target}/geoserver/WEB-INF/lib/printing-${gs.version}.jar" dest="${tmp}"/>
+
+                <copy file="../../../data_dir/printing/config.yaml" tofile="${tmp}/org/geoserver/printing/default-config.yaml" overwrite="yes"/>
+                <jar destfile="${target}/printing-${gs.version}.jar" basedir="${tmp}"/>
+                <delete dir="${target}/tmp"/>
+
+                <copy file="${target}/printing-${gs.version}.jar" todir="${target}/geoserver/WEB-INF/lib" overwrite="true"/>
+               
+                <delete file="${target}/geoserver.war"/>
+                <jar destfile="${target}/geoserver.war" basedir="${target}/geoserver"/>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+         </execution>
+       </executions>
+       
+    </plugin>
+
 
    </plugins>
   </build>
