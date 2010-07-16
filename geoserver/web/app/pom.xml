@@ -39,6 +39,12 @@
     <dependency>
       <groupId>org.geoserver.community</groupId>
       <artifactId>printing</artifactId>
+      <exclusions>
+        <exclusion>
+           <groupId>com.vividsolutions</groupId>
+           <artifactId>jts</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     
     <!-- opengeo specific stuff -->
