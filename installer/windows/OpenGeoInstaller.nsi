@@ -180,8 +180,8 @@ Page custom Ready
 Function .onInit
 
   ; Init vars
-  ;StrCpy $SDECheckBoxPrior 0
-  ;StrCpy $OracleCheckBoxPrior 0
+  StrCpy $SDECheckBoxPrior 0
+  StrCpy $OracleCheckBoxPrior 0
 
   IfSilent SilentSkip
 
@@ -195,18 +195,6 @@ Function .onInit
          ; '-1' if some error occurred.
   Delete $TEMP\spltmp.bmp
 
-  ; Get ${VERSION} number from version.ini
-  ;ClearErrors
-  ;FileOpen $0 "${SOURCEPATHROOT}\version.ini" r
-  ;FileRead $0 $1 ; we read until the end of line 
-  ;FileClose $0 ; and close the file
-  ;StrLen $2 $1 ; find length of string
-  ;IntOp $3 14 - $2 ; "suite_version=" is 14 chars, output is length of everything but that
-  ;StrCpy $4 $1 "" $3 ; trim the "suite_version=" from the string
-  ;StrCpy $Version $4 ; This is the version number
-  ;StrCpy $5 $4 3 ; grab only the a.b portion
-  ;StrCpy $6 "$5.0.0"
-  ;!define LONGVERSION $6 ; a.b.0.0
 
   SilentSkip:
 
