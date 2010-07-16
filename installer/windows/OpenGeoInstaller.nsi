@@ -502,12 +502,12 @@ SectionEnd
   ; This section removes files from 1.0 or 1.0r1 install, before continuing
 Section "-Upgrade" SectionUpgrade ; dash = hidden
 
-  !insertmacro DisplayImage "graphics\slide_1_suite.bmp"
-
   StrCmp $Upgrade "Clean" Skip
   
   ;Stop existing Suite if necessary
   ExecWait '"$OldInstallDir\opengeo-suite.bat" stop'
+
+  !insertmacro DisplayImage "graphics\slide_1_suite.bmp"
 
   ;Remove files
   RMDir /r "$OldInstallDir"
@@ -925,6 +925,9 @@ Section "-Misc" SectionMisc
   ; Changelog
   SetOutPath $INSTDIR
   ; File /a ..\common\changelog.txt
+
+  ; For GPL compliance
+  File /a "..\common\license.txt"  
 
   ; version.ini
   File /a "${SOURCEPATHROOT}\version.ini"
