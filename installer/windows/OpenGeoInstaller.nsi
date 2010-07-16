@@ -511,17 +511,18 @@ Section "-Upgrade" SectionUpgrade ; dash = hidden
 
   ;Remove files
   RMDir /r "$OldInstallDir"
+  RMDir /r "$OldInstallDir\bin"
   RMDir /r "$OldInstallDir\dashboard"
   RMDir /r "$OldInstallDir\data_dir"
   RMDir /r "$OldInstallDir\etc"
+  RMDir /r "$OldInstallDir\icons"
+  RMDir /r "$OldInstallDir\jre"
   RMDir /r "$OldInstallDir\lib"
   RMDir /r "$OldInstallDir\logs"
+  RMDir /r "$OldInstallDir\pgdata"
+  RMDir /r "$OldInstallDir\pgsql"
   RMDir /r "$OldInstallDir\resources"
   RMDir /r "$OldInstallDir\webapps"
-  RMDir /r "$OldInstallDir\jre"
-  RMDir /r "$OldInstallDir\icons"
-  RMDir /r "$OldInstallDir\recipes"
-  RMDir /r "$OldInstallDir\trace.db" ; shouldn't need this
   Delete "$OldInstallDir\*.*"
   RMDir "$OldInstallDir"
 
@@ -1023,15 +1024,14 @@ Section Uninstall
     RMDir /r "$INSTDIR\dashboard"
     RMDir /r "$INSTDIR\data_dir"
     RMDir /r "$INSTDIR\etc"
+    RMDir /r "$INSTDIR\icons"
+    RMDir /r "$INSTDIR\jre"
     RMDir /r "$INSTDIR\lib"
     RMDir /r "$INSTDIR\logs"
+    RMDir /r "$INSTDIR\pgdata"
+    RMDir /r "$INSTDIR\pgsql"
     RMDir /r "$INSTDIR\resources"
     RMDir /r "$INSTDIR\webapps"
-    RMDir /r "$INSTDIR\jre"
-    RMDir /r "$INSTDIR\icons"
-    RMDir /r "$INSTDIR\recipes"
-    RMDir /r "$INSTDIR\trace.db" ; shouldn't need this
-    RMDir /r "$INSTDIR\pgsql"
     Delete "$INSTDIR\*.*"
     RMDir "$INSTDIR"
     IfFileExists "$INSTDIR" Warn Succeed
