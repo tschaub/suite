@@ -1,7 +1,7 @@
 REM job to build .EXE
-REM assumes that...
+REM assumes that
 REM   http://svn.opengeo.org/suite/trunk/installer
-REM ...has been checked out
+REM has been checked out
 REM Also assumes that it is running inside installer\windows
 
 REM Start by cleaning up target
@@ -22,7 +22,26 @@ unzip dashboard-latest-win32.zip -d ..\..\target\win\
 del dashboard-latest-win32.zip
 ren "..\..\target\win\OpenGeo Dashboard" dashboard
 
-makensis OpenGeoInstaller.nsi
+REM Get today's date
+FOR /F "TOKENS=1* DELIMS= " %%A IN ('DATE/T') DO SET CDATE=%%B
+FOR /F "TOKENS=1,2 eol=/ DELIMS=/ " %%A IN ('DATE/T') DO SET mm=%%B
+FOR /F "TOKENS=1,2 DELIMS=/ eol=/" %%A IN ('echo %CDATE%') DO SET dd=%%B
+FOR /F "TOKENS=2,3 DELIMS=/ " %%A IN ('echo %CDATE%') DO SET yyyy=%%B
+SET todaysdate=%yyyy%-%mm%-%dd%
+
+REM Get version number
+findstr suite_version ..\..\target\win\version.ini > "%TEMP%\vertemp.txt"
+set /p vertemp=<"%TEMP%\vertemp.txt"
+del "%TEMP%\vertemp.txt"
+for /f "tokens=1,2 delims=/=" %%a in ("%revtemp%") do set trash=%%a&set version=%%b
+
+REM Get revision numver
+findstr svn_revision ..\..\target\win\version.ini > "%TEMP%\revtemp.txt"
+set /p revtemp=<"%TEMP%\revtemp.txt"
+del "%TEMP%\revtemp.txt"
+for /f "tokens=1,2 delims=/=" %%a in ("%revtemp%") do set trash=%%a&set revision=%%b
+
+makensis /DVERSION=%version% /DLONGVERSION=%version%.%revision% OpenGeoInstaller.nsi
 
 @echo.
 @echo version.ini contents:
