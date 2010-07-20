@@ -5,7 +5,7 @@ REM has been checked out
 REM Also assumes that it is running inside installer\windows
 
 REM Start by cleaning up target
-rd /s /q ..\..\target\
+rd /s /q ..\..\target\ >nul 2>nul
 
 REM Get the maven artifact in place
 @echo Downloading http://suite.opengeo.org/builds/opengeosuite-latest-win.zip ...
@@ -33,19 +33,15 @@ REM Get version number
 findstr suite_version ..\..\target\win\version.ini > "%TEMP%\vertemp.txt"
 set /p vertemp=<"%TEMP%\vertemp.txt"
 del "%TEMP%\vertemp.txt"
-for /f "tokens=1,2 delims=/=" %%a in ("%revtemp%") do set trash=%%a&set version=%%b
+for /f "tokens=1,2 delims=/=" %%a in ("%vertemp%") do set trash=%%a&set version=%%b
 
-REM Get revision numver
+REM Get revision number
 findstr svn_revision ..\..\target\win\version.ini > "%TEMP%\revtemp.txt"
 set /p revtemp=<"%TEMP%\revtemp.txt"
 del "%TEMP%\revtemp.txt"
 for /f "tokens=1,2 delims=/=" %%a in ("%revtemp%") do set trash=%%a&set revision=%%b
 
 makensis /DVERSION=%version% /DLONGVERSION=%version%.%revision% OpenGeoInstaller.nsi
-
-@echo.
-@echo version.ini contents:
-type "..\..\target\win\version.ini"
 
 REM Clean up
 rd /s /q ..\..\target\
