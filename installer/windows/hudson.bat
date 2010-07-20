@@ -41,7 +41,7 @@ set /p revtemp=<"%TEMP%\revtemp.txt"
 del "%TEMP%\revtemp.txt"
 for /f "tokens=1,2 delims=/=" %%a in ("%revtemp%") do set trash=%%a&set revision=%%b
 
-makensis /DVERSION=%version% /DLONGVERSION=%version%.%revision% OpenGeoInstaller.nsi
+makensis /DVERSION=%version% /DLONGVERSION=0.0.0.%revision% OpenGeoInstaller.nsi
 
 REM Clean up
 rd /s /q ..\..\target\

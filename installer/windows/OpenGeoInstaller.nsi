@@ -3,8 +3,8 @@
 ; Initial definitions
 !define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
-;!define VERSION "2.1.0"
-;!define LONGVERSION "2.1.0.0" ; Must be a.b.c.d!
+;!define VERSION "2.1.0" ;Call this from command line /DVERSION=a.b.c
+;!define LONGVERSION "2.1.0.0" ;Call this from command line /DLONGVERSION=a.b.c.d
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
 !define SOURCEPATHROOT "..\..\target\win"
 !define STARTMENU_FOLDER "${APPNAME}"
@@ -77,7 +77,7 @@ VIAddVersionKey ProductName "${APPNAME}"
 VIAddVersionKey CompanyName "OpenGeo"
 VIAddVersionKey LegalCopyright "Copyright (c) 2001 - 2010 OpenGeo"
 VIAddVersionKey FileDescription "OpenGeo Suite Installer"
-VIAddVersionKey ProductVersion "${VERSION}"
+VIAddVersionKey ProductVersion "${LONGVERSION}"
 VIAddVersionKey FileVersion "${VERSION}"
 VIAddVersionKey Comments "http://opengeo.org"
 
@@ -123,7 +123,6 @@ LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be ins
 !define MUI_FINISHPAGE_RUN_TEXT "Launch the OpenGeo Suite Dashboard"
 !define MUI_FINISHPAGE_RUN_FUNCTION "RunAfterInstall"
 
-
 ; Do things after install
 Function RunAfterInstall
 
@@ -145,8 +144,6 @@ FunctionEnd
 
 ; Install Page order
 ; This is the main list of installer pages
-
-
 
 !insertmacro MUI_PAGE_WELCOME                                 ; Hello
 Page custom CheckUserType                                     ; Die if not admin
@@ -176,8 +173,12 @@ Page custom Ready
 !insertmacro MUI_RESERVEFILE_LANGDLL
 
 
+
+
 ; Startup tasks
 Function .onInit
+
+
 
   ; Init vars
   StrCpy $SDECheckBoxPrior 0
