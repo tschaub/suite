@@ -3,8 +3,8 @@
 ; Initial definitions
 !define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
-;!define VERSION "2.1.0" ;Call this from command line /DVERSION=a.b.c
-;!define LONGVERSION "2.1.0.0" ;Call this from command line /DLONGVERSION=a.b.c.d
+;!define VERSION "a.b.c" ;Call this from command line /DVERSION=a.b.c
+;!define LONGVERSION "a.b.c.d" ;Call this from command line /DLONGVERSION=a.b.c.d
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
 !define SOURCEPATHROOT "..\..\target\win"
 !define STARTMENU_FOLDER "${APPNAME}"
@@ -245,6 +245,7 @@ Function PriorInstall
   StrCmp $R2 "1.9.1" Upgrade 0
   StrCmp $R2 "1.9.2" Upgrade 0
   StrCmp $R2 "2.0.0" Upgrade 0
+  StrCmp $R2 "2.1.0" Upgrade 0
   StrCmp $R2 "${VERSION}" SameVersion UnknownVersion
 
 
@@ -522,6 +523,7 @@ Section "-Upgrade" SectionUpgrade ; dash = hidden
   StrCmp $Upgrade "1.9.1" Old 0 
   StrCmp $Upgrade "1.9.2" Old 0 
   StrCmp $Upgrade "2.0.0" Old 0 
+  StrCmp $Upgrade "2.1.0" Old 0 
   ; Faking it for 1.0 + 1.0r1
   RMDir /r "$SMPROGRAMS\${APPNAME} $Upgrade"
   Goto Continue
@@ -698,13 +700,6 @@ Section "GeoEditor" SectionGE
   File /r "${SOURCEPATHROOT}\webapps\geoeditor"
 
 SectionEnd
-
-
-
-
-
-
-
 
 SectionGroupEnd
 
