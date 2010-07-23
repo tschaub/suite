@@ -1,3 +1,4 @@
+@echo off
 REM job to build .EXE
 REM assumes that
 REM   http://svn.opengeo.org/suite/trunk/installer
@@ -41,7 +42,21 @@ set /p revtemp=<"%TEMP%\revtemp.txt"
 del "%TEMP%\revtemp.txt"
 for /f "tokens=1,2 delims=/=" %%a in ("%revtemp%") do set trash=%%a&set revision=%%b
 
-makensis /DVERSION=%version% /DLONGVERSION=0.0.0.%revision% OpenGeoInstaller.nsi
+REM Figure out if the version is a snapshot
+for /f "tokens=1,2,3 delims=." %%a in ("%version%") do set vermajor=%%a&set verminor=%%b&set verpatch=%%c
+if "%vermajor%"=="" goto Snapshot
+if "%verminor%"=="" goto Snapshot
+if "%verpatch%"=="" goto Snapshot
+set longversion=%version%.%revision%
+goto Build
+:Snapshot
+set longversion=0.0.0.%revision%
+goto Build
+
+:Build
+REM Now build the EXE
+@echo Running NSIS (version %version%, longversion %longversion%) ...
+makensis /DVERSION=%version% /DLONGVERSION=%longversion% OpenGeoInstaller.nsi
 
 REM Clean up
 rd /s /q ..\..\target\
