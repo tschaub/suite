@@ -21,11 +21,11 @@ Installation
 
 .. note:: The installation process runs in a terminal.
 
-#. Begin the install by executing the :file:`OpenGeoSuite-2.0.0.bin` file in a shell:
+#. Begin the install by executing the :file:`OpenGeoSuite-2.1.1.bin` file in a shell:
 
    .. code-block:: bash
 
-     sh OpenGeoSuite-2.0.0.bin
+     sh OpenGeoSuite-2.1.1.bin
 
 #. The archive will verify its integrity, and then ask if you wish to proceed (default is Yes)::
 
@@ -37,7 +37,11 @@ Installation
 
 #. Choose the installation directory.  The default is in the ``$HOME`` directory::
 
-     Choose an installation directory [/home/user/opengeosuite-2.0.0]:
+     Choose an installation directory [/home/user/opengeosuite-2.1.1]:
+
+#. Choose to create an installation directory::
+
+     The directory [/home/user/opengeosuite-2.1.1] does not exist. Would you like to create it now? [Y|n]:
 
 #. Choose if the OpenGeo Suite should include ArcSDE support (default is No):
 
@@ -71,7 +75,7 @@ Installation
    
       Installation summary:
 
-	     Installation directory: 	 /home/user/opengeosuite-2.0.0
+	     Installation directory: 	 /home/user/opengeosuite-2.1.1
 	     Install ArcSDE support: 	 No
 	     Install Oracle support: 	 No
 	     Install executables:        /home/user/bin
@@ -117,7 +121,7 @@ Uninstallation
 
    .. code-block:: bash
 
-     $ cd /home/user/opengeosuite-2.0.0/suite
+     $ cd /home/user/opengeosuite-2.1.1/suite
 
 #. Execute the uninstall.sh script
 
