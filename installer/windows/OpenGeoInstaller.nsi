@@ -55,7 +55,7 @@ RequestExecutionLevel admin
 
 ; Might be the same as !define
 Var STARTMENU_FOLDER
-Var Upgrade
+Var PreviousVer
 Var OldInstallDir
 Var OldStartMenu
 ;Var CommonAppData
@@ -226,7 +226,7 @@ Function CheckUserType
 FunctionEnd
 
 
-; Checks for existing prior installs
+; Checks for prior installs
 Function PriorInstall
 
   ClearErrors
@@ -240,29 +240,29 @@ Function PriorInstall
   ReadRegStr $R2 HKLM "Software\${COMPANYNAME}\${APPNAME}" "Version"
   IfErrors Upgrade1.0 ; v1.0 and v1.0r1 did not have this key, so if not there, must be 1.0 or 1.0r1
 
-  ; Check for 1.9.0
-  StrCmp $R2 "1.9.0" Upgrade 0
-  StrCmp $R2 "1.9.1" Upgrade 0
-  StrCmp $R2 "1.9.2" Upgrade 0
-  StrCmp $R2 "2.0.0" Upgrade 0
-  StrCmp $R2 "2.1.0" Upgrade 0
-  StrCmp $R2 "${VERSION}" SameVersion UnknownVersion
-
+  ; Compare version strings
+  ${VersionCompare} $R2 ${VERSION} $R0
+  StrCmp $R0 "0" SameVersion 0 ; Reinstall not allowed
+  StrCmp $R0 "1" BadVersion 0  ; Downgrade not allowed
+  StrCmp $R0 "2" Upgrade 0     ; Upgrade allowed
+  Goto UhOh
 
   Upgrade1.0:
   ClearErrors
   ReadRegStr $R1 HKLM "Software\${COMPANYNAME}\OpenGeo Suite 1.0" "InstallDir"
   IfErrors Upgrade1.0r1 ; It must be 1.0r1 then
-  StrCpy $Upgrade "1.0"
+  StrCpy $PreviousVer "1.0"
   StrCpy $OldInstallDir $R1
+  StrCpy $OldStartMenu "$SMPROGRAMS\${APPNAME} $PreviousVer" ; Kind of a fake
   Goto Continue
 
   Upgrade1.0r1:
   ClearErrors
   ReadRegStr $R1 HKLM "Software\${COMPANYNAME}\OpenGeo Suite 1.0r1" "InstallDir"
   IfErrors UhOh ; Okay, give up
-  StrCpy $Upgrade "1.0r1"
+  StrCpy $PreviousVer "1.0r1"
   StrCpy $OldInstallDir $R1
+  StrCpy $OldStartMenu "$SMPROGRAMS\${APPNAME} $PreviousVer" ; Kind of a fake 
   Goto Continue
 
   Upgrade:
@@ -271,7 +271,7 @@ Function PriorInstall
   IfErrors UhOh
   ReadRegStr $R3 HKLM "Software\${COMPANYNAME}\OpenGeo Suite" "StartMenu"
   IfErrors UhOh
-  StrCpy $Upgrade $R2
+  StrCpy $PreviousVer $R2
   StrCpy $OldInstallDir $R1
   StrCpy $OldStartMenu $R3
   Goto Continue
@@ -284,28 +284,30 @@ Function PriorInstall
 
   SameVersion:
   MessageBox MB_ICONSTOP "This version of the OpenGeo Suite is already installed.  \
-                          If you wish to reinstall the OpenGeo Suite, please uninstall the \
-                          existing version first and then run Setup again."
+                          If you wish to reinstall the OpenGeo Suite, please uninstall \
+                          first and then run Setup again."
   Goto Die
 
-  UnknownVersion:
-  ; Fail!  An unknown version is installed!
-  MessageBox MB_ICONSTOP "Setup has found a conflicting version of the OpenGeo Suite \
+  BadVersion:
+  ; Fail!  Bad version is installed!  
+  MessageBox MB_ICONSTOP "Setup has found a conflicting version ($R2) of the OpenGeo Suite \
                           installed on your machine.  If you wish to install this version \
                           of the OpenGeo Suite, please uninstall your existing version first \
-                          and then run Setup again.  (Version found was $R2)"
+                          and then run Setup again."
   Goto Die
 
   NoPriorInstall:
-  StrCpy $Upgrade "Clean"
+  StrCpy $PreviousVer "Clean"
+  Goto End
 
   Continue:
   ClearErrors
-  StrCmp $Upgrade "Clean" End 0
-  MessageBox MB_OKCANCEL "Setup has found a previous version of the OpenGeo Suite on your system.  \
-                          This version will be upgraded.  Your existing data will not be affected, \
-                          but this operation is not undoable.  Click OK to continue, or Cancel to \
-                          exit." IDOK End IDCANCEL Die
+  MessageBox MB_OKCANCEL "Setup has found a previous version ($R2) of the OpenGeo Suite \
+                          on your system.  This version will be upgraded.  Your existing \
+                          data will not be affected, but this operation is not undoable.\
+                          $\r$\n$\r$\nPlease make sure that the OpenGeo Suite is not \
+                          running, then click OK to continue with the upgrade.  Otherwise, \
+                          click Cancel to exit." IDOK End IDCANCEL Die
 
   Die:
   MessageBox MB_OK "Setup will now exit..."
@@ -492,15 +494,14 @@ SectionEnd
   ; This section removes files from 1.0 or 1.0r1 install, before continuing
 Section "-Upgrade" SectionUpgrade ; dash = hidden
 
-  StrCmp $Upgrade "Clean" Skip
+  StrCmp $PreviousVer "Clean" Skip
   
   ;Stop existing Suite if necessary
-  ExecWait '"$OldInstallDir\opengeo-suite.bat" stop'
+  ;ExecWait '"$OldInstallDir\opengeo-suite.bat" stop'
 
   !insertmacro DisplayImage "graphics\slide_1_suite.bmp"
 
   ;Remove files
-  RMDir /r "$OldInstallDir"
   RMDir /r "$OldInstallDir\bin"
   RMDir /r "$OldInstallDir\dashboard"
   RMDir /r "$OldInstallDir\data_dir"
@@ -517,25 +518,11 @@ Section "-Upgrade" SectionUpgrade ; dash = hidden
   RMDir "$OldInstallDir"
 
   ;Remove start menu entries
-
-  ; Someday do a version greater/less than comparison instead of this
-  StrCmp $Upgrade "1.9.0" Old 0 
-  StrCmp $Upgrade "1.9.1" Old 0 
-  StrCmp $Upgrade "1.9.2" Old 0 
-  StrCmp $Upgrade "2.0.0" Old 0 
-  StrCmp $Upgrade "2.1.0" Old 0 
-  ; Faking it for 1.0 + 1.0r1
-  RMDir /r "$SMPROGRAMS\${APPNAME} $Upgrade"
-  Goto Continue
-
-  Old:
   RMDir /r "$OldStartMenu"
-  Goto Continue
 
-  Continue:
   ;Remove registry
   DeleteRegKey HKLM "Software\${COMPANYNAME}"
-  DeleteRegKey HKLM "${UNINSTALLREGPATH}\${APPNAME} $Upgrade"
+  DeleteRegKey HKLM "${UNINSTALLREGPATH}\${APPNAME} $PreviousVer"
 
   Skip:
 
@@ -575,7 +562,7 @@ Section "-Jetty" SectionJetty ; dash = hidden
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
 
   ; Only do if new install
-  StrCmp $Upgrade "Clean" 0 Skip
+  StrCmp $PreviousVer "Clean" 0 Skip
   CreateDirectory "$PROFILE\.opengeo"
   CreateDirectory "$PROFILE\.opengeo\logs"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\OpenGeo Suite Logs.lnk" \
@@ -641,7 +628,7 @@ Section "GeoServer" SectionGS
   File /r /x jai*.* "${SOURCEPATHROOT}\webapps\geoserver"
  
   ; Copy data_dir if new install
-  StrCmp $Upgrade "Clean" 0 Skip
+  StrCmp $PreviousVer "Clean" 0 Skip
   SetOutPath "$PROFILE\.opengeo"
   File /r "${SOURCEPATHROOT}\data_dir"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\GeoServer Data Directory.lnk" \
@@ -831,7 +818,7 @@ Section "-Dashboard" SectionDashboard ;dash means hidden
   SetOutPath "$INSTDIR\webapps\"
   File /r "${SOURCEPATHROOT}\webapps\dashboard"
 
-  ;StrCmp $Upgrade "Clean" 0 Skip
+  ;StrCmp $PreviousVer "Clean" 0 Skip
   ${textreplace::ReplaceInFile} "$INSTDIR\dashboard\Resources\config.ini" \
                                 "$INSTDIR\dashboard\Resources\config.ini" \
                                 "@GEOSERVER_DATA_DIR@" "$PROFILE\.opengeo\data_dir" \ 
