@@ -101,7 +101,7 @@
               <ogc:PropertyName>STATE_ABBR</ogc:PropertyName>
             </Label>
             <Font>
-              <CssParameter name="font-family">Sans-Serif</CssParameter>
+              <CssParameter name="font-family">SansSerif</CssParameter>
               <CssParameter name="font-family">Arial</CssParameter>
               <CssParameter name="font-style">Normal</CssParameter>
               <CssParameter name="font-size">12</CssParameter>
@@ -130,7 +130,7 @@
               <ogc:PropertyName>STATE_NAME</ogc:PropertyName>
             </Label>
             <Font>
-              <CssParameter name="font-family">Sans-Serif</CssParameter>
+              <CssParameter name="font-family">SansSerif</CssParameter>
               <CssParameter name="font-family">Arial</CssParameter>
               <CssParameter name="font-style">Normal</CssParameter>
               <CssParameter name="font-size">12</CssParameter>
