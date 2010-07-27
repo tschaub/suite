@@ -52,6 +52,7 @@ echo    postgis ^[start^|stop^]
 goto End
 
 :Done
+cd ..
 
 :End
-popd
+

@@ -32,7 +32,7 @@ if not exist jre\bin\java.exe (
 REM Check debug flag
 set COMMAND=start jre\bin\javaw.exe
 if "%2" == "debug" (
-  set COMMAND=jre\bin\java.exe  
+  set COMMAND=start jre\bin\java.exe  
 )
 
 REM Java flags
@@ -43,8 +43,8 @@ set OPTS=-Dslf4j=false -cp %CLASSPATH%
 REM Start
 if "%1" == "start" (
   echo Starting the OpenGeo Suite...
-  %COMMAND% %VMOPTS% %OPTS% org.opengeo.jetty.Start
   call bin\postgis.cmd start
+  %COMMAND% %VMOPTS% %OPTS% org.opengeo.jetty.Start
   goto Done
 )
 
