@@ -21,27 +21,37 @@ Installation
 
 .. note:: The installation process runs in a terminal.
 
-#. Begin the install by executing the :file:`OpenGeoSuite-2.1.1.bin` file in a shell:
+#. Begin by making the file executable:
 
-   .. code-block:: bash
+   .. parsed-literal::
 
-     sh OpenGeoSuite-2.1.1.bin
+      chmod +x OpenGeoSuite-|version|.bin
+
+#. Execute the file:
+
+   .. parsed-literal::
+
+      sh OpenGeoSuite-|version|.bin
 
 #. The archive will verify its integrity, and then ask if you wish to proceed (default is Yes)::
 
-     Would you like to proceed with installing OpenGeo Suite? [Y|n]: 
+      Would you like to proceed with installing OpenGeo Suite? [Y|n]: 
 
 #. Read and accept the License Agreement (default is Yes)::
 
-     Do you accept the license agreement? [Y|n]:
+      Do you accept the license agreement? [Y|n]:
 
-#. Choose the installation directory.  The default is in the ``$HOME`` directory::
+#. Choose the installation directory.  The default is in the ``$HOME`` directory:
 
-     Choose an installation directory [/home/user/opengeosuite-2.1.1]:
+   .. parsed-literal::
 
-#. Choose to create an installation directory::
+      Choose an installation directory [/home/<user>/opengeosuite-|version|]:
 
-     The directory [/home/user/opengeosuite-2.1.1] does not exist. Would you like to create it now? [Y|n]:
+#. Choose to create an installation directory:
+
+   .. parsed-literal::
+
+      The directory [/home/<user>/opengeosuite-|version|] does not exist. Would you like to create it now? [Y|n]:
 
 #. Choose if the OpenGeo Suite should include ArcSDE support (default is No):
 
@@ -65,20 +75,22 @@ Installation
      
 #. If you selected "yes", choose the directory where the links will be created.  The default is ``$HOME/bin``::
 
-     What directory should links be created in? [/home/user/bin]:
+     What directory should links be created in? [/home/<user>/bin]:
       
 #. If this directory does not exist, you will be asked if you want to create it::
    
-     /home/user/bin does not exist. Would you like to create it now? [Y|n]:
+     /home/<user>/bin does not exist. Would you like to create it now? [Y|n]:
             
-#. The installer will provide a summary and ask for confirmation::
-   
+#. The installer will provide a summary and ask for confirmation:
+
+   .. parsed-literal::
+
       Installation summary:
 
-	     Installation directory: 	 /home/user/opengeosuite-2.1.1
+	     Installation directory: 	 /home/<user>/opengeosuite-|version|
 	     Install ArcSDE support: 	 No
 	     Install Oracle support: 	 No
-	     Install executables:        /home/user/bin
+	     Install executables:        /home/<user>/bin
 
       Proceed with installation? [Y|n]: 
 
@@ -96,17 +108,13 @@ Installation
 
 #. The installation is complete.
 
-#. To run the Dashboard, navigate to ``$HOME/bin`` and type:
+#. To run the Dashboard, navigate to ``$HOME/bin`` and type::
  
-   .. code-block:: bash
-
      $ ./opengeo-dashboard
 
    .. note:: The Dashboard requires X11 or equivalent windowing environment.
 
-#. To start or stop the OpenGeo Suite, navigate to ``$HOME/bin`` and type:
-
-   .. code-block:: bash
+#. To start or stop the OpenGeo Suite, navigate to ``$HOME/bin`` and type::
 
      $ ./opengeo-suite start
      $ ./opengeo-suite stop  
@@ -119,15 +127,13 @@ Uninstallation
 
 #. Navigate to the OpenGeo Suite installation directory:
 
-   .. code-block:: bash
+   .. parsed-literal::
 
-     $ cd /home/user/opengeosuite-2.1.1/suite
+      $ cd /home/<user>/opengeosuite-|version|/suite
 
-#. Execute the uninstall.sh script
+#. Execute the uninstall.sh script::
 
-   .. code-block:: bash
-
-     $ ./uninstall.sh
+      $ ./uninstall.sh
 
 
 For More Information
