@@ -20,13 +20,17 @@
      </exec>
   </target>
   
-  <target name="pdf" if="pdflatex">
+  <target name="pdf" depends="pdf-if,pdf-else"/>
+  <target name="pdf-if" if="pdflatex">
      <exec executable="sphinx-build" failonerror="true" dir="${basedir}/source">
         <arg line="-b latex -d ${build.directory}/doctrees . ${build.directory}/latex"/>
      </exec>
      <exec executable="make" failonerror="true" dir="${build.directory}/latex">
         <arg line="all-pdf"/>
      </exec>
+  </target>
+  <target name="pdf-else" unless="pdflatex">
+      <echo message="No PDF generated because pdflatex is not on PATH.  This may make installer assembly fail."/>
   </target>
 
 </project>
