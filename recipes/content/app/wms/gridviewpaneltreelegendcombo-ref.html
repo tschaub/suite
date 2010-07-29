@@ -1,0 +1,42 @@
+<h2>Adding a Combo Box of Available Map Scales</h2>
+
+<p>A grid can display the contents of a layer store. A map panel provides its layers in a layer store. A tree can read layers from a layer store. And a legend panel accesses a map’s layer store to deternube which legend images to display. What else could we do with that store? We could display its contents in a combo box. Our WMS browser already has a grid and a tree displaying layers, so let’s populate a combo box with something else: the available scales of our map.</p>
+
+<p>The Ext.form.ComboBox works similar to the grid:</p>
+
+<pre>
+    var scaleCombo = new Ext.form.ComboBox({
+        width: 130,
+        mode: "local",
+        emptyText: "Scale",
+        triggerAction: "all",
+        displayField: "scale",
+        store: new GeoExt.data.ScaleStore({
+            map: mapPanel
+        })
+    });
+</pre>
+
+<p>It requires a store, and it has to know which field from the store’s records to display. This is what the displayField option is for. This GeoExt.data.ScaleStore itself is easy to configure – it just takes a map option. Once configured, the store will be updated any time the map’s available scales change.</p>
+
+<p>Now the one thing that the combo box does not have is a selection model. If it did, GeoExt could provide more convenience by offering an option to update the selected field of the combo box when the map scale changes, and zoom the map to a new scale when selected from the combo. Instead, we have to do this ourselves. It requires two things.</p>
+
+<p>First is a listener to the combo’s “select event”, which gets triggered when the user selects a scale from the combo box:</p>
+
+<pre>
+    listeners: {
+        select: function(combo, record) {
+            mapPanel.map.zoomTo(record.get("level"));
+        }
+    }
+</pre>
+
+<p>The records created by the ScaleStore’s reader have three fields: resolution, scale and level. In the handler function above, we use the zoom level as argument to the map’s zoomTo method.</p>
+
+<p>Second is a listener to the map’s "zoomend" event, which gets triggered after every zoom operation:</p>
+
+<pre>
+    mapPanel.map.events.register("zoomend", this, function() {
+        scaleCombo.setValue(mapPanel.map.getScale());
+    });
+</pre>

@@ -1,0 +1,34 @@
+<h2>Adding a Tree View to Manage the Map Panel’s Layers</h2>
+
+<p>With the Ext.tree.TreePanel and its tree nodes, Ext JS provides a powerful tool to work with hierarchical information. While Ext JS trees cannot be populated from stores, GeoExt provides a tree loader that can turn information from a layer store into tree nodes. Configured with checkboxes, these can be used to turn layers on and off. In addition, thanks to drag & drop support of Ext JS trees, layers can easily be reordered.</p>
+
+<h3>Using a Tree Panel for Layer Management</h3>
+
+<p>First, let’s have a look at the tree configuration again to see what it consists of.</p>
+
+<p>As we already saw, we can drag and drop tree nodes. This is enabled by setting <pre>enableDD: true</pre>. More interesting is the root property.</p>
+
+<pre>
+    root: new GeoExt.tree.LayerContainer({
+        layerStore: mapPanel.layers,
+        expanded: true
+    }),
+</pre>
+
+<p>Every tree needs to have a root node. GeoExt provides a special layer container node type. Configured with the map panel’s layer store, it will be populated with layer nodes for each of the map’s layers. These nodes are GeoExt.tree.LayerNode instances. The container makes sure that the list of layers is always synchronized with the map, and the node’s checkbox controls the layer’s visibility.</p>
+
+<p>Surprisingly, adding a root node that has all map layers as children requires less coding effort than the button to remove layers:</p>
+
+<pre>
+    bbar: [{
+        text: "Remove from Map",
+        handler: function() {
+            var node = tree.getSelectionModel().getSelectedNode();
+            if(node) {
+                mapPanel.map.removeLayer(node.layer);
+            }
+        }
+    }]
+</pre>
+
+<p>We already know the concept of a bottom toolbar from a previous exercise. The flesh of the above snippet is the handler function that gets executed when the button is clicked. Like the grid, the tree also has a selection model. The default selection model only supports selection of one node at a time, and we can get the selected node using its getSelectedNode method. All that is left to do is check if there is a selected node, and remove it from the map using the removeLayer method of the OpenLayers.Map object.</p>

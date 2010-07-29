@@ -1,10 +1,12 @@
-<h2>Minimal HTML Document</h2>
+<h2>Map Window</h2>
+
+<h3>Minimal HTML Document</h3>
 
 <p>Since the mother of all web browser content is still HTML, every web application needs at least a basic HTML document as container. It does not contain human readable markup, so it has an empty body. But it makes sure that all required script and style resources are loaded. These usually go in the document’s head:</p>
 
 <pre>
-    &lt;script type="text/javascript" src="ext/adapter/ext/ext-base.js"&gt;&lt;/script&gt;
-    &lt;script type="text/javascript" src="ext/ext-all.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript" src="http://extjs.cachefly.net/ext-3.2.1/adapter/ext/ext-base.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript" src="http://extjs.cachefly.net/ext-3.2.1/ext-all.js"&gt;&lt;/script&gt;
 </pre>
 
 <p>Ext JS can be used standalone, or together with JavaScript frameworks like JQuery. Depending on this environment, an appropriate adapter has to be loaded first. We use Ext JS standalone, so we need the ext-base.js adapter. In the second line, we load the main library.</p>
@@ -12,7 +14,7 @@
 <p>Next, we load the stylesheet required by Ext JS:</p>
 
 <pre>
-    &lt;link rel="stylesheet" type="text/css" href="ext/resources/css/ext-all.css" /&gt;
+    &lt;link rel="stylesheet" type="text/css" href="http://extjs.cachefly.net/ext-3.2.1/resources/css/ext-all.css" /&gt;
 </pre>
 
 <p>This loads all CSS that Ext JS needs to use the default theme. For other or custom themes, additional CSS resources would have to be added.</p>
@@ -20,14 +22,14 @@
 <p>GeoExt not only relies on Ext JS, but also on OpenLayers. So we also have to load OpenLayers. And finally, we can load GeoExt:</p>
 
 <pre>
-    &lt;script src="openlayers/lib/OpenLayers.js"&gt;</script>
+    &lt;script src="http://dev.openlayers.org/releases/OpenLayers-2.9.1/OpenLayers.js"&gt;</script>
 
-    &lt;script type="text/javascript" src="geoext/lib/GeoExt.js"&gt;&lt;/script&gt;
+    &lt;script type="text/javascript" src="http://api.geoext.org/0.7/script/GeoExt.js"&gt;&lt;/script&gt;
 </pre>
 
 <p><em>Note: When using GeoExt, you also benefit from all the functionality that plain Ext JS and OpenLayers provide. You can add GeoExt to your existing Ext JS and OpenLayers applications without breaking anything.</em></p>
 
-<h2>Application Initialization Code</h2>
+<h3>Application Initialization Code</h3>
 
 <p>Application initialization usually consists of two stages:
 
@@ -38,7 +40,7 @@
 
 <pre>
     &lt;script type="text/javascript"&gt;
-    Ext.BLANK_IMAGE_URL = "ext/resources/images/default/s.gif";
+    Ext.BLANK_IMAGE_URL = "http://extjs.cachefly.net/ext-3.2.1/resources/images/default/s.gif";
 
     Ext.onReady(function() {
         new Ext.Window({
@@ -52,7 +54,7 @@
 
 <p>The interesting part is the one that is replaced with a /* configuration object goes here */ comment above. In Ext JS, we will find ourselves creating configuration objects instead of writing code for most basic tasks, which usually makes application development easier and faster. This is why configuration objects deserve their own section.</p>
 
-<h2>Configuration Objects</h2>
+<h3>Configuration Objects</h3>
 
 <p>In Ext JS, all constructors take a single argument, which we will be referring to as "configuration object". Like all JavaScript objects, this configuration object is wrapped in curly braces, and contains key: value pairs. Let’s have a look at the configuration object for our map window:</p>
 
@@ -66,7 +68,7 @@
             xtype: "gx_mappanel",
             layers: [new OpenLayers.Layer.WMS(
                 "World",
-                "/geoserver/ows?",
+                "http://v2.suite.opengeo.org/geoserver/ows?",
                 {layers: "world"}
             )]
         }
