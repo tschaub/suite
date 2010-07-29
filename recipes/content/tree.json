@@ -231,4 +231,60 @@
             "leaf": true
         }]
     }]
+},  {
+    "text": "GeoExt",
+    "children": [{
+        "text": "WMS", 
+        "children": [{
+            "id": "app/wms/mapwindow",
+            "text": "Map Window",
+            "leaf": true
+        }, {
+            "id": "app/wms/gridview",
+            "text": "Grid View",
+            "leaf": true
+        }, {
+            "id": "app/wms/gridviewpanel",
+            "text": "Grid View + Panel",
+            "leaf": true
+        }, {
+            "id": "app/wms/gridviewpaneltree",
+            "text": "Grid View + Panel + Tree",
+            "leaf": true
+        }, {
+            "id": "app/wms/gridviewpaneltreelegend",
+            "text": "Grid View + Panel + Tree + Legend",
+            "leaf": true
+        }, {
+            "id": "app/wms/gridviewpaneltreelegendcombo",
+            "text": "Grid View + Panel + Tree + Legend + Combo Box",
+            "leaf": true
+        }]
+    }, { 
+        "text": "WFS",
+        "children": [{
+            "id": "app/wfs/gridview",
+            "text": "Grid View",
+            "leaf": true
+        }, {
+            "id": "app/wfs/gridviewpanel",
+            "text": "Grid View + Panel",
+            "leaf": true
+        }, {
+            "id": "app/wfs/gridviewpanelcrud",
+            "text": "Grid View + Panel + CRUD",
+            "leaf": true
+        }, {
+            "id": "app/wfs/gridviewpanelcrudwfst",
+            "text": "Grid View + Panel + Crud + WFS-T",
+            "leaf": true
+        }]
+    }, { 
+        "text": "More",
+        "children": [{
+            "id": "app/more/browsequeryfilter",
+            "text": "Browse + Query + Filter",
+            "leaf": true
+        }]
+    }]
 }]

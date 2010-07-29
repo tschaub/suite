@@ -338,6 +338,72 @@
         "components": ["GeoServer"],
         "reference": "sld/raster/raster_discretecolors-ref",
         "sourcepath": "sld/raster/raster_discretecolors.sld"
+    }, {
+        "id": "app/wms/mapwindow",
+        "title": "Creating a floating map window",
+        "description": "Map Window",
+        "components": ["OpenLayers, GeoExt"],
+        "reference": "app/wms/mapwindow-ref"
+    }, {
+        "id": "app/wms/gridview",
+        "title": "WMS Grid View",
+        "description": "============",
+        "components": ["OpenLayers, GeoExt"],
+        "reference": "app/wms/gridview-ref"
+    }, {
+        "id": "app/wms/gridviewpanel",
+        "title": "WMS Grid View + Panel",
+        "description": "============",
+        "components": ["OpenLayers, GeoExt"],
+        "reference": "app/wms/gridviewpanel-ref"
+    }, {
+        "id": "app/wms/gridviewpaneltree",
+        "title": "WMS Grid View + Panel + Tree",
+        "description": "============",
+        "components": ["OpenLayers, GeoExt"],
+        "reference": "app/wms/gridviewpaneltree-ref"
+    }, {
+        "id": "app/wms/gridviewpaneltreelegend",
+        "title": "WMS Grid View + Panel + Tree + Legend",
+        "description": "============",
+        "components": ["OpenLayers, GeoExt"],
+        "reference": "app/wms/gridviewpaneltreelegend-ref"
+    }, {
+        "id": "app/wms/gridviewpaneltreelegendcombo",
+        "title": "WMS Grid View + Panel + Tree + Legend + Combo",
+        "description": "============",
+        "components": ["OpenLayers, GeoExt"],
+        "reference": "app/wms/gridviewpaneltreelegend-ref"
+    }, {
+        "id": "app/wfs/gridview",
+        "title": "WFS Grid View",
+        "description": "============",
+        "components": ["OpenLayers, GeoExt"],
+        "reference": "app/wfs/gridview-ref"
+    }, {
+        "id": "app/wfs/gridviewpanel",
+        "title": "WFS Grid View + Panel",
+        "description": "============",
+        "components": ["OpenLayers, GeoExt"],
+        "reference": "app/wfs/gridviewpanel-ref"
+    }, {
+        "id": "app/wfs/gridviewpanelcrud",
+        "title": "WFS Grid View + Panel + CRUD",
+        "description": "============",
+        "components": ["OpenLayers, GeoExt"],
+        "reference": "app/wfs/gridviewpanelcrud-ref"
+    }, {
+        "id": "app/wfs/gridviewpanelcrudwfst",
+        "title": "WFS Grid View + Panel + CRUD + WFS-T",
+        "description": "============",
+        "components": ["OpenLayers, GeoExt"],
+        "reference": "app/wfs/gridviewpanelcrudwfst-ref"
+    }, {
+        "id": "app/more/browsequeryfilter",
+        "title": "Browse + Query + Filter",
+        "description": "============",
+        "components": ["OpenLayers, GeoExt"],
+        "reference": "app/browserqueryfilter-ref"
     }
           
 ]
