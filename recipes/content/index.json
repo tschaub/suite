@@ -376,28 +376,28 @@
         "reference": "app/wms/gridviewpaneltreelegend-ref"
     }, {
         "id": "app/wfs/gridview",
-        "title": "WFS Grid View",
-        "description": "============",
+        "title": "Create a WFS Grid View",
+        "description": "Grid View",
         "components": ["OpenLayers, GeoExt"],
         "reference": "app/wfs/gridview-ref"
     }, {
-        "id": "app/wfs/gridviewpanel",
-        "title": "WFS Grid View + Panel",
-        "description": "============",
+        "id": "app/wfs/synchronizedmap",
+        "title": "Synchronized Map",
+        "description": "A Synchronized Map and Table View",
         "components": ["OpenLayers, GeoExt"],
-        "reference": "app/wfs/gridviewpanel-ref"
+        "reference": "app/wfs/synchronizedmap-ref"
     }, {
-        "id": "app/wfs/gridviewpanelcrud",
-        "title": "WFS Grid View + Panel + CRUD",
-        "description": "============",
+        "id": "app/wfs/editingfeaturesattributes",
+        "title": "Edit Features and Attributes",
+        "description": "Features and Attributes",
         "components": ["OpenLayers, GeoExt"],
-        "reference": "app/wfs/gridviewpanelcrud-ref"
+        "reference": "app/wfs/editingfeaturesattributes-ref"
     }, {
-        "id": "app/wfs/gridviewpanelcrudwfst",
-        "title": "WFS Grid View + Panel + CRUD + WFS-T",
-        "description": "============",
+        "id": "app/wfs/commitedits",
+        "title": "Committing Feature Modifications",
+        "description": "Commit Edits",
         "components": ["OpenLayers, GeoExt"],
-        "reference": "app/wfs/gridviewpanelcrudwfst-ref"
+        "reference": "app/wfs/commitedits-ref"
     }, {
         "id": "app/more/browsequeryfilter",
         "title": "Browse + Query + Filter",

@@ -267,16 +267,16 @@
             "text": "Grid View",
             "leaf": true
         }, {
-            "id": "app/wfs/gridviewpanel",
-            "text": "Grid View + Panel",
+            "id": "app/wfs/synchronizedmap",
+            "text": "Synchronized Map",
             "leaf": true
         }, {
-            "id": "app/wfs/gridviewpanelcrud",
-            "text": "Grid View + Panel + CRUD",
+            "id": "app/wfs/editingfeaturesattributes",
+            "text": "Editing Featuers and Attributes",
             "leaf": true
         }, {
-            "id": "app/wfs/gridviewpanelcrudwfst",
-            "text": "Grid View + Panel + Crud + WFS-T",
+            "id": "app/wfs/commitedits",
+            "text": "Commit Edits",
             "leaf": true
         }]
     }, { 
