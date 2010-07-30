@@ -38,7 +38,8 @@ Styler.SLDManager = OpenLayers.Class({
         var layer;
         this.layers = [];
         this.layerData = {};
-        for(var i=0; i<this.map.layers.length; ++i) {
+        this.format = new OpenLayers.Format.SLD({multipleSymbolizers: true});
+        for (var i=0; i<this.map.layers.length; ++i) {
             layer = this.map.layers[i];
             if(layer instanceof OpenLayers.Layer.WMS) {
                 this.layers.push(layer);
@@ -86,7 +87,7 @@ Styler.SLDManager = OpenLayers.Class({
             url: this.getUrl(layer, styleName),
             method: "GET",
             success: function(request) {
-                var sld = new OpenLayers.Format.SLD().read(
+                var sld = this.format.read(
                     request.responseXML.documentElement ?
                     request.responseXML : request.responseText);
                 //TODO: for now, we just handle the 1st user style of the
@@ -113,7 +114,7 @@ Styler.SLDManager = OpenLayers.Class({
             headers: {
                 "Content-Type": "application/vnd.ogc.sld+xml; charset=UTF-8"
             },
-            xmlData: new OpenLayers.Format.SLD().write(this.layerData[layer.id].sld),
+            xmlData: this.format.write(this.layerData[layer.id].sld),
             success: function(request) {
                 callback.call(scope || this, request);
             }
