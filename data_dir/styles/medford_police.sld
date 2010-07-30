@@ -15,7 +15,7 @@
           <Title>Police 140K-70K</Title>
           <ogc:Filter>
             <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
-              <ogc:PropertyName>location</ogc:PropertyName>
+              <ogc:PropertyName>place</ogc:PropertyName>
               <ogc:Literal>*Medford*</ogc:Literal>
             </ogc:PropertyIsLike>
           </ogc:Filter>
@@ -42,7 +42,7 @@
          <Title>Police 70K-25K</Title>
          <ogc:Filter>
            <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
-             <ogc:PropertyName>location</ogc:PropertyName>
+             <ogc:PropertyName>place</ogc:PropertyName>
              <ogc:Literal>*Medford*</ogc:Literal>
            </ogc:PropertyIsLike>
          </ogc:Filter>
@@ -69,7 +69,7 @@
           <Title>Police 35K-17.5</Title>
           <ogc:Filter>
             <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
-              <ogc:PropertyName>location</ogc:PropertyName>
+              <ogc:PropertyName>place</ogc:PropertyName>
               <ogc:Literal>*Medford*</ogc:Literal>
             </ogc:PropertyIsLike>
           </ogc:Filter>
@@ -134,7 +134,7 @@
           <Title>Police &lt; 17.5</Title>
           <ogc:Filter>
             <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
-              <ogc:PropertyName>location</ogc:PropertyName>
+              <ogc:PropertyName>place</ogc:PropertyName>
               <ogc:Literal>*Medford*</ogc:Literal>
             </ogc:PropertyIsLike>
           </ogc:Filter>
