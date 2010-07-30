@@ -126,7 +126,7 @@ Styler.RulePanel = Ext.extend(Ext.TabPanel, {
         this.activeTab = 0;
         
         this.textSymbolizer = new gxp.TextSymbolizer({
-            symbolizer: this.rule.symbolizer["Text"],
+            symbolizer: this.getTextSymbolizer(),
             attributes: this.attributes,
             fonts: this.fonts,
             listeners: {
@@ -185,13 +185,13 @@ Styler.RulePanel = Ext.extend(Ext.TabPanel, {
                 title: "Label Features",
                 autoHeight: true,
                 checkboxToggle: true,
-                collapsed: !this.rule.symbolizer["Text"],
+                collapsed: !this.hasTextSymbolizer(),
                 items: [
                     this.textSymbolizer
                 ],
                 listeners: {
                     collapse: function() {
-                        delete this.rule.symbolizer["Text"];
+                        OpenLayers.Util.removeItem(this.rule.symbolizers, this.getTextSymbolizer());
                         this.fireEvent("change", this, this.rule);
                     },
                     expand: function() {
@@ -206,7 +206,7 @@ Styler.RulePanel = Ext.extend(Ext.TabPanel, {
                          * End workaround for
                          * http://projects.opengeo.org/suite/ticket/676
                          */
-                        this.rule.symbolizer["Text"] = this.textSymbolizer.symbolizer;
+                        this.setTextSymbolizer(this.textSymbolizer.symbolizer);
                         this.fireEvent("change", this, this.rule);
                     },
                     scope: this
@@ -311,7 +311,55 @@ Styler.RulePanel = Ext.extend(Ext.TabPanel, {
 
         Styler.RulePanel.superclass.initComponent.call(this);
     },
+
+    /**
+     * Method: hasTextSymbolizer
+     */
+    hasTextSymbolizer: function() {
+        var candidate, symbolizer;
+        for (var i=0, ii=this.rule.symbolizers.length; i<ii; ++i) {
+            candidate = this.rule.symbolizers[i];
+            if (candidate instanceof OpenLayers.Symbolizer.Text) {
+                symbolizer = candidate;
+                break;
+            }
+        }
+        return symbolizer;
+    },
     
+    /**
+     * Method: getTextSymbolizer
+     * Get the first text symbolizer in the rule.  If one does not exist,
+     *     create one.
+     */
+    getTextSymbolizer: function() {
+        var symbolizer = this.hasTextSymbolizer();
+        if (!symbolizer) {
+            symbolizer = new OpenLayers.Symbolizer.Text();
+        }
+        return symbolizer;
+    },
+    
+    /** 
+     * Method: setTextSymbolizer
+     * Update the first text symbolizer in the rule.  If one does not exist,
+     *     add it.
+     */
+    setTextSymbolizer: function(symbolizer) {
+        var found;
+        for (var i=0, ii=this.rule.symbolizers.length; i<ii; ++i) {
+            candidate = this.rule.symbolizers[i];
+            if (this.rule.symbolizers[i] instanceof OpenLayers.Symbolizer.Text) {
+                this.rule.symbolizers[i] = symbolizer;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            this.rule.symbolizers.push(symbolizer);
+        }        
+    },
+
     /**
      * Method: uniqueRuleName
      * Generate a unique rule name.  This name will only be unique for this
@@ -330,7 +378,7 @@ Styler.RulePanel = Ext.extend(Ext.TabPanel, {
     createHeaderPanel: function() {
         this.symbolizerSwatch = new GeoExt.FeatureRenderer({
             symbolType: this.symbolType,
-            symbolizers: [this.rule.symbolizer[this.symbolType]],
+            symbolizers: this.rule.symbolizers,
             isFormField: true,
             fieldLabel: "Symbol"
         });
@@ -375,9 +423,22 @@ Styler.RulePanel = Ext.extend(Ext.TabPanel, {
      * Method: createSymbolizerPanel
      */
     createSymbolizerPanel: function() {
+        // use first symbolizer that matches symbolType
+        var name = "OpenLayers.Symbolizer." + this.symbolType;
+        var candidate, symbolizer;
+        for (var i=0, ii=this.rule.symbolizers.length; i<ii; ++i) {
+            candidate = this.rule.symbolizers[i];
+            if (candidate.CLASS_NAME === name) {
+                symbolizer = candidate;
+                break;
+            }
+        }
+        if (!symbolizer) {
+            throw new Error("Rule does not contain symbolizer of appropriate type: " + this.symbolType);
+        }
         return {
             xtype: "gx_" + this.symbolType.toLowerCase() + "symbolizer",
-            symbolizer: this.rule.symbolizer[this.symbolType],
+            symbolizer: symbolizer,
             pointGraphics: (this.symbolType === "Point") ? this.pointGraphics : undefined,
             bodyStyle: {"padding": "10px"},
             border: false,
