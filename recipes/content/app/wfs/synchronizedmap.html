@@ -14,31 +14,34 @@
         Ext.BLANK_IMAGE_URL = "http://extjs.cachefly.net/ext-3.2.1/resources/images/default/s.gif";
 
         Ext.onReady(function() {
-            var store = new GeoExt.data.FeatureStore({
+          var layer = new OpenLayers.Layer.Vector("vector", {
+					    strategies: [new OpenLayers.Strategy.Fixed()],
+					    protocol: new OpenLayers.Protocol.WFS({
+					        url: "/geoserver/ows",
+					        version: "1.1.0",
+					        featureType: "parks",
+					        featureNS: "http://medford.opengeo.org",
+					        srsName: "EPSG:4326"
+					    })
+					});
+					  
+					var store = new GeoExt.data.FeatureStore({
                 fields: [
                     {name: "name", type: "string"},
                     {name: "owner", type: "string"},
                     {name: "usage", type: "string"},
                     {name: "number_fac", type: "int", defaultValue: 0}
                 ],
-                proxy: new GeoExt.data.ProtocolProxy({
-                    protocol: new OpenLayers.Protocol.WFS({
-                        url: "/geoserver/ows",
-                        version: "1.1.0",
-                        featureType: "parks",
-                        featureNS: "http://medford.opengeo.org",
-                        srsName: "EPSG:4326"
-                    })
-                }),
-                autoLoad: true
+						    layer: layer
             });
 
-            var gridPanel = new Ext.grid.GridPanel({
-                title: "Feature Table - Medford Parks",
-                region: "center",
-                viewConfig: {forceFit: true},
-                store: store,
-                cm: new Ext.grid.ColumnModel({
+						var gridPanel = new Ext.grid.GridPanel({
+						    title: "Feature Table - Medford Parks",
+						    region: "center",
+						    viewConfig: {forceFit: true},
+						    store: store,
+						    sm: new GeoExt.grid.FeatureSelectionModel(),
+						    cm: new Ext.grid.ColumnModel({
                     defaults: {
                         sortable: true
                     },
@@ -58,20 +61,30 @@
                 })
             });
 
-            var mainPanel = new Ext.Panel({
+            var mapPanel = new GeoExt.MapPanel({
+						    title: "Map",
+						    region: "west",
+						    width: 400,
+						    layers: [layer],
+						    extent: new OpenLayers.Bounds(-122.91, 42.28, -122.76, 42.41)
+						});
+						
+						var mainPanel = new Ext.Panel({
                 renderTo: "map-id",
                 layout: "border",
                 height: 450,
                 width: 800,
-                items: [gridPanel]
+                items: [gridPanel, mapPanel]
             });
-        });
+        
+						
+					});
         </script>
     </head>
 	    <body class="recipe-body">
-	        <h1>A Grid View of WFS Features</h1>
+	        <h1>Synchronized Map</h1>
 	        <div class="description">
-	            Reads a WFS layer and displays the feature attributes in a table.
+	            A Synchronized Map and Table View of Vector Features.
 	        </div>
 	        <div class="content">
 	            <div id="map-id"></div>
