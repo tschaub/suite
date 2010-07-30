@@ -20,15 +20,16 @@ Styler.Util = {
      * {String} "Point", "Line" or "Polygon" (or undefined if none of the
      *     three)
      */
-    getSymbolTypeFromRule: function(rule){
-        var symbolizer = rule.symbolizer;
-        if (symbolizer["Line"] || symbolizer["Point"] || symbolizer["Polygon"]) {
-            for (var type in symbolizer) {
-                if (type != "Text") {
-                    return type;
-                }
+    getSymbolTypeFromRule: function(rule) {
+        var candidate, type;
+        for (var i=0, ii=rule.symbolizers.length; i<ii; ++i) {
+            candidate = rule.symbolizers[i];
+            if (!(candidate instanceof OpenLayers.Symbolizer.Text)) {
+                type = candidate.CLASS_NAME.split(".").pop();
+                break;
             }
         }
+        return type;
     }
 };
 
