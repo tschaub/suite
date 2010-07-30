@@ -19,7 +19,6 @@ var Styler = Ext.extend(Ext.util.Observable, {
     
     map: null,
     wmsLayerList: null,
-    wfsLayerList: null,
     layerList: null,
     currentLayer: null,
     sldManager: null,
@@ -97,7 +96,7 @@ var Styler = Ext.extend(Ext.util.Observable, {
                     }, this);
                 },
                 function(done) {
-                    this.getCapabilities(done);
+                    this.getLayerList(done);
                 }
             ],
             function() {
@@ -109,32 +108,50 @@ var Styler = Ext.extend(Ext.util.Observable, {
 
     },
     
-    /**
-     * Method: getCapabilities
-     * Fetch WMS and WFS capabilities and merge the two into a single layer
-     *     list.
-     *
-     * Parameters:
-     * callback - {Function} Function to be called when merge is complete.
-     */
-    getCapabilities: function(callback) {
-        Styler.dispatch(
-            [
-                function(done) {
-                    this.getWMSCapabilities(done);
-                },
-                function(done) {
-                    this.getWFSCapabilities(done);
-                }
-            ],
-            function() {
-                this.mergeCapabilities();
-                callback();
-            },
-            this
-        );
+    getLayerList: function(callback) {
+        this.layerList = [];
+        this.getWMSCapabilities((function() {
+            this.describeLayers(callback);
+        }).createDelegate(this))
     },
-
+    
+    describeLayers: function(callback) {
+        var config;
+        var candidates = [];
+        for (var i=0, ii=this.wmsLayerList.length; i<ii; ++i) {
+            config = this.wmsLayerList[i];
+            if (config.styles && config.styles.length) {
+                candidates.push(config.name);
+            }
+        }
+        var params = {
+            SERVICE: "WMS",
+            VERSION: "1.1.1",
+            REQUEST: "DescribeLayer",
+            LAYERS: candidates
+        };
+        var store = new GeoExt.data.WMSDescribeLayerStore({
+            url: "/geoserver/wms?" + OpenLayers.Util.getParameterString(params),
+            autoLoad: true,
+            listeners: {
+                load: function() {
+                    var config, index;
+                    for (var i=0, ii=this.wmsLayerList.length; i<ii; ++i) {
+                        config = this.wmsLayerList[i];
+                        index = store.findExact("layerName", config.name);
+                        if (index > -1) {
+                            if (store.getAt(index).get("owsType") === "WFS") {
+                                this.layerList.push(config);
+                            }
+                        }
+                    }
+                    callback();
+                },
+                scope: this
+            }
+        });
+    },
+    
     /**
      * Method: getWMSCapabilities
      */
@@ -161,69 +178,17 @@ var Styler = Ext.extend(Ext.util.Observable, {
     },
     
     /**
-     * Method: getWMSCapabilities
-     */
-    getWFSCapabilities: function(callback) {
-        Ext.Ajax.request({
-            url: "/geoserver/ows",
-            method: "GET",
-            disableCaching: false,
-            success: this.parseWFSCapabilities,
-            failure: function() {
-                throw("Unable to read capabilities from WFS");
-            },
-            params: {
-                VERSION: "1.1.0",
-                REQUEST: "GetCapabilities",
-                SERVICE: "WFS"
-            },
-            options: {callback: callback},
-            scope: this
-        });
-    },
-    
-    /**
      * Method: parseWMSCapabilities
      */
     parseWMSCapabilities: function(response, request) {
         var capabilities = new OpenLayers.Format.WMSCapabilities().read(
             response.responseXML && response.responseXML.documentElement ?
             response.responseXML : response.responseText);
+        //this.wmsLayerList = capabilities.capability.layers;
         this.wmsLayerList = capabilities.capability.layers;
         request.options.callback();
     },
 
-    /**
-     * Method: parseWFSCapabilities
-     */
-    parseWFSCapabilities: function(response, request) {
-        var capabilities = new OpenLayers.Format.WFSCapabilities().read(
-            response.responseXML && response.responseXML.documentElement ?
-            response.responseXML : response.responseText);
-        this.wfsLayerList = capabilities.featureTypeList.featureTypes;
-        request.options.callback();
-    },
-    
-    /**
-     * Method: mergeCapabilities
-     * Given layer lists from WMS and WFS capabilities docs, create a single
-     *     layer list with entires that appear in both.
-     */
-    mergeCapabilities: function() {
-        this.layerList = [];
-        var layer, name;
-        for(var i=0; i<this.wmsLayerList.length; ++i) {
-            layer = this.wmsLayerList[i];
-            name = layer.name;
-            for(var j=0; j<this.wfsLayerList.length; ++j) {
-                if(this.wfsLayerList[j].name === name) {
-                    this.layerList.push(layer);
-                    break;
-                }
-            }
-        }
-    },
-    
     /**
      * Method: createLayout
      * Create the layout with a map panel, a layers panel, and a legend panel.
@@ -287,11 +252,9 @@ var Styler = Ext.extend(Ext.util.Observable, {
                 disabled: true,
                 handler: function() {
                     var panel = this.getLegend();
-                    var symbolizer = {};
-                    symbolizer[panel.symbolType] =
-                        OpenLayers.Format.SLD.v1.prototype.defaultSymbolizer; 
+                    var Type = OpenLayers.Symbolizer[panel.symbolType];
                     var rule = new OpenLayers.Rule({
-                        symbolizer: symbolizer
+                        symbolizers: [new Type()]
                     });
                     panel.rules.push(rule);
                     this.fireEvent("ruleadded", rule);
@@ -369,41 +332,46 @@ var Styler = Ext.extend(Ext.util.Observable, {
      * Given the merged layer list, create WMS layers and add them to the map.
      */
     createLayers: function() {
-        var layerList = this.layerList;
         var layers = this.baseLayers.slice();
-        var num = layerList.length;
-        var offset = this.baseLayers.length;
-        var selected = offset + num - 1;  // activate the last/top layer by default
+        var selected = -1;
         var selectedName = OpenLayers.Util.getParameters(window.location.href).layer;
-        for(var i=0; i<num; ++i) {
-            if (layerList[i].name === selectedName) {
-                selected = i + offset;
-            }
-            var llbbox = layerList[i].llbbox;
-            // make sure we don't get infinity values for bottom and top
-            llbbox[1] = Math.max(-85.0511, llbbox[1]);
-            llbbox[3] = Math.min(85.0511, llbbox[3]);
-            var maxExtent = OpenLayers.Bounds.fromArray(llbbox).transform(
-                new OpenLayers.Projection("EPSG:4326"),
-                new OpenLayers.Projection("EPSG:900913")
-            );
-            
-            layers.push(new OpenLayers.Layer.WMS(
-                layerList[i].title, "/geoserver/wms", {
-                    layers: layerList[i].name,
-                    styles: layerList[i].styles[0].name,
-                    transparent: true,
-                    format: "image/png"
-                }, {
-                    isBaseLayer: false,
-                    buffer: 0,
-                    tileSize: new OpenLayers.Size(512, 512),
-                    displayOutsideMaxExtent: true,
-                    visibility: false,
-                    alpha: OpenLayers.Util.alphaHack(), 
-                    maxExtent: maxExtent
+        var alpha = OpenLayers.Util.alphaHack();
+        var config;
+        for (var i=0, ii=this.layerList.length; i<ii; ++i) {
+            config = this.layerList[i]
+            if (config.styles && config.styles.length > 0) {
+                if (config.name === selectedName) {
+                    selected = layers.length;
                 }
-            ));
+                var llbbox = config.llbbox;
+                // make sure we don't get infinity values for bottom and top
+                llbbox[1] = Math.max(-85.0511, llbbox[1]);
+                llbbox[3] = Math.min(85.0511, llbbox[3]);
+                var maxExtent = OpenLayers.Bounds.fromArray(llbbox).transform(
+                    new OpenLayers.Projection("EPSG:4326"),
+                    new OpenLayers.Projection("EPSG:900913")
+                );
+
+                layers.push(new OpenLayers.Layer.WMS(
+                    config.title, "/geoserver/wms", {
+                        layers: config.name,
+                        styles: config.styles[0].name,
+                        transparent: true,
+                        format: "image/png"
+                    }, {
+                        isBaseLayer: false,
+                        buffer: 0,
+                        tileSize: new OpenLayers.Size(512, 512),
+                        displayOutsideMaxExtent: true,
+                        visibility: false,
+                        alpha: alpha, 
+                        maxExtent: maxExtent
+                    }
+                ));
+            }
+        }
+        if (selected === -1) {
+            selected = layers.length - 1;
         }
         
         var prepNode = function(node) {
@@ -956,7 +924,7 @@ var Styler = Ext.extend(Ext.util.Observable, {
      */
     updateRule: function(rule, newRule) {
         rule.title = newRule.title;
-        rule.symbolizer = newRule.symbolizer;
+        rule.symbolizers = newRule.symbolizers;
         rule.filter = newRule.filter;
         rule.minScaleDenominator = newRule.minScaleDenominator;
         rule.maxScaleDenominator = newRule.maxScaleDenominator;
