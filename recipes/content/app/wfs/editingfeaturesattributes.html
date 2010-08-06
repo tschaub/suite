@@ -4,20 +4,18 @@
         <title>
             GeoExt WFS Editor
         </title>
-        <script type="text/javascript" src="http://extjs.cachefly.net/ext-3.2.1/adapter/ext/ext-base.js">
-        </script>
-        <script type="text/javascript" src="http://extjs.cachefly.net/ext-3.2.1/ext-all.js">
-        </script>
-        <link rel="stylesheet" type="text/css" href="http://extjs.cachefly.net/ext-3.2.1/resources/css/ext-all.css"
-        />
-        <script src="http://dev.openlayers.org/releases/OpenLayers-2.9.1/OpenLayers.js">
-        </script>
-        <link rel="stylesheet" href="../../../resources/app/theme/style.css" type="text/css"
-        />
-        <script type="text/javascript" src="http://api.geoext.org/0.7/script/GeoExt.js">
-        </script>
-        <script type="text/javascript">
-            Ext.BLANK_IMAGE_URL = "http://extjs.cachefly.net/ext-3.2.1/resources/images/default/s.gif";
+		    <script type="text/javascript" src="http://extjs.cachefly.net/ext-3.2.1/adapter/ext/ext-base.js"></script>
+		    <script type="text/javascript" src="http://extjs.cachefly.net/ext-3.2.1/ext-all.js"></script>
+		    <link rel="stylesheet" type="text/css" href="http://extjs.cachefly.net/ext-3.2.1/resources/css/ext-all.css"/>
+		    <link rel="stylesheet" type="text/css" href="http://extjs.cachefly.net/ext-3.2.1/resources/css/xtheme-gray.css" />
+		    <link rel="stylesheet" href="http://dev.openlayers.org/releases/OpenLayers-2.9.1/theme/default/style.css" type="text/css" />
+		    <link rel="stylesheet" href="../../../resources/app/theme/style.css" type="text/css" />
+		    <script src="http://dev.openlayers.org/releases/OpenLayers-2.9.1/OpenLayers.js"></script>
+		    <script src="http://api.geoext.org/0.7/script/GeoExt.js"></script>
+
+		    <script type="text/javascript">
+		      Ext.BLANK_IMAGE_URL = "http://extjs.cachefly.net/ext-3.2.1/resources/images/default/s.gif";
+		      OpenLayers.ImgPath = "http://dev.openlayers.org/releases/OpenLayers-2.9.1/img/";
 
             Ext.onReady(function() {
                 var layer = new OpenLayers.Layer.Vector("vector", {

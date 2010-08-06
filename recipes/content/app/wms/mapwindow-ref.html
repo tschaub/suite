@@ -1,93 +1,15 @@
-<h2>Map Window</h2>
-
-<h3>Minimal HTML Document</h3>
-
-<p>Since the mother of all web browser content is still HTML, every web application needs at least a basic HTML document as container. It does not contain human readable markup, so it has an empty body. But it makes sure that all required script and style resources are loaded. These usually go in the document’s head:</p>
-
-<pre>
-    &lt;script type="text/javascript" src="http://extjs.cachefly.net/ext-3.2.1/adapter/ext/ext-base.js"&gt;&lt;/script&gt;
-    &lt;script type="text/javascript" src="http://extjs.cachefly.net/ext-3.2.1/ext-all.js"&gt;&lt;/script&gt;
-</pre>
-
-<p>Ext JS can be used standalone, or together with JavaScript frameworks like JQuery. Depending on this environment, an appropriate adapter has to be loaded first. We use Ext JS standalone, so we need the ext-base.js adapter. In the second line, we load the main library.</p>
-
-<p>Next, we load the stylesheet required by Ext JS:</p>
-
-<pre>
-    &lt;link rel="stylesheet" type="text/css" href="http://extjs.cachefly.net/ext-3.2.1/resources/css/ext-all.css" /&gt;
-</pre>
-
-<p>This loads all CSS that Ext JS needs to use the default theme. For other or custom themes, additional CSS resources would have to be added.</p>
-
-<p>GeoExt not only relies on Ext JS, but also on OpenLayers. So we also have to load OpenLayers. And finally, we can load GeoExt:</p>
-
-<pre>
-    &lt;script src="http://dev.openlayers.org/releases/OpenLayers-2.9.1/OpenLayers.js"&gt;</script>
-
-    &lt;script type="text/javascript" src="http://api.geoext.org/0.7/script/GeoExt.js"&gt;&lt;/script&gt;
-</pre>
-
-<p><em>Note: When using GeoExt, you also benefit from all the functionality that plain Ext JS and OpenLayers provide. You can add GeoExt to your existing Ext JS and OpenLayers applications without breaking anything.</em></p>
-
-<h3>Application Initialization Code</h3>
-
-<p>Application initialization usually consists of two stages:
-
-<ul><li>initialize the application itself</li>
-<li>initialize the user interface</li></ul>
-
-</p>
-
-<pre>
-    &lt;script type="text/javascript"&gt;
-    Ext.BLANK_IMAGE_URL = "http://extjs.cachefly.net/ext-3.2.1/resources/images/default/s.gif";
-
-    Ext.onReady(function() {
-        new Ext.Window({
-            /* configuration object goes here */
-        }).show();
-    });
-    &lt;/script&gt;
-</pre>
-
-<p>As an example for the former, we just set a local URL for the blank image that Ext JS uses frequently. The latter requires that the DOM (Document Object Model) of our HTML document is accessible, because Ext JS adds content to it dynamically. So we build the user interface inside a function that we pass as argument to the special Ext.onReady() hook, which gets called when the DOM is ready. In our example, the user interface is simple. We just create a new Ext.Window and call its show() method, which will open the window. In a more complex application, we would have multiple components with attached event handlers so they can interact.</p>
-
-<p>The interesting part is the one that is replaced with a /* configuration object goes here */ comment above. In Ext JS, we will find ourselves creating configuration objects instead of writing code for most basic tasks, which usually makes application development easier and faster. This is why configuration objects deserve their own section.</p>
-
-<h3>Configuration Objects</h3>
-
-<p>In Ext JS, all constructors take a single argument, which we will be referring to as "configuration object". Like all JavaScript objects, this configuration object is wrapped in curly braces, and contains key: value pairs. Let’s have a look at the configuration object for our map window:</p>
-
-<pre>
-    {
-        title: "My Map Window",
-        height: 290,
-        width: 528,
-        layout: "fit",
-        items: [{
-            xtype: "gx_mappanel",
-            layers: [new OpenLayers.Layer.WMS(
-                "World",
-                "http://v2.suite.opengeo.org/geoserver/ows?",
-                {layers: "world"}
-            )]
-        }
-    }
-</pre>
-
-<p>We set some properties, like the title, height and width of our window. We also set the layout to "fit", which means that the window will have one item that fills up the entire window space.</p>
-
-<p>Since other layouts can position more than just one item, we use an array (square braces) for a list of the window’s items – in our case just one: the map.</p>
-
-<p>Above this point, we were only talking about HTML, JavaScript, CSS and Ext JS. Now, finally, we configure our GeoExt.MapPanel. To do this, we start a nested object by declaring an xtype of "gx_mappanel".</p>
-
-<p>The MapPanel configuration takes another property: an array of layers. For our simple map window, we just want to show a single WMS layer. As in plain OpenLayers, we do this by instantiating an OpenLayers.Layer.WMS object. If we want our MapPanel to zoom to the first layer’s maximum extent, there is nothing else we need to configure.</p>
-
-<p><em>Note: The following two notations are equivalent:
-
-<ul><li>new GeoExt.MapPanel({layers: [/* ... */]});</li>
-<li>{xtype: "gx_mappanel", layers: [/* ... */]});</ul>
-
-Ext JS keeps a registry of available components, called "xtypes". GeoExt adds its components to this registry. To make them distinguishable from others, their names start with the "gx_" prefix.</p>
-
-<p>Using xtypes is useful when "lazy-loading" configurations. In that case, the configuration has to be JSON compliant, and may only contain numbers, strings and boolean values.
+<html>
+    <head>
+        <title>Documentation</title>
+        <link rel="stylesheet" type="text/css" href="../../../resources/ext/resources/css/ext-all.css" />
+        <link rel="stylesheet" type="text/css" href="../../../resources/ext/resources/css/xtheme-gray.css" />
+        <link rel="stylesheet" href="../../../resources/app/theme/style.css" type="text/css" />
+    </head>
+    <body class="reference-body">
+        <h1>Further Information</h1>
+<div class="description">
+            To learn more about this recipe, see <a href="http://workshops.opengeo.org/geoext/basics/map.html" target="_blank">
+						Creating a Map Window</a> from the OpenGeo <a href="http://workshops.opengeo.org/geoext/index.html"> Developing OGC Services Based Web Applications with GeoExt </a>Workshop.
+        </div>
+    </body>
+</html>

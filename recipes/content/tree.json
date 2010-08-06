@@ -245,19 +245,19 @@
             "leaf": true
         }, {
             "id": "app/wms/gridviewpanel",
-            "text": "Grid View + Panel",
+            "text": "WMS Map and Grid",
             "leaf": true
         }, {
             "id": "app/wms/gridviewpaneltree",
-            "text": "Grid View + Panel + Tree",
+            "text": "Tree Panel",
             "leaf": true
         }, {
             "id": "app/wms/gridviewpaneltreelegend",
-            "text": "Grid View + Panel + Tree + Legend",
+            "text": "Map Legend",
             "leaf": true
         }, {
             "id": "app/wms/gridviewpaneltreelegendcombo",
-            "text": "Grid View + Panel + Tree + Legend + Combo Box",
+            "text": "Scale Store",
             "leaf": true
         }]
     }, { 
@@ -280,10 +280,10 @@
             "leaf": true
         }]
     }, { 
-        "text": "More",
+        "text": "Advanced",
         "children": [{
             "id": "app/more/browsequeryfilter",
-            "text": "Browse + Query + Filter",
+            "text": "Demo Application",
             "leaf": true
         }]
     }]

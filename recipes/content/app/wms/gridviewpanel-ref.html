@@ -1,84 +1,15 @@
-<h2>Creating a Map Panel that We Can Add Layers From the Grid To</h2>
-
-<p>A map panel’s layer store uses the same record type (GeoExt.data.LayerRecord) as our GeoExt.data.WMSCapabilitiesStore. This is by intention, and makes it easy to populate a map panel with layers from a store of WMS Capabilities.</p>
-
-<h3>Using Records from the WMSCapabilitiesStore in a Map</h3>
-
-<p>We will first add the code that creates a map panel to the previous example and modify the application’s layout to accomodate the grid and the map. To get more familiar with the concept of stores in Ext JS and GeoExt, we will then add a button to the grid panel with a handler that copies a layer from the store of WMS Capabilities to the map panel.</p>
-
-<p>Let’s examine the handler function of the “Add to Map” button to get an idea of what is going on when we click it:</p>
-
-<pre>
-    handler: function() {
-        grid.getSelectionModel().each(function(record) {
-            var clone = record.clone();
-            clone.get("layer").mergeNewParams({
-                format: "image/png",
-                transparent: true
-            });
-            mapPanel.layers.add(clone);
-            mapPanel.map.zoomToExtent(
-                OpenLayers.Bounds.fromArray(clone.get("llbbox"))
-            );
-        });
-    }
-</pre>
-
-<p>Obviously, the grid has a selection model that we can access using grid.getSelectionModel(). Since we did not explicitly configure a selection model, our grid automatically instantiated an Ext.grid.RowSelectionModel. This model provides a method called each, which we can use to walk through the selected rows. Conveniently, this function gets called with the record of a selected row as argument.</p>
-
-<p>The first thing we do inside this function is clone the record and assign the layer additional parameters.</p>
-
-<pre>
-    var clone = record.clone();
-    clone.get("layer").mergeNewParams({
-        format: "image/png",
-        transparent: true
-    });
-</p>
-
-<p>Why? In the layer records of the WMSCapabilitiesStore, the OpenLayers.Layer.WMS objects (found in the “layer” field) are configured without an image format, without projection and without styles. This makes sense because the record also contains information about the available formats, projections and styles from the Capabilities document. For our example, we are confident that all our layers come in WGS84 (EPSG.4326) projection by default and have a neat default style, so we do not care about projection and style. We are also confident that the WMS provides the layer in png format, so we set the format without looking in the record’s “formats” field. Finally, we set the transparent: true parameter, so we can stack layers nicely.</p>
-
-<p>We have prepared everything now to finally add the layer to the map:</p>
-
-<pre>
-    mapPanel.layers.add(clone);
-    mapPanel.map.zoomToExtent(
-        OpenLayers.Bounds.fromArray(clone.get("llbbox"))
-    );
-</pre>
-
-<p>To make the layer appear on the map, all we need to do is add the cloned record to the map panel’s layer store. Zooming to the extent of the layer is important for the first layer added, because it is part of the required inatialization sequence of an OpenLayers.Map. For subsequent layers, it is convenient to see the whole layer. The capabilities document provides the extent of the layer, and this information is stored in the record’s “llbox” field.</p>
-
-<h3>Want some WMS GetFeatureInfo with That?</h3>
-
-<p>Wouldn’t it be nice to get a Feature Info when we click on the map? Let’s use an OpenLayers.Control.WMSGetFeatureInfo control with a GeoExt.Popup to do so.</p>
-
-<p>For the popup, we need to include a CSS file in our document’s head, which provides the styles for the popup’s anchor:</p>
-
-<pre>
-    &lt;link rel="stylesheet" type="text/css" href="http://api.geoext.org/0.7/resources/css/geoext-all.css" /&gt;
-</pre>
-
-<p>Now we can create the control. The code below should be added below the map and mapPanel definitions:</p>
-
-<pre>
-    var featureInfo = new OpenLayers.Control.WMSGetFeatureInfo();
-    featureInfo.events.on({
-        getfeatureinfo: function(e) {
-            new GeoExt.Popup({
-                title: "Feature Info",
-                width: 200,
-                height: 150,
-                autoScroll: true,
-                maximizable: true,
-                map: mapPanel.map,
-                lonlat: mapPanel.map.getLonLatFromPixel(e.xy),
-                html: e.text
-            }).show();
-        }
-    });
-    mapPanel.map.addControl(featureInfo);
-    featureInfo.activate();
-</pre>
-
-<p>The only interesting thing here is the handler (featureInfo.events.on({...})). We create a popup at the position that was clicked on the map (mapPanel.map.getLonLatFromPixel(e.xy)). And the markup to display is provided as text property in the event object.</p>
+<html>
+    <head>
+        <title>Documentation</title>
+        <link rel="stylesheet" type="text/css" href="../../../resources/ext/resources/css/ext-all.css" />
+        <link rel="stylesheet" type="text/css" href="../../../resources/ext/resources/css/xtheme-gray.css" />
+        <link rel="stylesheet" href="../../../resources/app/theme/style.css" type="text/css" />
+    </head>
+    <body class="reference-body">
+        <h1>Further Information</h1>
+<div class="description">
+            To learn more about this recipe, see <a href="http://workshops.opengeo.org/geoext/stores/map.html" target="_blank">
+						Creating a Map Panel that We Can Add Layers From the Grid To</a> from the OpenGeo <a href="http://workshops.opengeo.org/geoext/index.html"> Developing OGC Services Based Web Applications with GeoExt </a>Workshop.
+        </div>
+    </body>
+</html>

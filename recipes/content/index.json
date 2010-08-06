@@ -340,38 +340,38 @@
         "sourcepath": "sld/raster/raster_discretecolors.sld"
     }, {
         "id": "app/wms/mapwindow",
-        "title": "Creating a floating map window",
+        "title": "Creating a map window",
         "description": "Map Window",
         "components": ["OpenLayers, GeoExt"],
         "reference": "app/wms/mapwindow-ref"
     }, {
         "id": "app/wms/gridview",
-        "title": "WMS Grid View",
-        "description": "============",
+        "title": "Populate a WMS Grid View",
+        "description": "Basic WMS grid",
         "components": ["OpenLayers, GeoExt"],
         "reference": "app/wms/gridview-ref"
     }, {
         "id": "app/wms/gridviewpanel",
-        "title": "WMS Grid View + Panel",
-        "description": "============",
+        "title": "Add Map Layers from a Grid View",
+        "description": "WMS map and grid",
         "components": ["OpenLayers, GeoExt"],
         "reference": "app/wms/gridviewpanel-ref"
     }, {
         "id": "app/wms/gridviewpaneltree",
-        "title": "WMS Grid View + Panel + Tree",
-        "description": "============",
+        "title": "Use a Tree Panel for Layer Management",
+        "description": "Tree Panel",
         "components": ["OpenLayers, GeoExt"],
         "reference": "app/wms/gridviewpaneltree-ref"
     }, {
         "id": "app/wms/gridviewpaneltreelegend",
-        "title": "WMS Grid View + Panel + Tree + Legend",
-        "description": "============",
+        "title": "Create a map legend",
+        "description": "Map Legend",
         "components": ["OpenLayers, GeoExt"],
         "reference": "app/wms/gridviewpaneltreelegend-ref"
     }, {
         "id": "app/wms/gridviewpaneltreelegendcombo",
-        "title": "WMS Grid View + Panel + Tree + Legend + Combo",
-        "description": "============",
+        "title": "Use a scale store",
+        "description": "Scale Store",
         "components": ["OpenLayers, GeoExt"],
         "reference": "app/wms/gridviewpaneltreelegend-ref"
     }, {
@@ -400,10 +400,10 @@
         "reference": "app/wfs/commitedits-ref"
     }, {
         "id": "app/more/browsequeryfilter",
-        "title": "Browse + Query + Filter",
-        "description": "============",
+        "title": "WFS, DescribeFeatureType, Filters and SLD",
+        "description": "Demo Application",
         "components": ["OpenLayers, GeoExt"],
-        "reference": "app/browserqueryfilter-ref"
+        "reference": "app/more/browsequeryfilter-ref"
     }
           
 ]

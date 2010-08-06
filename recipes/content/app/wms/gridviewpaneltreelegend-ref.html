@@ -1,14 +1,15 @@
-<h2>Adding a Legend Using WMS GetLegendGraphic</h2>
-
-<p>Let’s add another panel to our WMS browser. For a legend view, GeoExt provides the GeoExt.LegendPanel. This panel can use a legend image configured in the record’s styles field, or generate WMS GetLegendGraphic requests.  We have created a legend panel and placed it in the "east" region (i.e. on the right) of our application’s main panel. The only configuration option specific to the legend panel is the layerStore property, which – again – references the layer store of the map panel.</p>
-
-<pre>
-    layerStore: mapPanel.layers
-</pre>
-
-<p>The application’s main panel with its border layout has now four items, each placed according to its region property.</p>
-
-<pre>
-    layout: "border",
-    items: [grid, mapPanel, tree, legend]
-</pre>
+<html>
+    <head>
+        <title>Documentation</title>
+        <link rel="stylesheet" type="text/css" href="../../../resources/ext/resources/css/ext-all.css" />
+        <link rel="stylesheet" type="text/css" href="../../../resources/ext/resources/css/xtheme-gray.css" />
+        <link rel="stylesheet" href="../../../resources/app/theme/style.css" type="text/css" />
+    </head>
+    <body class="reference-body">
+        <h1>Further Information</h1>
+<div class="description">
+            To learn more about this recipe, see <a href="http://workshops.opengeo.org/geoext/stores/legend.html" target="_blank">
+						Adding a Legend Using WMS GetLegendGraphic</a> from the OpenGeo <a href="http://workshops.opengeo.org/geoext/index.html"> Developing OGC Services Based Web Applications with GeoExt </a>Workshop.
+        </div>
+    </body>
+</html>

@@ -1,29 +1,15 @@
-<h2>Creating a Grid View of WMS Capabilities</h2>
-
-<p>The GetCapabilities request is usually the first thing we do when we establish a connection to a remote WMS service. It returns a list of available layers, styles and formats, along with metadata like abstracts and attribution.</p>
-
-<h3>Configuring a Grid View</h3>
-
-<p>The GeoExt.data.WMSCapabilitiesStore uses its reader to create records from a WMS GetCapabilities response. So for most applications, the only property required in its configuration object is the url for the GetCapabilities request.</p>
-
-<pre>
-    store: new GeoExt.data.WMSCapabilitiesStore({
-        url: "http://v2.suite.opengeo.org/geoserver/ows?SERVICE=WMS&REQUEST=GetCapabilities",
-        autoLoad: true
-    }),
-</pre>
-
-<p>This configures the store to use a plain GeoExt.data.WMSCapabilitiesReader, which uses a HTTP GET request to fetch the data. We add the autoLoad: true configuration property to make sure that the request gets sent as soon as the component is ready.</p>
-
-<p>The records (GeoExt.data.LayerRecord) in this store contain several fields. In the grid, we want to display the name, title and abstract fields of each layer. So we have to configure it with the correct column definition:</p>
-
-<pre>
-    columns: [
-        {header: "Name", dataIndex: "name", sortable: true},
-        {header: "Title", dataIndex: "title", sortable: true},
-        {header: "Abstract", dataIndex: "abstract"}
-    ]
-</pre>
-
-<p>The dataIndex has to match the name of a record’s field. So for a grid, we always need to configure a store that provides the records for the rows, and a column model that knows which field of each record belongs to which column.</p>
-
+<html>
+    <head>
+        <title>Documentation</title>
+        <link rel="stylesheet" type="text/css" href="../../../resources/ext/resources/css/ext-all.css" />
+        <link rel="stylesheet" type="text/css" href="../../../resources/ext/resources/css/xtheme-gray.css" />
+        <link rel="stylesheet" href="../../../resources/app/theme/style.css" type="text/css" />
+    </head>
+    <body class="reference-body">
+        <h1>Further Information</h1>
+<div class="description">
+            To learn more about this recipe, see <a href="http://workshops.opengeo.org/geoext/stores/capabilities.html" target="_blank">
+						Creating a Grid View of WMS Capabilities</a> from the OpenGeo <a href="http://workshops.opengeo.org/geoext/index.html"> Developing OGC Services Based Web Applications with GeoExt </a>Workshop.
+        </div>
+    </body>
+</html>
