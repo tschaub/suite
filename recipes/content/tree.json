@@ -272,7 +272,7 @@
             "leaf": true
         }, {
             "id": "app/wfs/editingfeaturesattributes",
-            "text": "Editing Featuers and Attributes",
+            "text": "Editing Features and Attributes",
             "leaf": true
         }, {
             "id": "app/wfs/commitedits",
