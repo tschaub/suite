@@ -25,9 +25,9 @@
 
  <repositories>
   <repository>
-   <id>opengeo</id>
-   <name>OpenGeo Maven Repository</name>
-   <url>http://repo.opengeo.org/</url>
+   <id>opengeosuite</id>
+   <name>OpenGeo Suite Maven Repository</name>
+   <url>http://suite.opengeo.org/maven</url>
    <snapshots>
     <enabled>true</enabled>
    </snapshots>
@@ -56,9 +56,9 @@
 
  <pluginRepositories>
   <pluginRepository>
-    <id>opengeo</id>
-    <name>OpenGeo Maven Repository</name>
-    <url>http://repo.opengeo.org</url>
+    <id>opengeosuite</id>
+    <name>OpenGeo Suite Maven Repository</name>
+    <url>http://suite.opengeo.org/maven</url>
   </pluginRepository>
  </pluginRepositories>
 
