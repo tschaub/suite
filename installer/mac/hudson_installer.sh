@@ -5,12 +5,18 @@
 # .pkg files by Iceberg using the 'freeze' command and finally into the 
 # suite .mpkg file with 'freeze' also.
 
+if [ $# -lt 1 ]; then
+  id=latest
+else
+  id=$1
+fi
+
 dashboard_version=1.0.0
 pgsql_version=8.4
 
-dashboard_url=http://suite.opengeo.org/builds/dashboard-latest-osx.zip
-suite_url=http://suite.opengeo.org/builds/opengeosuite-latest-mac.zip
-ext_url=http://suite.opengeo.org/builds/opengeosuite-latest-ext.zip
+dashboard_url=http://suite.opengeo.org/builds/dashboard-${id}-osx.zip
+suite_url=http://suite.opengeo.org/builds/opengeosuite-${id}-mac.zip
+ext_url=http://suite.opengeo.org/builds/opengeosuite-${id}-ext.zip
 pgsql_url=http://suite.opengeo.org/osxbuilds/postgis-osx.zip
 
 export PATH=$PATH:/usr/local/bin
