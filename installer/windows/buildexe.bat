@@ -1,48 +1,71 @@
 @echo off
-REM job to build .EXE
-REM assumes that
-REM   http://svn.opengeo.org/suite/trunk/installer
-REM has been checked out
-REM Also assumes that it is running inside installer\windows
+:: job to build .EXE
+:: assumes that
+::   http://svn.opengeo.org/suite/trunk/installer
+:: has been checked out
+:: Also assumes that it is running inside installer\windows
 
-REM Start by cleaning up target
+:: Start by cleaning up target
 rd /s /q ..\..\target\ >nul 2>nul
 
-REM Get the maven artifact in place
-@echo Downloading http://suite.opengeo.org/builds/opengeosuite-latest-win.zip ...
-wget http://suite.opengeo.org/builds/opengeosuite-latest-win.zip >nul 2>nul
-mkdir ..\..\target\win 2>nul
-unzip opengeosuite-latest-win.zip -d ..\..\target\win
-del opengeosuite-latest-win.zip
+:: Get repoREPO_PATH and convert slashes to dashes
+for /f "tokens=1,2,3 delims=\/" %%a in ("%repo_path%") do (
+  if not x%%c==x (
+    set repo_path=%%a-%%b-%%c
+  ) else (
+  if not x%%b==x (
+    set repo_path=%%a-%%b
+  ) else (
+    set repo_path=%%a
+    )
+  )
+)
 
-REM Get the dashboard in place
-@echo Downloading http://suite.opengeo.org/builds/dashboard-latest-win32.zip ...
-wget http://suite.opengeo.org/builds/dashboard-latest-win32.zip >nul 2>nul
+:: generate id string
+if %revision%==latest (
+  set id=latest
+) else (
+  set id=%repo_path%-%revision%
+)
+
+set mainzip=opengeosuite-%id%-win.zip
+set dashzip=dashboard-%id%-win32.zip
+
+:: Get the maven artifact in place
+@echo Downloading http://suite.opengeo.org/builds/%mainzip% ...
+wget http://suite.opengeo.org/builds/%mainzip% >nul 2>nul
+mkdir ..\..\target\win 2>nul
+unzip %mainzip% -d ..\..\target\win
+del %mainzip%
+
+:: Get the dashboard in place
+@echo Downloading http://suite.opengeo.org/builds/%dashzip% ...
+wget http://suite.opengeo.org/builds/%dashzip% >nul 2>nul
 rd /s /q ..\..\target\win\dashboard
-unzip dashboard-latest-win32.zip -d ..\..\target\win\
-del dashboard-latest-win32.zip
+unzip %dashzip% -d ..\..\target\win\
+del %dashzip%
 ren "..\..\target\win\OpenGeo Dashboard" dashboard
 
-REM Get today's date
-FOR /F "TOKENS=1* DELIMS= " %%A IN ('DATE/T') DO SET CDATE=%%B
-FOR /F "TOKENS=1,2 eol=/ DELIMS=/ " %%A IN ('DATE/T') DO SET mm=%%B
-FOR /F "TOKENS=1,2 DELIMS=/ eol=/" %%A IN ('echo %CDATE%') DO SET dd=%%B
-FOR /F "TOKENS=2,3 DELIMS=/ " %%A IN ('echo %CDATE%') DO SET yyyy=%%B
-SET todaysdate=%yyyy%-%mm%-%dd%
+:: Get today's date
+for /F "tokens=1* delims= " %%A in ('DATE/T') do set CDATE=%%B
+for /F "tokens=1,2 eol=/ delims=/ " %%A in ('DATE/T') do set mm=%%B
+for /F "tokens=1,2 delims=/ eol=/" %%A in ('echo %CDATE%') do set dd=%%B
+for /F "tokens=2,3 delims=/ " %%A in ('echo %CDATE%') do set yyyy=%%B
+set todaysdate=%yyyy%-%mm%-%dd%
 
-REM Get version number
+:: Get version number
 findstr suite_version ..\..\target\win\version.ini > "%TEMP%\vertemp.txt"
 set /p vertemp=<"%TEMP%\vertemp.txt"
 del "%TEMP%\vertemp.txt"
 for /f "tokens=1,2 delims=/=" %%a in ("%vertemp%") do set trash=%%a&set version=%%b
 
-REM Get revision number
+:: Get revision number
 findstr svn_revision ..\..\target\win\version.ini > "%TEMP%\revtemp.txt"
 set /p revtemp=<"%TEMP%\revtemp.txt"
 del "%TEMP%\revtemp.txt"
 for /f "tokens=1,2 delims=/=" %%a in ("%revtemp%") do set trash=%%a&set revision=%%b
 
-REM Figure out if the version is a snapshot
+:: Figure out if the version is a snapshot
 for /f "tokens=1,2,3 delims=." %%a in ("%version%") do set vermajor=%%a&set verminor=%%b&set verpatch=%%c
 if "%vermajor%"=="" goto Snapshot
 if "%verminor%"=="" goto Snapshot
@@ -54,9 +77,9 @@ set longversion=0.0.0.%revision%
 goto Build
 
 :Build
-REM Now build the EXE
+:: Now build the EXE
 @echo Running NSIS (version %version%, longversion %longversion%) ...
 makensis /DVERSION=%version% /DLONGVERSION=%longversion% OpenGeoInstaller.nsi
 
-REM Clean up
+:: Clean up
 rd /s /q ..\..\target\
