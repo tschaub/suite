@@ -1,4 +1,4 @@
-@echo off
+::@echo off
 :: job to build .EXE
 :: assumes that
 ::   http://svn.opengeo.org/suite/trunk/installer
@@ -8,16 +8,24 @@
 :: Start by cleaning up target
 rd /s /q ..\..\target\ >nul 2>nul
 
-:: Get repoREPO_PATH and convert slashes to dashes
-for /f "tokens=1,2,3 delims=\/" %%a in ("%repo_path%") do (
-  if not x%%c==x (
-    set repo_path=%%a-%%b-%%c
-  ) else (
+::Auto defined variables (for when not building through Hudson)
+if x%repo_path%==x (
+  set repo_path=trunk
+)
+if x%revision%==x (
+  set revision=latest
+)
+
+
+
+:: Get REPO_PATH and convert slashes to dashes
+
+
+for /f "tokens=1,2 delims=\/" %%a in ("%repo_path%") do (
   if not x%%b==x (
-    set repo_path=%%a-%%b
+    set repo-path=%%a-%%b
   ) else (
-    set repo_path=%%a
-    )
+    set repo-path=%%a
   )
 )
 
@@ -25,7 +33,7 @@ for /f "tokens=1,2,3 delims=\/" %%a in ("%repo_path%") do (
 if %revision%==latest (
   set id=latest
 ) else (
-  set id=%repo_path%-%revision%
+  set id=%repo-path%-%revision%
 )
 
 set mainzip=opengeosuite-%id%-win.zip
@@ -60,20 +68,21 @@ del "%TEMP%\vertemp.txt"
 for /f "tokens=1,2 delims=/=" %%a in ("%vertemp%") do set trash=%%a&set version=%%b
 
 :: Get revision number
+:: Note that this must be numeric, so is different from what is passed from Hudson
 findstr svn_revision ..\..\target\win\version.ini > "%TEMP%\revtemp.txt"
 set /p revtemp=<"%TEMP%\revtemp.txt"
 del "%TEMP%\revtemp.txt"
-for /f "tokens=1,2 delims=/=" %%a in ("%revtemp%") do set trash=%%a&set revision=%%b
+for /f "tokens=1,2 delims=/=" %%a in ("%revtemp%") do set trash=%%a&set rev=%%b
 
 :: Figure out if the version is a snapshot
 for /f "tokens=1,2,3 delims=." %%a in ("%version%") do set vermajor=%%a&set verminor=%%b&set verpatch=%%c
 if "%vermajor%"=="" goto Snapshot
 if "%verminor%"=="" goto Snapshot
 if "%verpatch%"=="" goto Snapshot
-set longversion=%version%.%revision%
+set longversion=%version%.%rev%
 goto Build
 :Snapshot
-set longversion=0.0.0.%revision%
+set longversion=0.0.0.%rev%
 goto Build
 
 :Build
