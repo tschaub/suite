@@ -112,7 +112,12 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 if (!previousStarts[this.revision]) {
                     previousStarts[this.revision] = true;
                     this.setPreferences({previousStarts: previousStarts});
-                    startingDialog.body.update("Starting the OpenGeo Suite");
+                    var html = "Starting the OpenGeo Suite";
+                    if (startingDialog.body) {
+                        startingDialog.body.update(html);
+                    } else {
+                        startingDialog.html = html;
+                    }
                 }
                 this.updateOnlineLinks(true);
             }, 
