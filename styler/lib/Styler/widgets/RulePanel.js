@@ -164,7 +164,7 @@ Styler.RulePanel = Ext.extend(Ext.TabPanel, {
         
         this.filterBuilder = new gxp.FilterBuilder({
             allowGroups: this.nestedFilters,
-            filter: this.rule && this.rule.filter,
+            filter: this.rule && this.rule.filter.clone(),
             attributes: this.attributes,
             listeners: {
                 change: function(builder) {
