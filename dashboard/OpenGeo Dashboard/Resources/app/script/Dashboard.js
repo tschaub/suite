@@ -88,7 +88,13 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
 
         this.suite.on({
             starting: function() {
-                startingDialog.show();
+                var previousStarts = this.getPreferences("previousStarts") || {};
+                if (!previousStarts[this.revision]) {
+                    startingDialog.html = 
+                        "Please wait while the OpenGeo Suite starts for the first time.<br>" +
+                        " This process may take up to a few minutes.";
+                }
+                startingDialog.show().center();
             }, 
             startfailure: function(msg) {
                 startingDialog.hide();
@@ -102,6 +108,12 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
             started: function() {
                 this.ok("The OpenGeo Suite is online.");
                 startingDialog.hide();
+                var previousStarts = this.getPreferences("previousStarts") || {};
+                if (!previousStarts[this.revision]) {
+                    previousStarts[this.revision] = true;
+                    this.setPreferences({previousStarts: previousStarts});
+                    startingDialog.body.update("Starting the OpenGeo Suite");
+                }
                 this.updateOnlineLinks(true);
             }, 
             stopping: function() {
