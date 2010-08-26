@@ -120,6 +120,7 @@
            <descriptor>assembly/war-geoeditor.xml</descriptor>
            <descriptor>assembly/war-geowebcache.xml</descriptor>
            <descriptor>assembly/war-geoserver-jboss.xml</descriptor>
+           <descriptor>assembly/war.xml</descriptor>
          </descriptors>
        </configuration>
      </plugin>

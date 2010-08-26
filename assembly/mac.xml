@@ -82,6 +82,9 @@
     <fileSet>
       <directory>recipes</directory>
       <outputDirectory>webapps/recipes</outputDirectory>
+      <excludes>
+        <exclude>target</exclude>
+      </excludes>
     </fileSet>
     <fileSet>
       <directory>apps</directory>
