@@ -154,6 +154,7 @@
       </activation>
      <modules>
        <module>docs</module>
+       <module>recipes</module>
      </modules>
    </profile>
    <profile>
