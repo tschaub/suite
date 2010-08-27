@@ -627,7 +627,7 @@ var Styler = Ext.extend(Ext.util.Observable, {
         var legend = new GeoExt.VectorLegend({
             rules: rules,
             symbolType: type,
-            enableDD: true,
+            enableDD: false,
             style: {padding: "10px"},
             selectOnClick: true,
             currentScaleDenominator: this.map.getScale(),
