@@ -117,10 +117,6 @@ Uninstallation
 
       *The OpenGeo Suite is successfully uninstalled*
 
-Known Issues
-------------
-
-For the current list of known issues, please see http://opengeo.org/products/suite/changelog/
 
 For More Information
 --------------------
