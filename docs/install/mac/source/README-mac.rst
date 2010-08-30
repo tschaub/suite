@@ -90,11 +90,6 @@ To run the uninstaller, navigate to :menuselection:`Applications --> OpenGeo -->
        
      sudo /opt/opengeo/suite/suite-uninstall.sh
 
-Known Issues
-------------
-
-For the current list of known issues, please see http://opengeo.org/products/suite/changelog/
-
 For More Information
 --------------------
 
