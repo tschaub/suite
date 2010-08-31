@@ -28,10 +28,10 @@
       <groupId>org.geoserver.extension</groupId>
       <artifactId>charts</artifactId>
     </dependency>
-    <dependency>
+    <!--dependency>
       <groupId>org.geoserver.extension</groupId>
       <artifactId>control-flow</artifactId>
-    </dependency>
+    </dependency-->
     <dependency>
       <groupId>org.geoserver.web</groupId>
       <artifactId>web-security</artifactId>
