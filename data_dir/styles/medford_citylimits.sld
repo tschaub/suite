@@ -1,53 +1,31 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<StyledLayerDescriptor version="1.0.0" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc"
-  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd">
-  <NamedLayer>
-    <Name>medford:citylimits</Name>
-    <UserStyle>
-      <Title>City Limits Style</Title>
-      <Abstract>Basic polygon fill in gray with opacity.  Border increases with zoom level.</Abstract>
-    
-      <FeatureTypeStyle>
-
-<!--280K-140K--> 
-          <Rule>
-            <Name>citylimits</Name>
-            <Title>City Limits 280K-140K</Title>
-            
-            <MinScaleDenominator> 140000 </MinScaleDenominator>
-            <MaxScaleDenominator> 280000 </MaxScaleDenominator>
-            <PolygonSymbolizer>
-              <Fill>
-               <CssParameter name="fill">#b3b3b3</CssParameter>
-               <CssParameter name="fill-opacity">.45</CssParameter>                 
-              </Fill>
-              <Stroke>
-                <CssParameter name="stroke">#868686</CssParameter>
-                <CssParameter name="stroke-width">.5</CssParameter>
-              </Stroke>
-            </PolygonSymbolizer>
-          </Rule>
-
-<!--< 140-->           
-          <Rule>
-            <Name>citylimits</Name>
-            <Title>City Limits &lt; 140K </Title>
-            
-            <MaxScaleDenominator> 140000 </MaxScaleDenominator>
-            <PolygonSymbolizer>
-              <Fill>
-               <CssParameter name="fill">#b3b3b3</CssParameter>
-               <CssParameter name="fill-opacity">.45</CssParameter>                 
-              </Fill>
-              <Stroke>
-                <CssParameter name="stroke">#868686</CssParameter>
-                <CssParameter name="stroke-width">.75</CssParameter>
-              </Stroke>
-            </PolygonSymbolizer>
-          </Rule>          
-        
-        </FeatureTypeStyle>
-    </UserStyle>
-  </NamedLayer>
-</StyledLayerDescriptor>
+<?xml version="1.0" encoding="UTF-8"?>
+<sld:UserStyle xmlns="http://www.opengis.net/sld" xmlns:sld="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">
+  <sld:Name>medford_citylimits</sld:Name>
+  <sld:Title>City Limits Style</sld:Title>
+  <sld:Abstract>Basic polygon fill in gray with opacity.  Border increases with zoom level.</sld:Abstract>
+  <sld:FeatureTypeStyle>
+    <sld:Name>name</sld:Name>
+    <sld:Rule>
+      <sld:Name>citylimits</sld:Name>
+      <sld:Title>City Limits &lt; 280K </sld:Title>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
+      <sld:PolygonSymbolizer>
+        <sld:Fill>
+          <sld:CssParameter name="fill">#C1C1C1</sld:CssParameter>
+          <sld:CssParameter name="fill-opacity">0.25</sld:CssParameter>
+        </sld:Fill>
+      </sld:PolygonSymbolizer>
+    </sld:Rule>
+    <sld:Rule>
+      <sld:Name>citylimits</sld:Name>
+      <sld:Title>City Limits Border &lt; 70K </sld:Title>
+      <sld:MaxScaleDenominator>70000.0</sld:MaxScaleDenominator>
+      <sld:PolygonSymbolizer>
+        <sld:Stroke>
+          <sld:CssParameter name="stroke">#b3b3b3</sld:CssParameter>
+          <sld:CssParameter name="stroke-width">.75</sld:CssParameter>
+        </sld:Stroke>
+      </sld:PolygonSymbolizer>
+    </sld:Rule>
+  </sld:FeatureTypeStyle>
+</sld:UserStyle>

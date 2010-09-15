@@ -4,7 +4,7 @@
   <sld:Title>Medford, OR - Zoning</sld:Title>
   <sld:Abstract>Zones styled by residential, commercial, industrial, resource, list.</sld:Abstract>
   <sld:FeatureTypeStyle>
-    <sld:Name>Medford Zones</sld:Name>
+    <sld:Name>name</sld:Name>
     <sld:Rule>
       <sld:Name>MFR-30</sld:Name>
       <sld:Title>Residential: Multi-Family 30 Units/Acre</sld:Title>
@@ -14,6 +14,7 @@
           <ogc:Literal>MFR-30</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>140000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#800026</sld:CssParameter>
@@ -30,6 +31,7 @@
           <ogc:Literal>MFR-20</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>140000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#BD0026</sld:CssParameter>
@@ -46,6 +48,7 @@
           <ogc:Literal>MFR-15</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#E31A1C</sld:CssParameter>
@@ -62,6 +65,7 @@
           <ogc:Literal>SFR-10</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#FC4E2A</sld:CssParameter>
@@ -78,6 +82,7 @@
           <ogc:Literal>SFR-6</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#FD8D3C</sld:CssParameter>
@@ -94,6 +99,7 @@
           <ogc:Literal>SFR-4</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#FEB24C</sld:CssParameter>
@@ -110,6 +116,7 @@
           <ogc:Literal>SFR-2</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#FED976</sld:CssParameter>
@@ -126,6 +133,7 @@
           <ogc:Literal>SFR-00</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#FFEDA0</sld:CssParameter>
@@ -142,6 +150,7 @@
           <ogc:Literal>C-H</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#A50F15</sld:CssParameter>
@@ -158,6 +167,7 @@
           <ogc:Literal>C-R</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#DE2D26</sld:CssParameter>
@@ -174,6 +184,7 @@
           <ogc:Literal>C-C</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#FB6A4A</sld:CssParameter>
@@ -190,6 +201,7 @@
           <ogc:Literal>C-N</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#FCAE91</sld:CssParameter>
@@ -206,6 +218,7 @@
           <ogc:Literal>C-S/P</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#FEE5D9</sld:CssParameter>
@@ -222,6 +235,7 @@
           <ogc:Literal>I-H</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#810F7C</sld:CssParameter>
@@ -238,6 +252,7 @@
           <ogc:Literal>I-G</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#8856A7</sld:CssParameter>
@@ -254,6 +269,7 @@
           <ogc:Literal>I-L</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#8C96C6</sld:CssParameter>
@@ -273,6 +289,7 @@
           <ogc:Literal>SR-1</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#A50026</sld:CssParameter>
@@ -289,6 +306,7 @@
           <ogc:Literal>SR-2.5</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#D73027</sld:CssParameter>
@@ -305,6 +323,7 @@
           <ogc:Literal>RR-5</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#F46D43</sld:CssParameter>
@@ -321,6 +340,7 @@
           <ogc:Literal>F-5</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#FDAE61</sld:CssParameter>
@@ -337,6 +357,7 @@
           <ogc:Literal>GC</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#FEE090</sld:CssParameter>
@@ -353,6 +374,7 @@
           <ogc:Literal>NC</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#FFFFBF</sld:CssParameter>
@@ -369,6 +391,7 @@
           <ogc:Literal>EFU</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#E0F3F8</sld:CssParameter>
@@ -385,6 +408,7 @@
           <ogc:Literal>OSR</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#ABD9E9</sld:CssParameter>
@@ -401,6 +425,7 @@
           <ogc:Literal>GI</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#74ADD1</sld:CssParameter>
@@ -417,6 +442,7 @@
           <ogc:Literal>LI</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#4575B4</sld:CssParameter>
@@ -433,6 +459,7 @@
           <ogc:Literal>AD-MU</ogc:Literal>
         </ogc:PropertyIsEqualTo>
       </ogc:Filter>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#313695</sld:CssParameter>

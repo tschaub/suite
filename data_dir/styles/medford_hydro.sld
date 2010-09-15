@@ -1,287 +1,272 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<StyledLayerDescriptor version="1.0.0" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc"
-  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd">
-  <NamedLayer>
-    <Name>medford:hydro</Name>
-    <UserStyle>
-      <Title>Medford, OR - Hydro</Title>
-      <Abstract></Abstract>
-
-      <FeatureTypeStyle>
-<!--280K-140K-->      
-        <Rule>
-          <Name>large-streams-zoom1</Name>
-          <Title>Large Streams 280K-140K</Title>
-          <ogc:Filter>
-            <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
-              <ogc:PropertyName>STREAM</ogc:PropertyName>
-              <ogc:Literal>Bear</ogc:Literal>
-            </ogc:PropertyIsLike>
-          </ogc:Filter>
-
-          <MinScaleDenominator> 140000 </MinScaleDenominator>
-          <MaxScaleDenominator> 280000 </MaxScaleDenominator>   
-          <LineSymbolizer>
-            <Stroke>
-              <CssParameter name="stroke">#0000E2</CssParameter>
-              <CssParameter name="stroke-width">.5</CssParameter>
-              <CssParameter name="stroke-opacity">.45</CssParameter>
-            </Stroke>
-          </LineSymbolizer> 
-        </Rule>
-
-<!--140K-70K--> 
-        <Rule>
-          <Name>large-streams-zoom2</Name>
-          <Title>Large Streams 140K-70K</Title>
-          <ogc:Filter>
-            <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
-              <ogc:PropertyName>STREAM</ogc:PropertyName>
-              <ogc:Literal>Bear</ogc:Literal>
-            </ogc:PropertyIsLike>
-          </ogc:Filter>
-
-          <MinScaleDenominator> 70000 </MinScaleDenominator>
-          <MaxScaleDenominator> 140000 </MaxScaleDenominator>   
-          <LineSymbolizer>
-            <Stroke>
-              <CssParameter name="stroke">#0000E2</CssParameter>
-              <CssParameter name="stroke-width">1</CssParameter>
-              <CssParameter name="stroke-opacity">.45</CssParameter>
-            </Stroke>
-          </LineSymbolizer> 
-        </Rule>
-
-<!--70K-35K--> 
-        <Rule>
-          <Name>large-streams-zoom2</Name>
-          <Title>Large Streams 70K-35K</Title>
-          <ogc:Filter>
-            <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
-              <ogc:PropertyName>STREAM</ogc:PropertyName>
-              <ogc:Literal>Bear</ogc:Literal>
-            </ogc:PropertyIsLike>
-          </ogc:Filter>
-
-          <MinScaleDenominator> 35000 </MinScaleDenominator>
-          <MaxScaleDenominator> 70000 </MaxScaleDenominator>   
-          <LineSymbolizer>
-            <Stroke>
-              <CssParameter name="stroke">#0000E2</CssParameter>
-              <CssParameter name="stroke-width">1.5</CssParameter>
-              <CssParameter name="stroke-opacity">.45</CssParameter>
-            </Stroke>
-          </LineSymbolizer> 
-        </Rule>
-        
-        <Rule>
-          <Name>small-streams-zoom2</Name>
-          <Title>Small Streams 70K-35K</Title>
-          <ogc:Filter>
-            <ogc:Not>
-              <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
-                <ogc:PropertyName>STREAM</ogc:PropertyName>
-                <ogc:Literal>Bear</ogc:Literal>
-              </ogc:PropertyIsLike>
-            </ogc:Not>
-          </ogc:Filter>
-
-          <MinScaleDenominator> 35000 </MinScaleDenominator>
-          <MaxScaleDenominator> 70000 </MaxScaleDenominator>   
-          <LineSymbolizer>
-            <Stroke>
-              <CssParameter name="stroke">#0085e2</CssParameter>
-              <CssParameter name="stroke-width">.5</CssParameter>
-              <CssParameter name="stroke-opacity">.45</CssParameter>
-            </Stroke>
-          </LineSymbolizer> 
-        </Rule>
-        
-<!--35K-17.5K--> 
-        <Rule>
-          <Name>large-streams-zoom3</Name>
-          <Title>Large Streams 35K-17.5K</Title>
-          <ogc:Filter>
-            <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
-              <ogc:PropertyName>STREAM</ogc:PropertyName>
-              <ogc:Literal>Bear</ogc:Literal>
-            </ogc:PropertyIsLike>
-          </ogc:Filter>
-          
-          <MinScaleDenominator>17500</MinScaleDenominator>   
-          <MaxScaleDenominator>35000</MaxScaleDenominator>   
-          <LineSymbolizer>
-            <Stroke>
-              <CssParameter name="stroke">#0000E2</CssParameter>
-              <CssParameter name="stroke-width">2</CssParameter>
-              <CssParameter name="stroke-opacity">.45</CssParameter>
-            </Stroke>
-          </LineSymbolizer> 
-          
-          <TextSymbolizer>
-            <Label>
-              <ogc:PropertyName>STREAM_NAM</ogc:PropertyName>
-            </Label>
-            <Font>
-              <CssParameter name="font-family">SansSerif</CssParameter>
-              <CssParameter name="font-family">Arial</CssParameter>
-              <CssParameter name="font-style">italic</CssParameter>
-              <CssParameter name="font-size">10</CssParameter>
-              <CssParameter name="font-weight">normal</CssParameter>
-              
-            </Font>
-            <LabelPlacement>
-              <LinePlacement>
-                <PerpendicularOffset>1</PerpendicularOffset>
-              </LinePlacement>
-            </LabelPlacement>
-            <Halo>
-              <Radius>
-                <ogc:Literal>2</ogc:Literal>
-              </Radius>
-              <Fill>
-                <CssParameter name="fill">#ffffff</CssParameter>
-                <CssParameter name="fill-opacity">.65</CssParameter>        
-              </Fill>
-            </Halo>
-            
-            <VendorOption name="maxDisplacement">50</VendorOption>
-            <VendorOption name="labelAllGroup">true</VendorOption>
-            <VendorOption name="followLine">true</VendorOption>
-            <VendorOption name="group">true</VendorOption> 
-          </TextSymbolizer>
-        </Rule>        
-       
-        <Rule>
-          <Name>small-streams-zoom2</Name>
-          <Title>Small Streams 35K-17.5K</Title>
-          <ogc:Filter>
-            <ogc:Not>
-              <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
-                <ogc:PropertyName>STREAM</ogc:PropertyName>
-                <ogc:Literal>Bear</ogc:Literal>
-              </ogc:PropertyIsLike>
-            </ogc:Not>
-          </ogc:Filter>
-
-          <MinScaleDenominator> 17500 </MinScaleDenominator>
-          <MaxScaleDenominator> 35000 </MaxScaleDenominator>   
-          <LineSymbolizer>
-            <Stroke>
-              <CssParameter name="stroke">#0085e2</CssParameter>
-              <CssParameter name="stroke-width">1</CssParameter>
-              <CssParameter name="stroke-opacity">.45</CssParameter>
-            </Stroke>
-          </LineSymbolizer> 
-        </Rule>
-<!--17.5K-1K--> 
-        <Rule>
-          <Name>large-streams-zoom3</Name>
-          <Title>Large Streams &lt; 17.5K</Title>
-          <ogc:Filter>
-            <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
-              <ogc:PropertyName>STREAM</ogc:PropertyName>
-              <ogc:Literal>Bear</ogc:Literal>
-            </ogc:PropertyIsLike>
-          </ogc:Filter>
-
-          <MaxScaleDenominator>17500</MaxScaleDenominator>   
-          <LineSymbolizer>
-            <Stroke>
-              <CssParameter name="stroke">#0000E2</CssParameter>
-              <CssParameter name="stroke-width">2.5</CssParameter>
-              <CssParameter name="stroke-opacity">.45</CssParameter>
-            </Stroke>
-          </LineSymbolizer> 
-
-          <TextSymbolizer>
-            <Label>
-              <ogc:PropertyName>STREAM_NAM</ogc:PropertyName>
-            </Label>
-            <Font>
-              <CssParameter name="font-family">SansSerif</CssParameter>
-              <CssParameter name="font-family">Arial</CssParameter>
-              <CssParameter name="font-style">italic</CssParameter>
-              <CssParameter name="font-size">11</CssParameter>
-              <CssParameter name="font-weight">normal</CssParameter>
-            </Font>
-            <LabelPlacement>
-              <LinePlacement>
-                <PerpendicularOffset>1</PerpendicularOffset>
-              </LinePlacement>
-            </LabelPlacement>
-            <Halo>
-              <Radius>
-                <ogc:Literal>2</ogc:Literal>
-              </Radius>
-              <Fill>
-                <CssParameter name="fill">#ffffff</CssParameter>
-                <CssParameter name="fill-opacity">.65</CssParameter>        
-              </Fill>
-            </Halo>
-
-            <VendorOption name="maxDisplacement">50</VendorOption>
-            <VendorOption name="labelAllGroup">true</VendorOption>
-            <VendorOption name="followLine">true</VendorOption>
-            <VendorOption name="group">true</VendorOption> 
-          </TextSymbolizer>
-        </Rule> 
-      
-        <Rule>
-          <Name>small-streams-zoom2</Name>
-          <Title>Small Streams &lt; 17.5K</Title>
-          <ogc:Filter>
-            <ogc:Not>
-              <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
-                <ogc:PropertyName>STREAM</ogc:PropertyName>
-                <ogc:Literal>Bear</ogc:Literal>
-              </ogc:PropertyIsLike>
-            </ogc:Not>
-          </ogc:Filter>
-
-          <MaxScaleDenominator> 17500 </MaxScaleDenominator>   
-          <LineSymbolizer>
-            <Stroke>
-              <CssParameter name="stroke">#0085e2</CssParameter>
-              <CssParameter name="stroke-width">1.5</CssParameter>
-              <CssParameter name="stroke-opacity">.45</CssParameter>
-            </Stroke>
-          </LineSymbolizer>
-          
-          <TextSymbolizer>
-            <Label>
-              <ogc:PropertyName>STREAM_NAM</ogc:PropertyName>
-            </Label>
-            <Font>
-              <CssParameter name="font-family">SansSerif</CssParameter>
-              <CssParameter name="font-family">Arial</CssParameter>
-              <CssParameter name="font-style">italic</CssParameter>
-              <CssParameter name="font-size">10</CssParameter>
-              <CssParameter name="font-weight">normal</CssParameter>
-            </Font>
-            <LabelPlacement>
-              <LinePlacement>
-                <PerpendicularOffset>1</PerpendicularOffset>
-              </LinePlacement>
-            </LabelPlacement>
-            <Halo>
-              <Radius>
-                <ogc:Literal>2</ogc:Literal>
-              </Radius>
-              <Fill>
-                <CssParameter name="fill">#ffffff</CssParameter>
-                <CssParameter name="fill-opacity">.65</CssParameter>        
-              </Fill>
-            </Halo>
-
-            <VendorOption name="maxDisplacement">50</VendorOption>
-            <VendorOption name="labelAllGroup">true</VendorOption>
-            <VendorOption name="followLine">true</VendorOption>
-            <VendorOption name="group">true</VendorOption> 
-          </TextSymbolizer> 
-        </Rule>
-      </FeatureTypeStyle>
-    </UserStyle>
-  </NamedLayer>
-</StyledLayerDescriptor>
+<?xml version="1.0" encoding="UTF-8"?>
+<sld:UserStyle xmlns="http://www.opengis.net/sld" xmlns:sld="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">
+  <sld:Name>medford_hydro</sld:Name>
+  <sld:Title>Medford, OR - Hydro</sld:Title>
+  <sld:FeatureTypeStyle>
+    <sld:Name>name</sld:Name>
+    <sld:Rule>
+      <sld:Name>large-streams-zoom1</sld:Name>
+      <sld:Title>Large Streams 280K-140K</sld:Title>
+      <ogc:Filter>
+        <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
+          <ogc:PropertyName>STREAM</ogc:PropertyName>
+          <ogc:Literal>Bear</ogc:Literal>
+        </ogc:PropertyIsLike>
+      </ogc:Filter>
+      <sld:MinScaleDenominator>140000.0</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
+      <sld:LineSymbolizer>
+        <sld:Stroke>
+          <sld:CssParameter name="stroke">#3182BD</sld:CssParameter>
+        </sld:Stroke>
+      </sld:LineSymbolizer>
+    </sld:Rule>
+    <sld:Rule>
+      <sld:Name>large-streams-zoom2</sld:Name>
+      <sld:Title>Large Streams 140K-70K</sld:Title>
+      <ogc:Filter>
+        <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
+          <ogc:PropertyName>STREAM</ogc:PropertyName>
+          <ogc:Literal>Bear</ogc:Literal>
+        </ogc:PropertyIsLike>
+      </ogc:Filter>
+      <sld:MinScaleDenominator>70000.0</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator>140000.0</sld:MaxScaleDenominator>
+      <sld:LineSymbolizer>
+        <sld:Stroke>
+          <sld:CssParameter name="stroke">#3182BD</sld:CssParameter>
+          <sld:CssParameter name="stroke-width">1.5</sld:CssParameter>
+        </sld:Stroke>
+      </sld:LineSymbolizer>
+    </sld:Rule>
+    <sld:Rule>
+      <sld:Name>large-streams-zoom2</sld:Name>
+      <sld:Title>Large Streams 70K-35K</sld:Title>
+      <ogc:Filter>
+        <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
+          <ogc:PropertyName>STREAM</ogc:PropertyName>
+          <ogc:Literal>Bear</ogc:Literal>
+        </ogc:PropertyIsLike>
+      </ogc:Filter>
+      <sld:MinScaleDenominator>35000.0</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator>70000.0</sld:MaxScaleDenominator>
+      <sld:LineSymbolizer>
+        <sld:Stroke>
+          <sld:CssParameter name="stroke">#3182BD</sld:CssParameter>
+          <sld:CssParameter name="stroke-width">3</sld:CssParameter>
+        </sld:Stroke>
+      </sld:LineSymbolizer>
+    </sld:Rule>
+    <sld:Rule>
+      <sld:Name>small-streams-zoom2</sld:Name>
+      <sld:Title>Small Streams 70K-35K</sld:Title>
+      <ogc:Filter>
+        <ogc:Not>
+          <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
+            <ogc:PropertyName>STREAM</ogc:PropertyName>
+            <ogc:Literal>Bear</ogc:Literal>
+          </ogc:PropertyIsLike>
+        </ogc:Not>
+      </ogc:Filter>
+      <sld:MinScaleDenominator>35000.0</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator>70000.0</sld:MaxScaleDenominator>
+      <sld:LineSymbolizer>
+        <sld:Stroke>
+          <sld:CssParameter name="stroke">#3182BD</sld:CssParameter>
+          <sld:CssParameter name="stroke-width">.5</sld:CssParameter>
+        </sld:Stroke>
+      </sld:LineSymbolizer>
+    </sld:Rule>
+    <sld:Rule>
+      <sld:Name>large-streams-zoom3</sld:Name>
+      <sld:Title>Large Streams 35K-17.5K</sld:Title>
+      <ogc:Filter>
+        <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
+          <ogc:PropertyName>STREAM</ogc:PropertyName>
+          <ogc:Literal>Bear</ogc:Literal>
+        </ogc:PropertyIsLike>
+      </ogc:Filter>
+      <sld:MinScaleDenominator>17500.0</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator>35000.0</sld:MaxScaleDenominator>
+      <sld:LineSymbolizer>
+        <sld:Stroke>
+          <sld:CssParameter name="stroke">#3182BD</sld:CssParameter>
+          <sld:CssParameter name="stroke-width">3</sld:CssParameter>
+        </sld:Stroke>
+      </sld:LineSymbolizer>
+      <sld:TextSymbolizer>
+        <sld:Label>
+          <ogc:PropertyName>STREAM_NAM</ogc:PropertyName>
+        </sld:Label>
+        <sld:Font>
+          <sld:CssParameter name="font-family">Arial</sld:CssParameter>
+          <sld:CssParameter name="font-size">10</sld:CssParameter>
+          <sld:CssParameter name="font-style">italic</sld:CssParameter>
+          <sld:CssParameter name="font-weight">normal</sld:CssParameter>
+        </sld:Font>
+        <sld:LabelPlacement>
+          <sld:PointPlacement>
+            <sld:AnchorPoint>
+              <sld:AnchorPointX>
+                <ogc:Literal>0.0</ogc:Literal>
+              </sld:AnchorPointX>
+              <sld:AnchorPointY>
+                <ogc:Literal>0.5</ogc:Literal>
+              </sld:AnchorPointY>
+            </sld:AnchorPoint>
+            <sld:Rotation>
+              <ogc:Literal>0</ogc:Literal>
+            </sld:Rotation>
+          </sld:PointPlacement>
+        </sld:LabelPlacement>
+        <sld:Halo>
+          <sld:Radius>
+            <ogc:Literal>2</ogc:Literal>
+          </sld:Radius>
+          <sld:Fill>
+            <sld:CssParameter name="fill">#ffffff</sld:CssParameter>
+            <sld:CssParameter name="fill-opacity">.65</sld:CssParameter>
+          </sld:Fill>
+        </sld:Halo>
+        <sld:VendorOption name="labelAllGroup">true</sld:VendorOption>
+        <sld:VendorOption name="followLine">true</sld:VendorOption>
+        <sld:VendorOption name="group">true</sld:VendorOption>
+        <sld:VendorOption name="maxDisplacement">50</sld:VendorOption>
+      </sld:TextSymbolizer>
+    </sld:Rule>
+    <sld:Rule>
+      <sld:Name>small-streams-zoom2</sld:Name>
+      <sld:Title>Small Streams 35K-17.5K</sld:Title>
+      <ogc:Filter>
+        <ogc:Not>
+          <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
+            <ogc:PropertyName>STREAM</ogc:PropertyName>
+            <ogc:Literal>Bear</ogc:Literal>
+          </ogc:PropertyIsLike>
+        </ogc:Not>
+      </ogc:Filter>
+      <sld:MinScaleDenominator>17500.0</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator>35000.0</sld:MaxScaleDenominator>
+      <sld:LineSymbolizer>
+        <sld:Stroke>
+          <sld:CssParameter name="stroke">#3182BD</sld:CssParameter>
+          <sld:CssParameter name="stroke-width">1.5</sld:CssParameter>
+        </sld:Stroke>
+      </sld:LineSymbolizer>
+    </sld:Rule>
+    <sld:Rule>
+      <sld:Name>large-streams-zoom3</sld:Name>
+      <sld:Title>Large Streams &lt; 17.5K</sld:Title>
+      <ogc:Filter>
+        <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
+          <ogc:PropertyName>STREAM</ogc:PropertyName>
+          <ogc:Literal>Bear</ogc:Literal>
+        </ogc:PropertyIsLike>
+      </ogc:Filter>
+      <sld:MaxScaleDenominator>17500.0</sld:MaxScaleDenominator>
+      <sld:LineSymbolizer>
+        <sld:Stroke>
+          <sld:CssParameter name="stroke">#3182BD</sld:CssParameter>
+          <sld:CssParameter name="stroke-width">4</sld:CssParameter>
+        </sld:Stroke>
+      </sld:LineSymbolizer>
+      <sld:TextSymbolizer>
+        <sld:Label>
+          <ogc:PropertyName>STREAM_NAM</ogc:PropertyName>
+        </sld:Label>
+        <sld:Font>
+          <sld:CssParameter name="font-family">Arial</sld:CssParameter>
+          <sld:CssParameter name="font-size">11</sld:CssParameter>
+          <sld:CssParameter name="font-style">italic</sld:CssParameter>
+          <sld:CssParameter name="font-weight">normal</sld:CssParameter>
+        </sld:Font>
+        <sld:LabelPlacement>
+          <sld:PointPlacement>
+            <sld:AnchorPoint>
+              <sld:AnchorPointX>
+                <ogc:Literal>0.0</ogc:Literal>
+              </sld:AnchorPointX>
+              <sld:AnchorPointY>
+                <ogc:Literal>0.5</ogc:Literal>
+              </sld:AnchorPointY>
+            </sld:AnchorPoint>
+            <sld:Rotation>
+              <ogc:Literal>0</ogc:Literal>
+            </sld:Rotation>
+          </sld:PointPlacement>
+        </sld:LabelPlacement>
+        <sld:Halo>
+          <sld:Radius>
+            <ogc:Literal>2</ogc:Literal>
+          </sld:Radius>
+          <sld:Fill>
+            <sld:CssParameter name="fill">#ffffff</sld:CssParameter>
+            <sld:CssParameter name="fill-opacity">.65</sld:CssParameter>
+          </sld:Fill>
+        </sld:Halo>
+        <sld:VendorOption name="labelAllGroup">true</sld:VendorOption>
+        <sld:VendorOption name="followLine">true</sld:VendorOption>
+        <sld:VendorOption name="group">true</sld:VendorOption>
+        <sld:VendorOption name="maxDisplacement">50</sld:VendorOption>
+      </sld:TextSymbolizer>
+    </sld:Rule>
+    <sld:Rule>
+      <sld:Name>small-streams-zoom2</sld:Name>
+      <sld:Title>Small Streams &lt; 17.5K</sld:Title>
+      <ogc:Filter>
+        <ogc:Not>
+          <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
+            <ogc:PropertyName>STREAM</ogc:PropertyName>
+            <ogc:Literal>Bear</ogc:Literal>
+          </ogc:PropertyIsLike>
+        </ogc:Not>
+      </ogc:Filter>
+      <sld:MaxScaleDenominator>17500.0</sld:MaxScaleDenominator>
+      <sld:LineSymbolizer>
+        <sld:Stroke>
+          <sld:CssParameter name="stroke">#3182BD</sld:CssParameter>
+          <sld:CssParameter name="stroke-width">2.5</sld:CssParameter>
+        </sld:Stroke>
+      </sld:LineSymbolizer>
+      <sld:TextSymbolizer>
+        <sld:Label>
+          <ogc:PropertyName>STREAM_NAM</ogc:PropertyName>
+        </sld:Label>
+        <sld:Font>
+          <sld:CssParameter name="font-family">Arial</sld:CssParameter>
+          <sld:CssParameter name="font-size">10</sld:CssParameter>
+          <sld:CssParameter name="font-style">italic</sld:CssParameter>
+          <sld:CssParameter name="font-weight">normal</sld:CssParameter>
+        </sld:Font>
+        <sld:LabelPlacement>
+          <sld:PointPlacement>
+            <sld:AnchorPoint>
+              <sld:AnchorPointX>
+                <ogc:Literal>0.0</ogc:Literal>
+              </sld:AnchorPointX>
+              <sld:AnchorPointY>
+                <ogc:Literal>0.5</ogc:Literal>
+              </sld:AnchorPointY>
+            </sld:AnchorPoint>
+            <sld:Rotation>
+              <ogc:Literal>0</ogc:Literal>
+            </sld:Rotation>
+          </sld:PointPlacement>
+        </sld:LabelPlacement>
+        <sld:Halo>
+          <sld:Radius>
+            <ogc:Literal>2</ogc:Literal>
+          </sld:Radius>
+          <sld:Fill>
+            <sld:CssParameter name="fill">#ffffff</sld:CssParameter>
+            <sld:CssParameter name="fill-opacity">.65</sld:CssParameter>
+          </sld:Fill>
+        </sld:Halo>
+        <sld:VendorOption name="labelAllGroup">true</sld:VendorOption>
+        <sld:VendorOption name="followLine">true</sld:VendorOption>
+        <sld:VendorOption name="group">true</sld:VendorOption>
+        <sld:VendorOption name="maxDisplacement">50</sld:VendorOption>
+      </sld:TextSymbolizer>
+    </sld:Rule>
+  </sld:FeatureTypeStyle>
+</sld:UserStyle>
