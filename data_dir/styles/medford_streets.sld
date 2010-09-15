@@ -279,7 +279,7 @@
               <ogc:PropertyName>namelow</ogc:PropertyName>
             </Label>            
             <Font>
-              <CssParameter name="font-family">Sans-Serif</CssParameter>
+              <CssParameter name="font-family">SansSerif</CssParameter>
               <CssParameter name="font-family">Arial</CssParameter>
               <CssParameter name="font-style">Normal</CssParameter>
               <CssParameter name="font-size">10</CssParameter>
@@ -396,7 +396,7 @@
               <ogc:PropertyName>namelow</ogc:PropertyName>
             </Label>
             <Font>
-              <CssParameter name="font-family">Sans-Serif</CssParameter>
+              <CssParameter name="font-family">SansSerif</CssParameter>
               <CssParameter name="font-family">Arial</CssParameter>
               <CssParameter name="font-style">normal</CssParameter>
               <CssParameter name="font-size">10</CssParameter>
@@ -448,7 +448,7 @@
               <ogc:PropertyName>namelow</ogc:PropertyName>
             </Label>
             <Font>
-              <CssParameter name="font-family">Sans-Serif</CssParameter>
+              <CssParameter name="font-family">SansSerif</CssParameter>
               <CssParameter name="font-family">Arial</CssParameter>
               <CssParameter name="font-style">normal</CssParameter>
               <CssParameter name="font-size">11</CssParameter>

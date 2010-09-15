@@ -124,7 +124,7 @@
               <ogc:PropertyName>STREAM_NAM</ogc:PropertyName>
             </Label>
             <Font>
-              <CssParameter name="font-family">Sans-Serif</CssParameter>
+              <CssParameter name="font-family">SansSerif</CssParameter>
               <CssParameter name="font-family">Arial</CssParameter>
               <CssParameter name="font-style">italic</CssParameter>
               <CssParameter name="font-size">10</CssParameter>
@@ -178,7 +178,7 @@
 <!--17.5K-1K--> 
         <Rule>
           <Name>large-streams-zoom3</Name>
-          <Title>Large Streams 17.5K-1K</Title>
+          <Title>Large Streams &lt; 17.5K</Title>
           <ogc:Filter>
             <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
               <ogc:PropertyName>STREAM</ogc:PropertyName>
@@ -186,7 +186,7 @@
             </ogc:PropertyIsLike>
           </ogc:Filter>
 
-          <MaxScaleDenominator>35000</MaxScaleDenominator>   
+          <MaxScaleDenominator>17500</MaxScaleDenominator>   
           <LineSymbolizer>
             <Stroke>
               <CssParameter name="stroke">#0000E2</CssParameter>
@@ -200,7 +200,7 @@
               <ogc:PropertyName>STREAM_NAM</ogc:PropertyName>
             </Label>
             <Font>
-              <CssParameter name="font-family">Sans-Serif</CssParameter>
+              <CssParameter name="font-family">SansSerif</CssParameter>
               <CssParameter name="font-family">Arial</CssParameter>
               <CssParameter name="font-style">italic</CssParameter>
               <CssParameter name="font-size">11</CssParameter>
@@ -230,7 +230,7 @@
       
         <Rule>
           <Name>small-streams-zoom2</Name>
-          <Title>Small Streams 17.5K-1K</Title>
+          <Title>Small Streams &lt; 17.5K</Title>
           <ogc:Filter>
             <ogc:Not>
               <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
@@ -240,7 +240,7 @@
             </ogc:Not>
           </ogc:Filter>
 
-          <MaxScaleDenominator> 35000 </MaxScaleDenominator>   
+          <MaxScaleDenominator> 17500 </MaxScaleDenominator>   
           <LineSymbolizer>
             <Stroke>
               <CssParameter name="stroke">#0085e2</CssParameter>
@@ -254,7 +254,7 @@
               <ogc:PropertyName>STREAM_NAM</ogc:PropertyName>
             </Label>
             <Font>
-              <CssParameter name="font-family">Sans-Serif</CssParameter>
+              <CssParameter name="font-family">SansSerif</CssParameter>
               <CssParameter name="font-family">Arial</CssParameter>
               <CssParameter name="font-style">italic</CssParameter>
               <CssParameter name="font-size">10</CssParameter>
