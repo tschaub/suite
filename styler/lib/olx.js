@@ -17,10 +17,24 @@ OpenLayers.Format.SLD.v1.prototype.writers.sld["VendorOption"] = function(option
     });
 };
 (function() {
-    // modify symbolizer writers to include any VendorOption elements
     var writers = OpenLayers.Format.SLD.v1.prototype.writers.sld;
+    var original;
+
+    // modify TextSymbolizer writer to include Graphic element (GeoTools extension to SLD)
+    original = writers.TextSymbolizer;
+    writers.TextSymbolizer = (function(original) {
+        return function(symbolizer) {
+            var node = original.apply(this, arguments);
+            if (symbolizer.externalGraphic || symbolizer.graphicName) {
+                this.writeNode("Graphic", symbolizer, node);
+            }
+            return node;
+        };
+    })(original);
+
+    // modify symbolizer writers to include any VendorOption elements
     var modify = ["PointSymbolizer", "LineSymbolizer", "PolygonSymbolizer", "TextSymbolizer"];
-    var original, name;
+    var name;
     for (var i=0, ii=modify.length; i<ii; ++i) {
         name = modify[i];
         original = writers[name];
@@ -37,4 +51,6 @@ OpenLayers.Format.SLD.v1.prototype.writers.sld["VendorOption"] = function(option
             }
         })(original);
     }
+    
+    
 })();
