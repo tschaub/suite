@@ -1,6 +1,6 @@
 // extensions or customizations to OpenLayers
 
-// read/write GeoServer custom VendorOption elements
+// read/write GeoTools custom VendorOption elements
 OpenLayers.Format.SLD.v1.prototype.readers.sld["VendorOption"] = function(node, obj) {
     if (!obj.vendorOptions) {
         obj.vendorOptions = [];
@@ -16,11 +16,27 @@ OpenLayers.Format.SLD.v1.prototype.writers.sld["VendorOption"] = function(option
         value: option.value
     });
 };
+
+// read GeoTools custom Priority element in TextSymbolizer
+OpenLayers.Format.SLD.v1.prototype.readers.sld["Priority"] = function(node, obj) {
+    obj.priority = this.readOgcExpression(node);
+};
+OpenLayers.Format.SLD.v1.prototype.writers.sld["Priority"] = function(priority) {
+    var node = this.createElementNSPlus("sld:Priority");
+    this.writeNode("ogc:Literal", priority, node);
+    return node;
+};
+
+
 (function() {
+    
+    // extend OL SLD parser to accommodate GeoTools extensions to SLD
+    // http://svn.osgeo.org/geotools/branches/2.6.x/modules/extension/xsd/xsd-sld/src/main/resources/org/geotools/sld/bindings/StyledLayerDescriptor.xsd
+
     var writers = OpenLayers.Format.SLD.v1.prototype.writers.sld;
     var original;
 
-    // modify TextSymbolizer writer to include Graphic element (GeoTools extension to SLD)
+    // modify TextSymbolizer writer to include Graphic and Priority elements
     original = writers.TextSymbolizer;
     writers.TextSymbolizer = (function(original) {
         return function(symbolizer) {
@@ -28,9 +44,13 @@ OpenLayers.Format.SLD.v1.prototype.writers.sld["VendorOption"] = function(option
             if (symbolizer.externalGraphic || symbolizer.graphicName) {
                 this.writeNode("Graphic", symbolizer, node);
             }
+            if ("priority" in symbolizer) {
+                this.writeNode("Priority", symbolizer.priority, node);
+            }
             return node;
         };
     })(original);
+    
 
     // modify symbolizer writers to include any VendorOption elements
     var modify = ["PointSymbolizer", "LineSymbolizer", "PolygonSymbolizer", "TextSymbolizer"];
@@ -51,6 +71,5 @@ OpenLayers.Format.SLD.v1.prototype.writers.sld["VendorOption"] = function(option
             }
         })(original);
     }
-    
-    
+
 })();
