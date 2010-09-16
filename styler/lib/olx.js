@@ -1,5 +1,19 @@
 // extensions or customizations to OpenLayers
 
+// set SLD defaults for symbolizer
+OpenLayers.Renderer.defaultSymbolizer = {
+    fillColor: "#808080",
+    fillOpacity: 1,
+    strokeColor: "#000000",
+    strokeOpacity: 1,
+    strokeWidth: 1,
+    strokeDashstyle: "solid",
+    pointRadius: 3,
+    graphicName: "square",
+    haloColor: "#FFFFFF",
+    fontColor: "#000000"
+};
+
 // read/write GeoTools custom VendorOption elements
 OpenLayers.Format.SLD.v1.prototype.readers.sld["VendorOption"] = function(node, obj) {
     if (!obj.vendorOptions) {
