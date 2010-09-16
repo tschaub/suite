@@ -3,10 +3,8 @@
  *
  * @include Styler/dispatch.js
  * @include Styler/ColorManager.js
- * @include Styler/widgets/RulePanel.js
  * @include Styler/SchemaManager.js
  * @include Styler/SLDManager.js
- * @include Styler/Util.js
  */
 
 /**
@@ -844,7 +842,6 @@ var Styler = Ext.extend(Ext.util.Observable, {
                 autoScroll: true,
                 rule: newRule,
                 fonts: this.fonts,
-                symbolType: Styler.Util.getSymbolTypeFromRule(rule),
                 nestedFilters: false,
                 scaleLevels: this.map.baseLayer.numZoomLevels,
                 minScaleDenominatorLimit: OpenLayers.Util.getScaleFromResolution(
