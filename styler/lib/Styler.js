@@ -841,6 +841,7 @@ var Styler = Ext.extend(Ext.util.Observable, {
                 autoHeight: false,
                 autoScroll: true,
                 rule: newRule,
+                symbolType: symbolType, // TODO: decide whether we want to guess this from the rule
                 fonts: this.fonts,
                 nestedFilters: false,
                 scaleLevels: this.map.baseLayer.numZoomLevels,
