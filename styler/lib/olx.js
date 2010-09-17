@@ -10,8 +10,11 @@ OpenLayers.Renderer.defaultSymbolizer = {
     strokeDashstyle: "solid",
     pointRadius: 3,
     graphicName: "square",
+    fontSize: 10,
+    fontColor: "#000000",
     haloColor: "#FFFFFF",
-    fontColor: "#000000"
+    haloOpacity: 1,
+    haloRadius: 1
 };
 
 // read/write GeoTools custom VendorOption elements
