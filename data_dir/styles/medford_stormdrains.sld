@@ -10,8 +10,7 @@
       <sld:MaxScaleDenominator>9000.0</sld:MaxScaleDenominator>
       <sld:LineSymbolizer>
         <sld:Stroke>
-          <sld:CssParameter name="stroke">#41B6C4</sld:CssParameter>
-          <sld:CssParameter name="stroke-width">3</sld:CssParameter>
+          <sld:CssParameter name="stroke">#081D58</sld:CssParameter>
         </sld:Stroke>
       </sld:LineSymbolizer>
     </sld:Rule>
@@ -20,8 +19,8 @@
       <sld:MaxScaleDenominator>4500.0</sld:MaxScaleDenominator>
       <sld:LineSymbolizer>
         <sld:Stroke>
-          <sld:CssParameter name="stroke">#41B6C4</sld:CssParameter>
-          <sld:CssParameter name="stroke-width">4</sld:CssParameter>
+          <sld:CssParameter name="stroke">#081D58</sld:CssParameter>
+          <sld:CssParameter name="stroke-width">2</sld:CssParameter>
         </sld:Stroke>
       </sld:LineSymbolizer>
     </sld:Rule>
