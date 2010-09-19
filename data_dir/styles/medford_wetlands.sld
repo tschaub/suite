@@ -5,8 +5,8 @@
   <sld:FeatureTypeStyle>
     <sld:Name>name</sld:Name>
     <sld:Rule>
-      <sld:Name>Large 140K-70K</sld:Name>
-      <sld:Title>Large Wetlands 140K-70K</sld:Title>
+      <sld:Name>Large 280K-70K</sld:Name>
+      <sld:Title>Large Wetlands 280K-70K</sld:Title>
       <ogc:Filter>
         <ogc:PropertyIsGreaterThanOrEqualTo>
           <ogc:PropertyName>acres</ogc:PropertyName>
@@ -14,7 +14,7 @@
         </ogc:PropertyIsGreaterThanOrEqualTo>
       </ogc:Filter>
       <sld:MinScaleDenominator>70000.0</sld:MinScaleDenominator>
-      <sld:MaxScaleDenominator>140000.0</sld:MaxScaleDenominator>
+      <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
           <sld:CssParameter name="fill">#3182BD</sld:CssParameter>

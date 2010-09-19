@@ -178,7 +178,7 @@
           <sld:CssParameter name="font-family">Arial</sld:CssParameter>
           <sld:CssParameter name="font-size">11</sld:CssParameter>
           <sld:CssParameter name="font-style">italic</sld:CssParameter>
-          <sld:CssParameter name="font-weight">normal</sld:CssParameter>
+          <sld:CssParameter name="font-weight">bold</sld:CssParameter>
         </sld:Font>
         <sld:LabelPlacement>
           <sld:PointPlacement>
@@ -200,7 +200,7 @@
             <ogc:Literal>2</ogc:Literal>
           </sld:Radius>
           <sld:Fill>
-            <sld:CssParameter name="fill">#ffffff</sld:CssParameter>
+            <sld:CssParameter name="fill">#FFFFFF</sld:CssParameter>
             <sld:CssParameter name="fill-opacity">.65</sld:CssParameter>
           </sld:Fill>
         </sld:Halo>

@@ -80,11 +80,12 @@
             </Stroke>
           </LineSymbolizer>
         </Rule>
-        <!--< 18K-->
+        <!--18K-9K-->
         <Rule>
           <Name>Streets</Name>
-          <Title>Streets &lt; 18K</Title>
+          <Title>Streets 18K-9K</Title>
           <ElseFilter/>
+          <MinScaleDenominator> 9000 </MinScaleDenominator>
           <MaxScaleDenominator> 18000 </MaxScaleDenominator>
           <LineSymbolizer>
             <Stroke>
@@ -99,7 +100,50 @@
             <Font>
               <CssParameter name="font-family">Arial</CssParameter>
               <CssParameter name="font-family">SansSerif</CssParameter>
-              <CssParameter name="font-size">6</CssParameter>
+              <CssParameter name="font-size">10</CssParameter>
+            </Font>
+						<LabelPlacement>
+		          <LinePlacement>
+		            <PerpendicularOffset>
+		              <ogc:Literal>0.5</ogc:Literal>
+		            </PerpendicularOffset>
+		          </LinePlacement>
+		        </LabelPlacement>
+            <Halo>
+              <Radius>
+                <ogc:Literal>1</ogc:Literal>
+              </Radius>
+              <Fill>
+                <CssParameter name="fill">#ffffff</CssParameter>
+                <CssParameter name="fill-opacity">.5</CssParameter>
+              </Fill>
+            </Halo>
+            <VendorOption name="maxDisplacement">50</VendorOption>
+            <VendorOption name="labelAllGroup">true</VendorOption>
+            <VendorOption name="followLine">true</VendorOption>
+            <VendorOption name="group">true</VendorOption>
+          </TextSymbolizer>
+        </Rule>
+				<!--< 9K-->
+				<Rule>
+          <Name>Streets</Name>
+          <Title>Streets &lt; 9K</Title>
+          <ElseFilter/>
+          <MaxScaleDenominator> 9000 </MaxScaleDenominator>
+          <LineSymbolizer>
+            <Stroke>
+              <CssParameter name="stroke">#a5a5a5</CssParameter>
+              <CssParameter name="width">4</CssParameter>
+            </Stroke>
+          </LineSymbolizer>
+          <TextSymbolizer>
+            <Label>
+              <ogc:PropertyName>namelow</ogc:PropertyName>
+            </Label>
+            <Font>
+              <CssParameter name="font-family">Arial</CssParameter>
+              <CssParameter name="font-family">SansSerif</CssParameter>
+              <CssParameter name="font-size">11</CssParameter>
             </Font>
 						<LabelPlacement>
 		          <LinePlacement>
@@ -205,7 +249,7 @@
 		        </Label>
 		        <Font>
 		          <CssParameter name="font-family">Arial</CssParameter>
-		          <CssParameter name="font-size">8</CssParameter>
+		          <CssParameter name="font-size">10</CssParameter>
 		          <CssParameter name="font-weight">bold</CssParameter>
 		        </Font>
             <LabelPlacement>
@@ -255,7 +299,7 @@
             <Font>
               <CssParameter name="font-family">Arial</CssParameter>
               <CssParameter name="font-family">SansSerif</CssParameter>
-              <CssParameter name="font-size">10</CssParameter>
+              <CssParameter name="font-size">12</CssParameter>
 		          <CssParameter name="font-weight">bold</CssParameter>
             </Font>
             <LabelPlacement>
