@@ -21,6 +21,12 @@
       <artifactId>web-app</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.geoserver.web</groupId>
+      <artifactId>web-security</artifactId>
+    </dependency>
+
+    <!-- extension modules -->
+    <dependency>
       <groupId>org.geoserver.extension</groupId>
       <artifactId>restconfig</artifactId>
     </dependency>
@@ -32,10 +38,6 @@
       <groupId>org.geoserver.extension</groupId>
       <artifactId>control-flow</artifactId>
     </dependency-->
-    <dependency>
-      <groupId>org.geoserver.web</groupId>
-      <artifactId>web-security</artifactId>
-    </dependency>
     <dependency>
       <groupId>org.geoserver.community</groupId>
       <artifactId>proxy</artifactId>
@@ -49,6 +51,10 @@
            <artifactId>jts</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.geotools</groupId>
+      <artifactId>gt-imageio-ext-gdal</artifactId>
     </dependency>
     
     <!-- opengeo specific stuff -->
