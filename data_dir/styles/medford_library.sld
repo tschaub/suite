@@ -1,99 +1,59 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<StyledLayerDescriptor version="1.0.0" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc"
-  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd">
-  <NamedLayer>
-    <Name>medford:library</Name>
-    <UserStyle>
-      <Title>Medford, OR - Library</Title>
-      <Abstract>Point style with external graphic for Medford city libraries</Abstract>
-      
-      <FeatureTypeStyle>
-<!--140K-70K-->
-        <Rule>
-          <Name>Library</Name>
-          <Title>Library 140K-70K</Title>
-          
-          <MinScaleDenominator> 70000 </MinScaleDenominator>
-          <MaxScaleDenominator> 140000 </MaxScaleDenominator>
-      
-          <PointSymbolizer>
-            <Graphic>
-              <ExternalGraphic>
-                <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                  xlink:href="library10.png"/>
-                <Format>image/png</Format>
-              </ExternalGraphic>
-              <Mark/>
-              <Size>10</Size>
-            </Graphic>
-          </PointSymbolizer>
-        </Rule>   
-        
- <!--70-35K-->
-        <Rule>
-         <Name>Library</Name>
-         <Title>Library 70K-25K</Title>
-   
-         <MinScaleDenominator> 35000 </MinScaleDenominator>
-         <MaxScaleDenominator> 70000 </MaxScaleDenominator>
-
-         <PointSymbolizer>
-            <Graphic>
-              <ExternalGraphic>
-                <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                 xlink:href="library13.png"/>
-                <Format>image/png</Format>
-              </ExternalGraphic>
-              <Mark/>
-              <Size>13</Size>
-            </Graphic>
-          </PointSymbolizer>
-        </Rule>          
-            
-<!--35K-17.5-->
-        <Rule>
-          <Name>Library</Name>
-          <Title>Library 35K-17.5</Title>
-
-          <MinScaleDenominator> 17500 </MinScaleDenominator>
-          <MaxScaleDenominator> 35000 </MaxScaleDenominator>
-
-          <PointSymbolizer>
-            <Graphic>
-              <ExternalGraphic>
-                <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                xlink:href="library16.png"/>
-                <Format>image/png</Format>
-              </ExternalGraphic>
-              <Mark/>
-              <Size>16</Size>
-            </Graphic>
-          </PointSymbolizer>
-        </Rule> 
-
-<!--< 17.5-->
-        <Rule>
-          <Name>library</Name>
-          <Title>library &lt; 17.5</Title>
-
-          <MaxScaleDenominator> 17500 </MaxScaleDenominator>
-
-          <PointSymbolizer>
-            <Graphic>
-              <ExternalGraphic>
-                <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" 
-                  xlink:href="library20.png"/>
-                <Format>image/png</Format>
-              </ExternalGraphic>
-              <Mark/>
-              <Size>20</Size>
-            </Graphic>
-          </PointSymbolizer>
-        </Rule>
-         
-      </FeatureTypeStyle>
-     
-    </UserStyle>
-  </NamedLayer>
-</StyledLayerDescriptor>
+<?xml version="1.0" encoding="UTF-8"?>
+<sld:UserStyle xmlns="http://www.opengis.net/sld" xmlns:sld="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">
+  <sld:Name>medford_library</sld:Name>
+  <sld:Title>Medford, OR - Library</sld:Title>
+  <sld:Abstract>Point style with external graphic for Medford city libraries</sld:Abstract>
+  <sld:FeatureTypeStyle>
+    <sld:Name>name</sld:Name>
+    <sld:Rule>
+      <sld:Name>Library</sld:Name>
+      <sld:Title>Library 70K-25K</sld:Title>
+      <sld:MinScaleDenominator>35000.0</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator>70000.0</sld:MaxScaleDenominator>
+      <sld:PointSymbolizer>
+        <sld:Graphic>
+          <sld:ExternalGraphic>
+            <sld:OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="library13.png"/>
+            <sld:Format>image/png</sld:Format>
+          </sld:ExternalGraphic>
+          <sld:Size>
+            <ogc:Literal>10</ogc:Literal>
+          </sld:Size>
+        </sld:Graphic>
+      </sld:PointSymbolizer>
+    </sld:Rule>
+    <sld:Rule>
+      <sld:Name>Library</sld:Name>
+      <sld:Title>Library 35K-17.5</sld:Title>
+      <sld:MinScaleDenominator>17500.0</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator>35000.0</sld:MaxScaleDenominator>
+      <sld:PointSymbolizer>
+        <sld:Graphic>
+          <sld:ExternalGraphic>
+            <sld:OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="library13.png"/>
+            <sld:Format>image/png</sld:Format>
+          </sld:ExternalGraphic>
+          <sld:Size>
+            <ogc:Literal>13</ogc:Literal>
+          </sld:Size>
+        </sld:Graphic>
+      </sld:PointSymbolizer>
+    </sld:Rule>
+    <sld:Rule>
+      <sld:Name>library</sld:Name>
+      <sld:Title>library &lt; 17.5</sld:Title>
+      <sld:MaxScaleDenominator>17500.0</sld:MaxScaleDenominator>
+      <sld:PointSymbolizer>
+        <sld:Graphic>
+          <sld:ExternalGraphic>
+            <sld:OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="library16.png"/>
+            <sld:Format>image/png</sld:Format>
+          </sld:ExternalGraphic>
+          <sld:Size>
+            <ogc:Literal>16</ogc:Literal>
+          </sld:Size>
+        </sld:Graphic>
+      </sld:PointSymbolizer>
+    </sld:Rule>
+  </sld:FeatureTypeStyle>
+</sld:UserStyle>
