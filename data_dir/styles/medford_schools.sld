@@ -94,7 +94,7 @@
     </sld:Rule>
     <sld:Rule>
       <sld:Name>Elementary Schools</sld:Name>
-      <sld:Title>Elementary Schools 1:35K-1:17.5</sld:Title>
+      <sld:Title>Elementary Schools 1:35K-1:8.5</sld:Title>
       <ogc:Filter>
         <ogc:And>
           <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
@@ -107,7 +107,7 @@
           </ogc:PropertyIsEqualTo>
         </ogc:And>
       </ogc:Filter>
-      <sld:MinScaleDenominator>17500.0</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator>8500.0</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator>35000.0</sld:MaxScaleDenominator>
       <sld:PointSymbolizer>
         <sld:Graphic>
@@ -123,7 +123,7 @@
     </sld:Rule>
     <sld:Rule>
       <sld:Name>Middle Schools</sld:Name>
-      <sld:Title>Middle Schools 1:35K-1:17.5</sld:Title>
+      <sld:Title>Middle Schools 1:35K-1:8.5</sld:Title>
       <ogc:Filter>
         <ogc:And>
           <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
@@ -136,7 +136,7 @@
           </ogc:PropertyIsEqualTo>
         </ogc:And>
       </ogc:Filter>
-      <sld:MinScaleDenominator>17500.0</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator>8500.0</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator>35000.0</sld:MaxScaleDenominator>
       <sld:PointSymbolizer>
         <sld:Graphic>
@@ -152,7 +152,7 @@
     </sld:Rule>
     <sld:Rule>
       <sld:Name>High Schools</sld:Name>
-      <sld:Title>High Schools 1:35K-1:17.5</sld:Title>
+      <sld:Title>High Schools 1:35K-1:8.5</sld:Title>
       <ogc:Filter>
         <ogc:And>
           <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
@@ -165,7 +165,7 @@
           </ogc:PropertyIsEqualTo>
         </ogc:And>
       </ogc:Filter>
-      <sld:MinScaleDenominator>17500.0</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator>8500.0</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator>35000.0</sld:MaxScaleDenominator>
       <sld:PointSymbolizer>
         <sld:Graphic>
@@ -181,7 +181,7 @@
     </sld:Rule>
     <sld:Rule>
       <sld:Name>Elementary Schools</sld:Name>
-      <sld:Title>Elementary Schools &lt; 1:17.5</sld:Title>
+      <sld:Title>Elementary Schools &lt; 1:8.5</sld:Title>
       <ogc:Filter>
         <ogc:And>
           <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
@@ -194,7 +194,7 @@
           </ogc:PropertyIsEqualTo>
         </ogc:And>
       </ogc:Filter>
-      <sld:MaxScaleDenominator>17500.0</sld:MaxScaleDenominator>
+      <sld:MaxScaleDenominator>8500.0</sld:MaxScaleDenominator>
       <sld:PointSymbolizer>
         <sld:Graphic>
           <sld:ExternalGraphic>
@@ -250,7 +250,7 @@
     </sld:Rule>
     <sld:Rule>
       <sld:Name>Middle Schools</sld:Name>
-      <sld:Title>Middle Schools &lt; 1:17.5</sld:Title>
+      <sld:Title>Middle Schools &lt; 1:8.5</sld:Title>
       <ogc:Filter>
         <ogc:And>
           <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
@@ -263,7 +263,7 @@
           </ogc:PropertyIsEqualTo>
         </ogc:And>
       </ogc:Filter>
-      <sld:MaxScaleDenominator>17500.0</sld:MaxScaleDenominator>
+      <sld:MaxScaleDenominator>8500.0</sld:MaxScaleDenominator>
       <sld:PointSymbolizer>
         <sld:Graphic>
           <sld:ExternalGraphic>
@@ -319,7 +319,7 @@
     </sld:Rule>
     <sld:Rule>
       <sld:Name>High Schools</sld:Name>
-      <sld:Title>High Schools &lt; 1:17.5</sld:Title>
+      <sld:Title>High Schools &lt; 1:8.5</sld:Title>
       <ogc:Filter>
         <ogc:And>
           <ogc:PropertyIsLike wildCard="*" singleChar="." escape="!">
@@ -332,7 +332,7 @@
           </ogc:PropertyIsEqualTo>
         </ogc:And>
       </ogc:Filter>
-      <sld:MaxScaleDenominator>17500.0</sld:MaxScaleDenominator>
+      <sld:MaxScaleDenominator>8500.0</sld:MaxScaleDenominator>
       <sld:PointSymbolizer>
         <sld:Graphic>
           <sld:ExternalGraphic>
