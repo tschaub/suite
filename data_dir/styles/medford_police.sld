@@ -23,7 +23,7 @@
             <sld:Format>image/png</sld:Format>
           </sld:ExternalGraphic>
           <sld:Size>
-            <ogc:Literal>10</ogc:Literal>
+            <ogc:Literal>8</ogc:Literal>
           </sld:Size>
         </sld:Graphic>
       </sld:PointSymbolizer>
@@ -68,7 +68,7 @@
             <sld:Format>image/png</sld:Format>
           </sld:ExternalGraphic>
           <sld:Size>
-            <ogc:Literal>13</ogc:Literal>
+            <ogc:Literal>12</ogc:Literal>
           </sld:Size>
         </sld:Graphic>
       </sld:PointSymbolizer>
