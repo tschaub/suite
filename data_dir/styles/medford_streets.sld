@@ -422,7 +422,7 @@
                 <ogc:Literal>0.0</ogc:Literal>
               </sld:AnchorPointX>
               <sld:AnchorPointY>
-                <ogc:Literal>0.5</ogc:Literal>
+                <ogc:Literal>-1.0</ogc:Literal>
               </sld:AnchorPointY>
             </sld:AnchorPoint>
             <sld:Rotation>
@@ -483,7 +483,7 @@
                 <ogc:Literal>0.0</ogc:Literal>
               </sld:AnchorPointX>
               <sld:AnchorPointY>
-                <ogc:Literal>0.5</ogc:Literal>
+                <ogc:Literal>-1.0</ogc:Literal>
               </sld:AnchorPointY>
             </sld:AnchorPoint>
             <sld:Rotation>
@@ -543,7 +543,7 @@
                 <ogc:Literal>0.0</ogc:Literal>
               </sld:AnchorPointX>
               <sld:AnchorPointY>
-                <ogc:Literal>0.5</ogc:Literal>
+                <ogc:Literal>-1.0</ogc:Literal>
               </sld:AnchorPointY>
             </sld:AnchorPoint>
             <sld:Rotation>
@@ -604,7 +604,7 @@
                 <ogc:Literal>0.0</ogc:Literal>
               </sld:AnchorPointX>
               <sld:AnchorPointY>
-                <ogc:Literal>0.5</ogc:Literal>
+                <ogc:Literal>-1.0</ogc:Literal>
               </sld:AnchorPointY>
             </sld:AnchorPoint>
             <sld:Rotation>
@@ -665,7 +665,7 @@
                 <ogc:Literal>0.0</ogc:Literal>
               </sld:AnchorPointX>
               <sld:AnchorPointY>
-                <ogc:Literal>0.5</ogc:Literal>
+                <ogc:Literal>-1.0</ogc:Literal>
               </sld:AnchorPointY>
             </sld:AnchorPoint>
             <sld:Rotation>
@@ -725,7 +725,7 @@
                 <ogc:Literal>0.0</ogc:Literal>
               </sld:AnchorPointX>
               <sld:AnchorPointY>
-                <ogc:Literal>0.5</ogc:Literal>
+                <ogc:Literal>-1.0</ogc:Literal>
               </sld:AnchorPointY>
             </sld:AnchorPoint>
             <sld:Rotation>
