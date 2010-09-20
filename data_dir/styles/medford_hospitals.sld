@@ -30,11 +30,11 @@
       <sld:PointSymbolizer>
         <sld:Graphic>
           <sld:ExternalGraphic>
-            <sld:OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="hospital16.png"/>
+            <sld:OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="hospital13.png"/>
             <sld:Format>image/png</sld:Format>
           </sld:ExternalGraphic>
           <sld:Size>
-            <ogc:Literal>16</ogc:Literal>
+            <ogc:Literal>13</ogc:Literal>
           </sld:Size>
         </sld:Graphic>
       </sld:PointSymbolizer>
@@ -46,11 +46,11 @@
       <sld:PointSymbolizer>
         <sld:Graphic>
           <sld:ExternalGraphic>
-            <sld:OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="hospital20.png"/>
+            <sld:OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="hospital16.png"/>
             <sld:Format>image/png</sld:Format>
           </sld:ExternalGraphic>
           <sld:Size>
-            <ogc:Literal>20</ogc:Literal>
+            <ogc:Literal>16</ogc:Literal>
           </sld:Size>
         </sld:Graphic>
       </sld:PointSymbolizer>
@@ -68,10 +68,10 @@
           <sld:PointPlacement>
             <sld:AnchorPoint>
               <sld:AnchorPointX>
-                <ogc:Literal>0.0</ogc:Literal>
+                <ogc:Literal>.5</ogc:Literal>
               </sld:AnchorPointX>
               <sld:AnchorPointY>
-                <ogc:Literal>0.5</ogc:Literal>
+                <ogc:Literal>-.5</ogc:Literal>
               </sld:AnchorPointY>
             </sld:AnchorPoint>
             <sld:Rotation>
@@ -91,9 +91,9 @@
         <sld:Fill>
           <sld:CssParameter name="fill">#ff0000</sld:CssParameter>
         </sld:Fill>
+        <sld:VendorOption name="allowOverrun">true</sld:VendorOption>
         <sld:VendorOption name="autoWrap">100</sld:VendorOption>
         <sld:VendorOption name="spaceAround">20</sld:VendorOption>
-        <sld:VendorOption name="allowOverrun">true</sld:VendorOption>
       </sld:TextSymbolizer>
     </sld:Rule>
   </sld:FeatureTypeStyle>
