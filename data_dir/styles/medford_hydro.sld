@@ -99,7 +99,7 @@
           <ogc:PropertyName>STREAM_NAM</ogc:PropertyName>
         </sld:Label>
         <sld:Font>
-          <sld:CssParameter name="font-family">Arial</sld:CssParameter>
+          <sld:CssParameter name="font-family">SansSerif</sld:CssParameter>
           <sld:CssParameter name="font-size">10</sld:CssParameter>
           <sld:CssParameter name="font-style">italic</sld:CssParameter>
           <sld:CssParameter name="font-weight">normal</sld:CssParameter>
@@ -175,7 +175,7 @@
           <ogc:PropertyName>STREAM_NAM</ogc:PropertyName>
         </sld:Label>
         <sld:Font>
-          <sld:CssParameter name="font-family">Arial</sld:CssParameter>
+          <sld:CssParameter name="font-family">SansSerif</sld:CssParameter>
           <sld:CssParameter name="font-size">11</sld:CssParameter>
           <sld:CssParameter name="font-style">italic</sld:CssParameter>
           <sld:CssParameter name="font-weight">bold</sld:CssParameter>
@@ -233,7 +233,7 @@
           <ogc:PropertyName>STREAM_NAM</ogc:PropertyName>
         </sld:Label>
         <sld:Font>
-          <sld:CssParameter name="font-family">Arial</sld:CssParameter>
+          <sld:CssParameter name="font-family">SansSerif</sld:CssParameter>
           <sld:CssParameter name="font-size">10</sld:CssParameter>
           <sld:CssParameter name="font-style">italic</sld:CssParameter>
           <sld:CssParameter name="font-weight">normal</sld:CssParameter>
