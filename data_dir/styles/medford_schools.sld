@@ -211,7 +211,7 @@
           <ogc:PropertyName>name</ogc:PropertyName>
         </sld:Label>
         <sld:Font>
-          <sld:CssParameter name="font-family">Arial</sld:CssParameter>
+          <sld:CssParameter name="font-family">SansSerif</sld:CssParameter>
           <sld:CssParameter name="font-size">11</sld:CssParameter>
           <sld:CssParameter name="font-style">normal</sld:CssParameter>
           <sld:CssParameter name="font-weight">normal</sld:CssParameter>
@@ -280,7 +280,7 @@
           <ogc:PropertyName>name</ogc:PropertyName>
         </sld:Label>
         <sld:Font>
-          <sld:CssParameter name="font-family">Arial</sld:CssParameter>
+          <sld:CssParameter name="font-family">SansSerif</sld:CssParameter>
           <sld:CssParameter name="font-size">11</sld:CssParameter>
           <sld:CssParameter name="font-style">normal</sld:CssParameter>
           <sld:CssParameter name="font-weight">normal</sld:CssParameter>
@@ -349,7 +349,7 @@
           <ogc:PropertyName>name</ogc:PropertyName>
         </sld:Label>
         <sld:Font>
-          <sld:CssParameter name="font-family">Arial</sld:CssParameter>
+          <sld:CssParameter name="font-family">SansSerif</sld:CssParameter>
           <sld:CssParameter name="font-size">11</sld:CssParameter>
           <sld:CssParameter name="font-style">normal</sld:CssParameter>
           <sld:CssParameter name="font-weight">normal</sld:CssParameter>
