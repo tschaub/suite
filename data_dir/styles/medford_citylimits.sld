@@ -11,8 +11,8 @@
       <sld:MaxScaleDenominator>280000.0</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
         <sld:Fill>
-          <sld:CssParameter name="fill">#C1C1C1</sld:CssParameter>
-          <sld:CssParameter name="fill-opacity">0.25</sld:CssParameter>
+          <sld:CssParameter name="fill">#E5E5E5</sld:CssParameter>
+          <sld:CssParameter name="fill-opacity">0.6</sld:CssParameter>
         </sld:Fill>
       </sld:PolygonSymbolizer>
     </sld:Rule>
