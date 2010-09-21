@@ -372,26 +372,25 @@ var Styler = Ext.extend(Ext.util.Observable, {
             selected = layers.length - 1;
         }
         
-        var prepNode = function(node) {
-            if (!node.hasListener("radiochange")) {
-                node.on({
-                    radiochange: function(node) {
-                        this.changeLayer(node);
-                    },
-                    scope: this
-                });
-            }
-        };
-        
         this.layerTree = new Ext.tree.TreePanel({
             border: false,
             animate: false,
+            plugins: [
+                new GeoExt.plugins.TreeNodeRadioButton({
+                    listeners: {
+                        radiochange: function(node) {
+                            this.changeLayer(node);
+                        },
+                        scope: this
+                    }
+                })
+            ],
             loader: new Ext.tree.TreeLoader({
                 applyLoader: false,
                 uiProviders: {
-                    "use_radio": Ext.extend(
-                        GeoExt.tree.LayerNodeUI,
-                        new GeoExt.tree.RadioButtonMixin()
+                    layerNodeUI: Ext.extend(
+                        GeoExt.tree.LayerNodeUI, 
+                        new GeoExt.tree.TreeNodeUIEventMixin()
                     )
                 }
             }),
@@ -406,7 +405,7 @@ var Styler = Ext.extend(Ext.util.Observable, {
                     loader: {
                         baseAttrs: {
                             radioGroup: "active",
-                            uiProvider: "use_radio"
+                            uiProvider: "layerNodeUI"
                         }
                     }
                 }, {
@@ -423,12 +422,11 @@ var Styler = Ext.extend(Ext.util.Observable, {
             },
             enableDD: true,
             listeners: {
-                insert: prepNode,
-                append: prepNode,
                 /**
                  * TODO: This dragdrop listener should not be necessary. Make
                  * sure that the radio state does not get changed for a layer
                  * node in GeoExt on dragdrop.
+                 * http://trac.geoext.org/ticket/346
                  */
                 dragdrop: function(panel, node) {
                     window.setTimeout(
