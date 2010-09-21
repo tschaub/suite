@@ -122,8 +122,9 @@
     </sld:Rule>
     <sld:Rule>
       <sld:Name>Streets</sld:Name>
-      <sld:Title>Streets &lt; 9K</sld:Title>
+      <sld:Title>Streets 9K-4.5K</sld:Title>
       <sld:ElseFilter/>
+      <sld:MinScaleDenominator>4500.0</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator>9000.0</sld:MaxScaleDenominator>
       <sld:LineSymbolizer>
         <sld:Stroke>
@@ -139,7 +140,58 @@
           <sld:CssParameter name="font-family">SansSerif</sld:CssParameter>
           <sld:CssParameter name="font-size">11</sld:CssParameter>
           <sld:CssParameter name="font-style">normal</sld:CssParameter>
-          <sld:CssParameter name="font-weight">normal</sld:CssParameter>
+          <sld:CssParameter name="font-weight">bold</sld:CssParameter>
+        </sld:Font>
+        <sld:LabelPlacement>
+          <sld:PointPlacement>
+            <sld:AnchorPoint>
+              <sld:AnchorPointX>
+                <ogc:Literal>0.0</ogc:Literal>
+              </sld:AnchorPointX>
+              <sld:AnchorPointY>
+                <ogc:Literal>0.5</ogc:Literal>
+              </sld:AnchorPointY>
+            </sld:AnchorPoint>
+            <sld:Rotation>
+              <ogc:Literal>0</ogc:Literal>
+            </sld:Rotation>
+          </sld:PointPlacement>
+        </sld:LabelPlacement>
+        <sld:Halo>
+          <sld:Radius>
+            <ogc:Literal>1</ogc:Literal>
+          </sld:Radius>
+          <sld:Fill>
+            <sld:CssParameter name="fill">#ffffff</sld:CssParameter>
+            <sld:CssParameter name="fill-opacity">.5</sld:CssParameter>
+          </sld:Fill>
+        </sld:Halo>
+        <sld:VendorOption name="labelAllGroup">true</sld:VendorOption>
+        <sld:VendorOption name="followLine">true</sld:VendorOption>
+        <sld:VendorOption name="group">true</sld:VendorOption>
+        <sld:VendorOption name="maxDisplacement">50</sld:VendorOption>
+      </sld:TextSymbolizer>
+    </sld:Rule>
+    <sld:Rule>
+      <sld:Name>Streets</sld:Name>
+      <sld:Title>Streets &lt; 4.5K</sld:Title>
+      <sld:ElseFilter/>
+      <sld:MaxScaleDenominator>4500.0</sld:MaxScaleDenominator>
+      <sld:LineSymbolizer>
+        <sld:Stroke>
+          <sld:CssParameter name="stroke">#a5a5a5</sld:CssParameter>
+          <sld:CssParameter name="stroke-width">5</sld:CssParameter>
+        </sld:Stroke>
+      </sld:LineSymbolizer>
+      <sld:TextSymbolizer>
+        <sld:Label>
+          <ogc:PropertyName>namelow</ogc:PropertyName>
+        </sld:Label>
+        <sld:Font>
+          <sld:CssParameter name="font-family">SansSerif</sld:CssParameter>
+          <sld:CssParameter name="font-size">12</sld:CssParameter>
+          <sld:CssParameter name="font-style">normal</sld:CssParameter>
+          <sld:CssParameter name="font-weight">bold</sld:CssParameter>
         </sld:Font>
         <sld:LabelPlacement>
           <sld:PointPlacement>
@@ -356,37 +408,6 @@
           <sld:CssParameter name="stroke">#404040</sld:CssParameter>
         </sld:Stroke>
       </sld:LineSymbolizer>
-      <sld:TextSymbolizer>
-        <sld:Label>
-          <ogc:PropertyName>namelow</ogc:PropertyName>
-        </sld:Label>
-        <sld:Font>
-          <sld:CssParameter name="font-family">Serif</sld:CssParameter>
-          <sld:CssParameter name="font-size">10</sld:CssParameter>
-          <sld:CssParameter name="font-style">normal</sld:CssParameter>
-          <sld:CssParameter name="font-weight">normal</sld:CssParameter>
-        </sld:Font>
-        <sld:LabelPlacement>
-          <sld:PointPlacement>
-            <sld:AnchorPoint>
-              <sld:AnchorPointX>
-                <ogc:Literal>0.0</ogc:Literal>
-              </sld:AnchorPointX>
-              <sld:AnchorPointY>
-                <ogc:Literal>0.5</ogc:Literal>
-              </sld:AnchorPointY>
-            </sld:AnchorPoint>
-            <sld:Rotation>
-              <ogc:Literal>0</ogc:Literal>
-            </sld:Rotation>
-          </sld:PointPlacement>
-        </sld:LabelPlacement>
-        <sld:Fill>
-          <sld:CssParameter name="fill-opacity">0</sld:CssParameter>
-        </sld:Fill>
-        <sld:VendorOption name="spaceAround">150</sld:VendorOption>
-        <sld:VendorOption name="group">no</sld:VendorOption>
-      </sld:TextSymbolizer>
     </sld:Rule>
     <sld:Rule>
       <sld:Name>Highway-62</sld:Name>
@@ -410,7 +431,7 @@
           <ogc:PropertyName>namelow</ogc:PropertyName>
         </sld:Label>
         <sld:Font>
-          <sld:CssParameter name="font-family">Serif</sld:CssParameter>
+          <sld:CssParameter name="font-family">SansSerif</sld:CssParameter>
           <sld:CssParameter name="font-size">10</sld:CssParameter>
           <sld:CssParameter name="font-style">normal</sld:CssParameter>
           <sld:CssParameter name="font-weight">normal</sld:CssParameter>
@@ -422,7 +443,7 @@
                 <ogc:Literal>0.0</ogc:Literal>
               </sld:AnchorPointX>
               <sld:AnchorPointY>
-                <ogc:Literal>-1.0</ogc:Literal>
+								<ogc:Literal>-1.0</ogc:Literal>
               </sld:AnchorPointY>
             </sld:AnchorPoint>
             <sld:Rotation>
@@ -471,7 +492,7 @@
           <ogc:PropertyName>namelow</ogc:PropertyName>
         </sld:Label>
         <sld:Font>
-          <sld:CssParameter name="font-family">Serif</sld:CssParameter>
+          <sld:CssParameter name="font-family">SansSerif</sld:CssParameter>
           <sld:CssParameter name="font-size">10</sld:CssParameter>
           <sld:CssParameter name="font-style">normal</sld:CssParameter>
           <sld:CssParameter name="font-weight">normal</sld:CssParameter>
@@ -531,7 +552,7 @@
           <ogc:PropertyName>namelow</ogc:PropertyName>
         </sld:Label>
         <sld:Font>
-          <sld:CssParameter name="font-family">Serif</sld:CssParameter>
+          <sld:CssParameter name="font-family">SansSerif</sld:CssParameter>
           <sld:CssParameter name="font-size">10</sld:CssParameter>
           <sld:CssParameter name="font-style">normal</sld:CssParameter>
           <sld:CssParameter name="font-weight">normal</sld:CssParameter>
@@ -543,7 +564,7 @@
                 <ogc:Literal>0.0</ogc:Literal>
               </sld:AnchorPointX>
               <sld:AnchorPointY>
-                <ogc:Literal>-1.0</ogc:Literal>
+                <ogc:Literal>-1.5</ogc:Literal>
               </sld:AnchorPointY>
             </sld:AnchorPoint>
             <sld:Rotation>
@@ -592,7 +613,7 @@
           <ogc:PropertyName>namelow</ogc:PropertyName>
         </sld:Label>
         <sld:Font>
-          <sld:CssParameter name="font-family">Serif</sld:CssParameter>
+          <sld:CssParameter name="font-family">SansSerif</sld:CssParameter>
           <sld:CssParameter name="font-size">10</sld:CssParameter>
           <sld:CssParameter name="font-style">normal</sld:CssParameter>
           <sld:CssParameter name="font-weight">normal</sld:CssParameter>
@@ -653,7 +674,7 @@
           <ogc:PropertyName>namelow</ogc:PropertyName>
         </sld:Label>
         <sld:Font>
-          <sld:CssParameter name="font-family">Serif</sld:CssParameter>
+          <sld:CssParameter name="font-family">SansSerif</sld:CssParameter>
           <sld:CssParameter name="font-size">10</sld:CssParameter>
           <sld:CssParameter name="font-style">normal</sld:CssParameter>
           <sld:CssParameter name="font-weight">normal</sld:CssParameter>
@@ -713,7 +734,7 @@
           <ogc:PropertyName>namelow</ogc:PropertyName>
         </sld:Label>
         <sld:Font>
-          <sld:CssParameter name="font-family">Serif</sld:CssParameter>
+          <sld:CssParameter name="font-family">SansSerif</sld:CssParameter>
           <sld:CssParameter name="font-size">10</sld:CssParameter>
           <sld:CssParameter name="font-style">normal</sld:CssParameter>
           <sld:CssParameter name="font-weight">normal</sld:CssParameter>
@@ -725,7 +746,7 @@
                 <ogc:Literal>0.0</ogc:Literal>
               </sld:AnchorPointX>
               <sld:AnchorPointY>
-                <ogc:Literal>-1.0</ogc:Literal>
+                <ogc:Literal>-1.5</ogc:Literal>
               </sld:AnchorPointY>
             </sld:AnchorPoint>
             <sld:Rotation>
@@ -862,7 +883,7 @@
           <ogc:PropertyName>namelow</ogc:PropertyName>
         </sld:Label>
         <sld:Font>
-          <sld:CssParameter name="font-family">Serif</sld:CssParameter>
+          <sld:CssParameter name="font-family">SansSerif</sld:CssParameter>
           <sld:CssParameter name="font-size">10</sld:CssParameter>
           <sld:CssParameter name="font-style">normal</sld:CssParameter>
           <sld:CssParameter name="font-weight">normal</sld:CssParameter>
@@ -923,7 +944,7 @@
           <ogc:PropertyName>namelow</ogc:PropertyName>
         </sld:Label>
         <sld:Font>
-          <sld:CssParameter name="font-family">Serif</sld:CssParameter>
+          <sld:CssParameter name="font-family">SansSerif</sld:CssParameter>
           <sld:CssParameter name="font-size">10</sld:CssParameter>
           <sld:CssParameter name="font-style">normal</sld:CssParameter>
           <sld:CssParameter name="font-weight">normal</sld:CssParameter>
@@ -984,7 +1005,7 @@
           <ogc:PropertyName>namelow</ogc:PropertyName>
         </sld:Label>
         <sld:Font>
-          <sld:CssParameter name="font-family">Serif</sld:CssParameter>
+          <sld:CssParameter name="font-family">SansSerif</sld:CssParameter>
           <sld:CssParameter name="font-size">10</sld:CssParameter>
           <sld:CssParameter name="font-style">normal</sld:CssParameter>
           <sld:CssParameter name="font-weight">normal</sld:CssParameter>
