@@ -655,8 +655,8 @@ var Styler = Ext.extend(Ext.util.Observable, {
      * Undo what is done in addLegend.
      */
     removeLegend: function() {
-        var old = this.legendContainer.items.length && this.legendContainer.getComponent(0);
-        if(old) {
+        var old = this.getLegend();
+        if (old) {
             this.getAddButton().disable();
             this.legendContainer.remove(old);
         }
@@ -667,7 +667,7 @@ var Styler = Ext.extend(Ext.util.Observable, {
      * Called when map scale changes.
      */
     setLegendScale: function() {
-        var legend = this.legendContainer.items.length && this.legendContainer.getComponent(0);
+        var legend = this.getLegend();
         if (legend && legend.setCurrentScaleDenominator) {
             legend.setCurrentScaleDenominator(this.map.getScale());
         }
@@ -678,8 +678,8 @@ var Styler = Ext.extend(Ext.util.Observable, {
      * Redraw the legend if shown.
      */
     refreshLegend: function() {
-        var legend = this.legendContainer.items.length && this.legendContainer.getComponent(0);
-        if(legend) {
+        var legend = this.getLegend();
+        if (legend) {
             legend.update();
         }
     },
@@ -962,7 +962,7 @@ var Styler = Ext.extend(Ext.util.Observable, {
      * Method: getLegend
      */
     getLegend: function() {
-        return this.legendContainer.getComponent(0);
+        return !!this.legendContainer.items.length && this.legendContainer.getComponent(0);
     },
 
     /**
