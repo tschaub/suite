@@ -275,7 +275,10 @@ var Styler = Ext.extend(Ext.util.Observable, {
                         panel.getRuleTitle(rule) + " rule?";
                     Ext.Msg.confirm("Delete rule", message, function(yesno) {
                         if(yesno == "yes") {
+                            // TODO: fix this in GeoExt
+                            // http://trac.geoext.org/ticket/347
                             panel.rules.remove(rule);
+                            panel.selectedRule = null;
                             this.fireEvent("ruleremoved", rule);
                             sldMgr = this.sldManager;
                             sldMgr.saveSld(this.currentLayer, function() {
