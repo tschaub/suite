@@ -250,6 +250,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         tabTip: "View the logs",
                         cls: "dash-panel",
                         id: "app-panels-help-logs",
+                        disabled: !window.Titanium,
                         items: [this.logPanel]
                     }, {
                         border: false,
@@ -259,6 +260,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                         tabTip: "Configure the OpenGeo Suite",
                         cls: "dash-panel",
                         id: "app-panels-pref-main",
+                        disabled: !window.Titanium,
                         listeners: {
                            render: {
                                fn: function() {
@@ -329,12 +331,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         }
         og.util.tirun(this.initStatsCollector, this, Ext.emptyFn);
         
-        // special logic for running in a browser
-        if (!window.Titanium) {
-            Ext.getCmp("app-panels-pref-main").disable();
-            Ext.getCmp("app-panels-help-logs").disable();
-        }
-
     },
     
     showStartHelp: function() {
@@ -631,18 +627,22 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         ilinks.removeClass("app-ilink");
         
         var plinks = Ext.select(".app-plink", false, root);
-        plinks.on({
-            click: function(evt, el) {
-                var xEl = new Ext.Element(el);
-                var follow = xEl.hasClass("app-online") ? this.suite.online : true;
-                if (follow) {
-                    var key = el.href.split("#").pop();
-                    this.launchProcess(key);
-                }
-                return follow;
-            },
-            scope: this
-        });
+        if (window.Titanium) {
+            plinks.on({
+                click: function(evt, el) {
+                    var xEl = new Ext.Element(el);
+                    var follow = xEl.hasClass("app-online") ? this.suite.online : true;
+                    if (follow) {
+                        var key = el.href.split("#").pop();
+                        this.launchProcess(key);
+                    }
+                    return follow;
+                },
+                scope: this
+            });
+        } else {
+            plinks.addClass("app-disabled-permanently");
+        }
         plinks.removeClass("app-plink");        
         
         this.updateOnlineLinks(this.suite.online);

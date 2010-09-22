@@ -25,7 +25,10 @@ a:hover {
 }
 
 a.app-disabled,
-a.app-disabled:hover {
+a.app-disabled:hover,
+a.app-disabled-permanently,
+a.app-disabled-permanently:hover {
+    cursor: default;
     color: #999999;
 }
 
