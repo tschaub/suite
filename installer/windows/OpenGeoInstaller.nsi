@@ -920,7 +920,7 @@ Section -FinishSection
 
   ; For the Add/Remove programs area
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "DisplayName" "${APPNAMEANDVERSION}"
-  WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "UninstallString" "$INSTDIR\uninstall.exe"
+  WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "UninstallString" "$INSTDIR\Uninstall OpenGeo Suite.exe"
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "InstallLocation" "$INSTDIR"
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "DisplayIcon" "$INSTDIR\icons\opengeo.ico"
   WriteRegStr HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}" "Publisher" "OpenGeo"
@@ -982,7 +982,7 @@ Section Uninstall
   DeleteRegKey HKLM "${UNINSTALLREGPATH}\${APPNAMEANDVERSION}"
 
   ; Delete self
-  Delete "$INSTDIR\uninstall.exe"
+  Delete "$INSTDIR\Uninstall OpenGeo Suite.exe"
 
   ; Delete Shortcuts
   RMDir /r "$SMPROGRAMS\$STARTMENU_FOLDER"
