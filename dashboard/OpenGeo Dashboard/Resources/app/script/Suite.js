@@ -179,7 +179,8 @@ og.Suite = Ext.extend(Ext.util.Observable, {
             var client = new XMLHttpRequest();
             var port = this.config["suite_port"];
             var host = this.config["suite_host"];
-            var url = "http://" + host + (port ? ":" + port : "") + "/";
+            var time = (new Date).getTime();
+            var url = "http://" + host + (port ? ":" + port : "") + "/?t=" + time;
             client.open("GET", url, false);
             try {
                 client.send(null);
