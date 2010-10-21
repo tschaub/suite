@@ -11,7 +11,8 @@ Styler is currently under development and will eventually be an integrated compo
    :maxdepth: 2
        
    getting-started
-   styling    
+   styling 
+   reference   
    glossary
    license
 
