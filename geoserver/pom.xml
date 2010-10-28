@@ -360,11 +360,6 @@
    </profile>
    <profile>
      <id>externals</id>
-     <activation>
-       <property>
-         <name>full</name>
-       </property>
-     </activation>
      <modules>
        <module>externals</module>
      </modules>
