@@ -23,6 +23,8 @@ suite_url=http://suite.opengeo.org/builds/opengeosuite-${id}-bin.tar.gz
 ext_url=http://suite.opengeo.org/builds/opengeosuite-${id}-ext.tar.gz
 jre_url=http://data.opengeo.org/suite/suite-jre-${jre_version}-lin${arch}.tgz
 pgsql_url=http://linuxbuild${arch}.dev.opengeo.org/suite/pgsql-postgis-linux${arch}.tar.gz
+# http://suite.opengeo.org/lin32builds/
+# http://suite.opengeo.org/lin64builds/
 
 export PATH=$PATH:/usr/local/bin
 
