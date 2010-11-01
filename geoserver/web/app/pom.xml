@@ -151,13 +151,13 @@
     </plugin>
     <plugin>
        <artifactId>maven-antrun-plugin</artifactId>
-       <dependencies>
+       <!--dependencies>
           <dependency>
             <groupId>ant</groupId>
             <artifactId>ant</artifactId>
             <version>${ant.version}</version>
           </dependency>
-       </dependencies>
+       </dependencies-->
        <executions>
          <execution>
            <id>hack-printing</id>

@@ -106,6 +106,28 @@
  <build>
    <plugins>
      <plugin>
+       <artifactId>maven-antrun-plugin</artifactId>
+       <dependencies>
+         <dependency>
+           <groupId>com.sun</groupId>
+           <artifactId>tools</artifactId>
+           <version>1.5.0</version>
+           <scope>system</scope>
+           <systemPath>${java.home}/../lib/tools.jar</systemPath>
+         </dependency>
+          <dependency>
+            <groupId>ant</groupId>
+            <artifactId>ant</artifactId>
+            <version>${ant.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>ant-contrib</groupId>
+            <artifactId>ant-contrib</artifactId>
+            <version>1.0b3</version>
+          </dependency>
+        </dependencies>
+     </plugin>
+     <plugin>
        <artifactId>maven-assembly-plugin</artifactId>
        <configuration>
          <finalName>opengeosuite-${project.version}</finalName>

@@ -58,7 +58,7 @@
    <plugins>
      <plugin>
        <artifactId>maven-antrun-plugin</artifactId>
-       <dependencies>
+       <!--dependencies>
           <dependency>
             <groupId>ant</groupId>
             <artifactId>ant</artifactId>
@@ -69,7 +69,7 @@
             <artifactId>ant-contrib</artifactId>
             <version>1.0b3</version>
           </dependency>
-        </dependencies>
+        </dependencies-->
         <executions>
           <execution>
             <id>compile</id>
