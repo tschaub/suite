@@ -17,7 +17,7 @@ if x%revision%==x (
 )
 
 :: Assemble artifact base URL
-set url=http://suite.opengeo.org/builds/%repo_path
+set url=http://suite.opengeo.org/builds/%repo_path%
 
 :: Get REPO_PATH and convert slashes to dashes
 
