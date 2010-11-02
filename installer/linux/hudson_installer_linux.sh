@@ -4,23 +4,23 @@
 # assembles them in the ./binaries/root directory where they are packaged into
 # a self-extracting bin file with makeself.sh
 
-if [ $# -lt 1 ]; then
-  echo "Usage: $0 <arch> [artifact-id]"
+if [ $# -lt 3 ]; then
+  echo "Usage: $0 <arch> <repo_path> <revision>"
   exit 1
 fi
 
-if [ $# -lt 2 ]; then
-  id=latest
-else
-  id=$2
-fi
+arch=$1
+REPO_PATH=$2
+REVISION=$3
+
+id=$(echo $REPO_PATH|sed 's/\//-/g')
+id=${id}-${REVISION}
 
 jre_version=1.6.0.20
-arch=$1
 
-dashboard_url=http://suite.opengeo.org/builds/dashboard-${id}-lin${arch}.zip
-suite_url=http://suite.opengeo.org/builds/opengeosuite-${id}-bin.tar.gz
-ext_url=http://suite.opengeo.org/builds/opengeosuite-${id}-ext.tar.gz
+dashboard_url=http://suite.opengeo.org/builds/${REPO_PATH}/dashboard-${id}-lin${arch}.zip
+suite_url=http://suite.opengeo.org/builds/${REPO_PATH}/opengeosuite-${id}-bin.tar.gz
+ext_url=http://suite.opengeo.org/builds/${REPO_PATH}/opengeosuite-${id}-ext.tar.gz
 jre_url=http://data.opengeo.org/suite/suite-jre-${jre_version}-lin${arch}.tgz
 pgsql_url=http://linuxbuild${arch}.dev.opengeo.org/suite/pgsql-postgis-linux${arch}.tar.gz
 # http://suite.opengeo.org/lin32builds/
