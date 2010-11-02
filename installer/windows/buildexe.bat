@@ -41,15 +41,15 @@ set mainzip=opengeosuite-%id%-win.zip
 set dashzip=dashboard-%id%-win32.zip
 
 :: Get the maven artifact in place
-@echo Downloading url/%mainzip% ...
-wget url/%mainzip% >nul 2>nul
+@echo Downloading %url%/%mainzip% ...
+wget %url%/%mainzip% >nul 2>nul
 mkdir ..\..\target\win 2>nul
 unzip %mainzip% -d ..\..\target\win
 del %mainzip%
 
 :: Get the dashboard in place
-@echo Downloading url/%dashzip% ...
-wget url/%dashzip% >nul 2>nul
+@echo Downloading %url%/%dashzip% ...
+wget %url%/%dashzip% >nul 2>nul
 rd /s /q ..\..\target\win\dashboard
 unzip %dashzip% -d ..\..\target\win\
 del %dashzip%
