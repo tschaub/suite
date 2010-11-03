@@ -34,7 +34,7 @@ for /f "tokens=1,2 delims=\/" %%a in ("%repo_path%") do (
 if %revision%==latest (
   set id=latest
 ) else (
-  set id=%repo-path%-%revision%
+  set id=%repo-path%-r%revision%
 )
 
 set mainzip=opengeosuite-%id%-win.zip

@@ -14,7 +14,7 @@ REPO_PATH=$2
 REVISION=$3
 
 id=$(echo $REPO_PATH|sed 's/\//-/g')
-id=${id}-${REVISION}
+id=${id}-r${REVISION}
 
 jre_version=1.6.0.20
 

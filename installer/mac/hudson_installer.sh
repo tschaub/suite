@@ -14,7 +14,7 @@ REPO_PATH=$1
 REVISION=$2
 
 id=$(echo $REPO_PATH|sed 's/\//-/g')
-id=${id}-${REVISION}
+id=${id}-r${REVISION}
 
 dashboard_version=1.0.0
 pgsql_version=8.4
