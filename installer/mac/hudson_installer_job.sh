@@ -9,18 +9,18 @@
 #
 # This process is bootstrapped in the Hudson jobs build script with the 
 # following (REPO_PATH and REVISION are job parameters):
+#
 #     cd repo
 #     if [ -d $REPO_PATH ]; then
 #       cd $REPO_PATH
-#       svn update .
+#       svn update -r $REVISION .
 #     else
 #       mkdir -p $REPO_PATH
 #       cd $REPO_PATH
-#       svn checkout http://svn.opengeo.org/suite/${REPO_PATH}/installer .
+#       svn checkout -r $REVISION http://svn.opengeo.org/suite/${REPO_PATH}/installer .
 #     fi
 #     cd mac
-
-#     bash hudson_installer_job.sh trunk 1881
+#     bash hudson_installer_job.sh $REPO_PATH $REVISION
 
 if [ $# -lt 2 ]; then
   echo "Usage: $0 <repo_path> <revision>"
