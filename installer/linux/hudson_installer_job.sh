@@ -43,7 +43,7 @@ if [ $? -gt 0 ]; then
 fi
 
 PATH_NAME=$(echo $REPO_PATH|sed 's/\//-/g')
-CUR_FILE=${dist}/OpenGeoSuite-${PATH_NAME}-r${REVISION}-b${BUILD_NUMBER}-x${ARCH_TYPE}.bin
+CUR_FILE=${DIST_DIR}/OpenGeoSuite-${PATH_NAME}-r${REVISION}-b${BUILD_NUMBER}-x${ARCH_TYPE}.bin
 
 BUILD_FILE=`ls OpenGeoSuite*.bin`
 
