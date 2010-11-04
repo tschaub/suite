@@ -36,7 +36,7 @@ if [ ! -e $DIST_DIR ]; then
 fi
 
 
-bash hudson_installer.sh $REPO_PATH $REVISION
+bash assemble_installer.sh $REPO_PATH $REVISION
 if [ $? -gt 0 ]; then
   exit 1
 fi
