@@ -50,6 +50,9 @@ BUILD_FILE=`ls OpenGeoSuite*.bin`
 # Copy datestamped version
 if [ -f $BUILD_FILE ]; then
   cp $BUILD_FILE $CUR_FILE
+  if [ $? -gt 0 ]; then
+    exit 1
+  fi
 else
   exit 1
 fi
