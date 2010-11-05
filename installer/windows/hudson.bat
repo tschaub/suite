@@ -26,7 +26,6 @@ for /f "tokens=1,2 delims=\/" %%a in ("%REPO_PATH%") do (
 :: Build process
 echo Calling build process...
 echo.
-cd windows
 call buildexe.bat %repo_path% %revision%
 
 
