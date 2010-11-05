@@ -36,11 +36,6 @@
     </dependency>
     <dependency>
       <groupId>org.geotools</groupId>
-      <artifactId>gt-directory</artifactId>	
-      <version>${gt.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.geotools</groupId>
       <artifactId>gt-shapefile</artifactId>
       <version>${gt.version}</version>
     </dependency>

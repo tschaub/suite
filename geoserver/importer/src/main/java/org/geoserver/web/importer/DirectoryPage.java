@@ -36,7 +36,7 @@ import org.geoserver.web.wicket.browser.ExtensionFileFilter;
 import org.geoserver.web.wicket.browser.GeoServerFileChooser;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
-import org.geotools.data.directory.DirectoryDataStoreFactory;
+import org.geotools.data.shapefile.ShapefileDataStoreFactory;
 
 /**
  * Sets up the import process and starts it up delegating the progress to {@link ImportProgressPage}
@@ -144,11 +144,11 @@ public class DirectoryPage extends GeoServerSecuredPage {
                     }
 
                     // build/reuse the store
-                    String storeType = new DirectoryDataStoreFactory().getDisplayName();
+                    String storeType = new ShapefileDataStoreFactory().getDisplayName();
                     Map<String, Serializable> params = new HashMap<String, Serializable>();
-                    params.put(DirectoryDataStoreFactory.URLP.key, new File(directory).toURI()
+                    params.put(ShapefileDataStoreFactory.URLP.key, new File(directory).toURI()
                             .toURL().toString());
-                    params.put(DirectoryDataStoreFactory.NAMESPACE.key, new URI(namespace.getURI()).toString());
+                    params.put(ShapefileDataStoreFactory.NAMESPACEP.key, new URI(namespace.getURI()).toString());
 
                     DataStoreInfo si;
                     StoreInfo preExisting = getCatalog().getStoreByName(workspace, generalParams.name,
@@ -245,8 +245,8 @@ public class DirectoryPage extends GeoServerSecuredPage {
             Map<String, Serializable> params = new HashMap<String, Serializable>();
             try {
                 // check the store can be built (we need to provide the namespace as well
-                params.put(DirectoryDataStoreFactory.URLP.key, new File(directory).toURI().toURL());
-                params.put(DirectoryDataStoreFactory.NAMESPACE.key, new URI(
+                params.put(ShapefileDataStoreFactory.URLP.key, new File(directory).toURI().toURL());
+                params.put(ShapefileDataStoreFactory.NAMESPACEP.key, new URI(
                         "http://www.geoserver.org"));
                 store = DataStoreFinder.getDataStore(params);
                 if (store == null) {
