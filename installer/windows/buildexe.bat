@@ -20,8 +20,6 @@ if x%revision%==x (
 set url=http://suite.opengeo.org/builds/%repo_path%
 
 :: Get REPO_PATH and convert slashes to dashes
-
-
 for /f "tokens=1,2 delims=\/" %%a in ("%repo_path%") do (
   if not x%%b==x (
     set repo-path=%%a-%%b
@@ -55,27 +53,25 @@ unzip %dashzip% -d ..\..\target\win\
 del %dashzip%
 ren "..\..\target\win\OpenGeo Dashboard" dashboard
 
-:: Get today's date
-for /F "tokens=1* delims= " %%A in ('DATE/T') do set CDATE=%%B
-for /F "tokens=1,2 eol=/ delims=/ " %%A in ('DATE/T') do set mm=%%B
-for /F "tokens=1,2 delims=/ eol=/" %%A in ('echo %CDATE%') do set dd=%%B
-for /F "tokens=2,3 delims=/ " %%A in ('echo %CDATE%') do set yyyy=%%B
-set todaysdate=%yyyy%-%mm%-%dd%
-
 :: Get version number
+:: Example: "2.1.2" or "2.3-SNAPSHOT"
 findstr suite_version ..\..\target\win\version.ini > "%TEMP%\vertemp.txt"
 set /p vertemp=<"%TEMP%\vertemp.txt"
 del "%TEMP%\vertemp.txt"
 for /f "tokens=1,2 delims=/=" %%a in ("%vertemp%") do set trash=%%a&set version=%%b
 
-:: Get revision number
-:: Note that this must be numeric, so is different from what is passed from Hudson
+:: Get revision number, called "rev" here
+:: Note that this must be numeric
+:: So it is determined differently from what is passed from Hudson
+:: since Hudson can pass "latest" as the value for revision
 findstr svn_revision ..\..\target\win\version.ini > "%TEMP%\revtemp.txt"
 set /p revtemp=<"%TEMP%\revtemp.txt"
 del "%TEMP%\revtemp.txt"
 for /f "tokens=1,2 delims=/=" %%a in ("%revtemp%") do set trash=%%a&set rev=%%b
 
-:: Figure out if the version is a snapshot
+:: Figure out if the version is a snapshot (such as "2.3-SNAPSHOT")
+:: Used to pass the correct longversion parameter to NSIS
+:: since NSIS longversion must be of the form #.#.#.#
 for /f "tokens=1,2,3 delims=." %%a in ("%version%") do set vermajor=%%a&set verminor=%%b&set verpatch=%%c
 if "%vermajor%"=="" goto Snapshot
 if "%verminor%"=="" goto Snapshot
@@ -93,3 +89,13 @@ makensis /DVERSION=%version% /DLONGVERSION=%longversion% OpenGeoInstaller.nsi
 
 :: Clean up
 rd /s /q ..\..\target\
+
+
+::Unused commands
+
+:: Get today's date
+:: for /F "tokens=1* delims= " %%A in ('DATE/T') do set CDATE=%%B
+:: for /F "tokens=1,2 eol=/ delims=/ " %%A in ('DATE/T') do set mm=%%B
+:: for /F "tokens=1,2 delims=/ eol=/" %%A in ('echo %CDATE%') do set dd=%%B
+:: for /F "tokens=2,3 delims=/ " %%A in ('echo %CDATE%') do set yyyy=%%B
+:: set todaysdate=%yyyy%-%mm%-%dd%
