@@ -40,13 +40,11 @@ set dashzip=dashboard-%id%-win32.zip
 echo Downloading %url%/%mainzip% ...
 wget %url%/%mainzip% >nul 2>nul || (
   echo Error: File not found
-  echo   %url%/%mainzip% not found!
   exit /b 1
 )
 echo Downloading %url%/%dashzip% ...
 wget %url%/%dashzip% >nul 2>nul || (
   echo Error: File not found
-  echo   %url%/%dashzip% not found!
   exit /b 1
 )
 
