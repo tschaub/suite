@@ -9,15 +9,20 @@
 rd /s /q ..\..\target\ >nul 2>nul
 
 ::Auto defined variables (for when not building through Hudson)
-if x%repo_path%==x (
+if "x%repo_path%"=="x" (
   set repo_path=trunk
 )
-if x%revision%==x (
+if "x%revision%"=="x" (
   set revision=latest
 )
 
+echo repo_path is: %repo_path%
+
 :: Assemble artifact base URL
 set url=http://suite.opengeo.org/builds/%repo_path%
+
+echo url is: %url%
+
 
 :: Get REPO_PATH and convert slashes to dashes
 for /f "tokens=1,2 delims=\/" %%a in ("%repo_path%") do (
