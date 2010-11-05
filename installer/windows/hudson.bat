@@ -77,6 +77,6 @@ echo.
 echo Usage:
 echo   hudson.bat repo_path revision
 echo.
-
+exit /b 1
 
 :End
