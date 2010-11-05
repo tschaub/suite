@@ -29,22 +29,31 @@ for /f "tokens=1,2 delims=\/" %%a in ("%repo_path%") do (
   )
 )
 
-:: generate id string
-set id=%repo-path%-%revision%
+:: Generate id string (for file names)
+set id=%repo-path%-r%revision%
 
+:: File names
 set mainzip=opengeosuite-%id%-win.zip
 set dashzip=dashboard-%id%-win32.zip
 
-:: Get the maven artifact in place
-@echo Downloading %url%/%mainzip% ...
-wget %url%/%mainzip% >nul 2>nul
+:: Get the maven artifacts 
+echo Downloading %url%/%mainzip% ...
+wget %url%/%mainzip% >nul 2>nul || (
+  echo Error: File not found
+  echo   %url%/%mainzip% not found!
+  exit /b 1
+)
+echo Downloading %url%/%dashzip% ...
+wget %url%/%dashzip% >nul 2>nul || (
+  echo Error: File not found
+  echo   %url%/%dashzip% not found!
+  exit /b 1
+)
+
+:: Put artifacts in place
 mkdir ..\..\target\win 2>nul
 unzip %mainzip% -d ..\..\target\win
 del %mainzip%
-
-:: Get the dashboard in place
-@echo Downloading %url%/%dashzip% ...
-wget %url%/%dashzip% >nul 2>nul
 rd /s /q ..\..\target\win\dashboard
 unzip %dashzip% -d ..\..\target\win\
 del %dashzip%
@@ -58,9 +67,10 @@ del "%TEMP%\vertemp.txt"
 for /f "tokens=1,2 delims=/=" %%a in ("%vertemp%") do set trash=%%a&set version=%%b
 
 :: Get revision number, called "rev" here
-:: Note that this must be numeric
-:: So it is determined differently from what is passed from Hudson
-:: since Hudson can pass "latest" as the value for revision
+:: Note that this must be numeric.
+:: It is determined differently from what is passed from Hudson
+:: since Hudson could pass "latest" as the value for revision.
+:: This may be unecessary now (Hudson no longer using "latest")
 findstr svn_revision ..\..\target\win\version.ini > "%TEMP%\revtemp.txt"
 set /p revtemp=<"%TEMP%\revtemp.txt"
 del "%TEMP%\revtemp.txt"
@@ -70,9 +80,9 @@ for /f "tokens=1,2 delims=/=" %%a in ("%revtemp%") do set trash=%%a&set rev=%%b
 :: Used to pass the correct longversion parameter to NSIS
 :: since NSIS longversion must be of the form #.#.#.#
 for /f "tokens=1,2,3 delims=." %%a in ("%version%") do set vermajor=%%a&set verminor=%%b&set verpatch=%%c
-if "%vermajor%"=="" goto Snapshot
-if "%verminor%"=="" goto Snapshot
-if "%verpatch%"=="" goto Snapshot
+if "x%vermajor%"=="x" goto Snapshot
+if "x%verminor%"=="x" goto Snapshot
+if "x%verpatch%"=="x" goto Snapshot
 set longversion=%version%.%rev%
 goto Build
 :Snapshot
@@ -80,7 +90,7 @@ set longversion=0.0.0.%rev%
 goto Build
 
 :Build
-:: Now build the EXE
+:: Now build the EXE with NSIS
 @echo Running NSIS (version %version%, longversion %longversion%) ...
 makensis /DVERSION=%version% /DLONGVERSION=%longversion% OpenGeoInstaller.nsi
 
@@ -100,7 +110,7 @@ echo Exs:
 echo   buildexe.bat branches/2.2.x 1866
 echo   buildexe.bat trunk 1898
 echo.
-
+exit /b 1
 
 
 
