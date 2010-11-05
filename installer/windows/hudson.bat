@@ -62,11 +62,14 @@ echo.
 for /f "skip=8" %%a in ('dir /b /o-d "%outpath%"') do del "%outpath%\%%a"
 
 :: Final output
-echo The Hudson build number is b%BUILD_NUMBER%
-echo The files were built from %repo_path%
-echo The revision is %rev% (%revision%)
-echo Output file is called %outfile%
-echo Output file saved to %outpath%
+echo Summary:
+echo.
+echo The Hudson build number is: b%BUILD_NUMBER%
+echo The files were built from: %repo_path%
+echo The revision is: %rev% (%revision%)
+echo Output file is called: %outfile%
+echo Output file saved to: %outpath%
+echo Available for download at: http://suite.opengeo.org/winbuilds/%repo_path%/%outfile%
 echo.
 echo Done.
 echo.
