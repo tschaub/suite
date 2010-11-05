@@ -1,32 +1,28 @@
-::@echo off
+@echo off
 :: job to build .EXE
 :: assumes that
 ::   http://svn.opengeo.org/suite/trunk/installer
 :: has been checked out
 :: Also assumes that it is running inside installer\windows
 
+:: Requires two paramters
+:: buildexe.bat %repo_path% %revision%
+:: See Usage at bottom
+if "x%2"=="x" goto Usage
+if not "x%3"=="x" goto Usage
+set repo_path=%1
+set revision=%2
+
+
 :: Start by cleaning up target
 rd /s /q ..\..\target\ >nul 2>nul
-
-::Auto defined variables (for when not building through Hudson)
-if "x%repo_path%"=="x" (
-  set repo_path=trunk
-)
-if "x%revision%"=="x" (
-  set revision=latest
-)
-
-echo repo_path is: %repo_path%
 
 :: Assemble artifact base URL
 set url=http://suite.opengeo.org/builds/%repo_path%
 
-echo url is: %url%
-
-
-:: Get REPO_PATH and convert slashes to dashes
+:: Convert slashes to dashes in "repo_path", to be called "repo-path"
 for /f "tokens=1,2 delims=\/" %%a in ("%repo_path%") do (
-  if not x%%b==x (
+  if not "x%%b"=="x" (
     set repo-path=%%a-%%b
   ) else (
     set repo-path=%%a
@@ -34,11 +30,7 @@ for /f "tokens=1,2 delims=\/" %%a in ("%repo_path%") do (
 )
 
 :: generate id string
-if %revision%==latest (
-  set id=latest
-) else (
-  set id=%repo-path%-r%revision%
-)
+set id=%repo-path%-%revision%
 
 set mainzip=opengeosuite-%id%-win.zip
 set dashzip=dashboard-%id%-win32.zip
@@ -95,6 +87,24 @@ makensis /DVERSION=%version% /DLONGVERSION=%longversion% OpenGeoInstaller.nsi
 :: Clean up
 rd /s /q ..\..\target\
 
+goto End
+
+
+:Usage
+echo.
+echo OpenGeo Suite build process
+echo.
+echo Usage:
+echo   buildexe.bat repo_path revision
+echo Exs:
+echo   buildexe.bat branches/2.2.x 1866
+echo   buildexe.bat trunk 1898
+echo.
+
+
+
+
+:End
 
 ::Unused commands
 
