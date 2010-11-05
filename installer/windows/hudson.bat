@@ -28,6 +28,11 @@ echo Calling build process...
 echo.
 call buildexe.bat %repo_path% %revision%
 
+:: If buildexe.bat failed in some way
+if not exist OpenGeo*.exe (
+  echo Error: EXE creation failed
+  exit /b 1
+)
 
 :: Name the file
 :: Note: %id% is defined in buildexe.bat
