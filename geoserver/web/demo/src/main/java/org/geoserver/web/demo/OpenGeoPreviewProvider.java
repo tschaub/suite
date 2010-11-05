@@ -73,8 +73,9 @@ public class OpenGeoPreviewProvider extends GeoServerDataProvider<PreviewLayer> 
         return PROPERTIES;
     }
 
-    public IModel model(Object object) {
+    protected IModel newModel(Object object) {
         return new PreviewLayerModel((PreviewLayer) object);
     }
+    
 
 }

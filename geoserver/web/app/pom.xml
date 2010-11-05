@@ -53,6 +53,10 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>org.geoserver.community</groupId>
+      <artifactId>monitoring</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.geotools</groupId>
       <artifactId>gt-imageio-ext-gdal</artifactId>
     </dependency>
@@ -178,24 +182,21 @@
             </goals>
          </execution>
        </executions>
-       
     </plugin>
-
 
    </plugins>
   </build>
 
   <profiles>
-    <profile>
-      <id>monitoring</id>
-      <dependencies>
-        <dependency>
-          <groupId>org.opengeo.geoserver</groupId>
-          <artifactId>monitoring</artifactId>
-          <version>${project.version}</version>
-        </dependency>
-      </dependencies>
-    </profile>
+     <profile>
+       <id>dbconfig</id>
+       <dependencies> 
+         <dependency>
+           <groupId>org.geoserver.community</groupId>
+           <artifactId>dbconfig</artifactId>
+         </dependency>
+       </dependencies> 
+     </profile>
   </profiles>
 
 </project>

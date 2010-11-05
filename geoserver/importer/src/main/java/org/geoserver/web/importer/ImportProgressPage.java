@@ -76,8 +76,8 @@ public class ImportProgressPage extends GeoServerSecuredPage {
                         perc = 90;
                     }
                     widthModel.setObject("width: " + perc + "%;");
-                    percentage.setModelObject(perc);
-                    currentFile.setModelObject(summary.getCurrentLayer());
+                    percentage.setDefaultModelObject(perc);
+                    currentFile.setDefaultModelObject(summary.getCurrentLayer());
                     
                     target.addComponent(info);
                 }

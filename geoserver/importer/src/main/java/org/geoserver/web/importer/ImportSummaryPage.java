@@ -316,7 +316,7 @@ public class ImportSummaryPage extends GeoServerSecuredPage {
             protected void onClick(AjaxRequestTarget target) {
                 popupWindow.setInitialHeight(375);
                 popupWindow.setInitialWidth(525);
-                LayerSummary summary = (LayerSummary) getModel().getObject();
+                LayerSummary summary = (LayerSummary) getDefaultModel().getObject();
                 CoordinateReferenceSystem crs = summary.getLayer().getResource().getNativeCRS();
                 popupWindow.setContent(new CRSPanel.WKTPanel(popupWindow.getContentId(), crs));
                 if (crs != null)

@@ -101,7 +101,7 @@ public class DirectoryPage extends GeoServerSecuredPage {
                     @Override
                     protected boolean onSubmit(AjaxRequestTarget target, Component contents) {
                         GeoServerFileChooser chooser = (GeoServerFileChooser) contents;
-                        directory = ((File) chooser.getModelObject()).getAbsolutePath();
+                        directory = ((File) chooser.getDefaultModelObject()).getAbsolutePath();
                         // clear the raw input of the field won't show the new model value
                         dirField.clearInput();
 

@@ -75,6 +75,16 @@
      <version>${gs.version}</version>
    </dependency>
    <dependency>
+     <groupId>org.geoserver.community</groupId>
+     <artifactId>monitoring</artifactId>
+     <version>${gs.version}</version>
+   </dependency>
+   <dependency>
+     <groupId>org.geoserver.community</groupId>
+     <artifactId>dbconfig</artifactId>
+     <version>${gs.version}</version>
+   </dependency>
+   <dependency>
      <groupId>org.geotools</groupId>
      <artifactId>gt-imageio-ext-gdal</artifactId>
      <version>${gt.version}</version>
@@ -273,7 +283,6 @@
  <modules>
   <module>extension</module>
   <module>importer</module>
-  <module>monitoring</module>
   <module>web</module>
   <module>test</module>
  </modules>
@@ -353,12 +362,6 @@
     </dependencies>
    </profile>
    <profile>
-     <id>monitoring</id>
-     <modules>
-       <module>monitoring</module>
-     </modules>
-   </profile>
-   <profile>
      <id>externals</id>
      <modules>
        <module>externals</module>
@@ -367,8 +370,8 @@
   </profiles>
   
  <properties>
-  <gs.version>2.0.3-SNAPSHOT</gs.version>
-  <gt.version>2.6-SNAPSHOT</gt.version>
+  <gs.version>2.1-SNAPSHOT</gs.version>
+  <gt.version>2.7-SNAPSHOT</gt.version>
   <java.awt.headless>true</java.awt.headless>
   <test.maxHeapSize>512M</test.maxHeapSize>
   <sde.version>9.2</sde.version>

@@ -5,7 +5,7 @@
 package org.geoserver.web.importer;
 
 import static org.geotools.data.oracle.OracleNGOCIDataStoreFactory.*;
-import static org.geotools.jdbc.JDBCJNDIDataStoreFactory.*;
+import static org.geotools.jdbc.JDBCJNDIDataStoreFactory.JNDI_REFNAME;
 
 import java.io.Serializable;
 import java.net.URI;

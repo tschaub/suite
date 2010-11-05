@@ -5,6 +5,7 @@
 package org.geoserver.web.importer;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -14,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.ResourceModel;
 import org.geoserver.catalog.FeatureTypeInfo;
 import org.geoserver.importer.LayerSummary;
@@ -95,10 +97,10 @@ class ImportSummaryProvider extends GeoServerDataProvider<LayerSummary> {
         return Arrays.asList(TYPE, LAYER, ISSUES, SRS, COMMANDS);
     }
 
-    public IModel model(Object object) {
+    protected IModel newModel(Object object) {
         return new LayerSummaryModel((LayerSummary) object);
     }
-
+    
     /**
      * Sorts layers so that the first ones are failures. The secondary sort criteria is the layer
      * name

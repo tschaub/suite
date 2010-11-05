@@ -157,10 +157,9 @@ public class LayerChooserProvider extends GeoServerDataProvider<Resource> {
         return PROPERTIES;
     }
 
-    public IModel model(Object object) {
+    protected IModel newModel(Object object) {
         return new Model((Serializable) object);
     }
-
     
     /**
      * Compares two resources by their geometry type
