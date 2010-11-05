@@ -25,6 +25,11 @@ public class OpenGeoTestSupport extends GeoServerAbstractTestSupport {
     }
     
     @Override
+    protected boolean useLegacyDataDirectory() {
+        return false;
+    }
+    
+    @Override
     protected TestData buildTestData() throws Exception {
         return new LiveData(new File("../../data_dir").getCanonicalFile());
     }
