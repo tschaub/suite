@@ -23,10 +23,10 @@ import org.geoserver.ows.Response;
 import org.geoserver.platform.Operation;
 import org.geoserver.platform.Service;
 import org.geoserver.platform.ServiceException;
+import org.geoserver.wms.GetMapRequest;
 import org.geoserver.wms.MapLayerInfo;
 import org.geotools.util.Version;
 import org.geotools.util.logging.Logging;
-import org.vfny.geoserver.wms.requests.GetMapRequest;
 
 public class MonitoringCallback implements DispatcherCallback {
     

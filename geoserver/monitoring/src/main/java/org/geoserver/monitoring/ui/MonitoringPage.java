@@ -153,11 +153,9 @@ public class MonitoringPage extends GeoServerBasePage {
             return PROPERTIES;
         }
 
-        /**
-         * @see org.apache.wicket.markup.repeater.data.IDataProvider#model(java.lang.Object)
-         */
-        public IModel model(Object request) {
-            return new Model((RequestStats) request);
+        @Override
+        protected IModel newModel(Object object) {
+            return new Model((RequestStats) object);
         }
     }
 
