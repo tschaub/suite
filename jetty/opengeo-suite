@@ -34,7 +34,7 @@ else
 fi
 
 CLASSPATH=og-jetty.jar:jetty-start.jar:lib/ini4j-0.5.1.jar:lib/log4j-1.2.14.jar:lib/commons-logging-1.0.jar:lib/slf4j-jcl-1.0.1.jar
-VMOPTS="-Xms128m -Xmx512m"
+VMOPTS="-Xms128m -Xmx512m -XX:MaxPermSize=128m"
 OPTS="-Dslf4j=false -cp $CLASSPATH"
 
 # Check for PostGIS script in Linux and OSX locations
