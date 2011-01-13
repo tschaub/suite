@@ -1,0 +1,4 @@
+debian/tmp/usr/bin/pgadmin3
+debian/pgadmin3.xpm usr/share/pixmaps
+debian/pgadmin3.svg usr/share/pixmaps
+debian/pgadmin3.desktop	usr/share/applications

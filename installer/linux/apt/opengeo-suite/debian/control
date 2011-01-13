@@ -1,0 +1,14 @@
+Source: opengeo-suite
+Section: science
+Priority: extra
+Maintainer: Aaron Greengrass <aaron@thatserver.ca>
+Build-Depends: debhelper (>= 7.0.50~)
+Standards-Version: 3.8.4
+Homepage: http://geonode.org/
+
+Package: opengeo-suite
+Architecture: any
+Depends: debconf, opengeo-geoserver, ${misc:Depends} 
+Suggests: opengeo-docs
+Description: Allows the creation, sharing, and collaborative use of geospatial data. 
+ description

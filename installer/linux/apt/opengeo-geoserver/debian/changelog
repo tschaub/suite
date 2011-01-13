@@ -1,0 +1,5 @@
+opengeo-geoserver (2.3.0) unstable; urgency=low
+
+  *  First complete release including pre and post install hooks.
+
+ -- Aaron Greengrass <aaron@thatserver.ca>  Thu, 25 Nov 2010 14:49:39 -0700

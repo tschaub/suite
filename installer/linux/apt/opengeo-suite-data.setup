@@ -1,0 +1,13 @@
+#!/bin/bash
+
+. functions
+
+pushd files
+if [ -e data_dir ]; then
+  svn up data_dir
+else
+  svn co http://svn.opengeo.org/suite/$BRANCH/data_dir
+fi
+popd
+
+svn export files/data_dir $1/data_dir

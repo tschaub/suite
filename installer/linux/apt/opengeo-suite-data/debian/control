@@ -1,0 +1,14 @@
+Source: opengeo-suite-data
+Section: science
+Priority: extra
+Maintainer: Aaron Greengrass <aaron@thatserver.ca>
+Build-Depends: debhelper (>= 7.0.50~)
+Standards-Version: 3.8.4
+Homepage: http://geonode.org/
+
+Package: opengeo-suite-data
+Architecture: any
+Depends: debconf, tomcat6, ${misc:Depends}
+#,${shlibs:Depends}
+Description: Allows the creation, sharing, and collaborative use of geospatial data. 
+ These are the required datafiles for Geoserver Suite

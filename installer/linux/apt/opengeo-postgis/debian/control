@@ -1,0 +1,13 @@
+Source: opengeo-postgis
+Section: science
+Priority: extra
+Maintainer: Aaron Greengrass <aaron@thatserver.ca>
+Build-Depends: debhelper (>= 7.0.50~)
+Standards-Version: 3.8.4
+Homepage: http://geonode.org/
+
+Package: opengeo-postgis
+Architecture: any
+Depends: debconf, postgis, postgresql-8.4-postgis, opengeo-suite-data, postgresql-contrib, ${misc:Depends}
+Description: Customizations for postgis to run with opengeo server suite.
+ These are the required datafiles for Geoserver Suite

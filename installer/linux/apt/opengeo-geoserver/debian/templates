@@ -1,0 +1,29 @@
+Template: opengeo_geoserver/geoserver_user
+Type: string
+Default: admin
+Description: Please enter an admin username:
+ The default username is 'admin', hit enter to accept, or pick your own.
+
+Template: opengeo_geoserver/geoserver_password
+Type: password
+Default: admin
+Description: Please enter an admin password:
+ The default password is 'admin', hit enter to accept, or pick your own.
+
+Template: opengeo_geoserver/geoserver_password_confirm
+Type: password
+Description: Password confirmation:
+
+Template: opengeo_geoserver/geoserver_hostname
+Type: string
+Default: localhost
+Description: Please enter the hostname you will access geoserver on:
+ This should be either a resolved dnsname or an ip address.
+ Hit enter to use localhost ONLY if this service is running on your
+ local machine! Do not include paths or http://
+
+Template: opengeo-geoserver/password_mismatch
+Type: error
+Description: Password input error
+ The two passwords you entered were not the same. Please try again.
+

@@ -1,0 +1,15 @@
+function checkrc() {
+  if [ "$1" != 0 ]; then
+    echo "$2 failed returning $1"
+    exit 1
+  fi
+}
+
+function getfile() {
+  local url=$2/$1
+  if [ ! -e files/$1 ]; then
+     wget $url
+     checkrc $? "downloading $url"
+     mv $1 files
+  fi
+}

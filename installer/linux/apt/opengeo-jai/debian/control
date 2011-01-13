@@ -1,0 +1,14 @@
+Source: opengeo-jai
+Section: science
+Priority: extra
+Maintainer: Aaron Greengrass <aaron@thatserver.ca>
+Build-Depends: debhelper (>= 7.0.50~)
+Standards-Version: 3.8.4
+Homepage: http://geonode.org/
+
+Package: opengeo-jai
+Architecture: any
+Depends: debconf, sun-java6-jdk | openjdk-6-jdk, ${misc:Depends}
+Description: Java Imaging library for Geoserver Suite
+ Rendering libraries to improve Geoserver Suite performance
+

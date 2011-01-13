@@ -1,0 +1,12 @@
+Source: opengeo-docs
+Section: doc
+Priority: extra
+Maintainer: Aaron Greengrass <aaron@thatserver.ca>
+Build-Depends: debhelper (>= 7.0.50~)
+Standards-Version: 3.8.4
+Homepage: http://geonode.org/
+
+Package: opengeo-docs
+Architecture: all
+Description: Documentation for the OpenGeo Suite packages
+ This is the documentation for Geoserver Suite

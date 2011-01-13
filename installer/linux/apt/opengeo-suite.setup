@@ -1,0 +1,10 @@
+#!/bin/bash
+
+. functions
+
+ARTIFACT=opengeosuite-$BRANCH-$REV-war.tar.gz
+getfile $ARTIFACT $SUITE_BUILDS/$BRANCH
+
+cd $1
+tar xzvf ../files/$ARTIFACT
+mv opengeosuite-*/*.war .
