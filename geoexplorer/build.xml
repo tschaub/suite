@@ -6,6 +6,8 @@
     </description>
 
     <property name="build" location="build"/>
+    <available file="repo" type="dir" property="repo.initialized"/>
+        
 
     <target name="init">
 
@@ -28,8 +30,8 @@
         <ant dir="repo" target="dist"/>
     </target>
     
-    <target name="clean" description="remove previous build">
-        <!-- <ant dir="repo" target="clean"/> -->
+    <target name="clean" description="remove previous build" if="repo.initialized">
+        <ant dir="repo" target="clean"/>
     </target>
 
 </project>
