@@ -5,9 +5,7 @@
         GeoExplorer Build File
     </description>
 
-    <property name="build" location="build"/>
     <available file="repo" type="dir" property="repo.initialized"/>
-        
 
     <target name="init">
 
@@ -32,6 +30,7 @@
     
     <target name="clean" description="remove previous build" if="repo.initialized">
         <ant dir="repo" target="clean"/>
+        <delete dir="target" failonerror="false"/>
     </target>
 
 </project>

@@ -46,7 +46,7 @@
                     <webappDirectory>target/${artifactId}</webappDirectory>
                     <webResources>
                         <resource>
-                            <directory>build/geoexplorer/WEB-INF</directory>
+                            <directory>repo/build/geoexplorer/WEB-INF</directory>
                             <targetPath>WEB-INF</targetPath>
                         </resource>
                     </webResources>
