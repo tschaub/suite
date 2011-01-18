@@ -1,3 +1,5 @@
+
+# checkrc <code> <message>
 function checkrc() {
   if [ "$1" != 0 ]; then
     echo "$2 failed returning $1"
@@ -5,11 +7,44 @@ function checkrc() {
   fi
 }
 
-function getfile() {
-  local url=$2/$1
-  if [ ! -e files/$1 ]; then
+# getfile <url> [overwrite]
+function get_file() {
+  local url=$1
+  local file=`echo $url | sed 's#http://##g' | xargs basename`
+
+  if [ ! -d files ]; then
+     mkdir files
+     checkr4c $? "mkdir files"
+  fi
+
+  if [ "$2" != "" ] ||  [ ! -e files/$file ]; then
      wget $url
      checkrc $? "downloading $url"
-     mv $1 files
+
+     mv $file files
+     checkrc $? "mv $file files"
   fi
+}
+
+# build_deb <name>
+function build_deb() {
+
+  # clear out old build
+  if [ ! -d build ]; then
+    mkdir build
+    checkrc $? "mkdir build"
+  fi
+
+  rm build/$1*
+  pushd $1
+  checkrc $? "pushd $1"
+  debuild clean
+
+  # debuild
+  debuild -uc -us -b -i
+  checkrc $? "debuilding $1"
+  
+  # move artifacts to build directory
+  popd
+  mv *.deb *.build *.changes build
 }
