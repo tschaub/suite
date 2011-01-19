@@ -12,7 +12,6 @@ rm -rf opengeo-docs/docs
 # unpack
 unzip files/$DOCS -d opengeo-docs
 checkrc $? "unpacking docs"
-exit 
 
 # build
 build_deb opengeo-docs
