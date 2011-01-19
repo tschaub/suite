@@ -20,5 +20,4 @@ checkrc $? "unpacking geos sources"
 rmdir $GEOS 
 
 # build
-exit
 build_deb geos

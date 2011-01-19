@@ -29,13 +29,12 @@ function get_file() {
 # build_deb <name>
 function build_deb() {
 
-  # clear out old build
-  if [ ! -d build ]; then
-    mkdir build
-    checkrc $? "mkdir build"
-  fi
+  local build="build/$1"
 
-  rm build/$1*
+  # clear out old build
+  rm -rf $build
+  mkdir -p $build
+
   pushd $1
   checkrc $? "pushd $1"
   debuild clean
@@ -46,5 +45,42 @@ function build_deb() {
   
   # move artifacts to build directory
   popd
-  mv *.deb *.build *.changes build
+  mv *.deb *.build *.changes $build
+}
+
+# check_root
+check_root() {
+  if [ "$USER" != "root" ]; then
+    echo "This script must be run as root"
+    exit 1
+  fi
+}
+
+# remove_deb [package, ...]
+remove_deb() {
+  local pkgs=( $* )
+
+  # remove
+  for (( i = 0; i < ${#pkgs[@]}; i++ )); do
+    dpkg -r ${pkgs[$i]}
+  done
+
+  # prune
+  for (( i = 0; i < ${#pkgs[@]}; i++ )); do
+    dpkg -P ${pkgs[$i]}
+  done
+}
+
+# install_deb <name> [package, ...]
+install_deb() {
+  local name=$1
+  local pkgs=( $* )
+
+  pushd build/$name
+  for (( i = 1; i < ${#pkgs[@]}; i++ )); do
+    dpkg -i ${pkgs[$i]}_*
+  done
+  popd
+
+  dpkg -l | grep $name
 }
