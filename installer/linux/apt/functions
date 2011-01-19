@@ -1,3 +1,8 @@
+SVN_REPO=http://svn.opengeo.org/suite
+BUILDS=http://suite.opengeo.org/builds
+REPO_PATH=trunk
+BRANCH=trunk
+REV=latest
 
 # checkrc <code> <message>
 function checkrc() {
@@ -7,14 +12,14 @@ function checkrc() {
   fi
 }
 
-# getfile <url> [overwrite]
+# get_file <url> [overwrite]
 function get_file() {
   local url=$1
   local file=`echo $url | sed 's#http://##g' | xargs basename`
 
   if [ ! -d files ]; then
      mkdir files
-     checkr4c $? "mkdir files"
+     checkrc $? "mkdir files"
   fi
 
   if [ "$2" != "" ] ||  [ ! -e files/$file ]; then
@@ -24,6 +29,32 @@ function get_file() {
      mv $file files
      checkrc $? "mv $file files"
   fi
+}
+
+# get_svn <repo_path> <dir> <path>
+function get_svn() {
+  local repo_path=$1
+  local dir=$2
+  local path=$3
+
+  if [ ! -d svn ]; then
+    mkdir svn
+    checkrc $? "mkdir svn"
+  fi
+
+  if [ ! -d svn/$repo_path ]; then
+    mkdir svn/$repo_path
+    checkrc $? "mkdir svn/$repo_path"
+  fi
+
+  pushd svn/$repo_path
+  if [ -d $dir ]; then 
+    svn up $dir
+  else 
+    svn co $SVN_REPO/$repo_path/$path $dir
+  fi
+  checkrc $? "svn update"
+  popd
 }
 
 # build_deb <name>
@@ -83,4 +114,21 @@ install_deb() {
   popd
 
   dpkg -l | grep $name
+}
+
+# publish_deb <name> <repo> <dist>
+publish_deb() {
+  local name=$1
+  local repo=$2
+  local dist=$3
+
+  pushd build/$name
+  checkrc $? "push build/$name"
+
+  scp * apt.opengeo.org:/home/apt/incoming/$repo/$dist
+  checkrc $? "secure copy .deb files"
+  ssh -i ~/.ssh/id_rsa_apt apt@apt.opengeo.org "./publish_debs.sh $repo $dist" 
+  checkrc $? "remote publish"
+
+  popd
 }
