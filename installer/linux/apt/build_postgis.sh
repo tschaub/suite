@@ -11,7 +11,6 @@ get_file http://postgis.refractions.net/download/$POSTGIS.tar.gz
 pushd postgis
 ls | grep -v debian | xargs rm -rf
 popd
-exit
 
 # unpack sources
 rm -rf $POSTGIS
