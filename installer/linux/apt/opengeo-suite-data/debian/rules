@@ -9,6 +9,8 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+include /usr/share/dpatch/dpatch.make
+
 %:
 	dh $@ 
 install:
@@ -20,8 +22,10 @@ install:
 	mkdir -p $(CURDIR)/debian/opengeo-suite-data/usr/share/opengeo-suite-data/geoexplorer_data
 
 	cp -rp $(CURDIR)/data_dir/* $(CURDIR)/debian/opengeo-suite-data/usr/share/opengeo-suite-data/geoserver_data/.
-	cp $(CURDIR)/debian/datastore.xml $(CURDIR)/debian/opengeo-suite-data/usr/share/opengeo-suite-data/geoserver_data/workspaces/medford/Taxlots/datastore.xml
+	#cp $(CURDIR)/debian/datastore.xml $(CURDIR)/debian/opengeo-suite-data/usr/share/opengeo-suite-data/geoserver_data/workspaces/medford/Taxlots/datastore.xml
 	find $(CURDIR)/debian/opengeo-suite-data/usr/share/opengeo-suite-data -iname .svn  -print0 | xargs -0 rm -rf
+
+build: patch-stamp
 
 binary-indep: build install
 
@@ -43,3 +47,4 @@ binary-arch: build install
 binary: binary-indep binary-arch
 #       .PHONY: build clean binary-indep binary-arch binary install
 
+clean: unpatch
