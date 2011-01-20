@@ -24,6 +24,7 @@
   <verbose>false</verbose>
   <metadata>
     <entry key="svgAntiAlias">true</entry>
+    <entry key="GWC_WMS_Integration">true</entry>
     <entry key="svgRenderer">Batik</entry>
   </metadata>
   <watermark class="org.geoserver.wms.WatermarkInfoImpl">
