@@ -10,13 +10,13 @@ fi
 
 BRANCH=${REPO_PATH//\//-}
 
-# build_info <name>
+# build_info <package>
 function build_info() {
-  local name=$1
-  if [ "$name" != "" ]; then
-     name=$JOB_HOME
+  local pkg=$1
+  if [ "$pkg" != "" ]; then
+     name=$PACKAGE
   fi
-  echo "Building $1 from $REPO_PATH at revision $REV"
+  echo "Building $pkg from $REPO_PATH at revision $REV"
 }
 
 # checkrc <code> <message>
