@@ -20,3 +20,6 @@ rm -rf tmp
 
 # build
 build_deb opengeo-geoserver
+
+# publish
+publish_deb opengeo-geoserver

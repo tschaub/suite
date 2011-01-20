@@ -17,3 +17,6 @@ checkrc $? "unpacking docs"
 
 # build
 build_deb opengeo-docs
+
+# publish
+publish_deb opengeo-docs

@@ -25,3 +25,6 @@ checkrc $? "unpacking datum files"
 
 # build
 build_deb proj
+
+# publish
+publish_deb proj

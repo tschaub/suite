@@ -23,3 +23,6 @@ rmdir $POSTGIS
 
 # build
 build_deb postgis
+
+# publish
+publish_deb postgis

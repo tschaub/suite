@@ -17,3 +17,6 @@ checkrc $? "unpacking medford scripts"
 
 # build
 build_deb opengeo-postgis
+
+# publish
+publish_deb opengeo-postgis

@@ -21,3 +21,6 @@ rm -rf tmp
 
 # build
 build_deb opengeo-suite
+
+# publish
+publish_deb opengeo-suite

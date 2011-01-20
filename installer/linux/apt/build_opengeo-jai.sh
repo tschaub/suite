@@ -31,3 +31,6 @@ unzip -o files/jai_imageio-1_1-lib-linux-i586-jdk.bin -d opengeo-jai
 
 # build
 build_deb opengeo-jai
+
+# publish
+publish_deb opengeo-jai

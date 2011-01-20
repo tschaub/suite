@@ -15,3 +15,6 @@ checkrc $? "unpacking data directory"
 
 # build
 build_deb opengeo-suite-data
+
+# publish
+publish_deb opengeo-suite-data

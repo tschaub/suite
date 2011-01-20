@@ -24,3 +24,6 @@ rmdir $PGADMIN
 
 # build
 build_deb pgadmin3
+
+# publish
+pubish_deb pgadmin3

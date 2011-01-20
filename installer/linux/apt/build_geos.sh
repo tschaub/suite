@@ -23,3 +23,6 @@ rmdir $GEOS
 
 # build
 build_deb geos
+
+# publish
+publish_deb geos
