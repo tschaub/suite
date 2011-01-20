@@ -6,7 +6,7 @@ build_info
 
 # grab files
 DOCS=opengeosuite-$BRANCH-$REV-doc.zip
-get_file $BUILDS/$REPO_PATH/$DOCS
+get_file $BUILDS/$REPO_PATH/$DOCS yes
 
 # clean out old files
 rm -rf opengeo-docs/docs

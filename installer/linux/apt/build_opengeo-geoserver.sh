@@ -6,7 +6,7 @@ build_info
 
 # grab files
 GEOSERVER=opengeosuite-$BRANCH-$REV-war-geoserver.zip
-get_file $BUILDS/$REPO_PATH/$GEOSERVER
+get_file $BUILDS/$REPO_PATH/$GEOSERVER yes
 
 # clean out old files
 rm -rf opengeo-geoserver/geoserver.war
