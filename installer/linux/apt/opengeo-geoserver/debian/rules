@@ -9,6 +9,8 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+include /usr/share/dpatch/dpatch.make
+
 %:
 	dh $@ 
 install:
@@ -17,12 +19,21 @@ install:
 	dh_prep
 	dh_installdirs
 	mkdir -p $(CURDIR)/debian/opengeo-geoserver/usr/share/opengeo-geoserver 
-	rm -rf $(CURDIR)/geoserver $(CURDIR)/geoserver.zip
-	unzip $(CURDIR)/geoserver.war -d geoserver
-	cp $(CURDIR)/debian/web.xml $(CURDIR)/geoserver/WEB-INF/web.xml
+	#rm -rf $(CURDIR)/geoserver $(CURDIR)/geoserver.zip
+	rm -rf $(CURDIR)/geoserver.zip
+	#unzip $(CURDIR)/geoserver.war -d geoserver
+	#cp $(CURDIR)/debian/web.xml $(CURDIR)/geoserver/WEB-INF/web.xml
 	( cd geoserver ; zip ../geoserver.zip * -r ; cd ..)
 	cp -rp $(CURDIR)/geoserver.zip $(CURDIR)/debian/opengeo-geoserver/usr/share/opengeo-geoserver/geoserver.war
-	rm -rf $(CURDIR)/geoserver $(CURDIR)/geoserver.zip
+	#rm -rf $(CURDIR)/geoserver $(CURDIR)/geoserver.zip
+	rm -rf $(CURDIR)/geoserver.zip
+
+unpack-war:
+	rm -rf $(CURDIR)/geoserver
+	unzip $(CURDIR)/geoserver.war -d geoserver
+
+build: unpack-war patch-stamp
+
 binary-indep: build install
 
 binary-arch: build install
@@ -43,3 +54,4 @@ binary-arch: build install
 binary: binary-indep binary-arch
 #       .PHONY: build clean binary-indep binary-arch binary install
 
+clean: unpatch
