@@ -1,10 +1,10 @@
 Source: opengeo-jai
 Section: science
 Priority: extra
-Maintainer: Aaron Greengrass <aaron@thatserver.ca>
+Maintainer: OpenGeo <inquiry@opengeo.org>
 Build-Depends: debhelper (>= 7.0.50~)
 Standards-Version: 3.8.4
-Homepage: http://geonode.org/
+Homepage: http://opengeo.org
 
 Package: opengeo-jai
 Architecture: any
