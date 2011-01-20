@@ -137,6 +137,21 @@ publish_deb() {
   local repo=$2
   local dist=$3
 
+  if [ "$repo" == "" ]; then
+     repo=$REPO
+  fi
+  if [ "$repo" == "" ]; then
+     echo "repository not specified, aborting publish"
+  fi
+
+  if [ "$dist" == "" ]; then
+    dist=$DIST
+  fi
+  if [ "$dist" == "" ]; then
+    echo "distribution not specified, aborting publish"
+    exit 1
+  fi
+
   pushd build/$name
   checkrc $? "push build/$name"
 
