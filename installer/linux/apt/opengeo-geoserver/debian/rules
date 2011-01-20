@@ -13,7 +13,7 @@ include /usr/share/dpatch/dpatch.make
 
 %:
 	dh $@ 
-install:
+install: unpack-war patch-stamp
 	dh_testdir
 	dh_testroot
 	dh_prep
@@ -31,8 +31,6 @@ install:
 unpack-war:
 	rm -rf $(CURDIR)/geoserver
 	unzip $(CURDIR)/geoserver.war -d geoserver
-
-build: unpack-war patch-stamp
 
 binary-indep: build install
 
