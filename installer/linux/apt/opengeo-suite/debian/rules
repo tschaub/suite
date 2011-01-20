@@ -31,6 +31,7 @@ install: unpack-gxp patch-stamp
 	( cd geoexplorer ; zip ../geoexplorer.zip * -r ; cd ..)
 	cp -rp $(CURDIR)/geoexplorer.zip $(CURDIR)/debian/opengeo-suite/usr/share/opengeo-suite/geoexplorer.war
 	#rm -rf $(CURDIR)/geoexplorer $(CURDIR)/geoexplorer.zip
+	rm -rf $(CURDIR)/geoexplorer.zip
 
 unpack-gxp:
 	rm -rf $(CURDIR)/geoexplorer	
@@ -58,4 +59,4 @@ binary: binary-indep binary-arch
 
 clean: unpatch
 	dh_clean
-	rm -rf $(CURDIR)/geoexplorer $(CURDIR)/geoexplorer.zip
+	rm -rf $(CURDIR)/geoexplorer
