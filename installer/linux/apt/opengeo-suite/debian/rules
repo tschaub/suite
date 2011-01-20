@@ -57,3 +57,5 @@ binary: binary-indep binary-arch
 #       .PHONY: build clean binary-indep binary-arch binary install
 
 clean: unpatch
+	dh_clean
+	rm -rf $(CURDIR)/geoexplorer $(CURDIR)/geoexplorer.zip
