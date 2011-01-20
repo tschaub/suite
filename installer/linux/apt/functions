@@ -1,8 +1,23 @@
 SVN_REPO=http://svn.opengeo.org/suite
 BUILDS=http://suite.opengeo.org/builds
-REPO_PATH=trunk
-BRANCH=trunk
-REV=latest
+
+if [ "$REPO_PATH" == "" ]; then
+  REPO_PATH=trunk
+fi
+if [ "$REV" == "" ]; then
+  REV=latest
+fi
+
+BRANCH=${REPO_PATH//\//-}
+
+# build_info <name>
+function build_info() {
+  local name=$1
+  if [ "$name" != "" ]; then
+     name=$JOB_HOME
+  fi
+  echo "Building $1 from $REPO_PATH at revision $REV"
+}
 
 # checkrc <code> <message>
 function checkrc() {

@@ -2,6 +2,8 @@
 
 . functions
 
+build_info
+
 VERSION=1.10.2
 PGADMIN=pgadmin3-$VERSION
 

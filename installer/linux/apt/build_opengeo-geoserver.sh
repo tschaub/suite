@@ -2,6 +2,8 @@
 
 . functions
 
+build_info
+
 # grab files
 GEOSERVER=opengeosuite-$BRANCH-$REV-war-geoserver.zip
 get_file $BUILDS/$REPO_PATH/$GEOSERVER

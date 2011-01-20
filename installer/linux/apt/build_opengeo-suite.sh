@@ -2,6 +2,8 @@
 
 . functions
 
+build_info
+
 WARS=opengeosuite-$BRANCH-$REV-war.zip
 
 # grab files

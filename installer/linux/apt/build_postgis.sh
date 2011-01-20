@@ -2,6 +2,8 @@
 
 . functions
 
+build_info
+
 POSTGIS=postgis-1.5.2
 
 # grab files

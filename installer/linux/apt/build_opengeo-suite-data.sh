@@ -2,7 +2,7 @@
 
 . functions
 
-REPO_PATH=trunk
+build_info
 
 # grab files
 get_svn $REPO_PATH data_dir data_dir

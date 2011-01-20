@@ -2,6 +2,8 @@
 
 . functions
 
+build_info
+
 # grab files
 get_file http://data.opengeo.org/suite/medford_taxlots.zip
 

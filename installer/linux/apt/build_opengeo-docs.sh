@@ -2,6 +2,8 @@
 
 . functions
 
+build_info
+
 # grab files
 DOCS=opengeosuite-$BRANCH-$REV-doc.zip
 get_file $BUILDS/$REPO_PATH/$DOCS

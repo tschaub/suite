@@ -2,6 +2,8 @@
 
 . functions
 
+build_info
+
 GEOS=geos-3.2.2
 
 # grab files
