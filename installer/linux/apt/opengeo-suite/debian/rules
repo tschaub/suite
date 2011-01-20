@@ -9,9 +9,11 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+include /usr/share/dpatch/dpatch.make
+
 %:
 	dh $@ 
-install:
+install: unpack-gxp patch-stamp
 	dh_testdir
 	dh_testroot
 	dh_prep
@@ -23,13 +25,18 @@ install:
 	cp -rp $(CURDIR)/recipes.war $(CURDIR)/debian/opengeo-suite/usr/share/opengeo-suite/.
 	cp -rp $(CURDIR)/geoexplorer.war $(CURDIR)/debian/opengeo-suite/usr/share/opengeo-suite/.
 
-	rm -rf $(CURDIR)/geoexplorer $(CURDIR)/geoexplorer.zip
-	unzip $(CURDIR)/geoexplorer.war -d geoexplorer
-	cp $(CURDIR)/debian/web.xml $(CURDIR)/geoexplorer/WEB-INF/web.xml
+	#rm -rf $(CURDIR)/geoexplorer $(CURDIR)/geoexplorer.zip
+	#unzip $(CURDIR)/geoexplorer.war -d geoexplorer
+	#cp $(CURDIR)/debian/web.xml $(CURDIR)/geoexplorer/WEB-INF/web.xml
 	( cd geoexplorer ; zip ../geoexplorer.zip * -r ; cd ..)
 	cp -rp $(CURDIR)/geoexplorer.zip $(CURDIR)/debian/opengeo-suite/usr/share/opengeo-suite/geoexplorer.war
-	rm -rf $(CURDIR)/geoexplorer $(CURDIR)/geoexplorer.zip
-inary-indep: build install
+	#rm -rf $(CURDIR)/geoexplorer $(CURDIR)/geoexplorer.zip
+
+unpack-gxp:
+	rm -rf $(CURDIR)/geoexplorer	
+	unzip $(CURDIR)/geoexplorer.war -d geoexplorer
+
+binary-indep: build install
 
 binary-arch: build install
 	dh_testdir
@@ -49,3 +56,4 @@ binary-arch: build install
 binary: binary-indep binary-arch
 #       .PHONY: build clean binary-indep binary-arch binary install
 
+clean: unpatch
