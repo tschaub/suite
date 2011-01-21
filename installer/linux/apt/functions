@@ -92,6 +92,11 @@ function build_deb() {
   # move artifacts to build directory
   popd
   mv *.deb *.build *.changes $build
+
+  # clean
+  pushd $1 
+  debuild clean
+  popd 
 }
 
 # check_root
