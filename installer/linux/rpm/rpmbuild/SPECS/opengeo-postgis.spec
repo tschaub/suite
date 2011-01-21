@@ -6,7 +6,7 @@ Group: Applications/Database
 License: see http://opengeo.org
 Requires(post): bash
 Requires(preun): bash
-Requires: postgresql84, postgresql84-contrib
+Requires: postgresql84, postgresql84-contrib postgis
 
 %define _rpmdir ../
 %define _rpmfilename %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm
