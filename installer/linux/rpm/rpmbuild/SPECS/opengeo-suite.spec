@@ -2,10 +2,12 @@ Name: opengeo-suite
 Version: 2.3.0
 Release: opengeo
 Summary: Allows the creation, sharing, and collaborative use of geospatial data.
+Group: Applications/Engineering
 License: see http://opengeo.org
 Requires(post): bash
 Requires(preun): bash
 Requires: opengeo-geoserver
+Patch: geoexplorer_webxml.patch
 
 %define _rpmdir ../
 %define _rpmfilename %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm
@@ -18,6 +20,16 @@ web browser spatial visualization and analysis. Atop this stack,
 the project has built a map composer and viewer, tools for
 analysis, and reporting tools.
 
+%prep
+        pushd $RPM_SOURCE_DIR/opengeo-suite
+        unzip geoexplorer.war -d geoexplorer
+        cd geoexplorer
+%patch -p1
+        zip -r ../geoexplorer.zip *
+        cd ..
+        rm -rf geoexplorer
+        mv geoexplorer.zip geoexplorer.war
+        popd
 
 %install
         rm -rf $RPM_BUILD_ROOT
@@ -30,11 +42,11 @@ analysis, and reporting tools.
         cp -rp $RPM_SOURCE_DIR/opengeo-suite/recipes.war $RPM_BUILD_ROOT/var/lib/tomcat5/webapps/.
         cp -rp $RPM_SOURCE_DIR/opengeo-suite/geoexplorer.war $RPM_BUILD_ROOT/var/lib/tomcat5/webapps/.
 
-        unzip $RPM_SOURCE_DIR/opengeo-suite/geoexplorer.war -d $RPM_BUILD_ROOT/geoexplorer
-        cp $RPM_SOURCE_DIR/opengeo-suite/debian/web.xml $RPM_BUILD_ROOT/geoexplorer/WEB-INF/web.xml
-        ( cd $RPM_BUILD_ROOT/geoexplorer ; zip ../geoexplorer.zip * -r ; cd ..)
-        cp -rp $RPM_BUILD_ROOT/geoexplorer.zip $RPM_BUILD_ROOT/var/lib/tomcat5/webapps/geoexplorer.war
-        rm -rf $RPM_BUILD_ROOT/geoexplorer $RPM_BUILD_ROOT/geoexplorer.zip
+        #unzip $RPM_SOURCE_DIR/opengeo-suite/geoexplorer.war -d $RPM_BUILD_ROOT/geoexplorer
+        #cp $RPM_SOURCE_DIR/opengeo-suite/debian/web.xml $RPM_BUILD_ROOT/geoexplorer/WEB-INF/web.xml
+        #( cd $RPM_BUILD_ROOT/geoexplorer ; zip ../geoexplorer.zip * -r ; cd ..)
+        #cp -rp $RPM_BUILD_ROOT/geoexplorer.zip $RPM_BUILD_ROOT/var/lib/tomcat5/webapps/geoexplorer.war
+        #rm -rf $RPM_BUILD_ROOT/geoexplorer $RPM_BUILD_ROOT/geoexplorer.zip
 	cp -rp $RPM_SOURCE_DIR/scripts/opengeo-setup.sh $RPM_BUILD_ROOT/usr/share/opengeo-suite/.
 %post
 	echo "OPENGEO: you will need to run /usr/share/opengeo-suite/opengeo-setup.sh to complete this installation"
