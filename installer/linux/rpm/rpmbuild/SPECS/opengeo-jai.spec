@@ -2,6 +2,7 @@ Name: opengeo-jai
 Version: 1.1.3
 Release: opengeo
 Summary: Java Imaging library for Geoserver Suite
+Group: System Environment/Libraries
 License: see copyright
 Requires(post): bash
 Requires(preun): bash
@@ -50,7 +51,7 @@ jre/lib/ext/mlibwrapper_jai.jar"
         done
 
 
-%clean
+clean
 
 %files
 %defattr(-,root,root,-)

@@ -2,6 +2,7 @@ Name: opengeo-postgis
 Version: 2.3.0
 Release: opengeo
 Summary: Allows the creation, sharing, and collaborative use of geospatial data.
+Group: Applications/Database
 License: see http://opengeo.org
 Requires(post): bash
 Requires(preun): bash

@@ -2,10 +2,12 @@ Name: opengeo-suite-data
 Version: 2.3.0
 Release: opengeo
 Summary: Allows the creation, sharing, and collaborative use of geospatial data.
+Group: Unspecified
 License: see http://opengeo.org
 Requires(post): bash
 Requires(preun): bash
 Requires: tomcat5
+Patch: medford_taxlots_datastore.patch
 
 %define _rpmdir ../ 
 %define _rpmfilename %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm 
@@ -19,12 +21,17 @@ the project has built a map composer and viewer, tools for
 analysis, and reporting tools.
 
 
+%prep
+  cd $RPM_SOURCE_DIR/opengeo-suite-data/data_dir
+%patch -p1
+  cd ../../../
+
 %install
   rm -rf $RPM_BUILD_ROOT
   mkdir -p $RPM_BUILD_ROOT/usr/share/opengeo-suite-data/geoserver_data
   mkdir -p $RPM_BUILD_ROOT/usr/share/opengeo-suite-data/geoexplorer_data
   cp -rp  $RPM_SOURCE_DIR/opengeo-suite-data/data_dir/* $RPM_BUILD_ROOT/usr/share/opengeo-suite-data/geoserver_data/.
-  cp $RPM_SOURCE_DIR/opengeo-suite-data/debian/datastore.xml $RPM_BUILD_ROOT/usr/share/opengeo-suite-data/geoserver_data/workspaces/medford/Taxlots/datastore.xml
+  #cp $RPM_SOURCE_DIR/opengeo-suite-data/debian/datastore.xml $RPM_BUILD_ROOT/usr/share/opengeo-suite-data/geoserver_data/workspaces/medford/Taxlots/datastore.xml
   find $RPM_BUILD_ROOT/usr/share/opengeo-suite-data -iname .svn  -print0 | xargs -0 rm -rf
 %post
 chown tomcat. /usr/share/opengeo-suite-data -R

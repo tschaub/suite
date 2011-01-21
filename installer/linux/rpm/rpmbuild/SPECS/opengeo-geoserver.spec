@@ -2,10 +2,12 @@ Name: opengeo-geoserver
 Version: 2.3.0
 Release: opengeo
 Summary: Allows the creation, sharing, and collaborative use of geospatial data.
+Group: Applications/Engineering
 License: see http://geoserver.org
 Requires(post): bash
 Requires(preun): bash
 Requires:  tomcat5, java-1.6.0-openjdk, opengeo-jai, opengeo-suite-data
+Patch: geoserver_webxml.patch
 
 %define _rpmdir ../
 %define _rpmfilename %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm
@@ -17,14 +19,26 @@ issues facing governments, businesses, transit agencies, and other enterprises
 worldwide -- including through-the-web editing of vector data, versioned data
 management, imagery delivery, customized web application development, and more.
 
+%prep
+        
+	pushd $RPM_SOURCE_DIR/opengeo-geoserver
+	unzip geoserver.war -d geoserver
+        cd geoserver
+%patch -p1
+	zip -r ../geoserver.zip *
+	cd ..
+        rm -rf geoserver
+	mv geoserver.zip geoserver.war
+	popd
+
 %install
         rm -rf $RPM_BUILD_ROOT
         mkdir -p $RPM_BUILD_ROOT/var/lib/tomcat5/webapps/
-        unzip $RPM_SOURCE_DIR/opengeo-geoserver/geoserver.war -d $RPM_BUILD_ROOT/geoserver
-        cp $RPM_SOURCE_DIR/opengeo-geoserver/debian/web.xml $RPM_BUILD_ROOT/geoserver/WEB-INF/web.xml
-        ( cd  $RPM_BUILD_ROOT/geoserver ; zip ../geoserver.zip * -r ; cd ..)
-        cp -rp  $RPM_BUILD_ROOT/geoserver.zip  $RPM_BUILD_ROOT/var/lib/tomcat5/webapps/geoserver.war
-        rm -rf  $RPM_BUILD_ROOT/geoserver  $RPM_BUILD_ROOT/geoserver.zip
+        #unzip $RPM_SOURCE_DIR/opengeo-geoserver/geoserver.war -d $RPM_BUILD_ROOT/geoserver
+        #cp $RPM_SOURCE_DIR/opengeo-geoserver/debian/web.xml $RPM_BUILD_ROOT/geoserver/WEB-INF/web.xml
+        #( cd  $RPM_BUILD_ROOT/geoserver ; zip ../geoserver.zip * -r ; cd ..)
+        cp -rp  $RPM_SOURCE_DIR/opengeo-geoserver/geoserver.war  $RPM_BUILD_ROOT/var/lib/tomcat5/webapps
+        #rm -rf  $RPM_BUILD_ROOT/geoserver  $RPM_BUILD_ROOT/geoserver.zip
 
 %post
 if [ ! -e /var/lib/tomcat5/tomcat5.original-settings ]; then
