@@ -14,7 +14,9 @@ BRANCH=${REPO_PATH//\//-}
 
 PACKAGE=`echo $0 | sed 's#^.*build_##g' | sed 's#\.sh##g'`
 RPM_BUILD_ROOT=`pwd`/rpmbuild
-PKG_SOURCE_DIR=${RPM_BUILD_ROOT}/SOURCES/$PACKAGE
+RPM_SOURCE_DIR=`pwd`/rpmbuild/SOURCES
+PKG_SOURCE_DIR=${RPM_SOURCE_DIR}/$PACKAGE
+ARCH=`uname -i`	
 
 # build_info <package>
 function build_info() {
@@ -32,6 +34,15 @@ function checkrc() {
     exit 1
   fi
 }
+
+# check_root
+check_root() {
+  if [ "$USER" != "root" ]; then
+    echo "This script must be run as root"
+    exit 1
+  fi
+}
+
 
 # get_file <url> [overwrite]
 function get_file() {
@@ -83,7 +94,7 @@ function clean_src() {
   rm -rf ${PKG_SOURCE_DIR}
 }
 
-# build_rpm
+# build_rpm <proper>
 function build_rpm() {
   
   pushd ${RPM_BUILD_ROOT}/SPECS
@@ -97,7 +108,13 @@ function build_rpm() {
     checkrc $? "mkdir build"
   fi
   
-  mv ${RPM_BUILD_ROOT}/$PACKAGE-*.rpm build
+  rm -rf build/$PACKAGE
+  mkdir build/$PACKAGE
+  if [ "$1" != "" ]; then
+    mv ${RPM_BUILD_ROOT}/RPMS/${ARCH}/*.rpm build/$PACKAGE
+  else
+    mv ${RPM_BUILD_ROOT}/$PACKAGE-*.rpm build/$PACKAGE
+  fi
   checkrc $? "mv rpm"
 
 }
