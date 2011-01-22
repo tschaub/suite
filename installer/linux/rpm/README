@@ -1,0 +1,15 @@
+OpenGeo Suite RPM Packaging
+===========================
+
+Setup
+-----
+
+In order to build rpm packages the following must be installed on the system:
+
+  yum install rpm-build zip unzip gcc gcc-c++ doxygen swig ruby python-devel ruby-devel postgresql84-devel postgresql84 libxslt-devel dos2unix flex
+
+Create a file .rpmmacros in the home directory of the user who will build the
+packages. Do *NOT* build as them as root. The file should have the following
+contents:
+
+  %_topdir <path to rpmbuild directory>
