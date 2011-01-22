@@ -7,7 +7,7 @@ build_info
 WARS=opengeosuite-$BRANCH-$REV-war.zip
 
 # grab files
-get_file $BUILDS/$REPO_PATH/$WARS
+get_file $BUILDS/$REPO_PATH/$WARS yes
 
 # clean out old files
 clean_src
