@@ -118,3 +118,35 @@ function build_rpm() {
   checkrc $? "mv rpm"
 
 }
+
+# publish_rpm <repo> <dist>
+publish_rpm() {
+  local repo=$1
+  local dist=$2
+
+  if [ "$repo" == "" ]; then
+     repo=$REPO
+  fi
+  if [ "$repo" == "" ]; then
+     echo "repository not specified, aborting publish"
+  fi
+
+  if [ "$dist" == "" ]; then
+    dist=$DIST
+  fi
+  if [ "$dist" == "" ]; then
+    echo "distribution not specified, aborting publish"
+    exit 1
+  fi
+
+  pushd build/$PACKAGE
+  checkrc $? "push build/$PACKAGE"
+
+  scp -i ~/.ssh/id_rsa_apt * apt@apt.opengeo.org:/home/apt/yum/incoming/$repo/$dist
+  checkrc $? "secure copy .deb files"
+  ssh -i ~/.ssh/id_rsa_apt apt@apt.opengeo.org "./yum/publish_debs.sh $repo $dist" 
+  checkrc $? "remote publish"
+
+  popd
+}
+
