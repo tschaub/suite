@@ -66,5 +66,5 @@
     </hudson.plugins.emailext.ExtendedEmailPublisher>
   </publishers>
   <buildWrappers/>
-  <customWorkspace>/var/lib/hudson/jobs/bootstrap/workspace/apt</customWorkspace>
+  <customWorkspace>/var/lib/hudson/jobs/bootstrap/workspace</customWorkspace>
 </project>
