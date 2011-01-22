@@ -160,9 +160,9 @@ publish_deb() {
   pushd build/$name
   checkrc $? "push build/$name"
 
-  scp -i ~/.ssh/id_rsa_apt * apt@apt.opengeo.org:/home/apt/incoming/$repo/$dist
+  scp -i ~/.ssh/id_rsa_apt * apt@apt.opengeo.org:/home/apt/apt/incoming/$repo/$dist
   checkrc $? "secure copy .deb files"
-  ssh -i ~/.ssh/id_rsa_apt apt@apt.opengeo.org "./publish_debs.sh $repo $dist" 
+  ssh -i ~/.ssh/id_rsa_apt apt@apt.opengeo.org "./apt/publish_debs.sh $repo $dist" 
   checkrc $? "remote publish"
 
   popd
