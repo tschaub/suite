@@ -22,3 +22,7 @@ rm -rf tmp
 
 # build
 build_rpm
+
+# publish
+publish_rpm
+

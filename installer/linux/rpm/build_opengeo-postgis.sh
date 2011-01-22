@@ -16,3 +16,7 @@ checkrc $? "unpacking medford scripts"
  
 # build 
 build_rpm
+
+# publish
+publish_rpm
+

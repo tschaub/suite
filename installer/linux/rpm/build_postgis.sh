@@ -12,3 +12,7 @@ cp files/$POSTGIS.tar.gz $RPM_SOURCE_DIR
 
 # build
 build_rpm yes
+
+# publish
+publish_rpm
+

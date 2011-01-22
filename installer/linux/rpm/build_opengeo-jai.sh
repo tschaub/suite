@@ -29,4 +29,6 @@ unzip -o files/jai_imageio-1_1-lib-linux-i586-jdk.bin -d ${PKG_SOURCE_DIR}
 # build 
 build_rpm
 
+# publish
+publish_rpm
 

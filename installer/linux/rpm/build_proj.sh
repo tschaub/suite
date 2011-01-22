@@ -13,3 +13,7 @@ cp files/proj-datumgrid-1.5.zip $RPM_SOURCE_DIR
 
 # build
 build_rpm yes
+
+# publish
+publish_rpm
+
