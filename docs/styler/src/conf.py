@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+w# -*- coding: utf-8 -*-
 #
 # GeoServer documentation build configuration file, created by
 # sphinx-quickstart on Tue Oct 28 10:01:09 2008.
@@ -39,7 +39,7 @@ master_doc = 'index'
 
 # General substitutions.
 project = u'Styler'
-copyright = u'2010 OpenGeo'
+copyright = u'2011 OpenGeo'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.

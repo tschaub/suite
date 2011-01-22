@@ -39,7 +39,7 @@ master_doc = 'index'
 # General substitutions.
 project = u'PostGIS'
 manual = u'User Manual' 
-copyright = u'2010 PostGIS'
+copyright = u'2011 PostGIS'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.

@@ -10,6 +10,7 @@ Welcome to the OpenGeo Suite!  The OpenGeo Suite is a full geospatial software s
    dashboard.rst
    workflow/index
    recipes.rst
+   tutorials/index
    builtindemos.rst
    aws/index
    moreinfo.rst

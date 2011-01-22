@@ -39,7 +39,7 @@ master_doc = 'index'
 
 # General substitutions.
 project = u'GeoExplorer'
-copyright = u'2010 OpenGeo'
+copyright = u'2011 OpenGeo'
 
 # The default replacements for |version| and |release|, also used in various
 # other places throughout the built documents.

@@ -42,7 +42,7 @@ master_doc = 'README-windows'
 
 # General information about the project.
 project = u'OpenGeo Suite Windows Installation'
-copyright = u'2010 OpenGeo'
+copyright = u'2011 OpenGeo'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
