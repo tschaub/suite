@@ -143,8 +143,9 @@ publish_rpm() {
   checkrc $? "push build/$PACKAGE"
 
   scp -i ~/.ssh/id_rsa_apt * apt@apt.opengeo.org:/home/apt/yum/incoming/$repo/$dist
-  checkrc $? "secure copy .deb files"
-  ssh -i ~/.ssh/id_rsa_apt apt@apt.opengeo.org "./yum/publish_debs.sh $repo $dist" 
+  checkrc $? "secure copy .rpm files"
+
+  ssh -i ~/.ssh/id_rsa_apt apt@apt.opengeo.org "./yum/publish_rpms.sh $repo $dist" 
   checkrc $? "remote publish"
 
   popd
