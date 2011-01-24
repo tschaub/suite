@@ -1,4 +1,4 @@
-w# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 #
 # GeoServer documentation build configuration file, created by
 # sphinx-quickstart on Tue Oct 28 10:01:09 2008.
