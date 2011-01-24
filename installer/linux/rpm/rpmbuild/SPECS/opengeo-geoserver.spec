@@ -39,7 +39,8 @@ management, imagery delivery, customized web application development, and more.
         #( cd  $RPM_BUILD_ROOT/geoserver ; zip ../geoserver.zip * -r ; cd ..)
         cp -rp  $RPM_SOURCE_DIR/opengeo-geoserver/geoserver.war  $RPM_BUILD_ROOT/var/lib/tomcat5/webapps
         #rm -rf  $RPM_BUILD_ROOT/geoserver  $RPM_BUILD_ROOT/geoserver.zip
-		cp -rp $RPM_SOURCE_DIR/scripts/geoserver-setup.sh $RPM_BUILD_ROOT/user/share/opengeo-suite/.
+        mkdir -p $RPM_BUILD_ROOT/usr/share/opengeo-suite
+		cp -rp $RPM_SOURCE_DIR/scripts/geoserver-setup.sh $RPM_BUILD_ROOT/usr/share/opengeo-suite/.
 
 %post
 if [ ! -e /var/lib/tomcat5/tomcat5.original-settings ]; then
@@ -55,7 +56,9 @@ fi
 	chkconfig tomcat5 on
 	service tomcat5 restart
 
+    echo ""
     echo "NOTICE: Please run /usr/share/opengeo-suite/geoserver-setup.sh to complete this installation."
+    echo ""
 
 %preun
        if [ -e /var/lib/tomcat5/geoserver ]; then

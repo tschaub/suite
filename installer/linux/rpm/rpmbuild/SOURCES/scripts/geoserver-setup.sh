@@ -11,9 +11,10 @@ set -e
 
 function check_root () {
   printf "Checking permissions..."
-  [ ! $( id -u ) -eq 0 ] \
-    && { echo "error: not root.\nPlease run 'sudo $0'";
-       exit 1; }
+  if [ ! $( id -u ) -eq 0 ]; then
+    printf "This script must be run as root. Exiting.\n"
+    exit 1
+  fi
 }
 
 function randpass() {
@@ -35,12 +36,12 @@ menu() {
 
   printf "
   ----------------------
-  1. hostname or ip        : $myhost
-  2. geoserver username    : $username
-  3. geoserver password    : $password
+  1. Hostname or IP        : $myhost
+  2. Admin username        : $username
+  3. Admin password        : $password
 
-  9. accept config and continue
-  0. abort/quit
+  9. Accept and continue
+  0. Abort and quit
 
   choice: "
 
@@ -48,19 +49,22 @@ menu() {
 
 case "$menuchoice" in
     "1")
-        printf "please provide the ipaddress or hostname of this machine\ndo *NOT* put http:// or a / after (no spaces)\n"
+        printf "Please provide the IP address or hostname that GeoServer is accessed\n"
+        printf "through publicly. This value is required in cases where GeoServer is\n"
+        printf "accessed through an external proxy.\n"
         respond "hostname" "$myhost" "3"
         myhost=$choice
+        myhost=`echo $myhost | sed s#http://##g | sed 's#/$##g'`
         ;;
 
     "2")
-        printf "please choose a username to log into geoserver with\n"
+        printf "Please choose a username for the GeoServer admin account.\n"
         respond "username" "$username" "3"
         username=$choice
         ;;
 
     "3")
-        printf "please choose a password to log into geoserver with\n"
+        printf "Please choose a password for the GeoServer admin account.\n"
         respond "password" "$password" "3"
         password=$choice
         ;;
@@ -78,10 +82,10 @@ EOF
 
 if [ ! -d "/var/lib/tomcat5/webapps/geoserver" ]; then
        unzip  -o /var/lib/tomcat5/webapps/geoserver.war  -d /var/lib/tomcat5/webapps/geoserver  > /dev/null 2>&1
-        sed -i -e "s/MYHOST/$myhost/g" /var/lib/tomcat5/webapps/geoserver/WEB-INF/web.xml
 fi
+sed -i -e "s/MYHOST/$myhost/g" /var/lib/tomcat5/webapps/geoserver/WEB-INF/web.xml
 
-if [ ! `cat /etc/sysconfig/iptables | grep 8080 |wc -l`]; then
+if [ -e /etc/sysconfig/iptables ] && [ ! `cat /etc/sysconfig/iptables | grep 8080 |wc -l` ]; then
 	iptables -I INPUT -p tcp --dport 8080 -j ACCEPT
 	iptables-save > /etc/sysconfig/iptables
 fi
@@ -94,7 +98,7 @@ fi
     ;;
 
     "0")
-        echo "aborting, changes not saved"
+        echo "Aborting, changes not saved."
         exit 255
     ;;
   esac
