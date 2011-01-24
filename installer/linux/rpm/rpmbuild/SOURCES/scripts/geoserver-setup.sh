@@ -10,7 +10,6 @@ exit=0
 set -e
 
 function check_root () {
-  printf "Checking permissions..."
   if [ ! $( id -u ) -eq 0 ]; then
     printf "This script must be run as root. Exiting.\n"
     exit 1
@@ -35,6 +34,9 @@ respond() {
 menu() {
 
   printf "
+  GeoServer Post Configuration.
+
+  Select an entry from the following list:
   ----------------------
   1. Hostname or IP        : $myhost
   2. Admin username        : $username
@@ -70,6 +72,7 @@ case "$menuchoice" in
         ;;
 
     "9")
+        printf "Saving changes."
         fin="1"
         #TODO configure a check to prevent rerunning this
 
