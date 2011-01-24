@@ -61,7 +61,7 @@ fi
     echo ""
 
 %preun
-       if [ -e /var/lib/tomcat5/geoserver ]; then
+       if [ -e /var/lib/tomcat5/webapps/geoserver ]; then
                 service tomcat5 stop
                 rm -rf  /var/lib/tomcat5/webapps/geoserver.war /var/lib/tomcat5/webapps/geoserver
         fi
