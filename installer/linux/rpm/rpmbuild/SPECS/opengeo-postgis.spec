@@ -27,9 +27,9 @@ Postgis integration for Opengeo
   sh /usr/share/opengeo-postgis/postgis-setup.sh
   
 %preun
+  sh /usr/share/opengeo-postgis/postgis-uninstall.sh
 
 %postun
-  sh /usr/share/opengeo-postgis/postgis-uninstall.sh
 
 # remove files
 # remove users
