@@ -8,12 +8,12 @@ function check_root () {
 }
 
 function check_pg() {
-  local status=$( echo "`service postgresql status`" | cut -f 3 -d ' ' )
+  local status=$( echo "`service postgresql status`" | awk '{print $NF}' )
   if [ $status != "started" ]; then
      service postgresql start
   fi
 
-  status=$( echo "`service postgresql status`" | cut -f 3 -d ' ' )
+  status=$( echo "`service postgresql status`" | awk '{print $NF}' )
   if [ $status != "started" ]; then
      echo "Postgresql is not running and could not be started. Unable to clean up postgis." 
      exit 1
@@ -21,7 +21,7 @@ function check_pg() {
 }
 
 check_root
-old_status=$( echo "`service postgresql status`" | cut -f 3 -d ' ' )
+old_status=$( echo "`service postgresql status`" | awk '{print $NF}' )
 check_pg
 
 PG_CONTRIB=/usr/share/pgsql/contrib
