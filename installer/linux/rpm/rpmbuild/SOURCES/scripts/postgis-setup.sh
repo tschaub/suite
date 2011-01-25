@@ -11,8 +11,8 @@ function check_root () {
 }
 
 function check_pg() {
-  local status=$( echo "`service postgresql status`" | cut -f 3 -d ' ' )
-  if [ $status != "started" ]; then
+  local status=$( echo "`service postgresql status`" | awk '{print $NF}' )
+  if [ $status != "running..." ]; then
      #attempt to start postgresql, first check if we need to init db
      if [ -e $PG_DATA ] && [ $( ls $PG_DATA | wc -l ) == 0 ]; then
         #init db
@@ -22,8 +22,8 @@ function check_pg() {
      service postgresql start
   fi
 
-  status=$( echo "`service postgresql status`" | cut -f 3 -d ' ' )
-  if [ $status != "started" ]; then
+  status=$( echo "`service postgresql status`" | awk '{print $NF}' )
+  if [ $status != "running..." ]; then
      echo "Could not start postgresql. Check above for the error and run this script once postgresql has been started."
      exit 1
   fi
@@ -36,16 +36,15 @@ echo "Initializing template_postgis database"
 su - postgres -c "createdb template_postgis"
 su - postgres -c "createlang plpgsql template_postgis"
 su - postgres -c "psql -d template_postgis -f $PG_CONTRIB/postgis-1.5/postgis.sql" > /dev/null
-su - postgres -c "psql -d template_postgis -f $PG_CONRIB/postgis-1.5/spatial_ref_sys.sql" > /dev/null
-su - postgres -c "psql -d template_postgis -c \"update pg_database set d
-atistemplate = true where datname = 'template_postgis'\""
+su - postgres -c "psql -d template_postgis -f $PG_CONTRIB/postgis-1.5/spatial_ref_sys.sql" > /dev/null
+su - postgres -c "psql -d template_postgis -c \"update pg_database set datistemplate = true where datname = 'template_postgis'\""
 
 # Adds PgAdmin utilities to the 'postgres' database
 echo "Installing postgresql admin pack"
-su - postgres -c "psql -f $PG_CONRIB/adminpack.sql -d postgres" > /dev/null
+su - postgres -c "psql -f $PG_CONTRIB/adminpack.sql -d postgres" > /dev/null
 
 # Create an 'opengeo' user
-echo "Creating opengeo database"
+echo "Creating demo database"
 su - postgres -c "createuser --createdb --superuser opengeo"
 
 # Set the user password?
@@ -53,6 +52,8 @@ su - postgres -c "psql -d postgres -c \"alter user opengeo password 'opengeo'\""
 
 # create demo database
 su - postgres -c "createdb --owner=opengeo --template=template_postgis medford"
+su - postgres -c "psql -f /usr/share/opengeo-postgis/medford_taxlots_schema.sql -d medford" > /dev/null
+su - postgres -c "psql -f /usr/share/opengeo-postgis/medford_taxlots.sql -d medford" > /dev/null
 
 echo "Updating pg_hba.conf"
 PG_HBA=/var/lib/pgsql/data/pg_hba.conf
@@ -60,14 +61,14 @@ PG_HBA=/var/lib/pgsql/data/pg_hba.conf
 if [ ! -e $PG_HBA ]; then
   printf "Unable to locate PGDATA directory. Please add the following line to pg_hba.conf to finalize configuration:
     
-     local		all 	opengeo 	md5
+     local   all         opengeo                           md5
 "
   exit 0
 fi
 
 # back up old file
 cp $PG_HBA $PG_HBA.orig
-if [ ! `cat $PG_HBA | grep opengeo | wc -l` ]; then
-   echo "local     all    opengeo               md5" >> $PG_HBA
+if [ $( cat $PG_HBA | grep opengeo | wc -l ) == 0 ]; then
+   sed -i '/# TYPE/a local   all         opengeo                           md5'  $PG_HBA
+   /etc/init.d/postgresql restart
 fi
-/etc/init.d/postgresql restart
