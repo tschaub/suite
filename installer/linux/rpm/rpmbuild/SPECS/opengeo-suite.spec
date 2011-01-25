@@ -47,9 +47,9 @@ analysis, and reporting tools.
         #( cd $RPM_BUILD_ROOT/geoexplorer ; zip ../geoexplorer.zip * -r ; cd ..)
         #cp -rp $RPM_BUILD_ROOT/geoexplorer.zip $RPM_BUILD_ROOT/var/lib/tomcat5/webapps/geoexplorer.war
         #rm -rf $RPM_BUILD_ROOT/geoexplorer $RPM_BUILD_ROOT/geoexplorer.zip
-	cp -rp $RPM_SOURCE_DIR/scripts/opengeo-setup.sh $RPM_BUILD_ROOT/usr/share/opengeo-suite/.
+	#cp -rp $RPM_SOURCE_DIR/scripts/opengeo-setup.sh $RPM_BUILD_ROOT/usr/share/opengeo-suite/.
 %post
-	echo "OPENGEO: you will need to run /usr/share/opengeo-suite/opengeo-setup.sh to complete this installation"
+	#echo "OPENGEO: you will need to run /usr/share/opengeo-suite/opengeo-setup.sh to complete this installation"
 
 %preun
 # stop services
