@@ -12,7 +12,6 @@ get_file $JAI_BUILDS/1_1_3/jai-1_1_3-lib-linux-amd64-jdk.bin
 get_file $JAI_BUILDS/1_1_3/jai-1_1_3-lib-linux-i586-jdk.bin
 get_file $JAIIIO_BUILDS/1.1/jai_imageio-1_1-lib-linux-amd64-jdk.bin
 get_file $JAIIIO_BUILDS/1.1/jai_imageio-1_1-lib-linux-i586-jdk.bin
-get_file 
 
 # clean out old sources
 pushd opengeo-jai
