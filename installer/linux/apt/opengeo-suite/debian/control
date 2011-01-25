@@ -10,5 +10,20 @@ Package: opengeo-suite
 Architecture: any
 Depends: debconf, opengeo-geoserver, ${misc:Depends} 
 Suggests: opengeo-docs
-Description: Allows the creation, sharing, and collaborative use of geospatial data. 
- description
+Description: A full geospatial software stack that allows you to allows you to easily compose, style, and publish data and maps.
+ The OpenGeo Suite is the complete, OGC standards-compliant web mapping platform built on powerful, cutting-edge, open source geospatial components.  It is comprised of the following components:
+ .
+   * PostGIS
+   * GeoServer
+   * GeoWebCache
+   * OpenLayers
+   * GeoExt
+ .
+ Also included are three GeoExt-based web applications:
+ .
+   * GeoExplorer, for composing and publishing maps
+   * Styler, for graphical styling of map layers
+   * GeoEditor, for graphical editing of geospatial features
+ .
+ In addition, the OpenGeo Suite contains a Recipe Book for building your own web-based mapping applications.
+

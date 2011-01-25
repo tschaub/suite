@@ -1,7 +1,7 @@
 Name: opengeo-jai
 Version: 1.1.3
 Release: opengeo
-Summary: Java Imaging library for Geoserver Suite
+Summary:  A set of Java toolkits to provide enhanced image rendering abilities.
 Group: System Environment/Libraries
 License: see copyright
 Requires(post): bash
@@ -13,7 +13,12 @@ Requires: tomcat5, java-1.6.0-openjdk
 %define _unpackaged_files_terminate_build 0
 
 %description
-Rendering libraries to improve Geoserver Suite performance
+Java Advanced Imaging API (JAI) provides a set of object-oriented interfaces 
+that supports a simple, high-level programming model which allows images to 
+be manipulated easily in Java applications and applets.  Java Advanced 
+Imaging Image I/O Tools provides JAI read and write operations which use the 
+Java Image I/O Framework.  These toolkits provide enhanced image rendering to 
+the OpenGeo Suite.
 
 %install
         rm -rf $RPM_BUILD_ROOT

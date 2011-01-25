@@ -1,7 +1,7 @@
 Name: opengeo-postgis
 Version: 2.3.0
 Release: opengeo
-Summary: Allows the creation, sharing, and collaborative use of geospatial data.
+Summary: Robust, spatially-enabled object-relational database built on PostgreSQL.
 Group: Applications/Database
 License: see http://opengeo.org
 Requires(post): bash
@@ -13,7 +13,12 @@ Requires: postgresql84, postgresql84-contrib postgis
 %define _unpackaged_files_terminate_build 0
 
 %description
-Postgis integration for Opengeo
+PostGIS adds support for geographic objects to the PostgreSQL 
+object-relational database, allowing it to be used as a spatial database for 
+geographic information systems (GIS). PostGIS follows the OGC "Simple Features 
+Specification for SQL" specification and has been certified as compliant with 
+the "Types and Functions" profile.  PostGIS is a core component of the OpenGeo 
+Suite.
 
 
 %install

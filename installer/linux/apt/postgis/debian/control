@@ -59,6 +59,8 @@ Package: opengeo-postgis-shapeloader
 Architecture: any
 Section: database
 Depends: libgtk2.0-0, libpq5,  ${shlibs:Depends}, ${misc:Depends}
-Description: Shapeloader for postgis (opengeo)
- Contains the shape loading tools
+Description: Graphical utility for loading shapefiles into PostGIS database tables.
+ The PostGIS Shapeloader utility adds functionality on top of the built-in PostGIS 
+ tools to provide an easy-to-use desktop-based graphical utility for loading 
+ shapefiles into database tables.
 

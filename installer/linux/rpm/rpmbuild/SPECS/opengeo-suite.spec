@@ -1,7 +1,7 @@
 Name: opengeo-suite
 Version: 2.3.0
 Release: opengeo
-Summary: Allows the creation, sharing, and collaborative use of geospatial data.
+Summary: A full geospatial software stack that allows you to allows you to easily compose, style, and publish data and maps.
 Group: Applications/Engineering
 License: see http://opengeo.org
 Requires(post): bash
@@ -14,11 +14,25 @@ Patch: geoexplorer_webxml.patch
 %define _unpackaged_files_terminate_build 0
 
 %description
-At its core, the opengeo-suite has a stack based on GeoServer,
-Django, and GeoExt that provides a platform for sophisticated
-web browser spatial visualization and analysis. Atop this stack,
-the project has built a map composer and viewer, tools for
-analysis, and reporting tools.
+The OpenGeo Suite is the complete, OGC standards-compliant web mapping 
+platform built on powerful, cutting-edge, open source geospatial 
+components.  It is comprised of the following core components:
+
+ * PostGIS
+ * GeoServer
+ * GeoWebCache
+ * OpenLayers
+ * GeoExt
+
+Also included are three GeoExt-based web applications:
+
+ * GeoExplorer, for composing and publishing maps
+ * Styler, for graphical styling of map layers
+ * GeoEditor, for graphical editing of geospatial features
+
+Finally, the OpenGeo Suite contains a Recipe Book for building your 
+own web-based mapping applications.
+
 
 %prep
         pushd $RPM_SOURCE_DIR/opengeo-suite

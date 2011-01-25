@@ -8,5 +8,7 @@ Homepage: http://opengeo.org
 
 Package: opengeo-docs
 Architecture: all
-Description: Documentation for the OpenGeo Suite packages
- This is the documentation for Geoserver Suite
+Description: Full documentation for the OpenGeo Suite.
+ Documentation in HTML format for the following components of the OpenGeo Suite: 
+ PostGIS, GeoServer, GeoWebCache, GeoExplorer, Styler, and GeoEditor.  Also includes 
+ a Getting Started Guide for an introduction to the OpenGeo Suite.

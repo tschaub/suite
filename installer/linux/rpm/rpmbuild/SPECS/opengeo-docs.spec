@@ -1,7 +1,7 @@
 Name: opengeo-docs
 Version: 2.3.0
 Release: opengeo
-Summary: Allows the creation, sharing, and collaborative use of geospatial data.
+Summary: Full documentation for the OpenGeo Suite.
 Group: Documentation
 License: see http://opengeo.org
 Requires(post): bash
@@ -12,7 +12,9 @@ Requires(preun): bash
 %define _unpackaged_files_terminate_build 0
 
 %description
-Documentation for OpenGeo Suite
+Contains HTML documentation for the following components of the OpenGeo Suite: 
+PostGIS, GeoServer, GeoWebCache, GeoExplorer, Styler, and GeoEditor.  Also 
+includes a Getting Started Guide for an introduction to the OpenGeo Suite.
 
 %install
   rm -rf $RPM_BUILD_ROOT

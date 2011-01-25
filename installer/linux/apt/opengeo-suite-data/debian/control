@@ -10,5 +10,6 @@ Package: opengeo-suite-data
 Architecture: any
 Depends: debconf, tomcat6, ${misc:Depends}
 #,${shlibs:Depends}
-Description: Allows the creation, sharing, and collaborative use of geospatial data. 
- These are the required datafiles for Geoserver Suite
+Description: Sample geospatial data required for use with the OpenGeo Suite.
+ A customized GeoServer data directory containing data required for use with 
+ the OpenGeo Suite.  

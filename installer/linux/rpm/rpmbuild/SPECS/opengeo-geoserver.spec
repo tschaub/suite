@@ -1,7 +1,7 @@
 Name: opengeo-geoserver
 Version: 2.3.0
 Release: opengeo
-Summary: Allows the creation, sharing, and collaborative use of geospatial data.
+Summary: High performance, standards-compliant map and geospatial data server.
 Group: Applications/Engineering
 License: see http://geoserver.org
 Requires(post): bash
@@ -14,10 +14,12 @@ Patch: geoserver_webxml.patch
 %define _unpackaged_files_terminate_build 0
 
 %description
-The OpenGeo Suite is a great basis for solving the critical geospatial IT
-issues facing governments, businesses, transit agencies, and other enterprises
-worldwide -- including through-the-web editing of vector data, versioned data
-management, imagery delivery, customized web application development, and more.
+GeoServer is an open source software server written in Java that allows users 
+to share and edit geospatial data. Designed for interoperability, it 
+publishes data from any major spatial data source using open standards such as 
+Web Features Server (WFS), Web Map Server (WMS), and Web Coverage Server 
+(WCS).  This version of GeoServer is enhanced and designed for use with the 
+OpenGeo Suite.
 
 %prep
         

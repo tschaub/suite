@@ -10,8 +10,9 @@ Package: opengeo-geoserver
 Architecture: any
 Depends: debconf,  sun-java6-jre | openjdk-6-jre, tomcat6, opengeo-jai, opengeo-suite-data, unzip, ${misc:Depends}
 #,${shlibs:Depends}
-Description: Allows the creation, sharing, and collaborative use of geospatial data. 
- The OpenGeo Suite is a great basis for solving the critical geospatial IT 
- issues facing governments, businesses, transit agencies, and other enterprises 
- worldwide -- including through-the-web editing of vector data, versioned data 
- management, imagery delivery, customized web application development, and more. 
+Description:  High performance, standards-compliant map and geospatial data server.
+ GeoServer is an open source software server written in Java that allows users to share 
+ and edit geospatial data. Designed for interoperability, it publishes data from any 
+ major spatial data source using open standards such as Web Features Server (WFS), Web 
+ Map Server (WMS), and Web Coverage Server (WCS).  This version of GeoServer is enhanced 
+ and designed for use with the OpenGeo Suite.

@@ -9,5 +9,9 @@ Homepage: http://opengeo.org
 Package: opengeo-postgis
 Architecture: any
 Depends: debconf, postgis, postgresql-8.4-postgis, opengeo-suite-data, postgresql-contrib, ${misc:Depends}
-Description: Customizations for postgis to run with opengeo server suite.
- These are the required datafiles for Geoserver Suite
+Description: Robust, spatially-enabled object-relational database built on PostgreSQL.
+ PostGIS adds support for geographic objects to the PostgreSQL object-relational database, 
+ allowing it to be used as a spatial database for geographic information systems (GIS). 
+ PostGIS follows the OGC "Simple Features Specification for SQL" specification and has been 
+ certified as compliant with the "Types and Functions" profile.  PostGIS is a core component 
+ of the OpenGeo Suite.

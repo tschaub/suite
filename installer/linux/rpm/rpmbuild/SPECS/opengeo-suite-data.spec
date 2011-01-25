@@ -1,7 +1,7 @@
 Name: opengeo-suite-data
 Version: 2.3.0
 Release: opengeo
-Summary: Allows the creation, sharing, and collaborative use of geospatial data.
+Summary: Sample geospatial data required for use with the OpenGeo Suite.
 Group: Unspecified
 License: see http://opengeo.org
 Requires(post): bash
@@ -14,11 +14,8 @@ Patch: medford_taxlots_datastore.patch
 %define _unpackaged_files_terminate_build 0
 
 %description
-At its core, the GeoNode has a stack based on GeoServer,
-Django, and GeoExt that provides a platform for sophisticated
-web browser spatial visualization and analysis. Atop this stack,
-the project has built a map composer and viewer, tools for
-analysis, and reporting tools.
+A customized GeoServer data directory containing data required for use with 
+the OpenGeo Suite.  
 
 
 %prep
