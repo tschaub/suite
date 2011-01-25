@@ -97,6 +97,11 @@ function clean_src() {
 # build_rpm <proper>
 function build_rpm() {
   
+  # clean out BUILDROOT
+  if [ -d ${RPM_BUILD_ROOT}/BUILDROOT ]; then
+     rm -rf ${RPM_BUILD_ROOT}/BUILDROOT/*
+  fi
+
   pushd ${RPM_BUILD_ROOT}/SPECS
   rpmbuild --buildroot ${RPM_BUILD_ROOT}/BUILDROOT -bb $PACKAGE.spec
   rc=$?
