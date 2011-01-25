@@ -8,14 +8,20 @@ function check_root () {
 }
 
 function check_pg() {
-  local status=`echo "`/etc/init.d/postgresql status`" | cut -f 3 -d ' '`
+  local status=$( echo "`service postgresql status`" | cut -f 3 -d ' ' )
   if [ $status != "started" ]; then
-    echo "WARNING: Postgresql is not running. Unable to clean up postgis."
-    exit 1
+     service postgresql start
+  fi
+
+  status=$( echo "`service postgresql status`" | cut -f 3 -d ' ' )
+  if [ $status != "started" ]; then
+     echo "Postgresql is not running and could not be started. Unable to clean up postgis." 
+     exit 1
   fi
 }
 
 check_root
+old_status=$( echo "`service postgresql status`" | cut -f 3 -d ' ' )
 check_pg
 
 PG_CONTRIB=/usr/share/pgsql/contrib
@@ -31,3 +37,7 @@ su - postgres -c "psql -f $PG_CONTRIB/uninstall_adminpack.sql -d postgres"
 
 # turn it back on
 set -e
+
+if [ $old_status == "stopped" ]; then
+  service postgresql stop
+fi

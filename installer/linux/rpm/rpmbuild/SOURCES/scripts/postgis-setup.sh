@@ -1,5 +1,8 @@
 #!/bin/bash
 
+PG_DATA=/var/lib/pgsql/data
+PG_CONTRIB=/usr/share/pgsql/contrib
+
 function check_root () {
   if [ ! $( id -u ) -eq 0 ]; then
     echo "This script must be run as root. Exiting."
@@ -8,17 +11,27 @@ function check_root () {
 }
 
 function check_pg() {
-  local status=`echo "`/etc/init.d/postgresql status`" | cut -f 3 -d ' '`
+  local status=$( echo "`service postgresql status`" | cut -f 3 -d ' ' )
   if [ $status != "started" ]; then
-    echo "NOTICE: Postgresql is not running. Run this script once the Postgresql server has been started"
-    exit 1
+     #attempt to start postgresql, first check if we need to init db
+     if [ -e $PG_DATA ] && [ $( ls $PG_DATA | wc -l ) == 0 ]; then
+        #init db
+        service postgresql initdb
+     fi
+
+     service postgresql start
+  fi
+
+  status=$( echo "`service postgresql status`" | cut -f 3 -d ' ' )
+  if [ $status != "started" ]; then
+     echo "Could not start postgresql. Check above for the error and run this script once postgresql has been started."
+     exit 1
   fi
 }
 
 check_root
 check_pg
 
-PG_CONTRIB=/usr/share/pgsql/contrib
 echo "Initializing template_postgis database"
 su - postgres -c "createdb template_postgis"
 su - postgres -c "createlang plpgsql template_postgis"
