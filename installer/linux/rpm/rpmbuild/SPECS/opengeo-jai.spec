@@ -40,7 +40,7 @@ the OpenGeo Suite.
 # remove files
 # remove users
 locations="/usr/lib/jvm/java-6-sun \
-/usr/lib/jvm/java-6-openjdk"
+/usr/lib/jvm/java-1.6.0-openjdk"
 
 filelist="jre/lib/amd64/libclib_jiio.so \
 jre/lib/i386/libmlib_jai.so \
