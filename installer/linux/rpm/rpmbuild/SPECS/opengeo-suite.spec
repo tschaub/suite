@@ -53,7 +53,7 @@ analysis, and reporting tools.
 # stop services
 
         if [ -e /var/lib/tomcat5/webapps/geoexplorer ]; then
-                invoke-rc.d tomcat5 stop
+                service tomcat5 stop
                 rm -rf /var/lib/tomcat5/webapps/recipes /var/lib/tomcat5/webapps/dashboard
                 rm -rf /var/lib/tomcat5/webapps/geoeditor /var/lib/tomcat5/webapps/geowebcache
                 rm -rf /var/lib/tomcat5/webapps/geoexplorer /var/lib/tomcat5/webapps/geowebcache
