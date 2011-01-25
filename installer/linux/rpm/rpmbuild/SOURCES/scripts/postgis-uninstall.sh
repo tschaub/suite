@@ -9,12 +9,12 @@ function check_root () {
 
 function check_pg() {
   local status=$( echo "`service postgresql status`" | awk '{print $NF}' )
-  if [ $status != "started" ]; then
+  if [ $status != "running..." ]; then
      service postgresql start
   fi
 
   status=$( echo "`service postgresql status`" | awk '{print $NF}' )
-  if [ $status != "started" ]; then
+  if [ $status != "running..." ]; then
      echo "Postgresql is not running and could not be started. Unable to clean up postgis." 
      exit 1
   fi
