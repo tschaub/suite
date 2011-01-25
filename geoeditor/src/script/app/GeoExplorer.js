@@ -182,6 +182,7 @@ var GeoExplorer = Ext.extend(Ext.util.Observable, {
         var url;
         var args = {
             SERVICE: "WMS",
+            VERSION: "1.1.1",
             REQUEST: "GetCapabilities"
         };
         var argIndex = this.wms.indexOf("?");
