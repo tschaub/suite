@@ -11,8 +11,8 @@ Packager:       Otto Dassau <dassau@gbd-consult.de>
 URL:            http://postgis.refractions.net/
 BuildRequires:  postgresql84-devel postgresql84 proj-devel proj geos-devel >= 2.1.1
 BuildRequires:  gcc-c++ libxslt-devel dos2unix flex
-Requires:       postgresql
-Requires:	postgresql-server
+Requires:       postgresql84
+Requires:	postgresql84-server
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 
 %description
@@ -51,6 +51,10 @@ install -d %{buildroot}%{sqldir}
 install -m 755 *.sql %{buildroot}%{sqldir}
 install -d %{buildroot}%{_bindir}
 install -m 755 utils/*.pl %{buildroot}%{_bindir}
+
+#JD: issue on centos with the perl Pg module, remove all developer scripts
+rm %{buildroot}%{_bindir}/test_*.pl
+rm %{buildroot}%{_bindir}/profile*.pl
 install -d %{buildroot}%{_mandir}/man1/
 install -m 644 doc/man/*.1 %{buildroot}%{_mandir}/man1/
 
@@ -103,10 +107,7 @@ rm -rf %{buildroot}
 %files utils
 %defattr(755,root,root)
 %{_bindir}/create_undef.pl
-%{_bindir}/test_estimation.pl
-%{_bindir}/test_joinestimation.pl
 %{_bindir}/postgis_restore.pl
-%{_bindir}/profile_intersects.pl
 
 %changelog
 * Fri Mar 19 2010 Otto Dassau 1.5.1
