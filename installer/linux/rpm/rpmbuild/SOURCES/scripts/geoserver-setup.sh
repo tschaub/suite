@@ -6,7 +6,6 @@ fin=0
 
 # get current values from geoserver_data
 GS_DATA=/usr/share/opengeo-suite-data/geoserver_data
-GS_DATA=/Users/jdeolive/Projects/gs_trunk/svn/data/release
 
 if [ -e $GS_DATA ]; then
   host="`cat $GS_DATA/global.xml | grep "<proxyBaseUrl>" | sed 's#</\?proxyBaseUrl>##g' | sed 's#.*://##g' | sed 's#/.*##g'`"
