@@ -31,8 +31,8 @@ the OpenGeo Suite.
                 cp -rp /usr/lib/opengeo-jai/* /usr/lib/jvm/java-6-sun/.
         fi
 
-        if [ -d /usr/lib/jvm/java-6-openjdk ]; then
-                cp -rp /usr/lib/opengeo-jai/* /usr/lib/jvm/java-6-openjdk/.
+        if [ -d /usr/lib/jvm/java-1.6.0-openjdk ]; then
+                cp -rp /usr/lib/opengeo-jai/* /usr/lib/jvm/java-1.6.0-openjdk/.
         fi
 
 
@@ -56,7 +56,7 @@ jre/lib/ext/mlibwrapper_jai.jar"
         done
 
 
-clean
+%clean
 
 %files
 %defattr(-,root,root,-)
