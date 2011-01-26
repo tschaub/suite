@@ -12,11 +12,11 @@ get_file http://wwwmaster.postgresql.org/redir/198/h/pgadmin3/release/v$VER/src/
 cp files/$PGADMIN.tar.gz $RPM_SOURCE_DIR
 
 get_svn $REPO_PATH installer/common/postgis pgadmin_postgis
-cp files/pgadmin_postgis/* $RPM_BUILD_DIR
+cp svn/$REPO_PATH/pgadmin_postgis/* $RPM_BUILD_DIR
 
 # build
-#build_rpm yes
+build_rpm yes
 
 # publish
-#publish_rpm
+publish_rpm
 

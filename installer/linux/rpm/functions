@@ -64,11 +64,11 @@ function get_file() {
   fi
 }
 
-# get_svn <repo_path> <dir> <path>
+# get_svn <repo_path> <path> <dir>
 function get_svn() {
   local repo_path=$1
-  local dir=$2
-  local path=$3
+  local path=$2
+  local dir=$3
 
   if [ ! -d svn ]; then
     mkdir svn
