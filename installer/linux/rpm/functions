@@ -15,6 +15,7 @@ BRANCH=${REPO_PATH//\//-}
 PACKAGE=`echo $0 | sed 's#^.*build_##g' | sed 's#\.sh##g'`
 RPM_BUILD_ROOT=`pwd`/rpmbuild
 RPM_SOURCE_DIR=`pwd`/rpmbuild/SOURCES
+RPM_BUILD_DIR=`pwd`/rpmbuild/BUILD
 PKG_SOURCE_DIR=${RPM_SOURCE_DIR}/$PACKAGE
 ARCH=`uname -i`	
 
