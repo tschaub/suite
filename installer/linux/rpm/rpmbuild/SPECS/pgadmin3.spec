@@ -13,7 +13,7 @@ Group:		Applications/Databases
 URL:		http://www.pgadmin.org/
 Source:		pgadmin3-%{version}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires:  wxGTK2-devel wxGTK2-stc wxGTK2-xrc postgresql-devel desktop-file-utils openssl-devel libxml2-devel libxslt-devel
+BuildRequires: wxGTK2-devel wxGTK2-stc wxGTK2-xrc postgresql84-devel desktop-file-utils openssl-devel libxml2-devel libxslt-devel
 
 %define beta 1
 %{?beta:%define __os_install_post /usr/lib/rpm/brp-compress}
@@ -52,6 +52,8 @@ rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
 
 make DESTDIR=%{buildroot} install
+cp -f $RPM_BUILD_DIR/branding.ini %{buildroot}/%{_datadir}/%{name}/branding/
+cp -f $RPM_BUILD_DIR/pgadmin_splash.gif %{buildroot}/%{_datadir}/%{name}/branding/
 
 #cp -f ./src/include/images/elephant48.xpm %{buildroot}/%{_datadir}/%{name}/%{name}.xpm
 
