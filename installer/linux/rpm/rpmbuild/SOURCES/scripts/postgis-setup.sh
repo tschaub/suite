@@ -62,6 +62,7 @@ if [ ! -e $PG_HBA ]; then
   printf "Unable to locate PGDATA directory. Please add the following line to pg_hba.conf to finalize configuration:
     
      local   all         opengeo                           md5
+     host    all         opengeo     127.0.0.1/32          md5
 "
   exit 0
 fi
@@ -70,5 +71,7 @@ fi
 cp $PG_HBA $PG_HBA.orig
 if [ $( cat $PG_HBA | grep opengeo | wc -l ) == 0 ]; then
    sed -i '/# TYPE/a local   all         opengeo                           md5'  $PG_HBA
+   sed -i '/# TYPE/a host    all         opengeo     127.0.0.1/32          md5'  $PG_HBA
+     
    /etc/init.d/postgresql restart
 fi
