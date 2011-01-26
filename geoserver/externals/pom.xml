@@ -17,6 +17,7 @@
   <name>OpenGeo Suite GeoServer Externals</name>
 
   <modules>
+   <module>geowebcache</module>
    <module>geotools</module>
    <module>geoserver</module>
   </modules>
