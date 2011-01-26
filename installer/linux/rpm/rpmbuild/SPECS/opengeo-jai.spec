@@ -1,6 +1,6 @@
 Name: opengeo-jai
 Version: 1.1.3
-Release: opengeo
+Release: 1
 Summary:  A set of Java toolkits to provide enhanced image rendering abilities.
 Group: System Environment/Libraries
 License: see copyright

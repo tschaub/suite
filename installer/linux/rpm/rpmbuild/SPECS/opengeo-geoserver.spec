@@ -1,6 +1,6 @@
 Name: opengeo-geoserver
 Version: 2.3.0
-Release: opengeo
+Release: 1
 Summary: High performance, standards-compliant map and geospatial data server.
 Group: Applications/Engineering
 License: see http://geoserver.org

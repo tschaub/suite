@@ -1,6 +1,6 @@
 Name: opengeo-postgis
 Version: 2.3.0
-Release: opengeo
+Release: 1
 Summary: Robust, spatially-enabled object-relational database built on PostgreSQL.
 Group: Applications/Database
 License: see http://opengeo.org
