@@ -21,7 +21,7 @@ Type: password
 Description: Password confirmation:
 
 Template: opengeo_geoserver/password_mismatch
-Type: error
+Type: password
 Description: Passwords did not match. 
  The two passwords you entered were not the same. Please try again.
 
