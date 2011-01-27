@@ -1,6 +1,5 @@
 Template: opengeo_geoserver/proxyurl
 Type: string
-Default: localhost
 Description: Please enter the URL that GeoServer is accessed through publicly:
  This is only necessary if GeoServer is accessed through an external proxy. 
  Hit enter to leave unset. 
@@ -21,7 +20,7 @@ Template: opengeo_geoserver/password_confirm
 Type: password
 Description: Password confirmation:
 
-Template: opengeo-geoserver/password_mismatch
+Template: opengeo_geoserver/password_mismatch
 Type: error
 Description: Passwords did not match. 
  The two passwords you entered were not the same. Please try again.

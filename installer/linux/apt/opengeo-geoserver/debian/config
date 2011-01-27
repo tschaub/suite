@@ -8,34 +8,35 @@ set -e
 #set -v -x; DEBIAN_SCRIPT_TRACE=1
 #${DEBIAN_SCRIPT_TRACE:+ echo "#42#DEBUG# RUNNING $0 $*" 1>&2 }
 
-db_input high opengeo_geoserver/geoserver_hostname || true
-db_go
-db_input high opengeo_geoserver/geoserver_user || true
+db_input high opengeo_geoserver/proxyurl || true
 db_go
 
-same=0
+db_input high opengeo_geoserver/username || true
+db_go
 
-while [ $same -ne 1 ]; do
-    RET=""
-    db_input high opengeo_geoserver/geoserver_password || true
-    db_go
-    db_get opengeo_geoserver/geoserver_password
-    # if password isn't empty we ask for password verification
-	if [ -z "$RET" ]; then
-		same=1
-	else
-		ROOT_PW="$RET"
-		db_input high opengeo_geoserver/geoserver_password_confirm || true
-		db_go
-		db_get opengeo_geoserver/geoserver_password_confirm
-		if [ "$RET" == "$ROOT_PW" ]; then
-			ROOT_PW=''
-			same=1
-		else
-			db_set opengeo_geoserver/geoserver_password ""
-			db_set opengeo_geoserver/geoserver_password_confirm ""
-			db_go
-		fi
-	fi
-done
+db_input high opengeo_geoserver/password || true
+db_go
+db_get opengeo_geoserver/password
+
+if [ ! -z "$RET" ]; then 
+   password="$RET"
+
+   password_ok=0
+   while [ $password_ok -ne 1 ]; do
+     db_input high opengeo_geoserver/password_confirm || true
+     db_go
+     db_get opengeo_geoserver/password_confirm
+     if [ "$RET" == "$password" ]; then
+        password_ok=1
+     else
+        db_input high opengeo_geoserver/password_mismatch || true
+        db_go
+        db_get opengeo_geoserver/password_mismatch
+        password=$RET
+     fi
+   done
+   
+else
+   password="geoserver"
+fi
 
