@@ -5,7 +5,7 @@
 
 . /usr/share/debconf/confmodule
 
-set -e
+set -x
 
 # summary of how this script can be called:
 #	* <postinst> `configure' <most-recently-configured-version>
@@ -37,7 +37,6 @@ function configuretomcat() {
 	cp /etc/default/tomcat6 /etc/default/tomcat6.orig
 	cat <<- EOF >> /etc/default/tomcat6
 	JAVA_OPTS="-Djava.awt.headless=true -Xms256m -Xmx768m -Xrs -XX:PerfDataSamplingInterval=500 -XX:MaxPermSize=128m"
-	GEOEXPLORER_DATA="/usr/share/opengeo-suite-data/geoexplorer_data"
 	EOF
 
 	# Ubuntu versions earlier than 9.10 have this setting turned on, it breaks geoserver.
@@ -57,34 +56,60 @@ function configuretomcat() {
 
 case "$1" in
     configure)
-	db_get opengeo_geoserver/geoserver_hostname
-	if [ "$RET" ]; then
-                hostname="$RET"
-        else
-		hostname=`system_primary_ip`
-	fi
+      db_input medium opengeo_geoserver/proxyurl || true
+      db_go
+      db_get opengeo_geoserver/proxy_url
+      if [ "$RET" ]; then
+         proxyurl="$RET"
+      else
+         proxyurl=""
+      fi
 
-        db_get opengeo_geoserver/geoserver_user
-        if [ "$RET" ]; then
-                username="$RET"
-        else
-                username="admin"
-        fi
+      db_input medium opengeo_geoserver/username || true
+      db_go
+      db_get opengeo_geoserver/username
+      if [ "$RET" ]; then
+         username="$RET"
+      else
+         username="admin"
+      fi
 
-	db_input medium opengeo_geoserver/geoserver_password || true
-	db_go
-	db_get opengeo_geoserver/geoserver_password && password="$RET"
+	  db_input medium opengeo_geoserver/password || true
+	  db_go
+	  db_get opengeo_geoserver/password
+      if [ "$RET" ]; then
+         password=$RET
+         password_ok=""
 
-	configuretomcat
-	invoke-rc.d tomcat6 restart
-	cat <<- EOF > /usr/share/opengeo-suite-data/geoserver_data/security/users.properties
+         while [ ! "$password_ok" ]; do
+	       db_input medium opengeo_geoserver/password_confirm || true
+	       db_go
+	       db_get opengeo_geoserver/password_confirm
+           if [ "$password" == "$RET" ]; then 
+              password_ok=1 
+           else
+	          db_input medium opengeo_geoserver/password_mismatch || true
+	          db_go
+	          db_get opengeo_geoserver/password_mismatch
+              password=$RET
+           fi
+         done
+      fi
+
+      if [ ! "$password" ]; then
+         password="geoserver"
+      fi
+    
+      configuretomcat
+      invoke-rc.d tomcat6 restart
+	  cat <<- EOF > /usr/share/opengeo-suite-data/geoserver_data/security/users.properties
 	$username=$password,ROLE_ADMINISTRATOR
 	# These are sample users you may uncomment if you want to test locking down wfs (see service.properties)
 	#wfst=wfst,ROLE_WFS_READ,ROLE_WFS_WRITE
 	#wfs=wfs,ROLE_WFS_READ
-	EOF
+	  EOF
 
-	chown tomcat6. /usr/share/opengeo-suite-data/geoserver_data/security/users.properties
+      chown tomcat6. /usr/share/opengeo-suite-data/geoserver_data/security/users.properties
 
     ;;
 
