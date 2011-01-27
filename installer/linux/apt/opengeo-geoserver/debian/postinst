@@ -71,9 +71,11 @@ case "$1" in
         username="admin"
     fi
 
-	db_input medium opengeo_geoserver/password || true
-	db_go
-	db_get opengeo_geoserver/password && password="$RET"
+    db_get opengeo_geoserver/password_confirm
+    password=$RET
+    if [ -z "$password" ]; then
+        password="geoserver"
+    fi
 
 	configuretomcat
 	invoke-rc.d tomcat6 restart
