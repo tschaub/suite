@@ -51,6 +51,9 @@
         <exec executable="${mvn.exec}" dir="repo/geowebcache" failonerror="true">
             <arg line="${mvn.set} -DskipTests clean install"/>
         </exec>
+        <exec executable="${mvn.exec}" dir="repo/geowebcache" failonerror="true">
+            <arg line="${mvn.set} install:install-file -DgroupId=org.geowebcache -DartifactId=geowebcache -Dversion=${gwc.version} -Dpackaging=war -Dfile=web/target/geowebcache.war"/>
+        </exec>
               </tasks>
             </configuration>
             <goals>
