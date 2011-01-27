@@ -51,11 +51,13 @@ function configuretomcat() {
 	#
 	cp /usr/share/opengeo-geoserver/geoserver.war /var/lib/tomcat6/webapps
 	unzip  -o /var/lib/tomcat6/webapps/geoserver.war  -d /var/lib/tomcat6/webapps/geoserver  > /dev/null 2>&1
-    GLOBAL_XML=/usr/share/opengeo-suite-data/geoserver_data/global.xml
-    if [ -e $GLOBAL_XML ]; then
-      sed -i 's/<\(proxyBaseUrl>.*<\/proxyBaseUrl\)>/<\!--\1-->/g' $GLOBAL_XML
-      sed -i "/<\/global>/i \
+    if [ ! -z "$proxyurl" ]; then
+      GLOBAL_XML=/usr/share/opengeo-suite-data/geoserver_data/global.xml
+      if [ -e $GLOBAL_XML ]; then
+        sed -i 's/<\(proxyBaseUrl>.*<\/proxyBaseUrl\)>/<\!--\1-->/g' $GLOBAL_XML
+        sed -i "/<\/global>/i \
   <proxyBaseUrl>$proxyurl<\/proxyBaseUrl>" $GLOBAL_XML
+      fi
     fi
 	chown tomcat6. /usr/share/opengeo-geoserver/*.war
 }
