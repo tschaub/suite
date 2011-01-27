@@ -88,7 +88,7 @@ To run the uninstaller, navigate to :menuselection:`Applications --> OpenGeo -->
 
   .. code-block:: bash
        
-     sudo /opt/opengeo/suite/suite-uninstall.sh
+     sudo sh /opt/opengeo/suite/suite-uninstall.sh
 
 For More Information
 --------------------
