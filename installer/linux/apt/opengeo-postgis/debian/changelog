@@ -1,4 +1,4 @@
-opengeo-postgis (1.0.0) unstable; urgency=low
+opengeo-postgis (2.3.0) unstable; urgency=low
 
   *  First complete release including pre and post install hooks.
 
