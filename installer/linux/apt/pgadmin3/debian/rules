@@ -97,6 +97,8 @@ install: build
 	# Add here commands to install the package into debian/pgadmin3.
 	# Finally install all in debian/tmp. Files are dispatched into packages by dh_install
 	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
+	cp $(CURDIR)/debian/plugins.ini $(CURDIR)/debian/tmp/usr/share/pgadmin3/
+	cp $(CURDIR)/debian/settings.ini $(CURDIR)/debian/tmp/usr/share/pgadmin3/
 	cp $(CURDIR)/debian/branding.ini  $(CURDIR)/debian/tmp/usr/share/pgadmin3/branding
 	cp $(CURDIR)/debian/pgadmin_splash.gif  $(CURDIR)/debian/tmp/usr/share/pgadmin3/branding
 
@@ -112,7 +114,7 @@ install: build
 	# by being there dh_install can warn about forgotten files as it is
 	# acting on both pgadmin3 and pgadmin3-data packages. (RE)
 	# (note that we could also use --fail-missing instead of --list-mising)
-	dh_install --list-missing -XDocs.vcproj
+	dh_install --fail-missing -XDocs.vcproj
 
 
 # binary-arch/binary-indep
