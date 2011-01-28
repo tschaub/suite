@@ -11,7 +11,7 @@ In order to build rpm packages the following must be installed on the system:
 Install wxGTK:
   
   yum install gtk+ gtk+-devel libjpeg-devel libpng-devel libtiff-devel
-  yum install ORBit2 SDL GConf2 gstreamer gstreamer-plugins-base libGLU libGLU-evel gtk2-devel
+  yum install ORBit2 SDL GConf2 gstreamer gstreamer-plugins-base libGLU libGLU-devel gtk2-devel desktop-file-utils openssl-devel
 
 Grab wxGTK rpms from http://download.fedora.redhat.com/pub/epel/5/i386/ :
 
