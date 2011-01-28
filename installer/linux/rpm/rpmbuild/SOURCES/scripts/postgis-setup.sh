@@ -24,7 +24,7 @@ function check_pg() {
 
   status=$( echo "`service postgresql status`" | awk '{print $NF}' )
   if [ $status != "running..." ]; then
-     echo "Could not start postgresql. Check above for the error and run this script once postgresql has been started."
+     echo "Could not start postgresql. Check above for the error and run /usr/share/opengeo-postgis/setup-postgis.sh once postgresql has been started."
      exit 1
   fi
 }
