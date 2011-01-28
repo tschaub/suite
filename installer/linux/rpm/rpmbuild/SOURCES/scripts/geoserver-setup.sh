@@ -56,7 +56,7 @@ menu() {
 
   Select an entry from the following list:
   ----------------------
-  1. Hostname or IP        : $host
+  1. Proxy URL             : $host
   2. Admin username        : $user
   3. Admin password        : $pass
 
@@ -69,9 +69,9 @@ menu() {
 
 case "$menuchoice" in
     "1")
-        printf "Please provide the IP address or hostname that GeoServer is accessed\n"
-        printf "through publicly. This value is required in cases where GeoServer is\n"
-        printf "accessed through an external proxy. Enter 'none' to leave value unset.\n"
+        printf "Please provide the URL that GeoServer is accessed through publicly.\n"
+        printf "This value is required in cases where GeoServer is accessed though an\n"
+        printf "external proxy. Enter 'none' to leave value unset.\n"
         respond "hostname" "$host" "3"
         host=$choice
         if [ -z $host ] || [ "$host" == "none" ]; then
@@ -82,14 +82,14 @@ case "$menuchoice" in
         ;;
 
     "2")
-        printf "Please choose a user for the GeoServer admin account.\n"
-        respond "user" "$user" "3"
+        printf "Please choose a username for the GeoServer admin account.\n"
+        respond "username" "$user" "3"
         user=$choice
         ;;
 
     "3")
-        printf "Please choose a pass for the GeoServer admin account.\n"
-        respond "pass" "$pass" "3"
+        printf "Please choose a password for the GeoServer admin account.\n"
+        respond "password" "$pass" "3"
         pass=$choice
         ;;
 
