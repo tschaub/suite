@@ -10,6 +10,9 @@ PGADMIN=pgadmin3-$VERSION
 # grab files
 get_file http://wwwmaster.postgresql.org/redir/333/h/pgadmin3/release/v$VERSION/src/$PGADMIN.tar.gz
 
+get_svn trunk pgadmin installer/common/postgis
+cp svn/pgadmin/* pgadmin3/debian
+
 # clean out old sources
 pushd pgadmin3
 ls | grep -v debian | xargs rm -rf
