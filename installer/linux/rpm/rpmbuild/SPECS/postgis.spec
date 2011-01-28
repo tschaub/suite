@@ -41,7 +41,7 @@ The postgis-utils package provides the utilities for PostGIS.
 %define sqldir %{_datadir}/postgresql
 
 %build
-%configure --datadir=%{sqldir} --mandir=%{_mandir}
+%configure --datadir=%{sqldir} --mandir=%{_mandir} --with-gui
 make LPATH="%{_libdir}/postgresql" \
 	shlib="%{name}.so"
 
