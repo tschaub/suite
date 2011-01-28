@@ -1,3 +1,9 @@
+pgadmin3 (1.10.2-1build1+opengeo) lucid-proposed; urgency=low
+
+  * OpenGeo specific branding and settings.ini
+
+ -- OpenGeo <inqiry@opengeo.org>  Fri, 28 Jan 2010 15:57:13 -0700
+
 pgadmin3 (1.10.2-1build1) lucid-proposed; urgency=low
 
   * No-change upload to rebuild against current wxwidgets2.8, which
