@@ -3,8 +3,8 @@ Section: science
 Priority: optional
 Maintainer: Debian GIS Project <pkg-grass-devel@lists.alioth.debian.org>
 Uploaders: Francesco Paolo Lovergine <frankie@debian.org>
-Build-Depends: debhelper (>= 7), dpatch, doxygen, swig, ruby, ruby1.8-dev,
-	       python-all, python-all-dev, python-central (>= 0.5), 
+Build-Depends: debhelper (>= 7), dpatch, doxygen, swig, 
+	       python-all, python-all-dev, python-central (>= 0.5)
 Standards-Version: 3.8.4
 Homepage: http://trac.osgeo.org/geos/
 Vcs-Browser: http://svn.debian.org/viewsvn/pkg-grass/packages/geos/trunk

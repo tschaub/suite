@@ -22,6 +22,11 @@
           <description>The svn revision to build from: Examples: &quot;latest&quot;, &quot;12456&quot;, etc..</description>
           <defaultValue>latest</defaultValue>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>REPO</name>
+          <description></description>
+          <defaultValue>testing</defaultValue>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>

@@ -32,13 +32,11 @@
           <default>
             <comparator class="hudson.util.CaseInsensitiveComparator"/>
           </default>
-          <int>4</int>
+          <int>3</int>
           <string>DIST</string>
           <string>lucid</string>
           <string>HOME</string>
           <string>/usr/share/jetty</string>
-          <string>REPO</string>
-          <string>testing</string>
           <string>SYS</string>
           <string>ubuntu-10.04-x86</string>
         </tree-map>
