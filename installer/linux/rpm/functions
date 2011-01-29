@@ -76,7 +76,7 @@ function get_svn() {
   fi
 
   if [ ! -d svn/$repo_path ]; then
-    mkdir svn/$repo_path
+    mkdir -p svn/$repo_path
     checkrc $? "mkdir svn/$repo_path"
   fi
 
