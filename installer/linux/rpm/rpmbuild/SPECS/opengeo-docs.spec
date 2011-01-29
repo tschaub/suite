@@ -1,5 +1,5 @@
 Name: opengeo-docs
-Version: 2.3.0
+Version: 2.3.3
 Release: 1
 Summary: Full documentation for the OpenGeo Suite.
 Group: Documentation
