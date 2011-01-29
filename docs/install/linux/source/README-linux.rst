@@ -1,7 +1,7 @@
 Installing the OpenGeo Suite
 ============================
 
-This document will describe how to install the OpenGeo Suite.  More detailed operating instructions are available once the software is installed.
+This document describes how to install the OpenGeo Suite on Linux. More detailed operating instructions are available once the software is installed.
 
 
 Prerequisites
@@ -9,132 +9,87 @@ Prerequisites
 
 The OpenGeo Suite has the following system requirements:
 
-* **Operating System**: Ubuntu 9.10, Redhat 5, CentOS 5, Fedora 11 (32bit)
-  * **Note**: The Dashboard is not available on 64bit systems, but the other components of the Suite run on 64bit systems.
+* **Operating System**: Ubuntu 10.04 and 10.10, CentOS 5
 * **Memory**: 512MB minimum (1GB recommended)
 * **Disk space**: 500MB minimum (plus extra space for any loaded data)
 * **Browser**: Any modern web browser is supported (Internet Explorer 6+, Firefox 3+, Chrome 2+, Safari 3+)
-* **Permissions**: Runs in a user account; superuser not required
+* **Permissions**: Super user privileges are required for installation
 
 Installation
 ------------
 
-.. note:: The installation process runs in a terminal.
+Packages for the OpenGeo Suite are currently available in both :ref:`rpm <rpm>` and :ref:`apt <apt>` (debian) format. 
 
-#. Begin by making the file executable:
+.. note:: The commands contained in the following installation instructions must be run as a user with root privileges. 
 
-   .. parsed-literal::
+.. _rpm:
 
-      chmod +x OpenGeoSuite-|version|.bin
+RPM Installation
+^^^^^^^^^^^^^^^^
 
-#. Execute the file:
+.. warning:: The rpm packages are only available for CentOS 5 and above.
 
-   .. parsed-literal::
-
-      sh OpenGeoSuite-|version|.bin
-
-#. The archive will verify its integrity, and then ask if you wish to proceed (default is Yes)::
-
-      Would you like to proceed with installing OpenGeo Suite? [Y|n]: 
-
-#. Read and accept the License Agreement (default is Yes)::
-
-      Do you accept the license agreement? [Y|n]:
-
-#. Choose the installation directory.  The default is in the ``$HOME`` directory:
+#. Begin by adding the OpenGeo Yum repository:
 
    .. parsed-literal::
 
-      Choose an installation directory [/home/<user>/opengeosuite-|version|]:
+      cd /etc/yum.repos.d
+      wget http://yum.opengeo.org/centos/5/i386/OpenGeo.repo
 
-#. Choose to create an installation directory:
+   .. note:: Replace ``i386`` with ``x86_64`` if installing on a 64 bit system.
+
+#. Search for packages:
 
    .. parsed-literal::
 
-      The directory [/home/<user>/opengeosuite-|version|] does not exist. Would you like to create it now? [Y|n]:
+      yum search opengeo
 
-#. Choose if the OpenGeo Suite should include ArcSDE support (default is No):
+   .. note:: If the search command does not return any results there was a problem adding the yum repository. Examine the output of yum for any errors or warnings.
 
-   .. note:: You will be prompted for additional required libraries later in the installation.
+#. Install the opengeo-suite package:
 
-   ::
+   .. parsed-literal::
 
-     Would you like to include additional support for ArcSDE? [y|N]:
+      yum install opengeo-suite
 
-#. Choose if the OpenGeo Suite should include Oracle Spatial support (default is No):
+.. _apt:
 
-   .. note:: You will be prompted for additional required libraries later in the installation.
+APT Installation
+^^^^^^^^^^^^^^^^
 
-   ::
+.. warning:: The apt packages are only available for Ubuntu 10.04 and above.
 
-     Would you like to include additional support for Oracle? [y|N]:
+#. Begin by importing the OpenGeo GPG key:
 
-#. Choose if you would like to create links to executable files (default is Yes)::
+   .. parsed-literal::
 
-     Would you like to create links to executable files? [Y|n]:
-     
-#. If you selected "yes", choose the directory where the links will be created.  The default is ``$HOME/bin``::
+      wget -qO- http://apt.opengeo.org/gpg.key | apt-key add -
 
-     What directory should links be created in? [/home/<user>/bin]:
+#. Add the OpenGeo APT repository:
+
+   .. parsed-literal::
+
+      echo "deb http://apt.opengeo.org/ubuntu lucid main" >> /etc/apt/sources.list
       
-#. If this directory does not exist, you will be asked if you want to create it::
-   
-     /home/<user>/bin does not exist. Would you like to create it now? [Y|n]:
-            
-#. The installer will provide a summary and ask for confirmation:
+#. Update:
 
    .. parsed-literal::
 
-      Installation summary:
+      apt-get update
 
-	     Installation directory: 	 /home/<user>/opengeosuite-|version|
-	     Install ArcSDE support: 	 No
-	     Install Oracle support: 	 No
-	     Install executables:        /home/<user>/bin
-
-      Proceed with installation? [Y|n]: 
-
-#. The installation will begin.  
-
-#. If you chose to add support for ArcSDE, the installer will ask you for the location of the necessary external libraries::
-
-     The ArcSDE extension requires the Java ESRI client libraries to function.
-     Where are the libraries located on your system? [Leave blank to skip]:
-
-#. If you chose to add support for Oracle, the installer will ask you for the location of the necessary external libraries::
-
-     The Oracle extension requires the Oracle JDBC driver to function.
-     Where is ojdbc jar located on your system? [Leave blank to skip]:
-
-#. The installation is complete.
-
-#. To run the Dashboard, navigate to ``$HOME/bin`` and type::
- 
-     $ ./opengeo-dashboard
-
-   .. note:: The Dashboard requires X11 or equivalent windowing environment.
-
-#. To start or stop the OpenGeo Suite, navigate to ``$HOME/bin`` and type::
-
-     $ ./opengeo-suite start
-     $ ./opengeo-suite stop  
-
-
-Uninstallation
---------------
-
-.. note:: Please make sure the OpenGeo Suite is offline and the Dashboard is closed before uninstalling.
-
-#. Navigate to the OpenGeo Suite installation directory:
+#. Search for packages:
 
    .. parsed-literal::
 
-      $ cd /home/<user>/opengeosuite-|version|/suite
+      apt-cache search opengeo
 
-#. Execute the uninstall.sh script::
+   .. note:: If the search command does not return any results there was a problem adding the apt repository. Examine the output of apt for any errors or warnings.
 
-      $ ./uninstall.sh
+#. Install the opengeo-suite package:
 
+   .. parsed-literal::
+
+      apt-get install opengeo-suite
 
 For More Information
 --------------------
