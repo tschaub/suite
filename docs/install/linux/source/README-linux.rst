@@ -1,7 +1,7 @@
-Installing the OpenGeo Suite
-============================
+Installing the OpenGeo Suite |version| for Linux
+================================================
 
-This document describes how to install the OpenGeo Suite on Linux. More detailed operating instructions are available once the software is installed.
+This document describes how to install the OpenGeo Suite for Linux. More detailed operating instructions are available once the software is installed.
 
 
 Prerequisites
@@ -9,89 +9,106 @@ Prerequisites
 
 The OpenGeo Suite has the following system requirements:
 
-* **Operating System**: Ubuntu 10.04 and 10.10, CentOS 5
-* **Memory**: 512MB minimum (1GB recommended)
-* **Disk space**: 500MB minimum (plus extra space for any loaded data)
-* **Browser**: Any modern web browser is supported (Internet Explorer 6+, Firefox 3+, Chrome 2+, Safari 3+)
-* **Permissions**: Super user privileges are required for installation
+* Operating System: Ubuntu 10.04 and 10.10, CentOS 5
+* Memory: 512MB minimum (1GB recommended)
+* Disk space: 500MB minimum (plus extra space for any loaded data)
+* Browser: Any modern web browser is supported (Internet Explorer 6+, Firefox 3+, Chrome 2+, Safari 3+)
+* Permissions: Super user privileges are required for installation
 
 Installation
 ------------
 
-Packages for the OpenGeo Suite are currently available in both :ref:`rpm <rpm>` and :ref:`apt <apt>` (debian) format. 
+Packages for the OpenGeo Suite are currently available in both :ref:`RPM <rpm>` and :ref:`APT <apt>` (Debian) format. 
 
-.. note:: The commands contained in the following installation instructions must be run as a user with root privileges. 
+.. note:: The commands contained in the following installation instructions must be run as a user with root privileges, or prefixed with ``sudo``. 
 
-.. _rpm:
+.. _RPM:
 
 RPM Installation
-^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~
 
-.. warning:: The rpm packages are only available for CentOS 5 and above.
+.. warning:: The RPM packages are only available for CentOS 5 and above.
 
-#. Begin by adding the OpenGeo Yum repository:
+#. Begin by adding the OpenGeo Yum repository.
 
-   .. parsed-literal::
+   For 32 bit systems:
+
+   .. code-block:: bash
 
       cd /etc/yum.repos.d
       wget http://yum.opengeo.org/centos/5/i386/OpenGeo.repo
 
-   .. note:: Replace ``i386`` with ``x86_64`` if installing on a 64 bit system.
+   For 64 bit systems:
+
+   .. code-block:: bash
+
+      cd /etc/yum.repos.d
+      wget http://yum.opengeo.org/centos/5/x86_64/OpenGeo.repo
 
 #. Search for packages:
 
-   .. parsed-literal::
+   .. code-block:: bash
 
       yum search opengeo
 
-   .. note:: If the search command does not return any results there was a problem adding the yum repository. Examine the output of yum for any errors or warnings.
+   .. note:: If the search command does not return any results, the repository was not added properly. Examine the output of the ``yum`` command for any errors or warnings.
 
-#. Install the opengeo-suite package:
+#. Install the OpenGeo Suite package (opengeo-suite):
 
-   .. parsed-literal::
+   .. code-block:: bash
 
       yum install opengeo-suite
 
-.. _apt:
+#. You can launch the OpenGeo Suite Dashboard (and verify the installation was successful) by navigating to the following URL::
+
+      http://localhost:8080/dashboard/
+ 
+
+.. _APT:
 
 APT Installation
-^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~
 
-.. warning:: The apt packages are only available for Ubuntu 10.04 and above.
+.. warning:: The APT packages are only available for Ubuntu 10.04 and above.
 
 #. Begin by importing the OpenGeo GPG key:
 
-   .. parsed-literal::
+   .. code-block:: bash
 
       wget -qO- http://apt.opengeo.org/gpg.key | apt-key add -
 
 #. Add the OpenGeo APT repository:
 
-   .. parsed-literal::
+   .. code-block:: bash
 
       echo "deb http://apt.opengeo.org/ubuntu lucid main" >> /etc/apt/sources.list
       
-#. Update:
+#. Update APT:
 
-   .. parsed-literal::
+   .. code-block:: bash
 
       apt-get update
 
 #. Search for packages:
 
-   .. parsed-literal::
+   .. code-block:: bash
 
       apt-cache search opengeo
 
-   .. note:: If the search command does not return any results there was a problem adding the apt repository. Examine the output of apt for any errors or warnings.
+   .. note:: If the search command does not return any results, the repository was not added properly. Examine the output of the ``apt`` commands for any errors or warnings.
 
-#. Install the opengeo-suite package:
+#. Install the OpenGeo Suite package (opengeo-suite):
 
-   .. parsed-literal::
+   .. code-block:: bash
 
       apt-get install opengeo-suite
+
+#. You can launch the OpenGeo Suite Dashboard (and verify the installation was successful) by navigating to the following URL::
+
+      http://localhost:8080/dashboard/
+
 
 For More Information
 --------------------
 
-Please visit http://opengeo.org or see the documentation included with this software.
+Please visit http://opengeo.org/ or see the documentation included with this software.
