@@ -34,6 +34,33 @@
       <groupId>org.geoserver.web</groupId>
       <artifactId>web-demo</artifactId>
     </dependency>
+    <!-- org.geoserver.rest.uploader dependencies -->
+    <dependency>
+     <groupId>org.geoserver.extension</groupId>
+     <artifactId>restconfig</artifactId>
+    </dependency>
+    <dependency>
+     <groupId>org.restlet</groupId>
+     <artifactId>org.restlet.ext.fileupload</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.restlet</groupId>
+      <artifactId>org.restlet.ext.json</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-vfs</groupId>
+      <artifactId>commons-vfs</artifactId>
+    </dependency>
+    <!-- /org.geoserver.rest.uploader dependencies -->
+    
     <dependency>
       <groupId>org.geotools</groupId>
       <artifactId>gt-shapefile</artifactId>

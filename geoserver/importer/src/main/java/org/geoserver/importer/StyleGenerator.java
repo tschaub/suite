@@ -65,6 +65,7 @@ public class StyleGenerator {
         ramp.add("cyan", Color.decode("0x0099CC"));
         ramp.add("azure", Color.decode("0x0033CC"));
         ramp.add("violet", Color.decode("0x3300FF"));
+        ramp.initRandom();
     }
 
     public StyleGenerator(Catalog catalog, ColorRamp ramp) {

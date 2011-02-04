@@ -15,4 +15,20 @@
   <!-- the import thread pool manager -->
   <bean id="importerPool" class="org.geoserver.importer.ImporterThreadManager"/>
   
+   <bean id="restConfigUploadMapping" class="org.geoserver.rest.RESTMapping">
+    <property name="routes">
+      <map>
+        <entry>
+          <key><value>/upload</value></key>
+          <value>resourceUploader</value>
+        </entry>
+      </map>
+    </property>
+  </bean>
+  
+  <bean id="resourceUploader" class="org.geoserver.rest.upload.ResourceUploader">
+     <constructor-arg ref="catalog"/>
+     <constructor-arg ref="dataDirectory"/>
+  </bean>
+  
  </beans>

@@ -55,4 +55,11 @@ public class ColorRamp {
         return colors.get(position);
     }
     
+    /**
+     * Sets the current ramp position to a random index
+     */
+    public void initRandom() {
+        position = (int) (names.size() * Math.random());
+    }
+
 }
