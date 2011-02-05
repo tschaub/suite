@@ -1,4 +1,4 @@
-package org.geoserver.rest.upload;
+package org.geoserver.uploader;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,9 +17,9 @@ import org.geoserver.catalog.LayerInfo;
 import org.geoserver.catalog.NamespaceInfo;
 import org.geoserver.catalog.StyleInfo;
 import org.geoserver.catalog.WorkspaceInfo;
-import org.geoserver.importer.ColorRamp;
 import org.geoserver.importer.StyleGenerator;
 import org.geotools.data.DataStore;
+import org.geotools.data.DataStoreFactorySpi;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.DefaultTransaction;
 import org.geotools.data.FeatureWriter;
@@ -51,6 +51,7 @@ class FeatureTypeImporter extends LayerImporter {
             file = ensureUnique(workspaceInfo, file);
         }
 
+        final DataStoreFactorySpi dsf = getDataStoreFactory(file);
         final Map<? extends String, ? extends Serializable> connectionParameters;
         connectionParameters = getConnectionParameters(file,
                 catalog.getNamespaceByPrefix(workspaceInfo.getName()));
@@ -63,6 +64,7 @@ class FeatureTypeImporter extends LayerImporter {
         if (storeInfo == null) {
             storeInfo = builder.buildDataStore(file.getName());
             storeInfo.setDescription(title);
+            storeInfo.setType(dsf.getDisplayName());
             storeInfo.getConnectionParameters().putAll(connectionParameters);
         } else {
             addStoreInfoToCatalog = false;
@@ -98,8 +100,13 @@ class FeatureTypeImporter extends LayerImporter {
             catalog.add(ftInfo);
             catalog.add(layerInfo);
         } catch (RuntimeException e) {
+            // wouldn't it be cool to have catalog transactions?
             try {
                 catalog.remove(layerInfo);
+            } finally {
+            }
+            try {
+                catalog.remove(style);
             } finally {
             }
             try {
@@ -114,6 +121,12 @@ class FeatureTypeImporter extends LayerImporter {
         }
         return layerInfo;
 
+    }
+
+    private DataStoreFactorySpi getDataStoreFactory(File file) {
+        // TODO: support more formats
+        ShapefileDataStoreFactory shpFac = new ShapefileDataStoreFactory();
+        return shpFac;
     }
 
     private SimpleFeatureSource importToStore(final SimpleFeatureSource source,
@@ -201,7 +214,7 @@ class FeatureTypeImporter extends LayerImporter {
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
-        params.put(ShapefileDataStoreFactory.CREATE_SPATIAL_INDEX.key, "true");
+        params.put(ShapefileDataStoreFactory.CREATE_SPATIAL_INDEX.key, "false");
         params.put("namespace", namespaceInfo.getURI());
 
         return params;

@@ -26,9 +26,16 @@
     </property>
   </bean>
   
-  <bean id="resourceUploader" class="org.geoserver.rest.upload.ResourceUploader">
-     <constructor-arg ref="catalog"/>
-     <constructor-arg ref="dataDirectory"/>
+  <bean id="resourceUploaderConfigPersister" 
+        class="org.geoserver.uploader.UploaderConfigPersister">
+    <constructor-arg ref="catalog"/>
+    <constructor-arg ref="resourceLoader"/>
+  </bean>
+  
+  <bean id="resourceUploader" class="org.geoserver.uploader.ResourceUploader">
+    <constructor-arg ref="catalog"/>
+    <constructor-arg ref="dataDirectory"/>
+    <constructor-arg ref="resourceUploaderConfigPersister"/>
   </bean>
   
  </beans>

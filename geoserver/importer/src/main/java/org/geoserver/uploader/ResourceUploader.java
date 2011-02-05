@@ -1,4 +1,4 @@
-package org.geoserver.rest.upload;
+package org.geoserver.uploader;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -17,7 +17,6 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.geoserver.catalog.Catalog;
-import org.geoserver.catalog.CoverageStoreInfo;
 import org.geoserver.catalog.DataStoreInfo;
 import org.geoserver.catalog.LayerInfo;
 import org.geoserver.catalog.StoreInfo;
@@ -45,9 +44,17 @@ public class ResourceUploader extends Restlet {
 
     private GeoServerDataDirectory dataDir;
 
-    public ResourceUploader(Catalog catalog, GeoServerDataDirectory dataDir) {
+    /**
+     * Used to get the default upload workspace and datastore dynamically as it may change over the
+     * course of the application
+     */
+    private UploaderConfigPersister configPersister;
+
+    public ResourceUploader(Catalog catalog, GeoServerDataDirectory dataDir,
+            UploaderConfigPersister configPersister) {
         this.catalog = catalog;
         this.dataDir = dataDir;
+        this.configPersister = configPersister;
     }
 
     @Override
@@ -76,7 +83,7 @@ public class ResourceUploader extends Restlet {
             JSONObject tmpresult = new JSONObject();
             tmpresult.put("success", Boolean.TRUE);
 
-            List<LayerInfo> importedLayers = importLayer(request, response);
+            List<LayerInfo> importedLayers = uploadLayers(request, response);
 
             for (LayerInfo importedLayer : importedLayers) {
                 JSONObject layerResult = new JSONObject();
@@ -118,8 +125,7 @@ public class ResourceUploader extends Restlet {
         response.setEntity(responseContents, MediaType.TEXT_HTML);
     }
 
-    private List<LayerInfo> importLayer(Request request, Response response) throws Exception {
-
+    private List<LayerInfo> uploadLayers(Request request, Response response) throws Exception {
         RestletFileUpload rfu = new RestletFileUpload();
         DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
         rfu.setFileItemFactory(fileItemFactory);
@@ -129,10 +135,37 @@ public class ResourceUploader extends Restlet {
         } catch (FileUploadException e) {
             throw new RestletException(request.getEntity(), Status.SERVER_ERROR_INTERNAL, e);
         }
-
         Map<String, Object> params = getRequestParams(items);
-        FileItem fileItem = (FileItem) params.get("file");
 
+        return uploadLayers(params);
+    }
+
+    /**
+     * Imports the layers comming from a POST form into the GeoServer catalog.
+     * <p>
+     * The following parameters are expected in {@code params}
+     * <ul>
+     * <li>{@code file}: Mandatory. {@link FileItem} containing the uploaded file
+     * <li>{@code workspace}: Optional: workspace name where to import the spatial data file(s)
+     * contained in {@code file}
+     * <li>{@code store}: Optional: target store name (belonging to {@code workspace} if provided,
+     * or to the uploader's default workspace otherwise). If not provided uploaded resources are
+     * kept in its original format under the GeoServer's data directory.
+     * <li>{@code title}: Optional: uploaded resource title
+     * <li>{@code abstract}: Optional: uploaded resource abstract
+     * </ul>
+     * </p>
+     * 
+     * @param params
+     * @return
+     * @throws IOException
+     * @throws Exception
+     */
+    public List<LayerInfo> uploadLayers(Map<String, Object> params) throws IOException {
+        FileItem fileItem = (FileItem) params.get("file");
+        if (fileItem == null) {
+            throw new IllegalArgumentException("Expected a 'file' parameter that was not provided");
+        }
         final String fileItemName = fileItem.getName();
         final File targetDirectory = createTargetDirectory(fileItemName);
 
@@ -157,8 +190,8 @@ public class ResourceUploader extends Restlet {
             if (canDeleteUploadedFiles) {
                 delete(targetDirectory);
             }
-        } catch (Exception e) {
-            LOGGER.log(Level.WARNING, "Error uploading and configuring layer for " + params, e);
+        } catch (IOException e) {
+            LOGGER.log(Level.WARNING, "Error uploading and configuring layer", e);
             FileUtils.deleteDirectory(targetDirectory);
             throw e;
         } finally {
@@ -171,9 +204,14 @@ public class ResourceUploader extends Restlet {
         return importedLayers;
     }
 
-    private List<File> doFileUpload(FileItem fileItem, final File targetDirectory) throws Exception {
+    private List<File> doFileUpload(FileItem fileItem, final File targetDirectory)
+            throws IOException {
         final File uploaded = new File(targetDirectory, fileItem.getName());
-        fileItem.write(uploaded);
+        try {
+            fileItem.write(uploaded);
+        } catch (Exception e) {
+            throw (IOException) new IOException(e.getMessage()).initCause(e);
+        }
 
         List<File> spatialFiles;
         VFSWorker vfs = new VFSWorker();
@@ -218,20 +256,52 @@ public class ResourceUploader extends Restlet {
         FileUtils.deleteDirectory(directory);
     }
 
+    /**
+     * Returns the target workspace in the following precedence order:
+     * <ul>
+     * <li>If one is specified by the user through the "workspace" parameter, that one is returned,
+     * at least it doesn't exist, in which case an exception is thrown.
+     * <li>The uploader's {@link UploaderConfig#getDefaultWorkspace() default} workspace, if set.
+     * <li>GeoServer's default workspace.
+     * <li>
+     * 
+     * @param params
+     * @return
+     */
     private WorkspaceInfo getTargetWorkspace(Map<String, Object> params) {
+
+        final UploaderConfig config = this.configPersister.getConfig();
+        final WorkspaceInfo uploaderDefaultWorkspace = config.defaultWorkspace();
+
         String workspaceId = (String) params.get("workspace");
         WorkspaceInfo workspaceInfo;
         if (null == workspaceId || workspaceId.trim().length() == 0) {
-            workspaceInfo = catalog.getDefaultWorkspace();
-            if (workspaceInfo == null) {
-                throw new IllegalArgumentException("There's no default workspace. "
-                        + "Create a Workspace before uploading data");
+            if (uploaderDefaultWorkspace == null) {
+                workspaceInfo = catalog.getDefaultWorkspace();
+                if (workspaceInfo == null) {
+                    throw new IllegalArgumentException("There's no default workspace. "
+                            + "Create a Workspace before uploading data");
+                }
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("Using GeoServer's default workspace " + workspaceInfo.getName()
+                            + " to upload " + params);
+                }
+            } else {
+                workspaceInfo = uploaderDefaultWorkspace;
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine("Using uploader's configured default workspace:"
+                            + workspaceInfo.getName() + " to upload " + params);
+                }
             }
         } else {
             workspaceInfo = catalog.getWorkspaceByName(workspaceId);
             if (null == workspaceInfo) {
-                throw new IllegalArgumentException("Provided workspace does not exist: "
+                throw new IllegalArgumentException("Requested workspace does not exist: "
                         + workspaceId);
+            }
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("Using user requested workspace:" + workspaceInfo.getName()
+                        + " to upload " + params);
             }
         }
         return workspaceInfo;
@@ -240,24 +310,36 @@ public class ResourceUploader extends Restlet {
     private DataStoreInfo getTargetDataStore(WorkspaceInfo targetWorkspace,
             Map<String, Object> params) {
 
+        final UploaderConfig config = this.configPersister.getConfig();
+        final DataStoreInfo uploaderDefaultDataStore = config.defaultDataStore();
+
+        DataStoreInfo storeInfo = getRequestedDataStore(targetWorkspace, params);
+        if (storeInfo == null) {
+            storeInfo = uploaderDefaultDataStore;
+        }
+        return storeInfo;
+    }
+
+    private DataStoreInfo getRequestedDataStore(WorkspaceInfo targetWorkspace,
+            Map<String, Object> params) {
         String storeId = (String) params.get("store");
         StoreInfo storeInfo = null;
         if (null != storeId && storeId.trim().length() > 0) {
             storeInfo = catalog.getStoreByName(targetWorkspace, storeId, StoreInfo.class);
             if (storeInfo == null) {
-                throw new RestletException("Specified store '" + storeId
-                        + "' not found in workspace " + targetWorkspace.getName(),
-                        Status.CLIENT_ERROR_BAD_REQUEST);
+                throw new IllegalArgumentException("Requested store '" + storeId
+                        + "' does not exist in workspace '" + targetWorkspace.getName() + "'");
             }
-            if (storeInfo instanceof CoverageStoreInfo) {
+            if (!(storeInfo instanceof DataStoreInfo)) {
                 throw new RestletException(
                         "Specified store '"
                                 + storeId
                                 + "' at workspace '"
                                 + targetWorkspace.getName()
-                                + "' is a Coverage store. It is not possible to post to existing CoverageStores.",
+                                + "' is not a DataStore. It is not possible to post to existing CoverageStores.",
                         Status.CLIENT_ERROR_CONFLICT);
             }
+
         }
         return (DataStoreInfo) storeInfo;
     }

@@ -1,4 +1,4 @@
-package org.geoserver.rest.upload;
+package org.geoserver.uploader;
 
 import java.io.File;
 import java.io.IOException;
