@@ -36,7 +36,7 @@
     </dependency>
     <!-- org.geoserver.rest.uploader dependencies -->
     <dependency>
-     <groupId>org.geoserver.extension</groupId>
+     <groupId>org.geoserver</groupId>
      <artifactId>restconfig</artifactId>
     </dependency>
     <dependency>
