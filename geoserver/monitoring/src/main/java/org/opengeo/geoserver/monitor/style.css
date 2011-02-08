@@ -1,0 +1,11 @@
+.button-group .button-chart-area span {
+  background: url(chart_curve.png) no-repeat;
+  display: block;
+  
+}
+
+.button-group .button-chart-pie span {
+  background: url(chart_pie.png) no-repeat;
+  display: block;
+}
+

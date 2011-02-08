@@ -1,0 +1,19 @@
+<html>
+ <head>
+  <wicket:head>
+  <wicket:link>
+     <link rel="stylesheet" type="text/css" href="style.css"/>
+   </wicket:link>
+  </wicket:head>
+ </head>
+ <body>
+ <wicket:extend>
+ <span id="export" style="float:right;">
+   <span>Export as:</span>
+   <a wicket:id="csv" class="csv-link">CSV</a>
+   <a wicket:id="excel" class="excel-link">Excel</a>
+ </span>
+ <div wicket:id="table"></div>
+ </wicket:extend>
+ </body>
+</html>

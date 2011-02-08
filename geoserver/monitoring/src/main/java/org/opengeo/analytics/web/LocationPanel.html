@@ -1,0 +1,30 @@
+<html xmlns:wicket="http://wicket.apache.org/">
+<head>
+  <wicket:head>
+  </wicket:head>
+</head>
+<body>
+<wicket:panel>
+  <div wicket:id="map"></div>
+  <form>
+    <div style="float:right; padding-right: 60px; clear:both;">
+      <span>Export as:</span>
+      <a wicket:id="kml">KML</a>
+      <a>PDF</a>
+    </div>
+    <ul style="padding-top: 2em;">
+        <li>
+             <fieldset style="width:700px;">
+               <legend><span><wicket:message key="pointsOfOrigin">Points of Origin</wicket:message></span></legend>
+               <ul>
+                 <li>
+                   <div wicket:id="commonOrigin"></div>
+                 </li>
+               </ul>
+             </fieldset>
+         </li>
+    </ul>
+  </form>
+</wicket:panel>
+</body>
+</html>

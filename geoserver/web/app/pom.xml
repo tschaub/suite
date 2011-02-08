@@ -185,6 +185,16 @@
 
   <profiles>
      <profile>
+       <id>monitoring</id>
+       <dependencies> 
+         <dependency>
+           <groupId>org.opengeo.geoserver</groupId>
+           <artifactId>monitoring</artifactId>
+           <version>${project.version}</version>
+         </dependency>
+       </dependencies> 
+     </profile>
+     <profile>
        <id>dbconfig</id>
        <dependencies> 
          <dependency>

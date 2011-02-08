@@ -1,0 +1,58 @@
+<html xmlns:wicket="http://wicket.apache.org/">
+<head>
+<title><wicket:message key="title">Activity</wicket:message></title>
+<wicket:head>
+  <style type="text/css">
+   #summaries fieldset {
+     width: 50em;
+   }
+  </style>
+
+  <wicket:link>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+  </wicket:link>
+
+</wicket:head>
+</head>
+<body>
+<wicket:panel>
+  <form>
+    <div style="clear: both; padding-top: 2em;">
+      <ul id="summaries">
+        <li>
+         <fieldset>
+           <legend><span><wicket:message key="recentActivity">Recent Activity</wicket:message></span></legend>
+           <ul>
+             <li>
+               <div wicket:id="recentActivity"></div>
+             </li>
+           </ul>
+         </fieldset>
+        </li>
+        <li>
+         <fieldset>
+           <legend><span><wicket:message key="commonlyRequestedResources">Commonly Requested Resources</wicket:message></span></legend>
+           <ul>
+             <li>
+               <div wicket:id="commonResources"></div>
+             </li>
+           </ul>
+         </fieldset>
+        </li>
+         <li>
+         <fieldset>
+           <legend><span><wicket:message key="failedRequests">Failed Requests</wicket:message></span></legend>
+           <ul>
+             <li>
+               <div wicket:id="failedRequests"></div>
+             </li>
+           </ul>
+         </fieldset>
+        </li>
+      </ul>
+    </div>
+    
+  </form>
+</wicket:panel>
+</body>
+</html>

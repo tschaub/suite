@@ -1,0 +1,64 @@
+<html xmlns:wicket="http://wicket.apache.org/">
+<head>
+<title><wicket:message key="title">Activity</wicket:message></title>
+<wicket:head>
+  <!--style type="text/css">
+    #chartHeader {
+       border-bottom: 1px solid #777777;
+       padding-bottom: 5px;
+    }
+  </style-->
+</wicket:head>
+</head>
+<body>
+<wicket:panel>
+  <form wicket:id="form">
+    <!--div id="chartHeader">
+       <span id="services">
+         <input wicket:id="wms" type="checkbox"</input>WMS
+         <input wicket:id="wfs" type="checkbox">WFS</input>
+         <input wicket:id="wcs" type="checkbox">WCS</input>
+         <input wicket:id="other" type="checkbox">Other</input>
+       </span>
+       <span id="timeSpan">
+         Show <span wicket:id="from" id="from"></span> to <span wicket:id="to" id="end" ></span>
+       </span>
+       <a href="#" wicket:id="refresh" class="refresh-link">Refresh</a>
+       <span id="zoom" class="button-group button-group-me" style="float:right;">
+         <a wicket:id="hour" class="button-hour"><span></span></a>
+         <a wicket:id="day" class="button-day"><span></span></a>
+         <a wicket:id="week" class="button-week"><span></span></a>
+         <a wicket:id="month" class="button-month"><span></span></a>
+       </span>
+    </div>
+    
+    <div wicket:id="lineChart" style="float:left; clear: left;"></div>
+    <div wicket:id="pieChart" style="float:right; width:250px; margin: 25px -50px;"></div-->
+    <div wicket:id="activity" style="height: 400px;"></div>
+
+     <ul id="">
+       <li>
+         <fieldset>
+           <legend><span><wicket:message key="recentRequests">Recent Requests</wicket:message></span></legend>
+           <div wicket:id="recentRequests"></div>
+           <a wicket:id="recentViewMore">View all...</a>
+         </fieldset>
+        </li>
+        <li>
+        <fieldset>
+           <legend><span><wicket:message key="recentFailedRequests">Recent Failed Requests</wicket:message></span></legend>
+           <div wicket:id="recentFailedRequests"></div>
+           <a wicket:id="recentFailedViewMore">View all...</a>
+         </fieldset>
+       </li>
+       <li>
+         <fieldset style="width:100%;">
+           <legend><span><wicket:message key="commonResources">Commonly Requested Resources</wicket:message></span></legend>
+           <div wicket:id="commonResources"></div>
+         </fieldset>
+        </li>
+      </ul>
+  </form>
+</wicket:panel>
+</body>
+</html>
