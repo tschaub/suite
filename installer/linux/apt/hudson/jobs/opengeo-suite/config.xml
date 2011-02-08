@@ -57,7 +57,7 @@
   </builders>
   <publishers>
     <hudson.plugins.emailext.ExtendedEmailPublisher>
-      <recipientList>suite@opengeo.org</recipientList>
+      <recipientList>builds@opengeo.org</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.FailureTrigger>
           <email>
