@@ -22,6 +22,12 @@ public class UploaderConfig {
         this.catalog = catalog;
     }
 
+    public UploaderConfig(UploaderConfig config) {
+        this.catalog = config.catalog;
+        this.defaultWorkspace = config.defaultWorkspace;
+        this.defaultDataStore = config.defaultDataStore;
+    }
+
     void setCatalog(Catalog catalog) {
         this.catalog = catalog;
     }
@@ -53,6 +59,7 @@ public class UploaderConfig {
     }
 
     public DataStoreInfo defaultDataStore() {
+        String defaultDataStore = this.defaultDataStore;
         if (defaultDataStore == null) {
             return null;
         }
@@ -64,7 +71,7 @@ public class UploaderConfig {
         }
 
         DataStoreInfo storeInfo = null;
-        storeInfo = catalog.getDataStoreByName(ws.getName(), defaultWorkspace);
+        storeInfo = catalog.getDataStoreByName(ws.getName(), defaultDataStore);
         return storeInfo;
     }
 }

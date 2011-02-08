@@ -22,7 +22,7 @@ public class UploaderConfigPersister {
 
     private static final Logger LOGGER = Logging.getLogger(UploaderConfigPersister.class);
 
-    private static final String UPLOADER_CONFIG_FILE_NAME = "uploader.xml";
+    static final String UPLOADER_CONFIG_FILE_NAME = "uploader.xml";
 
     private GeoServerResourceLoader resourceLoader;
 
@@ -55,7 +55,7 @@ public class UploaderConfigPersister {
     }
 
     public UploaderConfig getConfig() {
-        return config;
+        return new UploaderConfig(config);
     }
 
     public void setDefaults(WorkspaceInfo ws, DataStoreInfo ds) {

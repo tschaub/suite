@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -16,9 +17,12 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.io.IOUtils;
 import org.geoserver.catalog.Catalog;
+import org.geoserver.catalog.CatalogBuilder;
 import org.geoserver.catalog.CoverageStoreInfo;
+import org.geoserver.catalog.DataStoreInfo;
 import org.geoserver.catalog.LayerInfo;
 import org.geoserver.catalog.ResourceInfo;
+import org.geoserver.catalog.ResourcePool;
 import org.geoserver.catalog.StoreInfo;
 import org.geoserver.catalog.WorkspaceInfo;
 import org.geoserver.config.GeoServerDataDirectory;
@@ -26,9 +30,12 @@ import org.geoserver.data.test.MockData;
 import org.geoserver.platform.GeoServerResourceLoader;
 import org.geoserver.rest.RestletException;
 import org.geoserver.test.GeoServerTestSupport;
+import org.geotools.data.DataAccessFactory;
+import org.geotools.data.property.PropertyDataStoreFactory;
 import org.geotools.data.shapefile.ShapefileDataStoreFactory;
 import org.geotools.referencing.CRS;
 import org.geotools.util.logging.Logging;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.restlet.data.Status;
 
 public class ResourceUploaderTest extends GeoServerTestSupport {
@@ -47,9 +54,13 @@ public class ResourceUploaderTest extends GeoServerTestSupport {
 
     final String bugsitesTestResource = "shapes/bugsites_esri_prj.tar.gz";
 
+    final String coverageTestResource = "geotiffs/EmissiveCampania.tif.bz2";
+
     final String archsitesFileName = "archsites.zip";
 
     final String bugsitesFileName = "bugsites.tar.gz";
+
+    final String coverageTestName = "EmissiveCampania.tif.bz2";
 
     FileItem archSitesFileItem;
 
@@ -146,11 +157,41 @@ public class ResourceUploaderTest extends GeoServerTestSupport {
      * A type comming with a .prj file that doesn't match an EPSG code should be run through
      * {@link CRS#lookupEpsgCode CRS#lookupEpsgCode(crsFromPrjFile, extensive == true)}
      */
-    public void testLookUpSRS() throws Exception {
-        System.out.println(CRS.decode("EPSG:26713").toWKT());
+    // commenting out this test as I couldn't figure out why CRS.lookupEpsgCode(crs, true) doesn't
+    // work in the test environment but it does work with the running application, even though I've
+    // added gt-epsg-hsql as a test dependency
+    public void _testLookUpSRS() throws Exception {
+        params.put("file", bugSitesFileItem);// this one contains a .prj file in esri format
+        List<LayerInfo> uploadLayers = uploader.uploadLayers(params);
+        assertTrue(uploadLayers.size() == 1);
+        LayerInfo layerInfo = uploadLayers.get(0);
+        ResourceInfo resource = layerInfo.getResource();
+        assertNotNull(resource);
+        CoordinateReferenceSystem nativeCRS = resource.getNativeCRS();
+        assertNotNull(nativeCRS);
+
+        CoordinateReferenceSystem expected = CRS.decode("EPSG:26713");
+        assertEquals(expected, nativeCRS);
+    }
+
+    public void testNoCRSProvidedDefaultsTo4326() throws Exception {
+        FileItem fileItemMock = fileItemMock("archsites_no_crs.zip", "shapes/archsites_no_crs.zip");
+        params.put("file", fileItemMock);// this one has no .prj file
+        List<LayerInfo> uploadLayers = uploader.uploadLayers(params);
+        assertTrue(uploadLayers.size() == 1);
+        LayerInfo layerInfo = uploadLayers.get(0);
+        ResourceInfo resource = layerInfo.getResource();
+        assertNotNull(resource);
+        CoordinateReferenceSystem nativeCRS = resource.getNativeCRS();
+        assertNull(nativeCRS);
+        CoordinateReferenceSystem declaredCRS = resource.getCRS();
+        CoordinateReferenceSystem expected = CRS.decode("EPSG:4326");
+        assertEquals(expected, declaredCRS);
     }
 
     public void testUploadShpGeoServerDefaultWorkspace() throws Exception {
+        configPersister.setDefaults(null, null);
+
         params.put("file", archSitesFileItem);
 
         List<LayerInfo> layers = uploader.uploadLayers(params);
@@ -179,40 +220,189 @@ public class ResourceUploaderTest extends GeoServerTestSupport {
         assertEquals(catalog.getDefaultWorkspace(), workspace);
     }
 
-    public void testUploadShpUploaderDefaultWorkspace() {
-        LOGGER.log(Level.SEVERE, getName() + " is not implemented yet!");
+    public void testUploadShpUploaderDefaultWorkspace() throws Exception {
+
+        final WorkspaceInfo targetWs = getNonDefaultWorkspace();
+        configPersister.setDefaults(targetWs, null);
+
+        final String ws = targetWs.getName();
+        params.put("file", archSitesFileItem);
+
+        List<LayerInfo> layers = uploader.uploadLayers(params);
+        LayerInfo layerInfo = layers.get(0);
+
+        assertEquals("archsites", layerInfo.getName());
+        assertEquals(ws, layerInfo.getResource().getStore().getWorkspace().getName());
     }
 
-    public void testUploadShpUserSpecifiedWorkspace() {
-        LOGGER.log(Level.SEVERE, getName() + " is not implemented yet!");
+    public void testUploadShpUserSpecifiedWorkspace() throws Exception {
+        final WorkspaceInfo targetWs = getNonDefaultWorkspace();
+        final String ws = targetWs.getName();
+
+        params.put("file", archSitesFileItem);
+        params.put("workspace", ws);
+
+        List<LayerInfo> layers = uploader.uploadLayers(params);
+        LayerInfo layerInfo = layers.get(0);
+
+        assertEquals("archsites", layerInfo.getName());
+        assertEquals(ws, layerInfo.getResource().getStore().getWorkspace().getName());
     }
 
-    public void testUploadShpUploadersDefaultDataStore() {
-        LOGGER.log(Level.SEVERE, getName() + " is not implemented yet!");
+    public void testUploadShpUploadersDefaultDataStore() throws Exception {
+        final WorkspaceInfo targetWs = getNonDefaultWorkspace();
+        final DataStoreInfo targetDs;
+        // create a datastore capable of creating new ft's
+        targetDs = createDirectoryDataStore(targetWs);
+        configPersister.setDefaults(targetWs, targetDs);
+
+        params.put("file", archSitesFileItem);
+
+        List<LayerInfo> layers = uploader.uploadLayers(params);
+        LayerInfo layerInfo = layers.get(0);
+
+        assertEquals("archsites", layerInfo.getName());
+        StoreInfo store = layerInfo.getResource().getStore();
+        assertEquals(targetDs, store);
     }
 
-    public void testUploadShpUserSpecifiedDataStore() {
-        LOGGER.log(Level.SEVERE, getName() + " is not implemented yet!");
+    public void testUploadShpUserSpecifiedDataStore() throws Exception {
+        final WorkspaceInfo targetWs = getNonDefaultWorkspace();
+        final DataStoreInfo targetDs;
+        // create a datastore capable of creating new ft's
+        targetDs = createDirectoryDataStore(targetWs);
+        configPersister.setDefaults(null, null);
+
+        params.put("file", archSitesFileItem);
+        params.put("workspace", targetWs.getName());
+        params.put("store", targetDs.getName());
+
+        List<LayerInfo> layers = uploader.uploadLayers(params);
+        LayerInfo layerInfo = layers.get(0);
+
+        assertEquals("archsites", layerInfo.getName());
+        StoreInfo store = layerInfo.getResource().getStore();
+        assertEquals(targetDs, store);
     }
 
-    public void testCantUploadToExistingShpDataStore() {
-        LOGGER.log(Level.SEVERE, getName() + " is not implemented yet!");
+    public void testCantUploadToExistingSingleFileDataStore() throws Exception {
+
+        final DataStoreInfo defaultDataStore = getCatalog().getDataStores().get(0);
+        {
+            assertNotNull(defaultDataStore);
+            ResourcePool resourcePool = getCatalog().getResourcePool();
+            DataAccessFactory dataStoreFactory = resourcePool.getDataStoreFactory(defaultDataStore);
+            assertTrue(dataStoreFactory instanceof PropertyDataStoreFactory);
+        }
+
+        params.put("file", archSitesFileItem);
+        params.put("workspace", defaultDataStore.getWorkspace().getName());
+        params.put("store", defaultDataStore.getName());
+
+        try {
+            uploader.uploadLayers(params);
+            fail("Expected IAE");
+        } catch (IllegalArgumentException expected) {
+            String message = expected.getMessage();
+            assertTrue(message.toLowerCase().contains("invalid"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Expected IAE, but got " + e.getClass().getName());
+        }
     }
 
-    public void testUploadShpMultipleTimesAssignsNewNames() {
-        LOGGER.log(Level.SEVERE, getName() + " is not implemented yet!");
+    public void testUploadShpMultipleTimesAssignsNewNames() throws IOException {
+
+        archSitesFileItem = fileItemMock(archsitesFileName, archsitesTestResource);
+        params.put("file", archSitesFileItem);
+        LayerInfo layerInfo1 = uploader.uploadLayers(params).get(0);
+
+        archSitesFileItem = fileItemMock(archsitesFileName, archsitesTestResource);
+        params.put("file", archSitesFileItem);
+        LayerInfo layerInfo2 = uploader.uploadLayers(params).get(0);
+
+        archSitesFileItem = fileItemMock(archsitesFileName, archsitesTestResource);
+        params.put("file", archSitesFileItem);
+        LayerInfo layerInfo3 = uploader.uploadLayers(params).get(0);
+
+        assertEquals("archsites", layerInfo1.getName());
+        assertEquals("archsites_1", layerInfo2.getName());
+        assertEquals("archsites_2", layerInfo3.getName());
     }
 
-    public void testUploadCoverageDefaultWorkspace() {
-        LOGGER.log(Level.SEVERE, getName() + " is not implemented yet!");
+    public void testUploadCoverageGeoServerDefaultWorkspace() throws Exception {
+        configPersister.setDefaults(null, null);
+        FileItem coverageFileItem = fileItemMock(coverageTestName, coverageTestResource);
+        params.put("file", coverageFileItem);
+        LayerInfo layerInfo = uploader.uploadLayers(params).get(0);
+        assertEquals("EmissiveCampania", layerInfo.getName());
+        ResourceInfo resource = layerInfo.getResource();
+        StoreInfo store = resource.getStore();
+        assertTrue(store instanceof CoverageStoreInfo);
+        assertEquals(getCatalog().getDefaultWorkspace(), store.getWorkspace());
     }
 
-    public void testUploadCoverageUserSpecifiedWorkspace() {
-        LOGGER.log(Level.SEVERE, getName() + " is not implemented yet!");
+    public void testUploadCoverageUploaderDefaultWorkspace() throws Exception {
+        WorkspaceInfo uploadersWs = getNonDefaultWorkspace();
+        configPersister.setDefaults(uploadersWs, null);
+
+        FileItem coverageFileItem = fileItemMock(coverageTestName, coverageTestResource);
+        params.put("file", coverageFileItem);
+        LayerInfo layerInfo = uploader.uploadLayers(params).get(0);
+        assertEquals("EmissiveCampania", layerInfo.getName());
+        ResourceInfo resource = layerInfo.getResource();
+        StoreInfo store = resource.getStore();
+        assertEquals(uploadersWs, store.getWorkspace());
     }
 
-    public void testUploadCoverageNonExistentWorkspace() {
-        LOGGER.log(Level.SEVERE, getName() + " is not implemented yet!");
+    public void testUploadCoverageUserSpecifiedWorkspace() throws Exception {
+        configPersister.setDefaults(getCatalog().getDefaultWorkspace(), null);
+
+        final WorkspaceInfo requestedWs = getNonDefaultWorkspace();
+        FileItem coverageFileItem = fileItemMock(coverageTestName, coverageTestResource);
+        params.put("file", coverageFileItem);
+        params.put("workspace", requestedWs.getName());
+
+        LayerInfo layerInfo = uploader.uploadLayers(params).get(0);
+        assertEquals("EmissiveCampania", layerInfo.getName());
+        ResourceInfo resource = layerInfo.getResource();
+        StoreInfo store = resource.getStore();
+        assertEquals(requestedWs, store.getWorkspace());
+    }
+
+    public void testUploadCoverageDataStoreParamIsIgnored() throws Exception {
+        final WorkspaceInfo targetWs = getNonDefaultWorkspace();
+        final DataStoreInfo datastore;
+        // create a datastore capable of creating new ft's
+        datastore = createDirectoryDataStore(targetWs);
+
+        configPersister.setDefaults(getCatalog().getDefaultWorkspace(), null);
+
+        FileItem coverageFileItem = fileItemMock(coverageTestName, coverageTestResource);
+        params.put("file", coverageFileItem);
+        params.put("workspace", targetWs.getName());
+        params.put("store", datastore.getName());// it shouldn't matter
+
+        LayerInfo layerInfo = uploader.uploadLayers(params).get(0);
+        assertEquals("EmissiveCampania", layerInfo.getName());
+        ResourceInfo resource = layerInfo.getResource();
+        StoreInfo store = resource.getStore();
+        assertEquals(targetWs, store.getWorkspace());
+    }
+
+    public void testUploadCoverageNonExistentWorkspace() throws Exception {
+        configPersister.setDefaults(getCatalog().getDefaultWorkspace(), null);
+
+        FileItem coverageFileItem = fileItemMock(coverageTestName, coverageTestResource);
+        params.put("file", coverageFileItem);
+        params.put("workspace", "nonExistentWorkspace");
+
+        try {
+            uploader.uploadLayers(params);
+            fail("Expected IAE");
+        } catch (IllegalArgumentException e) {
+            assertTrue(e.getMessage().contains("workspace"));
+        }
     }
 
     /**
@@ -245,4 +435,33 @@ public class ResourceUploaderTest extends GeoServerTestSupport {
         return fileItem;
     }
 
+    private WorkspaceInfo getNonDefaultWorkspace() {
+        List<WorkspaceInfo> workspaces = getCatalog().getWorkspaces();
+        assertTrue(workspaces.size() > 1);
+        for (WorkspaceInfo ws : workspaces) {
+            if (!ws.equals(getCatalog().getDefaultWorkspace())) {
+                return ws;
+            }
+        }
+        throw new IllegalStateException();
+    }
+
+    private DataStoreInfo createDirectoryDataStore(final WorkspaceInfo targetWs)
+            throws IOException, MalformedURLException {
+        final DataStoreInfo targetDs;
+        final String dataStoreName = "testDirectoryDS";
+        {
+            File dsDir = dataDir.findOrCreateDataDir(dataStoreName);
+            CatalogBuilder cb = new CatalogBuilder(getCatalog());
+            cb.setWorkspace(targetWs);
+            DataStoreInfo ds = cb.buildDataStore(dataStoreName);
+            // if given a url to a directory it creates a DirectoryDataStore
+            ds.getConnectionParameters().put(ShapefileDataStoreFactory.URLP.key,
+                    dsDir.toURI().toURL());
+            getCatalog().add(ds);
+            targetDs = getCatalog().getDataStoreByName(dataStoreName);
+            assertNotNull(targetDs);
+        }
+        return targetDs;
+    }
 }

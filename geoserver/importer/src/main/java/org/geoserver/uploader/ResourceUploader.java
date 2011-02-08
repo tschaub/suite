@@ -19,15 +19,22 @@ import org.apache.commons.io.FilenameUtils;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.DataStoreInfo;
 import org.geoserver.catalog.LayerInfo;
+import org.geoserver.catalog.ResourcePool;
 import org.geoserver.catalog.StoreInfo;
 import org.geoserver.catalog.WorkspaceInfo;
 import org.geoserver.config.GeoServerDataDirectory;
 import org.geoserver.ows.util.ResponseUtils;
 import org.geoserver.rest.RestletException;
 import org.geoserver.rest.util.RESTUtils;
+import org.geotools.data.DataAccess;
+import org.geotools.data.DataAccessFactory;
+import org.geotools.data.directory.DirectoryDataStore;
+import org.geotools.jdbc.JDBCDataStoreFactory;
 import org.geotools.util.logging.Logging;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.opengis.feature.Feature;
+import org.opengis.feature.type.FeatureType;
 import org.restlet.Restlet;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
@@ -36,6 +43,13 @@ import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.restlet.ext.fileupload.RestletFileUpload;
 
+/**
+ * REST end point to take care of uploading spatial data files through an HTML POST form; see
+ * package documentation for more details.
+ * 
+ * @author groldan
+ * 
+ */
 public class ResourceUploader extends Restlet {
 
     private static final Logger LOGGER = Logging.getLogger(ResourceUploader.class);
@@ -316,6 +330,26 @@ public class ResourceUploader extends Restlet {
         DataStoreInfo storeInfo = getRequestedDataStore(targetWorkspace, params);
         if (storeInfo == null) {
             storeInfo = uploaderDefaultDataStore;
+        }
+        if (storeInfo != null) {
+            try {
+                ResourcePool resourcePool = catalog.getResourcePool();
+                DataAccess<? extends FeatureType, ? extends Feature> dataStore;
+                dataStore = storeInfo.getDataStore(null);
+                DataAccessFactory dsFac = resourcePool.getDataStoreFactory(storeInfo);
+                boolean valid = dsFac instanceof JDBCDataStoreFactory;
+                valid |= dataStore instanceof DirectoryDataStore;
+                String displayName = dsFac.getDisplayName();
+                valid |= displayName.toLowerCase().contains("arcsde");
+                if (!valid) {
+                    throw new IllegalArgumentException("Target DataStore "
+                            + storeInfo.getWorkspace().getName() + ":" + storeInfo.getName()
+                            + " is invalid. It is not known to support "
+                            + "the creation of new FeatureTypes");
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         return storeInfo;
     }

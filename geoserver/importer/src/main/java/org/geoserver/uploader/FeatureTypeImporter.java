@@ -8,13 +8,18 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.CatalogBuilder;
 import org.geoserver.catalog.DataStoreInfo;
 import org.geoserver.catalog.FeatureTypeInfo;
 import org.geoserver.catalog.LayerInfo;
 import org.geoserver.catalog.NamespaceInfo;
+import org.geoserver.catalog.ProjectionPolicy;
 import org.geoserver.catalog.StyleInfo;
 import org.geoserver.catalog.WorkspaceInfo;
 import org.geoserver.importer.StyleGenerator;
@@ -30,10 +35,16 @@ import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.geotools.referencing.CRS;
+import org.geotools.util.logging.Logging;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 class FeatureTypeImporter extends LayerImporter {
+
+    private static final Logger LOGGER = Logging.getLogger(FeatureTypeImporter.class);
 
     private static final List<String> supportedExtensions = Arrays.asList(".shp");
 
@@ -50,6 +61,13 @@ class FeatureTypeImporter extends LayerImporter {
         if (storeInfo == null) {
             file = ensureUnique(workspaceInfo, file);
         }
+        /*
+         * If there's a .prj file next to the given file in ESRI format, once it's parsed by the
+         * DataStore, CRS.lookUpCRS won't match an EPSG anymore. So make an attempt to convert the
+         * .prj file before we get the DataStore
+         */
+        convertPrjWKTToEPSG(new File(file.getParentFile(),
+                FilenameUtils.getBaseName(file.getName()) + ".prj"));
 
         final DataStoreFactorySpi dsf = getDataStoreFactory(file);
         final Map<? extends String, ? extends Serializable> connectionParameters;
@@ -77,6 +95,10 @@ class FeatureTypeImporter extends LayerImporter {
         if (ftInfo.getSRS() == null) {
             boolean extensive = true;
             builder.lookupSRS(ftInfo, extensive);
+            if (ftInfo.getSRS() == null) {
+                ftInfo.setSRS("EPSG:4326");
+                ftInfo.setProjectionPolicy(ProjectionPolicy.FORCE_DECLARED);
+            }
         }
         builder.setupBounds(ftInfo);
 
@@ -121,6 +143,35 @@ class FeatureTypeImporter extends LayerImporter {
         }
         return layerInfo;
 
+    }
+
+    private void convertPrjWKTToEPSG(final File prjFile) {
+        if (!prjFile.exists()) {
+            return;
+        }
+        String wkt;
+        try {
+            wkt = FileUtils.readFileToString(prjFile);
+            CoordinateReferenceSystem parsed = CRS.parseWKT(wkt);
+            Integer epsgCode = CRS.lookupEpsgCode(parsed, false);
+            CoordinateReferenceSystem epsgCrs = null;
+            if (epsgCode == null) {
+                epsgCode = CRS.lookupEpsgCode(parsed, true);
+                if (epsgCode != null) {
+                    epsgCrs = CRS.decode("EPSG:" + epsgCode);
+                }
+                if (epsgCrs != null) {
+                    String epsgWKT = epsgCrs.toWKT();
+                    FileUtils.writeStringToFile(prjFile, epsgWKT);
+                }
+            }
+        } catch (IOException e) {
+            LOGGER.log(Level.FINE, "Problem reading .prj file " + prjFile.getName(), e);
+            // no problem
+        } catch (FactoryException e) {
+            LOGGER.log(Level.FINE, "Problem parsing .prj file " + prjFile.getName(), e);
+            // no problem
+        }
     }
 
     private DataStoreFactorySpi getDataStoreFactory(File file) {
