@@ -310,7 +310,7 @@
  <modules>
   <module>extension</module>
   <module>importer</module>
-  <module>monitoring</module>
+  <!--module>monitoring</module-->
   <module>web</module>
   <module>test</module>
  </modules>
