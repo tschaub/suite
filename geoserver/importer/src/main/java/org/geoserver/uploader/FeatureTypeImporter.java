@@ -104,7 +104,7 @@ class FeatureTypeImporter extends LayerImporter {
 
         String title = super.title;
         if (null == title || title.trim().length() == 0) {
-            title = ftInfo.getPrefixedName();
+            title = ftInfo.getName();
         }
         ftInfo.setTitle(title);
         ftInfo.setAbstract(_abstract);

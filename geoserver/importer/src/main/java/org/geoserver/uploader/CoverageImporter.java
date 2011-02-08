@@ -90,7 +90,8 @@ class CoverageImporter extends LayerImporter {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        coverageInfo.setTitle(title == null || title.length() == 0 ? coverageName : title);
+        coverageInfo
+                .setTitle(title == null || title.length() == 0 ? coverageInfo.getName() : title);
         coverageInfo.setAbstract(_abstract);
 
         // do some post configuration, if srs is not known or unset, transform to 4326
