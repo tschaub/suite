@@ -1,27 +1,91 @@
+.tab-row {
+  margin-bottom: 8px;
+}
+.csv-link, .excel-link, .kml-link, .pdf-link {
+  padding: 2px 0px 2px 20px;
+  background: transparent no-repeat left center;
+}
 .csv-link {
-background: transparent url(page_green.png) scroll no-repeat left center;
-padding: 2px 0px 2px 20px;
+background-image: url(page_white_text.png);
 }
-
 .excel-link {
-background: transparent url(page_excel.png) scroll no-repeat left center;
-padding: 2px 0px 2px 20px;
+background-image: url(page_white_excel.png);
+}
+.kml-link {
+background-image: url(kml.png);
+}
+.pdf-link {
+background-image: url(page_white_acrobat.png);
+}
+.button {
+  padding: 4px 10px;
+  margin-right: 4px;
+  border: 1px solid #ccc;
+  background-color: #eee;
+  background-position: center center;
+  background-repeat: no-repeat;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+.button.active {
+  border: 1px solid #999;
+  background-color: #ccc;
+}
+#tableBody {
+    padding: 0 4px;
+}
+#tableBody fieldset.leftwise, #tableBody fieldset.rightwise {
+    width: 49%;
+    padding-bottom: 20px;
+}
+#tableBody fieldset.fullWidth {
+    width: 99%;
+    clear: both;
 }
 
-.button-hour span {
-  background: url(clock.png) no-repeat;
+/* For SUMMARY page */
+#chartHeader {
 }
-.button-day span {
-  background: url(calendar_view_day.png) no-repeat;
+#chartHeader #timeSpan input {
+  border: 1px solid #999;
+  padding: 2px;
 }
-.button-week span {
-  background: url(calendar_view_week.png) no-repeat;
+#chartHeader #timeButtons {
+  padding-left: 8px;
 }
-.button-month span {
-  background: url(calendar_view_month.png) no-repeat;
+#chartHeader #chartServices {
+  padding: 4px 0;
+  border-bottom: 1px solid #eee;
 }
-
+#timeButtons .refresh-link {
+  margin-left: 16px;
+}
+.button-hour {
+  background-image: url(clock.png);
+}
+.button-day {
+  background-image: url(calendar_view_day.png);
+}
+.button-week {
+  background-image: url(calendar_view_week.png);
+}
+.button-month {
+  background-image: url(calendar_view_month.png);
+}
 .button-group-me a.active {
   /*background-color: darkGray;
   color: #004f6c;*/
+}
+#chartBody {
+  margin-bottom: 60px;
+}
+#chartBody .lineChart {
+  height: 300px;
+  margin-right: 25px;
+}
+#chartBody .pieChart {
+  height: 275px;
+  width: 200px;
+  margin: 25px 0 0;
 }

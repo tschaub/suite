@@ -9,7 +9,7 @@
   default-autowire="byName">
 
   <!-- filter for core geoserver monitor extension -->
-  <bean id="gsMonitorFilter" class="org.opengeo.geoserver.monitor.GeoServerMonitorFilter"/>
+  <bean id="gsMonitorFilter" class="org.opengeo.analytics.web.GeoServerMonitorFilter"/>
   
   <bean id="analyticsMenuPage" class="org.geoserver.web.MenuPageInfo">
       <property name="id" value="category.monitor"/>

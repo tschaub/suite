@@ -39,8 +39,6 @@ import org.geoserver.web.GeoServerApplication;
 import org.geoserver.web.GeoServerSecuredPage;
 import org.geoserver.web.wicket.GeoServerDataProvider;
 import org.geoserver.web.wicket.GeoServerTablePanel;
-import org.geoserver.web.wicket.OpenLayersMapPanel;
-import org.geoserver.web.wicket.OpenLayersMapPanel.Layer;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
 import org.opengis.referencing.operation.MathTransform;

@@ -5,25 +5,21 @@
 </head>
 <body>
 <wicket:panel>
-  <div wicket:id="map"></div>
   <form>
-    <div style="float:right; padding-right: 60px; clear:both;">
-      <span>Export as:</span>
-      <a wicket:id="kml">KML</a>
-      <a>PDF</a>
+    <div id="chartBody" class="selfclear clearBoth">
+      <div wicket:id="map" style="width: 99%;"></div>
     </div>
-    <ul style="padding-top: 2em;">
-        <li>
-             <fieldset style="width:700px;">
-               <legend><span><wicket:message key="pointsOfOrigin">Points of Origin</wicket:message></span></legend>
-               <ul>
-                 <li>
-                   <div wicket:id="commonOrigin"></div>
-                 </li>
-               </ul>
-             </fieldset>
-         </li>
-    </ul>
+    <div id="tableBody" class="selfclear clearBoth">
+      <fieldset class="fullWidth">
+        <legend><span><wicket:message key="pointsOfOrigin">Points of Origin</wicket:message></span></legend>
+         <div wicket:id="commonOrigin"></div>
+         <div class="rightwise">
+           <span>Export as: </span>
+           <a wicket:id="kml" class="kml-link">KML</a>
+           <a class="pdf-link">PDF</a>
+         </div>
+      </fieldset>
+    </div>
   </form>
 </wicket:panel>
 </body>

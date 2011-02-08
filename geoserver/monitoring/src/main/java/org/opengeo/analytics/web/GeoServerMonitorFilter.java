@@ -1,4 +1,4 @@
-package org.opengeo.geoserver.monitor;
+package org.opengeo.analytics.web;
 
 import org.geoserver.platform.ExtensionFilter;
 
