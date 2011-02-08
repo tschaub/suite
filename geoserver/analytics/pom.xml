@@ -10,9 +10,9 @@
   </parent>
 
   <groupId>org.opengeo.geoserver</groupId>
-  <artifactId>monitoring</artifactId>
+  <artifactId>analytics</artifactId>
   <packaging>jar</packaging>
-  <name>Monitoring module</name>
+  <name>OpenGeo Suite GeoServer Analytics Module</name>
 
   <!-- declare depenency on geoserver main -->
   <dependencies>
