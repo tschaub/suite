@@ -14,7 +14,6 @@ GeoExplorer is based on the :term:`GeoExt` framework and is built using :term:`G
    introduction
    workspace
    using/index
-   customization
    glossary
    license
 
