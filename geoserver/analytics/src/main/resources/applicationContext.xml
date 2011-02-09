@@ -21,4 +21,8 @@
   <bean id="analyticsRequestMapInitializer" class="org.opengeo.analytics.RequestMapInitializer">
     <constructor-arg ref="monitorDataSource"/>
   </bean>
+  
+  <bean id="geoIPPostProcessor" class="org.geoserver.monitor.GeoIPPostProcessor">
+     <constructor-arg ref="resourceLoader"/>
+  </bean>
 </beans>
