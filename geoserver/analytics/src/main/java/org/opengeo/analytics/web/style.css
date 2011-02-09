@@ -39,6 +39,10 @@ background-image: url(page_white_acrobat.png);
     width: 49%;
     padding-bottom: 20px;
 }
+#tableBody fieldset.leftwise td, #tableBody fieldset.rightwise td {
+    max-width: 13em;
+    word-wrap: break-word;
+}
 #tableBody fieldset.fullWidth {
     width: 99%;
     clear: both;
@@ -78,7 +82,7 @@ background-image: url(page_white_acrobat.png);
   color: #004f6c;*/
 }
 #chartBody {
-  margin-bottom: 60px;
+  margin-bottom: 40px;
 }
 #chartBody .lineChart {
   height: 300px;
@@ -87,10 +91,9 @@ background-image: url(page_white_acrobat.png);
 #chartBody .pieChart {
   height: 320px;
   width: 200px;
-  margin: 10px 0 0;
+  margin: 10px 0;
 }
-
-#chartBody .pieChart div {
+#chartBody .pieChart div.pie-chart {
   height: 320px;
   width: 350px;
 }
