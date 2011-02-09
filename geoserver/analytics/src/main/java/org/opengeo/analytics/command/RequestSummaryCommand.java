@@ -48,24 +48,25 @@ public class RequestSummaryCommand extends AbstractCommand<List<ResourceSummary>
             result.put(rs.getResource(), rs);
         }
         
-        monitor.query(query(), new RequestDataVisitor() {
-            public void visit(RequestData data, Object... aggregates) {
-                String resource = data.getResources().get(0);
-                String operation = data.getOperation();
-                Long count = ((Number)aggregates[0]).longValue();
-                
-                ResourceSummary summary = result.get(resource);
-                RequestSummary request = new RequestSummary();
-                request.setRequest(operation);
-                request.setCount(count);
-                if (summary.getCount() != null) {
-                    request.setPercent(count / ((double)summary.getCount()));
+        if(!resources.isEmpty()) {
+            monitor.query(query(), new RequestDataVisitor() {
+                public void visit(RequestData data, Object... aggregates) {
+                    String resource = data.getResources().get(0);
+                    String operation = data.getOperation();
+                    Long count = ((Number)aggregates[0]).longValue();
+                    
+                    ResourceSummary summary = result.get(resource);
+                    RequestSummary request = new RequestSummary();
+                    request.setRequest(operation);
+                    request.setCount(count);
+                    if (summary.getCount() != null) {
+                        request.setPercent(count / ((double)summary.getCount()));
+                    }
+                    
+                    summary.getRequests().add(request);
                 }
-                
-                summary.getRequests().add(request);
-            }
-        });
-        
+            });
+        }
         return new ArrayList(result.values());
     }
 
