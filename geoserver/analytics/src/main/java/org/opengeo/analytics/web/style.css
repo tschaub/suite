@@ -85,7 +85,12 @@ background-image: url(page_white_acrobat.png);
   margin-right: 25px;
 }
 #chartBody .pieChart {
-  height: 275px;
+  height: 320px;
   width: 200px;
-  margin: 25px 0 0;
+  margin: 10px 0 0;
+}
+
+#chartBody .pieChart div {
+  height: 320px;
+  width: 350px;
 }

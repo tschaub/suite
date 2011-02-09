@@ -130,7 +130,8 @@ public class ActivityPanel extends Panel {
             form.add(link);
         }
         setMutuallyExclusive(zoomLinks, 
-            Arrays.asList("button-hour", "button-day", "button-week", "button-month"), zoomLinks.get(1));
+            Arrays.asList("button button-hour", "button button-day", "button button-week", 
+                "button button-month"), zoomLinks.get(1));
 
         form.add(lineChartPanel = new ChartPanel("lineChart"));
         form.add(pieChartPanel = new ChartPanel("pieChart"));

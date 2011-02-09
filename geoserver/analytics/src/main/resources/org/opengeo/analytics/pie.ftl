@@ -24,11 +24,12 @@ data = [
 ];
 
 createDiv("${container}", "_a");
-createDiv("${container}", "_b");
+//createDiv("${container}", "_b");
 
 <#assign gut = 10>
 
 var r = Raphael("${container}_a");
+//var r = Raphael("${container}");
 
 var values = [];
 var colors = [];
@@ -47,7 +48,7 @@ var pie = r.g.piechart(${(width+gut)/2}, ${(height+gut)/2}, ${width/2}, values, 
   colors: colors
 });
 
-pie.hover(function () {
+var fin = function () {
     this.sector.stop();
     this.sector.scale(1.05, 1.05, this.cx, this.cy);
     
@@ -55,10 +56,13 @@ pie.hover(function () {
     
     var percent = this.value.value / this.total * 100; 
     this.tags.push(r.g.popup(this.mx, this.my, this.value.value + " (" + percent.toFixed(2) + "%)"));
-}, function () {
+};
+var fout = function() {
     this.sector.animate({scale: [1, 1, this.cx, this.cy]}, 500, "bounce");
     this.tags && this.tags.remove();
-});
+};
+
+pie.hover(fin, fout);
 
 pie.click(function() {
   if (window.subpie) {
@@ -66,21 +70,30 @@ pie.click(function() {
   }
   var value = data[this.value.order];
   if (value.ops.length > 0) {
-     var s = Raphael("${container}_b");
+     //var s = Raphael("${container}_b");
      var values = [];
      var legend = [];
      for (var i in value.ops) {
        var op = value.ops[i];
        values.push(op.value);
-       legend.push(op.name + ": " + op.value + " (%%.%%)");
+       legend.push(op.name);
      }
      
-     var subpie = s.g.piechart(${(width+gut)/2}, ${(height+gut)/2}, ${width/2}, values, {
-        legend: legend, legendpos: "east", legendmark: "s"
+     var subpie = r.g.piechart(${(width+gut)/2}, ${(height+gut)/2}+${height}+10, ${width/2}, values, {
+        legend: legend, legendpos: "east", legendmark: "s",
+        //colors: ["#B20000", "#00B22C", "#5900B2", "#B2A000", "#00B27C", "#B25000"]
+        colors: ["#B20000"]
      });
+     
+      subpie.hover(function() {
+        this.sector.stop();
+        this.sector.scale(1.05, 1.05, this.cx, this.cy);
+        
+        this.tags = r.set();
+        
+        var percent = this.value.value / this.total * 100; 
+        this.tags.push(r.g.popup(this.mx, this.my, this.value.value + " (" + percent.toFixed(2) + "%)"));
+    }, fout);
      window.subpie = subpie;
   }
-  
-  
-  
 });
