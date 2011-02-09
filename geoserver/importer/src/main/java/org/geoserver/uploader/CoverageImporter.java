@@ -2,6 +2,7 @@ package org.geoserver.uploader;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,11 +17,9 @@ import org.geoserver.catalog.CoverageStoreInfo;
 import org.geoserver.catalog.LayerInfo;
 import org.geoserver.catalog.WorkspaceInfo;
 import org.geoserver.data.util.CoverageStoreUtils;
-import org.geoserver.rest.RestletException;
 import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
 import org.geotools.coverage.grid.io.AbstractGridFormat;
 import org.opengis.coverage.grid.Format;
-import org.restlet.data.Status;
 
 class CoverageImporter extends LayerImporter {
 
@@ -43,8 +42,9 @@ class CoverageImporter extends LayerImporter {
         return canHandle;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public LayerInfo importFromFile(File file) throws IOException {
+    public LayerInfo importFromFile(File file) throws InvalidParameterException, RuntimeException {
         file = ensureUnique(workspaceInfo, file);
 
         Map<String, String> formatToCoverageStoreFormat = CoverageImporter.formatToCoverageStoreFormat;
@@ -54,11 +54,15 @@ class CoverageImporter extends LayerImporter {
         try {
             coverageFormat = CoverageStoreUtils.acquireFormat(coverageFormatName);
         } catch (Exception e) {
-            throw new RestletException("Coveragestore format unavailable: " + coverageFormatName,
-                    Status.SERVER_ERROR_INTERNAL);
+            throw new RuntimeException("Error acquiring reader for provided raster file", e);
         }
         final String coverageName = FilenameUtils.getBaseName(file.getName());
-        final URL coverageURL = file.toURI().toURL();
+        URL coverageURL;
+        try {
+            coverageURL = file.toURI().toURL();
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
 
         CatalogBuilder builder = new CatalogBuilder(catalog);
         builder.setWorkspace(super.workspaceInfo);
@@ -72,8 +76,7 @@ class CoverageImporter extends LayerImporter {
         AbstractGridCoverage2DReader reader = (AbstractGridCoverage2DReader) ((AbstractGridFormat) coverageFormat)
                 .getReader(coverageURL);
         if (reader == null) {
-            throw new RestletException("Could not aquire reader for coverage.",
-                    Status.SERVER_ERROR_INTERNAL);
+            throw new RuntimeException("Error acquiring reader for provided raster file");
         }
 
         // coverage read params
@@ -88,7 +91,7 @@ class CoverageImporter extends LayerImporter {
         try {
             coverageInfo = builder.buildCoverage(reader, customParameters);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error building coverage information", e);
         }
         coverageInfo
                 .setTitle(title == null || title.length() == 0 ? coverageInfo.getName() : title);
@@ -105,7 +108,12 @@ class CoverageImporter extends LayerImporter {
             // cinfo.setBoundingBox( re );
         }
 
-        LayerInfo layerInfo = builder.buildLayer(coverageInfo);
+        LayerInfo layerInfo;
+        try {
+            layerInfo = builder.buildLayer(coverageInfo);
+        } catch (IOException e) {
+            throw new RuntimeException("Error building coverage information", e);
+        }
         try {
             catalog.add(storeInfo);
             catalog.add(coverageInfo);
@@ -123,7 +131,7 @@ class CoverageImporter extends LayerImporter {
                 catalog.remove(storeInfo);
             } finally {
             }
-            throw e;
+            throw new RuntimeException("Error registering coverage", e);
         }
         return layerInfo;
     }

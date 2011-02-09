@@ -2,7 +2,6 @@ package org.geoserver.uploader;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.io.IOException;
 
 import org.apache.commons.io.FilenameUtils;
 import org.geoserver.catalog.Catalog;
@@ -34,7 +33,7 @@ abstract class LayerImporter {
         this._abstract = _abstract == null ? "" : _abstract;
     }
 
-    public abstract LayerInfo importFromFile(File file) throws IOException;
+    public abstract LayerInfo importFromFile(File file);
 
     protected File ensureUnique(final WorkspaceInfo workspaceInfo, final File resourceFile) {
         final NamespaceInfo namespace = catalog.getNamespaceByPrefix(workspaceInfo.getName());

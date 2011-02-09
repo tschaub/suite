@@ -4,12 +4,13 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import net.sf.json.JSONArray;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -116,30 +117,42 @@ public class ResourceUploader extends Restlet {
             result = tmpresult;
 
             response.setStatus(Status.SUCCESS_OK);
-        } catch (RestletException e) {
-            response.setStatus(e.getStatus());
-            try {
-                result.put("success", Boolean.FALSE);
-                String text = e.getRepresentation().getText();
-                result.put("message", "" + text);
-            } catch (Exception jse) {
-                throw new RestletException("Internal error", Status.SERVER_ERROR_INTERNAL, jse);
-            }
-        } catch (Exception e) {
+        } catch (InvalidParameterException e) {
+            response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+            addErrors(result, e.getLocator(), e);
+        } catch (RuntimeException e) {
             response.setStatus(Status.SERVER_ERROR_INTERNAL);
-            try {
-                result.put("success", Boolean.FALSE);
-                result.put("message", "" + e.getMessage());
-            } catch (JSONException jse) {
-                throw new RestletException("Internal error", Status.SERVER_ERROR_INTERNAL, jse);
-            }
+            addErrors(result, "Internal Error", e);
+        } catch (JSONException e) {
+            // shouldn't happen
+            throw new RestletException("JSON error", Status.SERVER_ERROR_INTERNAL, e);
         }
 
         String responseContents = result.toString();
         response.setEntity(responseContents, MediaType.TEXT_HTML);
     }
 
-    private List<LayerInfo> uploadLayers(Request request, Response response) throws Exception {
+    private void addErrors(final JSONObject result, final String locator, final Exception ex) {
+        Throwable cause = ex;
+        try {
+            result.put("success", Boolean.FALSE);
+            while (cause != null) {
+                String message = cause.getMessage();
+                if (message != null && message.trim().length() != 0) {
+                    JSONObject jsonErr = new JSONObject();
+                    jsonErr.put(locator, message);
+                    result.append("errors", jsonErr);
+                }
+                cause = cause.getCause();
+            }
+        } catch (JSONException e) {
+            // shouldn't happen
+            throw new RestletException("JSON error", Status.SERVER_ERROR_INTERNAL, e);
+        }
+    }
+
+    private List<LayerInfo> uploadLayers(Request request, Response response)
+            throws InvalidParameterException {
         RestletFileUpload rfu = new RestletFileUpload();
         DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
         rfu.setFileItemFactory(fileItemFactory);
@@ -147,7 +160,7 @@ public class ResourceUploader extends Restlet {
         try {
             items = rfu.parseRequest(request);
         } catch (FileUploadException e) {
-            throw new RestletException(request.getEntity(), Status.SERVER_ERROR_INTERNAL, e);
+            throw new RuntimeException("Unknown error parsing the request", e);
         }
         Map<String, Object> params = getRequestParams(items);
 
@@ -175,10 +188,12 @@ public class ResourceUploader extends Restlet {
      * @throws IOException
      * @throws Exception
      */
-    public List<LayerInfo> uploadLayers(Map<String, Object> params) throws IOException {
+    public List<LayerInfo> uploadLayers(Map<String, Object> params)
+            throws InvalidParameterException {
         FileItem fileItem = (FileItem) params.get("file");
         if (fileItem == null) {
-            throw new IllegalArgumentException("Expected a 'file' parameter that was not provided");
+            throw new InvalidParameterException("file",
+                    "Expected a 'file' parameter that was not provided");
         }
         final String fileItemName = fileItem.getName();
         final File targetDirectory = createTargetDirectory(fileItemName);
@@ -204,51 +219,54 @@ public class ResourceUploader extends Restlet {
             if (canDeleteUploadedFiles) {
                 delete(targetDirectory);
             }
-        } catch (IOException e) {
-            LOGGER.log(Level.INFO, "Error uploading and configuring layer", e);
-            FileUtils.deleteDirectory(targetDirectory);
-            throw e;
         } catch (RuntimeException e) {
-            LOGGER.log(Level.INFO, "Error uploading and configuring layer", e);
-            FileUtils.deleteDirectory(targetDirectory);
+            delete(targetDirectory);
             throw e;
         } finally {
             try {
                 fileItem.delete();
             } catch (RuntimeException e) {
-                LOGGER.log(Level.INFO, "", e);
+                LOGGER.log(Level.WARNING, "", e);
             }
         }
         return importedLayers;
     }
 
-    private List<File> doFileUpload(FileItem fileItem, final File targetDirectory)
-            throws IOException {
+    private List<File> doFileUpload(FileItem fileItem, final File targetDirectory) {
         final File uploaded = new File(targetDirectory, fileItem.getName());
+
         try {
             fileItem.write(uploaded);
         } catch (Exception e) {
-            throw (IOException) new IOException(e.getMessage()).initCause(e);
+            throw new RuntimeException("Error writing uploaded file to disk", e);
+        }
+
+        VFSWorker vfs = new VFSWorker();
+        if (vfs.canHandle(uploaded)) {
+            try {
+                vfs.extractTo(uploaded, targetDirectory);
+            } catch (IOException e) {
+                throw new RuntimeException("Error uncompressing uploaded archive", e);
+            }
+            uploaded.delete();
         }
 
         List<File> spatialFiles;
-        VFSWorker vfs = new VFSWorker();
-        if (vfs.canHandle(uploaded)) {
-            vfs.extractTo(uploaded, targetDirectory);
-            spatialFiles = findSpatialFile(targetDirectory);
-            uploaded.delete();
-            if (spatialFiles.size() == 0) {
-                throw new IllegalArgumentException(
-                        "No spatial data file provided in uploaded archive");
-            }
-        } else {
-            spatialFiles = Collections.singletonList(uploaded);
+        spatialFiles = findSpatialFile(targetDirectory);
+        if (spatialFiles.size() == 0) {
+            throw new InvalidParameterException("file", "The file provided is not supported.");
         }
+
         return spatialFiles;
     }
 
-    private File createTargetDirectory(final String fileItemName) throws IOException {
-        final File incomingDirectory = dataDir.findOrCreateDataDir("data", "incoming");
+    private File createTargetDirectory(final String fileItemName) {
+        File incomingDirectory;
+        try {
+            incomingDirectory = dataDir.findOrCreateDataDir("data", "incoming");
+        } catch (IOException e) {
+            throw new RuntimeException("Can't create target directory for uploaded data", e);
+        }
 
         final File targetDirectory = ensureUniqueDirectory(incomingDirectory,
                 FilenameUtils.getBaseName(fileItemName));
@@ -264,14 +282,18 @@ public class ResourceUploader extends Restlet {
         } else if (CoverageImporter.canHandle(spatialFile)) {
             importer = new CoverageImporter(catalog, targetWorkspace);
         } else {
-            throw new IllegalArgumentException(spatialFile.getName()
-                    + " is not recognized as a supported spatial file");
+            throw new InvalidParameterException("file", "The file provided is not supported");
         }
         return importer;
     }
 
-    private void delete(File directory) throws IOException {
-        FileUtils.deleteDirectory(directory);
+    private void delete(File directory) {
+        try {
+            FileUtils.deleteDirectory(directory);
+        } catch (IOException e) {
+            LOGGER.log(Level.WARNING,
+                    "Can't delete directory for uploaded files " + directory.getAbsolutePath(), e);
+        }
     }
 
     /**
@@ -297,8 +319,9 @@ public class ResourceUploader extends Restlet {
             if (uploaderDefaultWorkspace == null) {
                 workspaceInfo = catalog.getDefaultWorkspace();
                 if (workspaceInfo == null) {
-                    throw new IllegalArgumentException("There's no default workspace. "
-                            + "Create a Workspace before uploading data");
+                    throw new InvalidParameterException("workspace",
+                            "There's no default workspace. "
+                                    + "Create a Workspace before uploading data");
                 }
                 if (LOGGER.isLoggable(Level.FINE)) {
                     LOGGER.fine("Using GeoServer's default workspace " + workspaceInfo.getName()
@@ -314,8 +337,8 @@ public class ResourceUploader extends Restlet {
         } else {
             workspaceInfo = catalog.getWorkspaceByName(workspaceId);
             if (null == workspaceInfo) {
-                throw new IllegalArgumentException("Requested workspace does not exist: "
-                        + workspaceId);
+                throw new InvalidParameterException("workspace",
+                        "The provided workspace does not exist: " + workspaceId);
             }
             if (LOGGER.isLoggable(Level.FINE)) {
                 LOGGER.fine("Using user requested workspace:" + workspaceInfo.getName()
@@ -336,23 +359,25 @@ public class ResourceUploader extends Restlet {
             storeInfo = uploaderDefaultDataStore;
         }
         if (storeInfo != null) {
+            ResourcePool resourcePool = catalog.getResourcePool();
+            DataAccess<? extends FeatureType, ? extends Feature> dataStore;
+            DataAccessFactory dsFac;
             try {
-                ResourcePool resourcePool = catalog.getResourcePool();
-                DataAccess<? extends FeatureType, ? extends Feature> dataStore;
                 dataStore = storeInfo.getDataStore(null);
-                DataAccessFactory dsFac = resourcePool.getDataStoreFactory(storeInfo);
-                boolean valid = dsFac instanceof JDBCDataStoreFactory;
-                valid |= dataStore instanceof DirectoryDataStore;
-                String displayName = dsFac.getDisplayName();
-                valid |= displayName.toLowerCase().contains("arcsde");
-                if (!valid) {
-                    throw new IllegalArgumentException("Target DataStore "
-                            + storeInfo.getWorkspace().getName() + ":" + storeInfo.getName()
-                            + " is invalid. It is not known to support "
-                            + "the creation of new FeatureTypes");
-                }
+                dsFac = resourcePool.getDataStoreFactory(storeInfo);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Could not aquire a handle to the provided store "
+                        + targetWorkspace.getName() + ":" + storeInfo.getName(), e);
+            }
+            boolean valid = dsFac instanceof JDBCDataStoreFactory;
+            valid |= dataStore instanceof DirectoryDataStore;
+            String displayName = dsFac.getDisplayName();
+            valid |= displayName.toLowerCase().contains("arcsde");
+            if (!valid) {
+                throw new InvalidParameterException("store", "Target DataStore "
+                        + storeInfo.getWorkspace().getName() + ":" + storeInfo.getName()
+                        + " is invalid. It is not known to support "
+                        + "the creation of new FeatureTypes");
             }
         }
         return storeInfo;
@@ -365,17 +390,17 @@ public class ResourceUploader extends Restlet {
         if (null != storeId && storeId.trim().length() > 0) {
             storeInfo = catalog.getStoreByName(targetWorkspace, storeId, StoreInfo.class);
             if (storeInfo == null) {
-                throw new IllegalArgumentException("Requested store '" + storeId
+                throw new InvalidParameterException("store", "Requested store '" + storeId
                         + "' does not exist in workspace '" + targetWorkspace.getName() + "'");
             }
             if (!(storeInfo instanceof DataStoreInfo)) {
-                throw new RestletException(
+                throw new InvalidParameterException(
+                        "store",
                         "Specified store '"
                                 + storeId
                                 + "' at workspace '"
                                 + targetWorkspace.getName()
-                                + "' is not a DataStore. It is not possible to post to existing CoverageStores.",
-                        Status.CLIENT_ERROR_CONFLICT);
+                                + "' is not a DataStore. It is not possible to post to existing CoverageStores.");
             }
 
         }

@@ -41,17 +41,15 @@ public class UploaderConfigPersister {
         }
         if (config == null) {
             config = new UploaderConfig(catalog);
+            try {
+                UploaderConfig sampleConfig = new UploaderConfig(catalog);
+                sampleConfig.setDefaultWorkspace("ws_name");
+                sampleConfig.setDefaultDataStore("ds_name");
+                saveConfig(sampleConfig, UPLOADER_CONFIG_FILE_NAME + ".example");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        // if (config.getDefaultWorkspace() == null) {
-        // config.setDefaultWorkspace(catalog.getDefaultWorkspace().getName());
-        // config.setDefaultDataStore(catalog.getDefaultDataStore(catalog.getDefaultWorkspace())
-        // .getName());
-        // try {
-        // saveConfig();
-        // } catch (IOException e) {
-        // e.printStackTrace();
-        // }
-        // }
     }
 
     public UploaderConfig getConfig() {
@@ -88,7 +86,12 @@ public class UploaderConfigPersister {
     }
 
     private void saveConfig() throws IOException {
-        File file = resourceLoader.createFile(UPLOADER_CONFIG_FILE_NAME);
+        String fileName = UPLOADER_CONFIG_FILE_NAME;
+        saveConfig(config, fileName);
+    }
+
+    private void saveConfig(UploaderConfig config, String fileName) throws IOException {
+        File file = resourceLoader.createFile(fileName);
         OutputStream out = new FileOutputStream(file);
         Persister persister = new Persister();
         persister.save(config, out);

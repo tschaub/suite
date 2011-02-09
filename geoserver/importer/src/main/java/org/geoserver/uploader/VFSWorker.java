@@ -2,6 +2,7 @@ package org.geoserver.uploader;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -157,29 +158,26 @@ class VFSWorker {
      * Extracts the archive file {@code archiveFile} to {@code targetFolder}; both shall previously
      * exist.
      */
-    public void extractTo(File archiveFile, File targetFolder) {
-        try {
-            FileSystemManager manager = VFS.getManager();
-            String sourceURI = resolveArchiveURI(archiveFile);
-            // String targetURI = resolveArchiveURI(targetFolder);
-            FileObject source = manager.resolveFile(sourceURI);
-            if (manager.canCreateFileSystem(source)) {
-                source = manager.createFileSystem(source);
-            }
-            FileObject target = manager.createVirtualFileSystem(manager.resolveFile(targetFolder
-                    .getAbsolutePath()));
+    public void extractTo(File archiveFile, File targetFolder) throws IOException {
 
-            FileSelector selector = new AllFileSelector() {
-                @Override
-                public boolean includeFile(FileSelectInfo fileInfo) {
-                    LOGGER.fine("Uncompressing " + fileInfo.getFile().getName().getFriendlyURI());
-                    return true;
-                }
-            };
-            target.copyFrom(source, selector);
-        } catch (FileSystemException e) {
-            throw new RuntimeException(e);
+        FileSystemManager manager = VFS.getManager();
+        String sourceURI = resolveArchiveURI(archiveFile);
+        // String targetURI = resolveArchiveURI(targetFolder);
+        FileObject source = manager.resolveFile(sourceURI);
+        if (manager.canCreateFileSystem(source)) {
+            source = manager.createFileSystem(source);
         }
+        FileObject target = manager.createVirtualFileSystem(manager.resolveFile(targetFolder
+                .getAbsolutePath()));
+
+        FileSelector selector = new AllFileSelector() {
+            @Override
+            public boolean includeFile(FileSelectInfo fileInfo) {
+                LOGGER.fine("Uncompressing " + fileInfo.getFile().getName().getFriendlyURI());
+                return true;
+            }
+        };
+        target.copyFrom(source, selector);
     }
 
     @SuppressWarnings("unchecked")

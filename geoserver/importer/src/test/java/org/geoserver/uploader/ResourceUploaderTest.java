@@ -28,7 +28,6 @@ import org.geoserver.catalog.WorkspaceInfo;
 import org.geoserver.config.GeoServerDataDirectory;
 import org.geoserver.data.test.MockData;
 import org.geoserver.platform.GeoServerResourceLoader;
-import org.geoserver.rest.RestletException;
 import org.geoserver.test.GeoServerTestSupport;
 import org.geotools.data.DataAccessFactory;
 import org.geotools.data.property.PropertyDataStoreFactory;
@@ -36,7 +35,6 @@ import org.geotools.data.shapefile.ShapefileDataStoreFactory;
 import org.geotools.referencing.CRS;
 import org.geotools.util.logging.Logging;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.restlet.data.Status;
 
 public class ResourceUploaderTest extends GeoServerTestSupport {
 
@@ -147,9 +145,8 @@ public class ResourceUploaderTest extends GeoServerTestSupport {
         try {
             uploader.uploadLayers(params);
             fail("Expected IAE");
-        } catch (RestletException e) {
-            assertTrue(e.getRepresentation().getText().contains("store"));
-            assertEquals(Status.CLIENT_ERROR_CONFLICT, e.getStatus());
+        } catch (InvalidParameterException e) {
+            assertEquals("store", e.getLocator());
         }
     }
 
@@ -174,19 +171,15 @@ public class ResourceUploaderTest extends GeoServerTestSupport {
         assertEquals(expected, nativeCRS);
     }
 
-    public void testNoCRSProvidedDefaultsTo4326() throws Exception {
+    public void testNoCRSProvided() throws Exception {
         FileItem fileItemMock = fileItemMock("archsites_no_crs.zip", "shapes/archsites_no_crs.zip");
         params.put("file", fileItemMock);// this one has no .prj file
-        List<LayerInfo> uploadLayers = uploader.uploadLayers(params);
-        assertTrue(uploadLayers.size() == 1);
-        LayerInfo layerInfo = uploadLayers.get(0);
-        ResourceInfo resource = layerInfo.getResource();
-        assertNotNull(resource);
-        CoordinateReferenceSystem nativeCRS = resource.getNativeCRS();
-        assertNull(nativeCRS);
-        CoordinateReferenceSystem declaredCRS = resource.getCRS();
-        CoordinateReferenceSystem expected = CRS.decode("EPSG:4326");
-        assertEquals(expected, declaredCRS);
+        try {
+            uploader.uploadLayers(params);
+            fail("Expected IPE");
+        } catch (InvalidParameterException e) {
+            assertEquals("crs", e.getLocator());
+        }
     }
 
     public void testUploadShpGeoServerDefaultWorkspace() throws Exception {

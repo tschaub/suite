@@ -19,7 +19,6 @@ import org.geoserver.catalog.DataStoreInfo;
 import org.geoserver.catalog.FeatureTypeInfo;
 import org.geoserver.catalog.LayerInfo;
 import org.geoserver.catalog.NamespaceInfo;
-import org.geoserver.catalog.ProjectionPolicy;
 import org.geoserver.catalog.StyleInfo;
 import org.geoserver.catalog.WorkspaceInfo;
 import org.geoserver.importer.StyleGenerator;
@@ -28,7 +27,6 @@ import org.geotools.data.DataStoreFactorySpi;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.DefaultTransaction;
 import org.geotools.data.FeatureWriter;
-import org.geotools.data.Query;
 import org.geotools.data.Transaction;
 import org.geotools.data.shapefile.ShapefileDataStoreFactory;
 import org.geotools.data.simple.SimpleFeatureCollection;
@@ -57,7 +55,7 @@ class FeatureTypeImporter extends LayerImporter {
     }
 
     @Override
-    public LayerInfo importFromFile(File file) throws IOException {
+    public LayerInfo importFromFile(File file) throws InvalidParameterException, RuntimeException {
         if (storeInfo == null) {
             file = ensureUnique(workspaceInfo, file);
         }
@@ -73,7 +71,13 @@ class FeatureTypeImporter extends LayerImporter {
         final Map<? extends String, ? extends Serializable> connectionParameters;
         connectionParameters = getConnectionParameters(file,
                 catalog.getNamespaceByPrefix(workspaceInfo.getName()));
-        SimpleFeatureSource featureSource = getFeatureSource(file.getName(), connectionParameters);
+        SimpleFeatureSource featureSource;
+        try {
+            featureSource = getFeatureSource(file.getName(), connectionParameters);
+        } catch (IOException e) {
+            throw new InvalidParameterException("file",
+                    "The file provided does not contain valid spatial data");
+        }
 
         CatalogBuilder builder = new CatalogBuilder(catalog);
         builder.setWorkspace(workspaceInfo);
@@ -94,13 +98,23 @@ class FeatureTypeImporter extends LayerImporter {
         FeatureTypeInfo ftInfo = builder.buildFeatureType(featureSource);
         if (ftInfo.getSRS() == null) {
             boolean extensive = true;
-            builder.lookupSRS(ftInfo, extensive);
+            try {
+                builder.lookupSRS(ftInfo, extensive);
+            } catch (IOException e) {
+                throw new InvalidParameterException("crs",
+                        "Error trying to identify the CRS for uploaded data", e);
+            }
             if (ftInfo.getSRS() == null) {
-                ftInfo.setSRS("EPSG:4326");
-                ftInfo.setProjectionPolicy(ProjectionPolicy.FORCE_DECLARED);
+                throw new InvalidParameterException("crs",
+                        "Cannot identify the CRS for uploaded data, or CRS information not provided.");
             }
         }
-        builder.setupBounds(ftInfo);
+        try {
+            builder.setupBounds(ftInfo);
+        } catch (IOException e) {
+            throw new InvalidParameterException("file",
+                    "Error computing bounding box for uploaded data", e);
+        }
 
         String title = super.title;
         if (null == title || title.trim().length() == 0) {
@@ -109,10 +123,20 @@ class FeatureTypeImporter extends LayerImporter {
         ftInfo.setTitle(title);
         ftInfo.setAbstract(_abstract);
 
-        LayerInfo layerInfo = builder.buildLayer(ftInfo);
+        LayerInfo layerInfo;
+        try {
+            layerInfo = builder.buildLayer(ftInfo);
+        } catch (IOException e) {
+            throw new RuntimeException("Error building layer information", e);
+        }
 
         StyleGenerator styles = new StyleGenerator(catalog);
-        StyleInfo style = styles.getStyle(ftInfo);
+        StyleInfo style;
+        try {
+            style = styles.getStyle(ftInfo);
+        } catch (IOException e) {
+            throw new RuntimeException("Error building layer information", e);
+        }
         try {
             catalog.add(style);
             layerInfo.setDefaultStyle(style);
@@ -139,7 +163,7 @@ class FeatureTypeImporter extends LayerImporter {
                 catalog.remove(storeInfo);
             } finally {
             }
-            throw e;
+            throw new RuntimeException("Error registering layer", e);
         }
         return layerInfo;
 
@@ -181,16 +205,26 @@ class FeatureTypeImporter extends LayerImporter {
     }
 
     private SimpleFeatureSource importToStore(final SimpleFeatureSource source,
-            final DataStoreInfo targetInfo) throws IOException {
+            final DataStoreInfo targetInfo) {
 
-        final DataStore dataStore = (DataStore) targetInfo.getDataStore(null);
+        DataStore dataStore;
+        try {
+            dataStore = (DataStore) targetInfo.getDataStore(null);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not aquire a handle to the provided store "
+                    + targetInfo.getName());
+        }
 
         final String sourceTypeName = source.getName().getLocalPart();
         String targetTypeName = sourceTypeName.toLowerCase();
         int tries = 0;
-        while (Arrays.asList(dataStore.getTypeNames()).contains(targetTypeName)) {
-            tries++;
-            targetTypeName = sourceTypeName.toLowerCase() + tries;
+        try {
+            while (Arrays.asList(dataStore.getTypeNames()).contains(targetTypeName)) {
+                tries++;
+                targetTypeName = sourceTypeName.toLowerCase() + tries;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         final SimpleFeatureType sourceType = source.getSchema();
@@ -203,16 +237,31 @@ class FeatureTypeImporter extends LayerImporter {
             targetType = builder.buildFeatureType();
         }
 
-        dataStore.createSchema(targetType);
+        try {
+            dataStore.createSchema(targetType);
+        } catch (IOException e) {
+            throw new InvalidParameterException("store",
+                    "The data provided cannot be added to the target store '"
+                            + targetInfo.getName() + "'", e);
+        }
 
-        final int count = source.getCount(Query.ALL);
-
-        SimpleFeatureCollection sourceFeatures = source.getFeatures();
+        SimpleFeatureCollection sourceFeatures;
+        try {
+            sourceFeatures = source.getFeatures();
+        } catch (IOException e) {
+            throw new InvalidParameterException("file", "Error reading the provided data", e);
+        }
         SimpleFeatureIterator features = sourceFeatures.features();
         try {
             FeatureWriter<SimpleFeatureType, SimpleFeature> writer;
             Transaction transaction = new DefaultTransaction();// Transaction.AUTO_COMMIT;
-            writer = dataStore.getFeatureWriterAppend(targetTypeName, transaction);
+            try {
+                writer = dataStore.getFeatureWriterAppend(targetTypeName, transaction);
+            } catch (IOException e) {
+                throw new InvalidParameterException("store",
+                        "The data provided cannot be added to the target store "
+                                + targetInfo.getName(), e);
+            }
             try {
                 int inserted = 0;
                 while (features.hasNext()) {
@@ -223,22 +272,41 @@ class FeatureTypeImporter extends LayerImporter {
                     inserted++;
                 }
                 transaction.commit();
-            } catch (IOException e) {
-                transaction.rollback();
-                // TODO: there's no dataStore.dropSchema()....
-                throw e;
-            } catch (RuntimeException rte) {
-                transaction.rollback();
+            } catch (Exception e) {
+                try {
+                    transaction.rollback();
+                } catch (IOException e2) {
+                    LOGGER.log(Level.INFO,
+                            "Error rolling back transaction while handling data upload for store "
+                                    + targetInfo + ", layer " + targetTypeName, e);
+                }
+                throw new InvalidParameterException("store",
+                        "The data provided cannot be added to the target store "
+                                + targetInfo.getName());
             } finally {
-                transaction.close();
-                writer.close();
+                try {
+                    transaction.close();
+                    writer.close();
+                } catch (IOException e) {
+                    LOGGER.log(Level.INFO,
+                            "Error closing transaction while handling data upload for store "
+                                    + targetInfo + ", layer " + targetTypeName, e);
+                    throw new InvalidParameterException("store",
+                            "The data provided cannot be added to the target store "
+                                    + targetInfo.getName());
+                }
             }
         } finally {
             features.close();
         }
 
         SimpleFeatureSource imported;
-        imported = dataStore.getFeatureSource(targetType.getName());
+        try {
+            imported = dataStore.getFeatureSource(targetType.getName());
+        } catch (IOException e) {
+            throw new RuntimeException("Error acquiring imported data once uploaded to store '"
+                    + targetInfo.getName() + "'", e);
+        }
         return imported;
     }
 
