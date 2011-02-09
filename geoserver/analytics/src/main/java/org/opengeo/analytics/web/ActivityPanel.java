@@ -180,8 +180,13 @@ public class ActivityPanel extends Panel {
         q.getAggregates().clear();
         q.getGroupBy().clear();
         q.properties("service", "operation").aggregate("count()").group("service", "operation");
-        q.and(new Filter("service", new ArrayList(services.getSelectedAsString()), Comparison.IN)
-            .or(new Filter("service", null, Comparison.EQ)));
+        
+        Filter filter = 
+            new Filter("service", new ArrayList(services.getSelectedAsString()), Comparison.IN);
+        if (services.isSet(Service.OTHER)) {
+            filter = filter.or(new Filter("service", null, Comparison.EQ));
+        }
+        q.and(filter);
         
         final HashMap<String,ServiceOpSummary> data = new HashMap();
         Analytics.monitor().query(q, new RequestDataVisitor() {
