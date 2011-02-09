@@ -1,1 +1,1 @@
-.. _geoexplorer.using:Using GeoExplorer=================The following are the most common tasks accomplished with GeoExplorer... toctree::   :maxdepth: 2   add   remove   layerproperties   getfeatureinfo   measure   save   publish   print
+.. _geoexplorer.using:Using GeoExplorer=================This section describe the various functions available through GeoExplorer... toctree::   :maxdepth: 2   add   upload   remove   layerproperties   style   getfeatureinfo   createfeature   editfeature   measure   save   export   print

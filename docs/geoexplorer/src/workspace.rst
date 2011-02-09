@@ -29,6 +29,11 @@ The primary component of the GeoExplorer workspace is the Map Window.  This disp
 Toolbar
 -------
 
+.. figure:: images/workspace_toolbar.png
+   :align: center
+
+   *Toolbar*
+
 The Toolbar contains buttons that accomplish certain tasks:
 
   .. list-table::
@@ -45,8 +50,8 @@ The Toolbar contains buttons that accomplish certain tasks:
        - :ref:`geoexplorer.using.save`
        - Saves the current state of the Map Window and generates a URL to use in order to revisit the current configuration.
      * - .. image:: images/button_publishmap.png
-       - :ref:`geoexplorer.using.publish`
-       - Generates HTML code to use to embed the contents of the current Map Window into a web page.
+       - :ref:`geoexplorer.using.export`
+       - Composes a map application based on the current Map Window and generates HTML code to embed the application into a web page.
      * - .. image:: images/button_print.png
        - :ref:`geoexplorer.using.print`
        - Opens a dialog for creating PDFs of the current map view.
@@ -56,6 +61,12 @@ The Toolbar contains buttons that accomplish certain tasks:
      * - .. image:: images/button_getfeatureinfo.png
        - :ref:`geoexplorer.using.getfeatureinfo`
        - Sets the mouse action to display feature info (attributes) for the features when located at a given point when clicked.  Dragging has no effect when this tool is activated.
+     * - .. image:: images/button_createfeature.png
+       - :ref:`geoexplorer.using.createfeature`
+       - Creates a new feature on the selected layer which can then be edited.  Works with overlays only.
+     * - .. image:: images/button_editfeature.png
+       - :ref:`geoexplorer.using.editfeature`
+       - Edits an existing feature on the selected layer.  Works with overlays only and requires authentication to the server.
      * - .. image:: images/button_measure.png
        - :ref:`geoexplorer.using.measure`
        - Sets the mouse action to measure distance or area on the map.
@@ -83,26 +94,21 @@ The Toolbar contains buttons that accomplish certain tasks:
 Layers Panel
 ------------
 
+.. figure:: images/workspace_layerspanel.png
+   :align: center
+
+   *Layers Panel*
+
 The Layers Panel displays a list of all layers active in GeoExplorer.  Each layer's visibility in the Map Window is toggled by the check box next to each entry in the list.  Layer order can be set by clicking and dragging the entries in the list with the mouse.
 
-There are two folders in the Layers Panel, :guilabel:`Overlays` and :guilabel:`Base Layers`.
+There are two folders in the Layers Panel, :guilabel:`Overlays` and :guilabel:`Base Layers`, plus a toolbar.
 
-Overlays
-~~~~~~~~
-
-The Overlays folder shows a list of layers that are known to GeoExplorer.  These layers are set to be transparent, such that multiple layers can be visible at one time.  When starting GeoExplorer, this list is empty; you can :ref:`geoexplorer.using.add` to the list by clicking the :guilabel:`Add New Layers` button.
-
-Base Layers
-~~~~~~~~~~~
-
-The Base Layers folder contains a list of layers that can be used as a base layer.  A base layer will always be drawn beneath all other active layers.  Only one layer in this list can be active at any time, but it is possible to move layers between the Base Layers folder and Overlays folder.
-
-The default base layer is Google Terrain.  No base layer ("None") is also an option.
+.. _geoexplorer.workspace.layerstoolbar:
 
 Layers toolbar
 ~~~~~~~~~~~~~~
 
-The Layers Panel also contains a small toolbar with the following buttons:
+The Layers Panel contains a toolbar with the following buttons:
 
   .. list-table::
      :header-rows: 1
@@ -118,23 +124,70 @@ The Layers Panel also contains a small toolbar with the following buttons:
        - :ref:`geoexplorer.using.remove`
        - Removes the currently selected layer from the list.
      * - .. image:: /images/button_layerproperties.png
-       - Layer Properties
-       - Displays metadata and display characteristics about the selected layer.  (For attribute information, use the :ref:`geoexplorer.using.getfeatureinfo` Tool.)
+       - :ref:`geoexplorer.using.layerproperties`
+       - For a selected layer, displays a dialog for viewing and editing metadata, display characteristics, caching settings, and layer styles.  (For attribute information, use the :ref:`geoexplorer.using.getfeatureinfo` Tool.)
+
+Layer context menu
+~~~~~~~~~~~~~~~~~~
 
 You can also right-click on an entry in the list to display a context menu.  This menu contains three options:
 
-* :guilabel:`Zoom to Layer Extent`
-* :guilabel:`Remove Layer`
-* :guilabel:`Layer Properties`
+  .. list-table::
+     :header-rows: 1
+     :widths: 15 30 85 
+
+     * - Icon
+       - Name
+       - Description
+     * - .. image:: /images/button_zoomlayer.png
+       - Zoom to Layer Extent
+       - Zooms to the smallest extent that contains the full extent of the selected layer.
+     * - .. image:: /images/button_removelayer.png
+       - :ref:`geoexplorer.using.remove`
+       - Removes the currently selected layer from the list.
+     * - .. image:: /images/button_layerproperties.png
+       - :ref:`geoexplorer.using.layerproperties`
+       - For a selected layer, displays a dialog for viewing and editing metadata, display characteristics, caching settings, and layer styles.  (For attribute information, use the :ref:`geoexplorer.using.getfeatureinfo` Tool.)
 
 .. figure:: images/workspace_layermenu.png
    :align: center
 
    *Layer context menu*
 
+
+Overlays
+~~~~~~~~
+
+The Overlays folder shows a list of layers that are known to GeoExplorer.  These layers are set to be transparent, so that multiple layers can be visible at one time.  When starting GeoExplorer, this list is empty; you can :ref:`geoexplorer.using.add` to the list by clicking the :guilabel:`Add New Layers` button.
+
+Base Layers
+~~~~~~~~~~~
+
+The Base Layers folder contains a list of layers that can be used as a base layer.  A base layer will always be drawn beneath all other active layers.  Only one layer in this list can be active at any time, but it is possible to have multiple base layers contained in a map. It is also possible to drag layers between the Base Layers folder and Overlays folder.
+
+The default base layer is Google Roadmap.  No base layer ("None") is also an option.  You can :ref:`geoexplorer.using.add` to the list by clicking the :guilabel:`Add New Layers` button.
+
+.. _geoexplorer.workspace.layerspanel.layerorder:
+
+Layer order
+~~~~~~~~~~~
+
+Layers that are displayed in this panel can be reordered to affect the rendering order.  To change the order of layers, click and drag the layers in the Overlays list in the :ref:`geoexplorer.workspace.layerspanel`.  The layers will be rendered in the order in which they are listed, meaning that the layer at the top of the list will display on the top of all of the other layers, the next layer will be drawn below that, etc.  The selected base layer will always be drawn beneath all other layers (i.e. first).
+
+.. figure:: images/workspace_draglayers.png
+   :align: center
+
+   *Reordering Layers*
+
+
 .. _geoexplorer.workspace.legendpanel:
 
 Legend Panel
 ------------
 
-The Legend Panel displays style information for every visible layer.  This list of styles is generated directly from the WMS :term:`GetLegendGraphic` request.  The names of the entries in the styles are taken directly from the SLD from which the layers are styled.  The legend cannot be edited from within GeoExplorer.  To change the styles of a layer, you can use GeoServer's built-in SLD editor, :term:`Styler`, or other means.
+.. figure:: images/workspace_legendpanel.png
+   :align: center
+
+   *Legend Panel*
+
+The Legend Panel displays style information for every visible layer.  This list of styles is generated directly from the WMS :term:`GetLegendGraphic` request.  The names of the entries in the styles are taken directly from the SLD from which the layers are styled.  It is possible to edit styles for WMS layers with the :ref:`geoexplorer.using.layerproperties` dialog.

@@ -37,21 +37,26 @@ Introduction
        
 #. Compose your map by ordering layers in the :ref:`geoexplorer.workspace.layerspanel`.
     
-   .. figure:: using/images/add_draglayers.png
+   .. figure:: images/workspace_draglayers.png
       :align: center
    
       *Ordering layers*
        
-#. Launch the :ref:`geoexplorer.using.publish` tool to save your map and generate HTML code that you can embed into a web page.
+#. Launch the :ref:`geoexplorer.using.export` tool to generate a map application and the HTML code that you can embed into a web page.
 
-   .. figure:: using/images/publish.png
+   .. figure:: using/images/export_tools.png
       :align: center
 
-      *Publishing a map*
+      *Selecting the map tools*
+
+   .. figure:: using/images/export_html.png
+      :align: center
+
+      *Exporting a map*
 
 #. Paste the HTML code into your web page.
 
-   .. figure:: using/images/publish_embed.png
+   .. figure:: using/images/export_embed.png
       :align: center
 
-      *Map embedded in web page*
+      *Embedded map inside a web page*
