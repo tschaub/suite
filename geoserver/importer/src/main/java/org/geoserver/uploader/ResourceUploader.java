@@ -205,7 +205,11 @@ public class ResourceUploader extends Restlet {
                 delete(targetDirectory);
             }
         } catch (IOException e) {
-            LOGGER.log(Level.WARNING, "Error uploading and configuring layer", e);
+            LOGGER.log(Level.INFO, "Error uploading and configuring layer", e);
+            FileUtils.deleteDirectory(targetDirectory);
+            throw e;
+        } catch (RuntimeException e) {
+            LOGGER.log(Level.INFO, "Error uploading and configuring layer", e);
             FileUtils.deleteDirectory(targetDirectory);
             throw e;
         } finally {
