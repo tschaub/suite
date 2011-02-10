@@ -12,7 +12,7 @@
    <property name="gwc.version" value="1.2-SNAPSHOT"/>
 
    <property name="mvn.exec" value="mvn"/>
-   <property name="mvn.set" value="settings.xml"/>
+   <property name="mvn.settings" value="settings.xml"/>
 
    <target name="build-all" depends="checkout-all, build-gt, build-gwc, build-gs">
    </target>
@@ -83,7 +83,7 @@
   </target>
 
   <target name="mvn">
-     <echo message="${mvn.exec} -s ${mvn.set} ${flags} ${targets}"/>
+     <echo message="${mvn.exec} -s ${mvn.settings} ${flags} ${targets}"/>
      <exec executable="${mvn.exec}" dir="${dir}" failonerror="true">
         <arg line="-s ${mvn.set} ${flags} ${targets}"/>
      </exec>
