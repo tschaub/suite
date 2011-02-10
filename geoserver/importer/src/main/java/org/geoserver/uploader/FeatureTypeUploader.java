@@ -55,17 +55,25 @@ class FeatureTypeUploader extends LayerUploader {
     }
 
     @Override
-    public LayerInfo importFromFile(File file) throws InvalidParameterException, RuntimeException {
+    public LayerInfo importFromFile(File file) throws InvalidParameterException, RuntimeException,
+            MissingInformationException {
+        
         if (storeInfo == null) {
             file = ensureUnique(workspaceInfo, file);
+        }
+        
+        final File prjFile = new File(file.getParentFile(), FilenameUtils.getBaseName(file
+                .getName()) + ".prj");
+        if (!prjFile.exists()) {
+            throw new MissingInformationException("crs", "Uploaded file " + file.getName()
+                    + " does not contain Coordinate Reference System information (.prj file)");
         }
         /*
          * If there's a .prj file next to the given file in ESRI format, once it's parsed by the
          * DataStore, CRS.lookUpCRS won't match an EPSG anymore. So make an attempt to convert the
          * .prj file before we get the DataStore
          */
-        convertPrjWKTToEPSG(new File(file.getParentFile(),
-                FilenameUtils.getBaseName(file.getName()) + ".prj"));
+        convertPrjWKTToEPSG(prjFile);
 
         final DataStoreFactorySpi dsf = getDataStoreFactory(file);
         final Map<? extends String, ? extends Serializable> connectionParameters;

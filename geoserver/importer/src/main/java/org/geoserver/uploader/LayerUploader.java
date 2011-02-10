@@ -33,7 +33,7 @@ abstract class LayerUploader {
         this._abstract = _abstract == null ? "" : _abstract;
     }
 
-    public abstract LayerInfo importFromFile(File file);
+    public abstract LayerInfo importFromFile(File file) throws MissingInformationException;
 
     protected File ensureUnique(final WorkspaceInfo workspaceInfo, final File resourceFile) {
         final NamespaceInfo namespace = catalog.getNamespaceByPrefix(workspaceInfo.getName());

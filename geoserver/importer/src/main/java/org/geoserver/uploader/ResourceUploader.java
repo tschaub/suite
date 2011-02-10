@@ -10,20 +10,15 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.sf.json.JSONArray;
-
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.DataStoreInfo;
 import org.geoserver.catalog.LayerInfo;
 import org.geoserver.catalog.ResourcePool;
 import org.geoserver.catalog.StoreInfo;
 import org.geoserver.catalog.WorkspaceInfo;
-import org.geoserver.config.GeoServerDataDirectory;
 import org.geoserver.ows.util.ResponseUtils;
 import org.geoserver.rest.RestletException;
 import org.geoserver.rest.util.RESTUtils;
@@ -57,7 +52,7 @@ public class ResourceUploader extends Restlet {
 
     private Catalog catalog;
 
-    private GeoServerDataDirectory dataDir;
+    private UploadLifeCyleManager lifeCycleManager;
 
     /**
      * Used to get the default upload workspace and datastore dynamically as it may change over the
@@ -65,10 +60,10 @@ public class ResourceUploader extends Restlet {
      */
     private UploaderConfigPersister configPersister;
 
-    public ResourceUploader(Catalog catalog, GeoServerDataDirectory dataDir,
+    public ResourceUploader(Catalog catalog, UploadLifeCyleManager lifeCycleManager,
             UploaderConfigPersister configPersister) {
         this.catalog = catalog;
-        this.dataDir = dataDir;
+        this.lifeCycleManager = lifeCycleManager;
         this.configPersister = configPersister;
     }
 
@@ -84,6 +79,12 @@ public class ResourceUploader extends Restlet {
         response.setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
     }
 
+    /**
+     * TODO: change errors format, {errors: [{id: "file", msg: "invalid"}], trace: "foo"} would work
+     * 
+     * @param request
+     * @param response
+     */
     private void handlePost(Request request, Response response) {
         final MediaType requestMediaType = request.getEntity().getMediaType();
         final boolean ignoreParameters = true;
@@ -117,12 +118,17 @@ public class ResourceUploader extends Restlet {
             result = tmpresult;
 
             response.setStatus(Status.SUCCESS_OK);
+
+        } catch (MissingInformationException e) {
+            String token = e.getToken();
+            response.setStatus(Status.CLIENT_ERROR_EXPECTATION_FAILED);
+            addErrors(result, e.getLocator(), e, token);
         } catch (InvalidParameterException e) {
             response.setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-            addErrors(result, e.getLocator(), e);
+            addErrors(result, e.getLocator(), e, null);
         } catch (RuntimeException e) {
             response.setStatus(Status.SERVER_ERROR_INTERNAL);
-            addErrors(result, "Internal Error", e);
+            addErrors(result, "Internal Error", e, null);
         } catch (JSONException e) {
             // shouldn't happen
             throw new RestletException("JSON error", Status.SERVER_ERROR_INTERNAL, e);
@@ -132,7 +138,9 @@ public class ResourceUploader extends Restlet {
         response.setEntity(responseContents, MediaType.TEXT_HTML);
     }
 
-    private void addErrors(final JSONObject result, final String locator, final Exception ex) {
+    private void addErrors(final JSONObject result, final String locator, final Exception ex,
+            String uploadToken) {
+
         Throwable cause = ex;
         try {
             result.put("success", Boolean.FALSE);
@@ -145,6 +153,9 @@ public class ResourceUploader extends Restlet {
                 }
                 cause = cause.getCause();
             }
+            if (uploadToken != null) {
+                result.put("token", uploadToken);
+            }
         } catch (JSONException e) {
             // shouldn't happen
             throw new RestletException("JSON error", Status.SERVER_ERROR_INTERNAL, e);
@@ -152,7 +163,7 @@ public class ResourceUploader extends Restlet {
     }
 
     private List<LayerInfo> uploadLayers(Request request, Response response)
-            throws InvalidParameterException {
+            throws InvalidParameterException, MissingInformationException {
         RestletFileUpload rfu = new RestletFileUpload();
         DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
         rfu.setFileItemFactory(fileItemFactory);
@@ -185,18 +196,19 @@ public class ResourceUploader extends Restlet {
      * 
      * @param params
      * @return
+     * @throws MissingInformationException
      * @throws IOException
      * @throws Exception
      */
     public List<LayerInfo> uploadLayers(Map<String, Object> params)
-            throws InvalidParameterException {
+            throws InvalidParameterException, MissingInformationException {
         FileItem fileItem = (FileItem) params.get("file");
         if (fileItem == null) {
             throw new InvalidParameterException("file",
                     "Expected a 'file' parameter that was not provided");
         }
         final String fileItemName = fileItem.getName();
-        final File targetDirectory = createTargetDirectory(fileItemName);
+        final File targetDirectory = lifeCycleManager.createTargetDirectory(fileItemName);
 
         List<LayerInfo> importedLayers = new ArrayList<LayerInfo>();
 
@@ -211,16 +223,22 @@ public class ResourceUploader extends Restlet {
                 importer.setTitle((String) params.get("title"));
                 importer.setAbstract((String) params.get("abstract"));
 
-                importedLayer = importer.importFromFile(spatialFile);
+                try {
+                    importedLayer = importer.importFromFile(spatialFile);
+                } catch (MissingInformationException e) {
+                    String savedToken = lifeCycleManager.saveAsPending(targetDirectory);
+                    e.setToken(savedToken);
+                    throw e;
+                }
                 importedLayers.add(importedLayer);
             }
 
             boolean canDeleteUploadedFiles = targetDataStore != null;
             if (canDeleteUploadedFiles) {
-                delete(targetDirectory);
+                lifeCycleManager.deleteTargetDirectory(targetDirectory);
             }
         } catch (RuntimeException e) {
-            delete(targetDirectory);
+            lifeCycleManager.deleteTargetDirectory(targetDirectory);
             throw e;
         } finally {
             try {
@@ -260,20 +278,6 @@ public class ResourceUploader extends Restlet {
         return spatialFiles;
     }
 
-    private File createTargetDirectory(final String fileItemName) {
-        File incomingDirectory;
-        try {
-            incomingDirectory = dataDir.findOrCreateDataDir("data", "incoming");
-        } catch (IOException e) {
-            throw new RuntimeException("Can't create target directory for uploaded data", e);
-        }
-
-        final File targetDirectory = ensureUniqueDirectory(incomingDirectory,
-                FilenameUtils.getBaseName(fileItemName));
-        targetDirectory.mkdirs();
-        return targetDirectory;
-    }
-
     private LayerUploader findImporter(final WorkspaceInfo targetWorkspace,
             final DataStoreInfo targetDataStore, File spatialFile) {
         LayerUploader importer;
@@ -285,15 +289,6 @@ public class ResourceUploader extends Restlet {
             throw new InvalidParameterException("file", "The file provided is not supported");
         }
         return importer;
-    }
-
-    private void delete(File directory) {
-        try {
-            FileUtils.deleteDirectory(directory);
-        } catch (IOException e) {
-            LOGGER.log(Level.WARNING,
-                    "Can't delete directory for uploaded files " + directory.getAbsolutePath(), e);
-        }
     }
 
     /**
@@ -405,16 +400,6 @@ public class ResourceUploader extends Restlet {
 
         }
         return (DataStoreInfo) storeInfo;
-    }
-
-    private File ensureUniqueDirectory(final File baseDirectory, final String temptativeName) {
-        String uniqueName = temptativeName;
-        int tries = 0;
-        while (new File(baseDirectory, uniqueName).exists()) {
-            tries++;
-            uniqueName = temptativeName + "_" + tries;
-        }
-        return new File(baseDirectory, uniqueName);
     }
 
     private List<File> findSpatialFile(File targetDirectory) {

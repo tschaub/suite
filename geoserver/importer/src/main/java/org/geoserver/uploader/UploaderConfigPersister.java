@@ -12,8 +12,8 @@ import java.util.logging.Logger;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.DataStoreInfo;
 import org.geoserver.catalog.WorkspaceInfo;
+import org.geoserver.config.GeoServerDataDirectory;
 import org.geoserver.config.util.XStreamPersister;
-import org.geoserver.platform.GeoServerResourceLoader;
 import org.geotools.util.logging.Logging;
 
 import com.thoughtworks.xstream.XStream;
@@ -24,15 +24,15 @@ public class UploaderConfigPersister {
 
     static final String UPLOADER_CONFIG_FILE_NAME = "uploader.xml";
 
-    private GeoServerResourceLoader resourceLoader;
+    private GeoServerDataDirectory dataDir;
 
     private UploaderConfig config;
 
     private Catalog catalog;
 
-    public UploaderConfigPersister(Catalog catalog, GeoServerResourceLoader resourceLoader) {
+    public UploaderConfigPersister(Catalog catalog, GeoServerDataDirectory dataDirectory) {
         this.catalog = catalog;
-        this.resourceLoader = resourceLoader;
+        this.dataDir = dataDirectory;
         try {
             this.config = loadConfig();
         } catch (IOException e) {
@@ -69,8 +69,8 @@ public class UploaderConfigPersister {
 
     private UploaderConfig loadConfig() throws IOException {
         UploaderConfig config = null;
-        File file = resourceLoader.find(UPLOADER_CONFIG_FILE_NAME);
-        if (null == file) {
+        File file = new File(dataDir.root(), UPLOADER_CONFIG_FILE_NAME);
+        if (!file.exists()) {
             return null;
         }
         Persister persister = new Persister();
@@ -91,7 +91,7 @@ public class UploaderConfigPersister {
     }
 
     private void saveConfig(UploaderConfig config, String fileName) throws IOException {
-        File file = resourceLoader.createFile(fileName);
+        File file = new File(dataDir.root(), fileName);
         OutputStream out = new FileOutputStream(file);
         Persister persister = new Persister();
         persister.save(config, out);

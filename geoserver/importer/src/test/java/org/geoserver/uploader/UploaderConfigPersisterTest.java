@@ -9,6 +9,7 @@ import org.apache.commons.io.FileUtils;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.DataStoreInfo;
 import org.geoserver.catalog.WorkspaceInfo;
+import org.geoserver.config.GeoServerDataDirectory;
 import org.geoserver.platform.GeoServerResourceLoader;
 import org.geoserver.test.GeoServerTestSupport;
 
@@ -37,7 +38,7 @@ public class UploaderConfigPersisterTest extends GeoServerTestSupport {
 
     public void testLoadWhenConfigFileDoesNotExists() {
         UploaderConfigPersister persister = new UploaderConfigPersister(getCatalog(),
-                getResourceLoader());
+                getDataDirectory());
         UploaderConfig config = persister.getConfig();
         assertNotNull(config);
         assertNull(config.getDefaultWorkspace());
@@ -57,8 +58,8 @@ public class UploaderConfigPersisterTest extends GeoServerTestSupport {
             assertFalse(ws.equals(catalog.getDefaultWorkspace()));
             ds = catalog.getDataStoresByWorkspace(ws).get(0);
         }
-        GeoServerResourceLoader resourceLoader = getResourceLoader();
-        File baseDirectory = resourceLoader.getBaseDirectory();
+        GeoServerDataDirectory dataDir = getDataDirectory();
+        File baseDirectory = dataDir.root();
         File file = new File(baseDirectory, UploaderConfigPersister.UPLOADER_CONFIG_FILE_NAME);
 
         String contents = "<UploaderConfig><defaultWorkspace>" + ws.getName()
@@ -68,7 +69,7 @@ public class UploaderConfigPersisterTest extends GeoServerTestSupport {
         FileUtils.writeStringToFile(file, contents);
 
         UploaderConfigPersister persister;
-        persister = new UploaderConfigPersister(catalog, resourceLoader);
+        persister = new UploaderConfigPersister(catalog, dataDir);
         UploaderConfig config = persister.getConfig();
         assertEquals(ws.getName(), config.getDefaultWorkspace());
         assertEquals(ds.getName(), config.getDefaultDataStore());
@@ -79,10 +80,9 @@ public class UploaderConfigPersisterTest extends GeoServerTestSupport {
 
     public void testSave() {
         Catalog catalog = getCatalog();
-        GeoServerResourceLoader resourceLoader = getResourceLoader();
 
         UploaderConfigPersister persister;
-        persister = new UploaderConfigPersister(catalog, resourceLoader);
+        persister = new UploaderConfigPersister(catalog, getDataDirectory());
         assertNull(persister.getConfig().getDefaultWorkspace());
         assertNull(persister.getConfig().getDefaultDataStore());
 
@@ -90,7 +90,7 @@ public class UploaderConfigPersisterTest extends GeoServerTestSupport {
         persister.setDefaults(ws, null);
 
         // force reload
-        persister = new UploaderConfigPersister(catalog, resourceLoader);
+        persister = new UploaderConfigPersister(catalog, getDataDirectory());
         UploaderConfig config;
         config = persister.getConfig();
 
@@ -103,7 +103,7 @@ public class UploaderConfigPersisterTest extends GeoServerTestSupport {
         persister.setDefaults(ws, ds);
 
         // force reload
-        persister = new UploaderConfigPersister(catalog, resourceLoader);
+        persister = new UploaderConfigPersister(catalog, getDataDirectory());
         config = persister.getConfig();
         assertEquals(ws.getName(), config.getDefaultWorkspace());
         assertEquals(ds.getName(), config.getDefaultDataStore());

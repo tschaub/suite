@@ -2,40 +2,75 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
-  <!-- 
-   Demo menu item
-   -->
+  <!-- Demo menu item -->
   <bean id="importerMenuPage" class="org.geoserver.web.MenuPageInfo">
-    <property name="id" value="importer"/>
-    <property name="titleKey" value="StoreChooserPage.menu"/>
-    <property name="descriptionKey" value="StoreChooserPage.description"/>
-    <property name="componentClass" value="org.geoserver.web.importer.StoreChooserPage"/>
+    <property name="id" value="importer" />
+    <property name="titleKey" value="StoreChooserPage.menu" />
+    <property name="descriptionKey" value="StoreChooserPage.description" />
+    <property name="componentClass" value="org.geoserver.web.importer.StoreChooserPage" />
   </bean>
-  
+
   <!-- the import thread pool manager -->
-  <bean id="importerPool" class="org.geoserver.importer.ImporterThreadManager"/>
-  
-   <bean id="restConfigUploadMapping" class="org.geoserver.rest.RESTMapping">
+  <bean id="importerPool" class="org.geoserver.importer.ImporterThreadManager" />
+
+  <bean id="restConfigUploadMapping" class="org.geoserver.rest.RESTMapping">
     <property name="routes">
       <map>
         <entry>
-          <key><value>/upload</value></key>
+          <key>
+            <value>/upload</value>
+          </key>
           <value>resourceUploader</value>
         </entry>
       </map>
     </property>
   </bean>
-  
-  <bean id="resourceUploaderConfigPersister" 
-        class="org.geoserver.uploader.UploaderConfigPersister">
-    <constructor-arg ref="catalog"/>
-    <constructor-arg ref="resourceLoader"/>
+
+  <bean id="resourceUploaderConfigPersister" class="org.geoserver.uploader.UploaderConfigPersister">
+    <constructor-arg ref="catalog" />
+    <constructor-arg ref="dataDirectory" />
   </bean>
-  
+
+  <bean id="uploadsLifeCycleManager" class="org.geoserver.uploader.UploadLifeCyleManager">
+    <constructor-arg ref="dataDirectory" />
+  </bean>
+
   <bean id="resourceUploader" class="org.geoserver.uploader.ResourceUploader">
-    <constructor-arg ref="catalog"/>
-    <constructor-arg ref="dataDirectory"/>
-    <constructor-arg ref="resourceUploaderConfigPersister"/>
+    <constructor-arg ref="catalog" />
+    <constructor-arg ref="uploadsLifeCycleManager" />
+    <constructor-arg ref="resourceUploaderConfigPersister" />
   </bean>
-  
- </beans>
+
+  <bean id="periodicPendingUploadsCleanerTask" class="org.geoserver.uploader.PeriodicPendingUploadsCleanerTask">
+    <description><![CDATA[
+      Runnable that evicts non recovered pending uploads
+    ]]></description>
+    <constructor-arg ref="uploadsLifeCycleManager" />
+    <constructor-arg>
+      <description>Seconds between pending upload eviction runs</description>
+      <value>600</value>
+    </constructor-arg>
+  </bean>
+
+  <bean id="uploaderCleanUpExecutor" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">
+    <description><![CDATA[
+      Spring's scheduled task that runs the upload evition runnable periodically
+    ]]></description>
+    <property name="runnable" ref="periodicPendingUploadsCleanerTask" />
+    <property name="period">
+      <description>period between repeated task executions (ms)</description>
+      <value>30000</value>
+    </property>
+  </bean>
+
+  <bean id="uploaderCleanUpExecutorService" class="org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean">
+    <property name="continueScheduledExecutionAfterException" value="true" />
+    <property name="poolSize" value="1" />
+    <property name="waitForTasksToCompleteOnShutdown" value="true" />
+    <property name="scheduledExecutorTasks">
+      <list>
+        <ref bean="uploaderCleanUpExecutor" />
+      </list>
+    </property>
+  </bean>
+</beans>

@@ -42,9 +42,9 @@ public class ResourceUploaderTest extends GeoServerTestSupport {
 
     GeoServerDataDirectory dataDir;
 
-    GeoServerResourceLoader resourceLoader;
-
     UploaderConfigPersister configPersister;
+
+    UploadLifeCyleManager lifeCycleManager;
 
     ResourceUploader uploader;
 
@@ -86,9 +86,9 @@ public class ResourceUploaderTest extends GeoServerTestSupport {
     public void setUpInternal() {
         catalog = getCatalog();
         dataDir = getDataDirectory();
-        resourceLoader = getResourceLoader();
-        configPersister = new UploaderConfigPersister(catalog, resourceLoader);
-        uploader = new ResourceUploader(catalog, dataDir, configPersister);
+        lifeCycleManager = new UploadLifeCyleManager(dataDir);
+        configPersister = new UploaderConfigPersister(catalog, dataDir);
+        uploader = new ResourceUploader(catalog, lifeCycleManager, configPersister);
         try {
             archSitesFileItem = fileItemMock(archsitesFileName, archsitesTestResource);
             bugSitesFileItem = fileItemMock(bugsitesFileName, bugsitesTestResource);
@@ -177,8 +177,12 @@ public class ResourceUploaderTest extends GeoServerTestSupport {
         try {
             uploader.uploadLayers(params);
             fail("Expected IPE");
-        } catch (InvalidParameterException e) {
+        } catch (MissingInformationException e) {
             assertEquals("crs", e.getLocator());
+            String token = e.getToken();
+            assertNotNull(token);
+            File pendingUploadDir = lifeCycleManager.getPendingUploadDir(token);
+            assertTrue(pendingUploadDir.exists());
         }
     }
 
@@ -304,7 +308,8 @@ public class ResourceUploaderTest extends GeoServerTestSupport {
         }
     }
 
-    public void testUploadShpMultipleTimesAssignsNewNames() throws IOException {
+    public void testUploadShpMultipleTimesAssignsNewNames() throws IOException,
+            InvalidParameterException, MissingInformationException {
 
         archSitesFileItem = fileItemMock(archsitesFileName, archsitesTestResource);
         params.put("file", archSitesFileItem);
