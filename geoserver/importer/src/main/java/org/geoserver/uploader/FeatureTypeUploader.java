@@ -40,15 +40,15 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-class FeatureTypeImporter extends LayerImporter {
+class FeatureTypeUploader extends LayerUploader {
 
-    private static final Logger LOGGER = Logging.getLogger(FeatureTypeImporter.class);
+    private static final Logger LOGGER = Logging.getLogger(FeatureTypeUploader.class);
 
     private static final List<String> supportedExtensions = Arrays.asList(".shp");
 
     private DataStoreInfo storeInfo;
 
-    public FeatureTypeImporter(Catalog catalog, WorkspaceInfo targetWorkspace,
+    public FeatureTypeUploader(Catalog catalog, WorkspaceInfo targetWorkspace,
             DataStoreInfo targetDataStore) {
         super(catalog, targetWorkspace);
         this.storeInfo = targetDataStore;

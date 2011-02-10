@@ -10,7 +10,7 @@ import org.geoserver.catalog.NamespaceInfo;
 import org.geoserver.catalog.ResourceInfo;
 import org.geoserver.catalog.WorkspaceInfo;
 
-abstract class LayerImporter {
+abstract class LayerUploader {
 
     protected Catalog catalog;
 
@@ -20,7 +20,7 @@ abstract class LayerImporter {
 
     protected WorkspaceInfo workspaceInfo;
 
-    public LayerImporter(Catalog catalog, WorkspaceInfo targetWorkspace) {
+    public LayerUploader(Catalog catalog, WorkspaceInfo targetWorkspace) {
         this.catalog = catalog;
         this.workspaceInfo = targetWorkspace;
     }

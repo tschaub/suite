@@ -21,7 +21,7 @@ import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
 import org.geotools.coverage.grid.io.AbstractGridFormat;
 import org.opengis.coverage.grid.Format;
 
-class CoverageImporter extends LayerImporter {
+class CoverageUploader extends LayerUploader {
 
     private static final List<String> supportedExtensions = Arrays.asList(".tif", ".tiff");
 
@@ -32,7 +32,7 @@ class CoverageImporter extends LayerImporter {
         }
     }
 
-    public CoverageImporter(Catalog catalog, final WorkspaceInfo targetWorkspace) {
+    public CoverageUploader(Catalog catalog, final WorkspaceInfo targetWorkspace) {
         super(catalog, targetWorkspace);
     }
 
@@ -47,7 +47,7 @@ class CoverageImporter extends LayerImporter {
     public LayerInfo importFromFile(File file) throws InvalidParameterException, RuntimeException {
         file = ensureUnique(workspaceInfo, file);
 
-        Map<String, String> formatToCoverageStoreFormat = CoverageImporter.formatToCoverageStoreFormat;
+        Map<String, String> formatToCoverageStoreFormat = CoverageUploader.formatToCoverageStoreFormat;
 
         String coverageFormatName = formatToCoverageStoreFormat.get("geotiff");
         Format coverageFormat = null;

@@ -207,7 +207,7 @@ public class ResourceUploader extends Restlet {
             final DataStoreInfo targetDataStore = getTargetDataStore(targetWorkspace, params);
 
             for (File spatialFile : spatialFiles) {
-                LayerImporter importer = findImporter(targetWorkspace, targetDataStore, spatialFile);
+                LayerUploader importer = findImporter(targetWorkspace, targetDataStore, spatialFile);
                 importer.setTitle((String) params.get("title"));
                 importer.setAbstract((String) params.get("abstract"));
 
@@ -274,13 +274,13 @@ public class ResourceUploader extends Restlet {
         return targetDirectory;
     }
 
-    private LayerImporter findImporter(final WorkspaceInfo targetWorkspace,
+    private LayerUploader findImporter(final WorkspaceInfo targetWorkspace,
             final DataStoreInfo targetDataStore, File spatialFile) {
-        LayerImporter importer;
-        if (FeatureTypeImporter.canHandle(spatialFile)) {
-            importer = new FeatureTypeImporter(catalog, targetWorkspace, targetDataStore);
-        } else if (CoverageImporter.canHandle(spatialFile)) {
-            importer = new CoverageImporter(catalog, targetWorkspace);
+        LayerUploader importer;
+        if (FeatureTypeUploader.canHandle(spatialFile)) {
+            importer = new FeatureTypeUploader(catalog, targetWorkspace, targetDataStore);
+        } else if (CoverageUploader.canHandle(spatialFile)) {
+            importer = new CoverageUploader(catalog, targetWorkspace);
         } else {
             throw new InvalidParameterException("file", "The file provided is not supported");
         }
@@ -424,8 +424,8 @@ public class ResourceUploader extends Restlet {
                 if (pathname.isDirectory()) {
                     return true;
                 }
-                boolean canHandle = FeatureTypeImporter.canHandle(pathname)
-                        || CoverageImporter.canHandle(pathname);
+                boolean canHandle = FeatureTypeUploader.canHandle(pathname)
+                        || CoverageUploader.canHandle(pathname);
                 return canHandle;
             }
         });
