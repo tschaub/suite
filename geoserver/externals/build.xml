@@ -34,11 +34,11 @@
    </target>
 
    <target name="build-gwc"> 
-     <!--antcall target="mvn">
+     <antcall target="mvn">
         <param name="dir" value="${gwc.dir}/geowebcache"/>
         <param name="flags" value="-DskipTests"/>
         <param name="targets" value="clean install"/>
-     </antcall-->
+     </antcall>
      <antcall target="mvn">
         <param name="dir" value="${gwc.dir}/geowebcache"/>
         <param name="flags" value="-DgroupId=org.geowebcache -DartifactId=geowebcache -Dversion=${gwc.version} -Dpackaging=war -Dfile=web/target/geowebcache.war"/>
