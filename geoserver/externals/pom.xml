@@ -13,12 +13,29 @@
 
   <groupId>org.opengeo.geoserver</groupId>
   <artifactId>externals</artifactId>
-  <packaging>pom</packaging>
+  <packaging>jar</packaging>
   <name>OpenGeo Suite GeoServer Externals</name>
 
-  <modules>
-   <module>geowebcache</module>
-   <module>geotools</module>
-   <module>geoserver</module>
-  </modules>
+  <build>
+   <plugins>
+     <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>compile</id>
+            <phase>compile</phase>
+            <configuration>
+              <tasks>
+                <ant antfile="${basedir}/build.xml"/>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
 </project>
