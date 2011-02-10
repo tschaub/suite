@@ -85,7 +85,7 @@
   <target name="mvn">
      <echo message="${mvn.exec} -s ${mvn.settings} ${flags} ${targets}"/>
      <exec executable="${mvn.exec}" dir="${dir}" failonerror="true">
-        <arg line="-s ${mvn.set} ${flags} ${targets}"/>
+        <arg line="-s ${mvn.settings} ${flags} ${targets}"/>
      </exec>
   </target>
 
