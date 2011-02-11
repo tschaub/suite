@@ -183,7 +183,6 @@
            <groupId>org.opengeo.geoserver</groupId>
            <artifactId>analytics</artifactId>
            <version>${project.version}</version>
-           <artifactId>analytics</artifactId>
          </dependency>
        </dependencies> 
      </profile>
