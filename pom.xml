@@ -190,6 +190,29 @@
        <module>assembly</module>
      </modules>
    </profile>
+   <profile>
+   </profile>
+   <profile>
+     <id>ee</id>
+     <build>
+     <plugins>
+       <plugin>
+         <artifactId>maven-assembly-plugin</artifactId>
+         <configuration>
+           <finalName>opengeosuite-ee-${project.version}</finalName>
+           <descriptors>
+             <descriptor>assembly/bin.xml</descriptor>
+             <descriptor>assembly/win.xml</descriptor>
+             <descriptor>assembly/mac.xml</descriptor>
+             <descriptor>assembly/war-geoserver.xml</descriptor>
+             <descriptor>assembly/war-geoserver-jboss.xml</descriptor>
+             <descriptor>assembly/war.xml</descriptor>
+           </descriptors>
+         </configuration>
+       </plugin>
+     </plugins>
+     </build>
+   </profile>
  </profiles>
 
  <properties>

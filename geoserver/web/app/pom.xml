@@ -30,10 +30,6 @@
       <groupId>org.geoserver.extension</groupId>
       <artifactId>charts</artifactId>
     </dependency>
-    <!--dependency>
-      <groupId>org.geoserver.extension</groupId>
-      <artifactId>control-flow</artifactId>
-    </dependency-->
     <dependency>
       <groupId>org.geoserver.community</groupId>
       <artifactId>proxy</artifactId>
@@ -187,6 +183,16 @@
            <groupId>org.opengeo.geoserver</groupId>
            <artifactId>analytics</artifactId>
            <version>${project.version}</version>
+           <artifactId>analytics</artifactId>
+         </dependency>
+       </dependencies> 
+     </profile>
+     <profile>
+       <id>ee</id>
+       <dependencies> 
+         <dependency>
+           <groupId>org.geoserver.extension</groupId>
+           <artifactId>control-flow</artifactId>
          </dependency>
        </dependencies> 
      </profile>
