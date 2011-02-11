@@ -3,6 +3,8 @@ r = Raphael("${container}");
 var gut = ${gut};
 var xo = 10;
 
+r.g.text(${width}/9, gut, "# of Requests").attr({"text-anchor":"left"});
+
 var fin = function() {
   this.tags = r.set();
   for (var i = 0, ii = this.y.length; i < ii; i++) {
