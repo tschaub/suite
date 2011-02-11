@@ -76,7 +76,7 @@ function getMapCount(config) {
     var resource = getResource(
         "http://" + config["suite_host"] + ":" + config["suite_port"] + "/geoexplorer/maps/"
     );
-    return resource && resource.ids.length;
+    return resource && resource.maps.length;
 }
 
 function collectStats(config) {    
