@@ -1,0 +1,29 @@
+#!/bin/sh
+
+set -x
+
+. /usr/share/debconf/confmodule
+
+case "$1" in
+  install)
+    ;;
+
+  upgrade)
+    if [ "$1" == "2.3.3" ]; then
+       pushd /usr/share/opengeo-suite-data/geoserver_data > /dev/null
+       cp wms.xml wms.xml.bak 
+       popd > /dev/null
+    fi
+    ;;
+
+  abort-upgrade)
+    ;;
+
+  *)
+    echo "preinst called with unknown argument '$1'" >&2
+    exit 1
+    ;;
+
+esac
+
+#DEBHELPER#
