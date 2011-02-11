@@ -62,46 +62,10 @@ function configuretomcat() {
 	chown tomcat6. /usr/share/opengeo-geoserver/*.war
 }
 
-function doconfigure() {
-db_input high opengeo_geoserver/proxyurl || true
-db_go
-
-db_input high opengeo_geoserver/username || true
-db_go
-
-db_input high opengeo_geoserver/password || true
-db_go
-db_get opengeo_geoserver/password
-
-if [ ! -z "$RET" ]; then 
-   password="$RET"
-
-   password_ok=0
-   while [ $password_ok -ne 1 ]; do
-     db_input high opengeo_geoserver/password_confirm || true
-     db_go
-     db_get opengeo_geoserver/password_confirm
-     if [ "$RET" == "$password" ]; then
-        password_ok=1
-     else
-        db_input high opengeo_geoserver/password_mismatch || true
-        db_go
-        db_get opengeo_geoserver/password_mismatch
-        password=$RET
-     fi
-   done
-   
-else
-   password="geoserver"
-fi
-}
-
-
 case "$1" in
     configure)
     
     echo "last configured version = $2"
-    doconfigure
 	db_get opengeo_geoserver/proxyurl
 	if [ "$RET" ]; then
         proxyurl="$RET"
