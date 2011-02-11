@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -x
 
@@ -9,12 +9,6 @@ case "$1" in
     ;;
 
   upgrade)
-    if dpkg --compare-versions "$2" eq "2.3.3"; then 
-       pushd /usr/share/opengeo-suite-data/geoserver_data > /dev/null
-       cp wms.xml wms.xml.bak 
-       popd > /dev/null
-    fi
-
     ;;
 
   abort-upgrade)
