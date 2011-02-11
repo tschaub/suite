@@ -29,28 +29,32 @@ createDiv("${container}", "_a");
 <#assign gut = 10>
 
 var r = Raphael("${container}_a");
+r.g.txtattr.font = "11px Arial, sans-serif";
 //var r = Raphael("${container}");
 
 var values = [];
 var colors = [];
 var legend = [];
 var detail = [];
+var hrefs = [];
 for (var prop in data) {
   var val = data[prop];
   values.push(val.value);
   colors.push(val.color);
   //legend.push(val.label + ": " + val.value + " (%%.%%)");
-  legend.push(val.label); 
+  legend.push(val.label);
+  hrefs.push('#'); 
 }
 
 var pie = r.g.piechart(${(width+gut)/2}, ${(height+gut)/2}, ${width/2}, values, {
   legend: legend, legendpos: "east", legendmark: "s", 
-  colors: colors
+  colors: colors, href: hrefs
 });
 
 var fin = function () {
     this.sector.stop();
     this.sector.scale(1.05, 1.05, this.cx, this.cy);
+    //console.log(this.sector);
     
     this.tags = r.set();
     
