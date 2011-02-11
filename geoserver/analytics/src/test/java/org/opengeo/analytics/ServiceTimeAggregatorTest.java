@@ -16,7 +16,8 @@ public class ServiceTimeAggregatorTest extends AnalyticsTestSupport {
         Date from = testData.toDate("2010-08-23T15:00:00");
         Date to = testData.toDate("2010-08-23T16:57:00");
         
-        ServiceTimeAggregator agg = new ServiceTimeAggregator(from, to, View.HOURLY);
+        ServiceTimeAggregator agg = 
+            new ServiceTimeAggregator(new Query().between(from, to), View.HOURLY);
         
         Query q = new Query().between(from, to);
         monitor.query(q, agg);

@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.geoserver.monitor.Query;
 import org.geoserver.monitor.RequestData;
 
 /**
@@ -16,20 +17,32 @@ import org.geoserver.monitor.RequestData;
  */
 public class ServiceTimeAggregator extends RequestDataAggregator {
 
+    Query query;
     View view;
     Set<String> services;
     Map<String,TimeAggregator> data = new HashMap();
     
-    public ServiceTimeAggregator(Date from, Date to, View view) {
-        this(from, to, view, new HashSet());
+    public ServiceTimeAggregator(Query query, View view) {
+        this(query, view, new HashSet());
     }
     
-    public ServiceTimeAggregator(Date from, Date to, View view, Set<String> services) {
-        super(from, to);
+    public ServiceTimeAggregator(Query query, View view, Set<String> services) {
+        super(query.getFromDate(), query.getToDate());
+        
+        this.query = query.clone();
+        this.query.getProperties().clear();
+        this.query.getAggregates().clear();
+        this.query.getGroupBy().clear();
+        this.query.properties("service", "startTime");
+        
         this.view = view;
         this.services = services;
     }
 
+    public Query getQuery() {
+        return query;
+    }
+    
     public void visit(RequestData req, Object... aggregates) {
         String service = req.getService();
         service = service != null ? service : Service.OTHER.name();

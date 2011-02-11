@@ -18,12 +18,10 @@ import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
-import org.apache.wicket.datetime.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.yui.calendar.DateTimeField;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.geoserver.monitor.Filter;
@@ -59,8 +57,6 @@ public class ActivityPanel extends Panel {
     }
 
     void initComponents() {
-        
-        
         if (query.getToDate() == null) {
             Date now = new Date();
             query.setToDate(now);    
@@ -156,9 +152,9 @@ public class ActivityPanel extends Panel {
     }
     
     void updateLineChart(AjaxRequestTarget target) {
-        ServiceTimeAggregator agg = new ServiceTimeAggregator(
-                query.getFromDate(), query.getToDate(), zoom, services.getSelectedAsString());
-        Analytics.monitor().query(query, agg);
+        ServiceTimeAggregator agg = 
+            new ServiceTimeAggregator(query, zoom, services.getSelectedAsString());
+        Analytics.monitor().query(agg.getQuery(), agg);
         
         LineChart chart = new LineChart();
         chart.setContainer(lineChartPanel.getMarkupId());
@@ -254,25 +250,6 @@ public class ActivityPanel extends Panel {
                 c.add(new SimpleAttributeModifier("class", clazz));
                 target.addComponent(c);
             }
-        }
-    }
-    
-    static class RequestDateTimeField extends DateTimeField {
-
-        public RequestDateTimeField(String id, IModel<Date> model) {
-            super(id, model);
-        }
-        
-        @Override
-        protected boolean use12HourFormat() {
-            return false;
-        }
-        
-        @Override
-        protected DateTextField newDateTextField(String id, PropertyModel dateFieldModel) {
-            DateTextField field = super.newDateTextField(id, dateFieldModel);
-            field.add(new SimpleAttributeModifier("size", "6"));
-            return field;
         }
     }
     
