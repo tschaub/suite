@@ -35,9 +35,11 @@ background-image: url(page_white_acrobat.png);
 #tableBody {
     padding: 0 4px;
 }
+#tableBody fieldset {
+  padding-bottom: 20px;
+}
 #tableBody fieldset.leftwise, #tableBody fieldset.rightwise {
     width: 49%;
-    padding-bottom: 20px;
 }
 #tableBody fieldset.leftwise td, #tableBody fieldset.rightwise td {
     max-width: 13em;
@@ -47,10 +49,10 @@ background-image: url(page_white_acrobat.png);
     width: 99%;
     clear: both;
 }
-
 .timeSpan input {
    border: 1px solid #999;
    padding: 2px;
+   white-space: nowrap;
 }
 
 .timeButtons {
@@ -60,10 +62,11 @@ background-image: url(page_white_acrobat.png);
 .chartHeader {
   padding: 4px 0;
   border-bottom: 1px solid #eee;
+  position: relative;
 }
-
+#timeButtons .refresh-link, 
 .chartHeader .refresh-link {
-  margin-left: 16px;
+  margin-left: 8px;
 }
 
 /* For SUMMARY page */
@@ -72,9 +75,6 @@ background-image: url(page_white_acrobat.png);
 #chartHeader #chartServices {
   padding: 4px 0;
   border-bottom: 1px solid #eee;
-}
-#timeButtons .refresh-link {
-  margin-left: 16px;
 }
 .button-hour {
   background-image: url(clock.png);
