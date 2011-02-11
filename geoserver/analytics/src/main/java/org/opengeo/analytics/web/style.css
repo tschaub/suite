@@ -71,10 +71,11 @@ background-image: url(page_white_acrobat.png);
 
 /* For SUMMARY page */
 #chartHeader {
-}
-#chartHeader #chartServices {
   padding: 4px 0;
   border-bottom: 1px solid #eee;
+}
+#chartHeader #chartServices {
+  margin-top: 4px;
 }
 .button-hour {
   background-image: url(clock.png);
