@@ -208,6 +208,7 @@
              <descriptor>assembly/war-geoserver-jboss.xml</descriptor>
              <descriptor>assembly/war.xml</descriptor>
            </descriptors>
+           <outputDirectory>${project.build.directory}/ee</outputDirectory>
          </configuration>
        </plugin>
      </plugins>
