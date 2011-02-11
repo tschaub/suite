@@ -30,7 +30,7 @@ else {
 }
 
 r.g.axis(${gut}+xo, ${height}-${gut}, ${width} - 2*${gut}, 0, ${xlen}, ${xsteps}, 0, ${labels});
-r.g.text(${width}/9, gut, "Average Request Time (ms)").attr({"text-anchor":"left"});
+r.g.text(${width}/9, gut, "Average Request Time (ms)").attr({"text-anchor":"start"});
 
 line = r.g.linechart(xo, ${height}, ${width}, ${height}, ${xdata}, ${thruData}, { 
   axis: "0 0 0 1", axisystep: 5, gutter: gut, smooth: true,  symbol: "o"
@@ -43,7 +43,7 @@ else {
   line.symbols.attr({r:0});
 }
 r.g.axis(${gut}+xo, 2*${height}-${gut}, ${width} - 2*${gut}, 0, ${xlen}, ${xsteps}, 0, ${labels});
-r.g.text(${width}/9, ${height}+gut, "Average Throughput (bytes)").attr({"text-anchor":"left"});
+r.g.text(${width}/9, ${height}+gut, "Average Throughput (bytes)").attr({"text-anchor":"start"});
 
 <#else>
   <#assign xlen = 0>
