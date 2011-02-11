@@ -31,13 +31,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.opengis.feature.Feature;
 import org.opengis.feature.type.FeatureType;
-import org.restlet.Restlet;
 import org.restlet.data.MediaType;
-import org.restlet.data.Method;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.restlet.ext.fileupload.RestletFileUpload;
+import org.restlet.resource.Resource;
 
 /**
  * REST end point to take care of uploading spatial data files through an HTML POST form; see
@@ -46,9 +45,9 @@ import org.restlet.ext.fileupload.RestletFileUpload;
  * @author groldan
  * 
  */
-public class ResourceUploader extends Restlet {
+public class ResourceUploaderResource extends Resource {
 
-    private static final Logger LOGGER = Logging.getLogger(ResourceUploader.class);
+    private static final Logger LOGGER = Logging.getLogger(ResourceUploaderResource.class);
 
     private Catalog catalog;
 
@@ -60,7 +59,7 @@ public class ResourceUploader extends Restlet {
      */
     private UploaderConfigPersister configPersister;
 
-    public ResourceUploader(Catalog catalog, UploadLifeCyleManager lifeCycleManager,
+    public ResourceUploaderResource(Catalog catalog, UploadLifeCyleManager lifeCycleManager,
             UploaderConfigPersister configPersister) {
         this.catalog = catalog;
         this.lifeCycleManager = lifeCycleManager;
@@ -68,24 +67,19 @@ public class ResourceUploader extends Restlet {
     }
 
     @Override
-    public void handle(Request request, Response response) {
-        super.init(request, response);
-
-        if (Method.POST.equals(request.getMethod())) {
-            handlePost(request, response);
-            return;
-        }
-
-        response.setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
+    public boolean allowPost() {
+        return true;
     }
 
     /**
-     * TODO: change errors format, {errors: [{id: "file", msg: "invalid"}], trace: "foo"} would work
      * 
      * @param request
      * @param response
      */
-    private void handlePost(Request request, Response response) {
+    @Override
+    public void handlePost() {
+        final Request request = getRequest();
+        final Response response = getResponse();
         final MediaType requestMediaType = request.getEntity().getMediaType();
         final boolean ignoreParameters = true;
         if (!MediaType.MULTIPART_FORM_DATA.equals(requestMediaType, ignoreParameters)) {
@@ -135,9 +129,12 @@ public class ResourceUploader extends Restlet {
         }
 
         String responseContents = result.toString();
-        response.setEntity(responseContents, MediaType.TEXT_HTML);
+        response.setEntity(responseContents, MediaType.TEXT_PLAIN);
     }
 
+    /**
+     * errors format, {errors: [{id: "file", msg: "invalid"}], trace: "foo"} would work
+     */
     private void addErrors(final JSONObject result, final String locator, final Exception ex,
             String uploadToken) {
 
@@ -148,7 +145,8 @@ public class ResourceUploader extends Restlet {
                 String message = cause.getMessage();
                 if (message != null && message.trim().length() != 0) {
                     JSONObject jsonErr = new JSONObject();
-                    jsonErr.put(locator, message);
+                    jsonErr.put("id", locator);
+                    jsonErr.put("msg", message);
                     result.append("errors", jsonErr);
                 }
                 cause = cause.getCause();

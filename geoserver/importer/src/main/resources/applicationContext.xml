@@ -13,14 +13,20 @@
   <!-- the import thread pool manager -->
   <bean id="importerPool" class="org.geoserver.importer.ImporterThreadManager" />
 
-  <bean id="restConfigUploadMapping" class="org.geoserver.rest.RESTMapping">
+  <bean id="restUploadMapping" class="org.geoserver.rest.RESTMapping">
     <property name="routes">
       <map>
         <entry>
           <key>
+            <value>/upload/{token}</value>
+          </key>
+          <value>uploadRecoveryFinder</value>
+        </entry>
+        <entry>
+          <key>
             <value>/upload</value>
           </key>
-          <value>resourceUploader</value>
+          <value>uploadRecoveryFinder</value>
         </entry>
       </map>
     </property>
@@ -35,7 +41,7 @@
     <constructor-arg ref="dataDirectory" />
   </bean>
 
-  <bean id="resourceUploader" class="org.geoserver.uploader.ResourceUploader">
+  <bean id="uploadRecoveryFinder" class="org.geoserver.uploader.UploadRecoveryFinder">
     <constructor-arg ref="catalog" />
     <constructor-arg ref="uploadsLifeCycleManager" />
     <constructor-arg ref="resourceUploaderConfigPersister" />

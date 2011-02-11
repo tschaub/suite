@@ -5,7 +5,7 @@ import org.geoserver.catalog.DataStoreInfo;
 import org.geoserver.catalog.WorkspaceInfo;
 
 /**
- * Configuration bean for the {@link ResourceUploader}
+ * Configuration bean for the {@link ResourceUploaderResource}
  * 
  * @author groldan
  * 

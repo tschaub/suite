@@ -46,7 +46,7 @@ public class ResourceUploaderTest extends GeoServerTestSupport {
 
     UploadLifeCyleManager lifeCycleManager;
 
-    ResourceUploader uploader;
+    ResourceUploaderResource uploader;
 
     final String archsitesTestResource = "shapes/archsites_epsg_prj.zip";
 
@@ -88,7 +88,7 @@ public class ResourceUploaderTest extends GeoServerTestSupport {
         dataDir = getDataDirectory();
         lifeCycleManager = new UploadLifeCyleManager(dataDir);
         configPersister = new UploaderConfigPersister(catalog, dataDir);
-        uploader = new ResourceUploader(catalog, lifeCycleManager, configPersister);
+        uploader = new ResourceUploaderResource(catalog, lifeCycleManager, configPersister);
         try {
             archSitesFileItem = fileItemMock(archsitesFileName, archsitesTestResource);
             bugSitesFileItem = fileItemMock(bugsitesFileName, bugsitesTestResource);
@@ -178,7 +178,7 @@ public class ResourceUploaderTest extends GeoServerTestSupport {
             uploader.uploadLayers(params);
             fail("Expected IPE");
         } catch (MissingInformationException e) {
-            assertEquals("crs", e.getLocator());
+            assertEquals("missingCRS", e.getLocator());
             String token = e.getToken();
             assertNotNull(token);
             File pendingUploadDir = lifeCycleManager.getPendingUploadDir(token);
