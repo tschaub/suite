@@ -1,6 +1,0 @@
-geoserver (2.0-1) unstable; urgency=low
-
-  * Initial build of the geoserver debian
-
- -- Ivan Willig <iwillig@opengeo.org>  Fri, 11 Sep 2009 15:28:28 -0400
-
