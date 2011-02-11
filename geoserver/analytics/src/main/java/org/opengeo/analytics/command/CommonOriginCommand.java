@@ -13,11 +13,13 @@ import org.opengeo.analytics.ResourceSummary;
 
 public class CommonOriginCommand extends AbstractCommand<List<RequestOriginSummary>> {
     
-    int n;
+    int offset;
+    int count;
     
-    public CommonOriginCommand(Query query, Monitor monitor, int n) {
+    public CommonOriginCommand(Query query, Monitor monitor, int offset, int count) {
         super(query, monitor);
-        this.n = n;
+        this.offset = offset;
+        this.count = count;
     }
     
     @Override
@@ -32,7 +34,14 @@ public class CommonOriginCommand extends AbstractCommand<List<RequestOriginSumma
         q.group("remoteAddr", "remoteHost", "remoteLat", "remoteLon", 
             "remoteCountry", "remoteCity");
         q.sort("count()", SortOrder.DESC);
-        q.page(0l, (long)n);
+        
+        if (offset > -1) {
+            q.setOffset((long) offset);
+        }
+        if (count > -1) {
+            q.setCount((long)count);
+        }
+        //q.page(0l, (long)n);
         
         return q;
     }
