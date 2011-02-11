@@ -9,7 +9,8 @@ case "$1" in
     ;;
 
   upgrade)
-    if [ "$1" == "2.3.3" ]; then
+    echo "$2"
+    if [ "$2" == "2.3.3" ]; then
        pushd /usr/share/opengeo-suite-data/geoserver_data > /dev/null
        cp wms.xml wms.xml.bak 
        popd > /dev/null
