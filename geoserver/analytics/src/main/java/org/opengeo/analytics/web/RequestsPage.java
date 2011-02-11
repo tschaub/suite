@@ -16,7 +16,10 @@ import org.geoserver.monitor.web.MonitorBasePage;
 public class RequestsPage extends MonitorBasePage {
 
     Query query;
+    String csvHref, excelHref;
+    
     RequestDataTablePanel requestTable;
+    ExternalLink csvLink, excelLink; 
     
     public RequestsPage(Query query) {
         this(new RequestDataProvider(query));
@@ -43,6 +46,10 @@ public class RequestsPage extends MonitorBasePage {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 target.addComponent(requestTable);
+                
+                updateDownloadLinks();
+                target.addComponent(excelLink);
+                target.addComponent(csvLink);
             }
         });
         
@@ -53,13 +60,15 @@ public class RequestsPage extends MonitorBasePage {
         requestTable.setFilterable(false);
         add(requestTable);
         
-        ExternalLink csvLink = new ExternalLink("csv", 
-                "../rest/monitor/requests.csv" + toQueryString(provider.getQuery()));;
-        add(csvLink);
-        
-        ExternalLink excelLink = new ExternalLink("excel", 
-                "../rest/monitor/requests.xls" + toQueryString(provider.getQuery()));;
-        add(excelLink);
-      
+        updateDownloadLinks();
+        add(csvLink = new ExternalLink("csv", new PropertyModel(this, "csvHref")));
+        csvLink.setOutputMarkupId(true);
+        add(excelLink = new ExternalLink("excel", new PropertyModel(this, "excelHref")));
+        excelLink.setOutputMarkupId(true);
+    }
+    
+    void updateDownloadLinks() {
+        csvHref = "../rest/monitor/requests.csv" + toQueryString(query);
+        excelHref = "../rest/monitor/requests.xls" + toQueryString(query);
     }
 }
