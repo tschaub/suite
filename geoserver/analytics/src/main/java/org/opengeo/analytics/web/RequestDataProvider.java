@@ -43,6 +43,10 @@ public class RequestDataProvider extends GeoServerDataProvider<RequestData> {
         new BeanProperty<RequestData>("endTime", "endTime");
     public static Property<RequestData> TOTAL_TIME = 
         new BeanProperty<RequestData>("totalTime", "totalTime");
+    public static Property<RequestData> RESPONSE_LENGTH = 
+        new BeanProperty<RequestData>("responseLength", "responseLength");
+    public static Property<RequestData> RESPONSE_CONTENT_TYPE = 
+        new BeanProperty<RequestData>("responseContentType", "responseContentType");
     public static Property<RequestData> ERROR = 
         new BeanProperty<RequestData>("error", "errorMessage");
     
