@@ -1,4 +1,4 @@
-var r = Raphael("${container}");
+r = Raphael("${container}");
 <#assign gut = 20>
 var gut = ${gut};
 var xo = 10;
@@ -19,7 +19,7 @@ var fout = function () {
 
 <#if (xlen > 0)>
 var line = r.g.linechart(xo, 0, ${width}, ${height}, ${xdata}, ${ydata}, { 
-  axis: "0 0 0 1", gutter: gut, smooth: true,  symbol: "o", 
+  axis: "0 0 0 1", axisystep: 5, gutter: gut, smooth: true,  symbol: "o", 
   colors: ${colors}
 });
 if (${xlen} < 25) {
@@ -46,5 +46,6 @@ r.g.axis(${gut}+10, ${height}-${gut}, ${width} - 2*${gut}, 0, ${xlen}, ${xsteps}
   <#assign x = gut+10 + dx*break[0] + dx*break[1]/break[2]>
   <#assign y = 270>
 
-r.text(${x}, ${y}, "${break[3]}");
+r.text(${x}, ${y}, "${break[3]}").attr({"text-anchor":"left", "opacity": "0.75"});
+//r.path("M${x} 280L${x} " + gut).attr({"stroke-opacity": "0.25"});
 </#list>
