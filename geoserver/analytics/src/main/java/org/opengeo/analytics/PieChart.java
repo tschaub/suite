@@ -54,7 +54,14 @@ public class PieChart extends Chart {
             SimpleHash hash = new SimpleHash();
             hash.put("value", sum.getCount());
             
-            Service s = Service.valueOf(sum.getService());
+            Service s;
+            try {
+                s = Service.valueOf(sum.getService());
+            }
+            catch(IllegalArgumentException e) {
+                s = Service.OTHER;
+            }
+            
             hash.put("label", s.displayName());
             hash.put("color", s.color());
             
