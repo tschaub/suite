@@ -25,12 +25,7 @@ function randpass() {
     echo
 }
 
-function system_primary_ip {
-    # returns the primary IP assigned to eth0
-    echo $(ifconfig eth0 | awk -F: '/inet addr:/ {print $2}' | awk '{ print $1 }')
-}
-
-function configuretomcat() {
+function configure_tomcat() {
 
 	# configure tomcat
 	#
@@ -43,14 +38,17 @@ function configuretomcat() {
 	# Ubuntu versions earlier than 9.10 have this setting turned on, it breaks geoserver.
 	sed -i -e 's/TOMCAT6_SECURITY=yes/TOMCAT6_SECURITY=no/g' /etc/default/tomcat6
 
-	# stop the tomcat process to prevent it from automatically unpacking the war files
-	#
-	invoke-rc.d tomcat6 stop
 
-	# set file permissions and copy the war files in
-	#
+}
+
+function unpack_war() {
 	cp /usr/share/opengeo-geoserver/geoserver.war /var/lib/tomcat6/webapps
 	unzip  -o /var/lib/tomcat6/webapps/geoserver.war  -d /var/lib/tomcat6/webapps/geoserver  > /dev/null 2>&1
+	chown tomcat6. /usr/share/opengeo-geoserver/*.war
+}
+
+function update_proxyurl() {
+    local proxyurl=$1
     if [ ! -z "$proxyurl" ]; then
       GLOBAL_XML=/usr/share/opengeo-suite-data/geoserver_data/global.xml
       if [ -e $GLOBAL_XML ]; then
@@ -59,44 +57,58 @@ function configuretomcat() {
   <proxyBaseUrl>$proxyurl<\/proxyBaseUrl>" $GLOBAL_XML
       fi
     fi
-	chown tomcat6. /usr/share/opengeo-geoserver/*.war
 }
 
-case "$1" in
-    configure)
-    
-    echo "last configured version = $2"
-	db_get opengeo_geoserver/proxyurl
-	if [ "$RET" ]; then
-        proxyurl="$RET"
-    else
-		proxyurl=""
-	fi
-
-    db_get opengeo_geoserver/username
-    if [ "$RET" ]; then
-        username="$RET"
-    else
-        username="admin"
-    fi
-
-    db_get opengeo_geoserver/password_confirm
-    password="$RET"
-    if [ -z "$password" ]; then
-        password="geoserver"
-    fi
-
-	configuretomcat
-	invoke-rc.d tomcat6 restart
-	cat <<- EOF > /usr/share/opengeo-suite-data/geoserver_data/security/users.properties
+function update_userpass() {
+    local username=$1
+    local password=$2
+    USERS_PROPS=/usr/share/opengeo-suite-data/geoserver_data/security/users.properties
+	cat <<- EOF > $USERS_PROPS
 	$username=$password,ROLE_ADMINISTRATOR
 	# These are sample users you may uncomment if you want to test locking down wfs (see service.properties)
 	#wfst=wfst,ROLE_WFS_READ,ROLE_WFS_WRITE
 	#wfs=wfs,ROLE_WFS_READ
 	EOF
+    chown tomcat6. $USERS_PROPS
+}
 
-	chown tomcat6. /usr/share/opengeo-suite-data/geoserver_data/security/users.properties
+case "$1" in
+    configure)
+    
+    # only update configuration if the package has not yet been configured
+    if [ -z "$2" ]; then
+      db_get opengeo_geoserver/proxyurl
+      if [ "$RET" ]; then
+         proxyurl="$RET"
+      else
+         proxyurl=""
+      fi
 
+      db_get opengeo_geoserver/username
+      if [ "$RET" ]; then
+        username="$RET"
+      else
+        username="admin"
+      fi
+
+      db_get opengeo_geoserver/password_confirm
+      password="$RET"
+      if [ -z "$password" ]; then
+        password="geoserver"
+      fi
+
+	  # stop tomcat to prevent it from automatically unpacking the war files
+	  invoke-rc.d tomcat6 stop
+
+      configure_tomcat
+      unpack_war
+      update_proxy $proxy_url
+      update_userpass $username $password
+
+      # TODO: check if tomcat was actually running before we installed
+	  invoke-rc.d tomcat6 start
+
+    fi
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
