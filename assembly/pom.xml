@@ -16,6 +16,18 @@
  <packaging>jar</packaging>
  <name>OpenGeo Suite Assembly</name>
 
+ <dependencies>
+   <dependency>
+     <groupId>org.opengeo.geoserver</groupId>
+     <artifactId>analytics</artifactId>
+     <version>${project.version}</version>
+   </dependency>
+   <dependency>
+     <groupId>org.geoserver.extension</groupId>
+     <artifactId>control-flow</artifactId>
+     <version>${gs.version}</version>
+   </dependency>
+ </dependencies>
  <build>
    <plugins>
      <plugin>
@@ -34,6 +46,19 @@
             </goals>
           </execution>
         </executions>
+     </plugin>
+     <plugin>
+      <artifactId>maven-dependency-plugin</artifactId>
+      <configuration>
+      </configuration>
+      <executions>
+       <execution>
+        <phase>install</phase>
+        <goals>
+         <goal>copy-dependencies</goal>
+        </goals>
+       </execution>
+      </executions>
      </plugin>
    </plugins>
  </build>

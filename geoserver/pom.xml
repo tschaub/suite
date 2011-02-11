@@ -398,9 +398,6 @@
   </profiles>
   
  <properties>
-  <gs.version>2.1-SNAPSHOT</gs.version>
-  <gt.version>2.7-SNAPSHOT</gt.version>
-  <gwc.version>1.2-SNAPSHOT</gwc.version>
   <java.awt.headless>true</java.awt.headless>
   <test.maxHeapSize>512M</test.maxHeapSize>
   <sde.version>9.2</sde.version>

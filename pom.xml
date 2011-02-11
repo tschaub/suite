@@ -207,6 +207,8 @@
              <descriptor>assembly/war-geoserver.xml</descriptor>
              <descriptor>assembly/war-geoserver-jboss.xml</descriptor>
              <descriptor>assembly/war.xml</descriptor>
+             <descriptor>assembly/control-flow.xml</descriptor>
+             <descriptor>assembly/analytics.xml</descriptor>
            </descriptors>
            <outputDirectory>${project.build.directory}/ee</outputDirectory>
          </configuration>
@@ -217,6 +219,9 @@
  </profiles>
 
  <properties>
+   <gs.version>2.1-SNAPSHOT</gs.version>
+   <gt.version>2.7-SNAPSHOT</gt.version>
+   <gwc.version>1.2-SNAPSHOT</gwc.version>
    <jetty.version>6.1.8</jetty.version>
    <ant.version>1.6.5</ant.version>
  </properties>
