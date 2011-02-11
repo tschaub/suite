@@ -74,7 +74,7 @@ public class SummaryPanel extends Panel {
         form.add(new Link("recentFailedViewMore") {
             @Override
             public void onClick() {
-                setResponsePage(new RequestsPage(new RecentFailedRequestProvider(query, -1)));
+                setResponsePage(new RequestsPage(new RecentFailedRequestProvider(query, -1), "Failed Requests"));
             }
         });
         
