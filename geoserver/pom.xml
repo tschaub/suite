@@ -310,6 +310,7 @@
  <modules>
   <module>extension</module>
   <module>importer</module>
+  <module>analytics</module>
   <module>web</module>
   <module>test</module>
  </modules>
@@ -387,12 +388,6 @@
         <version>3.4.4</version>
       </dependency>
     </dependencies>
-   </profile>
-   <profile>
-     <id>analytics</id>
-     <modules>
-       <module>analytics</module>
-     </modules>
    </profile>
    <profile>
      <id>externals</id>
