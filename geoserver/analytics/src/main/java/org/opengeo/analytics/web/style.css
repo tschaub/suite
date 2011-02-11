@@ -48,15 +48,17 @@ background-image: url(page_white_acrobat.png);
     clear: both;
 }
 
+.timeSpan input {
+   border: 1px solid #999;
+   padding: 2px;
+}
+
+.timeButtons {
+  padding-left: 8px;
+}
+
 /* For SUMMARY page */
 #chartHeader {
-}
-#chartHeader #timeSpan input {
-  border: 1px solid #999;
-  padding: 2px;
-}
-#chartHeader #timeButtons {
-  padding-left: 8px;
 }
 #chartHeader #chartServices {
   padding: 4px 0;

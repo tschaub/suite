@@ -37,10 +37,8 @@ public class RequestsPage extends MonitorBasePage {
         Form form = new Form("form");
         add(form);
         
-        //form.add(new TimeSpanPanel("timeSpan", new PropertyModel<Date>(this, "query.fromDate"), 
-        //    new PropertyModel<Date>(this, "query.toDate")));
-        form.add(new RequestDateTimeField("from", new PropertyModel<Date>(this, "query.fromDate")));
-        form.add(new RequestDateTimeField("to", new PropertyModel<Date>(this, "query.toDate")));
+        form.add(new TimeSpanPanel("timeSpan", new PropertyModel<Date>(this, "query.fromDate"), 
+            new PropertyModel<Date>(this, "query.toDate")));
         form.add(new AjaxButton("refresh") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {

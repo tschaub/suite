@@ -42,7 +42,7 @@ public class ActivityPanel extends Panel {
     View zoom = View.DAILY;
     ServiceSelection services = new ServiceSelection();
     
-    DateTimeField fromDateField, toDateField;
+    TimeSpanWithZoomPanel timeSpanPanel;
     ChartPanel lineChartPanel, pieChartPanel;
     
     public ActivityPanel(String id, Query query) {
@@ -84,11 +84,15 @@ public class ActivityPanel extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {}
         });
-        form.add(fromDateField = new RequestDateTimeField("from", new PropertyModel<Date>(this,"query.fromDate")));
-        fromDateField.setOutputMarkupId(true);
         
-        form.add(toDateField = new RequestDateTimeField("to", new PropertyModel<Date>(this,"query.toDate")));
-        toDateField.setOutputMarkupId(true);
+        timeSpanPanel = new TimeSpanWithZoomPanel("timeSpan", new PropertyModel<Date>(this,"query.fromDate"), 
+                new PropertyModel<Date>(this,"query.toDate")) {
+            @Override
+            protected void onZoomChange(View view, AjaxRequestTarget target) {
+                handleZoomClick(view, target);
+            }
+        };
+        form.add(timeSpanPanel);
         
         form.add(new AjaxButton("refresh", form) {
             @Override
@@ -97,38 +101,6 @@ public class ActivityPanel extends Panel {
             }
         });
         
-        List<AjaxLink> zoomLinks = new ArrayList();
-        zoomLinks.add(new AjaxLink<View>("hour", new Model<View>(View.HOURLY)) {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-               handleZoomClick(getModelObject(), target);
-            } 
-        });
-        zoomLinks.add(new AjaxLink<View>("day", new Model<View>(View.DAILY)) {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                handleZoomClick(getModelObject(), target);
-            }
-        });
-        zoomLinks.add(new AjaxLink<View>("week", new Model<View>(View.WEEKLY)) {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                handleZoomClick(getModelObject(), target);
-            }
-        });
-        zoomLinks.add(new AjaxLink<View>("month", new Model<View>(View.MONTHLY)) {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                handleZoomClick(getModelObject(), target);
-            }
-        });
-        for (AjaxLink link : zoomLinks) {
-            form.add(link);
-        }
-        setMutuallyExclusive(zoomLinks, 
-            Arrays.asList("button button-hour", "button button-day", "button button-week", 
-                "button button-month"), zoomLinks.get(1));
-
         form.add(lineChartPanel = new ChartPanel("lineChart"));
         form.add(pieChartPanel = new ChartPanel("pieChart"));
     }
@@ -141,7 +113,7 @@ public class ActivityPanel extends Panel {
         
         //adjust the time period for the zoom
         query.setFromDate(zoom.minimumRange(query.getFromDate(), query.getToDate()));
-        target.addComponent(fromDateField);
+        target.addComponent(timeSpanPanel);
         
         //update the charts
         updateLineChart(target);
@@ -210,47 +182,6 @@ public class ActivityPanel extends Panel {
         
         pieChartPanel.setChart(chart);
         target.addComponent(pieChartPanel);
-    }
-    
-    void setMutuallyExclusive(List<AjaxLink> links, List<String> classes, AjaxLink initial) {
-        for (int i = 0; i < links.size(); i++) {
-            AjaxLink link = links.get(i);
-            link.add(new MutuallyExclusingBehaviour("onclick", link, links, classes));
-        }
-        initial.add(new AttributeAppender("class", new Model("active"), " "));
-    }
-    
-    static class MutuallyExclusingBehaviour extends AjaxEventBehavior {
-
-        List<AjaxLink> group;
-        AjaxLink self;
-        List<String> classes;
-        
-        public MutuallyExclusingBehaviour(
-            String event, AjaxLink self, List<AjaxLink> group, List<String> classes) {
-            
-            super(event);
-            this.self = self;
-            this.group = group;
-            this.classes = classes;
-        }
-
-        @Override
-        protected void onEvent(AjaxRequestTarget target) {
-            self.onClick(target);
-            
-            self.add(new AttributeAppender("class", new Model("active"), " "));
-            target.addComponent(self);
-        
-            for (int i = 0; i < group.size(); i++) {
-                Component c = group.get(i);
-                if (c == self) continue;
-                
-                String clazz = classes.get(i);
-                c.add(new SimpleAttributeModifier("class", clazz));
-                target.addComponent(c);
-            }
-        }
     }
     
     /**

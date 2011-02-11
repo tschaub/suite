@@ -10,10 +10,7 @@
  <wicket:extend>
      <h1 wicket:id="title"></h1>
      <form wicket:id="form">
-        <div id="timeSpan" class="leftwise">
-           Showing activity from <span wicket:id="from"></span> until <span wicket:id="to"></span>
-        </div id="timeSpan">
-        <!--div id="timeSpan" wicket:id="timeSpan" class="leftwise"></div-->
+        <div wicket:id="timeSpan" class="leftwise"></div>
         <a href="#" wicket:id="refresh" class="refresh-link rightwise">Refresh</a>
      </form>
      <div wicket:id="table"></div>

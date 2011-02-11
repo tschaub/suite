@@ -7,15 +7,7 @@
     <wicket:panel>
     <form wicket:id="form" class="selfclear">
      <div id="chartHeader">
-       <div id="timeSpan">
-         Show activity from <span wicket:id="from" id="from"></span> until <span wicket:id="to" id="end" ></span> as 
-         <span id="timeButtons">
-           <a href="#" wicket:id="hour" title="Hourly" class="button button-hour"></a>
-           <a href="#" wicket:id="day" title="Daily" class="button button-day"></a>
-           <a href="#" wicket:id="week" title="Weekly" class="button button-week"></a>
-           <a href="#" wicket:id="month" title="Monthly" class="button button-month"></a>
-          </span>
-       </div>
+       <div wicket:id="timeSpan"></div>
        <div id="chartServices" class="selfclear">
          for the following services:
          <input wicket:id="wms" type="checkbox"</input>WMS
