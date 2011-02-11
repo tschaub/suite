@@ -193,6 +193,11 @@
            <groupId>org.geoserver.extension</groupId>
            <artifactId>control-flow</artifactId>
          </dependency>
+         <dependency>
+           <groupId>org.opengeo.geoserver</groupId>
+           <artifactId>analytics</artifactId>
+           <version>${project.version}</version>
+         </dependency>
        </dependencies> 
      </profile>
      <profile>
