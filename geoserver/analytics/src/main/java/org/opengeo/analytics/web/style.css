@@ -57,6 +57,15 @@ background-image: url(page_white_acrobat.png);
   padding-left: 8px;
 }
 
+.chartHeader {
+  padding: 4px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.chartHeader .refresh-link {
+  margin-left: 16px;
+}
+
 /* For SUMMARY page */
 #chartHeader {
 }

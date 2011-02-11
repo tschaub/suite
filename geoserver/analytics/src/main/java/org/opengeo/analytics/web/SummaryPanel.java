@@ -34,10 +34,9 @@ public class SummaryPanel extends Panel {
     GeoServerTablePanel<RequestData> recentRequestTable, recentFailedRequestTable;
     CommonResourceTable commonResourceTable;
     
-    public SummaryPanel(String id, Monitor monitor) {
+    public SummaryPanel(String id, Query query) {
         super(id);
-        
-        query = new Query();
+        this.query = query;
         initComponents();
     }
 
