@@ -178,7 +178,7 @@ public class ResourceUploaderTest extends GeoServerTestSupport {
             uploader.uploadLayers(params);
             fail("Expected IPE");
         } catch (MissingInformationException e) {
-            assertEquals("missingCRS", e.getLocator());
+            assertEquals("crs", e.getLocator());
             String token = e.getToken();
             assertNotNull(token);
             File pendingUploadDir = lifeCycleManager.getPendingUploadDir(token);

@@ -65,7 +65,7 @@ class FeatureTypeUploader extends LayerUploader {
         final File prjFile = new File(file.getParentFile(), FilenameUtils.getBaseName(file
                 .getName()) + ".prj");
         if (!prjFile.exists()) {
-            throw new MissingInformationException("missingCRS", "Uploaded file " + file.getName()
+            throw new MissingInformationException("crs", "Uploaded file " + file.getName()
                     + " does not contain Coordinate Reference System information (.prj file)");
         }
         /*
