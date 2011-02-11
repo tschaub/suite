@@ -18,7 +18,7 @@ Glossary
      A JavaScript toolkit for creating rich web mapping applications.  GeoExt is built using OpenLayers and ExtJS.  Learn more at `geoext.org <http://geoext.org>`_.
 
    GXP
-     A repository for high level application components useful for assembling applications for viewing, editing, styling, and configuring data with GeoServer. GXP components are built with GeoExt.  `Learn more about GXP <http://projects.opengeo.org/gxp>`_.
+     A repository for high level application components useful for assembling applications for viewing, editing, styling, and configuring data with GeoServer. GXP components are built with GeoExt.
 
    OGC
      The `Open Geospatial Consortium <http://www.opengeospatial.org/>`_ (OGC) is a standards organization that develops specifications for geospatial services.
@@ -31,3 +31,6 @@ Glossary
 
    WMS-C
      The `Web Map Service - Caching <http://wiki.osgeo.org/wiki/WMS_Tile_Caching>`_ (WMS-C) proposal is a WMS optimized for the delivery of saved/cached images. 
+
+   WFS-T
+     The `Web Feature Service - Transactional <http://www.opengeospatial.org/standards/wfs>`_ (WFS-T) is an OGC standard that describes a method for the editing of geographic features.
