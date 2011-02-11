@@ -96,6 +96,10 @@ public class RequestPage extends MonitorBasePage {
             panels.add(BodyPanel.class);
         }
         
+        if (request.getResponseLength() > 0) {
+            panels.add(ResponsePanel.class);
+        }
+        
         if (request.getError() != null) {
             panels.add(ErrorPanel.class);
         }
@@ -273,6 +277,9 @@ public class RequestPage extends MonitorBasePage {
     static class ResponsePanel extends RequestPanel {
         public ResponsePanel(String id, RequestData data) {
             super(id);
+            
+            add(new Label("content", new PropertyModel<RequestData>(data, "responseContentType")));
+            add(new Label("length", new PropertyModel<RequestData>(data, "responseLength")));
         }
         
         @Override

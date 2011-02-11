@@ -77,7 +77,8 @@ public class PerformancePanel extends Panel {
         chart.setWidth(550);
         chart.setHeight(300);
         chart.setZoom(zoom);
-        chart.setData(agg.getData());
+        chart.setTimeData(agg.getAverageTimeData());
+        chart.setThroughputData(agg.getAverageThroughputData());
         
         chartPanel.setChart(chart);
         target.addComponent(chartPanel);

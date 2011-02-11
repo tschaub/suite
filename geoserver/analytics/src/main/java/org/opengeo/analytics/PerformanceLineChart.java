@@ -15,9 +15,8 @@ public class PerformanceLineChart extends Chart {
     protected int steps;
     protected View zoom;
     protected Date from, to;
-    double[] data;
-    
-    
+    double[] timeData, thruData;
+
     public void setFrom(Date from) {
         this.from = from;
     }
@@ -50,31 +49,36 @@ public class PerformanceLineChart extends Chart {
         return steps;
     }
     
-    public void setData(double[] data) {
-        this.data = data;
+    public void setTimeData(double[] data) {
+        this.timeData = data;
     }
     
-    public double[] getData() {
-        return data;
+    public void setThroughputData(double[] data) {
+        this.thruData = data;
     }
     
     @Override
     public void render(Writer writer) throws IOException, TemplateException {
         //build up the xy data
         StringBuilder x = new StringBuilder();
-        StringBuilder y = new StringBuilder();
+        StringBuilder time = new StringBuilder();
+        StringBuilder thru = new StringBuilder();
         
-        x.append("["); y.append("[");
-        for (int i = 0; i < data.length; i++) {
+        x.append("["); time.append("["); thru.append("[");
+        for (int i = 0; i < timeData.length; i++) {
             x.append(i).append(",");
-            y.append(data[i]).append(",");
+            time.append(timeData[i]).append(",");
+            thru.append(thruData[i]).append(",");
         }
         
         x.setLength(x.length()-1);
         x.append("]");
         
-        y.setLength(y.length()-1);
-        y.append("]");
+        time.setLength(time.length()-1);
+        time.append("]");
+        
+        thru.setLength(thru.length()-1);
+        thru.append("]");
         
         //build the labels
         List<Date> dates = zoom.period().divide(from, to, steps);
@@ -120,8 +124,9 @@ public class PerformanceLineChart extends Chart {
         
         SimpleHash model = createTemplate();
         model.put("xdata", x.toString());
-        model.put("xlen",  data.length != 0 ? data.length : -1 );
-        model.put("ydata", y.toString());
+        model.put("xlen",  timeData.length != 0 ? timeData.length : -1 );
+        model.put("timeData", time.toString());
+        model.put("thruData", thru.toString());
         model.put("labels", labels.toString());
         model.put("xsteps", steps);
         model.put("breaks", breaks);

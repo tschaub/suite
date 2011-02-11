@@ -1,9 +1,8 @@
 r = Raphael("${container}");
 <#assign gut = 20>
 var gut = ${gut};
-var xo = 10;
+var xo = 25;
 
-r.g.text(${width}/9, gut, "Average Request Time (ms)").attr({"text-anchor":"left"});
 var fin = function() {
   this.tags = r.set();
   for (var i = 0, ii = this.y.length; i < ii; i++) {
@@ -19,7 +18,7 @@ var fout = function () {
 }
 
 <#if (xlen > 0)>
-var line = r.g.linechart(xo, 0, ${width}, ${height}, ${xdata}, ${ydata}, { 
+var line = r.g.linechart(xo, 0, ${width}, ${height}, ${xdata}, ${timeData}, { 
   axis: "0 0 0 1", axisystep: 5, gutter: gut, smooth: true,  symbol: "o"
 });
 if (${xlen} < 25) {
@@ -29,15 +28,31 @@ if (${xlen} < 25) {
 else {
   line.symbols.attr({r:0});
 }
+
+r.g.axis(${gut}+xo, ${height}-${gut}, ${width} - 2*${gut}, 0, ${xlen}, ${xsteps}, 0, ${labels});
+r.g.text(${width}/9, gut, "Average Request Time (ms)").attr({"text-anchor":"left"});
+
+line = r.g.linechart(xo, ${height}, ${width}, ${height}, ${xdata}, ${thruData}, { 
+  axis: "0 0 0 1", axisystep: 5, gutter: gut, smooth: true,  symbol: "o"
+});
+if (${xlen} < 25) {
+  line.hoverColumn(fin, fout);
+  line.symbols.attr({r:3});
+}
+else {
+  line.symbols.attr({r:0});
+}
+r.g.axis(${gut}+xo, 2*${height}-${gut}, ${width} - 2*${gut}, 0, ${xlen}, ${xsteps}, 0, ${labels});
+r.g.text(${width}/9, ${height}+gut, "Average Throughput (bytes)").attr({"text-anchor":"left"});
+
 <#else>
   <#assign xlen = 0>
-r.g.linechart(xo, 0, ${width}, ${height}, [0], [0], { axis: "0 0 0 1", gutter: gut, smooth: true});
+r.g.linechart(xo, 0, ${width}, ${height}, [0], [0], { axis: "0 0 1 1", gutter: gut, smooth: true});
 
 r.g.txtattr.font = "12px 'Fontin Sans', Fontin-Sans, sans-serif";
 r.g.text(${width}/2, ${height}/2, "No data");
 </#if>
 
-r.g.axis(${gut}+10, ${height}-${gut}, ${width} - 2*${gut}, 0, ${xlen}, ${xsteps}, 0, ${labels});
 
 <#assign w = width - 2*gut>
 <#assign dx = w / xsteps>
