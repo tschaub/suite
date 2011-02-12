@@ -37,14 +37,6 @@ function configure_tomcat() {
 
 	# Ubuntu versions earlier than 9.10 have this setting turned on, it breaks geoserver.
 	sed -i -e 's/TOMCAT6_SECURITY=yes/TOMCAT6_SECURITY=no/g' /etc/default/tomcat6
-
-
-}
-
-function unpack_war() {
-	cp /usr/share/opengeo-geoserver/geoserver.war /var/lib/tomcat6/webapps
-	unzip  -o /var/lib/tomcat6/webapps/geoserver.war  -d /var/lib/tomcat6/webapps/geoserver  > /dev/null 2>&1
-	chown tomcat6. /usr/share/opengeo-geoserver/*.war
 }
 
 function update_proxyurl() {
@@ -75,6 +67,9 @@ function update_userpass() {
 case "$1" in
     configure)
     
+	# stop tomcat to prevent it from automatically unpacking the war files
+	invoke-rc.d tomcat6 stop
+
     # only update configuration if the package has not yet been configured
     if [ -z "$2" ]; then
       db_get opengeo_geoserver/proxyurl
@@ -97,18 +92,13 @@ case "$1" in
         password="geoserver"
       fi
 
-	  # stop tomcat to prevent it from automatically unpacking the war files
-	  invoke-rc.d tomcat6 stop
-
       configure_tomcat
-      unpack_war
       update_proxy $proxy_url
       update_userpass $username $password
-
-      # TODO: check if tomcat was actually running before we installed
-	  invoke-rc.d tomcat6 start
-
     fi
+
+    # TODO: check if tomcat was actually running before we installed
+    invoke-rc.d tomcat6 start
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
