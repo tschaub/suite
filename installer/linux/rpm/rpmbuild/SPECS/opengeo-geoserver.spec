@@ -23,56 +23,78 @@ OpenGeo Suite.
 
 %prep
         
-	pushd $RPM_SOURCE_DIR/opengeo-geoserver
-	unzip geoserver.war -d geoserver
-        cd geoserver
+   pushd $RPM_SOURCE_DIR/opengeo-geoserver
+   unzip geoserver.war -d geoserver
+   cd geoserver
 %patch -p1
-	zip -r ../geoserver.zip *
-	cd ..
-        rm -rf geoserver
-	mv geoserver.zip geoserver.war
-	popd
+   zip -r ../geoserver.zip *
+   cd ..
+   rm -rf geoserver
+   mv geoserver.zip geoserver.war
+   popd
 
 %install
-        rm -rf $RPM_BUILD_ROOT
-        mkdir -p $RPM_BUILD_ROOT/var/lib/tomcat5/webapps/
-        #unzip $RPM_SOURCE_DIR/opengeo-geoserver/geoserver.war -d $RPM_BUILD_ROOT/geoserver
-        #cp $RPM_SOURCE_DIR/opengeo-geoserver/debian/web.xml $RPM_BUILD_ROOT/geoserver/WEB-INF/web.xml
-        #( cd  $RPM_BUILD_ROOT/geoserver ; zip ../geoserver.zip * -r ; cd ..)
-        cp -rp  $RPM_SOURCE_DIR/opengeo-geoserver/geoserver.war  $RPM_BUILD_ROOT/var/lib/tomcat5/webapps
-        #rm -rf  $RPM_BUILD_ROOT/geoserver  $RPM_BUILD_ROOT/geoserver.zip
-        mkdir -p $RPM_BUILD_ROOT/usr/share/opengeo-suite
-		cp -rp $RPM_SOURCE_DIR/scripts/geoserver-setup.sh $RPM_BUILD_ROOT/usr/share/opengeo-suite/.
+   rm -rf $RPM_BUILD_ROOT
+   mkdir -p $RPM_BUILD_ROOT/var/lib/tomcat5/webapps/
+   cp -rp  $RPM_SOURCE_DIR/opengeo-geoserver/geoserver.war  $RPM_BUILD_ROOT/var/lib/tomcat5/webapps
+   mkdir -p $RPM_BUILD_ROOT/usr/share/opengeo-suite
+   cp -rp $RPM_SOURCE_DIR/scripts/geoserver-setup.sh $RPM_BUILD_ROOT/usr/share/opengeo-suite/.
 
 %post
-if [ ! -e /var/lib/tomcat5/tomcat5.original-settings ]; then
-
-cp  /etc/sysconfig/tomcat5 /var/lib/tomcat5/tomcat5.original-settings
-cat << EOF >> /etc/sysconfig/tomcat5
+   if [ ! -e /var/lib/tomcat5/tomcat5.original-settings ]; then
+      cp  /etc/sysconfig/tomcat5 /var/lib/tomcat5/tomcat5.original-settings
+      cat << EOF >> /etc/sysconfig/tomcat5
 JAVA_OPTS="-Djava.awt.headless=true -Xms256m -Xmx768m -Xrs -XX:PerfDataSamplingInterval=500 -XX:MaxPermSize=128m"
 GEOEXPLORER_DATA="/usr/share/opengeo-suite-data/geoexplorer_data"
 EOF
+   fi
 
-fi
-	chown tomcat. /var/lib/tomcat5/webapps/*.war
-	chkconfig tomcat5 on
-	service tomcat5 restart
+   WEBAPPS=/var/lib/tomcat5/webapps
+   APP=$WEBAPPS/geoserver
+   TMP=/tmp/opengeo-geoserver
 
-    echo ""
-    echo "NOTICE: Please run /usr/share/opengeo-suite/geoserver-setup.sh to complete this installation."
-    echo ""
+   if [ -d $APP ]; then
+     # upgrade, perserve the old web.xml
+     mkdir $TMP
+     cp $APP/WEB-INF/web.xml $TMP
+
+     rm -rf $APP
+   fi
+
+   # unpack the war
+   unzip  $APP.war -d $APP /dev/null 2>&1
+
+   if [ -e $TMP/web.xml ]; then
+     cp $TMP/web.xml $APP/WEB-INF
+     rm -rf $TMP
+   fi
+
+   chown tomcat. /var/lib/tomcat5/webapps/*.war
+   chkconfig tomcat5 on
+   service tomcat5 restart
+
+   echo ""
+   echo "NOTICE: Please run /usr/share/opengeo-suite/geoserver-setup.sh to complete this installation."
+   echo ""
 
 %preun
-       if [ -e /var/lib/tomcat5/webapps/geoserver ]; then
-                service tomcat5 stop
-                rm -rf  /var/lib/tomcat5/webapps/geoserver.war /var/lib/tomcat5/webapps/geoserver
-        fi
-        service tomcat5 restart
+   APP=/var/lib/tomcat5/webapps/geoserver
+
+   # $1 == 1 means upgrade, on upgrade don't remove webapp as we want to 
+   # preserve certain files, namely web.xml
+   if [ "$1" == "0" ]; then
+
+     if [ -e $APP ]; then
+       service tomcat5 stop
+       rm -rf  $APP.war $APP
+     fi
+
+     service tomcat5 restart
+   fi
 
 %postun
 # remove files
 # remove users
-
 
 %clean
 
