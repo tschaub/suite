@@ -100,6 +100,6 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%dir "/var/lib/tomcat5/webapps/*"
+/var/lib/tomcat5/webapps/geoserver.war
 /usr/share/opengeo-suite/geoserver-setup.sh
 
