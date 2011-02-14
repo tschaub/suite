@@ -57,20 +57,51 @@ own web-based mapping applications.
    cp -rp $RPM_SOURCE_DIR/opengeo-suite/geoexplorer.war $RPM_BUILD_ROOT/var/lib/tomcat5/webapps/.
 
 %post
+   # check for upgrade, if so preserve geoexp web.xml
+   WEBAPPS=/var/lib/tomcat5/webapps
+   GXP=$WEBAPPS/geoexplorer
+   TMP=/tmp/opengeo-geoexplorer
+
+   if [ -d $GXP ]; then
+     # upgrade, perserve the old web.xml
+     mkdir $TMP
+     cp $GXP/WEB-INF/web.xml $TMP
+   fi
+  
+   # clear out old app dirs
+   APPS="dashboard geoeditor geoexplorer geowebcache recipes"
+   for APP in $APPS; do
+     if [ -d $WEBAPPS/$APP ]; then
+        rm -rf $WEBAPPS/$APP
+     fi
+   done
+
+   # restore old geoexp web.xml
+   if [ -e $TMP/web.xml ]; then
+     unzip  $GXP.war -d $GXP > /dev/null 2>&1
+     cp $TMP/web.xml $GXP/WEB-INF
+     rm -rf $TMP
+   fi
+
+   chown tomcat. /var/lib/tomcat5/webapps/*.war
+   chkconfig tomcat5 on
+   service tomcat5 restart
 
 %preun
 
-  if [ -e /var/lib/tomcat5/webapps/geoexplorer ]; then
-     service tomcat5 stop
-     rm -rf /var/lib/tomcat5/webapps/recipes /var/lib/tomcat5/webapps/dashboard
-     rm -rf /var/lib/tomcat5/webapps/geoeditor /var/lib/tomcat5/webapps/geowebcache
-     rm -rf /var/lib/tomcat5/webapps/geoexplorer /var/lib/tomcat5/webapps/geowebcache
-     rm -rf /var/lib/tomcat5/webapps/dashboard.war
-     rm -rf /var/lib/tomcat5/webapps/geoeditor.war
-     rm -rf /var/lib/tomcat5/webapps/geoexplorer.war
-     rm -rf /var/lib/tomcat5/webapps/geowebcache.war
-     rm -rf /var/lib/tomcat5/webapps/recipes.war
-     service tomcat5 start
+  # $1 == 1 means upgrade, on upgrade don't remove the webapps
+  if [ "$1" == "0" ]; then
+    service tomcat5 stop
+
+    WEBAPPS=/var/lib/tomcat5/webapps
+    APPS="dashboard geoeditor geoexplorer geowebcache recipes"
+    for APP in $APPS; do
+      if [ -e $WEBAPPS/$APP ]; then
+         rm -rf $WEBAPPS/$APP $WEBAPPS/$APP.war
+      fi
+    done
+
+    service tomcat5 restart
   fi
 
 %postun
@@ -79,4 +110,8 @@ own web-based mapping applications.
 
 %files
 %defattr(-,root,root,-)
-%dir "/var/lib/tomcat5/webapps/*"
+/var/lib/tomcat5/webapps/dashboard.war
+/var/lib/tomcat5/webapps/geoeditor.war
+/var/lib/tomcat5/webapps/geoexplorer.war
+/var/lib/tomcat5/webapps/geowebcache.war
+/var/lib/tomcat5/webapps/recipes.war
