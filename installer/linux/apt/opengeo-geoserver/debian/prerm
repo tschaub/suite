@@ -18,7 +18,7 @@ set -e
 
 
 case "$1" in
-    remove|upgrade|deconfigure)
+    remove)
 	if [ -e /var/lib/tomcat6/webapps/geoserver ]; then
 		invoke-rc.d tomcat6 stop
 		cp /etc/default/tomcat6.orig /etc/default/tomcat6
@@ -29,7 +29,7 @@ case "$1" in
 
     ;;
 
-    failed-upgrade)
+    upgrade|deconfigure|failed-upgrade)
     ;;
 
     *)
