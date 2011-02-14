@@ -1,5 +1,5 @@
-#!/bin/sh
-# prerm script for geonode
+#!/bin/bash
+# prerm script for geoserver
 #
 # see: dh_installdeb(1)
 
@@ -16,9 +16,9 @@ set -e
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
-
 case "$1" in
-    remove)
+    remove|deconfigure)
+    # remove the webapp and restore tomcat settings
 	if [ -e /var/lib/tomcat6/webapps/geoserver ]; then
 		invoke-rc.d tomcat6 stop
 		cp /etc/default/tomcat6.orig /etc/default/tomcat6
@@ -29,7 +29,9 @@ case "$1" in
 
     ;;
 
-    upgrade|deconfigure|failed-upgrade)
+    upgrade|failed-upgrade)
+    # don't remove anything on upgrade, upgrade logic handled in postinst
+
     ;;
 
     *)
