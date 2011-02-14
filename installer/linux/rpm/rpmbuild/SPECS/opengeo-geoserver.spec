@@ -62,7 +62,7 @@ EOF
    fi
 
    # unpack the war
-   unzip  $APP.war -d $APP /dev/null 2>&1
+   unzip  $APP.war -d $APP > /dev/null 2>&1
 
    if [ -e $TMP/web.xml ]; then
      cp $TMP/web.xml $APP/WEB-INF
