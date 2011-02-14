@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # postinst script for opengeo-suite
 #
 # see: dh_installdeb(1)
@@ -19,26 +19,37 @@ set -e
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
+WEBAPPS=/var/lib/tomcat6/webapps
 
-function configuretomcat() {
-
-	# stop the tomcat process to prevent it from automatically unpacking the war files
-	#
-	invoke-rc.d tomcat6 stop
-
+function unpack_apps() {
 	# set file permissions and copy the war files in
 	#
 	chown tomcat6. /usr/share/opengeo-suite/*.war
 	cp /usr/share/opengeo-suite/*.war /var/lib/tomcat6/webapps
-	invoke-rc.d tomcat6 restart
-
 }
 
 case "$1" in
     configure)
 
-	configuretomcat
-#	configureapache
+    invoke-rc.d tomcat6 stop
+    
+    GXP=$WEBAPPS/geoexplorer
+    TMP=/tmp/opengeo-geoexplorer
+
+    # if this is upgrade, perserve old geoexplorer web.xml
+    if [ -e $GXP/WEB-INF/web.xml ]; then
+      UPGRADE="yes"
+      mkdir $TMP
+      cp $GXP/WEB-INF/web.xml $TMP
+    fi
+
+	unpack_apps
+
+    if [ ! -z "$UPGRADE" ]; then
+      cp $TMP/web.xml $GXP/WEB-INF
+    fi
+
+    invoke-rc.d tomcat6 restart
 
     ;;
 

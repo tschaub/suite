@@ -16,25 +16,31 @@ set -e
 # for details, see http://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
+WEBAPPS=/var/lib/tomcat6/webapps
+function remove_apps() {
+  invoke-rc.d tomcat6 stop
+  for app in $*; do
+    if [ -d $WEBAPPS/$app ]; then 
+       rm -rf $WEBAPPS/$app
+    fi
+    if [ -e $WEBAPPS/$app.war ]; then 
+       rm -rf $WEBAPPS/$app.war
+    fi
+  done
+  invoke-rc.d tomcat6 start
+}
 
 case "$1" in
-    remove|upgrade|deconfigure)
+    remove|deconfigure)
 
-	if [ -e /var/lib/tomcat6/webapps/geoexplorer ]; then
-		invoke-rc.d tomcat6 stop
-		rm -rf /var/lib/tomcat6/webapps/recipes /var/lib/tomcat6/webapps/dashboard
-		rm -rf /var/lib/tomcat6/webapps/geoeditor /var/lib/tomcat6/webapps/geowebcache
-		rm -rf /var/lib/tomcat6/webapps/geoexplorer /var/lib/tomcat6/webapps/geowebcache
-		rm -rf /var/lib/tomcat6/webapps/dashboard.war
-		rm -rf /var/lib/tomcat6/webapps/geoeditor.war
-		rm -rf /var/lib/tomcat6/webapps/geoexplorer.war
-		rm -rf /var/lib/tomcat6/webapps/geowebcache.war
-		rm -rf /var/lib/tomcat6/webapps/recipes.war
-		invoke-rc.d tomcat6 start
-	fi
+    remove_apps dashboard geoeditor geoexplorer geowebcache recipes 
     ;;
 
-    failed-upgrade)
+    upgrade|failed-upgrade)
+    
+    # on upgrade delete all exception geoexplorer, since we want to preserve
+    # some its configuration, that is handled postinst
+    remove_apps dashboard geoeditor geowebcache recipes 
     ;;
 
     *)
