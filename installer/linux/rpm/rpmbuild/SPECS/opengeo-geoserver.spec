@@ -6,7 +6,7 @@ Group: Applications/Engineering
 License: see http://geoserver.org
 Requires(post): bash
 Requires(preun): bash
-Requires:  tomcat5, java-1.6.0-openjdk, opengeo-jai, opengeo-suite-data
+Requires:  unzip, tomcat5, java-1.6.0-openjdk, opengeo-jai, opengeo-suite-data
 Patch: geoserver_webxml.patch
 
 %define _rpmdir ../
