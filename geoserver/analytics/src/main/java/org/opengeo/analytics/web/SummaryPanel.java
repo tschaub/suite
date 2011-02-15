@@ -1,11 +1,13 @@
 package org.opengeo.analytics.web;
 
+import static org.geoserver.monitor.rest.RequestResource.asString;
+import static org.opengeo.analytics.web.Analytics.monitor;
+
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
@@ -13,8 +15,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.geoserver.monitor.Monitor;
 import org.geoserver.monitor.Query;
 import org.geoserver.monitor.Query.Comparison;
 import org.geoserver.monitor.RequestData;
@@ -22,10 +22,10 @@ import org.geoserver.web.wicket.GeoServerDataProvider;
 import org.geoserver.web.wicket.GeoServerDataProvider.Property;
 import org.geoserver.web.wicket.GeoServerTablePanel;
 import org.geoserver.web.wicket.SimpleBookmarkableLink;
+import org.opengeo.analytics.CountingVisitor;
 import org.opengeo.analytics.RequestSummary;
 import org.opengeo.analytics.ResourceSummary;
 import org.opengeo.analytics.command.CommonResourceCommand;
-import static org.geoserver.monitor.rest.RequestResource.asString;
 public class SummaryPanel extends Panel {
 
     Query query;
@@ -81,8 +81,10 @@ public class SummaryPanel extends Panel {
             new CommonResourceProvider(query)));
         commonResourceTable.setOutputMarkupId(true);
         commonResourceTable.setFilterable(false);
-        commonResourceTable.setPageable(false);
         commonResourceTable.setSortable(false);
+        commonResourceTable.setPageable(true);
+        commonResourceTable.setItemsPerPage(10);
+        
     }
 
     void updateSummaries(AjaxRequestTarget target) {
@@ -115,10 +117,28 @@ public class SummaryPanel extends Panel {
         protected List getProperties() {
             return Arrays.asList(RESOURCE, COUNT, PERCENT, REQUESTS);
         }
-
+        
+        @Override
+        public int size() {
+            return fullSize();
+        }
+        
+        public int fullSize() {
+            Query q = new CommonResourceCommand(query, Analytics.monitor(), -1, -1).query();
+            
+            CountingVisitor v = new CountingVisitor();
+            monitor().query(q, v);
+            return (int) v.getCount();
+        };
+        
+        public java.util.Iterator<ResourceSummary> iterator(int first, int count) {
+            return new CommonResourceCommand(query, Analytics.monitor(), first, count)
+                .execute().iterator();
+        };
+        
         @Override
         protected List<ResourceSummary> getItems() {
-            return new CommonResourceCommand(query, Analytics.monitor(), 5).execute();
+            throw new UnsupportedOperationException();
         }
     }
     

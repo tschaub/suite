@@ -13,10 +13,12 @@ import org.opengeo.analytics.ResourceSummary;
 
 public class CommonResourceCommand extends AbstractCommand<List<ResourceSummary>> {
 
-    int n;
-    public CommonResourceCommand(Query query, Monitor monitor, int n) {
+    int offset;
+    int count;
+    public CommonResourceCommand(Query query, Monitor monitor, int offset, int count) {
         super(query, monitor);
-        this.n = n;
+        this.offset = offset;
+        this.count = count;
     }
 
     @Override
@@ -28,7 +30,14 @@ public class CommonResourceCommand extends AbstractCommand<List<ResourceSummary>
         
         q.properties("resource").aggregate("count()")
             .filter("resource", null, Comparison.NEQ).group("resource")
-            .sort("count()", SortOrder.DESC).page(0l, (long) n);
+            .sort("count()", SortOrder.DESC);
+        
+        if (offset > -1) {
+            q.setOffset((long) offset);
+        }
+        if (count > -1) {
+            q.setCount((long)count);
+        }
         
         return q;
     }
