@@ -23,4 +23,4 @@ rm -rf tmp
 build_deb opengeo-analytics
 
 # publish
-publish_deb opengeo-analytics
+publish_deb opengeo-analytics ee

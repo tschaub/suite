@@ -136,11 +136,12 @@ install_deb() {
   dpkg -l | grep $name
 }
 
-# publish_deb <name> <repo> <dist>
+# publish_deb <name> <profile> <repo> <dist>
 publish_deb() {
   local name=$1
-  local repo=$2
-  local dist=$3
+  loacl profile=$2
+  local repo=$3
+  local dist=$4
 
   if [ "$repo" == "" ]; then
      repo=$REPO
@@ -160,11 +161,11 @@ publish_deb() {
   pushd build/$name
   checkrc $? "push build/$name"
 
-  rsync -avz -e "ssh -i $HOME/.ssh/id_rsa_apt" * apt@apt.opengeo.org:/home/apt/apt/incoming/$repo/$dist
+  rsync -avz -e "ssh -i $HOME/.ssh/id_rsa_apt" * apt@apt.opengeo.org:/home/apt/apt/$profile/incoming/$repo/$dist
   #scp -i ~/.ssh/id_rsa_apt * apt@apt.opengeo.org:/home/apt/apt/incoming/$repo/$dist
   checkrc $? "secure copy .deb files"
 
-  ssh -i ~/.ssh/id_rsa_apt apt@apt.opengeo.org "./apt/publish_debs.sh $repo $dist" 
+  ssh -i ~/.ssh/id_rsa_apt apt@apt.opengeo.org "./apt/publish_debs.sh $repo $dist $profile" 
   checkrc $? "remote publish"
 
   popd
