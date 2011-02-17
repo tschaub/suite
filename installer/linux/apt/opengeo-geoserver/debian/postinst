@@ -101,7 +101,7 @@ case "$1" in
       fi
 
       configure_tomcat
-      update_proxy $proxy_url
+      update_proxyurl $proxy_url
       update_userpass $username $password
     fi
 
