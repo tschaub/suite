@@ -113,7 +113,7 @@ case "$1" in
 
       # back up the old web.xml
       TMP=/tmp/opengeo-geoserver
-      mkdir $TMP; cp $WEBAPPS/geoserver/WEB-INF/web.xml;
+      mkdir $TMP; cp $WEBAPPS/geoserver/WEB-INF/web.xml $TMP;
 
       # unpack the new war
       unpack_war
@@ -121,6 +121,7 @@ case "$1" in
       # restore old web.xml
       cp $TMP/web.xml $WEBAPPS/geoserver/WEB-INF
 
+      rm -rf $TMP
     else
       # not there, treat as regular install
       unpack_war
