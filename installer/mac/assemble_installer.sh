@@ -16,13 +16,13 @@ PROFILE=$3
 
 id=$(echo $REPO_PATH|sed 's/\//-/g')
 id=${id}-r${REVISION}
-eid=$(echo $PROFILE|sed 's/\(.\{1,\}\)/\1-/g')${id}
+pro=$(echo $PROFILE|sed 's/\(.\{1,\}\)/\1-/g')
 
 dashboard_version=1.0.0
 pgsql_version=8.4
 
 dashboard_url=http://suite.opengeo.org/builds/${REPO_PATH}/dashboard-${id}-osx.zip
-suite_url=http://suite.opengeo.org/builds/${REPO_PATH}/opengeosuite-${eid}-mac.zip
+suite_url=http://suite.opengeo.org/builds/${REPO_PATH}/opengeosuite-${pro}${id}-mac.zip
 ext_url=http://suite.opengeo.org/builds/${REPO_PATH}/opengeosuite-${id}-ext.zip
 pgsql_url=http://suite.opengeo.org/osxbuilds/postgis-osx.zip
 
@@ -252,7 +252,7 @@ checkrv $? "Suite packaging"
 #
 VOL="OpenGeo Suite $suite_version"
 DMGTMP="tmp-${VOL}.dmg"
-DMGFINAL="OpenGeoSuite-r$svn_revision.dmg"
+DMGFINAL="OpenGeoSuite-${pro}r$svn_revision.dmg"
 BACKGROUND="dmg_background.tiff"
 APP="OpenGeo Suite.mpkg"
 
