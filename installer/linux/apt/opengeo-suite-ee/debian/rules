@@ -16,8 +16,8 @@ install:
 	dh_testroot
 	dh_prep
 	dh_installdirs
-	mkdir -p $(CURDIR)/debian/opengeo-suite-ee/var/lib/tomcat6/webapps/geoserver/WEB-INF/lib
-	cp -rp $(CURDIR)/*.jar $(CURDIR)/debian/opengeo-suite-ee/var/lib/tomcat6/webapps/geoserver/WEB-INF/lib
+	mkdir -p $(CURDIR)/debian/opengeo-suite-ee/usr/share/opengeo-suite-ee/geoserver
+	cp -rp $(CURDIR)/*.jar $(CURDIR)/debian/opengeo-suite-ee/usr/share/opengeo-suite-ee/geoserver
 
 binary-indep: build install
 
