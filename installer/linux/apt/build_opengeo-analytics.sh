@@ -6,10 +6,11 @@ build_info
 
 # grab files
 ANALYTICS=opengeosuite-ee-$BRANCH-$REV-analytics.zip
-get_file $BUILDS/$REPO_PATH/$GEOSERVER yes
+get_file $BUILDS/$REPO_PATH/$ANALYTICS yes
 
 # clean out old files
 rm -rf opengeo-analytics/analytics
+mkdir opengeo-analytics/analytics
 
 # unpack
 mkdir tmp
