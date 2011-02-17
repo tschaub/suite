@@ -143,6 +143,7 @@
            <descriptor>assembly/war-geowebcache.xml</descriptor>
            <descriptor>assembly/war-geoserver-jboss.xml</descriptor>
            <descriptor>assembly/war.xml</descriptor>
+           <descriptor>assembly/control-flow.xml</descriptor>
          </descriptors>
        </configuration>
      </plugin>
@@ -207,8 +208,8 @@
              <descriptor>assembly/war-geoserver.xml</descriptor>
              <descriptor>assembly/war-geoserver-jboss.xml</descriptor>
              <descriptor>assembly/war.xml</descriptor>
-             <descriptor>assembly/control-flow.xml</descriptor>
              <descriptor>assembly/analytics.xml</descriptor>
+             <descriptor>assembly/importer.xml</descriptor>
            </descriptors>
            <outputDirectory>${project.build.directory}/ee</outputDirectory>
          </configuration>
