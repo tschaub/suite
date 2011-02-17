@@ -23,6 +23,7 @@
         <include>jcommon-*jar</include>
         <include>jta-*.jar</include>
         <include>geoip-*.jar</include>
+        <include>joda-time-*.jar</include>
       </includes>
     </fileSet>
   </fileSets>
