@@ -15,20 +15,19 @@ function unpack_jars() {
 # grab files
 ANALYTICS=opengeosuite-ee-$BRANCH-$REV-analytics.zip
 IMPORTER=opengeosuite-ee-$BRANCH-$REV-importer.zip
-CFLOW=opengeosuite-$BRANCH-$REV-controlflow.zip
+CFLOW=opengeosuite-ee-$BRANCH-$REV-control-flow.zip
 
 get_file $BUILDS/$REPO_PATH/$ANALYTICS yes
 get_file $BUILDS/$REPO_PATH/$IMPORTER yes
 get_file $BUILDS/$REPO_PATH/$CFLOW yes
 
-unpack_jars files/$ANALYTICS
-unpack_jars files/$IMPORTER
-unpack_jars files/$CFLOW
-
 # clean out old files
 rm -rf opengeo-suite-ee/*.jar
 
 # unpack
+unpack_jars $ANALYTICS
+unpack_jars $IMPORTER
+unpack_jars $CFLOW
 
 # build
 build_deb opengeo-suite-ee
