@@ -18,12 +18,3 @@ Description: A full geospatial software stack that allows you to allows you to e
    * GeoWebCache
    * OpenLayers
    * GeoExt
- .
- Also included are three GeoExt-based web applications:
- .
-   * GeoExplorer, for composing and publishing maps
-   * Styler, for graphical styling of map layers
-   * GeoEditor, for graphical editing of geospatial features
- .
- In addition, the OpenGeo Suite contains a Recipe Book for building your own web-based mapping applications.
-
