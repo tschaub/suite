@@ -42,8 +42,9 @@ if [ $? -gt 0 ]; then
   exit 1
 fi
 
+pro=$(echo $PROFILE|sed 's/\(.\{1,\}\)/-\1/g')
 PATH_NAME=$(echo $REPO_PATH|sed 's/\//-/g')
-CUR_FILE=${DIST_DIR}/OpenGeoSuite$(echo $PROFILE|sed 's/\(.\{1,\}\)/-\1/g')-${PATH_NAME}-r${REVISION}-b${BUILD_NUMBER}.dmg
+CUR_FILE=${DIST_DIR}/OpenGeoSuite${pro}-${PATH_NAME}-r${REVISION}-b${BUILD_NUMBER}.dmg
 BUILD_FILE=`ls OpenGeoSuite*.dmg`
 
 # move to dist dir
@@ -63,5 +64,5 @@ find $DIST_DIR -maxdepth 1 -type l -exec rm {} \;
 
 # Symlink new version
 if  [ $REPO_PATH = "trunk" ]; then
-  ln -s $CUR_FILE $DIST_DIR/OpenGeoSuite-latest.dmg
+  ln -s $CUR_FILE $DIST_DIR/OpenGeoSuite${pro}-latest.dmg
 fi
