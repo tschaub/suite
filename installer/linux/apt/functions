@@ -139,7 +139,7 @@ install_deb() {
 # publish_deb <name> <profile> <repo> <dist>
 publish_deb() {
   local name=$1
-  loacl profile=$2
+  local profile=$2
   local repo=$3
   local dist=$4
 
