@@ -5,22 +5,24 @@
 # .pkg files by Iceberg using the 'freeze' command and finally into the 
 # suite .mpkg file with 'freeze' also.
 
-if [ $# -lt  ]; then
-  echo "Usage: $0 <repo_path> <revision>"
+if [ $# -lt 2 ]; then
+  echo "Usage: $0 <repo_path> <revision> [profile]"
   exit 1
 fi
 
 REPO_PATH=$1
 REVISION=$2
+PROFILE=$3
 
 id=$(echo $REPO_PATH|sed 's/\//-/g')
 id=${id}-r${REVISION}
+eid=$(echo $PROFILE|sed 's/\(.\{1,\}\)/\1-/g')${id}
 
 dashboard_version=1.0.0
 pgsql_version=8.4
 
 dashboard_url=http://suite.opengeo.org/builds/${REPO_PATH}/dashboard-${id}-osx.zip
-suite_url=http://suite.opengeo.org/builds/${REPO_PATH}/opengeosuite-${id}-mac.zip
+suite_url=http://suite.opengeo.org/builds/${REPO_PATH}/opengeosuite-${eid}-mac.zip
 ext_url=http://suite.opengeo.org/builds/${REPO_PATH}/opengeosuite-${id}-ext.zip
 pgsql_url=http://suite.opengeo.org/osxbuilds/postgis-osx.zip
 

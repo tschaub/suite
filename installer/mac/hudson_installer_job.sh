@@ -20,15 +20,16 @@
 #       svn checkout -r $REVISION http://svn.opengeo.org/suite/${REPO_PATH}/installer .
 #     fi
 #     cd mac
-#     bash hudson_installer_job.sh $REPO_PATH $REVISION
+#     bash hudson_installer_job.sh $REPO_PATH $REVISION $PROFILE
 
 if [ $# -lt 2 ]; then
-  echo "Usage: $0 <repo_path> <revision>"
+  echo "Usage: $0 <repo_path> <revision> [profile]"
   exit 1
 fi
 
 REPO_PATH=$1
 REVISION=$2
+PROFILE=$3
 
 DIST_DIR=/Library/WebServer/Documents/suite/$REPO_PATH
 if [ ! -e $DIST_DIR ]; then
@@ -36,13 +37,13 @@ if [ ! -e $DIST_DIR ]; then
 fi
 
 
-bash assemble_installer.sh $REPO_PATH $REVISION
+bash assemble_installer.sh $REPO_PATH $REVISION $PROFILE
 if [ $? -gt 0 ]; then
   exit 1
 fi
 
 PATH_NAME=$(echo $REPO_PATH|sed 's/\//-/g')
-CUR_FILE=${DIST_DIR}/OpenGeoSuite-${PATH_NAME}-r${REVISION}-b${BUILD_NUMBER}.dmg
+CUR_FILE=${DIST_DIR}/OpenGeoSuite$(echo $PROFILE|sed 's/\(.\{1,\}\)/-\1/g')-${PATH_NAME}-r${REVISION}-b${BUILD_NUMBER}.dmg
 BUILD_FILE=`ls OpenGeoSuite*.dmg`
 
 # move to dist dir
