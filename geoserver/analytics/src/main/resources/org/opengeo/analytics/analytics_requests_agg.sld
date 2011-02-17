@@ -24,7 +24,7 @@
                 <ogc:Add>
                   <ogc:Function name="max">
                     <ogc:Function name="log">
-                      <ogc:PropertyName>requests</ogc:PropertyName>
+                      <ogc:PropertyName>REQUESTS</ogc:PropertyName>
                     </ogc:Function>
                     <ogc:Literal>1</ogc:Literal>
                   </ogc:Function>
@@ -35,7 +35,7 @@
           </PointSymbolizer>
           <TextSymbolizer>
              <Label>
-               <ogc:PropertyName>remote_city</ogc:PropertyName>
+               <ogc:PropertyName>REMOTE_CITY</ogc:PropertyName>
              </Label>
              <Font>
                <CssParameter name="font-family">Arial</CssParameter>

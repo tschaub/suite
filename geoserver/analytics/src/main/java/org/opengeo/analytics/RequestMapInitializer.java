@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.DataStoreInfo;
@@ -25,12 +26,15 @@ import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.jdbc.JDBCDataStoreFactory;
 import org.geotools.jdbc.VirtualTable;
 import org.geotools.referencing.CRS;
+import org.geotools.util.logging.Logging;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import com.vividsolutions.jts.geom.Point;
 
 public class RequestMapInitializer implements GeoServerInitializer {
 
+    static Logger LOGGER = Logging.getLogger("org.opengeo.analytics");
+    
     MonitoringDataSource dataSource;
     
     public RequestMapInitializer(MonitoringDataSource dataSource) {
@@ -88,23 +92,24 @@ public class RequestMapInitializer implements GeoServerInitializer {
 //        }
         
         //set up a datastore for the request layer 
-        if (cat.getDataStoreByName("analytics", "requests") == null) {
-            DataStoreInfo ds = cat.getFactory().createDataStore();
+        DataStoreInfo ds = cat.getDataStoreByName("analytics", "db");
+        if ( ds == null) {
+            ds = cat.getFactory().createDataStore();
             ds.setWorkspace(ws);
-            ds.setName("requests");
-
-            Map params = new HashMap();
-            String url = dataSource.getUrl();
-            setParams(params, url);
-            params.put(JDBCDataStoreFactory.DBTYPE.key, "postgis");
-            params.put(JDBCDataStoreFactory.USER.key, dataSource.getUsername());
-            params.put(JDBCDataStoreFactory.PASSWD.key, dataSource.getPassword());
-            
-            ds.getConnectionParameters().putAll(params);
+            ds.setName("db");
             ds.setEnabled(true);
-            cat.add(ds);
+            updateParams(ds);
             
-            FeatureTypeInfo ft = cat.getFactory().createFeatureType();
+            cat.add(ds);
+        }
+        else {
+            updateParams(ds);
+            cat.save(ds);
+        }
+        
+        FeatureTypeInfo ft = cat.getFeatureTypeByDataStore(ds, "requests_agg");
+        if (ft == null) {
+            ft = cat.getFactory().createFeatureType();
             ft.setName("requests_agg");
             ft.setNativeName("requests_agg");
             ft.setNamespace(cat.getNamespaceByPrefix(ws.getName()));
@@ -113,17 +118,24 @@ public class RequestMapInitializer implements GeoServerInitializer {
             setWorldBounds(ft);
             
             VirtualTable vt = new VirtualTable("requests_agg", 
-                "SELECT ST_SetSRID(ST_MakePoint(remote_lon,remote_lat), 4326) as point," +
-                        "remote_city,remote_country,count(*) as requests " + 
+                "SELECT ST_SetSRID(ST_MakePoint(remote_lon,remote_lat), 4326) as \"POINT\"," +
+                        "remote_city as \"REMOTE_CITY\", " +
+                        "remote_country as \"REMOTE_COUNTRY\", " +
+                        "count(*) as \"REQUESTS\"" + 
                  " FROM request " + 
-              "GROUP BY point, remote_city, remote_country");
-            vt.addGeometryMetadatata("point", Point.class, 4326);
+              "GROUP BY \"POINT\", \"REMOTE_CITY\", \"REMOTE_COUNTRY\"");
+            vt.addGeometryMetadatata("POINT", Point.class, 4326);
             
             ft.getMetadata().put("JDBC_VIRTUAL_TABLE", vt);
             cat.add(ft);
-            
+        }
+        
+        if (cat.getLayers(ft).isEmpty()) {
             addLayer(cat, ft, "analytics_requests_agg");
-            
+        }
+        
+        ft = cat.getFeatureTypeByDataStore(ds, "requests");
+        if (ft == null) {
             ft = cat.getFactory().createFeatureType();
             ft.setName("requests");
             ft.setNativeName("requests");
@@ -132,33 +144,45 @@ public class RequestMapInitializer implements GeoServerInitializer {
             ft.setEnabled(true);
             setWorldBounds(ft);
             
-            vt = new VirtualTable("requests", 
-                "SELECT ST_SetSRID(ST_MakePoint(remote_lon,remote_lat), 4326) as point," +
-                       "id, id as request_id, status, category, path, query_string, body_content_type, " +
-                       "body_content_length, server_host, http_method, start_time, end_time, " +
-                       "total_time, remote_address, remote_host, remote_user, remote_country, " +
-                       "remote_city, service, operation, sub_operation, ows_version, content_type, " +
-                       "response_length, error_message" + 
+            VirtualTable vt = new VirtualTable("requests", 
+                "SELECT ST_SetSRID(ST_MakePoint(remote_lon,remote_lat), 4326) as \"point\"," +
+                       "id as \"ID\", " +
+                       "id as \"REQUEST_ID\", " +
+                       "status as \"STATUS\", " +
+                       "category as \"CATEGORY\", " +
+                       "path as \"PATH\", " +
+                       "query_string as \"QUERY_STRING\", " +
+                       "body_content_type as \"BODY_CONTENT_TYPE\", " +
+                       "body_content_length as \"BODY_CONTENT_LENGTH\", " +
+                       "server_host as \"SERVER_HOST\", " +
+                       "http_method as \"HTTP_METHOD\", " +
+                       "start_time as \"START_TIME\", " +
+                       "end_time as \"END_TIME\", " +
+                       "total_time as \"TOTAL_TIME\", " +
+                       "remote_address as \"REMOTE_ADDRESS\", " +
+                       "remote_host as \"REMOTE_HOST\", " +
+                       "remote_user as \"REMOTE_USER\", " +
+                       "remote_country as \"REMOTE_COUNTRY\", " +
+                       "remote_city as \"REMOTE_CITY\", " +
+                       "service as \"SERVICE\", " +
+                       "operation as \"OPERATION\", " +
+                       "sub_operation as \"SUB_OPERATION\", " +
+                       "ows_version as \"OWS_VERSION\", " +
+                       "content_type as \"CONTENT_TYPE\", " +
+                       "response_length as \"RESPONSE_LENGTH\", " +
+                       "error_message as \"ERROR_MESSAGE\"" + 
                  " FROM request");
             
-            vt.addGeometryMetadatata("point", Point.class, 4326);
-            vt.setPrimaryKeyColumns(Arrays.asList("id"));
+            vt.addGeometryMetadatata("POINT", Point.class, 4326);
+            vt.setPrimaryKeyColumns(Arrays.asList("ID"));
             
             ft.getMetadata().put("JDBC_VIRTUAL_TABLE", vt);
             cat.add(ft);
-            
-            addLayer(cat, ft, "point");
         }
         
-//        if (cat.getLayerGroupByName("requests") == null) {
-//            LayerGroupInfo lg = cat.getFactory().createLayerGroup();
-//            lg.setName("requests");
-//            lg.getLayers().add(cat.getLayerByName("monitor:monitor_world"));
-//            lg.getLayers().add(cat.getLayerByName("monitor:monitor_requests_agg"));
-//            lg.setBounds(worldBounds());
-//            
-//            cat.add(lg);
-//        }
+        if (cat.getLayers(ft).isEmpty()) {
+            addLayer(cat, ft, "point");
+        }
     }
     
     void addStyle(Catalog cat, String name) throws Exception {
@@ -177,24 +201,45 @@ public class RequestMapInitializer implements GeoServerInitializer {
         }
     }
 
-    void setParams(Map params, String url) {
-        //jdbc:postgresql://localhost/geotools
-        int i = url.indexOf("//") + 2;
-        int j = url.indexOf('/', i);
+    void updateParams(DataStoreInfo ds) {
+        Map params = new HashMap();
         
-        String host = url.substring(i, j);
-        int port = -1;
-        if (host.contains(":")) {
-            port = Integer.parseInt(host.substring(host.indexOf(':')+1));
-            host = host.substring(0, host.indexOf(':'));
-        }
+        setParamsFromURL(params, dataSource.getUrl());
+        params.put(JDBCDataStoreFactory.USER.key, dataSource.getUsername());
+        params.put(JDBCDataStoreFactory.PASSWD.key, dataSource.getPassword());
         
-        String db = url.substring(j+1);
-        params.put(JDBCDataStoreFactory.HOST.key, host);
-        if (port != -1) {
-            params.put(JDBCDataStoreFactory.PORT.key, port);
+        ds.getConnectionParameters().putAll(params);
+    }
+    
+    void setParamsFromURL(Map params, String url) {
+        if (url.startsWith("jdbc:postgresql:")) {
+            //jdbc:postgresql://localhost/geotools
+            int i = url.indexOf("//") + 2;
+            int j = url.indexOf('/', i);
+            
+            String host = url.substring(i, j);
+            int port = -1;
+            if (host.contains(":")) {
+                port = Integer.parseInt(host.substring(host.indexOf(':')+1));
+                host = host.substring(0, host.indexOf(':'));
+            }
+            
+            String db = url.substring(j+1);
+            params.put(JDBCDataStoreFactory.DBTYPE.key, "postgis");
+            params.put(JDBCDataStoreFactory.HOST.key, host);
+            if (port != -1) {
+                params.put(JDBCDataStoreFactory.PORT.key, port);
+            }
+            params.put(JDBCDataStoreFactory.DATABASE.key, db);
         }
-        params.put(JDBCDataStoreFactory.DATABASE.key, db);
+        else if (url.startsWith("jdbc:h2:file:")) {
+            //jdbc:h2:file:/path
+            params.put(JDBCDataStoreFactory.DBTYPE.key, "h2");
+            params.put(JDBCDataStoreFactory.DATABASE.key, url.substring("jdbc:h2:file:".length()));
+        }
+        else {
+            LOGGER.warning("Unable to configure analytics:db store from jdbc url " + url);
+        }
     }
     
     void setWorldBounds(FeatureTypeInfo ft) throws Exception {
