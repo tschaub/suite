@@ -8,7 +8,6 @@ import org.geoserver.rest.RestletException;
 import org.geoserver.rest.util.RESTUtils;
 import org.geotools.util.logging.Logging;
 import org.restlet.Finder;
-import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
@@ -41,13 +40,6 @@ public class UploadRecoveryFinder extends Finder {
 
         Resource resource;
         if (token == null) {
-            final MediaType requestMediaType = request.getEntity().getMediaType();
-            final boolean ignoreParameters = true;
-            if (!MediaType.MULTIPART_FORM_DATA.equals(requestMediaType, ignoreParameters)) {
-                throw new RestletException("Unsupported media type",
-                        Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
-            }
-
             resource = new ResourceUploaderResource(catalog, lifeCycleManager, configPersister);
         } else {
 

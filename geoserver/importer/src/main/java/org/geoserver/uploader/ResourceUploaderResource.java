@@ -67,6 +67,11 @@ public class ResourceUploaderResource extends Resource {
     }
 
     @Override
+    public boolean allowGet() {
+        return false;
+    }
+
+    @Override
     public boolean allowPost() {
         return true;
     }
