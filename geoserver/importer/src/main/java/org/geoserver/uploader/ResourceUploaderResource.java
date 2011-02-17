@@ -134,7 +134,7 @@ public class ResourceUploaderResource extends Resource {
         }
 
         String responseContents = result.toString();
-        response.setEntity(responseContents, MediaType.TEXT_PLAIN);
+        response.setEntity(responseContents, MediaType.TEXT_HTML);
     }
 
     /**
