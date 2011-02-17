@@ -10,5 +10,5 @@ Package: opengeo-analytics
 Architecture: any
 Depends: opengeo-geoserver (>= 2.4.0), unzip, ${misc:Depends}
 #,${shlibs:Depends}
-Description:  GeoServer extension for analyzing and visualizing server statistics. 
-  The analytics extension collects data and maintains statistics about server usage. It also includes an addon to the GeoServer admin interface that provides a visualization of these statistics. 
+Description: GeoServer extension for analyzing server activity.
+ The analytics extension collects data and maintains statistics about server usage. It also includes an addon to the GeoServer admin interface that provides a visualization of these statistics. 
