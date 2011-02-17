@@ -20,12 +20,6 @@ set -e
 case "$1" in
     remove|upgrade|deconfigure)
 
-    # remove all the analytics jars
-    for jar in `ls /usr/share/opengeo-analytics/*.jar`; do
-      jar=`basename $jar` 
-      rm /var/lib/tomcat6/webapps/geoserver/WEB-INF/lib/$jar   
-    done
-    
     # restart tomcat
 	invoke-rc.d tomcat6 restart
     ;;

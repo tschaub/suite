@@ -22,14 +22,8 @@ set -e
 case "$1" in
     configure)
 
-    # stop tomcat
-	invoke-rc.d tomcat6 stop
-    
-    # copy over all the jar files into the geoserver webapp
-    cp /usr/share/opengeo-analytics/*.jar /var/lib/tomcat6/webapps/geoserver/WEB-INF/lib    
-
-    # fire up tomcat again
-	invoke-rc.d tomcat6 start
+    # restart tomcat
+	invoke-rc.d tomcat6 restart
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
