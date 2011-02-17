@@ -31,6 +31,10 @@
       <artifactId>charts</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.geoserver.extension</groupId>
+      <artifactId>h2</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.geoserver.community</groupId>
       <artifactId>proxy</artifactId>
     </dependency>
