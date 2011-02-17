@@ -17,7 +17,7 @@ install:
 	dh_prep
 	dh_installdirs
 	mkdir -p $(CURDIR)/debian/opengeo-analytics/var/lib/tomcat6/webapps/geoserver/WEB-INF/lib
-	cp -rp $(CURDIR)/analytics/* $(CURDIR)/debian/opengeo-analytics/var/lib/tomcat6/webapps/geoserver/WEB-INF/lib
+	cp -rp $(CURDIR)/*.jar $(CURDIR)/debian/opengeo-analytics/var/lib/tomcat6/webapps/geoserver/WEB-INF/lib
 
 binary-indep: build install
 
