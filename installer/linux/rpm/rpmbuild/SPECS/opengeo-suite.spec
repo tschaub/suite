@@ -24,16 +24,6 @@ components.  It is comprised of the following core components:
  * OpenLayers
  * GeoExt
 
-Also included are three GeoExt-based web applications:
-
- * GeoExplorer, for composing and publishing maps
- * Styler, for graphical styling of map layers
- * GeoEditor, for graphical editing of geospatial features
-
-Finally, the OpenGeo Suite contains a Recipe Book for building your 
-own web-based mapping applications.
-
-
 %prep
    pushd $RPM_SOURCE_DIR/opengeo-suite
    unzip geoexplorer.war -d geoexplorer
