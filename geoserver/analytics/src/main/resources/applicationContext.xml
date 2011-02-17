@@ -12,10 +12,13 @@
   <bean id="gsMonitorFilter" class="org.opengeo.analytics.web.GeoServerMonitorFilter"/>
   
   <bean id="analyticsMenuPage" class="org.geoserver.web.MenuPageInfo">
-      <property name="id" value="category.monitor"/>
+      <property name="id" value="analyticsMenuPage"/>
+      <property name="category" ref="aboutStatusCategory"/>
       <property name="titleKey" value="AnalyticsHomePage.title"/>
       <property name="descriptionKey" value="AnalyticsHomePage.description"/>
       <property name="componentClass" value="org.opengeo.analytics.web.AnalyticsHomePage"/>
+      <property name="icon" value="server_chart.png"/>
+      <property name="order" value="11"/>
   </bean>
    
   <bean id="analyticsRequestMapInitializer" class="org.opengeo.analytics.RequestMapInitializer">
