@@ -6,7 +6,7 @@ Group: Applications/Engineering
 License: see http://opengeo.org
 Requires(post): bash
 Requires(preun): bash
-Requires: opengeo-postgis opengeo-geoserver
+Requires: opengeo-postgis opengeo-geoserver >= 2.4.0, opengeo-docs >= 2.4.0
 Patch: geoexplorer_webxml.patch
 
 %define _rpmdir ../
