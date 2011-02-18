@@ -6,8 +6,7 @@ Group: Applications/Engineering
 License: see http://geoserver.org
 Requires(post): bash
 Requires(preun): bash
-Requires:  unzip, tomcat5, java-1.6.0-openjdk, opengeo-jai, opengeo-suite-data
-Patch: geoserver_webxml.patch
+Requires: opengeo-suite 
 
 %define _rpmdir ../
 %define _rpmfilename %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm
@@ -18,23 +17,13 @@ The OpenGeo Suite Enterprise Edition provides additional modules and extensions
  geared toward enterprise and production systems.  
 
 %prep
-        
-   pushd $RPM_SOURCE_DIR/opengeo-geoserver
-   unzip geoserver.war -d geoserver
-   cd geoserver
-%patch -p1
-   zip -r ../geoserver.zip *
-   cd ..
-   rm -rf geoserver
-   mv geoserver.zip geoserver.war
-   popd
 
 %install
    rm -rf $RPM_BUILD_ROOT
 
    LIB=$RPM_BUILD_ROOT/var/lib/tomcat5/webapps/geoserver/WEB-INF/lib
    mkdir -p $LIB
-   cp -rp  $RPM_SOURCE_DIR/opengeo-geoserver/*.jar  $LIB
+   cp -rp  $RPM_SOURCE_DIR/opengeo-suite-ee/*.jar  $LIB
 
 %post
 

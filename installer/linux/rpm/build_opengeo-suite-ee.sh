@@ -15,7 +15,7 @@ function unpack_jars() {
 # grab files
 ANALYTICS=opengeosuite-ee-$BRANCH-$REV-analytics.zip
 IMPORTER=opengeosuite-ee-$BRANCH-$REV-importer.zip
-CFLOW=opengeosuite-ee-$BRANCH-$REV-control-flow.zip
+CFLOW=opengeosuite-$BRANCH-$REV-control-flow.zip
 
 get_file $BUILDS/$REPO_PATH/$ANALYTICS yes
 get_file $BUILDS/$REPO_PATH/$IMPORTER yes
@@ -25,6 +25,7 @@ get_file $BUILDS/$REPO_PATH/$CFLOW yes
 clean_src
 
 # unpack
+mkdir $PKG_SOURCE_DIR
 unpack_jars $ANALYTICS
 unpack_jars $IMPORTER
 unpack_jars $CFLOW
