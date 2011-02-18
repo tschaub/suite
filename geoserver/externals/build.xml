@@ -1,14 +1,14 @@
 <project name="build" default="build-all">
 
    <property name="gs.repo" value="git://github.com/opengeo/geoserver-2.1.x.git"/>
-   <property name="gs.branch" value="analytics"/>
+   <property name="gs.branch" value="suite"/>
    <property name="gs.rev" value="${gs.branch}"/>
    <property name="gs.dir" value="geoserver"/>
 
    <property name="gwc.repo" value="git://github.com/GeoWebCache/geowebcache.git"/>
    <property name="gwc.branch" value="master"/>
-   <property name="gwc.rev" value="845d8b5b92ac01458054ed8a887b5a5998512d57"/>
-   <property name="gwc.dir" value="gwc"/>
+   <property name="gwc.rev" value="ef74653902173d8cbf6e6acfe6b289254c9d2e2d"/>
+   <property name="gwc.dir" value="geowebcache"/>
    <property name="gwc.version" value="1.2-SNAPSHOT"/>
 
    <property name="mvn.exec" value="mvn"/>
