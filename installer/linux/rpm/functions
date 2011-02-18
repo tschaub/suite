@@ -125,10 +125,11 @@ function build_rpm() {
 
 }
 
-# publish_rpm <repo> <dist>
+# publish_rpm <profile> <repo> <dist>
 publish_rpm() {
-  local repo=$1
-  local dist=$2
+  local profile=$1
+  local repo=$2
+  local dist=$3
 
   if [ "$repo" == "" ]; then
      repo=$REPO
@@ -148,10 +149,10 @@ publish_rpm() {
   pushd build/$PACKAGE
   checkrc $? "push build/$PACKAGE"
 
-  scp -i ~/.ssh/id_rsa_apt * apt@apt.opengeo.org:/home/apt/yum/incoming/$repo/$dist
+  scp -i ~/.ssh/id_rsa_apt * apt@apt.opengeo.org:/home/apt/yum/${profile}/incoming/$repo/$dist
   checkrc $? "secure copy .rpm files"
 
-  ssh -i ~/.ssh/id_rsa_apt apt@apt.opengeo.org "./yum/publish_rpms.sh $repo $dist" 
+  ssh -i ~/.ssh/id_rsa_apt apt@apt.opengeo.org "./yum/publish_rpms.sh $repo $dist $(echo $profile|sed 's/\(.\{1,\}\)/-p \1/g')" 
   checkrc $? "remote publish"
 
   popd

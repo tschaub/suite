@@ -34,5 +34,5 @@ unpack_jars $CFLOW
 build_rpm
 
 # publish
-publish_rpm
+publish_rpm ee
 
