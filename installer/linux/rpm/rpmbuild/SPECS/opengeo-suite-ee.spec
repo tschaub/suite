@@ -26,10 +26,12 @@ The OpenGeo Suite Enterprise Edition provides additional modules and extensions
    cp -rp  $RPM_SOURCE_DIR/opengeo-suite-ee/*.jar  $LIB
 
 %post
+  service tomcat5 restart
 
 %preun
 
 %postun
+  service tomcat5 restart
 
 %clean
 
