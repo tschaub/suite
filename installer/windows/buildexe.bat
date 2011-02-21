@@ -8,13 +8,11 @@
 :: Requires two paramters
 :: buildexe.bat %repo_path% %revision% %profile%
 :: See Usage at bottom
-if "x%3"=="x" goto Usage
+if "x%2"=="x" goto Usage
 if not "x%4"=="x" goto Usage
 set repo_path=%1
 set revision=%2
 set profile=%3
-
-echo profile is %profile%
 
 :: Start by cleaning up target
 rd /s /q ..\..\target\ >nul 2>nul
@@ -38,7 +36,7 @@ set id=%repo-path%-r%revision%
 if "x%profile%"=="x" (
   set mainzip=opengeosuite-%id%-win.zip
 ) else (
-  set set mainzip=opengeosuite-%profile%-%id%-win.zip
+  set mainzip=opengeosuite-%profile%-%id%-win.zip
 )
 set dashzip=dashboard-%id%-win32.zip
 

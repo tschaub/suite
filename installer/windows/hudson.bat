@@ -5,13 +5,11 @@
 :: Requires three paramters
 :: hudson.bat %repo_path% %revision% %profile%
 :: See Usage at bottom
-if "x%3"=="x" goto Usage
+if "x%2"=="x" goto Usage
 if not "x%4"=="x" goto Usage
 set repo_path=%1
 set revision=%2
 set profile=%3
-
-echo profile is %profile%
 
 set HTDOCS=C:\Program Files\Apache Software Foundation\Apache2.2\htdocs
 set PATH=%PATH%;C:\Program Files\wget\bin;C:\Program Files\NSIS;C:\Program Files\Subversion\bin
