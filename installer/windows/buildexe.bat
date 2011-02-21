@@ -6,12 +6,13 @@
 :: Also assumes that it is running inside installer\windows
 
 :: Requires two paramters
-:: buildexe.bat %repo_path% %revision%
+:: buildexe.bat %repo_path% %revision% %profile%
 :: See Usage at bottom
-if "x%2"=="x" goto Usage
-if not "x%3"=="x" goto Usage
+if "x%3"=="x" goto Usage
+if not "x%4"=="x" goto Usage
 set repo_path=%1
 set revision=%2
+set profile=%3
 
 
 :: Start by cleaning up target
@@ -33,7 +34,11 @@ for /f "tokens=1,2 delims=\/" %%a in ("%repo_path%") do (
 set id=%repo-path%-r%revision%
 
 :: File names
-set mainzip=opengeosuite-%id%-win.zip
+if "x%profile%"=="x" (
+  set mainzip=opengeosuite-%id%-win.zip
+) else (
+  set set mainzip=opengeosuite-%profile%-%id%-win.zip
+)
 set dashzip=dashboard-%id%-win32.zip
 
 :: Get the maven artifacts 
@@ -103,9 +108,9 @@ echo.
 echo OpenGeo Suite build process
 echo.
 echo Usage:
-echo   buildexe.bat repo_path revision
+echo   buildexe.bat repo_path revision profile
 echo Exs:
-echo   buildexe.bat branches/2.2.x 1866
+echo   buildexe.bat branches/2.2.x 1866 ee
 echo   buildexe.bat trunk 1898
 echo.
 exit /b 1

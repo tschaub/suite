@@ -2,13 +2,14 @@
 :: This file is to be run on the Windows Hudson build machine only.
 :: To build the Windows installer locally, run the buildexe.bat file.
 
-:: Requires two paramters
-:: hudson.bat %repo_path% %revision%
+:: Requires three paramters
+:: hudson.bat %repo_path% %revision% %profile%
 :: See Usage at bottom
-if "x%2"=="x" goto Usage
-if not "x%3"=="x" goto Usage
+if "x%3"=="x" goto Usage
+if not "x%4"=="x" goto Usage
 set repo_path=%1
 set revision=%2
+set profile=%3
 
 set HTDOCS=C:\Program Files\Apache Software Foundation\Apache2.2\htdocs
 set PATH=%PATH%;C:\Program Files\wget\bin;C:\Program Files\NSIS;C:\Program Files\Subversion\bin
@@ -26,7 +27,7 @@ for /f "tokens=1,2 delims=\/" %%a in ("%REPO_PATH%") do (
 :: Build process
 echo Calling build process...
 echo.
-call buildexe.bat %repo_path% %revision%
+call buildexe.bat %repo_path% %revision% %profile%
 
 :: If buildexe.bat failed in some way
 if not exist OpenGeo*.exe (
@@ -35,8 +36,12 @@ if not exist OpenGeo*.exe (
 )
 
 :: Name the file
-:: Note: %id% is defined in buildexe.bat
-set outfile=OpenGeoSuite-%id%-b%BUILD_NUMBER%.exe
+:: Note #1: %id% is defined in buildexe.bat
+if "x%profile%"=="x" (
+  set outfile=OpenGeoSuite-%id%-b%BUILD_NUMBER%.exe
+) else (
+  set outfile=OpenGeoSuite-%profile%-%id%-b%BUILD_NUMBER%.exe
+)
 ren OpenGeo*.exe %outfile%
 
 :: Create outpath
@@ -67,6 +72,7 @@ echo.
 echo The Hudson build number is: b%BUILD_NUMBER%
 echo The files were built from: %repo_path%
 echo The revision is: %rev% (%revision%)
+echo The profile (if any) is: %profile% 
 echo Output file is called: %outfile%
 echo Output file saved to: %outpath%
 echo Available for download at: http://suite.opengeo.org/winbuilds/%repo_path%/%outfile%
@@ -79,10 +85,10 @@ goto End
 
 :Usage
 echo.
-echo This program requires two parameters:
+echo This program requires three parameters:
 echo.
 echo Usage:
-echo   hudson.bat repo_path revision
+echo   hudson.bat repo_path revision profile
 echo.
 exit /b 1
 
