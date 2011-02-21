@@ -11,6 +11,8 @@ set repo_path=%1
 set revision=%2
 set profile=%3
 
+echo profile is %profile%
+
 set HTDOCS=C:\Program Files\Apache Software Foundation\Apache2.2\htdocs
 set PATH=%PATH%;C:\Program Files\wget\bin;C:\Program Files\NSIS;C:\Program Files\Subversion\bin
 

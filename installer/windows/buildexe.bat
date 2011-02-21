@@ -14,6 +14,7 @@ set repo_path=%1
 set revision=%2
 set profile=%3
 
+echo profile is %profile%
 
 :: Start by cleaning up target
 rd /s /q ..\..\target\ >nul 2>nul
@@ -40,6 +41,10 @@ if "x%profile%"=="x" (
   set set mainzip=opengeosuite-%profile%-%id%-win.zip
 )
 set dashzip=dashboard-%id%-win32.zip
+
+
+echo mainzip is %mainzip%
+
 
 :: Get the maven artifacts 
 echo Downloading %url%/%mainzip% ...
