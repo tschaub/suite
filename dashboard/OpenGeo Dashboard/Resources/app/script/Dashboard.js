@@ -55,6 +55,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         
         var versionInfo = og.util.getVersionInfo();
         this.revision = versionInfo["svn_revision"];
+        this.buildProfile = versionInfo["build_profile"];
         var targetVersion = versionInfo["suite_version"];
         var config = og.util.getUserConfig();
         if (config) {
@@ -767,7 +768,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                     xtype: "box",
                     autoEl: {
                         tag: "div",
-                        html: "<strong>OpenGeo Suite <small ext:qtip='Revision " + this.revision + "'>" + this.config["suite_version"] + "</small></strong>"
+                        html: "<strong>OpenGeo Suite " + (("ee" == this.buildProfile) ? "Enterprise Edition " : "") + "<small ext:qtip='Revision " + this.revision + "'>" + this.config["suite_version"] + "</small></strong>"
                     }
                 },
                 controlButton

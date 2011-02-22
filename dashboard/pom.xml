@@ -75,6 +75,7 @@
                     <filter token="SUITE_VERSION" value="${project.version}"/>
                     <filter token="SVN_REVISION" value="${svn.revision}"/>
                     <filter token="BUILD_DATE" value="${build.date}"/>
+                    <filter token="BUILD_PROFILE" value="${build.profile}"/>
                   </filterset>
                 </copy>
                 <mkdir dir="../target"/>
@@ -111,4 +112,18 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>ee</id>
+      <properties>
+        <build.profile>ee</build.profile>
+      </properties>
+    </profile>
+  </profiles>
+
+  <properties>
+    <build.profile></build.profile>
+  </properties>
+
 </project>
