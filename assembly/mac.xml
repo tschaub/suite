@@ -52,8 +52,8 @@
       </includes>
     </fileSet>
     <fileSet>
-      <directory>docs/gettingstarted/target/html</directory>
-      <outputDirectory>webapps/docs/gettingstarted</outputDirectory>
+      <directory>docs/usermanual/target/html</directory>
+      <outputDirectory>webapps/docs/usermanual</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>docs/styler/target/html</directory>

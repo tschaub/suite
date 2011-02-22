@@ -30,12 +30,8 @@
       </excludes>
     </fileSet>
     <fileSet>
-      <directory>docs/install/target/html</directory>
-      <outputDirectory>webapps/docs/install</outputDirectory>
-    </fileSet>
-    <fileSet>
-      <directory>docs/gettingstarted/target/html</directory>
-      <outputDirectory>webapps/docs/gettingstarted</outputDirectory>
+      <directory>docs/usermanual/target/html</directory>
+      <outputDirectory>webapps/docs/usermanual</outputDirectory>
     </fileSet>
     <fileSet>
       <directory>docs/styler/target/html</directory>

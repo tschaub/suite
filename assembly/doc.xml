@@ -27,16 +27,12 @@
       <outputDirectory>geowebcache</outputDirectory>
     </fileSet>
     <fileSet>
-      <directory>docs/gettingstarted/target/html</directory>
-      <outputDirectory>gettingstarted</outputDirectory>
-    </fileSet>
-    <fileSet>
-      <directory>docs/install/target/html</directory>
-      <outputDirectory>install</outputDirectory>
-    </fileSet>
-    <fileSet>
       <directory>docs/geoeditor/target/html</directory>
       <outputDirectory>geoeditor</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>docs/usermanual/target/html</directory>
+      <outputDirectory>usermanual</outputDirectory>
     </fileSet>
   </fileSets>
   <files>
