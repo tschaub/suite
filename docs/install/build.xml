@@ -11,6 +11,7 @@
       </or>
     </condition>
     <antcall target="html"/>
+    <antcall target="text"/>
     <antcall target="pdf"/>
   </target>
 
@@ -20,6 +21,12 @@
      </exec>
   </target>
   
+  <target name="text">
+     <exec executable="sphinx-build" failonerror="true" dir="${basedir}/source">
+        <arg line="-b text -d ${build.directory}/doctrees . ${build.directory}/text"/>
+     </exec>
+  </target>
+
   <target name="pdf" depends="pdf-if,pdf-else"/>
   <target name="pdf-if" if="pdflatex">
      <exec executable="sphinx-build" failonerror="true" dir="${basedir}/source">
