@@ -26,6 +26,7 @@
   <module>postgis</module>
   <module>geowebcache</module>
   <module>production</module>
+  <module>usermanual</module>
  </modules>
 
 </project>
