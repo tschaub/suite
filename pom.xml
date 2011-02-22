@@ -137,6 +137,7 @@
            <descriptor>assembly/mac.xml</descriptor>
            <descriptor>assembly/doc.xml</descriptor>
            <descriptor>assembly/ext.xml</descriptor>
+           <descriptor>assembly/readme.xml</descriptor>
            <descriptor>assembly/war-geoserver.xml</descriptor>
            <descriptor>assembly/war-geoexplorer.xml</descriptor>
            <descriptor>assembly/war-geoeditor.xml</descriptor>
