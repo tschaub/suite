@@ -6,7 +6,7 @@
   <baseDirectory></baseDirectory>
   <fileSets>
     <fileSet>
-      <directory>assembly/dashboard-osx</directory>
+      <directory>assembly/dashboard-1.0.0-osx</directory>
       <outputDirectory>/</outputDirectory>
     </fileSet>
   </fileSets>

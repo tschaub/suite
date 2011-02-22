@@ -6,7 +6,7 @@
   <baseDirectory></baseDirectory>
   <fileSets>
     <fileSet>
-      <directory>assembly/dashboard-win32</directory>
+      <directory>assembly/dashboard-1.0.0-win32</directory>
       <outputDirectory>/</outputDirectory>
     </fileSet>
   </fileSets>
