@@ -1,0 +1,13 @@
+<assembly>
+  <id>dashboard-osx</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <baseDirectory></baseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>assembly/dashboard-osx</directory>
+      <outputDirectory>/</outputDirectory>
+    </fileSet>
+  </fileSets>
+</assembly>

@@ -145,6 +145,10 @@
            <descriptor>assembly/war-geoserver-jboss.xml</descriptor>
            <descriptor>assembly/war.xml</descriptor>
            <descriptor>assembly/control-flow.xml</descriptor>
+           <descriptor>assembly/dashboard-win32.xml</descriptor>
+           <descriptor>assembly/dashboard-lin32.xml</descriptor>
+           <descriptor>assembly/dashboard-lin64.xml</descriptor>
+           <descriptor>assembly/dashboard-osx.xml</descriptor>
          </descriptors>
        </configuration>
      </plugin>

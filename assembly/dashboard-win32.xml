@@ -1,0 +1,13 @@
+<assembly>
+  <id>dashboard-win32</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <baseDirectory></baseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>assembly/dashboard-win32</directory>
+      <outputDirectory>/</outputDirectory>
+    </fileSet>
+  </fileSets>
+</assembly>

@@ -1,0 +1,13 @@
+<assembly>
+  <id>dashboard-lin32</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <baseDirectory></baseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>assembly/dashboard-lin32</directory>
+      <outputDirectory>/</outputDirectory>
+    </fileSet>
+  </fileSets>
+</assembly>
