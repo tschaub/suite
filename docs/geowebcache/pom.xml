@@ -34,7 +34,7 @@
                   <arg line="pull origin master"/>
                 </exec>
                 <exec executable="git" dir="externals/gwc" failonerror="true">
-                   <arg line="checkout ef74653902173d8cbf6e6acfe6b289254c9d2e2d"/>
+                   <arg line="checkout ${gwc.rev}"/>
                 </exec>
 
                 <mkdir dir="src"/>
@@ -71,5 +71,9 @@
      </plugin>
    </plugins>
  </build>
+
+ <properties>
+   <gwc.rev>0f615de2e1156655d3b8c7538a91b0d2cfb3ddde</gwc.rev>
+ </properties>
 
 </project>
