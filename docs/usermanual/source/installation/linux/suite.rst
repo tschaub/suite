@@ -271,6 +271,67 @@ PostGIS is installed as a standard service (under the name of :command:`postgres
    /etc/init.d/postgresql start
    /etc/init.d/postgresql stop
 
+Installing OpenGeo Suite Enterprise Edition
+-------------------------------------------
+
+RPM Installation
+~~~~~~~~~~~~~~~~
+
+#. Begin by installing the :ref:`Community Edition <RPM>`.
+
+#. Add the following YUM repository using the username/password you obtained ... TODO: Mike fill this in
+
+   For 32 bit systems:
+
+   .. code-block:: bash
+
+      cd /etc/yum.repos.d
+      wget --user='<yourUserName>' --password='yourPassword' http://yum-ee.opengeo.org/centos/5/i386/OpenGeoEE.repo
+
+   For 64 bit systems:
+
+   .. code-block:: bash
+
+      cd /etc/yum.repos.d
+      wget --user='<yourUserName>' --password='yourPassword' http://yum-ee.opengeo.org/centos/5/x86_64/OpenGeoEE.repo
+
+#. Edit the OpenGeoEE.repo file filling in your username and password.
+
+#. Update YUM
+
+   .. code-block:: bash
+
+      yum update
+
+#. Install the opengeo-suite-ee package:
+
+   .. code-block:: bash
+
+      yum install opengeo-suite-ee
+
+APT Installation
+~~~~~~~~~~~~~~~~
+
+#. Begin by installing the :ref:`Community Edition <APT>`.
+
+#. Add the following APT repository using the username/password you obtained ... TODO: Mike fill this in
+
+   .. code-block:: bash
+
+      echo "deb http://yourUserName:yourPassword@apt-ee.opengeo.org/ubuntu lucid main" >> /etc/apt/sources.list
+
+#. Update APT
+
+   .. code-block:: bash
+
+      apt-get update
+
+#. Install the opengeo-suite-ee package:
+
+   .. code-block:: bash
+
+      apt-get install opengeo-suite-ee
+
 For More Information
 --------------------
 
