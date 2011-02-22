@@ -19,7 +19,7 @@ The OpenGeo Suite has the following system requirements:
 Installation
 ------------
 
-Packages for the OpenGeo Suite are currently available in both :ref:`RPM <rpm>` and :ref:`APT <apt>` (Debian) format. 
+Packages for the OpenGeo Suite are currently available in both :ref:`RPM <rpm>` (CentOS/Redhat/Fedora) and :ref:`APT <apt>` (Ubuntu/Debian) format. 
 
 .. note:: The commands contained in the following installation instructions must be run as a user with root privileges, or prefixed with ``sudo``. 
 
@@ -29,6 +29,8 @@ RPM Installation
 ~~~~~~~~~~~~~~~~
 
 .. warning:: The RPM packages are only available for CentOS 5 and above.
+
+.. note:: If upgrading jump to :ref:`RPM_upgrade` .
 
 #. Begin by adding the OpenGeo Yum repository.
 
@@ -66,12 +68,56 @@ RPM Installation
 
 Jump to the :ref:`installation.linux.suite.afterinstall` section.
  
+.. _RPM_upgrade:
+
+RPM Upgrade
+~~~~~~~~~~~
+
 .. _APT:
+
+.. warning:: If upgrading from 2.3.3 to you must first uninstall the opengeo-suite and opengeo-geoserver packages before the upgrade. See :ref:`RPM_upgrade_from_233`.
+
+#. Begin by updating YUM:
+
+   .. code-block:: bash
+
+      yum update
+
+#. The relevant opengeo packages should be included in the upgrade list. If you do not wish to do a full update, cancel the upgrade and install the opengeo-suite package manually:
+
+   .. code-block:: bash
+
+      yum install opengeo-suite
+
+.. _RPM_upgrade_from_233:
+
+Upgrading from 2.3.3
+^^^^^^^^^^^^^^^^^^^^
+
+#. Begin by removing both the opengeo-suite and opengeo-geoserver packages:
+
+   .. code-block:: bash
+
+      yum remove opengeo-geoserver opengeo-suite
+
+#. Update YUM:
+
+   .. code-block:: bash
+
+      yum update
+
+#. Reinstall the opengeo-suite package:
+
+   .. code-block:: bash
+
+      yum install opengeo-suite
 
 APT Installation
 ~~~~~~~~~~~~~~~~
 
 .. warning:: The APT packages are only available for Ubuntu 10.04 and above.
+
+.. note:: If upgrading jump to :ref:`APT_upgrade` .
 
 #. Begin by importing the OpenGeo GPG key:
 
@@ -110,6 +156,23 @@ APT Installation
       http://localhost:8080/dashboard/
 
 Jump to the :ref:`installation.linux.suite.afterinstall` section.
+
+.. _APT_upgrade:
+
+APT Upgrade
+~~~~~~~~~~~
+
+#. Begin by updating APT:
+
+   .. code-block:: bash
+
+      apt-get update
+
+#. Upgrade the opengeo-suite package:
+
+   .. code-block:: bash
+
+      apt-get install opengeo-suite
 
 .. _installation.linux.suite.afterinstall:
 
