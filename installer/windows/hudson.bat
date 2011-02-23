@@ -37,11 +37,7 @@ if not exist OpenGeo*.exe (
 
 :: Name the file
 :: Note #1: %id% is defined in buildexe.bat
-if "x%profile%"=="x" (
-  set outfile=OpenGeoSuite-%id%-b%BUILD_NUMBER%.exe
-) else (
-  set outfile=OpenGeoSuite-%profile%-%id%-b%BUILD_NUMBER%.exe
-)
+set outfile=OpenGeoSuite-%id%-b%BUILD_NUMBER%.exe
 ren OpenGeo*.exe %outfile%
 
 :: Create outpath

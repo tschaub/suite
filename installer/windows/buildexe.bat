@@ -30,19 +30,15 @@ for /f "tokens=1,2 delims=\/" %%a in ("%repo_path%") do (
 )
 
 :: Generate id string (for file names)
-set id=%repo-path%-r%revision%
+if "x%profile%"=="x" (
+  set id=%repo-path%-r%revision%
+) else (
+  set id=%profile%-%repo-path%-r%revision%
+)
 
 :: File names
-if "x%profile%"=="x" (
-  set mainzip=opengeosuite-%id%-win.zip
-) else (
-  set mainzip=opengeosuite-%profile%-%id%-win.zip
-)
+set mainzip=opengeosuite-%id%-win.zip
 set dashzip=dashboard-%id%-win32.zip
-
-
-echo mainzip is %mainzip%
-
 
 :: Get the maven artifacts 
 echo Downloading %url%/%mainzip% ...
