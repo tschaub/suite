@@ -19,20 +19,21 @@ The OpenGeo Suite has the following system requirements:
 Installation
 ------------
 
-Packages for the OpenGeo Suite are currently available in both :ref:`RPM <rpm>` (CentOS/Redhat/Fedora) and :ref:`APT <apt>` (Ubuntu/Debian) format. 
+Packages for the OpenGeo Suite are currently available in both :ref:`RPM <rpm>` (CentOS/Red Hat/Fedora) and :ref:`APT <apt>` (Ubuntu/Debian) format. 
 
 .. note:: The commands contained in the following installation instructions must be run as a user with root privileges, or prefixed with ``sudo``. 
+
 
 .. _RPM:
 
 RPM Installation
 ~~~~~~~~~~~~~~~~
 
-.. warning:: The RPM packages are only available for CentOS 5 and above.
+.. note:: If you are upgrading from a previous version, jump to the section entitled :ref:`RPM_upgrade`.
 
-.. note:: If upgrading jump to :ref:`RPM_upgrade` .
+.. warning:: The RPM packages are only compatible with CentOS 5 and above.
 
-#. Begin by adding the OpenGeo Yum repository.
+#. Begin by adding the OpenGeo YUM repository:
 
    For 32 bit systems:
 
@@ -56,7 +57,7 @@ RPM Installation
 
    .. note:: If the search command does not return any results, the repository was not added properly. Examine the output of the ``yum`` command for any errors or warnings.
 
-#. Install the OpenGeo Suite package (opengeo-suite):
+#. Install the OpenGeo Suite package (``opengeo-suite``):
 
    .. code-block:: bash
 
@@ -66,16 +67,14 @@ RPM Installation
 
       http://localhost:8080/dashboard/
 
-Jump to the :ref:`installation.linux.suite.afterinstall` section.
+Continue reading at the :ref:`installation.linux.suite.afterinstall` section.
  
 .. _RPM_upgrade:
 
 RPM Upgrade
 ~~~~~~~~~~~
 
-.. _APT:
-
-.. warning:: If upgrading from 2.3.3 to you must first uninstall the opengeo-suite and opengeo-geoserver packages before the upgrade. See :ref:`RPM_upgrade_from_233`.
+.. warning:: If upgrading from 2.3.3 you must first uninstall the ``opengeo-suite`` and ``opengeo-geoserver`` packages before the upgrade. See the section entitled :ref:`RPM_upgrade_from_233`.
 
 #. Begin by updating YUM:
 
@@ -83,7 +82,7 @@ RPM Upgrade
 
       yum update
 
-#. The relevant opengeo packages should be included in the upgrade list. If you do not wish to do a full update, cancel the upgrade and install the opengeo-suite package manually:
+#. The relevant OpenGeo packages should be included in the upgrade list. If you do not wish to do a full update, cancel the upgrade and install the ``opengeo-suite`` package manually:
 
    .. code-block:: bash
 
@@ -91,10 +90,12 @@ RPM Upgrade
 
 .. _RPM_upgrade_from_233:
 
-Upgrading from 2.3.3
-^^^^^^^^^^^^^^^^^^^^
+RPM Upgrade from 2.3.3
+^^^^^^^^^^^^^^^^^^^^^^
 
-#. Begin by removing both the opengeo-suite and opengeo-geoserver packages:
+The process for upgrading from version 2.3.3 is slightly different from other upgrades.
+
+#. Begin by removing both the ``opengeo-suite`` and ``opengeo-geoserver`` packages:
 
    .. code-block:: bash
 
@@ -106,18 +107,20 @@ Upgrading from 2.3.3
 
       yum update
 
-#. Reinstall the opengeo-suite package:
+#. Reinstall the OpenGeo Suite package (``opengeo-suite``):
 
    .. code-block:: bash
 
       yum install opengeo-suite
 
+.. _APT:
+
 APT Installation
 ~~~~~~~~~~~~~~~~
 
-.. warning:: The APT packages are only available for Ubuntu 10.04 and above.
+.. note:: If you are upgrading from a previous version, jump to the section entitled :ref:`APT_upgrade`.
 
-.. note:: If upgrading jump to :ref:`APT_upgrade` .
+.. warning:: The APT packages are only available for Ubuntu 10.04 and above.
 
 #. Begin by importing the OpenGeo GPG key:
 
@@ -145,7 +148,7 @@ APT Installation
 
    .. note:: If the search command does not return any results, the repository was not added properly. Examine the output of the ``apt`` commands for any errors or warnings.
 
-#. Install the OpenGeo Suite package (opengeo-suite):
+#. Install the OpenGeo Suite package (``opengeo-suite``):
 
    .. code-block:: bash
 
@@ -155,7 +158,7 @@ APT Installation
 
       http://localhost:8080/dashboard/
 
-Jump to the :ref:`installation.linux.suite.afterinstall` section.
+Continue reading at the :ref:`installation.linux.suite.afterinstall` section.
 
 .. _APT_upgrade:
 
@@ -168,19 +171,20 @@ APT Upgrade
 
       apt-get update
 
-#. Upgrade the opengeo-suite package:
+#. Update the ``opengeo-suite`` package:
 
    .. code-block:: bash
 
       apt-get install opengeo-suite
+
 
 .. _installation.linux.suite.afterinstall:
 
 After installation
 ------------------
 
-Packages
-~~~~~~~~
+List of packages
+~~~~~~~~~~~~~~~~
 
 Once installed, you will have the following packages installed on your system:
 
@@ -208,21 +212,39 @@ Once installed, you will have the following packages installed on your system:
      - Robust, spatially-enabled object-relational database built on PostgreSQL.
    * - opengeo-suite-data
      - OpenGeo Suite Data
-     - Sample data for use with the OpenGeo Suite
+     - Sample data for use with the OpenGeo Suite.
    * - pgadmin3
      - pgAdmin III
      - Graphical client for interacting with PostgreSQL/PostGIS.
 
+Starting/Stopping the OpenGeo Suite
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+GeoServer, GeoExplorer, and all other web-based containers including the documentation are installed into the existing Tomcat instance on the machine. Starting and stopping these applications are therefore accomplished by managing them through the standard Tomcat instance.  Tomcat is installed as a service under the name of :command:`tomcat5`, and can be managed accordingly:
+
+.. code-block:: bash
+
+   /etc/init.d/tomcat5 start
+   /etc/init.d/tomcat5 stop
+
+PostGIS is also installed as a service, under the name of :command:`postgresql`, and can be managed in the same way as Tomcat:
+
+.. code-block:: bash
+
+   /etc/init.d/postgresql start
+   /etc/init.d/postgresql stop
+
+Both services are started and set to run automatically when the OpenGeo Suite is installed.
+
+
 Accessing web applications
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The easiest way to launch the web-based applications contained in the OpenGeo Sutie is via the Dashboard, located at::
+The easiest way to launch the web-based applications contained in the OpenGeo Suite is via the Dashboard.  All web applications are linked from this application.  The Dashboard is accessible via the following URL::
 
   http://localhost:8080/dashboard/
 
-.. note:: Please change the port number if your Tomcat installation is located on a different port.
-
-All web applications are linked from this application.
+.. note:: You will need to change the port number if your Tomcat installation is serving on a different port.
 
 .. list-table::
    :widths: 30 70
@@ -231,106 +253,98 @@ All web applications are linked from this application.
    * - Application
      - URL
    * - OpenGeo Suite Dashboard
-     - ``http://localhost:8080/dashboard/``
+     - http://localhost:8080/dashboard/
    * - GeoServer
-     - ``http://localhost:8080/geoserver/``
+     - http://localhost:8080/geoserver/
    * - OpenGeo Suite Documentation
-     - ``http://localhost:8080/docs/``
+     - http://localhost:8080/docs/
    * - GeoExplorer
-     - ``http://localhost:8080/geoexplorer/``
+     - http://localhost:8080/geoexplorer/
    * - Styler
-     - ``http://localhost:8080/styler/``
+     - http://localhost:8080/styler/
    * - GeoEditor
-     - ``http://localhost:8080/geoeditor/``
+     - http://localhost:8080/geoeditor/
    * - OpenGeo Recipe Book
-     - ``http://localhost:8080/recipes/``
+     - http://localhost:8080/recipes/
 
 Accessing PostGIS
 ~~~~~~~~~~~~~~~~~
 
-You can access PostGIS in one of two ways:  via the command line :command:`psql`, or via the graphical interface :command:`pgadmin3`.  Both commands should be on the path and can be invoked from any Terminal window.  If unfamiliar with PostGIS, start with :command:`pgadmin3`.
+You can access PostGIS in one of two ways:  via the command line will the :command:`psql` application, or via a graphical interface with the :command:`pgadmin3` application.  Both commands should be on the path and can be invoked from any Terminal window.  If unfamiliar with PostGIS, start with :command:`pgadmin3`.  
 
-.. note:: This version of PostGIS is running on port 5432.  The administrator account and password is **opengeo** / **opengeo**.
+This version of PostGIS is running on port 5432, with administrator username and password **opengeo** / **opengeo**.
 
-Starting/Stopping the OpenGeo Suite
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-GeoServer, GeoExplorer, the documentation, and all other web-based containers are installed into the currently installed Tomcat instance. Thus starting and stopping the servlets are accomplished by manging them through the standard Tomcat instance.  Tomcat is installed as a standard service, and can be managed accordingly:
+Installing the OpenGeo Suite Enterprise Edition
+-----------------------------------------------
 
-.. note:: The commands contained in the following installation instructions must be run as a user with root privileges, or prefixed with ``sudo``. 
+If you have installed the OpenGeo Suite Community Edition, you're done!
 
-.. code-block:: bash
-
-   /etc/init.d/tomcat5 start
-   /etc/init.d/tomcat5 stop
-
-PostGIS is installed as a standard service (under the name of :command:`postgresql`) and can be managed accordingly:
-
-.. code-block:: bash
-
-   /etc/init.d/postgresql start
-   /etc/init.d/postgresql stop
-
-Installing OpenGeo Suite Enterprise Edition
--------------------------------------------
+If you have registered for the OpenGeo Suite Enterprise Edition, the next step is to install the package with the extra features contained only in the OpenGeo Suite Enterprise Edition.
 
 RPM Installation
 ~~~~~~~~~~~~~~~~
 
-#. Begin by installing the :ref:`Community Edition <RPM>`.
+#. If you haven't already done so, begin by following the instructions above in the :ref:`base installation <RPM>`.
 
-#. Add the following YUM repository using the username/password you obtained ... TODO: Mike fill this in
+#. You will have received a username and password when you registered for the Enterprise Edition.  Add the following YUM repository using the commands below, making sure to substitute in your username for ``<username>`` and password for ``<password>``.
 
    For 32 bit systems:
 
    .. code-block:: bash
 
       cd /etc/yum.repos.d
-      wget --user='<yourUserName>' --password='yourPassword' http://yum-ee.opengeo.org/centos/5/i386/OpenGeoEE.repo
+      wget --user='<username>' --password='<password>' http://yum-ee.opengeo.org/centos/5/i386/OpenGeoEE.repo
 
    For 64 bit systems:
 
    .. code-block:: bash
 
       cd /etc/yum.repos.d
-      wget --user='<yourUserName>' --password='yourPassword' http://yum-ee.opengeo.org/centos/5/x86_64/OpenGeoEE.repo
+      wget --user='<username>' --password='<password>' http://yum-ee.opengeo.org/centos/5/x86_64/OpenGeoEE.repo
 
 #. Edit the OpenGeoEE.repo file filling in your username and password.
 
-#. Update YUM
+#. Update YUM:
 
    .. code-block:: bash
 
       yum update
 
-#. Install the opengeo-suite-ee package:
+#. Install the ``opengeo-suite-ee`` package:
 
    .. code-block:: bash
 
       yum install opengeo-suite-ee
 
+The ``opengeo-suite-ee`` package contains all of the additional features contained in the OpenGeo Suite Enterprise Edition.
+
+
 APT Installation
 ~~~~~~~~~~~~~~~~
 
-#. Begin by installing the :ref:`Community Edition <APT>`.
+#. If you haven't already done so, begin by following the instructions above in the :ref:`base installation <APT>`.
 
-#. Add the following APT repository using the username/password you obtained ... TODO: Mike fill this in
+#. You will have received a username and password when you registered for the Enterprise Edition.  Add the following APT repository using the commands below, making sure to substitute in your username for ``<username>`` and password for ``<password>``.
 
    .. code-block:: bash
 
-      echo "deb http://yourUserName:yourPassword@apt-ee.opengeo.org/ubuntu lucid main" >> /etc/apt/sources.list
+      echo "deb http://<username>:<password>@apt-ee.opengeo.org/ubuntu lucid main" >> /etc/apt/sources.list
 
-#. Update APT
+#. Update APT:
 
    .. code-block:: bash
 
       apt-get update
 
-#. Install the opengeo-suite-ee package:
+#. Install the ``opengeo-suite-ee`` package:
 
    .. code-block:: bash
 
       apt-get install opengeo-suite-ee
+
+The ``opengeo-suite-ee`` package contains all of the additional features contained in the OpenGeo Suite Enterprise Edition.
+
 
 For More Information
 --------------------
