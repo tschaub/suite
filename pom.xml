@@ -234,5 +234,6 @@
    <gwc.version>1.2-SNAPSHOT</gwc.version>
    <jetty.version>6.1.8</jetty.version>
    <ant.version>1.6.5</ant.version>
+   <dashboard.version>1.0.0</dashboard.version>
  </properties>
 </project>

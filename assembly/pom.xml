@@ -70,8 +70,4 @@
    </plugins>
  </build>
 
- <properties>
-   <dashboard.version>1.0.0</dashboard.version>
- </properties>
-
 </project>
