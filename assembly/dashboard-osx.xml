@@ -10,7 +10,29 @@
       <outputDirectory>/</outputDirectory>
       <excludes>
         <exclude>**/MacOS/OpenGeo Dashboard</exclude>
+        <exclude>**/Contents/manifest</exclude>
+        <exclude>**/Contents/timanifest</exclude>
+        <exclude>**/Contents/tiapp.xml</exclude>
       </excludes>
+    </fileSet>
+    <fileSet>
+      <directory>dashboard/target/resources</directory>
+      <outputDirectory>OpenGeo Dashboard.app/Contents/Resources</outputDirectory>
+      <excludes>
+       <exclude>**/.svn/</exclude>
+       <exclude>**/.svn*</exclude>
+      </excludes>
+    </fileSet>
+    <fileSet>
+      <directory>dashboard/OpenGeo Dashboard</directory>
+      <outputDirectory>OpenGeo Dashboard.app/Contents</outputDirectory>
+      <includes>
+        <include>CHANGELOG.txt</include>
+        <include>LICENSE.txt</include>
+        <include>manifest</include>
+        <include>timanifest</include>
+        <include>tiapp.xml</include>
+      </includes>
     </fileSet>
   </fileSets>
   <files>
