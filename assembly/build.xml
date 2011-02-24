@@ -2,6 +2,7 @@
 <project name="assembly" default="build" basedir=".">
 
   <property name="data" value="http://data.opengeo.org/suite"/>
+  <property name="db.ver" value="${dashboard.version}"/>
 
   <target name="build"> 
     <tstamp/>
@@ -31,72 +32,72 @@
     <unzip src="postgres-osx.zip" dest="postgres-osx/pgsql" overwrite="true"/>
 
     <!-- Dashboard Mac OSX -->
-    <get src="${data}/dashboard-1.0.0-osx.zip" dest="dashboard-1.0.0-osx.zip" usetimestamp="yes"/>
-    <delete dir="dashboard-1.0.0-osx"/>
-    <mkdir dir="dashboard-1.0.0-osx"/>
+    <get src="${data}/dashboard-${db.ver}-osx.zip" dest="dashboard-${db.ver}-osx.zip" usetimestamp="yes"/>
+    <delete dir="dashboard-${db.ver}-osx"/>
+    <mkdir dir="dashboard-${db.ver}-osx"/>
     <exec executable="unzip" failonerror="true">
-        <arg value="dashboard-1.0.0-osx.zip"/>
+        <arg value="dashboard-${db.ver}-osx.zip"/>
     </exec>
-    <copy todir="dashboard-1.0.0-osx/OpenGeo Dashboard.app/Contents/Resources">
+    <copy todir="dashboard-${db.ver}-osx/OpenGeo Dashboard.app/Contents/Resources">
         <fileset dir="../dashboard/target/resources">
             <exclude name="**/.svn/"/>
             <exclude name="**/.svn*"/>
         </fileset>
     </copy>
-    <copy todir="dashboard-1.0.0-osx/OpenGeo Dashboard.app/Contents">
+    <copy todir="dashboard-${db.ver}-osx/OpenGeo Dashboard.app/Contents">
         <fileset dir="../dashboard/OpenGeo Dashboard"
                  includes="CHANGELOG.txt,LICENSE.txt,manifest,tiapp.xml,timanifest"/>
     </copy>
     
     <!-- Dashboard Linux32 -->
-    <get src="${data}/dashboard-1.0.0-lin32.zip" dest="dashboard-1.0.0-lin32.zip" usetimestamp="yes"/>
-    <delete dir="dashboard-1.0.0-lin32"/>
+    <get src="${data}/dashboard-${db.ver}-lin32.zip" dest="dashboard-${db.ver}-lin32.zip" usetimestamp="yes"/>
+    <delete dir="dashboard-${db.ver}-lin32"/>
     <exec executable="unzip" failonerror="true">
-        <arg value="dashboard-1.0.0-lin32.zip"/>
+        <arg value="dashboard-${db.ver}-lin32.zip"/>
     </exec>
-    <copy todir="dashboard-1.0.0-lin32/OpenGeo Dashboard/Resources">
+    <copy todir="dashboard-${db.ver}-lin32/OpenGeo Dashboard/Resources">
         <fileset dir="../dashboard/target/resources">
             <exclude name="**/.svn/"/>
             <exclude name="**/.svn*"/>
         </fileset>
     </copy>
-    <copy todir="dashboard-1.0.0-lin32/OpenGeo Dashboard/">
+    <copy todir="dashboard-${db.ver}-lin32/OpenGeo Dashboard/">
         <fileset dir="../dashboard/OpenGeo Dashboard"
                  includes="CHANGELOG.txt,LICENSE.txt,manifest,tiapp.xml,timanifest"/>
     </copy>
 
     <tstamp/>
     <!-- Dashboard Linux64 -->
-    <get src="${data}/dashboard-1.0.0-lin64.zip" dest="dashboard-1.0.0-lin64.zip" usetimestamp="yes"/>
-    <delete dir="dashboard-1.0.0-lin64"/>
+    <get src="${data}/dashboard-${db.ver}-lin64.zip" dest="dashboard-${db.ver}-lin64.zip" usetimestamp="yes"/>
+    <delete dir="dashboard-${db.ver}-lin64"/>
     <exec executable="unzip" failonerror="true">
-        <arg value="dashboard-1.0.0-lin64.zip"/>
+        <arg value="dashboard-${db.ver}-lin64.zip"/>
     </exec>
-    <copy todir="dashboard-1.0.0-lin64/OpenGeo Dashboard/Resources">
+    <copy todir="dashboard-${db.ver}-lin64/OpenGeo Dashboard/Resources">
         <fileset dir="../dashboard/target/resources">
             <exclude name="**/.svn/"/>
             <exclude name="**/.svn*"/>
         </fileset>
     </copy>
-    <copy todir="dashboard-1.0.0-lin64/OpenGeo Dashboard/">
+    <copy todir="dashboard-${db.ver}-lin64/OpenGeo Dashboard/">
         <fileset dir="../dashboard/OpenGeo Dashboard"
                  includes="CHANGELOG.txt,LICENSE.txt,manifest,tiapp.xml,timanifest"/>
     </copy>
 
     <!-- Dashboard Win32 -->
-    <get src="${data}/dashboard-1.0.0-win32.zip" dest="dashboard-1.0.0-win32.zip" usetimestamp="yes"/>
-    <delete dir="dashboard-1.0.0-win32"/>
-    <mkdir dir="dashboard-1.0.0-win32"/>
+    <get src="${data}/dashboard-${db.ver}-win32.zip" dest="dashboard-${db.ver}-win32.zip" usetimestamp="yes"/>
+    <delete dir="dashboard-${db.ver}-win32"/>
+    <mkdir dir="dashboard-${db.ver}-win32"/>
     <exec executable="unzip" failonerror="true">
-        <arg value="dashboard-1.0.0-win32.zip"/>
+        <arg value="dashboard-${db.ver}-win32.zip"/>
     </exec>
-    <copy todir="dashboard-1.0.0-win32/OpenGeo Dashboard/Resources">
+    <copy todir="dashboard-${db.ver}-win32/OpenGeo Dashboard/Resources">
         <fileset dir="../dashboard/target/resources">
             <exclude name="**/.svn/"/>
             <exclude name="**/.svn*"/>
         </fileset>
     </copy>
-    <copy todir="dashboard-1.0.0-win32/OpenGeo Dashboard/">
+    <copy todir="dashboard-${db.ver}-win32/OpenGeo Dashboard/">
         <fileset dir="../dashboard/OpenGeo Dashboard"
                  includes="CHANGELOG.txt,LICENSE.txt,manifest,tiapp.xml,timanifest"/>
     </copy>

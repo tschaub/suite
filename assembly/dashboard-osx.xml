@@ -6,8 +6,18 @@
   <baseDirectory></baseDirectory>
   <fileSets>
     <fileSet>
-      <directory>assembly/dashboard-1.0.0-osx</directory>
+      <directory>assembly/dashboard-${dashboard.version}-osx</directory>
       <outputDirectory>/</outputDirectory>
+      <excludes>
+        <exclude>**/MacOS/OpenGeo Dashboard</exclude>
+      </excludes>
     </fileSet>
   </fileSets>
+  <files>
+    <file>
+      <source>assembly/dashboard-${dashboard.version}-osx/OpenGeo Dashboard.app/Contents/MacOS/OpenGeo Dashboard</source>
+      <outputDirectory>OpenGeo Dashboard.app/Contents/MacOS</outputDirectory>
+      <fileMode>755</fileMode>
+    </file>
+  </files>
 </assembly>
