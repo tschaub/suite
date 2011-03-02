@@ -20,7 +20,7 @@
                 var layer = new OpenLayers.Layer.WMS(
                     "Global Imagery",
                     "http://maps.opengeo.org/geowebcache/service/wms",
-                    {layers: "openstreetmap"}
+                    {layers: "openstreetmap", format: "image/png"}
                 );
                 map.addLayer(layer);
                 

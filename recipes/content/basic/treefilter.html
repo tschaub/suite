@@ -25,7 +25,7 @@
                         new OpenLayers.Layer.WMS(
                             "Transportation",
                             "http://maps.opengeo.org/geowebcache/service/wms",
-                            {layers: "openstreetmap"}
+                            {layers: "openstreetmap", format: "image/png"}
                         ),
                         new OpenLayers.Layer.WMS(
                             "Global Imagery",
@@ -35,8 +35,8 @@
                         ),
                         new OpenLayers.Layer.WMS(
                             "State Boundaries",
-                            "http://maps.opengeo.org/geowebcache/service/wms",
-                            {layers: "topp:states", format: "image/png"}
+                            "http://v2.suite.opengeo.org/geoserver/wms",
+                            {layers: "usa:states", format: "image/gif", transparent: "true"}
                         )
                     ],
                     center: [-120, 48],
