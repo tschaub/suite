@@ -3,7 +3,7 @@
 . functions
 
 if [ -z $5 ]; then
-  echo "Usage: $0 NVOL SIZE DEV MNT INSTANCE_ID ZONE [--with-volumes "vol1,vol1,..."] [--skip-create-volumes]"
+  echo "Usage: $0 NVOL SIZE DEV MNT INSTANCE_ID ZONE [--skip-create-volumes] [--with-volumes vol1 vol2 ...]"
   exit 1
 fi
 
@@ -36,7 +36,7 @@ for (( i=6; i < ${#args[*]}; i++ )); do
          exit 1
        fi
 
-       vol_ids[$i]=$vol_id
+       vol_ids[(( j-i-1 ))]=$vol_id
      done
      
      break
@@ -127,7 +127,7 @@ if [ $RAID_MODE == "create" ]; then
   --raid-devices $NVOL ${devs[*]}
   check_rc $? "mdadm"
 else
-  sudo mdadm --assemble ${devs[*]}
+  sudo mdadm --assemble $DEV ${devs[*]}
 fi
 
 # update mdadm.conf

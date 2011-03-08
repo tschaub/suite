@@ -61,7 +61,7 @@ function ec2_instance_host() {
 # ec2_volume_status <volume-id>
 ec2_volume_status() {
   if [ ! -z $1 ]; then
-    status=`ec2-describe-volumes -F volume-id=$1 | cut -f 6`
+    status=`ec2-describe-volumes $1 | cut -f 6`
   fi
 
   echo -n $status

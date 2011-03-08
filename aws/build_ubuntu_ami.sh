@@ -54,7 +54,7 @@ function poll_instance() {
 }
 
 if [ -z $2 ]; then
-  echo "Usage: $0 AMI_ID IMAGE_NAME [-t 'ebs'|'s3'] [ -a 'i386'|'x86_64']"
+  echo "Usage: $0 AMI_ID IMAGE_NAME [-t 'ebs'|'s3'] [ -a 'i386'|'x86_64'] [ -s 'm1.small'|'m1.large'] [--skip-create-image]"
   exit 1
 fi
 
@@ -65,11 +65,15 @@ check_ec2_tools
 args=( $* )
 for (( i = 2; i < ${#args[*]}; i++ )); do
   arg=${args[$i]}
+  val=${args[(( i+1 ))]}
   if [ $arg == "-t" ]; then
-    IMAGE_TYPE=${args[(( i+1 ))]}
+    IMAGE_TYPE=$val
   fi
   if [ $arg == "-a" ]; then
-    IMAGE_ARCH=${args[(( i+1 ))]}
+    IMAGE_ARCH=$val
+  fi
+  if [ $arg == "-s" ]; then
+    IMAGE_SIZE=$val
   fi
   if [ $arg == "--skip-create-image" ]; then
     SKIP_CREATE_IMAGE="yes"
@@ -82,13 +86,19 @@ fi
 if [ -z $IMAGE_ARCH ]; then
   IMAGE_ARCH="i386"
 fi
+if [ -z $IMAGE_SIZE ]; then
+  IMAGE_SIZE="m1.small"
+  if [ $IMAGE_ARCH == "x86_64" ]; then
+    IMAGE_SIZE="m1.large"
+  fi 
+fi
 
 AMI_ID=$1
 IMAGE_NAME=$2
 CLIENT_TOKEN=`uuidgen`
 
 log "Starting instance from ami $AMI_ID with client token $CLIENT_TOKEN"
-ec2-run-instances -k suite $AMI_ID --client-token $CLIENT_TOKEN 
+ec2-run-instances -k suite -t $IMAGE_SIZE $AMI_ID --client-token $CLIENT_TOKEN 
 check_rc $? "ec2-run-instances"
 
 log "Polling instance"
