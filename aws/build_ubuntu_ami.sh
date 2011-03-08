@@ -53,14 +53,37 @@ function poll_instance() {
   return 0
 }
 
-if [ -z "$1" ]; then
-  echo "Usage: $0 <AMI_ID>"
+if [ -z "$2" ]; then
+  echo "Usage: $0 AMI_ID [-n IMAGE_NAME] [-t 'ebs'|'s3'] [ -a 'i386'|'x86_64']"
   exit 1
 fi
 
+# ensure the ec2 api tools are properly setup
 check_ec2_tools
 
+# parse the command line args
+args=( $* )
+for (( i = 2; i < ${#args[*]}; i++ )); do
+  if [ "${args[$i]}" == "-t" ]; then
+    IMAGE_TYPE=${args[(( i+1 ))]}
+  fi
+  if [ "${args[$i]}" == "-n" ]; then
+    IMAGE_NAME=${args[(( i+1 ))]}
+  fi
+  if [ "${args[$i]}" == "-a" ]; then
+    IMAGE_ARCH=${args[(( i+1 ))]}
+  fi
+done
+
+if [ -z $IMAGE_TYPE ]; then
+  IMAGE_TYPE="ebs"
+fi
+if [ -z $IMAGE_ARCH ]; then
+  IMAGE_ARCH="i386"
+fi
+
 AMI_ID=$1
+IMAGE_NAME=$2
 CLIENT_TOKEN=`uuidgen`
 
 log "Starting instance from ami $AMI_ID with client token $CLIENT_TOKEN"
@@ -76,7 +99,19 @@ log "instance available at $HOST"
 
 INSTANCE_ID=`ec2-describe-instances -F client-token=$TOKEN | grep "^INSTANCE" | cut -f 2`
 SSH_OPTS="-i $SUITE_KEYPAIR -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
-scp $SSH_OPTS prepare_ubuntu_image.sh functions ubuntu@$HOST:/home/ubuntu
-ssh $SSH_OPTS ubuntu@$HOST 'cd /home/ubuntu && ./prepare_ubuntu_image.sh'
+scp $SSH_OPTS prep_ubuntu_image.sh functions ubuntu@$HOST:/home/ubuntu
+check_rc $? "updload prep script"
 
-ec2-create-image 
+ssh $SSH_OPTS ubuntu@$HOST 'cd /home/ubuntu && ./prep_ubuntu_image.sh'
+check_rc $? "remote prepare"
+
+if [ $IMAGE_TYPE == "ebs" ]; then
+  ec2-create-image -n $IMAGE_NAME $INSTANCE_ID
+else
+  scp $SSH_OPTS bundle_s3_image.sh $EC2_PRIVATE_KEY $EC2_CERT ubuntu@$HOST:/home/ubuntu
+  check_rc $? "upload private key and certificate"
+
+  ssh $SSH_OPTS ubuntu@$HOST 'cd /home/ubuntu && ./bundle_s3_image.sh $IMAGE_NAME'
+  check_rc $? "remote bundle image"
+    
+fi
