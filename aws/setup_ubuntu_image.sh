@@ -15,6 +15,7 @@ sudo apt-get update
 check_rc $? "apt-get update"
 
 # populate the debconf database so we can run headless
+echo "postfix postfix/main_mailer_type select No configuration" | sudo debconf-set-selections
 echo "sun-java6-jdk shared/accepted-sun-dlj-v1-1 select true" | sudo debconf-set-selections 
 echo "opengeo-geoserver opengeo_geoserver/proxyurl string " | sudo debconf-set-selections 
 echo "opengeo-geoserver opengeo_geoserver/username string " | sudo debconf-set-selections 

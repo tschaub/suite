@@ -53,8 +53,8 @@ function poll_instance() {
   return 0
 }
 
-if [ -z "$2" ]; then
-  echo "Usage: $0 AMI_ID [-n IMAGE_NAME] [-t 'ebs'|'s3'] [ -a 'i386'|'x86_64']"
+if [ -z $2 ]; then
+  echo "Usage: $0 AMI_ID IMAGE_NAME [-t 'ebs'|'s3'] [ -a 'i386'|'x86_64']"
   exit 1
 fi
 
@@ -64,14 +64,15 @@ check_ec2_tools
 # parse the command line args
 args=( $* )
 for (( i = 2; i < ${#args[*]}; i++ )); do
-  if [ "${args[$i]}" == "-t" ]; then
+  arg=${args[$i]}
+  if [ $arg == "-t" ]; then
     IMAGE_TYPE=${args[(( i+1 ))]}
   fi
-  if [ "${args[$i]}" == "-n" ]; then
-    IMAGE_NAME=${args[(( i+1 ))]}
-  fi
-  if [ "${args[$i]}" == "-a" ]; then
+  if [ $arg == "-a" ]; then
     IMAGE_ARCH=${args[(( i+1 ))]}
+  fi
+  if [ $arg == "--skip-create-image" ]; then
+    SKIP_CREATE_IMAGE="yes"
   fi
 done
 
@@ -94,24 +95,29 @@ log "Polling instance"
 poll_instance $CLIENT_TOKEN
 check_rc $? "poll_instance"
 
-HOST=`ec2-describe-instances -F client-token=$TOKEN | grep "^INSTANCE" | cut -f 4`
+HOST=`ec2_instance_host $CLIENT_TOKEN`
 log "instance available at $HOST"
 
-INSTANCE_ID=`ec2-describe-instances -F client-token=$TOKEN | grep "^INSTANCE" | cut -f 2`
-SSH_OPTS="-i $SUITE_KEYPAIR -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
-scp $SSH_OPTS prep_ubuntu_image.sh functions ubuntu@$HOST:/home/ubuntu
-check_rc $? "updload prep script"
+INSTANCE_ID=`ec2_instance_id $CLIENT_TOKEN`
+log "instance id is $INSTANCE_ID"
 
-ssh $SSH_OPTS ubuntu@$HOST 'cd /home/ubuntu && ./prep_ubuntu_image.sh'
-check_rc $? "remote prepare"
+SSH_OPTS=`ssh_opts`
 
-if [ $IMAGE_TYPE == "ebs" ]; then
-  ec2-create-image -n $IMAGE_NAME $INSTANCE_ID
-else
-  scp $SSH_OPTS bundle_s3_image.sh $EC2_PRIVATE_KEY $EC2_CERT ubuntu@$HOST:/home/ubuntu
-  check_rc $? "upload private key and certificate"
+scp $SSH_OPTS setup_ubuntu_image.sh functions ubuntu@$HOST:/home/ubuntu
+check_rc $? "updload setup script"
 
-  ssh $SSH_OPTS ubuntu@$HOST 'cd /home/ubuntu && ./bundle_s3_image.sh $IMAGE_NAME'
-  check_rc $? "remote bundle image"
-    
+ssh $SSH_OPTS ubuntu@$HOST 'cd /home/ubuntu && ./setup_ubuntu_image.sh'
+check_rc $? "remote setup"
+
+if [ -z $SKIP_CREATE_IMAGE ]; then
+  if [ $IMAGE_TYPE == "ebs" ]; then
+    ec2-create-image -n $IMAGE_NAME $INSTANCE_ID
+  else
+    scp $SSH_OPTS bundle_s3_image.sh $EC2_PRIVATE_KEY $EC2_CERT ubuntu@$HOST:/home/ubuntu
+    check_rc $? "upload private key and certificate"
+  
+    ssh $SSH_OPTS ubuntu@$HOST 'cd /home/ubuntu && ./bundle_s3_image.sh $IMAGE_NAME'
+    check_rc $? "remote bundle image"
+      
+  fi
 fi
