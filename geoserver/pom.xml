@@ -314,6 +314,7 @@
 
  <modules>
   <module>extension</module>
+  <module>ftpclient</module>
   <module>importer</module>
   <module>analytics</module>
   <module>web</module>
