@@ -2,31 +2,6 @@
 
 . functions
 
-SUITE_KEYPAIR=~/.ec2/suite.pem
-
-# check_ec2_tools
-function check_ec2_tools() {
-  ec2-version
-  check_rc $? "ec2-api-tools not avaialble on PATH, ec2-version"
-
-  if [ -z $EC2_HOME ]; then
-     echo "EC2_HOME environment variable not set. Exiting."
-     exit 1
-  fi
-  if [ -z $EC2_PRIVATE_KEY ]; then
-     echo "EC2_PRIMARY_KEY environment variable not set. Exiting."
-     exit 1
-  fi
-  if [ -z $EC2_CERT ]; then
-     echo "EC2_CERT environment variable not set. Exiting."
-     exit 1
-  fi
-  if [ ! -e $SUITE_KEYPAIR ]; then
-     echo "suite keypair: ~/.ec2/suite.pem not found. Exiting."
-     exit 1
-  fi
-}
-
 # poll_instance <client_token> [<max_iterations>]
 function poll_instance() {
   local client_token=$1
