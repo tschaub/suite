@@ -108,7 +108,7 @@ SSH_OPTS=`ssh_opts`
 scp $SSH_OPTS setup_ubuntu_image.sh functions ubuntu@$HOST:/home/ubuntu
 check_rc $? "updload setup script"
 
-ssh $SSH_OPTS ubuntu@$HOST 'cd /home/ubuntu && ./setup_ubuntu_image.sh $IMAGE_SIZE'
+ssh $SSH_OPTS ubuntu@$HOST "cd /home/ubuntu && ./setup_ubuntu_image.sh $IMAGE_SIZE"
 check_rc $? "remote setup"
 
 if [ -z $SKIP_CREATE_IMAGE ]; then
