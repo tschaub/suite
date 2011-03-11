@@ -40,5 +40,7 @@ check_rc $? "apt-get -y install opengeo-suite"
 
 # tweak memory settings based on instance size
 if [ $IMAGE_SIZE == "m1.large" ]; then
-
+  sudo sed -i 's/\(JAVA_OPTS=.*\)Xms[0-9]\+[[:alpha:]]/\1Xms1024m/g' /etc/default/tomcat6
+  sudo sed -i 's/\(JAVA_OPTS=.*\)Xmx[0-9]\+[[:alpha:]]/\1Xmx2048m/g' /etc/default/tomcat6
+  sudo service tomcat6 restart 
 fi
