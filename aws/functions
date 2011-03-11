@@ -75,5 +75,5 @@ get_ami_version() {
   else
     ver=$( echo $1|sed 's#.*/##g' )
   fi
-  echo $ver-`date +"%Y%m%d"`
+  echo $ver
 }
