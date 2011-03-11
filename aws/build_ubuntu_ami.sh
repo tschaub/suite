@@ -45,6 +45,32 @@ function poll_instance() {
   return 0
 }
 
+# poll_image <image-id> [<max_iterations>]
+function poll_image() {
+  local image_id=$1
+  local max_iter=$2
+  local stat=""
+  local i=0  
+
+  if [ -z $max_iter ]; then
+    max_iter=50
+  fi
+
+  while [ "$stat" != "available" ]; do
+    if [ $i -lt $max_iter ]; then
+       (( i++ ))
+    else
+       return 1
+    fi
+    sleep 5
+    
+    stat=`ec2-image-status $image_id`
+    log "status of image $image_id is $stat"
+  done
+
+  return 0
+}
+
 if [ -z $2 ]; then
   echo "Usage: $0 AMI_ID IMAGE_NAME [-t 'ebs'|'s3'] [ -a 'i386'|'x86_64'] [ -s 'm1.small'|'m1.large'] [--skip-create-image]"
   exit 1
@@ -113,7 +139,11 @@ check_rc $? "remote setup"
 
 if [ -z $SKIP_CREATE_IMAGE ]; then
   if [ $IMAGE_TYPE == "ebs" ]; then
-    ec2-create-image -n $IMAGE_NAME $INSTANCE_ID
+    IMAGE_ID=$( ec2-create-image -n $IMAGE_NAME $INSTANCE_ID | cut -f 2 )
+    check_rc $? "ec2-create-image"    
+
+    poll_image $IMAGE_ID
+    check_rc $? "ec2-create-image"    
   else
     scp $SSH_OPTS bundle_s3_image.sh $EC2_PRIVATE_KEY $EC2_CERT ubuntu@$HOST:/home/ubuntu
     check_rc $? "upload private key and certificate"
