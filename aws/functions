@@ -67,6 +67,14 @@ ec2_volume_status() {
   echo -n $status
 }
 
+# ec2_image_status <image-id>
+ec2_image_status() {
+  if [ ! -z $1 ]; then
+    status=`ec2-describe-images $1 | grep IMAGE | cut -f 5`
+  fi
+  echo -n $status
+}
+
 # get_version <repo_path>
 get_ami_version() {
   local ver=""
