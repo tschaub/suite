@@ -64,7 +64,7 @@ function poll_image() {
     fi
     sleep 5
     
-    stat=`ec2-image-status $image_id`
+    stat=`ec2_image_status $image_id`
     log "status of image $image_id is $stat"
   done
 
