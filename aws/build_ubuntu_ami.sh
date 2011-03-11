@@ -120,6 +120,8 @@ if [ -z $SKIP_CREATE_IMAGE ]; then
   
     ssh $SSH_OPTS ubuntu@$HOST 'cd /home/ubuntu && ./bundle_s3_image.sh $IMAGE_NAME'
     check_rc $? "remote bundle image"
-      
   fi
 fi
+
+# shut down the instance
+ec2-terminate-instances $INSTANCE_ID
