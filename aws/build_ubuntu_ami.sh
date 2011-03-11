@@ -25,6 +25,23 @@ function poll_instance() {
     log "status of ami $client_token is $stat"
   done
 
+  # poll until the host is able to accept ssh connections
+  i=0
+  local ret=1
+  local SSH_OPTS=`ssh_opts` 
+  local HOST=`ec2_instance_host $CLIENT_TOKEN` 
+  while [ $ret -ne 0 ]; do
+    if [ $i -lt $max_iter ]; then
+       (( i++ ))
+    else
+       return 1
+    fi
+    sleep 5
+
+    ssh $SSH_OPTS ubuntu@$HOST 'ls'
+    ret=$?
+  done
+
   return 0
 }
 
