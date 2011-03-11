@@ -66,3 +66,14 @@ ec2_volume_status() {
 
   echo -n $status
 }
+
+# get_version <repo_path>
+get_version() {
+  local ver=""
+  if [ "trunk" == $1 ]; then
+    ver="latest"
+  else
+    ver=$( echo $1|sed 's#.*/##g' )
+  fi
+  echo $ver
+}

@@ -2,6 +2,13 @@
 
 . functions
 
+if [ -z $1 ]; then
+  echo "Usage: $0 IMAGE_SIZE"
+  exit 1
+fi
+
+IMAGE_SIZE=$1
+
 # add the repos for sun jdk and opengeo
 sudo bash -c "echo 'deb http://archive.canonical.com/ lucid partner' >> /etc/apt/sources.list"
 
@@ -31,3 +38,7 @@ update-java-alternatives -s java-6-sun
 sudo apt-get -y install opengeo-suite
 check_rc $? "apt-get -y install opengeo-suite" 
 
+# tweak memory settings based on instance size
+if [ $IMAGE_SIZE == "m1.large" ]; then
+
+fi
