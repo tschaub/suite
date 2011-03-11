@@ -16,10 +16,10 @@ function check_ec2_tools() {
   ec2-version
   check_rc $? "ec2-api-tools not avaialble on PATH, ec2-version"
 
-  if [ -z $EC2_HOME ]; then
-     echo "EC2_HOME environment variable not set. Exiting."
-     exit 1
-  fi
+  #if [ -z $EC2_HOME ]; then
+  #   echo "EC2_HOME environment variable not set. Exiting."
+  #   exit 1
+  #fi
   if [ -z $EC2_PRIVATE_KEY ]; then
      echo "EC2_PRIMARY_KEY environment variable not set. Exiting."
      exit 1
