@@ -20,12 +20,12 @@ function check_ec2_tools() {
   #   echo "EC2_HOME environment variable not set. Exiting."
   #   exit 1
   #fi
-  if [ -z $EC2_PRIVATE_KEY ]; then
-     echo "EC2_PRIMARY_KEY environment variable not set. Exiting."
+  if [ -z $EC2_PRIVATE_KEY ] || [ ! -e $EC2_PRIVATE_KEY ]; then
+     echo "EC2_PRIMARY_KEY environment variable not set or does not exist. Exiting."
      exit 1
   fi
-  if [ -z $EC2_CERT ]; then
-     echo "EC2_CERT environment variable not set. Exiting."
+  if [ -z $EC2_CERT ] || [ ! -e $EC2_CERT ]; then
+     echo "EC2_CERT environment variable not set or does not exist. Exiting."
      exit 1
   fi
   if [ ! -e $SUITE_KEYPAIR ]; then
