@@ -1,6 +1,7 @@
 #!/bin/bash
 
 . functions
+. s3.properties
 
 if [ -z $2 ]; then
   echo "Usage: $0 NAME ARCH [--skip-bundle] [--skip-upload] [--skip-register]"
@@ -32,7 +33,7 @@ check_rc $? "apt-get install ec2 api/ami tools"
 
 if [ -z $SKIP_BUNDLE ]; then
   # bundle the image
-  ec2-bundle-vol -u 372029072695 -r $IMAGE_ARCH
+  sudo ec2-bundle-vol -c $EC2_CERT -k $EC2_PRIVATE_KEY -u $S3_USER -r $IMAGE_ARCH
   check_rc $? "ec2-bundle-vol"
 fi
 
@@ -42,11 +43,11 @@ if [ ! -e  $IMAGE_MANIFEST ]; then
   exit 1
 fi
 
-S3_BUCKET=s3.suite.opengeo.org/$IMAGE_NAME
+S3_BUCKET=$S3_BUCKET_ROOT/$IMAGE_NAME
 
 if [ -z $SKIP_UPLOAD ]; then
   # upload the bundle
-  ec2-upload-bundle -b $S3_BUCKET -m $IMAGE_MANIFEST -a AKIAIEIFXZRDU4AY5B3Q -s LbEM4l6xxqHiJUY6Kb6eHyvl3Ryn3ItefAz02mnd
+  ec2-upload-bundle -b $S3_BUCKET -m $IMAGE_MANIFEST -a $S3_ACCESS_KEY -s $S3_SECRET_KEY
   check_rc $? "ec2-upload-bundle"
 fi
 

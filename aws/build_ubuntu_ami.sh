@@ -71,8 +71,8 @@ function poll_image() {
   return 0
 }
 
-if [ -z $2 ]; then
-  echo "Usage: $0 AMI_ID IMAGE_NAME [-t 'ebs'|'s3'] [ -a 'i386'|'x86_64'] [ -s 'm1.small'|'m1.large'] [--skip-create-image]"
+if [ -z $3 ]; then
+  echo "Usage: $0 AMI_ID IMAGE_NAME <dev|prod> [-t 'ebs'|'s3'] [ -a 'i386'|'x86_64'] [ -s 'm1.small'|'m1.large'] [--skip-create-image]"
   exit 1
 fi
 
@@ -113,6 +113,12 @@ fi
 
 AMI_ID=$1
 IMAGE_NAME=$2
+ACCOUNT=$3
+if [ $ACCOUNT != "dev" ] && [ $ACCOUNT != "prod" ]; then
+  echo "ACCOUNT must be one of 'dev' or 'prod'. Exiting"
+  exit 1
+fi
+
 CLIENT_TOKEN=`uuidgen`
 
 log "Starting instance from ami $AMI_ID with client token $CLIENT_TOKEN"
@@ -145,8 +151,8 @@ if [ -z $SKIP_CREATE_IMAGE ]; then
     poll_image $IMAGE_ID
     check_rc $? "ec2-create-image"    
   else
-    scp $SSH_OPTS bundle_s3_image.sh $EC2_PRIVATE_KEY $EC2_CERT ubuntu@$HOST:/home/ubuntu
-    check_rc $? "upload private key and certificate"
+    scp $SSH_OPTS s3-$ACCOUNT.properties bundle_s3_image.sh $EC2_PRIVATE_KEY $EC2_CERT ubuntu@$HOST:/home/ubuntu
+    check_rc $? "upload bundle script and private key and certificate"
   
     ssh $SSH_OPTS ubuntu@$HOST "cd /home/ubuntu && ./bundle_s3_image.sh $IMAGE_NAME $IMAGE_ARCH"
     check_rc $? "remote bundle image"
