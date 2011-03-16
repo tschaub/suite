@@ -148,7 +148,7 @@ if [ -z $SKIP_CREATE_IMAGE ]; then
     scp $SSH_OPTS bundle_s3_image.sh $EC2_PRIVATE_KEY $EC2_CERT ubuntu@$HOST:/home/ubuntu
     check_rc $? "upload private key and certificate"
   
-    ssh $SSH_OPTS ubuntu@$HOST 'cd /home/ubuntu && ./bundle_s3_image.sh $IMAGE_NAME'
+    ssh $SSH_OPTS ubuntu@$HOST 'cd /home/ubuntu && ./bundle_s3_image.sh $IMAGE_NAME $IMAGE_ARCH'
     check_rc $? "remote bundle image"
   fi
 fi
