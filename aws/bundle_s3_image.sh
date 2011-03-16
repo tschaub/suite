@@ -32,7 +32,7 @@ check_rc $? "apt-get install ec2 api/ami tools"
 
 if [ -z $SKIP_BUNDLE ]; then
   # bundle the image
-  sudo ec2-bundle-vol -u 372029072695 -r $IMAGE_ARCH
+  ec2-bundle-vol -u 372029072695 -r $IMAGE_ARCH
   check_rc $? "ec2-bundle-vol"
 fi
 
