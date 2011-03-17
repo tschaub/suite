@@ -72,7 +72,7 @@ function poll_image() {
 }
 
 if [ -z $3 ]; then
-  echo "Usage: $0 AMI_ID IMAGE_NAME <dev|prod> [-t 'ebs'|'s3'] [ -a 'i386'|'x86_64'] [ -s 'm1.small'|'m1.large'] [--skip-create-image]"
+  echo "Usage: $0 AMI_ID IMAGE_NAME <dev|prod> [-t 'ebs'|'s3'] [ -a 'i386'|'x86_64'] [ -s 'm1.small'|'m1.large'] [ -p <product_id> ] [--skip-create-image]"
   exit 1
 fi
 
@@ -92,6 +92,9 @@ for (( i = 2; i < ${#args[*]}; i++ )); do
   fi
   if [ $arg == "-s" ]; then
     IMAGE_SIZE=$val
+  fi
+  if [ $arg == "-p" ]; then
+    PRODUCT_ID=$val
   fi
   if [ $arg == "--skip-create-image" ]; then
     SKIP_CREATE_IMAGE="yes"
@@ -156,10 +159,23 @@ if [ -z $SKIP_CREATE_IMAGE ]; then
 
     scp $SSH_OPTS s3-$ACCOUNT.properties ubuntu@$HOST:/home/ubuntu/s3.properties
     check_rc $? "upload s3 properties"
+
+    scp $SSH_OPTS s3cfg-$ACCOUNT ubuntu@$HOST:/home/ubuntu/s3cfg
+    check_rc $? "upload s3cfg-$ACCOUNT"
   
     ssh $SSH_OPTS ubuntu@$HOST "cd /home/ubuntu && ./bundle_s3_image.sh $IMAGE_NAME $IMAGE_ARCH"
     check_rc $? "remote bundle image"
   fi
+fi
+
+if [ ! -z $PRODUCT_ID ]; then
+  # link the image to the product id
+  ec2-modify-image-attribute $IMAGE_ID -p $PRODUCT_ID
+  check_rc $? "linking image $IMAGE_ID to product $PRODUCT_ID"
+
+  # make the image public
+  ec2-modify-image-attribute $IMAGE_ID -l -a all 
+  check_rc $? "making image $IMAGE_ID public"
 fi
 
 # shut down the instance
