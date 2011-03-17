@@ -147,6 +147,13 @@ ssh $SSH_OPTS ubuntu@$HOST "cd /home/ubuntu && ./setup_ubuntu_image.sh $IMAGE_SI
 check_rc $? "remote setup"
 
 if [ -z $SKIP_CREATE_IMAGE ]; then
+  # first check for an already registred image with this name and deregister it
+  OLD_IMAGE_ID=$( ec2-describe-images -F name=$IMAGE_NAME | cut -f 2 ) 
+  if [ ! -z $OLD_IMAGE_ID ]; then
+     ec2-deregister $OLD_IMAGE_ID
+     check_rc $? "ec2-deregister $OLD_IMAGE_ID"
+  fi
+
   if [ $IMAGE_TYPE == "ebs" ]; then
     IMAGE_ID=$( ec2-create-image -n $IMAGE_NAME $INSTANCE_ID | cut -f 2 )
     check_rc $? "ec2-create-image"    
