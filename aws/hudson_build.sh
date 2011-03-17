@@ -24,4 +24,4 @@ popd > /dev/null
 ver=`get_ami_version $REPO_PATH`
 
 # build it
-./build_ubuntu_ami.sh $AMI_ID suite-$ver-$IMAGE_ARCH-`date +"%Y%m%d"` $ACCOUNT -t $IMAGE_TYPE -s $IMAGE_SIZE
+./build_ubuntu_ami.sh $AMI_ID suite-$ver-$IMAGE_ARCH-`date +"%Y%m%d"` $ACCOUNT -t $IMAGE_TYPE -s $IMAGE_SIZE -a $IMAGE_ARCH
