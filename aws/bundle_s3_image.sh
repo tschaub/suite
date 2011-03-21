@@ -63,6 +63,6 @@ fi
 
 if [ -z $SKIP_REGISTER ]; then
   # register the ami
-  ec2-register $S3_BUCKET/image.manifest.xml -n $IMAGE_NAME
+  ec2-register $S3_BUCKET/image.manifest.xml -n $IMAGE_NAME -a $IMAGE_ARCH
   check_rc $? "ec2-register"
 fi
