@@ -71,6 +71,7 @@ function poll_image() {
   return 0
 }
 
+set -x
 if [ -z $3 ]; then
   echo "Usage: $0 AMI_ID IMAGE_NAME <dev|prod> [-t 'ebs'|'s3'] [ -a 'i386'|'x86_64'] [ -s 'm1.small'|'m1.large'] [ -p <product_id> ] [--skip-create-image]"
   exit 1

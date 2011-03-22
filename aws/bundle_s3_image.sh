@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 . functions
 . s3.properties
 
