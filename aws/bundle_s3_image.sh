@@ -6,11 +6,14 @@ set -x
 . s3.properties
 
 if [ -z $2 ]; then
-  echo "Usage: $0 NAME ARCH [--skip-bundle] [--skip-upload] [--skip-register]"
+  echo "Usage: $0 NAME ARCH [-p PRODUCT_ID] [--skip-bundle] [--skip-upload] [--skip-register]"
   exit 1
 fi
 args=( $* )
 for (( i=2; i < ${#args[*]}; i++ )); do
+  if [ ${args[$i]} == "-p" ]; then
+    PRODUCT_ID=${args[(( i+1 ))]}
+  fi
   if [ ${args[$i]} == "--skip-bundle" ]; then
     SKIP_BUNDLE="yes"
   fi
@@ -65,6 +68,16 @@ fi
 
 if [ -z $SKIP_REGISTER ]; then
   # register the ami
-  ec2-register $S3_BUCKET/image.manifest.xml -n $IMAGE_NAME -a $IMAGE_ARCH
+  IMAGE_ID=$( ec2-register $S3_BUCKET/image.manifest.xml -n $IMAGE_NAME -a $IMAGE_ARCH | cut -f 2 )
   check_rc $? "ec2-register"
+
+  if [ ! -z $PRODUCT_ID ]; then
+    # link the image to the product id
+    ec2-modify-image-attribute $IMAGE_ID -p $PRODUCT_ID
+    check_rc $? "linking image $IMAGE_ID to product $PRODUCT_ID"
+  
+    # make the image public
+    ec2-modify-image-attribute $IMAGE_ID -l -a all
+    check_rc $? "making image $IMAGE_ID public"
+  fi
 fi

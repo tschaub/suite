@@ -171,19 +171,9 @@ if [ -z $SKIP_CREATE_IMAGE ]; then
     scp $SSH_OPTS s3cfg-$ACCOUNT ubuntu@$HOST:/home/ubuntu/s3cfg
     check_rc $? "upload s3cfg-$ACCOUNT"
   
-    ssh $SSH_OPTS ubuntu@$HOST "cd /home/ubuntu && ./bundle_s3_image.sh $IMAGE_NAME $IMAGE_ARCH"
+    ssh $SSH_OPTS ubuntu@$HOST "cd /home/ubuntu && ./bundle_s3_image.sh $IMAGE_NAME $IMAGE_ARCH -p $PRODUCT_ID"
     check_rc $? "remote bundle image"
   fi
-fi
-
-if [ ! -z $PRODUCT_ID ]; then
-  # link the image to the product id
-  ec2-modify-image-attribute $IMAGE_ID -p $PRODUCT_ID
-  check_rc $? "linking image $IMAGE_ID to product $PRODUCT_ID"
-
-  # make the image public
-  ec2-modify-image-attribute $IMAGE_ID -l -a all 
-  check_rc $? "making image $IMAGE_ID public"
 fi
 
 # shut down the instance
