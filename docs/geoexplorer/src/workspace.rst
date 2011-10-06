@@ -133,6 +133,8 @@ The Layers Panel contains a toolbar with the following buttons:
        - :ref:`geoexplorer.using.style`
        - Displays a dialog for editing map styling rules. Requires :ref:`geoexplorer.using.login` to local GeoServer.
 
+.. _geoexplorer.workspace.layercontextmenu:
+
 Layer context menu
 ~~~~~~~~~~~~~~~~~~
 
