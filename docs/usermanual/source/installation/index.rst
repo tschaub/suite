@@ -12,4 +12,5 @@ This section will describe how to install the OpenGeo Suite.
    windows/index
    mac/index
    linux/index
+   skygone/index
    aws/index

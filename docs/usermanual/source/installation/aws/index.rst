@@ -264,6 +264,29 @@ For example::
 
 where :file:`yourkey.ppk` is the name of the key file created by PuTTYgen.
 
+PostGIS
+-------
+
+In the OpenGeo Suite Cloud Edition, there is no web-based access to PostGIS.  (This is why the links to PostGIS show up as disabled in the Dashboard.)  There are two ways to connect to manage PostGIS:
+
+* Using the command-line utility ``psql`` via SSH.
+* Using a local copy of ``pgAdmin III`` via an SSH tunnel.
+
+Starting/stopping services
+--------------------------
+
+There are two system services used in the OpenGeo Suite:  **Apache Tomcat** (for GeoServer and all other webapps) and **PostgreSQL** (for PostGIS).  While these services are started by default when the instance is instantiated, here are the commands to stop and start these services should it become necessary:
+
+For PostGIS::
+
+  # service postgresql-8.4 stop
+  # service postgresql-8.4 start
+
+For Tomcat::
+
+  # service tomcat5 stop
+  # service tomcat5 start
+
 For More Information
 --------------------
 

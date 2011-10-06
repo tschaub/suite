@@ -76,7 +76,7 @@ The OpenGeo Suite Dashboard allows you to manage virtually all components of the
 
   http://<IP>:8080/dashboard/
 
-where ``<IP>`` is the IP address contained in the email you received from Skygone.  If you selected a Server Name in the above sign up form, your server will be available at:
+where ``<IP>`` is the IP address contained in the email you received from Skygone.  If you selected a Server Name in the above sign up form, your server will be available at::
 
   http://<SERVERNAME>.skygone.net:8080/dashboard/
 

@@ -8,3 +8,4 @@ Welcome to the OpenGeo Suite!  The OpenGeo Suite is a full geospatial software s
 
    installation/index.rst
    gettingstarted/index.rst
+   tutorials/index.rst
