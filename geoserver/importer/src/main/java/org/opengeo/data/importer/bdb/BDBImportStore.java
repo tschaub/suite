@@ -107,10 +107,11 @@ public class BDBImportStore implements ImportStore {
                 if (item.getLayer() != null) {
                     LayerInfo l = item.getLayer();
                     if (l.getDefaultStyle() != null && l.getDefaultStyle().getId() != null) {
-                        l.setDefaultStyle(importer.getCatalog().getStyle(l.getDefaultStyle().getId()));
+                        l.setDefaultStyle(catalog.getStyle(l.getDefaultStyle().getId()));
                     }
                     if (l.getResource() != null) {
-                        l.getResource().setCatalog(importer.getCatalog());
+                        l.getResource().setCatalog(catalog);
+                        ((StoreInfoImpl)l.getResource().getStore()).setCatalog(catalog);
                     }
                 }
             }
