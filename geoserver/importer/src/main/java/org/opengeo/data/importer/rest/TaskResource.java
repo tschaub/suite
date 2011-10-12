@@ -1,19 +1,18 @@
 package org.opengeo.data.importer.rest;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.channels.FileChannel;
 import java.util.Arrays;
 import java.util.List;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.geoserver.catalog.CatalogBuilder;
+import org.geoserver.catalog.DataStoreInfo;
+import org.geoserver.catalog.StoreInfo;
+import org.geoserver.catalog.impl.StoreInfoImpl;
 import org.geoserver.rest.AbstractResource;
 import org.geoserver.rest.RestletException;
 import org.geoserver.rest.format.DataFormat;
@@ -22,7 +21,6 @@ import org.opengeo.data.importer.Directory;
 import org.opengeo.data.importer.ImportContext;
 import org.opengeo.data.importer.ImportTask;
 import org.opengeo.data.importer.Importer;
-import org.opengeo.data.importer.VFSWorker;
 import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
@@ -159,9 +157,13 @@ public class TaskResource extends AbstractResource {
     public void handlePut() {
         getLogger().info("Handling PUT of " + getRequest().getEntity().getMediaType());
         
-        ImportTask newTask = handleFileUpload();
+        if (getRequest().getAttributes().containsKey("task")) {
+            handleTaskPut();
+        } else {
+            ImportTask newTask = handleFileUpload();
+            acceptTask(newTask);
+        }
         
-        acceptTask(newTask);
     }
 
     ImportContext lookupContext() {
@@ -192,6 +194,50 @@ public class TaskResource extends AbstractResource {
                 return context.getTasks();
             }
             throw new RestletException("No task specified", Status.CLIENT_ERROR_BAD_REQUEST);
+        }
+    }
+
+    void handleTaskPut() {
+        // @todo error handling, etc
+        long importId = Long.decode(getRequest().getAttributes().get("import").toString());
+        ImportContext context = importer.getContext(importId);
+        ImportTask task = context.getTasks().get(Integer.parseInt(getRequest().getAttributes().get("task").toString()));
+        ImportJSONIO json = new ImportJSONIO(importer);
+        Object read;
+        try {
+            read = json.read(getRequest().getEntity().getStream());
+        } catch (IOException ioe) {
+            throw new RestletException("Unexpected error", Status.SERVER_ERROR_INTERNAL);
+        }
+        if (read instanceof StoreInfo) {
+            // @todo clean up and complete
+            
+            // allow an existing store to be referenced as the target
+            StoreInfo newTargetRequested = (StoreInfo) read;
+            StoreInfo existing = task.getStore();
+            if (existing == null) {
+                assert existing != null : "Expected existing store";
+            }
+            Class storeType = existing instanceof DataStoreInfo
+                    ? DataStoreInfo.class : null;
+            if (storeType == null) {
+                assert storeType != null : "Cannot handle " + existing.getClass();
+            }
+            StoreInfo requestedExisting = importer.getCatalog().getStoreByName(newTargetRequested.getWorkspace(), newTargetRequested.getName(), storeType);
+            if (requestedExisting != null && storeType == DataStoreInfo.class) {
+                CatalogBuilder cb = new CatalogBuilder(importer.getCatalog());
+                DataStoreInfo clone = cb.buildDataStore(requestedExisting.getName());
+                cb.updateDataStore(clone, (DataStoreInfo) requestedExisting);
+                ((StoreInfoImpl) clone).setId(requestedExisting.getId());
+                task.setStore(clone);
+                task.setDirect(false);
+            } else {
+                throw new RestletException("Can only set target to existing datastore", Status.CLIENT_ERROR_BAD_REQUEST);
+            }
+            importer.changed(task);
+        } else {
+            getLogger().warning("JSON representation resolved to object : " + (read == null ? null : read.getClass()));
+            throw new RestletException("Unknown representation", Status.CLIENT_ERROR_BAD_REQUEST);
         }
     }
 
