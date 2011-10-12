@@ -194,7 +194,10 @@ public class ImportJSONIO {
         if (!inline) {
             json.object().key("item");
         }
-
+        
+        // @todo don't know why catalog isn't set here, thought this was set during load from BDBImportStore
+        layer.getResource().setCatalog(importer.getCatalog());
+        
         json.object()
           .key("id").value(id)
           .key("href").value(page.rootURI(String.format("/imports/%d/tasks/%d/items/%d",
@@ -370,6 +373,15 @@ public class ImportJSONIO {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         IOUtils.copy(in, bout);
         return JSONObject.fromObject(new String(bout.toByteArray()));
+    }
+
+    Object read(InputStream in) throws IOException {
+        Object result = null;
+        JSONObject json = parse(in);
+        if (json.containsKey("target")) {
+            result = fromJSON(json.getJSONObject("target"), DataStoreInfo.class);
+        }
+        return result;
     }
 
     static class JSONBuilder extends net.sf.json.util.JSONBuilder {
