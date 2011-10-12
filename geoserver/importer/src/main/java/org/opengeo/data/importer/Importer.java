@@ -1,9 +1,11 @@
 package org.opengeo.data.importer;
 
+import com.vividsolutions.jts.geom.Geometry;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -500,9 +502,15 @@ public class Importer implements InitializingBean, DisposableBean {
                     SimpleFeature feature = (SimpleFeature) reader.next();
                     SimpleFeature next = (SimpleFeature) writer.next();
                     next.setAttributes(feature.getAttributes());
+                    
+                    // @hack #45678 - mask empty geometry or postgis will complain
+                    Geometry geom = (Geometry) next.getDefaultGeometry();
+                    if (geom != null && geom.isEmpty()) {
+                        next.setDefaultGeometry(null);
+                    }
+
                     writer.write();
                 }
-
                 transaction.commit();
             } 
             catch (Exception e) {
@@ -528,7 +536,7 @@ public class Importer implements InitializingBean, DisposableBean {
                         writer.close();
                     }
                 } catch (IOException e) {
-                    //TODO: log this
+                    LOGGER.log(Level.WARNING, "Error closing transaction",e);
                 }
             }
         } 
@@ -550,9 +558,11 @@ public class Importer implements InitializingBean, DisposableBean {
         LayerInfo layer = item.getLayer();
         ResourceInfo resource = layer.getResource();
         resource.setStore(task.getStore());
-
+        
         //add the resource
-        resource.setName(findUniqueResourceName(resource));
+        String name = findUniqueResourceName(resource);
+        resource.setName(name);
+        resource.setNativeName(name);
         resource.setEnabled(true);
         catalog.add(resource);
 
