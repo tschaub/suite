@@ -160,6 +160,9 @@ public class DataStoreFormat extends VectorFormat {
             if (f != null) {
                 Map<String,Serializable> map = new HashMap<String, Serializable>();
                 map.put("url", f.toURI().toURL());
+                // @todo better way to handle this?
+                // problem is that shapefile DBF reader assumes local timezone when reading
+                map.put("timezone","GMT");
                 return map;
             }
         }
