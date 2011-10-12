@@ -378,6 +378,7 @@ public class ImportJSONIO {
     Object read(InputStream in) throws IOException {
         Object result = null;
         JSONObject json = parse(in);
+        // @hack - this should return a ImportTask
         if (json.containsKey("target")) {
             result = fromJSON(json.getJSONObject("target"), DataStoreInfo.class);
         }
