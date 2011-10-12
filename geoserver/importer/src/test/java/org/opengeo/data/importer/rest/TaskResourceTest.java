@@ -14,13 +14,21 @@ import org.opengeo.data.importer.Directory;
 import org.opengeo.data.importer.ImportContext;
 import org.opengeo.data.importer.ImportTask;
 import org.opengeo.data.importer.ImporterTestSupport;
-import org.opengeo.data.importer.SpatialFile;
 
 import com.mockrunner.mock.web.MockHttpServletRequest;
 import com.mockrunner.mock.web.MockHttpServletResponse;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import org.geoserver.catalog.impl.DataStoreInfoImpl;
+import org.geotools.data.Transaction;
+import org.geotools.jdbc.JDBCDataStore;
 
 public class TaskResourceTest extends ImporterTestSupport {
-
+    JDBCDataStore jdbcStore;
+    
     @Override
     protected void setUpInternal() throws Exception {
         super.setUpInternal();
@@ -28,6 +36,58 @@ public class TaskResourceTest extends ImporterTestSupport {
         File dir = unpack("shape/archsites_epsg_prj.zip");
         unpack("geotiff/EmissiveCampania.tif.bz2", dir);
         importer.createContext(new Directory(dir));
+        
+        // @todo clean this up to use a better technique
+        DataStoreInfoImpl postgis = new DataStoreInfoImpl(getCatalog());
+        postgis.setName("postgis");
+        postgis.setType("PostGIS");
+        postgis.setEnabled(true);
+        postgis.setWorkspace(getCatalog().getDefaultWorkspace());
+        Map<String,Serializable> params = new HashMap<String, Serializable>();
+        params.put("port",5432);
+        params.put("passwd","postgres");
+        params.put("dbtype","postgis");
+        params.put("host","localhost");
+        params.put("database","mapstory");
+        params.put("namespace", "http://geonode.org");
+        params.put("schema", "public");
+        params.put("user", "postgres");
+        postgis.setConnectionParameters(params);
+        getCatalog().add(postgis);
+        try {
+            jdbcStore = (JDBCDataStore) postgis.getDataStore(null);
+            jdbcStore.getConnection(Transaction.AUTO_COMMIT).createStatement().execute("drop table if exists archsites");
+        } catch (IOException ioe) {
+            LOGGER.log(Level.WARNING,"Could not initialize postgis db",ioe);
+        }
+    }
+    
+    public void testUploadToPostGIS() throws Exception {
+        if (jdbcStore == null) return;
+        
+        testPostMultiPartFormData();
+        
+        JSONObject payload = new JSONObject();
+        JSONObject target = new JSONObject();
+        JSONObject dataStore = new JSONObject();
+        JSONObject workspace = new JSONObject();
+        workspace.put("name", getCatalog().getDefaultWorkspace().getName() );
+        dataStore.put("name","postgis");
+        dataStore.put("workspace", workspace);
+        target.put("dataStore",dataStore);
+        payload.put("target", target);
+        
+        put("/rest/imports/0/tasks/0", payload.toString(), "application/json");
+        post("/rest/imports/0");
+        JSONObject resp = (JSONObject) getAsJSON("/rest/workspaces/" + getCatalog().getDefaultWorkspace().getName() + "/datastores/postgis/featuretypes.json");
+        // make sure the new feature type exists
+        JSONObject featureTypes = (JSONObject) resp.get("featureTypes");
+        JSONArray featureType = (JSONArray) featureTypes.get("featureType");
+        JSONObject type = (JSONObject) featureType.get(0);
+        assertEquals("archsites",type.getString("name"));
+        
+        // @todo do it again and ensure feature type is created
+        // correctly w/ auto-generated name 
     }
 
     public void testGetAllTasks() throws Exception {
