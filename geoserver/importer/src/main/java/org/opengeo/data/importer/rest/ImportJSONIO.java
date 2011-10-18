@@ -9,9 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -90,9 +88,9 @@ public class ImportJSONIO {
     }
 
 
-    public void contexts(List<ImportContext> contexts, PageInfo page, OutputStream out)
-            throws IOException {
-
+    public void contexts(List<ImportContext> contexts, PageInfo page, OutputStream out) 
+        throws IOException {
+        
         contexts(contexts.iterator(), page, out);
     }
 
@@ -120,8 +118,8 @@ public class ImportJSONIO {
         tasks(tasks, false, page, json);
     }
 
-    public void tasks(List<ImportTask> tasks, boolean inline, PageInfo page, JSONBuilder json)
-            throws IOException {
+    public void tasks(List<ImportTask> tasks, boolean inline, PageInfo page, JSONBuilder json) 
+        throws IOException {
         if (!inline) {
             json.object();
         }
@@ -143,11 +141,11 @@ public class ImportJSONIO {
     public void task(ImportTask task, PageInfo page, JSONBuilder json) throws IOException {
         task(task, false, page, json);
     }
-
+    
     public void task(ImportTask task, boolean inline, PageInfo page, JSONBuilder json) throws IOException {
-
+        
         long id = task.getId();
-
+       
         if (!inline) {
             json.object().key("task");
         }
@@ -185,23 +183,23 @@ public class ImportJSONIO {
     public void item(ImportItem item, PageInfo page, JSONBuilder json) throws IOException {
         item(item, false, page, json);
     }
-
+    
     public void item(ImportItem item, boolean inline, PageInfo page, JSONBuilder json) throws IOException {
         long id = item.getId();
         ImportTask task = item.getTask();
-
+        
         LayerInfo layer = item.getLayer();
         if (!inline) {
             json.object().key("item");
         }
-        
+
         // @todo don't know why catalog isn't set here, thought this was set during load from BDBImportStore
         layer.getResource().setCatalog(importer.getCatalog());
         
         json.object()
           .key("id").value(id)
-          .key("href").value(page.rootURI(String.format("/imports/%d/tasks/%d/items/%d",
-                task.getContext().getId(), task.getId(), id)))
+          .key("href").value(page.rootURI(String.format("/imports/%d/tasks/%d/items/%d", 
+              task.getContext().getId(), task.getId(), id)))
           .key("state").value(item.getState())
           .key("resource").value(toJSON(layer.getResource()))
           .key("layer").value(toJSON(layer))
@@ -221,8 +219,8 @@ public class ImportJSONIO {
         items(items, false, page, json);
     }
 
-    public void items(List<ImportItem> items, boolean inline, PageInfo page, JSONBuilder json)
-            throws IOException {
+    public void items(List<ImportItem> items, boolean inline, PageInfo page, JSONBuilder json) 
+        throws IOException {
         if (!inline) {
             json.object();
         }
@@ -246,7 +244,7 @@ public class ImportJSONIO {
             json = json.getJSONObject("item");
         }
 
-        LayerInfo layer = null;
+        LayerInfo layer = null; 
         if (json.has("layer")) {
             layer = fromJSON(json.getJSONObject("layer"), LayerInfo.class);
         } else {
@@ -285,7 +283,7 @@ public class ImportJSONIO {
 
     public void file(FileData data, PageInfo page, JSONBuilder json) throws IOException {
         json.object();
-
+        
         json.key("type").value("file");
         json.key("format").value(data.getFormat() != null ? data.getFormat().getName() : null);
         json.key("location").value(data.getFile().getParentFile().getPath());
@@ -319,7 +317,7 @@ public class ImportJSONIO {
         json.key("format").value(data.getFormat() != null ? data.getFormat().getName() : null);
         json.key("location").value(data.getFile().getPath());
         json.key("files").array();
-
+        
         for (FileData file : data.getFiles()) {
             json.object();
             fileContents(file, json);
@@ -345,7 +343,7 @@ public class ImportJSONIO {
         }
 
         json.endObject();
-
+        
         json.key("tables").array();
         for (Table t : data.getTables()) {
             json.value(t.getName());
@@ -365,7 +363,7 @@ public class ImportJSONIO {
         return (JSONObject) JSONSerializer.toJSON(new String(out.toByteArray()));
     }
 
-     <T> T fromJSON(JSONObject json, Class<T> clazz) throws IOException {
+    <T> T fromJSON(JSONObject json, Class<T> clazz) throws IOException {
         return (T) xp.load(new ByteArrayInputStream(json.toString().getBytes()), clazz);
     }
 
@@ -374,7 +372,7 @@ public class ImportJSONIO {
         IOUtils.copy(in, bout);
         return JSONObject.fromObject(new String(bout.toByteArray()));
     }
-
+    
     Object read(InputStream in) throws IOException {
         Object result = null;
         JSONObject json = parse(in);
