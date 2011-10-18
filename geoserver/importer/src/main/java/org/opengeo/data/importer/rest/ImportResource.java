@@ -90,29 +90,37 @@ public class ImportResource extends AbstractResource {
     @Override
     public void handlePost() {
         Object obj = lookupContext(true, true);
+        ImportContext context = null;
         if (obj instanceof ImportContext) {
             //run an existing import
             try {
-                importer.run((ImportContext) obj);
-            } catch (IOException e) {
+                context = (ImportContext) obj;
+                importer.run(context);
+                // @todo revisit - if errors occur, they are logged. A second request
+                // is required to verify success
+                getResponse().setStatus(Status.SUCCESS_NO_CONTENT);
+            } catch (Exception e) {
                 throw new RestletException("Error occured executing import", Status.SERVER_ERROR_INTERNAL, e);
             }
         }
         else {
             //create a new import
             try {
-                ImportContext context = importer.createContext(null);
-//                context.setUser(getCurrentUser()); // @todo spring3
+                context = importer.createContext(null);
+                context.setUser(getCurrentUser());
                 getResponse().redirectSeeOther(getPageInfo().rootURI("/imports/"+context.getId()));
                 getResponse().setEntity(new ImportContextJSONFormat().toRepresentation(context));
                 getResponse().setStatus(Status.SUCCESS_CREATED);
             } 
-            catch (IOException e) {
+            catch (Exception e) {
                 throw new RestletException("Unable to create import", Status.SERVER_ERROR_INTERNAL, e);
             }
         }
+        if (context != null) {
+            importer.changed(context);
+        }
     }
-    
+
     private String getCurrentUser() {
         String user = null;
         Authentication authentication = null;
@@ -154,7 +162,7 @@ public class ImportResource extends AbstractResource {
                     return importer.getAllContexts();
                 } else {
                     return importer.getContextsByUser(getCurrentUser());
-                }
+            }
             }
             throw new RestletException("No import specified", Status.CLIENT_ERROR_BAD_REQUEST);
         }
@@ -179,7 +187,7 @@ public class ImportResource extends AbstractResource {
         @Override
         protected void write(Object object, OutputStream out) throws IOException {
             ImportJSONIO json = new ImportJSONIO(importer);
-            
+
             PageInfo pageInfo = getPageInfo();
             // @hack lop off query if there is one or resulting URIs look silly
             int queryIdx = pageInfo.getPagePath().indexOf('?');

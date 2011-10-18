@@ -44,7 +44,7 @@ public class BDBImportStoreTest extends ImporterTestSupport {
     public void testAdd() throws Exception {
         File dir = unpack("shape/archsites_epsg_prj.zip");
         ImportContext context = importer.createContext(new Directory(dir));
-        
+
         assertEquals(1,context.getTasks().size());
         for (int i = 0; i < context.getTasks().size(); i++) {
             assertNotNull(context.getTasks().get(i).getStore());

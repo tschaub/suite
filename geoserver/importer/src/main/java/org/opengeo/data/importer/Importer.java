@@ -265,7 +265,6 @@ public class Importer implements InitializingBean, DisposableBean {
                 for (ImportItem item : format.list(data, catalog)) {
                     task.addItem(item);
 
-                    //set up an empty transform chain (TODO: raster chains)
                     item.setTransform(format instanceof VectorFormat 
                         ? new VectorTransformChain() : new RasterTransformChain());
 

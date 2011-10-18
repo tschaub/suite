@@ -21,11 +21,11 @@ public interface ImportStore {
     void add(ImportContext context);
 
     void save(ImportContext context);
-    
+
     void remove(ImportContext importContext);
 
     Iterator<ImportContext> iterator();
-    
+
     Iterator<ImportContext> allNonCompleteImports();
     
     Iterator<ImportContext> importsByUser(String user);

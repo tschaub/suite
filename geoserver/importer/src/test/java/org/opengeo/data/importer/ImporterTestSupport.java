@@ -44,7 +44,7 @@ public class ImporterTestSupport extends GeoServerTestSupport {
     protected File unpack(String path) throws Exception {
         return unpack(path, tmpDir());
     }
-    
+
     protected File getTestDataFile(String path) throws Exception {
         URL url = ImporterTestSupport.class.getResource("../test-data/" + path);
         return new File(url.toURI().getPath());

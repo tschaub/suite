@@ -28,7 +28,7 @@ import org.geotools.jdbc.JDBCDataStore;
 
 public class TaskResourceTest extends ImporterTestSupport {
     JDBCDataStore jdbcStore;
-    
+
     @Override
     protected void setUpInternal() throws Exception {
         super.setUpInternal();
@@ -61,7 +61,7 @@ public class TaskResourceTest extends ImporterTestSupport {
             LOGGER.log(Level.WARNING,"Could not initialize postgis db",ioe);
         }
     }
-    
+
     public void testUploadToPostGIS() throws Exception {
         if (jdbcStore == null) return;
         
@@ -77,11 +77,20 @@ public class TaskResourceTest extends ImporterTestSupport {
         target.put("dataStore",dataStore);
         payload.put("target", target);
         
-        put("/rest/imports/0/tasks/0", payload.toString(), "application/json");
-        post("/rest/imports/0");
-        JSONObject resp = (JSONObject) getAsJSON("/rest/workspaces/" + getCatalog().getDefaultWorkspace().getName() + "/datastores/postgis/featuretypes.json");
+        MockHttpServletResponse resp = putAsServletResponse("/rest/imports/0/tasks/0", payload.toString(), "application/json");
+        assertEquals(204,resp.getStatusCode());
+        
+        resp = postAsServletResponse("/rest/imports/0","","application/text");        
+        assertEquals(204,resp.getStatusCode());
+
+        // ensure item ran successfully
+        JSONObject json = (JSONObject) getAsJSON("/rest/imports/0/tasks/0/items/0");
+        json = json.getJSONObject("item");
+        assertEquals("COMPLETE",json.get("state"));
+        
+        json = (JSONObject) getAsJSON("/rest/workspaces/" + getCatalog().getDefaultWorkspace().getName() + "/datastores/postgis/featuretypes.json");
         // make sure the new feature type exists
-        JSONObject featureTypes = (JSONObject) resp.get("featureTypes");
+        JSONObject featureTypes = (JSONObject) json.get("featureTypes");
         JSONArray featureType = (JSONArray) featureTypes.get("featureType");
         JSONObject type = (JSONObject) featureType.get(0);
         assertEquals("archsites",type.getString("name"));

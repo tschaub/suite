@@ -174,7 +174,7 @@ public class ImportResourceTest extends ImporterTestSupport {
         assertNotNull( resp.getHeader( "Location") );
 
         Iterator<ImportContext> ctx = importer.getAllContexts();
-        int id = 0;
+        int id = -1;
         while (ctx.hasNext()) {
             ctx.next();
             id++;

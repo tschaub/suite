@@ -26,7 +26,7 @@ import org.geoserver.platform.GeoServerExtensions;
 import org.restlet.data.MediaType;
 
 public class RESTDataTest extends ImporterTestSupport {
-    
+
     public void testSingleFileUpload() throws Exception {
         int i = postNewImport();
         int t = postNewTaskAsMultiPartForm(i, "shape/archsites_epsg_prj.zip");
@@ -37,7 +37,7 @@ public class RESTDataTest extends ImporterTestSupport {
         postImport(i);
         runChecks("archsites");
     }
-    
+
     public void testFilePut() throws Exception {
         int i = postNewImport();
         int t1 = putNewTask(i, "shape/archsites_epsg_prj.zip");
@@ -162,7 +162,7 @@ public class RESTDataTest extends ImporterTestSupport {
         JSONObject task = json.getJSONObject("task");
         return task.getInt("id");
     }
-    
+
     int putNewTask(int imp, String data) throws Exception {
         File zip = getTestDataFile(data);
         byte[] payload = new byte[ (int) zip.length()];
@@ -190,6 +190,7 @@ public class RESTDataTest extends ImporterTestSupport {
 
     int postNewImport() throws Exception {
         MockHttpServletResponse resp = postAsServletResponse("/rest/imports", "");
+        
         assertEquals(201, resp.getStatusCode());
         assertNotNull( resp.getHeader( "Location") );
         assertTrue(resp.getHeader("Location").matches(".*/imports/\\d"));
@@ -202,6 +203,6 @@ public class RESTDataTest extends ImporterTestSupport {
 
     void postImport(int imp) throws Exception {
         MockHttpServletResponse resp = postAsServletResponse("/rest/imports/" + imp, "");
-        assertEquals(200, resp.getStatusCode());
+        assertEquals(204, resp.getStatusCode());
     }
 }

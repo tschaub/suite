@@ -6,7 +6,7 @@ import java.io.IOException;
 import org.apache.commons.io.FilenameUtils;
 
 public class FileData extends ImportData {
-    
+
     /** serialVersionUID */
     private static final long serialVersionUID = 1L;
 

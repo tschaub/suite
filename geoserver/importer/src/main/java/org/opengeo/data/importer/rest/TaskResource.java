@@ -97,7 +97,7 @@ public class TaskResource extends AbstractResource {
         getResponse().setEntity(new ImportTaskJSONFormat().toRepresentation(newTask));
         getResponse().setStatus(Status.SUCCESS_CREATED);
     }
-    
+
     private Directory createDirectory() {
         try {
             return Directory.createNew(importer.getCatalog().getResourceLoader().findOrCreateDirectory("uploads"));
@@ -156,9 +156,11 @@ public class TaskResource extends AbstractResource {
 
     public void handlePut() {
         getLogger().info("Handling PUT of " + getRequest().getEntity().getMediaType());
-        
-        if (getRequest().getAttributes().containsKey("task")) {
-            handleTaskPut();
+
+        if (getRequest().getEntity().getMediaType().equals(MediaType.APPLICATION_JSON)) {
+            if (getRequest().getAttributes().get("task") != null) {
+                handleTaskPut();
+            }
         } else {
             ImportTask newTask = handleFileUpload();
             acceptTask(newTask);
@@ -234,7 +236,8 @@ public class TaskResource extends AbstractResource {
             } else {
                 throw new RestletException("Can only set target to existing datastore", Status.CLIENT_ERROR_BAD_REQUEST);
             }
-            importer.changed(task);
+            importer.changed(context);
+            getResponse().setStatus(Status.SUCCESS_NO_CONTENT);
         } else {
             getLogger().warning("JSON representation resolved to object : " + (read == null ? null : read.getClass()));
             throw new RestletException("Unknown representation", Status.CLIENT_ERROR_BAD_REQUEST);
