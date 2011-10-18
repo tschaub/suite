@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.geoserver.catalog.LayerInfo;
+import org.opengeo.data.importer.transform.TransformChain;
 
 /**
  * A resource (feature type, coverage, etc... ) created during an imported.
@@ -35,8 +36,8 @@ public class ImportItem implements Serializable {
      * the layer/resource
      */
     LayerInfo layer;
-    
-    /**
+
+    /** 
      * state of the resource
      */
     State state = State.PENDING;
@@ -45,6 +46,11 @@ public class ImportItem implements Serializable {
      * Any error associated with the resource
      */
     Exception error;
+
+    /** 
+     * transform to apply to this import item 
+     */
+    TransformChain transform;
 
     /**
      * various metadata 
@@ -96,6 +102,14 @@ public class ImportItem implements Serializable {
 
     public void setError(Exception error) {
         this.error = error;
+    }
+
+    public TransformChain getTransform() {
+        return transform;
+    }
+
+    public void setTransform(TransformChain transform) {
+        this.transform = transform;
     }
 
     public Map<Object, Object> getMetadata() {
