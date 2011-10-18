@@ -26,12 +26,12 @@ import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
-import com.sleepycat.je.SecondaryDatabase;
 import com.sleepycat.je.Sequence;
 import com.sleepycat.je.SequenceConfig;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.collections.iterators.FilterIterator;
 import org.geoserver.catalog.Catalog;
+import org.geoserver.catalog.StoreInfo;
 import org.geoserver.catalog.impl.StoreInfoImpl;
 
 /**
@@ -46,7 +46,7 @@ public class BDBImportStore implements ImportStore {
     Database db;
     Database seqDb;
     Database classDb;
-    
+
     Sequence importIdSeq;
     StoredClassCatalog classCatalog;
     EntryBinding<ImportContext> importBinding;
@@ -96,12 +96,20 @@ public class BDBImportStore implements ImportStore {
         }
 
         ImportContext context = importBinding.entryToObject(val);
+
+        return reattach(context);
+    }
+    
+    
+    ImportContext reattach(ImportContext context) {
+        //reload store and workspace objects from catalog so they are "attached" with 
+        // the proper references to the catalog initialized
         Catalog catalog = importer.getCatalog();
-        
-        //fix transient references that were not serialized
         for (ImportTask task : context.getTasks()) {
-            if (task.getStore() != null) {
-                ((StoreInfoImpl) task.getStore()).setCatalog(catalog);
+            StoreInfo store = task.getStore();
+            if (store != null && store.getId() != null) {
+                task.setStore(catalog.getStore(store.getId(), StoreInfo.class));
+                //((StoreInfoImpl) task.getStore()).setCatalog(catalog); // @todo remove if the above sets catalog
             }
             for (ImportItem item : task.getItems()) {
                 if (item.getLayer() != null) {
@@ -111,12 +119,22 @@ public class BDBImportStore implements ImportStore {
                     }
                     if (l.getResource() != null) {
                         l.getResource().setCatalog(catalog);
-                        ((StoreInfoImpl)l.getResource().getStore()).setCatalog(catalog);
+                        ((StoreInfoImpl) l.getResource().getStore()).setCatalog(catalog);
                     }
                 }
             }
         }
+        return context;
+    }
 
+    ImportContext dettach(ImportContext context) {
+        Catalog catalog = importer.getCatalog();
+        for (ImportTask task : context.getTasks()) {
+            StoreInfo store = task.getStore();
+            if (store != null && store.getId() != null) {
+                task.setStore(catalog.detach(store));
+            }
+        }
         return context;
     }
 
@@ -131,6 +149,7 @@ public class BDBImportStore implements ImportStore {
     }
 
     public void save(ImportContext context) {
+        dettach(context);
         if (context.getId() == null) {
             add(context);
         }
@@ -143,7 +162,7 @@ public class BDBImportStore implements ImportStore {
         return new StoredMap<Long, ImportContext>(db, new LongBinding(), importBinding, false)
             .values().iterator();
     }
-    
+
     public Iterator<ImportContext> allNonCompleteImports() {
         // if this becomes too slow a secondary database could be used for indexing
         return new FilterIterator(iterator(), new Predicate() {
