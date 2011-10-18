@@ -35,6 +35,9 @@ import org.geotools.jdbc.JDBCDataStore;
 import org.geotools.util.logging.Logging;
 import org.opengeo.data.importer.ImportTask.State;
 import org.opengeo.data.importer.bdb.BDBImportStore;
+import org.opengeo.data.importer.transform.RasterTransformChain;
+import org.opengeo.data.importer.transform.TransformChain;
+import org.opengeo.data.importer.transform.VectorTransformChain;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.FeatureType;
@@ -55,7 +58,7 @@ public class Importer implements InitializingBean, DisposableBean {
     Catalog catalog;
 
     /** import context storage */
-    ImportStore store;
+    ImportStore contextStore;
 
     /** style generator */
     StyleGenerator styleGen;
@@ -65,12 +68,12 @@ public class Importer implements InitializingBean, DisposableBean {
 
     public Importer(Catalog catalog) {
         this.catalog = catalog;
-        this.store = new BDBImportStore(this);
+        this.contextStore = new BDBImportStore(this);
         this.styleGen = new StyleGenerator(catalog);
     }
 
     public void afterPropertiesSet() throws Exception {
-        this.store.init();
+        this.contextStore.init();
     }
 
     public Catalog getCatalog() {
@@ -78,19 +81,19 @@ public class Importer implements InitializingBean, DisposableBean {
     }
 
     public ImportContext getContext(long id) {
-        return store.get(id);
+        return contextStore.get(id);
     }
 
     public Iterator<ImportContext> getContexts() {
-        return store.allNonCompleteImports();
+        return contextStore.allNonCompleteImports();
     }
-    
+
     public Iterator<ImportContext> getContextsByUser(String user) {
-        return store.importsByUser(user);
+        return contextStore.importsByUser(user);
     }
     
     public Iterator<ImportContext> getAllContexts() {
-        return store.iterator();
+        return contextStore.iterator();
     }
 
     public ImportContext createContext(ImportData data, WorkspaceInfo targetWorkspace) throws IOException {
@@ -120,7 +123,7 @@ public class Importer implements InitializingBean, DisposableBean {
         context.setTargetStore(targetStore);
 
         context = init(context);
-        store.add(context);
+        contextStore.add(context);
         return context;
     }
     public ImportContext init(ImportContext context) throws IOException {
@@ -214,8 +217,8 @@ public class Importer implements InitializingBean, DisposableBean {
     }
 
     void createTask(ImportData data, ImportContext context, StoreInfo targetStore) {
-        if (data instanceof ASpatialFile) return; //TODO: this is temporary
-
+        // @revisit - why was this temporary
+        //if (data instanceof ASpatialFile) return; // this is temporary
         ImportTask task = new ImportTask(data);
         task.setStore(targetStore);
         task.setDirect(targetStore == null);
@@ -261,7 +264,11 @@ public class Importer implements InitializingBean, DisposableBean {
                 //ask the format for the list of "resources" to import
                 for (ImportItem item : format.list(data, catalog)) {
                     task.addItem(item);
-                    
+
+                    //set up an empty transform chain (TODO: raster chains)
+                    item.setTransform(format instanceof VectorFormat 
+                        ? new VectorTransformChain() : new RasterTransformChain());
+
                     LayerInfo layer = item.getLayer();
 
                     ResourceInfo resource = layer.getResource();
@@ -307,7 +314,7 @@ public class Importer implements InitializingBean, DisposableBean {
 
         //only save if not a new context
         if (context.getId() != null) {
-            store.save(context);
+            contextStore.save(context);
         }
         return context;
     }
@@ -368,7 +375,7 @@ public class Importer implements InitializingBean, DisposableBean {
         }
 
         context.updateState();
-        store.save(context);
+        contextStore.save(context);
     }
 
     void run(ImportTask task) throws IOException {
@@ -393,6 +400,10 @@ public class Importer implements InitializingBean, DisposableBean {
         //check if the task is complete, ie all items are complete
         task.updateState();
     }
+    
+    public void changed(ImportContext context) {
+        contextStore.save(context);
+    }
 
     public void changed(ImportItem item)  {
         changed(item.getTask());
@@ -400,7 +411,7 @@ public class Importer implements InitializingBean, DisposableBean {
 
     public void changed(ImportTask task)  {
         prep(task);
-        store.save(task.getContext());
+        changed(task.getContext());
     }
 
     public Long runAsync(final ImportContext context, final ImportFilter filter) {
@@ -425,7 +436,7 @@ public class Importer implements InitializingBean, DisposableBean {
         //add the store, may have been added in a previous iteration of this task
         if (task.getStore().getId() == null) {
             task.getStore().setName(findUniqueStoreName(task.getStore()));
-            catalog.add(task.getStore());    
+            catalog.add(task.getStore());
         }
 
         //add the individual resources
@@ -439,7 +450,21 @@ public class Importer implements InitializingBean, DisposableBean {
 
             item.setState(ImportItem.State.RUNNING);
 
+            //set up transform chain
+            TransformChain tx = (TransformChain) item.getTransform();
+            
+            //apply pre transform
+            if (!doPreTransform(item, task.getData(), tx)) {
+                continue;
+            }
+
             addToCatalog(item, task);
+
+            //apply pre transform
+            if (!doPostTransform(item, task.getData(), tx)) {
+                continue;
+            }
+
             item.setState(ImportItem.State.COMPLETE);
         }
     }
@@ -455,24 +480,71 @@ public class Importer implements InitializingBean, DisposableBean {
             if (!filter.include(item)) {
                 continue;
             }
+
+            item.setState(ImportItem.State.RUNNING);
+
+            //setup transform chain
+            TransformChain tx = item.getTransform();
+
+            //pre transform
+            if (!doPreTransform(item, task.getData(), tx)) {
+                continue;
+            }
+
             DataFormat format = task.getData().getFormat();
             if (format instanceof VectorFormat) {
                 try {
-                    loadIntoDataStore(item, (DataStoreInfo)task.getStore(), (VectorFormat) format);
+                    loadIntoDataStore(item, (DataStoreInfo)task.getStore(), (VectorFormat) format, (VectorTransformChain) tx);
                     addToCatalog(item, task);
-
-                    item.setState(ImportItem.State.COMPLETE);
                 }
                 catch(Exception e) {
                     LOGGER.log(Level.SEVERE, "Error occured during import", e);
                     item.setError(e);
                     item.setState(ImportItem.State.ERROR);
+                    continue;
                 }
             }
+            else {
+                throw new UnsupportedOperationException("Indirect raster import not yet supported");
+            }
+
+            if (!doPostTransform(item, task.getData(), tx)) {
+                continue;
+            }
+
+            item.setState(ImportItem.State.COMPLETE);
         }
     }
 
-    void loadIntoDataStore(ImportItem item, DataStoreInfo store, VectorFormat format) throws Exception {
+    boolean doPreTransform(ImportItem item, ImportData data, TransformChain tx) {
+        try {
+            tx.pre(item, data);
+        } 
+        catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error occured during pre transform", e);
+            item.setError(e);
+            item.setState(ImportItem.State.ERROR);
+            return false;
+        }
+        return true;
+    }
+
+    boolean doPostTransform(ImportItem item, ImportData data, TransformChain tx) {
+        try {
+            tx.post(item, data);
+        } 
+        catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error occured during post transform", e);
+            item.setError(e);
+            item.setState(ImportItem.State.ERROR);
+            return false;
+        }
+        return true;
+    }
+
+    void loadIntoDataStore(ImportItem item, DataStoreInfo store, VectorFormat format, 
+        VectorTransformChain tx) throws Exception {
+
         FeatureReader reader = format.read(item.getTask().getData(), item);
         SimpleFeatureType featureType = (SimpleFeatureType) reader.getFeatureType();
 
@@ -484,10 +556,28 @@ public class Importer implements InitializingBean, DisposableBean {
             typeBuilder.setName(featureTypeName);
             typeBuilder.addAll(featureType.getAttributeDescriptors());
             featureType = typeBuilder.buildFeatureType();
+
+            //update the metadata
+            item.getLayer().getResource().setName(featureTypeName);
+            item.getLayer().getResource().setNativeName(featureTypeName);
         }
 
         //create the target schema
         DataStore dataStore = (DataStore) store.getDataStore(null);
+        
+        // @todo HACK remove this at some point when timezone issues are fixed
+        // this will force postgis to create timezone w/ timestamp fields
+        if (dataStore instanceof JDBCDataStore) {
+            JDBCDataStore ds = (JDBCDataStore) dataStore;
+            // sniff for postgis (h2 is used in tests and will cause failure if this occurs)
+            if (ds.getSqlTypeNameToClassMappings().containsKey("timestamptz")) {
+                ds.getSqlTypeToSqlTypeNameOverrides().put(java.sql.Types.TIMESTAMP, "timestamptz");
+            }
+        }
+
+        //apply the feature type transform
+        featureType = tx.inline(item, dataStore, featureType);
+
         dataStore.createSchema(featureType);
 
         //start writing features
@@ -508,6 +598,8 @@ public class Importer implements InitializingBean, DisposableBean {
                     if (geom != null && geom.isEmpty()) {
                         next.setDefaultGeometry(null);
                     }
+                    //apply the feature transform
+                    next = tx.inline(item, dataStore, feature, next);
 
                     writer.write();
                 }
@@ -558,7 +650,7 @@ public class Importer implements InitializingBean, DisposableBean {
         LayerInfo layer = item.getLayer();
         ResourceInfo resource = layer.getResource();
         resource.setStore(task.getStore());
-        
+
         //add the resource
         String name = findUniqueResourceName(resource);
         resource.setName(name);
@@ -642,11 +734,11 @@ public class Importer implements InitializingBean, DisposableBean {
 
     public void destroy() throws Exception {
         jobs.shutdown();
-        store.destroy();
+        contextStore.destroy();
     }
 
     public void delete(ImportContext importContext) throws IOException {
         importContext.delete();
-        store.remove(importContext);
+        contextStore.remove(importContext);
     }
 }
