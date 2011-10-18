@@ -1,11 +1,9 @@
 package org.opengeo.data.importer;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -15,12 +13,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.io.FileUtils;
 import org.geoserver.data.util.IOUtils;
 import org.geotools.util.logging.Logging;
 
 public class Directory extends FileData {
-    
+
     private static final Logger LOGGER = Logging.getLogger(Directory.class);
     
     private static final long serialVersionUID = 1L;
@@ -33,7 +30,7 @@ public class Directory extends FileData {
     public Directory(File file) {
         super(file);
     }
-    
+
     public static Directory createNew(File parent) throws IOException {
         File directory = File.createTempFile("tmp", "", parent);
         if (!directory.delete() || !directory.mkdir()) throw new IOException("Error creating temp directory at " + directory.getAbsolutePath());
@@ -47,7 +44,7 @@ public class Directory extends FileData {
     public List<FileData> getFiles() {
         return files;
     }
-    
+
     public void unpack(File file) throws IOException {
         //if the file is an archive, unpack it
         VFSWorker vfs = new VFSWorker();
