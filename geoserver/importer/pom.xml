@@ -171,7 +171,4 @@
     </testResources>
   </build>
 
-  <properties>
-    <test.exclude.pattern>org/opengeo/data/importer/**/*Test.java</test.exclude.pattern>
-  </properties>
 </project>
