@@ -65,7 +65,7 @@ public class ImportContext implements Serializable {
      * date import was finished
      */
     Date updated;
-    
+
     /**
      * credentials of creator
      */
@@ -177,7 +177,7 @@ public class ImportContext implements Serializable {
     public void updated() {
         updated = new Date();
     }
-    
+
     public void delete() throws IOException {
         if (data != null) {
             data.cleanup();
@@ -209,14 +209,5 @@ public class ImportContext implements Serializable {
             return false;
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "ImportContext{" + "id=" + id + ", state=" + state + ", data=" + data + 
-                ", targetWorkspace=" + targetWorkspace + ", targetStore=" + targetStore + 
-                ", tasks=" + tasks + ", taskid=" + taskid + ", created=" + created + ", updated=" + updated + '}';
-    }
-    
-    
 }
     
