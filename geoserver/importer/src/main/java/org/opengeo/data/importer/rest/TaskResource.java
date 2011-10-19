@@ -158,9 +158,7 @@ public class TaskResource extends AbstractResource {
         getLogger().info("Handling PUT of " + getRequest().getEntity().getMediaType());
 
         if (getRequest().getEntity().getMediaType().equals(MediaType.APPLICATION_JSON)) {
-            if (getRequest().getAttributes().get("task") != null) {
-                handleTaskPut();
-            }
+            handleTaskPut();
         } else {
             ImportTask newTask = handleFileUpload();
             acceptTask(newTask);
@@ -199,48 +197,52 @@ public class TaskResource extends AbstractResource {
         }
     }
 
-    void handleTaskPut() {
-        // @todo error handling, etc
-        long importId = Long.decode(getRequest().getAttributes().get("import").toString());
-        ImportContext context = importer.getContext(importId);
-        ImportTask task = context.getTasks().get(Integer.parseInt(getRequest().getAttributes().get("task").toString()));
-        ImportJSONIO json = new ImportJSONIO(importer);
-        Object read;
-        try {
-            read = json.read(getRequest().getEntity().getStream());
-        } catch (IOException ioe) {
-            throw new RestletException("Unexpected error", Status.SERVER_ERROR_INTERNAL);
+    void handleTaskPut() {        
+        ImportTask task = (ImportTask) getFormatPostOrPut().toObject(getRequest().getEntity());
+        ImportTask orig = (ImportTask) lookupTask(false);
+        
+        boolean change = false;
+        if (task.getStore() != null) {
+            updateStoreInfo(orig, task.getStore());
+            change = true;
         }
-        if (read instanceof StoreInfo) {
-            // @todo clean up and complete
-            
-            // allow an existing store to be referenced as the target
-            StoreInfo newTargetRequested = (StoreInfo) read;
-            StoreInfo existing = task.getStore();
-            if (existing == null) {
-                assert existing != null : "Expected existing store";
-            }
-            Class storeType = existing instanceof DataStoreInfo
-                    ? DataStoreInfo.class : null;
-            if (storeType == null) {
-                assert storeType != null : "Cannot handle " + existing.getClass();
-            }
-            StoreInfo requestedExisting = importer.getCatalog().getStoreByName(newTargetRequested.getWorkspace(), newTargetRequested.getName(), storeType);
-            if (requestedExisting != null && storeType == DataStoreInfo.class) {
-                CatalogBuilder cb = new CatalogBuilder(importer.getCatalog());
-                DataStoreInfo clone = cb.buildDataStore(requestedExisting.getName());
-                cb.updateDataStore(clone, (DataStoreInfo) requestedExisting);
-                ((StoreInfoImpl) clone).setId(requestedExisting.getId());
-                task.setStore(clone);
-                task.setDirect(false);
-            } else {
-                throw new RestletException("Can only set target to existing datastore", Status.CLIENT_ERROR_BAD_REQUEST);
-            }
-            importer.changed(context);
-            getResponse().setStatus(Status.SUCCESS_NO_CONTENT);
-        } else {
-            getLogger().warning("JSON representation resolved to object : " + (read == null ? null : read.getClass()));
+        
+        if (!change) {
             throw new RestletException("Unknown representation", Status.CLIENT_ERROR_BAD_REQUEST);
+        } else {
+            importer.changed(orig);
+            getResponse().setStatus(Status.SUCCESS_NO_CONTENT);
+        }
+    }
+    
+    void updateStoreInfo(ImportTask orig, StoreInfo update) {
+        // allow an existing store to be referenced as the target
+        StoreInfo newTargetRequested = (StoreInfo) update;
+        StoreInfo existing = orig.getStore();
+        
+        if (existing == null) {
+            assert existing != null : "Expected existing store";
+        }
+        Class storeType = existing instanceof DataStoreInfo
+                ? DataStoreInfo.class : null;
+        if (storeType == null) {
+            assert storeType != null : "Cannot handle " + existing.getClass();
+        }
+        
+        StoreInfo requestedExisting = importer.getCatalog().getStoreByName(
+                newTargetRequested.getWorkspace(), 
+                newTargetRequested.getName(), 
+                storeType);
+        
+        if (requestedExisting != null && storeType == DataStoreInfo.class) {
+            CatalogBuilder cb = new CatalogBuilder(importer.getCatalog());
+            DataStoreInfo clone = cb.buildDataStore(requestedExisting.getName());
+            cb.updateDataStore(clone, (DataStoreInfo) requestedExisting);
+            ((StoreInfoImpl) clone).setId(requestedExisting.getId());
+            orig.setStore(clone);
+            orig.setDirect(false);
+        } else {
+            throw new RestletException("Can only set target to existing datastore", Status.CLIENT_ERROR_BAD_REQUEST);
         }
     }
 
@@ -252,7 +254,9 @@ public class TaskResource extends AbstractResource {
 
         @Override
         protected Object read(InputStream in) throws IOException {
-            return null;
+            ImportJSONIO json = new ImportJSONIO(importer);
+            
+            return json.task(in);
         }
 
         @Override
