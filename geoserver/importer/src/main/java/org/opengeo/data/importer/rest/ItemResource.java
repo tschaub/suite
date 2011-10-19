@@ -19,6 +19,7 @@ import org.opengeo.data.importer.ImportContext;
 import org.opengeo.data.importer.ImportItem;
 import org.opengeo.data.importer.ImportTask;
 import org.opengeo.data.importer.Importer;
+import org.opengeo.data.importer.transform.TransformChain;
 import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
@@ -61,6 +62,7 @@ public class ItemResource extends AbstractResource {
         //update the original layer and resource from the new
         LayerInfo l = item.getLayer();
         ResourceInfo r = l.getResource();
+        TransformChain chain = item.getTransform();
 
         //TODO: this is not thread safe, clone the object before overwriting it
         //save the existing resource, which will be overwritten below,  
@@ -81,6 +83,10 @@ public class ItemResource extends AbstractResource {
             else if (r instanceof CoverageInfo) {
                 cb.updateCoverage((CoverageInfo) resource, (CoverageInfo) r);
             }
+        }
+        
+        if (chain != null) {
+            orig.setTransform(chain);
         }
 
         //notify the importer that the item has changed
