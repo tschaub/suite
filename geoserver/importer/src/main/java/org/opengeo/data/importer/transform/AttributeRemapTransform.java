@@ -12,16 +12,22 @@ import org.opengis.feature.simple.SimpleFeatureType;
  * @author Justin Deoliveira, OpenGeo
  */
 public class AttributeRemapTransform extends AbstractVectorTransform implements InlineVectorTransform {
+    
+    private static final long serialVersionUID = 1L;
 
     /** field to remap */
     protected String field;
 
     /** type to remap to */
     protected Class type;
-
+    
     public AttributeRemapTransform(String field, Class type) {
         this.field = field;
         this.type = type;
+    }
+    
+    protected AttributeRemapTransform() {
+        
     }
 
     public String getField() {

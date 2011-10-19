@@ -1,7 +1,6 @@
 package org.opengeo.data.importer.transform;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +28,7 @@ public class VectorTransformChain extends TransformChain<VectorTransform> {
     public VectorTransformChain(VectorTransform... transforms) {
         super(transforms);
     }
-
+    
     public void pre(ImportItem item, ImportData data) throws Exception {
         for (PreVectorTransform tx : filter(transforms, PreVectorTransform.class)) {
             try {

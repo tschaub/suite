@@ -18,6 +18,10 @@ import org.opengeo.data.importer.ImportItem;
 public abstract class TransformChain<T extends ImportTransform> implements Serializable {
 
     protected List<T> transforms;
+    
+    public TransformChain() {
+        this(new ArrayList<T>(3));
+    }
 
     public TransformChain(List<T> transforms) {
         this.transforms = transforms;

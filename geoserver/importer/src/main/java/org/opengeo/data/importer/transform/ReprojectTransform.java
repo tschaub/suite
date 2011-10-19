@@ -5,7 +5,6 @@ import org.geotools.data.DataStore;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
-import org.opengeo.data.importer.ImportData;
 import org.opengeo.data.importer.ImportItem;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -15,6 +14,8 @@ import org.opengis.referencing.operation.MathTransform;
 import com.vividsolutions.jts.geom.Geometry;
 
 public class ReprojectTransform extends AbstractVectorTransform implements InlineVectorTransform {
+    
+    private static final long serialVersionUID = 1L;
 
     CoordinateReferenceSystem source, target;
     transient MathTransform transform;
