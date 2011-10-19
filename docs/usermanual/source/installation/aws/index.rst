@@ -40,14 +40,21 @@ The OpenGeo Suite is available as a AMI for use with Amazon's EC2 service.  The 
      - N/A
      - $1,150
 
-.. note:: Details about the Instance Size (number of CPUs, etc.) can be found on Amazon's `Amazon EC2 Instance Types <http://aws.amazon.com/ec2/instance-types/>`_ page.
+Details about the Instance Size (number of CPUs, etc.) can be found on Amazon's `Amazon EC2 Instance Types <http://aws.amazon.com/ec2/instance-types/>`_ page.
 
-The process for signing up for any of these tiers is exactly the same.  Only the features and pricing differ.
+.. note::
 
+   For the tiers with an hourly charge (**Dev Small** and **Dev Large**), charges will only accrue when the instance is running.  To avoid excess charges, please make sure to Terminate your instance when it is not in use.  To terminate an instance, right-click on the instance in the :guilabel:`Instances` list, and select :guilabel:`Terminate`.  There is no commitment or minimum charge associated with either of these tiers.
+   
 Signing up
 ----------
 
+The process for signing up for any of these tiers is exactly the same.  Only the features and pricing differ.
+
+
 .. warning:: In order to use the OpenGeo Suite Cloud Edition for Amazon Web Services (AWS), you need to have an Amazon Web Services (AWS) account which has EC2 access enabled.  Amazon has detailed instructions on how to sign up for AWS/EC2 at http://aws.amazon.com/documentation/ec2/.
+
+
 
 #. Navigate to the OpenGeo Suite Cloud page at http://opengeo.org/products/suite/cloud/. On the Amazon Web Services column, select the tier you wish to purchase by clicking the appropriate link.
 
