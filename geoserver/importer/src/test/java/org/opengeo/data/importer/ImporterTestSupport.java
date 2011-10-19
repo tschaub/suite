@@ -14,7 +14,10 @@ import org.geotools.factory.Hints;
 import org.w3c.dom.Document;
 
 import com.mockrunner.mock.web.MockHttpServletResponse;
+import java.io.StringWriter;
 import java.net.URL;
+import net.sf.json.JSONObject;
+import net.sf.json.util.JSONBuilder;
 
 public class ImporterTestSupport extends GeoServerTestSupport {
 
@@ -90,5 +93,17 @@ public class ImporterTestSupport extends GeoServerTestSupport {
         MockHttpServletResponse response = 
             getAsServletResponse("wms/reflect?layers=" + layer.getResource().getPrefixedName());
         assertEquals("image/png", response.getContentType());
+    }
+    
+    public static class JSONObjectBuilder extends JSONBuilder {
+
+        public JSONObjectBuilder() {
+            super(new StringWriter());
+        }
+        
+        public JSONObject buildObject() {
+            return JSONObject.fromObject( ((StringWriter) writer).toString() );
+        }
+        
     }
 }

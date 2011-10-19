@@ -67,17 +67,34 @@ public class TaskResourceTest extends ImporterTestSupport {
         
         testPostMultiPartFormData();
         
-        JSONObject payload = new JSONObject();
-        JSONObject target = new JSONObject();
-        JSONObject dataStore = new JSONObject();
-        JSONObject workspace = new JSONObject();
-        workspace.put("name", getCatalog().getDefaultWorkspace().getName() );
-        dataStore.put("name","postgis");
-        dataStore.put("workspace", workspace);
-        target.put("dataStore",dataStore);
-        payload.put("target", target);
+        JSONObjectBuilder builder = new JSONObjectBuilder();
+        builder.object().key("task").object()
+          .key("target").object()
+            .key("dataStore").object()
+              .key("name").value("postgis")
+              .key("workspace").object()
+                .key("name").value(getCatalog().getDefaultWorkspace().getName())
+              .endObject()
+            .endObject()
+          .endObject()
+        .endObject().endObject();
+                
         
-        MockHttpServletResponse resp = putAsServletResponse("/rest/imports/0/tasks/0", payload.toString(), "application/json");
+//        JSONObject payload = new JSONObject();
+//        JSONObject target = new JSONObject();
+//        JSONObject dataStore = new JSONObject();
+//        JSONObject workspace = new JSONObject();
+//        workspace.put("name", getCatalog().getDefaultWorkspace().getName() );
+//        dataStore.put("name","postgis");
+//        dataStore.put("workspace", workspace);
+//        target.put("dataStore",dataStore);
+//        payload.put("target", target);
+        
+        System.out.println(builder.buildObject().toString(2));
+        
+        String payload = builder.buildObject().toString();
+        
+        MockHttpServletResponse resp = putAsServletResponse("/rest/imports/0/tasks/0", payload, "application/json");
         assertEquals(204,resp.getStatusCode());
         
         resp = postAsServletResponse("/rest/imports/0","","application/text");        

@@ -13,15 +13,16 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import net.sf.json.JSONArray;
 
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
+import net.sf.json.util.JSONBuilder;
 
 import org.apache.commons.io.IOUtils;
 import org.geoserver.catalog.DataStoreInfo;
 import org.geoserver.catalog.FeatureTypeInfo;
 import org.geoserver.catalog.LayerInfo;
-import org.geoserver.catalog.NamespaceInfo;
 import org.geoserver.catalog.ResourceInfo;
 import org.geoserver.catalog.StoreInfo;
 import org.geoserver.config.util.XStreamPersister;
@@ -37,6 +38,7 @@ import org.opengeo.data.importer.ImportTask;
 import org.opengeo.data.importer.Importer;
 import org.opengeo.data.importer.SpatialFile;
 import org.opengeo.data.importer.Table;
+import org.opengeo.data.importer.transform.*;
 
 /**
  * Utility class for reading/writing import/tasks/etc... to/from JSON.
@@ -71,9 +73,16 @@ public class ImportJSONIO {
             }
         });
     }
+    
+    // allow tests to not require full importer
+    public static ImportJSONIO createUnitTestImportJSONIO() {
+        return new ImportJSONIO();
+    }
+    private ImportJSONIO() {
+    }
 
     public void context(ImportContext context, PageInfo page, OutputStream out) throws IOException {
-        JSONBuilder json = new JSONBuilder(new OutputStreamWriter(out));
+        FlushableJSONBuilder json = new FlushableJSONBuilder(new OutputStreamWriter(out));
 
         json.object().key("import");
         json.object();
@@ -97,7 +106,7 @@ public class ImportJSONIO {
     public void contexts(Iterator<ImportContext> contexts, PageInfo page, OutputStream out)
             throws IOException {
 
-        JSONBuilder json = new JSONBuilder(new OutputStreamWriter(out));
+        FlushableJSONBuilder json = new FlushableJSONBuilder(new OutputStreamWriter(out));
         json.object().key("imports").array();
         while (contexts.hasNext()) {
             ImportContext context = contexts.next();
@@ -114,11 +123,11 @@ public class ImportJSONIO {
         tasks(tasks, page, builder(out));
     }
 
-    public void tasks(List<ImportTask> tasks, PageInfo page, JSONBuilder json) throws IOException {
+    public void tasks(List<ImportTask> tasks, PageInfo page, FlushableJSONBuilder json) throws IOException {
         tasks(tasks, false, page, json);
     }
 
-    public void tasks(List<ImportTask> tasks, boolean inline, PageInfo page, JSONBuilder json) 
+    public void tasks(List<ImportTask> tasks, boolean inline, PageInfo page, FlushableJSONBuilder json) 
         throws IOException {
         if (!inline) {
             json.object();
@@ -138,11 +147,11 @@ public class ImportJSONIO {
         task(task, page, builder(out));
     }
 
-    public void task(ImportTask task, PageInfo page, JSONBuilder json) throws IOException {
+    public void task(ImportTask task, PageInfo page, FlushableJSONBuilder json) throws IOException {
         task(task, false, page, json);
     }
     
-    public void task(ImportTask task, boolean inline, PageInfo page, JSONBuilder json) throws IOException {
+    public void task(ImportTask task, boolean inline, PageInfo page, FlushableJSONBuilder json) throws IOException {
         
         long id = task.getId();
        
@@ -180,11 +189,11 @@ public class ImportJSONIO {
         item(item, page, builder(out));
     }
 
-    public void item(ImportItem item, PageInfo page, JSONBuilder json) throws IOException {
+    public void item(ImportItem item, PageInfo page, FlushableJSONBuilder json) throws IOException {
         item(item, false, page, json);
     }
     
-    public void item(ImportItem item, boolean inline, PageInfo page, JSONBuilder json) throws IOException {
+    public void item(ImportItem item, boolean inline, PageInfo page, FlushableJSONBuilder json) throws IOException {
         long id = item.getId();
         ImportTask task = item.getTask();
         
@@ -202,24 +211,43 @@ public class ImportJSONIO {
               task.getContext().getId(), task.getId(), id)))
           .key("state").value(item.getState())
           .key("resource").value(toJSON(layer.getResource()))
-          .key("layer").value(toJSON(layer))
-        .endObject();
+          .key("layer").value(toJSON(layer));
+        if (item.getError() != null) {
+            json.key("errorMessage").value(concatErrorMessages(item.getError()));
+        }
+        json.key("transformChain");
+        transformChain(item.getTransform(), json);
+        json.endObject();
 
         if (!inline) {
             json.endObject();
         }
         json.flush();
     }
+    
+    String concatErrorMessages(Throwable ex) {
+        StringBuilder buf = new StringBuilder();
+        while (ex != null) {
+            if (buf.length() > 0) {
+                buf.append('\n');
+            }
+            if (ex.getMessage() != null) {
+                buf.append(ex.getMessage());
+            }
+            ex = ex.getCause();
+        }
+        return buf.toString();
+    }
 
     public void items(List<ImportItem> items, PageInfo page, OutputStream out) throws IOException {
         items(items, page, builder(out));
     }
 
-    public void items(List<ImportItem> items, PageInfo page, JSONBuilder json) throws IOException {
+    public void items(List<ImportItem> items, PageInfo page, FlushableJSONBuilder json) throws IOException {
         items(items, false, page, json);
     }
 
-    public void items(List<ImportItem> items, boolean inline, PageInfo page, JSONBuilder json) 
+    public void items(List<ImportItem> items, boolean inline, PageInfo page, FlushableJSONBuilder json) 
         throws IOException {
         if (!inline) {
             json.object();
@@ -237,9 +265,36 @@ public class ImportJSONIO {
         }
         json.flush();
     }
+    
+    public ImportTask task(InputStream in) throws IOException {
+        JSONObject json = parse(in);
+        ImportTask task = null;
+        if (json.has("task")) {
+            task = new ImportTask();
+            
+            json = json.getJSONObject("task");
+            
+            if (json.has("id")) {
+                task.setId(json.getInt("id"));
+            }
+            if (json.has("target")) {
+                JSONObject x = json.getJSONObject("target");
+                task.setStore(fromJSON(json.getJSONObject("target"), DataStoreInfo.class));
+            }
+            if (json.has("items")) {
+                JSONArray items = json.getJSONArray("items");
+                for (int i = 0; i < items.size(); i++) {
+                    task.addItem(item(items.getJSONObject(i)));
+                }
+            }
+        }
+        return task;
+    }
 
     public ImportItem item(InputStream in) throws IOException {
-        JSONObject json = parse(in);
+        return item(parse(in));
+    }
+    public ImportItem item(JSONObject json) throws IOException {
         if (json.has("item")) {
             json = json.getJSONObject("item");
         }
@@ -250,17 +305,52 @@ public class ImportJSONIO {
         } else {
             layer = importer.getCatalog().getFactory().createLayer();
         }
+        
+        ImportItem importItem = new ImportItem(layer);
 
         //parse the resource if specified
         if (json.has("resource")) {
             ResourceInfo resource = fromJSON(json.getJSONObject("resource"), ResourceInfo.class);
             layer.setResource(resource);
         }
+        
+        if (json.has("transformChain")) {
+            importItem.setTransform(transformChain(json.getJSONObject("transformChain")));
+        }
 
         //parse the layer if specified
-        return new ImportItem(layer);
+        return importItem;
     }
-
+    
+    public TransformChain transformChain(JSONObject json) throws IOException {
+        String type = json.getString("type");
+        TransformChain chain = null;
+        if ("VectorTransformChain".equalsIgnoreCase(type)) {
+            chain = new VectorTransformChain();
+        } else if ("RasterTransformChain".equalsIgnoreCase(type)) {
+            chain = new RasterTransformChain();
+        } else {
+            throw new IOException("Unable to parse transformChain of type " + type);
+        }
+        JSONArray transforms = json.getJSONArray("transforms");
+        for (int i = 0; i < transforms.size(); i++) {
+            chain.add(importTransform(transforms.getJSONObject(i)));
+        }
+        return chain;
+    }
+    
+    public ImportTransform importTransform(JSONObject json) throws IOException {
+        ImportTransform transform;
+        String type = json.getString("type");
+        if ("DateFormatTransform".equalsIgnoreCase(type)) {
+            DateFormatTransform trans = new DateFormatTransform(json.getString("field"), json.optString("format", null));
+            transform = trans;
+        } else {
+            throw new RuntimeException("parsing of " + type + " not implemented");
+        }
+        return transform;
+    }
+    
     public void data(ImportData data, PageInfo page, OutputStream out) throws IOException {
         data(data, page, builder(out));
     }
@@ -353,8 +443,8 @@ public class ImportJSONIO {
         json.endObject();
     }
 
-    JSONBuilder builder(OutputStream out) {
-        return new JSONBuilder(new OutputStreamWriter(out));
+    FlushableJSONBuilder builder(OutputStream out) {
+        return new FlushableJSONBuilder(new OutputStreamWriter(out));
     }
 
     JSONObject toJSON(Object o) throws IOException {
@@ -383,9 +473,36 @@ public class ImportJSONIO {
         return result;
     }
 
-    static class JSONBuilder extends net.sf.json.util.JSONBuilder {
+    void transformChain(TransformChain transform, JSONBuilder json) throws IOException {
+        json.object();
+        json.key("type").value(transform.getClass().getSimpleName());
+        json.key("transforms");
+        json.array();
+        for (int i = 0; i < transform.getTransforms().size(); i++) {
+            importTransform( (ImportTransform) transform.getTransforms().get(i), json);
+        }
+        json.endArray();
+        json.endObject();
+    }
 
-        public JSONBuilder(Writer w) {
+    public void importTransform(ImportTransform transform, JSONBuilder json) throws IOException {
+        json.object();
+        json.key("type").value(transform.getClass().getSimpleName());
+        if (transform instanceof DateFormatTransform) {
+            DateFormatTransform df = (DateFormatTransform) transform;
+            json.key("field").value(df.getField());
+            if (df.getDateFormat() != null) {
+                json.key("format").value(df.getDateFormat().toPattern()); 
+            }
+        } else {
+            throw new IOException("Serializaiton of " + transform.getClass() + " not implemented");
+        }
+        json.endObject();
+    }
+
+    public static class FlushableJSONBuilder extends JSONBuilder {
+
+        public FlushableJSONBuilder(Writer w) {
             super(w);
         }
 
