@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -605,6 +604,8 @@ public class Importer implements InitializingBean, DisposableBean {
                 transaction.commit();
             } 
             catch (Exception e) {
+                item.setError(e);
+                item.setState(ImportItem.State.ERROR);
                 //failure, rollback transaction
                 try {
                     transaction.rollback();
