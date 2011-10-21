@@ -54,6 +54,9 @@ public class DateFormatTransform extends AttributeRemapTransform {
             this.dateFormat = new SimpleDateFormat(datePattern);
             this.dateFormat.setTimeZone(UTC_TZ);
         }
+    }
+    
+    public void init() {
         pos = new ParsePosition(0);
     }
 

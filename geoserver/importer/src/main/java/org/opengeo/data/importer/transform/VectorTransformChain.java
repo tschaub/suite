@@ -44,6 +44,7 @@ public class VectorTransformChain extends TransformChain<VectorTransform> {
         
         for (InlineVectorTransform tx : filter(transforms, InlineVectorTransform.class)) {
             try {
+                tx.init();
                 featureType = tx.apply(item, dataStore, featureType);
             } catch (Exception e) {
                 error(tx, e);

@@ -39,6 +39,7 @@ import org.opengeo.data.importer.transform.TransformChain;
 import org.opengeo.data.importer.transform.VectorTransformChain;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.FeatureType;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -613,9 +614,10 @@ public class Importer implements InitializingBean, DisposableBean {
                 
                 //attempt to drop the type that was created as well
                 try {
+                    // @todo the needs implementation in geotools
                     dataStore.getSchema(featureTypeName);
                     if(dataStore instanceof JDBCDataStore) {
-                        //((JDBCDataStore)dataStore).removeSchema(targetTypeName);
+//                        ((JDBCDataStore)dataStore).removeSchema(featureTypeName);
                     }
                 }
                 catch(Exception e1) {}
