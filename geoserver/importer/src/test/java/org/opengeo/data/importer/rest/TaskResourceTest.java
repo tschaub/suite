@@ -79,19 +79,6 @@ public class TaskResourceTest extends ImporterTestSupport {
           .endObject()
         .endObject().endObject();
                 
-        
-//        JSONObject payload = new JSONObject();
-//        JSONObject target = new JSONObject();
-//        JSONObject dataStore = new JSONObject();
-//        JSONObject workspace = new JSONObject();
-//        workspace.put("name", getCatalog().getDefaultWorkspace().getName() );
-//        dataStore.put("name","postgis");
-//        dataStore.put("workspace", workspace);
-//        target.put("dataStore",dataStore);
-//        payload.put("target", target);
-        
-        System.out.println(builder.buildObject().toString(2));
-        
         String payload = builder.buildObject().toString();
         
         MockHttpServletResponse resp = putAsServletResponse("/rest/imports/0/tasks/0", payload, "application/json");
