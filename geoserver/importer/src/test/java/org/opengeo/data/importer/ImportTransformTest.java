@@ -1,9 +1,8 @@
 package org.opengeo.data.importer;
 
 import java.io.File;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.sql.Timestamp;
+import java.util.*;
 
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.DataStoreInfo;
@@ -11,10 +10,7 @@ import org.geoserver.catalog.FeatureTypeInfo;
 import org.geoserver.catalog.LayerInfo;
 import org.geotools.feature.FeatureIterator;
 import org.geotools.referencing.CRS;
-import org.opengeo.data.importer.transform.DateFormatTransform;
-import org.opengeo.data.importer.transform.NumberFormatTransform;
-import org.opengeo.data.importer.transform.ReprojectTransform;
-import org.opengeo.data.importer.transform.VectorTransformChain;
+import org.opengeo.data.importer.transform.*;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -73,6 +69,50 @@ public class ImportTransformTest extends ImporterTestSupport {
             while(it.hasNext()) {
                 SimpleFeature f = (SimpleFeature) it.next();
                 assertTrue(f.getAttribute("cat") instanceof Integer);
+            }
+        }
+        finally {
+            it.close();
+        }
+    }
+    
+    public void testIntegerToDateTransform() throws Exception {
+        Catalog cat = getCatalog();
+
+        File dir = unpack("shape/archsites_epsg_prj.zip");
+
+        SpatialFile file = new SpatialFile(new File(dir, "archsites.shp"));
+        file.prepare();
+
+        ImportContext context = importer.createContext(file, store);
+        assertEquals(1, context.getTasks().size());
+        assertEquals(1, context.getTasks().get(0).getItems().size());
+        
+        context.setTargetStore(store);
+
+        ImportItem item = context.getTasks().get(0).getItems().get(0);
+        item.getTransform().add(new IntegerFieldToDateTransform("CAT_ID"));
+        importer.run(context);
+
+        assertEquals(ImportContext.State.COMPLETE, context.getState());
+
+        FeatureTypeInfo ft = cat.getFeatureTypeByDataStore(store, "archsites");
+        assertNotNull(ft);
+
+        SimpleFeatureType schema = (SimpleFeatureType) ft.getFeatureType();
+        assertEquals(Timestamp.class, schema.getDescriptor("CAT_ID").getType().getBinding());
+
+        FeatureIterator it = ft.getFeatureSource(null, null).getFeatures().features();
+        int year = 1;
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeZone(TimeZone.getTimeZone("UTC"));
+        try {
+            assertTrue(it.hasNext());
+            while(it.hasNext()) {
+                SimpleFeature f = (SimpleFeature) it.next();
+                // class will be timestamp
+                cal.setTime( (Date) f.getAttribute("CAT_ID"));
+                assertEquals(year++,cal.get(Calendar.YEAR));
             }
         }
         finally {
