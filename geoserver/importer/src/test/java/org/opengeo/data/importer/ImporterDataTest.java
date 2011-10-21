@@ -2,18 +2,13 @@ package org.opengeo.data.importer;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.DataStoreInfo;
-import org.geoserver.catalog.FeatureTypeInfo;
-import org.geoserver.catalog.LayerInfo;
-import org.geotools.data.FeatureSource;
-import org.geotools.data.Query;
 import org.geotools.data.h2.H2DataStoreFactory;
-import org.w3c.dom.Document;
 
-import com.mockrunner.mock.web.MockHttpServletResponse;
 
 public class ImporterDataTest extends ImporterTestSupport {
 
@@ -233,11 +228,16 @@ public class ImporterDataTest extends ImporterTestSupport {
         
         ImportItem item1 = context.getTasks().get(0).getItems().get(0);
         assertEquals(ImportItem.State.READY, item1.getState());
-        assertEquals("archsites", item1.getLayer().getResource().getName());
         
         ImportItem item2 = context.getTasks().get(1).getItems().get(0);
         assertEquals(ImportItem.State.READY, item2.getState());
-        assertEquals("bugsites", item2.getLayer().getResource().getName());
+        
+        // cannot ensure ordering of items
+        HashSet resources = new HashSet();
+        resources.add(item1.getLayer().getResource().getName());
+        resources.add(item2.getLayer().getResource().getName());
+        assertTrue(resources.contains("bugsites"));
+        assertTrue(resources.contains("archsites"));
 
         importer.run(context);
 

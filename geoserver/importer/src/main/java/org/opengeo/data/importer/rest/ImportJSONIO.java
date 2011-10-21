@@ -345,7 +345,7 @@ public class ImportJSONIO {
         if ("DateFormatTransform".equalsIgnoreCase(type)) {
             DateFormatTransform trans = new DateFormatTransform(json.getString("field"), json.optString("format", null));
             transform = trans;
-        } if ("IntegerFieldToDateTransform".equalsIgnoreCase(type)) {
+        } else if ("IntegerFieldToDateTransform".equalsIgnoreCase(type)) {
             IntegerFieldToDateTransform trans = new IntegerFieldToDateTransform(json.getString("field"));
             transform = trans;
         } else {
@@ -497,7 +497,7 @@ public class ImportJSONIO {
             if (df.getDateFormat() != null) {
                 json.key("format").value(df.getDateFormat().toPattern()); 
             }
-        } if (transform instanceof IntegerFieldToDateTransform) {
+        } else if (transform instanceof IntegerFieldToDateTransform) {
             IntegerFieldToDateTransform df = (IntegerFieldToDateTransform) transform;
             json.key("field").value(df.getField());
         } else {

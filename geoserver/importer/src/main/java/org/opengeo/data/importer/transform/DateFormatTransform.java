@@ -40,6 +40,7 @@ public class DateFormatTransform extends AttributeRemapTransform {
 
     public DateFormatTransform(String field, String datePattern) {
         init(field,datePattern);
+        init();
     }
     
     DateFormatTransform() {
@@ -56,7 +57,7 @@ public class DateFormatTransform extends AttributeRemapTransform {
         }
     }
     
-    public void init() {
+    public final void init() {
         pos = new ParsePosition(0);
     }
 

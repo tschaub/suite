@@ -1,6 +1,7 @@
 package org.opengeo.data.importer;
 
 import java.io.File;
+import java.util.HashSet;
 
 public class ImporterTest extends ImporterTestSupport {
 
@@ -37,12 +38,11 @@ public class ImporterTest extends ImporterTestSupport {
         
         ImportContext context = importer.createContext(d);
         assertEquals(2, context.getTasks().size());
-
-        // @todo this may fail if file order is different
-        ImportTask task = context.getTasks().get(0);
-        assertEquals(d.getFiles().get(0), task.getData());
         
-        task = context.getTasks().get(1);
-        assertEquals(d.getFiles().get(1), task.getData());
+        // cannot ensure order of tasks due to hashing
+        HashSet files = new HashSet();
+        files.add(context.getTasks().get(0).getData());
+        files.add(context.getTasks().get(1).getData());        
+        assertTrue(files.containsAll(d.getFiles()));
     }
 }
