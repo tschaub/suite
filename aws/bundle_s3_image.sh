@@ -76,21 +76,23 @@ if [ -z $SKIP_UPLOAD ]; then
 fi
 
 if [ -z $SKIP_REGISTER ]; then
-  # register the ami
-  IMAGE_ID=$( ec2-register $S3_BUCKET/image.manifest.xml -n $IMAGE_NAME -a $IMAGE_ARCH | cut -f 2 )
-  check_rc $? "ec2-register"
-
-  if [ ! -z $PRODUCT_ID ] && [ -z $SKIP_PRODUCT_CODE ]; then
-    # link the image to the product id
-    ec2-modify-image-attribute $IMAGE_ID -p $PRODUCT_ID
-    check_rc $? "linking image $IMAGE_ID to product $PRODUCT_ID"
+  for region in "us-east-1" "us-west-1"; do
+    # register the ami
+    IMAGE_ID=$( ec2-register --region $region $S3_BUCKET/image.manifest.xml -n $IMAGE_NAME -a $IMAGE_ARCH | cut -f 2 )
+    check_rc $? "ec2-register"
   
-    # make the image public
-    ec2-modify-image-attribute $IMAGE_ID -l -a all
-    check_rc $? "making image $IMAGE_ID public"
-
-    # tag the image
-    ec2-create-tags $IMAGE_ID --tag geoserver --tag postgis --tag opengeo --tag openlayers --tag gis --tag geospatial --tag "opengeo suite"
-    check_rc $? "create image tags for $IMAGE_ID"
-  fi
+    if [ ! -z $PRODUCT_ID ] && [ -z $SKIP_PRODUCT_CODE ]; then
+      # link the image to the product id
+      ec2-modify-image-attribute $IMAGE_ID -p $PRODUCT_ID
+      check_rc $? "linking image $IMAGE_ID to product $PRODUCT_ID"
+    
+      # make the image public
+      ec2-modify-image-attribute $IMAGE_ID -l -a all
+      check_rc $? "making image $IMAGE_ID public"
+  
+      # tag the image
+      ec2-create-tags $IMAGE_ID --tag geoserver --tag postgis --tag opengeo --tag openlayers --tag gis --tag geospatial --tag "opengeo suite"
+      check_rc $? "create image tags for $IMAGE_ID"
+    fi
+  done
 fi
