@@ -71,7 +71,7 @@ fi
 
 if [ -z $SKIP_UPLOAD ]; then
   # upload the bundle
-  ec2-upload-bundle -b $S3_BUCKET -m $IMAGE_MANIFEST -a $S3_ACCESS_KEY -s $S3_SECRET_KEY
+  ec2-upload-bundle --retry -b $S3_BUCKET -m $IMAGE_MANIFEST -a $S3_ACCESS_KEY -s $S3_SECRET_KEY
   check_rc $? "ec2-upload-bundle"
 fi
 
@@ -91,8 +91,9 @@ if [ -z $SKIP_REGISTER ]; then
       check_rc $? "making image $IMAGE_ID public"
   
       # tag the image
-      ec2-create-tags $IMAGE_ID --tag geoserver --tag postgis --tag opengeo --tag openlayers --tag gis --tag geospatial --tag "opengeo suite"
-      check_rc $? "create image tags for $IMAGE_ID"
+      # DISABLING for now, ec2-create-tags not available
+      #ec2-create-tags $IMAGE_ID --tag geoserver --tag postgis --tag opengeo --tag openlayers --tag gis --tag geospatial --tag "opengeo suite"
+      #check_rc $? "create image tags for $IMAGE_ID"
     fi
   done
 fi
