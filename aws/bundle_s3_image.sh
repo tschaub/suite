@@ -95,7 +95,7 @@ if [ -z $SKIP_UPLOAD ]; then
   #check_rc $? "ec2-migrate-bundle $S3_BUCKET to us-west-1"
 
   # migrate to eu west
-  ec2-migrate-bundle --retry -a $S3_ACCESS_KEY -s $S3_SECRET_KEY -b $S3_BUCKET -m `basename $IMAGE_MANIFEST` -d $S3_BUCKET_EU --location EU 
+  ec2-migrate-bundle --retry -c $EC2_CERT -k $EC2_PRIVATE_KEY -a $S3_ACCESS_KEY -s $S3_SECRET_KEY -b $S3_BUCKET -m `basename $IMAGE_MANIFEST` -d $S3_BUCKET_EU --location EU 
   check_rc $? "ec2-migrate-bundle $S3_BUCKET to us-west-1"
 fi
 
