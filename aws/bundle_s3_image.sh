@@ -28,7 +28,7 @@ for (( i=2; i < ${#args[*]}; i++ )); do
   fi
 done
 
-IMAGE_NAME=$1
+IMAGE_NAME_BASE=$1
 IMAGE_ARCH=$2
 export EC2_PRIVATE_KEY=`ls /tmp/pk-*`
 export EC2_CERT=`ls /tmp/cert-*`
@@ -45,13 +45,19 @@ check_rc $? "apt-get install ec2 api/ami + s3cmd tools"
 if [ -e /boot/grub/menu.lst ]; then
   sudo sed -i 's/root=LABEL=uec-rootfs/root=\/dev\/sda1/g' /boot/grub/menu.lst 
 fi
+
+for region in "us-east-1" "us-west-1"; do
+
+IMAGE_NAME=$IMAGE_NAME_BASE-$region
+IMAGE_MANIFEST=/tmp/image.manifest.xml
+rm $IMAGE_MANIFEST
+
 if [ -z $SKIP_BUNDLE ]; then
   # bundle the image
-  sudo ec2-bundle-vol -c $EC2_CERT -k $EC2_PRIVATE_KEY -u $S3_USER -r $IMAGE_ARCH
+  sudo ec2-bundle-vol --region $region -c $EC2_CERT -k $EC2_PRIVATE_KEY -u $S3_USER -r $IMAGE_ARCH
   check_rc $? "ec2-bundle-vol"
 fi
 
-IMAGE_MANIFEST=/tmp/image.manifest.xml
 if [ ! -e  $IMAGE_MANIFEST ]; then
   echo "No such file $IMAGE_MANIFEST. Exiting."
   exit 1
@@ -76,7 +82,6 @@ if [ -z $SKIP_UPLOAD ]; then
 fi
 
 if [ -z $SKIP_REGISTER ]; then
-  for region in "us-east-1" "us-west-1"; do
     # register the ami
     IMAGE_ID=$( ec2-register --region $region $S3_BUCKET/image.manifest.xml -n $IMAGE_NAME -a $IMAGE_ARCH | cut -f 2 )
     check_rc $? "ec2-register"
@@ -95,5 +100,5 @@ if [ -z $SKIP_REGISTER ]; then
       #ec2-create-tags $IMAGE_ID --tag geoserver --tag postgis --tag opengeo --tag openlayers --tag gis --tag geospatial --tag "opengeo suite"
       #check_rc $? "create image tags for $IMAGE_ID"
     fi
-  done
 fi
+done
