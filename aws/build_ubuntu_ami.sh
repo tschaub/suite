@@ -176,7 +176,9 @@ if [ -z $SKIP_CREATE_IMAGE ]; then
 
     scp $SSH_OPTS s3cfg-$ACCOUNT ubuntu@$HOST:/tmp/s3cfg
     check_rc $? "upload s3cfg-$ACCOUNT"
-  
+
+    scp $SSH_OPTS s3cfg-$ACCOUNT.us-west ubuntu@$HOST:/tmp/s3cfg.us-west
+    check_rc $? "upload s3cfg-$ACCOUNT.us-west"
     
     ssh $SSH_OPTS ubuntu@$HOST "cd /tmp && ./bundle_s3_image.sh $IMAGE_NAME $IMAGE_ARCH -p $PRODUCT_ID $SKIP_PRODUCT_CODE"
     check_rc $? "remote bundle image"

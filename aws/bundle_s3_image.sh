@@ -46,15 +46,11 @@ if [ -e /boot/grub/menu.lst ]; then
   sudo sed -i 's/root=LABEL=uec-rootfs/root=\/dev\/sda1/g' /boot/grub/menu.lst 
 fi
 
-for region in "us-east-1" "us-west-1"; do
-
-IMAGE_NAME=$IMAGE_NAME_BASE-$region
 IMAGE_MANIFEST=/tmp/image.manifest.xml
-rm $IMAGE_MANIFEST
 
 if [ -z $SKIP_BUNDLE ]; then
   # bundle the image
-  sudo ec2-bundle-vol --region $region -c $EC2_CERT -k $EC2_PRIVATE_KEY -u $S3_USER -r $IMAGE_ARCH
+  sudo ec2-bundle-vol -c $EC2_CERT -k $EC2_PRIVATE_KEY -u $S3_USER -r $IMAGE_ARCH
   check_rc $? "ec2-bundle-vol"
 fi
 
@@ -64,7 +60,9 @@ if [ ! -e  $IMAGE_MANIFEST ]; then
 fi
 
 S3_BUCKET=$S3_BUCKET_ROOT/$IMAGE_NAME
+S3_BUCKET_WEST=$S3_BUCKET_ROOT_WEST/$IMAGE_NAME
 S3CMD_CONFIG=/tmp/s3cfg
+S3CMD_CONFIG_WEST=/tmp/s3cfg.us-west
 
 s3cmd -c $S3CMD_CONFIG ls s3://$S3_BUCKET_ROOT 
 check_rc $? "listing contents of $S3_BUCKET_ROOT"
@@ -74,16 +72,24 @@ s3cmd -c $S3CMD_CONFIG ls s3://$S3_BUCKET_ROOT | grep $IMAGE_NAME
 if [ $? -eq 0 ]; then
   s3cmd -c $S3CMD_CONFIG -r del s3://$S3_BUCKET
 fi
+s3cmd -c $S3CMD_CONFIG_WEST ls s3://$S3_BUCKET_ROOT_WEST | grep $IMAGE_NAME
+if [ $? -eq 0 ]; then
+  s3cmd -c $S3CMD_CONFIG_WEST -r del s3://$S3_BUCKET_WEST
+fi
 
 if [ -z $SKIP_UPLOAD ]; then
   # upload the bundle
   ec2-upload-bundle --retry -b $S3_BUCKET -m $IMAGE_MANIFEST -a $S3_ACCESS_KEY -s $S3_SECRET_KEY
   check_rc $? "ec2-upload-bundle"
+
+  ec2-migrate-bundle --retry -a $S3_ACCESS_KEY -s $S3_SECRET_KEY -b $S3_BUCKET -m `basename $IMAGE_MANIFEST` -d $S3_BUCKET_WEST --location us-west-1
+  check_rc $? "ec2-migrate-bundle $S3_BUCKET to us-west-1"
 fi
 
-if [ -z $SKIP_REGISTER ]; then
-    # register the ami
-    IMAGE_ID=$( ec2-register --region $region $S3_BUCKET/image.manifest.xml -n $IMAGE_NAME -a $IMAGE_ARCH | cut -f 2 )
+# register_ami <S3_BUCKET> <LOCATION>
+function register_ami() {
+    #IMAGE_ID=$( ec2-register $S3_BUCKET/image.manifest.xml -n $IMAGE_NAME -a $IMAGE_ARCH | cut -f 2 )
+    IMAGE_ID=$( ec2-register --region $2 $1/image.manifest.xml -n $IMAGE_NAME -a $IMAGE_ARCH | cut -f 2 )
     check_rc $? "ec2-register"
   
     if [ ! -z $PRODUCT_ID ] && [ -z $SKIP_PRODUCT_CODE ]; then
@@ -100,5 +106,10 @@ if [ -z $SKIP_REGISTER ]; then
       #ec2-create-tags $IMAGE_ID --tag geoserver --tag postgis --tag opengeo --tag openlayers --tag gis --tag geospatial --tag "opengeo suite"
       #check_rc $? "create image tags for $IMAGE_ID"
     fi
+}
+
+if [ -z $SKIP_REGISTER ]; then
+    # register the ami
+    register_ami $S3_BUCKET us-east-1
+    register_ami $S3_BUCKET_WEST us-west-1
 fi
-done
