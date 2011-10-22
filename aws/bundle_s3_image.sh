@@ -28,7 +28,7 @@ for (( i=2; i < ${#args[*]}; i++ )); do
   fi
 done
 
-IMAGE_NAME_BASE=$1
+IMAGE_NAME=$1
 IMAGE_ARCH=$2
 export EC2_PRIVATE_KEY=`ls /tmp/pk-*`
 export EC2_CERT=`ls /tmp/cert-*`
@@ -61,28 +61,41 @@ fi
 
 S3_BUCKET=$S3_BUCKET_ROOT/$IMAGE_NAME
 S3_BUCKET_WEST=$S3_BUCKET_ROOT_WEST/$IMAGE_NAME
+S3_BUCKET_EU=$S3_BUCKET_ROOT_EU/$IMAGE_NAME
 S3CMD_CONFIG=/tmp/s3cfg
 S3CMD_CONFIG_WEST=/tmp/s3cfg.us-west
+S3CMD_CONFIG_EU=/tmp/s3cfg.us-west
 
 s3cmd -c $S3CMD_CONFIG ls s3://$S3_BUCKET_ROOT 
 check_rc $? "listing contents of $S3_BUCKET_ROOT"
 
 # figure out if the directory already exists, and delete it if necessary
-s3cmd -c $S3CMD_CONFIG ls s3://$S3_BUCKET_ROOT | grep $IMAGE_NAME
-if [ $? -eq 0 ]; then
-  s3cmd -c $S3CMD_CONFIG -r del s3://$S3_BUCKET
-fi
-s3cmd -c $S3CMD_CONFIG_WEST ls s3://$S3_BUCKET_ROOT_WEST | grep $IMAGE_NAME
-if [ $? -eq 0 ]; then
-  s3cmd -c $S3CMD_CONFIG_WEST -r del s3://$S3_BUCKET_WEST
-fi
+
+# clear_s3_bucket <S3CMD_CONFIG> <BUCKET_ROOT>
+function clear_s3_bucket() {
+  s3cmd -c $1 ls s3://$2 | grep $IMAGE_NAME
+  if [ $? -eq 0 ]; then
+    s3cmd -c $1 -r del s3://$2
+  fi
+}
+#s3cmd -c $S3CMD_CONFIG ls s3://$S3_BUCKET_ROOT | grep $IMAGE_NAME
+#if [ $? -eq 0 ]; then
+#  s3cmd -c $S3CMD_CONFIG -r del s3://$S3_BUCKET
+#fi
+clear_s3_bucket $S3CMD_CONFIG $S3_BUCKET_ROOT
+clear_s3_bucket $S3CMD_CONFIG_EU $S3_BUCKET_ROOT_EU
 
 if [ -z $SKIP_UPLOAD ]; then
   # upload the bundle
   ec2-upload-bundle --retry -b $S3_BUCKET -m $IMAGE_MANIFEST -a $S3_ACCESS_KEY -s $S3_SECRET_KEY
   check_rc $? "ec2-upload-bundle"
 
-  ec2-migrate-bundle --retry -a $S3_ACCESS_KEY -s $S3_SECRET_KEY -b $S3_BUCKET -m `basename $IMAGE_MANIFEST` -d $S3_BUCKET_WEST --location us-west-1
+  # migrate to us west
+  #ec2-migrate-bundle --retry -a $S3_ACCESS_KEY -s $S3_SECRET_KEY -b $S3_BUCKET -m `basename $IMAGE_MANIFEST` -d $S3_BUCKET_WEST --location us-west-1
+  #check_rc $? "ec2-migrate-bundle $S3_BUCKET to us-west-1"
+
+  # migrate to eu west
+  ec2-migrate-bundle --retry -a $S3_ACCESS_KEY -s $S3_SECRET_KEY -b $S3_BUCKET -m `basename $IMAGE_MANIFEST` -d $S3_BUCKET_EU --location eu-west-1
   check_rc $? "ec2-migrate-bundle $S3_BUCKET to us-west-1"
 fi
 
@@ -111,5 +124,6 @@ function register_ami() {
 if [ -z $SKIP_REGISTER ]; then
     # register the ami
     register_ami $S3_BUCKET us-east-1
-    register_ami $S3_BUCKET_WEST us-west-1
+    #register_ami $S3_BUCKET_WEST us-west-1
+    register_ami $S3_BUCKET_EU eu-west-1
 fi
