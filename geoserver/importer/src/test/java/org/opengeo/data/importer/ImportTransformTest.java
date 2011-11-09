@@ -91,6 +91,8 @@ public class ImportTransformTest extends ImporterTestSupport {
         context.setTargetStore(store);
 
         ImportItem item = context.getTasks().get(0).getItems().get(0);
+        // this is a silly test - CAT_ID ranges from 1-25 and is not supposed to be a date
+        // java date handling doesn't like dates in year 1
         item.getTransform().add(new IntegerFieldToDateTransform("CAT_ID"));
         importer.run(context);
 
@@ -103,11 +105,14 @@ public class ImportTransformTest extends ImporterTestSupport {
         assertEquals(Timestamp.class, schema.getDescriptor("CAT_ID").getType().getBinding());
 
         FeatureIterator it = ft.getFeatureSource(null, null).getFeatures().features();
-        int year = 1;
+        int year = 2;
         Calendar cal = Calendar.getInstance();
         cal.setTimeZone(TimeZone.getTimeZone("UTC"));
         try {
+            // make sure we have something
             assertTrue(it.hasNext());
+            // the first date will be bogus due to java date limitation
+            it.next();
             while(it.hasNext()) {
                 SimpleFeature f = (SimpleFeature) it.next();
                 // class will be timestamp
