@@ -19,7 +19,17 @@ public abstract class ImportData implements Serializable{
      * the format for this data
      */
     DataFormat format;
+    
+    String charsetEncoding;
 
+    public String getCharsetEncoding() {
+        return charsetEncoding;
+    }
+
+    public void setCharsetEncoding(String charsetEncoding) {
+        this.charsetEncoding = charsetEncoding;
+    }
+    
     public DataFormat getFormat() {
         return format;
     }

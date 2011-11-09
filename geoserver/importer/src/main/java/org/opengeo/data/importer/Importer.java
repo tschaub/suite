@@ -3,6 +3,8 @@ package org.opengeo.data.importer;
 import com.vividsolutions.jts.geom.Geometry;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -27,6 +29,7 @@ import org.geoserver.catalog.WorkspaceInfo;
 import org.geotools.data.DataStore;
 import org.geotools.data.DefaultTransaction;
 import org.geotools.data.FeatureReader;
+import org.geotools.data.FeatureStore;
 import org.geotools.data.FeatureWriter;
 import org.geotools.data.Transaction;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -41,6 +44,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.FeatureType;
+import org.opengis.filter.Filter;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
@@ -472,6 +476,7 @@ public class Importer implements InitializingBean, DisposableBean {
      * an import that involves reading from the datastore and writing into a specified target store
      */
     void doIndirectImport(ImportTask task, ImportFilter filter) throws IOException {
+        // @todo This needs to be transactional and probably should be extracted to a class for clarity
         for (ImportItem item : task.getItems()) {
             if (item.getState() != ImportItem.State.READY) {
                 continue;
@@ -494,7 +499,9 @@ public class Importer implements InitializingBean, DisposableBean {
             if (format instanceof VectorFormat) {
                 try {
                     loadIntoDataStore(item, (DataStoreInfo)task.getStore(), (VectorFormat) format, (VectorTransformChain) tx);
-                    addToCatalog(item, task);
+                    if (task.getUpdateMode() == null) {
+                        addToCatalog(item, task);
+                    }
                 }
                 catch(Exception e) {
                     LOGGER.log(Level.SEVERE, "Error occured during import", e);
@@ -543,99 +550,153 @@ public class Importer implements InitializingBean, DisposableBean {
 
     void loadIntoDataStore(ImportItem item, DataStoreInfo store, VectorFormat format, 
         VectorTransformChain tx) throws Exception {
-
+        
         FeatureReader reader = format.read(item.getTask().getData(), item);
         SimpleFeatureType featureType = (SimpleFeatureType) reader.getFeatureType();
-
-        //find a unique type name in the target store
-        String featureTypeName = findUniqueNativeFeatureTypeName(featureType, store);
-        if (!featureTypeName.equals(featureType.getTypeName())) {
-            //retype
-            SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
-            typeBuilder.setName(featureTypeName);
-            typeBuilder.addAll(featureType.getAttributeDescriptors());
-            featureType = typeBuilder.buildFeatureType();
-
-            //update the metadata
-            item.getLayer().getResource().setName(featureTypeName);
-            item.getLayer().getResource().setNativeName(featureTypeName);
-        }
-
-        //create the target schema
         DataStore dataStore = (DataStore) store.getDataStore(null);
+        String featureTypeName = featureType.getName().getLocalPart();
+
+        ImportTask.UpdateMode updateMode = item.getTask().getUpdateMode();
         
-        // @todo HACK remove this at some point when timezone issues are fixed
-        // this will force postgis to create timezone w/ timestamp fields
-        if (dataStore instanceof JDBCDataStore) {
-            JDBCDataStore ds = (JDBCDataStore) dataStore;
-            // sniff for postgis (h2 is used in tests and will cause failure if this occurs)
-            if (ds.getSqlTypeNameToClassMappings().containsKey("timestamptz")) {
-                ds.getSqlTypeToSqlTypeNameOverrides().put(java.sql.Types.TIMESTAMP, "timestamptz");
+        if (updateMode == null) {
+            //find a unique type name in the target store
+            featureTypeName = findUniqueNativeFeatureTypeName(featureType, store);
+            if (!featureTypeName.equals(featureType.getTypeName())) {
+                //retype
+                SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
+                typeBuilder.setName(featureTypeName);
+                typeBuilder.addAll(featureType.getAttributeDescriptors());
+                featureType = typeBuilder.buildFeatureType();
+
+                //update the metadata
+                item.getLayer().getResource().setName(featureTypeName);
+                item.getLayer().getResource().setNativeName(featureTypeName);
+            }
+
+            // @todo HACK remove this at some point when timezone issues are fixed
+            // this will force postgis to create timezone w/ timestamp fields
+            if (dataStore instanceof JDBCDataStore) {
+                JDBCDataStore ds = (JDBCDataStore) dataStore;
+                // sniff for postgis (h2 is used in tests and will cause failure if this occurs)
+                if (ds.getSqlTypeNameToClassMappings().containsKey("timestamptz")) {
+                    ds.getSqlTypeToSqlTypeNameOverrides().put(java.sql.Types.TIMESTAMP, "timestamptz");
+                }
+            }
+
+            //apply the feature type transform
+            featureType = tx.inline(item, dataStore, featureType);
+
+            dataStore.createSchema(featureType);
+        } else {
+            // @todo what to do if featureType transform is present?
+            
+            // @todo implement me - need to specify attribute used for id
+            if (updateMode == ImportTask.UpdateMode.UPDATE) {
+                throw new UnsupportedOperationException("updateMode UPDATE is not supported yet");
             }
         }
-
-        //apply the feature type transform
-        featureType = tx.inline(item, dataStore, featureType);
-
-        dataStore.createSchema(featureType);
+            
+        Transaction transaction = new DefaultTransaction();
+        
+        if (updateMode == ImportTask.UpdateMode.REPLACE) {
+            
+            FeatureStore fs = (FeatureStore) dataStore.getFeatureSource(featureTypeName);
+            fs.setTransaction(transaction);
+            fs.removeFeatures(Filter.INCLUDE);
+        }
+        
+        // using this exception to throw at the end
+        Exception error = null;
 
         //start writing features
+        // @todo ability to collect transformation errors for use in a dry-run (auto-rollback)
+        FeatureWriter writer = null;
+        
+        // @todo need better way to communicate to client
+        int skipped = 0;
+        item.clearImportMessages();
+        
         try {
-            FeatureWriter writer = null;
-            Transaction transaction = new DefaultTransaction();
+            writer = dataStore.getFeatureWriterAppend(featureTypeName, transaction);
 
-            try {
-                writer = dataStore.getFeatureWriterAppend(featureTypeName, transaction);
-           
-                while(reader.hasNext()) {
-                    SimpleFeature feature = (SimpleFeature) reader.next();
-                    SimpleFeature next = (SimpleFeature) writer.next();
-                    next.setAttributes(feature.getAttributes());
-                    
-                    // @hack #45678 - mask empty geometry or postgis will complain
-                    Geometry geom = (Geometry) next.getDefaultGeometry();
-                    if (geom != null && geom.isEmpty()) {
-                        next.setDefaultGeometry(null);
-                    }
-                    //apply the feature transform
-                    next = tx.inline(item, dataStore, feature, next);
+            while(reader.hasNext()) {
+                SimpleFeature feature = (SimpleFeature) reader.next();
+                SimpleFeature next = (SimpleFeature) writer.next();
+                next.setAttributes(feature.getAttributes());
 
+                // @hack #45678 - mask empty geometry or postgis will complain
+                Geometry geom = (Geometry) next.getDefaultGeometry();
+                if (geom != null && geom.isEmpty()) {
+                    next.setDefaultGeometry(null);
+                }
+                
+                //apply the feature transform
+                next = tx.inline(item, dataStore, feature, next);
+                
+                if (next == null) {
+                    skipped++;
+                } else {
                     writer.write();
                 }
-                transaction.commit();
-            } 
-            catch (Exception e) {
-                item.setError(e);
-                item.setState(ImportItem.State.ERROR);
-                //failure, rollback transaction
-                try {
-                    transaction.rollback();
-                } catch (IOException e1) {}
-                
-                //attempt to drop the type that was created as well
-                try {
-                    // @todo the needs implementation in geotools
-                    dataStore.getSchema(featureTypeName);
-                    if(dataStore instanceof JDBCDataStore) {
-//                        ((JDBCDataStore)dataStore).removeSchema(featureTypeName);
-                    }
-                }
-                catch(Exception e1) {}
-                throw e;
-            } 
-            finally {
-                try {
-                    transaction.close();
-                    if (writer != null) {
-                        writer.close();
-                    }
-                } catch (IOException e) {
-                    LOGGER.log(Level.WARNING, "Error closing transaction",e);
-                }
+            }
+            transaction.commit();
+            if (skipped > 0) {
+                item.addImportMessage(Level.WARNING,skipped + " features were skipped.");
             }
         } 
-        finally {
+        catch (Exception e) {
+            error = e;
+        } finally {
+            // try to cleanup, but if an error occurs here and one hasn't already been set, set the error
+            try {
+                transaction.close();
+            } catch (IOException e) {
+                if (error != null) {
+                    error = e;
+                }
+                LOGGER.log(Level.WARNING, "Error closing transaction",e);
+            }
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    if (error != null) {
+                        error = e;
+                    }
+                    LOGGER.log(Level.WARNING, "Error closing writer",e);
+                }
+            }
+        }
+        if (error != null) {
+            // all sub exceptions in this catch block should be logged, not thrown
+            // as the triggering exception will be thrown
+            
+            //failure, rollback transaction
+            try {
+                transaction.rollback();
+            } catch (IOException e1) {
+                LOGGER.log(Level.WARNING, "Error rolling back transaction",e1);
+            }
+
+            //attempt to drop the type that was created as well
+            try {
+                dropSchema(dataStore,featureTypeName);
+            } catch(Exception e1) {
+                LOGGER.log(Level.WARNING, "Error dropping schema in rollback",e1);
+            }
+        }
+        // do this last in case we have to drop the schema
+        try {
             format.dispose(reader, item);
+        } catch (IOException e) {
+            if (error != null) {
+                error = e;
+            }
+            LOGGER.log(Level.WARNING, "Error closing reader",e);
+        }
+        // finally, throw any error
+        if (error != null) {
+            throw error;
         }
     }
 
@@ -665,7 +726,6 @@ public class Importer implements InitializingBean, DisposableBean {
             catalog.add(layer.getDefaultStyle());
         }
 
-        //layer.setName(findUniqueLayerName(layer));
         layer.setEnabled(true);
         catalog.add(layer);
     }
@@ -742,5 +802,29 @@ public class Importer implements InitializingBean, DisposableBean {
     public void delete(ImportContext importContext) throws IOException {
         importContext.delete();
         contextStore.remove(importContext);
+    }
+
+    private void dropSchema(DataStore ds, String featureTypeName) throws Exception {
+        // @todo this needs implementation in geotools
+        SimpleFeatureType schema = ds.getSchema(featureTypeName);
+        if (schema != null) {
+            if (ds instanceof JDBCDataStore) {
+                JDBCDataStore dataStore = (JDBCDataStore) ds;
+                Connection conn = dataStore.getConnection(Transaction.AUTO_COMMIT);
+                Statement st = null;
+                try {
+                    st = conn.createStatement();
+                    st.execute("drop table " + featureTypeName);
+                    LOGGER.fine("dropSchema " + featureTypeName + " successful");
+                } finally {
+                    dataStore.closeSafe(conn);
+                    dataStore.closeSafe(st);
+                }
+            } else {
+                LOGGER.warning("Unable to dropSchema " + featureTypeName + " from datastore " + ds.getClass());
+            }
+        } else {
+            LOGGER.warning("Unable to dropSchema " + featureTypeName + " as it does not appear to exist in dataStore");
+        }
     }
 }

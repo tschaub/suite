@@ -18,7 +18,16 @@ public interface InlineVectorTransform extends VectorTransform {
 
     SimpleFeatureType apply(ImportItem item, DataStore dataStore, SimpleFeatureType featureType) 
         throws Exception;
-    
+
+    /**
+     * 
+     * @param item
+     * @param dataStore
+     * @param oldFeature
+     * @param feature
+     * @return null to discontinue processing
+     * @throws Exception 
+     */
     SimpleFeature apply(ImportItem item, DataStore dataStore, SimpleFeature oldFeature, SimpleFeature feature) 
         throws Exception;
 }

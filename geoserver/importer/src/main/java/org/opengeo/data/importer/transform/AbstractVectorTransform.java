@@ -1,8 +1,13 @@
 package org.opengeo.data.importer.transform;
 
+import java.util.logging.Logger;
+import org.geotools.util.logging.Logging;
+
 public abstract class AbstractVectorTransform implements VectorTransform {
 
     private static final long serialVersionUID = 1L;
+    
+    final transient Logger LOGGER = Logging.getLogger(getClass());
     
     public boolean stopOnError(Exception e) {
         return true;

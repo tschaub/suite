@@ -3,6 +3,7 @@ package org.opengeo.data.importer.rest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.geoserver.catalog.CoverageInfo;
 import org.geoserver.catalog.FeatureTypeInfo;
 import org.geoserver.catalog.LayerInfo;
 import org.geoserver.catalog.ResourceInfo;
+import org.geoserver.catalog.impl.LayerInfoImpl;
 import org.geoserver.rest.AbstractResource;
 import org.geoserver.rest.RestletException;
 import org.geoserver.rest.format.DataFormat;
@@ -63,7 +65,7 @@ public class ItemResource extends AbstractResource {
         LayerInfo l = item.getLayer();
         ResourceInfo r = l.getResource();
         TransformChain chain = item.getTransform();
-
+        
         //TODO: this is not thread safe, clone the object before overwriting it
         //save the existing resource, which will be overwritten below,  
         ResourceInfo resource = orig.getLayer().getResource();
@@ -71,8 +73,17 @@ public class ItemResource extends AbstractResource {
         CatalogBuilder cb = new CatalogBuilder(importer.getCatalog());
         if (l != null) {
             l.setResource(resource);
+            // @hack workaround OWSUtils bug - trying to copy null collections
+            // why these are null in the first place is a different question
+            LayerInfoImpl impl = (LayerInfoImpl) orig.getLayer();
+            if (impl.getAuthorityURLs() == null) {
+                impl.setAuthorityURLs(new ArrayList(1));
+            }
+            if (impl.getIdentifiers() == null) {
+                impl.setIdentifiers(new ArrayList(1));
+            }
+            // @endhack
             cb.updateLayer(orig.getLayer(), l);
-            //orig.getLayer().setResource(resource);
         }
 
         //update the resource

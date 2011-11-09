@@ -60,6 +60,9 @@ public class VectorTransformChain extends TransformChain<VectorTransform> {
         for (InlineVectorTransform tx : filter(transforms, InlineVectorTransform.class)) {
             try {
                 feature = tx.apply(item, dataStore, oldFeature, feature);
+                if (feature == null) {
+                    break;
+                }
             } catch (Exception e) {
                 error(tx, e);
             }

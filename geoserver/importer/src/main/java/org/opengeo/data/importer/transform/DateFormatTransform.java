@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.logging.Level;
 
 import org.geotools.data.DataStore;
 import org.opengeo.data.importer.ImportItem;
@@ -74,7 +75,13 @@ public class DateFormatTransform extends AttributeRemapTransform {
             SimpleFeature feature) throws Exception {
         Object val = feature.getAttribute(field);
         if (val != null) {
-            feature.setAttribute(field, parseDate(val.toString()));
+            Date parsed = parseDate(val.toString());
+            if (parsed == null) {
+                item.addImportMessage(Level.WARNING, "Invalid date '" + val + "' specified for " + feature.getID());
+                feature = null;
+            } else {
+                feature.setAttribute(field, parsed);
+            }
         }
         return feature;
     }

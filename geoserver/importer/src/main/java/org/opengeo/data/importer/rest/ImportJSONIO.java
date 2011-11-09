@@ -13,6 +13,7 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.LogRecord;
 import net.sf.json.JSONArray;
 
 import net.sf.json.JSONObject;
@@ -162,6 +163,9 @@ public class ImportJSONIO {
         json.key("id").value(id);
         json.key("href").value(page.rootURI("/imports/" + task.getContext().getId() + "/tasks/" + id));
         json.key("state").value(task.getState());
+        if (task.getUpdateMode() != null) {
+            json.key("updateMode").value(task.getUpdateMode().name());
+        }
 
         //source
         ImportData data = task.getData();
@@ -216,13 +220,29 @@ public class ImportJSONIO {
             json.key("errorMessage").value(concatErrorMessages(item.getError()));
         }
         json.key("transformChain");
-        transformChain(item.getTransform(), json);
+        transformChain(item.getTransform(), json);        
+        messages(json,item.getImportMessages());
         json.endObject();
 
         if (!inline) {
             json.endObject();
         }
         json.flush();
+    }
+    
+    void messages(FlushableJSONBuilder json,List<LogRecord> records) {
+        if (!records.isEmpty()) {
+            json.key("messages");
+            json.array();
+            for (int i = 0; i < records.size(); i++) {
+                LogRecord record = records.get(i);
+                json.object();
+                json.key("level").value(record.getLevel().toString());
+                json.key("message").value(record.getMessage());
+                json.endObject();
+            }
+            json.endArray();
+        }
     }
     
     String concatErrorMessages(Throwable ex) {
@@ -276,6 +296,16 @@ public class ImportJSONIO {
             
             if (json.has("id")) {
                 task.setId(json.getInt("id"));
+            }
+            if (json.has("updateMode")) {
+                task.setUpdateMode(ImportTask.UpdateMode.valueOf(json.getString("updateMode").toUpperCase()));
+            }
+            if (json.has("source")) {
+                JSONObject source = json.getJSONObject("source");
+                // we only support updating the charset
+                if (source.has("charset")) {
+                    task.getData().setCharsetEncoding(source.getString("charset"));
+                }
             }
             if (json.has("target")) {
                 JSONObject x = json.getJSONObject("target");
@@ -381,7 +411,9 @@ public class ImportJSONIO {
         json.key("type").value("file");
         json.key("format").value(data.getFormat() != null ? data.getFormat().getName() : null);
         json.key("location").value(data.getFile().getParentFile().getPath());
-
+        if (data.getCharsetEncoding() != null) {
+            json.key("charset").value(data.getCharsetEncoding());
+        }
         fileContents(data, json);
 
         json.endObject();
@@ -411,6 +443,9 @@ public class ImportJSONIO {
         json.key("format").value(data.getFormat() != null ? data.getFormat().getName() : null);
         json.key("location").value(data.getFile().getPath());
         json.key("files").array();
+        if (data.getCharsetEncoding() != null) {
+            json.key("charset").value(data.getCharsetEncoding());
+        }
         
         for (FileData file : data.getFiles()) {
             json.object();

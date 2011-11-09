@@ -93,6 +93,7 @@ public class DataStoreFormat extends VectorFormat {
             
             List<ImportItem> resources = new ArrayList<ImportItem>();
             for (String typeName : dataStore.getTypeNames()) {
+                // warning - this will log a scary exception if SRS cannot be found
                 FeatureTypeInfo featureType = 
                         cb.buildFeatureType(dataStore.getFeatureSource(typeName));
                 featureType.setStore(null);
@@ -175,6 +176,10 @@ public class DataStoreFormat extends VectorFormat {
             if (f != null) {
                 Map<String,Serializable> map = new HashMap<String, Serializable>();
                 map.put("url", f.toURI().toURL());
+                if (data.getCharsetEncoding() != null) {
+                    // @todo this map only work for shapefile
+                    map.put("charset",data.getCharsetEncoding());
+                }
                 return map;
             }
         }

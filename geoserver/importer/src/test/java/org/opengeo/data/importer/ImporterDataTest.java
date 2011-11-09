@@ -7,7 +7,15 @@ import java.util.Map;
 
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.DataStoreInfo;
+import org.geoserver.catalog.FeatureTypeInfo;
+import org.geotools.data.FeatureSource;
+import org.geotools.data.Query;
 import org.geotools.data.h2.H2DataStoreFactory;
+import org.geotools.feature.FeatureCollection;
+import org.geotools.feature.FeatureIterator;
+import org.opengis.feature.Feature;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.type.FeatureType;
 
 
 public class ImporterDataTest extends ImporterTestSupport {
@@ -252,6 +260,82 @@ public class ImporterDataTest extends ImporterTestSupport {
 
         runChecks("archsites");
         runChecks("bugsites");
+    }
+    
+    public void testImportIntoDatabaseWithEncoding() throws Exception {
+        Catalog cat = getCatalog();
+
+        DataStoreInfo ds = cat.getFactory().createDataStore();
+        ds.setWorkspace(cat.getDefaultWorkspace());
+        ds.setName("ming");
+        ds.setType("H2");
+
+        Map params = new HashMap();
+        params.put("database", getTestData().getDataDirectoryRoot().getPath()+"/ming");
+        params.put("dbtype", "h2");
+        ds.getConnectionParameters().putAll(params);
+        ds.setEnabled(true);
+        cat.add(ds);
+        
+        File dir = tmpDir();
+        unpack("shape/ming_time.zip", dir);
+
+        ImportContext context = importer.createContext(new Directory(dir), ds);
+        assertEquals(1, context.getTasks().size());
+        assertEquals(1, context.getTasks().get(0).getItems().size());
+
+        context.getTasks().get(0).getData().setCharsetEncoding("UTF-8");
+        importer.run(context);
+        
+        FeatureTypeInfo info = (FeatureTypeInfo) context.getTasks().get(0).getItems().get(0).getLayer().getResource();
+        FeatureSource<? extends FeatureType, ? extends Feature> fs = info.getFeatureSource(null, null);
+        FeatureCollection<? extends FeatureType, ? extends Feature> features = fs.getFeatures();
+        FeatureIterator<? extends Feature> it = features.features();
+        assertTrue(it.hasNext());
+        SimpleFeature next = (SimpleFeature) it.next();
+        // let's test some attributes to see if they were digested properly
+        String type_ch = (String) next.getAttribute("type_ch");
+        assertEquals("卫",type_ch);
+        String name_ch = (String) next.getAttribute("name_ch");
+        assertEquals("杭州前卫",name_ch);
+        
+        it.close();
+    }
+    
+    public void testImportIntoDatabaseUpdateModes() throws Exception {
+        testImportIntoDatabase();
+        
+        DataStoreInfo ds = getCatalog().getDataStoreByName("spearfish");
+        assertNotNull(ds);
+        
+        File dir = tmpDir();
+        unpack("shape/archsites_epsg_prj.zip", dir);
+        unpack("shape/bugsites_esri_prj.tar.gz", dir);
+        
+        FeatureSource<? extends FeatureType, ? extends Feature> fs = getCatalog().getFeatureTypeByName("archsites").getFeatureSource(null, null);
+        int archsitesCount = fs.getCount(Query.ALL);
+        fs = getCatalog().getFeatureTypeByName("bugsites").getFeatureSource(null, null);
+        int bugsitesCount = fs.getCount(Query.ALL);
+
+        ImportContext context = importer.createContext(new Directory(dir), ds);
+        context.getTasks().get(0).setUpdateMode(ImportTask.UpdateMode.REPLACE);
+        context.getTasks().get(1).setUpdateMode(ImportTask.UpdateMode.APPEND);
+        
+        importer.run(context);
+        
+        fs = getCatalog().getFeatureTypeByName("archsites").getFeatureSource(null, null);
+        int archsitesCount2 = fs.getCount(Query.ALL);
+        fs = getCatalog().getFeatureTypeByName("bugsites").getFeatureSource(null, null);
+        int bugsitesCount2 = fs.getCount(Query.ALL);
+        
+        // tasks might not be in same order
+        if (context.getTasks().get(0).getStore().equals("archsites")) {
+            assertEquals(archsitesCount, archsitesCount2);
+            assertEquals(bugsitesCount * 2, bugsitesCount2);
+        } else {
+            assertEquals(archsitesCount * 2, archsitesCount2);
+            assertEquals(bugsitesCount, bugsitesCount2);
+        }
     }
 
     public void testImportGeoTIFF() throws Exception {

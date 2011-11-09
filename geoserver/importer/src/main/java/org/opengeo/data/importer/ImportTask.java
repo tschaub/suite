@@ -20,6 +20,10 @@ public class ImportTask implements Serializable {
     public static enum State {
         PENDING, READY, RUNNING, INCOMPLETE, COMPLETE
     }
+    
+    public static enum UpdateMode {
+        REPLACE, APPEND, UPDATE
+    }
 
     /**
      * task id
@@ -60,6 +64,8 @@ public class ImportTask implements Serializable {
      * flag signalling direct/indirect import
      */
     boolean direct;
+    
+    UpdateMode updateMode;
 
     public ImportTask() {
     }
@@ -139,6 +145,14 @@ public class ImportTask implements Serializable {
         return null;
     }
 
+    public UpdateMode getUpdateMode() {
+        return updateMode;
+    }
+
+    public void setUpdateMode(UpdateMode updateMode) {
+        this.updateMode = updateMode;
+    }
+    
     public void updateState() {
         State newState = State.COMPLETE;
      O: for (ImportItem item : items) {

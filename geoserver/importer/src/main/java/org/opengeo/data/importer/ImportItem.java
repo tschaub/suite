@@ -1,8 +1,13 @@
 package org.opengeo.data.importer;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 import org.geoserver.catalog.LayerInfo;
 import org.opengeo.data.importer.transform.TransformChain;
@@ -56,6 +61,8 @@ public class ImportItem implements Serializable {
      * various metadata 
      */
     transient Map<Object,Object> metadata;
+    
+    List<LogRecord> importMessages = new ArrayList<LogRecord>();
 
     public ImportItem() {
     }
@@ -117,6 +124,29 @@ public class ImportItem implements Serializable {
             metadata = new HashMap<Object, Object>();
         }
         return metadata;
+    }
+    
+    public void clearImportMessages() {
+        if (importMessages != null) {
+            importMessages.clear();
+        }
+    }
+
+    public void addImportMessage(Level level,String msg) {
+        if (importMessages == null) {
+            importMessages = new ArrayList<LogRecord>();
+        }
+        importMessages.add(new LogRecord(level, msg));
+    }
+    
+    public List<LogRecord> getImportMessages() {
+        List<LogRecord> retval;
+        if (importMessages == null) {
+            retval = Collections.emptyList();
+        } else {
+            retval = Collections.unmodifiableList(importMessages);
+        }
+        return retval;
     }
 
     @Override
