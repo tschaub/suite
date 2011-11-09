@@ -343,12 +343,13 @@ public class ImportJSONIO {
         ImportTransform transform;
         String type = json.getString("type");
         if ("DateFormatTransform".equalsIgnoreCase(type)) {
-            DateFormatTransform trans = new DateFormatTransform(json.getString("field"), json.optString("format", null));
-            transform = trans;
+            transform = new DateFormatTransform(json.getString("field"), json.optString("format", null));
         } else if ("IntegerFieldToDateTransform".equalsIgnoreCase(type)) {
-            IntegerFieldToDateTransform trans = new IntegerFieldToDateTransform(json.getString("field"));
-            transform = trans;
-        } else {
+            transform = new IntegerFieldToDateTransform(json.getString("field"));
+        } else if ("CreateIndexTransform".equalsIgnoreCase(type)) {
+            transform = new CreateIndexTransform(json.getString("field"));
+        } 
+        else {
             throw new RuntimeException("parsing of " + type + " not implemented");
         }
         return transform;
@@ -499,6 +500,9 @@ public class ImportJSONIO {
             }
         } else if (transform instanceof IntegerFieldToDateTransform) {
             IntegerFieldToDateTransform df = (IntegerFieldToDateTransform) transform;
+            json.key("field").value(df.getField());
+        } else if (transform instanceof CreateIndexTransform) {
+            CreateIndexTransform df = (CreateIndexTransform) transform;
             json.key("field").value(df.getField());
         } else {
             throw new IOException("Serializaiton of " + transform.getClass() + " not implemented");

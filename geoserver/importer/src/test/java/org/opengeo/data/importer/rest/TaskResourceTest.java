@@ -25,6 +25,7 @@ import java.util.logging.Level;
 import org.geoserver.catalog.impl.DataStoreInfoImpl;
 import org.geotools.data.Transaction;
 import org.geotools.jdbc.JDBCDataStore;
+import org.opengeo.data.importer.transform.CreateIndexTransform;
 
 public class TaskResourceTest extends ImporterTestSupport {
     JDBCDataStore jdbcStore;
@@ -84,9 +85,14 @@ public class TaskResourceTest extends ImporterTestSupport {
         MockHttpServletResponse resp = putAsServletResponse("/rest/imports/0/tasks/0", payload, "application/json");
         assertEquals(204,resp.getStatusCode());
         
+        // @todo formalize and extract this test
+        ImportContext context = importer.getContext(0);
+        context.getTasks().get(0).getItems().get(0).getTransform().add(new CreateIndexTransform("CAT_ID"));
+        importer.changed(context);
+        
         resp = postAsServletResponse("/rest/imports/0","","application/text");        
         assertEquals(204,resp.getStatusCode());
-
+        
         // ensure item ran successfully
         JSONObject json = (JSONObject) getAsJSON("/rest/imports/0/tasks/0/items/0");
         json = json.getJSONObject("item");
