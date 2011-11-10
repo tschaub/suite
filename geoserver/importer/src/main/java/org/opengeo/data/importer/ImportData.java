@@ -52,4 +52,26 @@ public abstract class ImportData implements Serializable{
     public void cleanup() throws IOException {
         // do nothing
     }
+    
+    /**
+     * A dummy transfer object to hold properties but has no functionality.
+     */
+    public static class TransferObject extends ImportData {
+
+        @Override
+        public String getName() {
+            return null;
+        }
+
+        @Override
+        public void cleanup() throws IOException {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void prepare() throws IOException {
+            throw new UnsupportedOperationException();
+        }
+    
+    }
 }

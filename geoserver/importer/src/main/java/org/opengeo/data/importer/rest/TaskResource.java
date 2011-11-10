@@ -206,6 +206,14 @@ public class TaskResource extends AbstractResource {
             updateStoreInfo(orig, task.getStore());
             change = true;
         }
+        if (task.getData() != null) {
+            orig.getData().setCharsetEncoding(task.getData().getCharsetEncoding());
+            change = true;
+        }
+        if (task.getUpdateMode() != null) {
+            orig.setUpdateMode(task.getUpdateMode());
+            change = true;
+        }
         
         if (!change) {
             throw new RestletException("Unknown representation", Status.CLIENT_ERROR_BAD_REQUEST);

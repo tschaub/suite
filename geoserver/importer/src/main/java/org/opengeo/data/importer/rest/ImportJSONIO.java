@@ -304,6 +304,9 @@ public class ImportJSONIO {
                 JSONObject source = json.getJSONObject("source");
                 // we only support updating the charset
                 if (source.has("charset")) {
+                    if (task.getData() == null) {
+                        task.setData(new ImportData.TransferObject());
+                    }
                     task.getData().setCharsetEncoding(source.getString("charset"));
                 }
             }
