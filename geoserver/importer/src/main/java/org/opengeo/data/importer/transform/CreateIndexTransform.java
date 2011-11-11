@@ -2,7 +2,9 @@ package org.opengeo.data.importer.transform;
 
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.logging.Level;
 import org.geoserver.catalog.DataStoreInfo;
+import org.geotools.data.DataAccess;
 import org.geotools.data.Transaction;
 import org.geotools.jdbc.JDBCDataStore;
 import org.opengeo.data.importer.ImportData;
@@ -32,7 +34,15 @@ public class CreateIndexTransform extends AbstractVectorTransform implements Pos
     
     public void apply(ImportItem item, ImportData data) throws Exception {
         DataStoreInfo storeInfo = (DataStoreInfo) item.getTask().getStore();
-        JDBCDataStore store = (JDBCDataStore) storeInfo.getDataStore(null);
+        DataAccess store = storeInfo.getDataStore(null);
+        if (store instanceof JDBCDataStore) {
+            createIndex( item, (JDBCDataStore) store);
+        } else {
+            item.addImportMessage(Level.WARNING, "Cannot create index on non database target. Not a big deal.");
+        }
+    }
+    
+    private void createIndex(ImportItem item, JDBCDataStore store) throws Exception {
         try {
             //@todo another way to do this??
             //if ("PostGISDialect".equals(store.getSQLDialect().getClass().getSimpleName())) {
