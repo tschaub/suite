@@ -476,6 +476,9 @@ public class Importer implements InitializingBean, DisposableBean {
      * an import that involves reading from the datastore and writing into a specified target store
      */
     void doIndirectImport(ImportTask task, ImportFilter filter) throws IOException {
+        if (!task.getStore().isEnabled()) {
+            task.getStore().setEnabled(true);
+        }
         // @todo This needs to be transactional and probably should be extracted to a class for clarity
         for (ImportItem item : task.getItems()) {
             if (item.getState() != ImportItem.State.READY) {
