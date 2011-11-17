@@ -22,6 +22,32 @@
        <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
+            <id>clean</id>
+            <phase>clean</phase>
+            <configuration>
+              <tasks>
+                <delete dir="${basedir}/src"/>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>generate-sources</id>
+            <phase>generate-sources</phase>
+            <configuration>
+              <tasks>
+                <copy todir="${basedir}/src"> 
+                  <fileset dir="${basedir}/../../../geoserver/externals/geoserver/doc/en/user/source/production"/>
+                </copy>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+          <execution>
             <id>compile</id>
             <phase>compile</phase>
             <configuration>

@@ -17,25 +17,37 @@
   <name>OpenGeo Suite GeoServer Externals</name>
 
   <build>
-   <plugins>
-     <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>compile</id>
-            <phase>compile</phase>
-            <configuration>
-              <tasks>
-                <ant antfile="${basedir}/build.xml"/>
-              </tasks>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
   </build>
+  <profiles>
+   <profile>
+     <id>externals</id>
+     <activation>
+       <property>
+         <name>full</name>
+       </property>
+     </activation>
+     <build>
+      <plugins>
+        <plugin>
+           <artifactId>maven-antrun-plugin</artifactId>
+           <executions>
+             <execution>
+               <id>compile</id>
+               <phase>compile</phase>
+               <configuration>
+                 <tasks>
+                   <ant antfile="${basedir}/build.xml"/>
+                 </tasks>
+               </configuration>
+               <goals>
+                 <goal>run</goal>
+               </goals>
+             </execution>
+           </executions>
+         </plugin>
+       </plugins>
+     </build>
+   </profile>
+  </profiles>
 
 </project>

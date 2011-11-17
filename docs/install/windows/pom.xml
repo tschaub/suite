@@ -22,6 +22,35 @@
        <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
+            <id>clean</id>
+            <phase>clean</phase>
+            <configuration>
+              <tasks>
+                <delete file="${basedir}/source/README-windows.rst"/>
+                <delete dir="${basedir}/source/img"/>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>generate-sources</id>
+            <phase>generate-sources</phase>
+            <configuration>
+              <tasks>
+                <property name="dir" value="${basedir}/../../usermanual/source/installation/windows"/>
+                <copy file="${dir}/index.rst" tofile="${basedir}/source/README-windows.rst"/>
+                <copy todir="${basedir}/source/img">
+                  <fileset dir="${dir}/img"/>
+                </copy>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+          <execution>
             <id>compile</id>
             <phase>compile</phase>
             <configuration>

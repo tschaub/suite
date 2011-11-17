@@ -22,31 +22,31 @@
        <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
+            <id>clean</id>
+            <phase>clean</phase>
+            <configuration>
+              <tasks>
+                <delete dir="src"/>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+          <execution>
             <id>generate-sources</id>
             <phase>generate-sources</phase>
             <configuration>
               <tasks>
-                <mkdir dir="externals/gwc"/>
-                <exec executable="git" dir="externals/gwc" failonerror="false">
-                  <arg line="clone git://github.com/GeoWebCache/geowebcache.git ."/>
-                </exec>
-                <exec executable="git" dir="externals/gwc" failonerror="true">
-                   <arg line="checkout ${gwc.branch}"/>
-                </exec>
-                <exec executable="git" dir="externals/gwc" failonerror="true">
-                  <arg line="pull origin ${gwc.branch}"/>
-                </exec>
-                <exec executable="git" dir="externals/gwc" failonerror="true">
-                   <arg line="checkout ${gwc.rev}"/>
-                </exec>
-
-                <mkdir dir="src"/>
+                <!--mkdir dir="src"/>
                 <delete includeemptydirs="true">
                   <fileset dir="src" includes="**/*"/>
-                </delete>
+                </delete-->
                 <copy todir="src">
-                  <fileset dir="externals/gwc/documentation/en/user/source" includes="**/*"/>
+                  <fileset dir="${basedir}/../../geoserver/externals/geowebcache/documentation/en/user/source" includes="**/*"/>
                 </copy>
+                <!-- remove this copy when gwc #153 is fixed -->
+                <copy file="conf.py" todir="src" overwrite="true"/>
               </tasks>
             </configuration>
             <goals>
@@ -58,8 +58,6 @@
             <phase>compile</phase>
             <configuration>
               <tasks>
-                <!-- remove this copy when gwc #153 is fixed -->
-                <copy file="conf.py" todir="src" overwrite="true"/>
 
                 <exec executable="sphinx-build" failonerror="true" dir="${basedir}/src">
                   <arg line="-D html_theme='gwc' -b html -d ${build.directory}/doctrees . ${build.directory}/html"/>

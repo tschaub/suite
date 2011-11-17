@@ -149,6 +149,34 @@
        <artifactId>maven-antrun-plugin</artifactId>
        <executions>
          <execution>
+           <id>clean</id>
+           <phase>clean</phase>
+           <configuration>
+             <tasks>
+               <delete includeemptydirs="true">
+                 <fileset dir="${warSourceDirectory}" includes="**/*"/>
+               </delete>
+             </tasks>
+           </configuration>
+           <goals>
+             <goal>run</goal>
+           </goals>
+         </execution>
+         <execution>
+           <id>generate-resources</id>
+           <phase>generate-resources</phase>
+           <configuration>
+             <tasks>
+               <copy todir="${warSourceDirectory}">
+                 <fileset dir="${basedir}/../../externals/geoserver/src/web/app/src/main/webapp" includes="**/*"/>
+               </copy>
+             </tasks>
+           </configuration>
+           <goals>
+             <goal>run</goal>
+           </goals>
+         </execution>
+         <execution>
            <id>hack-printing</id>
            <phase>install</phase>
             <configuration>
@@ -218,4 +246,7 @@
      </profile>
   </profiles>
 
+  <properties>
+    <warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
+  </properties>
 </project>
