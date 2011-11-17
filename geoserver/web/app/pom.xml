@@ -153,9 +153,7 @@
            <phase>clean</phase>
            <configuration>
              <tasks>
-               <delete includeemptydirs="true">
-                 <fileset dir="${warSourceDirectory}" includes="**/*"/>
-               </delete>
+               <delete dir="${warSourceDirectory}"/>
              </tasks>
            </configuration>
            <goals>
@@ -167,6 +165,7 @@
            <phase>generate-resources</phase>
            <configuration>
              <tasks>
+               <mkdir dir="${warSourceDirectory}"/>
                <copy todir="${warSourceDirectory}">
                  <fileset dir="${basedir}/../../externals/geoserver/src/web/app/src/main/webapp" includes="**/*"/>
                </copy>
