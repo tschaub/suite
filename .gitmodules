@@ -1,0 +1,18 @@
+[submodule "geoserver/externals/geotools"]
+	path = geoserver/externals/geotools
+	url = git://github.com/geotools/geotools.git
+[submodule "geoserver/externals/geoserver"]
+	path = geoserver/externals/geoserver
+	url = git://github.com/geoserver/geoserver.git
+[submodule "geoserver/externals/geowebcache"]
+	path = geoserver/externals/geowebcache
+	url = git://github.com/GeoWebCache/geowebcache.git
+[submodule "styler/externals/geoext"]
+	path = styler/externals/geoext
+	url = git://github.com/opengeo/GeoExt.git
+[submodule "styler/externals/gxp"]
+	path = styler/externals/gxp
+	url = git://github.com/opengeo/gxp.git
+[submodule "styler/externals/openlayers"]
+	path = styler/externals/openlayers
+	url = git://github.com/openlayers/openlayers.git
