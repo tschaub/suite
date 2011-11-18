@@ -15,24 +15,61 @@ The following software packages are required to build the suite.
 * `Sphinx <http://sphinx.pocoo.org/>`_ - 1.0+
 * `Git <http://git-scm.com/>`_ - Recent
 
-Build Environment
------------------
+Quickstart
+----------
 
-The suite builds its own internal versions of many components like GeoTools and 
-GeoServer. To keep these builds separate it is recommened that you set up a 
-maven repository for the suite separate from your existing local maven 
-repository.
+For the imapatient.
 
 .. note::
 
-   Tools like `virtualenv <http://pypi.python.org/pypi/virtualenv>`_ and `virtualenvwrapper <http://www.doughellmann.com/projects/virtualenvwrapper/>`_
-   are useful for creating virtual environments with configuration specific to a   particular project. It is recommened that you set up a  "virtualenv" 
-   specifically for the suite. In that virtualenv you can configure the custom 
-   maven settings.
+   If you build GeoTools, GeoServer, or GeoWebCache with maven locally for other   projects you should skip this quickstart and follow the entire set of 
+   instructions.
 
-Also due to the fact that GeoServer depends on GeoTools and GeoWebCache via 
+#. Download `settings.xml <https://raw.github.com/opengeo/suite/master/build/settings.xml>`_
+
+#. Clone the repository:: 
+
+     % git clone git://github.com/opengeo/suite.git suite
+     % cd suite
+
+#. Initialize submodule dependnecies::
+
+     % git submodule init 
+     % git submodule sync
+     % git submodule update
+
+#. Do a full build::
+
+     % mvn -s /path/to/settings.xml clean install -Dfull
+
+Build Environment
+-----------------
+
+.. note::
+
+   If you don't build GeoTools, GeoServer, or GeoWebCache locally on a regular 
+   basis you can skip this section.
+
+The suite builds its own internal versions of many components like GeoTools and 
+GeoServer. To keep these builds separate it is recommened that you set up an 
+virtual environment for the suite build. 
+
+Tools like `virtualenv <http://pypi.python.org/pypi/virtualenv>`_ and `virtualenvwrapper <http://www.doughellmann.com/projects/virtualenvwrapper/>`_
+are useful for creating virtual environments with configuration specific to a   particular project. It is recommened that you set up a  "virtualenv" 
+specifically for the suite. In that virtualenv you can configure custom settingsfor maven, etc...
+
+Maven Setup
+-----------
+
+Due to the fact that GeoServer depends on GeoTools and GeoWebCache via 
 SNAPSHOT versions, Maven must be configured to not download SNAPSHOT versions 
 from any online repositories that publish GeoTools and GeoWebCache artifacts.
+
+.. note::
+
+   If you don't build GeoServer, GeoTools, or GeoWebCache locally for other 
+   projects then you can skip teh part in ``settings.xml`` about a custom 
+   repository.
 
 Set up a custom ``settings.xml`` file::
 
@@ -88,7 +125,7 @@ Repository Setup
 The suite repository contains submodules that pull in external dependencies. 
 After cloning the repository you must initialize the submodules::
 
-  % git clone 
+  % git clone git://github.com/opengeo/suite.git suite
   % cd suite
   % git submodule init
   % git submodule sync
@@ -97,16 +134,26 @@ After cloning the repository you must initialize the submodules::
 Building
 --------
 
-The basic command to build the suite is::
+If you are building the suite locally for the first time you *must* do a full 
+build::
+
+  % mvn clean install -Dfull
+
+The above command will build everything, including all external dependencies.
+Dropping the ``-Dfull`` flag will only build the core suite components::
 
   % mvn clean install
 
-The above command will however not build everything. It will not build i
-documentation, and also will not build some external dependencies such as 
-GeoServer, GeoTools, and GeoWebCache. To enable these components use the 
-``-Dfull`` flag::
+To build a distribution a full build must first be completed. After which the 
+following command is used::
 
-  % mvn clean install -Dfull
+  % mvn assembly:attached 
+
+Resulting artifacts will be located in the ``target`` directory. 
+
+The build and assembly commands can also be merged into one::
+
+  % mvn clean install assembly:attached -Dfull
 
 Building GeoServer Externals
 ----------------------------
