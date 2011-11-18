@@ -8,7 +8,7 @@
  <groupId>org.opengeo</groupId>
  <artifactId>suite</artifactId>
  <packaging>pom</packaging>
- <version>2.4.3</version>
+ <version>2.4-SNAPSHOT</version>
  <name>OpenGeo Suite</name>
 
  <organization>
@@ -289,12 +289,17 @@
  </profiles>
 
  <distributionManagement>
-   <!-- use the following if you're not using a snapshot version. -->
    <repository>
      <id>opengeo</id>
      <name>opengeo</name>
      <url>dav:http://repo.opengeo.org</url>
    </repository>
+   <snapshotRepository>
+     <id>opengeo</id>
+     <name>OpenGeo Maven Repository</name>
+     <url>dav:http://repo.opengeo.org</url>
+     <uniqueVersion>false</uniqueVersion>
+  </snapshotRepository>
  </distributionManagement>
 
  <properties>

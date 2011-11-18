@@ -9,6 +9,6 @@ fi
 FROM="<version>$1<"
 TO="<version>$2<"
 
-find . -type f -name pom.xml -exec sed -i "" "s/$FROM/$TO/g" {} \;
+find . -name externals -prune -o -name pom.xml -exec sed -i "" "s/$FROM/$TO/g" {} \;
 
 echo "Updated version strings in pom.xml files from $1 to $2."
