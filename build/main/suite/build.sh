@@ -67,6 +67,8 @@ function copy_artifacts {
   fi
 }
 
+set -x
+
 REPO_PATH=$GIT_BRANCH
 dist=/var/www/suite/$REPO_PATH
 if [ ! -e $dist ]; then
@@ -118,7 +120,7 @@ fi
 echo "building $revision with maven settings $MVN_SETTINGS"
 
 # perform a full build
-$MVN -s $MVN_SETTINGS clean install -Dfull -Dsvn.revision=$revision -Dbuild.date=$BUILD_ID
+$MVN -s $MVN_SETTINGS -Dfull -Dmvn.exec=$MVN -Dmvn.settings=$MVN_SETTINGS -Dsvn.revision=$revision -Dbuild.date=$BUILD_ID clean install
 checkrv $? "maven install"
 
 $MVN -o -s $MVN_SETTINGS assembly:attached &&
