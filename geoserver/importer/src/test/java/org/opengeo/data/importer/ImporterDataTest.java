@@ -329,7 +329,7 @@ public class ImporterDataTest extends ImporterTestSupport {
         int bugsitesCount2 = fs.getCount(Query.ALL);
         
         // tasks might not be in same order
-        if (context.getTasks().get(0).getStore().equals("archsites")) {
+        if (context.getTasks().get(0).getItems().get(0).getLayer().getName().equals("archsites")) {
             assertEquals(archsitesCount, archsitesCount2);
             assertEquals(bugsitesCount * 2, bugsitesCount2);
         } else {
