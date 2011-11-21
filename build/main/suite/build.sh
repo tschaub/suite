@@ -18,14 +18,17 @@ function checkrv {
 #
 function profile_rebuild {
   local profile=$1
-  cd geoserver/web/app
+
+  pushd geoserver/web/app
   $MVN -s $MVN_SETTINGS -o clean install -P $profile -Dsvn.revision=$revision -Dbuild.date=$BUILD_ID
   checkrv $? "maven clean install geoserver/web/app ($profile profile)"
-  cd $CWD/dashboard
+  popd
+
+  pushd dashboard
   $MVN -s $MVN_SETTINGS -o clean install -P $profile -Dsvn.revision=$revision -Dbuild.date=$BUILD_ID
   checkrv $? "maven clean install dashboard ($profile profile)"
+  popd
 
-  cd $CWD
   $MVN -s $MVN_SETTINGS -P $profile -o assembly:attached
   checkrv $? "maven assembly ($profile profile)"
 }
@@ -42,7 +45,7 @@ function copy_artifacts {
     prefix=-$1
   fi
 
-  cd $CWD/target/$1
+  pushd target/$1
   for x in $artifacts
   do
     if [ -e opengeosuite${prefix}-*-${x}.zip ]; then
@@ -60,7 +63,8 @@ function copy_artifacts {
     fi
   done
 
-  cd $CWD
+  popd
+
   if [ $counter -eq 0 ]; then
     echo "no artifacts copied"
     exit 1
@@ -81,14 +85,14 @@ id=$(echo $REPO_PATH|sed 's/\//-/g')
 
 # set up the maven repository for this particular branch/tag/etc...
 MVN_SETTINGS_TEMPLATE=`pwd`/repo/build/settings.xml
-cd maven
+pushd maven
 if [ ! -d $REPO_PATH ]; then
   echo "Creating new maven repository at `pwd`/$REPO_PATH"
   mkdir -p $REPO_PATH
   sed "s#@PATH@#`pwd`/$REPO_PATH/repo#g" $MVN_SETTINGS_TEMPLATE > $REPO_PATH/settings.xml
   cp -R repo-template $REPO_PATH/repo
 fi
-cd ..
+popd
 
 MVN_SETTINGS=`pwd`/maven/$REPO_PATH/settings.xml
 export MAVEN_OPTS=-Xmx256m
