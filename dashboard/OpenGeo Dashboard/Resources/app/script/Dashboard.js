@@ -54,7 +54,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
     constructor: function() {
         
         var versionInfo = og.util.getVersionInfo();
-        this.revision = versionInfo["svn_revision"];
+        this.revision = versionInfo["build_revision"];
         this.buildProfile = versionInfo["build_profile"];
         var targetVersion = versionInfo["suite_version"];
         var config = og.util.getUserConfig();

@@ -73,7 +73,7 @@
 
                   <filterset>
                     <filter token="SUITE_VERSION" value="${project.version}"/>
-                    <filter token="SVN_REVISION" value="${svn.revision}"/>
+                    <filter token="BUILD_REVISION" value="${svn.revision}"/>
                     <filter token="BUILD_DATE" value="${build.date}"/>
                     <filter token="BUILD_PROFILE" value="${build.profile}"/>
                   </filterset>

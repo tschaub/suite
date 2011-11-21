@@ -19,14 +19,14 @@ function checkrv {
 function profile_rebuild {
   local profile=$1
   cd geoserver/web/app
-  $MVN -s $MAVEN_SETTINGS -o clean install -P $profile -Dsvn.revision=$revision -Dbuild.date=$BUILD_ID
+  $MVN -s $MVN_SETTINGS -o clean install -P $profile -Dsvn.revision=$revision -Dbuild.date=$BUILD_ID
   checkrv $? "maven clean install geoserver/web/app ($profile profile)"
   cd $CWD/dashboard
-  $MVN -s $MAVEN_SETTINGS -o clean install -P $profile -Dsvn.revision=$revision -Dbuild.date=$BUILD_ID
+  $MVN -s $MVN_SETTINGS -o clean install -P $profile -Dsvn.revision=$revision -Dbuild.date=$BUILD_ID
   checkrv $? "maven clean install dashboard ($profile profile)"
 
   cd $CWD
-  $MVN -s $MAVEN_SETTINGS -P $profile -o assembly:attached
+  $MVN -s $MVN_SETTINGS -P $profile -o assembly:attached
   checkrv $? "maven assembly ($profile profile)"
 }
 
@@ -67,6 +67,7 @@ function copy_artifacts {
   fi
 }
 
+REPO_PATH=$GIT_BRANCH
 dist=/var/www/suite/$REPO_PATH
 if [ ! -e $dist ]; then
   mkdir -p $dist
@@ -77,61 +78,53 @@ artifacts="bin win mac ext war war-geoserver war-geoexplorer war-geoeditor war-g
 id=$(echo $REPO_PATH|sed 's/\//-/g')
 
 # set up the maven repository for this particular branch/tag/etc...
+MVN_SETTINGS_TEMPLATE=`pwd`/repo/build/settings.xml
 cd maven
 if [ ! -d $REPO_PATH ]; then
   echo "Creating new maven repository at `pwd`/$REPO_PATH"
   mkdir -p $REPO_PATH
-  sed "s#@PATH@#`pwd`/$REPO_PATH/repo#g" settings.xml-template > $REPO_PATH/settings.xml
+  sed "s#@PATH@#`pwd`/$REPO_PATH/repo#g" $MVN_SETTINGS_TEMPLATE > $REPO_PATH/settings.xml
   cp -R repo-template $REPO_PATH/repo
 fi
 cd ..
 
-
-MAVEN_SETTINGS=`pwd`/maven/$REPO_PATH/settings.xml
+MVN_SETTINGS=`pwd`/maven/$REPO_PATH/settings.xml
 export MAVEN_OPTS=-Xmx256m
 
-# get latest from subversion
+# checkout the requested revision to build
 cd repo
-if [ -d $REPO_PATH ]; then
-  cd $REPO_PATH
-  echo "updating $REPO_PATH"
-  svn update .
-  checkrv $? "svn update $REPO_PATH"
-else
-  mkdir -p $REPO_PATH
-  cd $REPO_PATH
-  echo "checking out $REPO_PATH"
-  svn checkout http://svn.opengeo.org/suite/$REPO_PATH .
-  checkrv $? "svn checkout $REPO_PATH"
-fi
+git checkout $REV
 
-# extract the revision number from the last change
-revision=`svn info | grep 'Last Changed Rev:' | cut -d : -f 2 | sed 's/ //g'`
+#if [ -d $REPO_PATH ]; then
+#  cd $REPO_PATH
+#  echo "updating $REPO_PATH"
+#  svn update .
+#  checkrv $? "svn update $REPO_PATH"
+#else
+#  mkdir -p $REPO_PATH
+#  cd $REPO_PATH
+#  echo "checking out $REPO_PATH"
+#  svn checkout http://svn.opengeo.org/suite/$REPO_PATH .
+#  checkrv $? "svn checkout $REPO_PATH"
+#fi
+
+# extract the revision number
+revision=`git log --format=format:%H | head -n 1`
 if [ "x$revision" == "x" ]; then
   echo "failed to get revision number from svn info"
   exit 1
 fi
 
-echo "building $revision with maven settings $MAVEN_SETTINGS"
+echo "building $revision with maven settings $MVN_SETTINGS"
 
-CWD=`pwd` && cd geoserver/externals
-
-#$MVN -s $MAVEN_SETTINGS clean install -DskipTests -Dall -P proxy,printing,monitoring,dbconfig,allExtensions 
-$MVN -s $MAVEN_SETTINGS -Dmvn.exec=$MVN -Dmvn.settings=$MAVEN_SETTINGS clean install
-checkrv $? "gwc/geotools/geoserver build"
-
-cd $CWD
-# update deps first
-$MVN -s $MAVEN_SETTINGS -Dfull -U clean
-checkrv $? "maven force update"
-# then build
-$MVN -s $MAVEN_SETTINGS -o install -Dfull -Dsvn.revision=$revision -Dbuild.date=$BUILD_ID
+# perform a full build
+$MVN -s $MVN_SETTINGS clean install -Dfull -Dsvn.revision=$revision -Dbuild.date=$BUILD_ID
 checkrv $? "maven install"
 
-$MVN -s $MAVEN_SETTINGS -o assembly:attached &&
+$MVN -o -s $MVN_SETTINGS assembly:attached &&
 checkrv $? "maven assembly"
 
-$MVN -s $MAVEN_SETTINGS deploy -DskipTests &&
+$MVN -s $MVN_SETTINGS deploy -DskipTests &&
 checkrv $? "maven deploy"
 
 # build with the enterprise profile
