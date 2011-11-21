@@ -1,4 +1,5 @@
 <settings>
+ <localRepository>@PATH@</localRepository>
  <profiles>
   <profile>
    <id>no-snapshots</id>
