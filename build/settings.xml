@@ -1,5 +1,6 @@
 <settings>
- <localRepository>@PATH@</localRepository>
+ <!-- uncomment this and replace @PATH@ to set up a custom maven repository -->
+ <!--localRepository>@PATH@</localRepository-->
  <profiles>
   <profile>
    <id>no-snapshots</id>

@@ -89,7 +89,7 @@ pushd maven
 if [ ! -d $REPO_PATH ]; then
   echo "Creating new maven repository at `pwd`/$REPO_PATH"
   mkdir -p $REPO_PATH
-  sed "s#@PATH@#`pwd`/$REPO_PATH/repo#g" $MVN_SETTINGS_TEMPLATE > $REPO_PATH/settings.xml
+  sed "s#@PATH@#`pwd`/$REPO_PATH/repo#g" $MVN_SETTINGS_TEMPLATE | sed 's#<\!--\(localRepository>.*</localRepository\)-->#<\1>#g' $REPO_PATH/settings.xml
   cp -R repo-template $REPO_PATH/repo
 fi
 popd
@@ -127,10 +127,10 @@ echo "building $revision with maven settings $MVN_SETTINGS"
 $MVN -s $MVN_SETTINGS -Dfull -Dmvn.exec=$MVN -Dmvn.settings=$MVN_SETTINGS -Dsvn.revision=$revision -Dbuild.date=$BUILD_ID clean install
 checkrv $? "maven install"
 
-$MVN -o -s $MVN_SETTINGS assembly:attached &&
+$MVN -o -s $MVN_SETTINGS assembly:attached
 checkrv $? "maven assembly"
 
-$MVN -s $MVN_SETTINGS deploy -DskipTests &&
+$MVN -s $MVN_SETTINGS deploy -DskipTests
 checkrv $? "maven deploy"
 
 # build with the enterprise profile
