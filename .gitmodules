@@ -16,3 +16,6 @@
 [submodule "styler/externals/openlayers"]
 	path = styler/externals/openlayers
 	url = git://github.com/openlayers/openlayers.git
+[submodule "geoexplorer/externals/geoexplorer"]
+	path = geoexplorer/externals/geoexplorer
+	url = git://github.com/opengeo/GeoExplorer.git
