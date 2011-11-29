@@ -34,7 +34,7 @@ if [ $? -gt 0 ]; then
 fi
 
 pro=$(echo $PROFILE|sed 's/\(.\{1,\}\)/-\1/g')
-CUR_FILE=${DIST_DIR}/OpenGeoSuite${pro}-r${REVISION}-b${BUILD_NUMBER}.dmg
+CUR_FILE=${DIST_DIR}/OpenGeoSuite${pro}-${REVISION}-b${BUILD_NUMBER}.dmg
 BUILD_FILE=`ls OpenGeoSuite*.dmg`
 
 # move to dist dir

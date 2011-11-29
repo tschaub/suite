@@ -50,14 +50,14 @@ function copy_artifacts {
   do
     if [ -e opengeosuite${prefix}-*-${x}.zip ]; then
        echo "copying opengeosuite${prefix}-*-${x}.zip"
-       cp opengeosuite${prefix}-*-${x}.zip $dist/opengeosuite${prefix}-r$revision-${x}.zip
+       cp opengeosuite${prefix}-*-${x}.zip $dist/opengeosuite${prefix}-$revision-${x}.zip
        cp opengeosuite${prefix}-*-${x}.zip $dist/opengeosuite${prefix}-latest-${x}.zip
        let counter=counter+1
     fi
   
     if [ -e opengeosuite${prefix}-*-${x}.tar.gz ]; then
       echo "copying opengeosuite${prefix}-*-${x}.tar.gz"
-      cp opengeosuite${prefix}-*-${x}.tar.gz $dist/opengeosuite${prefix}-r$revision-${x}.tar.gz
+      cp opengeosuite${prefix}-*-${x}.tar.gz $dist/opengeosuite${prefix}-$revision-${x}.tar.gz
       cp opengeosuite${prefix}-*-${x}.tar.gz $dist/opengeosuite${prefix}-latest-${x}.tar.gz
       let counter=counter+1
     fi

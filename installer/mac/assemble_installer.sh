@@ -14,7 +14,7 @@ DIST_PATH=$1
 REVISION=$2
 PROFILE=$3
 
-id=r${REVISION}
+id=${REVISION}
 pro=$(echo $PROFILE|sed 's/\(.\{1,\}\)/\1-/g')
 
 dashboard_version=1.0.0
