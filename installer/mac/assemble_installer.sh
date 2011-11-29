@@ -6,24 +6,23 @@
 # suite .mpkg file with 'freeze' also.
 
 if [ $# -lt 2 ]; then
-  echo "Usage: $0 <repo_path> <revision> [profile]"
+  echo "Usage: $0 <dist_path> <revision> [profile]"
   exit 1
 fi
 
-REPO_PATH=$1
+DIST_PATH=$1
 REVISION=$2
 PROFILE=$3
 
-id=$(echo $REPO_PATH|sed 's/\//-/g')
-id=${id}-r${REVISION}
+id=r${REVISION}
 pro=$(echo $PROFILE|sed 's/\(.\{1,\}\)/\1-/g')
 
 dashboard_version=1.0.0
 pgsql_version=8.4
 
-dashboard_url=http://suite.opengeo.org/builds/${REPO_PATH}/dashboard-${id}-osx.zip
-suite_url=http://suite.opengeo.org/builds/${REPO_PATH}/opengeosuite-${pro}${id}-mac.zip
-ext_url=http://suite.opengeo.org/builds/${REPO_PATH}/opengeosuite-${id}-ext.zip
+dashboard_url=http://suite.opengeo.org/builds/${DIST_PATH}/dashboard-${id}-osx.zip
+suite_url=http://suite.opengeo.org/builds/${DIST_PATH}/opengeosuite-${pro}${id}-mac.zip
+ext_url=http://suite.opengeo.org/builds/${DIST_PATH}/opengeosuite-${id}-ext.zip
 pgsql_url=http://suite.opengeo.org/osxbuilds/postgis-osx.zip
 
 export PATH=$PATH:/usr/local/bin

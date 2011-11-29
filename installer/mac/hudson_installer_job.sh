@@ -8,43 +8,33 @@
 # builds, and cleans up a bit.
 #
 # This process is bootstrapped in the Hudson jobs build script with the 
-# following (REPO_PATH and REVISION are job parameters):
+# following (DIST_PATH and REVISION are job parameters):
 #
-#     cd repo
-#     if [ -d $REPO_PATH ]; then
-#       cd $REPO_PATH
-#       svn update -r $REVISION .
-#     else
-#       mkdir -p $REPO_PATH
-#       cd $REPO_PATH
-#       svn checkout -r $REVISION http://svn.opengeo.org/suite/${REPO_PATH}/installer .
-#     fi
-#     cd mac
-#     bash hudson_installer_job.sh $REPO_PATH $REVISION $PROFILE
+#     cd repo/installer/mac
+#     bash hudson_installer_job.sh $DIST_PATH $REVISION $PROFILE
 
 if [ $# -lt 2 ]; then
-  echo "Usage: $0 <repo_path> <revision> [profile]"
+  echo "Usage: $0 <dist_path> <revision> [profile]"
   exit 1
 fi
 
-REPO_PATH=$1
+DIST_PATH=$1
 REVISION=$2
 PROFILE=$3
 
-DIST_DIR=/Library/WebServer/Documents/suite/$REPO_PATH
+DIST_DIR=/Library/WebServer/Documents/suite/$DIST_PATH
 if [ ! -e $DIST_DIR ]; then
   mkdir -p $DIST_DIR
 fi
 
 
-bash assemble_installer.sh $REPO_PATH $REVISION $PROFILE
+bash assemble_installer.sh $DIST_PATH $REVISION $PROFILE
 if [ $? -gt 0 ]; then
   exit 1
 fi
 
 pro=$(echo $PROFILE|sed 's/\(.\{1,\}\)/-\1/g')
-PATH_NAME=$(echo $REPO_PATH|sed 's/\//-/g')
-CUR_FILE=${DIST_DIR}/OpenGeoSuite${pro}-${PATH_NAME}-r${REVISION}-b${BUILD_NUMBER}.dmg
+CUR_FILE=${DIST_DIR}/OpenGeoSuite${pro}-r${REVISION}-b${BUILD_NUMBER}.dmg
 BUILD_FILE=`ls OpenGeoSuite*.dmg`
 
 # move to dist dir
@@ -63,6 +53,6 @@ find $DIST_DIR -maxdepth 1 -name 'OpenGeoSuite*.md5' -mtime +6 -exec rm {} \;
 find $DIST_DIR -maxdepth 1 -type l -exec rm {} \;
 
 # Symlink new version
-if  [ $REPO_PATH = "trunk" ]; then
+if  [ $DIST_PATH = "latest" ]; then
   ln -s $CUR_FILE $DIST_DIR/OpenGeoSuite${pro}-latest.dmg
 fi
