@@ -73,9 +73,9 @@ function copy_artifacts {
 
 set -x
 
-[ "$ARCHIVE" = "true" ] && REPO_PATH="archived" || REPO_PATH="latest"
+[ "$ARCHIVE" = "true" ] && DIST_PATH="archived" || DIST_PATH="latest"
 
-dist=/var/www/suite/$REPO_PATH
+dist=/var/www/suite/$DIST_PATH
 if [ ! -e $dist ]; then
   mkdir -p $dist
 fi
@@ -115,7 +115,7 @@ revision=${revision:0:7}
 echo "building $revision with maven settings $MVN_SETTINGS"
 
 # perform a full build
-$MVN -s $MVN_SETTINGS -Dfull -Dmvn.exec=$MVN -Dmvn.settings=$MVN_SETTINGS -Dsvn.revision=$revision -Dbuild.date=$BUILD_ID clean install
+$MVN -s $MVN_SETTINGS -Dfull -Dmvn.exec=$MVN -Dmvn.settings=$MVN_SETTINGS -Dsvn.revision=$revision -Dbuild.date=$BUILD_ID $BUILD_FLAGS clean install
 checkrv $? "maven install"
 
 $MVN -o -s $MVN_SETTINGS assembly:attached
@@ -156,8 +156,8 @@ popd
 
 # start_remote_job <url> <name> <profile>
 function start_remote_job() {
-   curl -k --connect-timeout 10 "$1/buildWithParameters?REPO_PATH=${REPO_PATH}&REVISION=${revision}&PROFILE=$3"
-   checkrv $? "trigger $2 $3 with ${REPO_PATH} r${revision}"
+   curl -k --connect-timeout 10 "$1/buildWithParameters?DIST_PATH=${DIST_PATH}&REVISION=${revision}&PROFILE=$3"
+   checkrv $? "trigger $2 $3 with ${DIST_PATH} r${revision}"
 }
 
 # start the build of the OSX installer
