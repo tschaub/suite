@@ -15,11 +15,11 @@
             <os family="windows"></os>
         </and>
     </condition>
+    <property name="mvn.settings" value="settings.xml"/>
 
     <target name="compile">
         <exec executable="${mvn.exec}" dir="${repo}/externals/ringojs" failonerror="true">
-           <arg value="clean"/>
-           <arg value="install"/>
+           <arg line="-s ${mvn.settings} clean install"/>
         </exec>
         <ant dir="${repo}" target="postcompile"/>
     </target>
