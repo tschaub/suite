@@ -1,0 +1,12 @@
+<assembly>
+  <id>data-dir</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <baseDirectory></baseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>data_dir</directory>
+    </fileSet>
+  </fileSets>
+</assembly>

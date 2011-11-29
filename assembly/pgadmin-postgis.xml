@@ -1,0 +1,13 @@
+<assembly>
+  <id>pgadmin-postgis</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <baseDirectory></baseDirectory>
+  <fileSets>
+    <fileSet>
+      <outputDirectory>/</outputDirectory>
+      <directory>installer/common/postgis/</directory>
+    </fileSet>
+  </fileSets>
+</assembly>
