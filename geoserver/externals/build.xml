@@ -106,7 +106,7 @@
      <exec executable="git" dir="${dir}" failonerror="true">
         <arg line="pull origin ${git.branch}"/>
      </exec>
-     <antcall target="checkout-rev"/>
+     <!--antcall target="checkout-rev"/-->
   </target>
 
   <target name="checkout-rev">
