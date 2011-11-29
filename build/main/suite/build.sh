@@ -86,15 +86,16 @@ artifacts="bin win mac ext war war-geoserver war-geoexplorer war-geoeditor war-g
 # set up the maven repository for this particular branch/tag/etc...
 MVN_SETTINGS_TEMPLATE=`pwd`/repo/build/settings.xml
 pushd maven
-if [ ! -d $REPO_PATH ]; then
-  echo "Creating new maven repository at `pwd`/$REPO_PATH"
-  mkdir -p $REPO_PATH
-  sed "s#@PATH@#`pwd`/$REPO_PATH/repo#g" $MVN_SETTINGS_TEMPLATE | sed 's#<\!--\(localRepository>.*</localRepository\)-->#<\1>#g' $REPO_PATH/settings.xml
-  cp -R repo-template $REPO_PATH/repo
+MVN_REPO=latest
+if [ ! -d $MVN_REPO ]; then
+  echo "Creating new maven repository at `pwd`/$MVN_REPO"
+  mkdir -p $MVN_REPO
+  sed "s#@PATH@#`pwd`/$MVN_REPO/repo#g" $MVN_SETTINGS_TEMPLATE | sed 's#<\!--\(localRepository>.*</localRepository\)-->#<\1>#g' > $MVN_REPO/settings.xml
+  cp -R repo-template $MVN_REPO/repo
 fi
 popd
 
-MVN_SETTINGS=`pwd`/maven/$REPO_PATH/settings.xml
+MVN_SETTINGS=`pwd`/maven/$MVN_REPO/settings.xml
 export MAVEN_OPTS=-Xmx256m
 
 # checkout the requested revision to build
