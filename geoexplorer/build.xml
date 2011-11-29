@@ -19,7 +19,7 @@
 
     <target name="compile">
         <exec executable="${mvn.exec}" dir="${repo}/externals/ringojs" failonerror="true">
-           <arg line="-s ${mvn.settings} clean install"/>
+           <arg line="-Dmaven.test.skip -s ${mvn.settings} clean install"/>
         </exec>
         <ant dir="${repo}" target="postcompile"/>
     </target>
