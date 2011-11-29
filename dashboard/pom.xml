@@ -66,20 +66,8 @@
               <tasks>
                 <mkdir dir="${build.directory}/resources"/>
                 <copy todir="${build.directory}/resources">
-                  <fileset dir="${basedir}/OpenGeo Dashboard/Resources" includes="**/*" excludes="version.ini"/>
+                  <fileset dir="${build.directory}" includes="version.ini"/>
                 </copy>
-                <copy todir="${build.directory}/resources">
-                  <fileset dir="${basedir}/OpenGeo Dashboard/Resources" includes="version.ini"/>
-
-                  <filterset>
-                    <filter token="SUITE_VERSION" value="${project.version}"/>
-                    <filter token="BUILD_REVISION" value="${svn.revision}"/>
-                    <filter token="BUILD_DATE" value="${build.date}"/>
-                    <filter token="BUILD_PROFILE" value="${build.profile}"/>
-                  </filterset>
-                </copy>
-                <mkdir dir="../target"/>
-                <copy file="${build.directory}/resources/version.ini" tofile="../target/version.ini"/>
               </tasks>
             </configuration>
             <goals>
@@ -112,18 +100,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>ee</id>
-      <properties>
-        <build.profile>ee</build.profile>
-      </properties>
-    </profile>
-  </profiles>
-
-  <properties>
-    <build.profile></build.profile>
-  </properties>
 
 </project>
