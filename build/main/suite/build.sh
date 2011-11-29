@@ -20,12 +20,12 @@ function profile_rebuild {
   local profile=$1
 
   pushd geoserver/web/app
-  $MVN -s $MVN_SETTINGS -o clean install -P $profile -Dsvn.revision=$revision -Dbuild.date=$BUILD_ID
+  $MVN -s $MVN_SETTINGS -o clean install -P $profile -Dbuild.revision=$revision -Dbuild.date=$BUILD_ID
   checkrv $? "maven clean install geoserver/web/app ($profile profile)"
   popd
 
   pushd dashboard
-  $MVN -s $MVN_SETTINGS -o clean install -P $profile -Dsvn.revision=$revision -Dbuild.date=$BUILD_ID
+  $MVN -s $MVN_SETTINGS -o clean install -P $profile -Dbuild.revision=$revision -Dbuild.date=$BUILD_ID
   checkrv $? "maven clean install dashboard ($profile profile)"
   popd
 
@@ -115,13 +115,13 @@ revision=${revision:0:7}
 echo "building $revision with maven settings $MVN_SETTINGS"
 
 # perform a full build
-$MVN -s $MVN_SETTINGS -Dfull -Dmvn.exec=$MVN -Dmvn.settings=$MVN_SETTINGS -Dsvn.revision=$revision -Dbuild.date=$BUILD_ID $BUILD_FLAGS clean install
+$MVN -s $MVN_SETTINGS -Dfull -Dmvn.exec=$MVN -Dmvn.settings=$MVN_SETTINGS -Dbuild.revision=$revision -Dbuild.date=$BUILD_ID $BUILD_FLAGS clean install
 checkrv $? "maven install"
 
 $MVN -o -s $MVN_SETTINGS assembly:attached
 checkrv $? "maven assembly"
 
-$MVN -s $MVN_SETTINGS deploy -DskipTests
+$MVN -s $MVN_SETTINGS -Dmvn.exec=$MVN -Dmvn.settings=$MVN_SETTINGS deploy -DskipTests
 checkrv $? "maven deploy"
 
 # build with the enterprise profile
