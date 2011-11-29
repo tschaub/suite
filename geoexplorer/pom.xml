@@ -34,7 +34,7 @@
         </dependency>
     </dependencies>
     <build>
-        <sourceDirectory>repo/src</sourceDirectory>
+        <sourceDirectory>externals/geoexplorer/src</sourceDirectory>
         <testSourceDirectory>test</testSourceDirectory>
         <plugins>
             <plugin>
@@ -42,11 +42,11 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
                     <warName>geoexplorer</warName>
-                    <warSourceDirectory>repo/src/main/webapp</warSourceDirectory>
+                    <warSourceDirectory>externals/geoexplorer/src/main/webapp</warSourceDirectory>
                     <webappDirectory>target/${artifactId}</webappDirectory>
                     <webResources>
                         <resource>
-                            <directory>repo/build/geoexplorer/WEB-INF</directory>
+                            <directory>externals/geoexplorer/build/geoexplorer/WEB-INF</directory>
                             <targetPath>WEB-INF</targetPath>
                         </resource>
                     </webResources>
@@ -63,18 +63,6 @@
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
-                    <execution>
-                        <id>initialize</id>
-                        <phase>initialize</phase>
-                        <configuration>
-                            <tasks>
-                                <ant antfile="${basedir}/build.xml" dir="${basedir}" target="init"/>
-                            </tasks>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
                     <execution>
                         <id>compile</id>
                         <phase>compile</phase>

@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="GeoExplorer" default="dist" basedir=".">
+<project name="GeoExplorer" default="compile" basedir=".">
 
     <description>
         GeoExplorer Build File
     </description>
 
     <property name="repo" location="externals/geoexplorer"/>
-
-    <target name="init">
-        <ant dir="${repo}" target="init"/>
-    </target>
     
-    <target name="dist" depends="init">
-        <ant dir="${repo}" target="dist"/>
+    <condition property="mvn.exec" value="mvn.bat" else="mvn">
+        <and>
+            <not>
+                <isset property="mvn.exec"/>
+            </not>
+            <os family="windows"></os>
+        </and>
+    </condition>
+
+    <target name="compile">
+        <exec executable="${mvn.exec}" dir="${repo}/externals/ringojs" failonerror="true">
+           <arg value="clean"/>
+           <arg value="install"/>
+        </exec>
+        <ant dir="${repo}" target="postcompile"/>
     </target>
     
     <target name="clean" description="remove previous build">
