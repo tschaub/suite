@@ -79,7 +79,7 @@ function strip_opengeosuite {
   # copy the dashboard artifacts into place
   pushd $dist
   for a in $*; do
-    for f in `ls opengeosuite-*-${a}-*.zip`; do
+    for f in `ls opengeosuite-*-${a}*.zip`; do
       f2=$(echo $f|sed 's/opengeosuite-//g'|eval "sed s/-${a}//g"|eval sed "s/^/${a}-/g") 
       mv $f $f2
     done
