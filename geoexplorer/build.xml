@@ -5,31 +5,18 @@
         GeoExplorer Build File
     </description>
 
-    <available file="repo" type="dir" property="repo.initialized"/>
+    <property name="repo" location="externals/geoexplorer"/>
 
     <target name="init">
-
-        <echo message="pulling in sources (ignore fatal warning)"/>
-        <exec executable="git" failonerror="false">
-            <arg line="clone -nq git://github.com/opengeo/GeoExplorer.git repo"/>
-        </exec>
-        <exec executable="git" dir="repo" failonerror="true">
-            <arg line="pull origin master"/>
-        </exec>
-        <exec executable="git" dir="repo" failonerror="true">
-            <arg line="checkout master"/>
-        </exec>
-
-        <ant dir="repo" target="init"/>
-
+        <ant dir="${repo}" target="init"/>
     </target>
     
     <target name="dist" depends="init">
-        <ant dir="repo" target="dist"/>
+        <ant dir="${repo}" target="dist"/>
     </target>
     
-    <target name="clean" description="remove previous build" if="repo.initialized">
-        <ant dir="repo" target="clean"/>
+    <target name="clean" description="remove previous build">
+        <ant dir="${repo}" target="clean"/>
         <delete dir="target" failonerror="false"/>
     </target>
 
