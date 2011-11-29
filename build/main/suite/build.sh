@@ -50,15 +50,15 @@ function copy_artifacts {
   do
     if [ -e opengeosuite${prefix}-*-${x}.zip ]; then
        echo "copying opengeosuite${prefix}-*-${x}.zip"
-       cp opengeosuite${prefix}-*-${x}.zip $dist/opengeosuite${prefix}-$id-r$revision-${x}.zip
-       cp opengeosuite${prefix}-*-${x}.zip $dist/opengeosuite${prefix}-$id-latest-${x}.zip
+       cp opengeosuite${prefix}-*-${x}.zip $dist/opengeosuite${prefix}-r$revision-${x}.zip
+       cp opengeosuite${prefix}-*-${x}.zip $dist/opengeosuite${prefix}-latest-${x}.zip
        let counter=counter+1
     fi
   
     if [ -e opengeosuite${prefix}-*-${x}.tar.gz ]; then
       echo "copying opengeosuite${prefix}-*-${x}.tar.gz"
-      cp opengeosuite${prefix}-*-${x}.tar.gz $dist/opengeosuite${prefix}-$id-r$revision-${x}.tar.gz
-      cp opengeosuite${prefix}-*-${x}.tar.gz $dist/opengeosuite${prefix}-$id-latest-${x}.tar.gz
+      cp opengeosuite${prefix}-*-${x}.tar.gz $dist/opengeosuite${prefix}-r$revision-${x}.tar.gz
+      cp opengeosuite${prefix}-*-${x}.tar.gz $dist/opengeosuite${prefix}-latest-${x}.tar.gz
       let counter=counter+1
     fi
   done
@@ -73,7 +73,8 @@ function copy_artifacts {
 
 set -x
 
-REPO_PATH=$GIT_BRANCH
+[ "$ARCHIVE" = "true" ] && REPO_PATH="archived" || REPO_PATH="latest"
+
 dist=/var/www/suite/$REPO_PATH
 if [ ! -e $dist ]; then
   mkdir -p $dist
@@ -81,7 +82,6 @@ fi
 echo "dist: $dist"
 
 artifacts="bin win mac ext war war-geoserver war-geoexplorer war-geoeditor war-geowebcache war-geoserver-jboss doc analytics control-flow importer readme dashboard-win32 dashboard-lin32 dashboard-lin64 dashboard-osx"
-id=$(echo $REPO_PATH|sed 's/\//-/g')
 
 # set up the maven repository for this particular branch/tag/etc...
 MVN_SETTINGS_TEMPLATE=`pwd`/repo/build/settings.xml
@@ -101,25 +101,15 @@ export MAVEN_OPTS=-Xmx256m
 cd repo
 git checkout $REV
 
-#if [ -d $REPO_PATH ]; then
-#  cd $REPO_PATH
-#  echo "updating $REPO_PATH"
-#  svn update .
-#  checkrv $? "svn update $REPO_PATH"
-#else
-#  mkdir -p $REPO_PATH
-#  cd $REPO_PATH
-#  echo "checking out $REPO_PATH"
-#  svn checkout http://svn.opengeo.org/suite/$REPO_PATH .
-#  checkrv $? "svn checkout $REPO_PATH"
-#fi
-
 # extract the revision number
 revision=`git log --format=format:%H | head -n 1`
 if [ "x$revision" == "x" ]; then
   echo "failed to get revision number from svn info"
   exit 1
 fi
+
+# only use first seven chars
+revision=${revision:0:7}
 
 echo "building $revision with maven settings $MVN_SETTINGS"
 
@@ -144,47 +134,6 @@ copy_artifacts
 copy_artifacts ee
 #copy_artifacts cloud
 
-#counter=0
-#for x in $artifacts
-#do
-#  if [ -e target/opengeosuite-*-${x}.zip ]; then
-#     echo "copying target/opengeosuite-*-${x}.zip"
-#     cp target/opengeosuite-*-${x}.zip $dist/opengeosuite-$id-r$revision-${x}.zip
-#     cp target/opengeosuite-*-${x}.zip $dist/opengeosuite-$id-latest-${x}.zip
-#     let counter=counter+1
-#  fi
-#  
-#  if [ -e target/opengeosuite-*-${x}.tar.gz ]; then
-#    echo "copying target/opengeosuite-*-${x}.tar.gz"
-#    cp target/opengeosuite-*-${x}.tar.gz $dist/opengeosuite-$id-r$revision-${x}.tar.gz
-#    cp target/opengeosuite-*-${x}.tar.gz $dist/opengeosuite-$id-latest-${x}.tar.gz
-#    let counter=counter+1
-#  fi
-#
-#  CWD=`pwd` && cd target/ee
-#  # enterprise
-#  if [ -e opengeosuite-ee-*-${x}.zip ]; then
-#     echo "copying target/opengeosuite-ee-*-${x}.zip"
-#     cp opengeosuite-ee-*-${x}.zip $dist/opengeosuite-ee-$id-r$revision-${x}.zip
-#     cp opengeosuite-ee-*-${x}.zip $dist/opengeosuite-ee-$id-latest-${x}.zip
-#     let counter=counter+1
-#  fi
-#  
-#  if [ -e opengeosuite-ee-*-${x}.tar.gz ]; then
-#    echo "copying target/opengeosuite-ee-*-${x}.tar.gz"
-#    cp opengeosuite-ee-*-${x}.tar.gz $dist/opengeosuite-ee-$id-r$revision-${x}.tar.gz
-#    cp opengeosuite-ee-*-${x}.tar.gz $dist/opengeosuite-ee-$id-latest-${x}.tar.gz
-#    let counter=counter+1
-#  fi
-#
-#  cd $CWD
-#done
-#
-#if [ $counter -eq 0 ]; then
-#  echo "no artifacts copied"
-#  exit 1
-#fi
-
 # copy the dashboard artifacts into place
 pushd $dist
 for f in `ls opengeosuite-*-dashboard-*.zip`; do
@@ -192,20 +141,6 @@ for f in `ls opengeosuite-*-dashboard-*.zip`; do
   mv $f $f2
 done
 popd
-
-#dashboard_version=1.0.0
-#pushd assembly/dashboard-${dashboard_version}-lin32
-#zip -r9 $dist/dashboard-$id-r$revision-lin32.zip *
-#popd
-#pushd assembly/dashboard-${dashboard_version}-lin64
-#zip -r9 $dist/dashboard-$id-r$revision-lin64.zip *
-#popd
-#pushd assembly/dashboard-${dashboard_version}-osx
-#zip -r9 $dist/dashboard-$id-r$revision-osx.zip *
-#popd
-#pushd assembly/dashboard-${dashboard_version}-win32
-#zip -r9 $dist/dashboard-$id-r$revision-win32.zip *
-#popd
 
 # clear out old artifacts
 pushd $dist
