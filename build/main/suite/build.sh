@@ -71,6 +71,22 @@ function copy_artifacts {
   fi
 }
 
+#
+# function to strip off opengeosuite- prefix from artifacts.
+# strip_opengeosuite <artifact>, <artifact>, ...
+#
+function strip_opengeosuite {
+  # copy the dashboard artifacts into place
+  pushd $dist
+  for a in $*; do
+    for f in `ls opengeosuite-*-${a}-*.zip`; do
+      f2=$(echo $f|sed 's/opengeosuite-//g'|eval "sed s/-${a}//g"|eval sed "s/^/${a}-/g") 
+      mv $f $f2
+    done
+  done
+  popd
+}
+
 set -x
 
 [ "$ARCHIVE" = "true" ] && DIST_PATH="archived" || DIST_PATH="latest"
@@ -81,7 +97,7 @@ if [ ! -e $dist ]; then
 fi
 echo "dist: $dist"
 
-artifacts="bin win mac ext war war-geoserver war-geoexplorer war-geoeditor war-geowebcache war-geoserver-jboss doc analytics control-flow importer readme dashboard-win32 dashboard-lin32 dashboard-lin64 dashboard-osx"
+artifacts="bin win mac ext war war-geoserver war-geoexplorer war-geoeditor war-geowebcache war-geoserver-jboss doc analytics control-flow importer readme dashboard-win32 dashboard-lin32 dashboard-lin64 dashboard-osx pgadmin-postgis data-dir"
 
 # set up the maven repository for this particular branch/tag/etc...
 MVN_SETTINGS_TEMPLATE=`pwd`/repo/build/settings.xml
@@ -135,13 +151,7 @@ copy_artifacts
 copy_artifacts ee
 #copy_artifacts cloud
 
-# copy the dashboard artifacts into place
-pushd $dist
-for f in `ls opengeosuite-*-dashboard-*.zip`; do
-  f2=$(echo $f|sed 's/opengeosuite-//g'|sed 's/-dashboard//g'|sed 's/^/dashboard-/g') 
-  mv $f $f2
-done
-popd
+strip_opengeosuite dashboard-win32 dashboard-lin32 dashboard-lin64 dashboard-osx pgadmin-postgis data-dir
 
 # clear out old artifacts
 pushd $dist
@@ -151,6 +161,9 @@ for x in $artifacts; do
 done
 for x in win32 lin32 lin64 osx; do
   ls -t | grep "dashboard-.*-$x.zip" | tail -n +7 | xargs rm -f
+done
+for x in pgadmin-postgis data-dir; do
+  ls -t | grep "$x.zip" | tail -n +2 | xargs rm -f
 done
 popd
 
