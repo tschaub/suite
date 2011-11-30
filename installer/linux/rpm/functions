@@ -123,10 +123,10 @@ publish_rpm() {
   pushd build/$PACKAGE
   checkrc $? "push build/$PACKAGE"
 
-  scp -i ~/.ssh/id_rsa_apt * apt@apt.opengeo.org:/home/apt/yum/${profile}/incoming/$repo/$dist
+  scp -P 7777 -i ~/.ssh/id_rsa_apt * apt@apt.opengeo.org:/home/apt/yum/${profile}/incoming/$repo/$dist
   checkrc $? "secure copy .rpm files"
 
-  ssh -i ~/.ssh/id_rsa_apt apt@apt.opengeo.org "./yum/publish_rpms.sh $repo $dist $(echo $profile|sed 's/\(.\{1,\}\)/-p \1/g')" 
+  ssh -p 7777 -i ~/.ssh/id_rsa_apt apt@apt.opengeo.org "./yum/publish_rpms.sh $repo $dist $(echo $profile|sed 's/\(.\{1,\}\)/-p \1/g')" 
   checkrc $? "remote publish"
 
   popd
