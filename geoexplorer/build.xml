@@ -21,6 +21,11 @@
         <exec executable="${mvn.exec}" dir="${repo}/externals/ringojs" failonerror="true">
            <arg line="-Dmaven.test.skip -s ${mvn.settings} clean install"/>
         </exec>
+        <jar jarfile="${repo}/externals/ringojs/run.jar"
+            basedir="${repo}/externals/ringojs/target/classes"
+            includes="**/tools/launcher/**"
+            manifest="${repo}/externals/ringojs/src/org/ringojs/tools/launcher/manifest.txt"/>
+
         <ant dir="${repo}" target="postcompile"/>
     </target>
     
