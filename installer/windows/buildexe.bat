@@ -1,4 +1,4 @@
-::@echo off
+@echo off
 :: This will build the OpenGeo Suite Windows executable
 :: Assumes that
 ::   git://github.com/opengeo/suite.git
@@ -92,13 +92,12 @@ goto Build
 :Build
 :: Now build the EXE with NSIS
 
+echo Running NSIS: version %version%, longversion %longversion%, [profile %profile%]
 if "%profile%"=="ee" (
-  echo Running NSIS (version %version%, longversion %longversion%, profile %profile%)
   makensis /DVERSION=%version% /DLONGVERSION=%longversion% /DEEPROFILE=-%profile% OpenGeoInstaller.nsi
 ) else (
-  echo Running NSIS (version %version%, longversion %longversion%)
   makensis /DVERSION=%version% /DLONGVERSION=%longversion% /DEEPROFILE= OpenGeoInstaller.nsi
-)  
+)
 
 :: Clean up
 rd /s /q ..\..\target\
