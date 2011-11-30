@@ -13,9 +13,9 @@ function unpack_jars() {
 }
 
 # grab files
-IMPORTER=opengeosuite-ee-$BRANCH-$REV-importer.zip
+IMPORTER=opengeosuite-ee-$REV-importer.zip
 
-get_file $BUILDS/$REPO_PATH/$IMPORTER yes
+get_file $BUILDS/$DIST_PATH/$IMPORTER yes
 
 # clean out old files
 clean_src

@@ -5,14 +5,15 @@
 build_info
 
 # grab files
-get_svn $REPO_PATH data_dir data_dir
+DATA_DIR=opengeosuite-$REV-data-dir.zip
+get_file $BUILDS/$DIST_PATH/$DATA_DIR yes
 
 # clean out old files
 clean_src
 
 # copy over files
 mkdir ${PKG_SOURCE_DIR}
-svn export svn/$REPO_PATH/data_dir ${PKG_SOURCE_DIR}/data_dir
+unzip files/$DATA_DIR -d ${PKG_SOURCE_DIR}
 checkrc $? "unpacking data directory"
 
 # build

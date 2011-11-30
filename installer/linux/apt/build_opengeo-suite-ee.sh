@@ -13,12 +13,13 @@ function unpack_jars() {
 }
 
 # grab files
-ANALYTICS=opengeosuite-ee-$BRANCH-$REV-analytics.zip
-CFLOW=opengeosuite-$BRANCH-$REV-control-flow.zip
+ANALYTICS=opengeosuite-ee-$REV-analytics.zip
+CFLOW=opengeosuite-$REV-control-flow.zip
+DATA_DIR=opengeosuite-$REV-data-dir.zip
 
-get_file $BUILDS/$REPO_PATH/$ANALYTICS yes
-get_file $BUILDS/$REPO_PATH/$CFLOW yes
-get_svn $REPO_PATH data_dir data_dir
+get_file $BUILDS/$DIST_PATH/$ANALYTICS yes
+get_file $BUILDS/$DIST_PATH/$CFLOW yes
+get_file $BUILDS/$DIST_PATH/$DATA_DIR yes
 
 # clean out old files
 rm -rf opengeo-suite-ee/*.jar
@@ -29,7 +30,10 @@ unpack_jars $ANALYTICS
 unpack_jars $CFLOW
 
 # copy over analytics files
-cp svn/$REPO_PATH/data_dir/monitoring/* opengeo-suite-ee
+mkdir tmp
+unzip files/$DATA_DIR -d tmp
+cp tmp/data_dir/monitoring/* opengeo-suite-ee
+rm -rf tmp
 
 # build
 build_deb opengeo-suite-ee

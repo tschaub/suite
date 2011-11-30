@@ -5,8 +5,8 @@
 echo $RPM_SOURCE_DIR
 
 # grab files
-DOCS=opengeosuite-$BRANCH-$REV-doc.zip
-get_file $BUILDS/$REPO_PATH/$DOCS yes
+DOCS=opengeosuite-$REV-doc.zip
+get_file $BUILDS/$DIST_PATH/$DOCS yes
 
 # clean out old files
 clean_src

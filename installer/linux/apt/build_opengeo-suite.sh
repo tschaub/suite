@@ -4,10 +4,10 @@
 
 build_info
 
-WARS=opengeosuite-$BRANCH-$REV-war.zip
+WARS=opengeosuite-$REV-war.zip
 
 # grab files
-get_file $BUILDS/$REPO_PATH/$WARS yes
+get_file $BUILDS/$DIST_PATH/$WARS yes
 
 # clean out old files
 rm -rf opengeo-suite/*.war

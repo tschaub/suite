@@ -13,11 +13,11 @@ function unpack_jars() {
 }
 
 # grab files
-ANALYTICS=opengeosuite-ee-$BRANCH-$REV-analytics.zip
-CFLOW=opengeosuite-$BRANCH-$REV-control-flow.zip
+ANALYTICS=opengeosuite-ee-$REV-analytics.zip
+CFLOW=opengeosuite-$REV-control-flow.zip
 
-get_file $BUILDS/$REPO_PATH/$ANALYTICS yes
-get_file $BUILDS/$REPO_PATH/$CFLOW yes
+get_file $BUILDS/$DIST_PATH/$ANALYTICS yes
+get_file $BUILDS/$DIST_PATH/$CFLOW yes
 
 # clean out old files
 clean_src

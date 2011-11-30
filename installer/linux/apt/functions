@@ -1,14 +1,13 @@
-SVN_REPO=http://svn.opengeo.org/suite
 BUILDS=http://suite.opengeo.org/builds
 
-if [ "$REPO_PATH" == "" ]; then
-  REPO_PATH=trunk
+if [ "$DIST_PATH" == "" ]; then
+  DIST_PATH=latest
 fi
 if [ "$REV" == "" ]; then
   REV=latest
 fi
 
-BRANCH=${REPO_PATH//\//-}
+BRANCH=${GIT_BRANCH}
 
 # build_info <package>
 function build_info() {
@@ -16,7 +15,7 @@ function build_info() {
   if [ "$pkg" != "" ]; then
      name=$PACKAGE
   fi
-  echo "Building $pkg from $REPO_PATH at revision $REV"
+  echo "Building $pkg from $BRANCH at revision $REV ($DIST_PATH)"
 }
 
 # checkrc <code> <message>
