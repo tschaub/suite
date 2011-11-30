@@ -20,18 +20,24 @@
    <property name="gwc.version" value="1.3-SNAPSHOT"/>
    <property name="gwc.flags" value=""/>
 
+   <condition property="mvn_exec" value="${mvn.exec}">
+     <isset property="mvn.exec"/>
+   </condition>
    <condition property="mvn.exec" value="mvn.bat" else="mvn">
      <and>
        <not>
-         <isset property="mvn.exec"/>
+         <isset property="mvn_exec"/>
        </not>
        <os family="windows"></os>
      </and>
    </condition>
-   <property name="mvn.settings" value="settings.xml"/>
 
-   <condition property="mvn.offline" value="-o" else="">
-     <isset property="offline"/>
+   <condition property="mvn_settings" value="-s ${mvn.settings}">
+       <isset property="mvn.settings"/>
+   </condition>
+
+   <condition property="mvn_offline" value="-o" else="">
+     <isset property="mvn.offline"/>
    </condition>
 
    <target name="build-all" depends="checkout-all, build-gt, build-gwc, build-gs">
@@ -117,9 +123,9 @@
   </target>
 
   <target name="mvn">
-     <echo message="${mvn.exec} -s ${mvn.settings} ${mvn.offline} ${flags} ${targets}"/>
-     <exec executable="${mvn.exec}" dir="${dir}" failonerror="true">
-        <arg line="-s ${mvn.settings} ${mvn.offline} ${flags} ${targets}"/>
+     <echo message="${mvn_exec} ${mvn_settings} ${mvn_offline} ${flags} ${targets}"/>
+     <exec executable="${mvn_exec}" dir="${dir}" failonerror="true">
+        <arg line="${mvn_settings} ${mvn_offline} ${flags} ${targets}"/>
      </exec>
   </target>
 

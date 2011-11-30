@@ -7,19 +7,26 @@
 
     <property name="repo" location="externals/geoexplorer"/>
     
-    <condition property="mvn.exec" value="mvn.bat" else="mvn">
+    <!-- setup maven command, use mvn.exec if passed in, if not fall back 
+         to either mvn.bat or mvn based on platform -->
+    <condition property="mvn_exec" value="${mvn.exec}">
+        <isset property="mvn.exec"/>
+    </condition>
+    <condition property="mvn_exec" value="mvn.bat" else="mvn">
         <and>
             <not>
-                <isset property="mvn.exec"/>
+                <isset property="mvn_exec"/>
             </not>
             <os family="windows"></os>
         </and>
     </condition>
-    <property name="mvn.settings" value="settings.xml"/>
+    <condition property="mvn_settings" value="-s ${mvn.settings}">
+        <isset property="mvn.settings"/>
+    </condition>
 
     <target name="compile">
-        <exec executable="${mvn.exec}" dir="${repo}/externals/ringojs" failonerror="true">
-           <arg line="-Dmaven.test.skip -s ${mvn.settings} clean install"/>
+        <exec executable="${mvn_exec}" dir="${repo}/externals/ringojs" failonerror="true">
+           <arg line="-Dmaven.test.skip ${mvn_settings} clean install"/>
         </exec>
         <jar jarfile="${repo}/externals/ringojs/run.jar"
             basedir="${repo}/externals/ringojs/target/classes"
