@@ -40,7 +40,8 @@
      <isset property="mvn.offline"/>
    </condition>
 
-   <target name="build-all" depends="checkout-all, build-gt, build-gwc, build-gs">
+   <!--target name="build-all" depends="checkout-all, build-gt, build-gwc, build-gs"-->
+   <target name="build-all" depends="build-gt, build-gwc, build-gs">
    </target>
 
    <target name="build-gt" unless="skip.gt"> 
