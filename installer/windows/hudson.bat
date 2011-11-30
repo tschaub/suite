@@ -41,9 +41,15 @@ move /y %outfile% "%outpath%"
 
 :: Copy to OpenGeoSuite-latest.exe and cleanup directory if latest
 if %dist_path%==latest (
-  echo Copying to OpenGeoSuite-latest.exe
-  echo.
-  copy /y "%outpath%\%outfile%" "%outpath%\OpenGeoSuite-latest.exe"
+  if %profile%==ee (
+    echo Copying to OpenGeoSuite-ee-latest.exe
+    echo.
+    copy /y "%outpath%\%outfile%" "%outpath%\OpenGeoSuite-ee-latest.exe"
+  ) else (
+    echo Copying to OpenGeoSuite-latest.exe
+    echo.
+    copy /y "%outpath%\%outfile%" "%outpath%\OpenGeoSuite-latest.exe"
+  )
   echo Deleting old files from the "latest" directory...
   echo.
   :: Keep only the most recent 7 builds (8 includes "latest")
