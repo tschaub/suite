@@ -5,12 +5,12 @@
 build_info
 
 # grab files
-get_svn $REPO_PATH data_dir data_dir
+DATA_DIR=opengeosuite-$REV-data-dir.zip
+get_file $BUILDS/$DIST_PATH/$DATA_DIR yes
 
 # clean out old files
 rm -rf opengeo-suite-data/data_dir
-
-svn export svn/$REPO_PATH/data_dir opengeo-suite-data/data_dir
+unzip files/$DATA_DIR -d opengeo-suite-data
 checkrc $? "unpacking data directory"
 
 # build

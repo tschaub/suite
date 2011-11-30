@@ -3,14 +3,14 @@
 SVN_REPO=http://svn.opengeo.org/suite
 BUILDS=http://suite.opengeo.org/builds
 
-if [ "$REPO_PATH" == "" ]; then
-  REPO_PATH=trunk
+if [ "$DIST_PATH" == "" ]; then
+  DIST_PATH=latest
 fi
 if [ "$REV" == "" ]; then
   REV=latest
 fi
 
-BRANCH=${REPO_PATH//\//-}
+BRANC=$GIT_BRANCH
 
 PACKAGE=`echo $0 | sed 's#^.*build_##g' | sed 's#\.sh##g'`
 RPM_BUILD_ROOT=`pwd`/rpmbuild
@@ -25,7 +25,7 @@ function build_info() {
   if [ "$pkg" != "" ]; then
      name=$PACKAGE
   fi
-  echo "Building $pkg from $REPO_PATH at revision $REV"
+  echo "Building $pkg from $DIST_PATH at revision $REV ($BRANCH)"
 }
 
 # checkrc <code> <message>
@@ -62,32 +62,6 @@ function get_file() {
      mv $file files
      checkrc $? "mv $file files"
   fi
-}
-
-# get_svn <repo_path> <path> <dir>
-function get_svn() {
-  local repo_path=$1
-  local path=$2
-  local dir=$3
-
-  if [ ! -d svn ]; then
-    mkdir svn
-    checkrc $? "mkdir svn"
-  fi
-
-  if [ ! -d svn/$repo_path ]; then
-    mkdir -p svn/$repo_path
-    checkrc $? "mkdir svn/$repo_path"
-  fi
-
-  pushd svn/$repo_path
-  if [ -d $dir ]; then
-    svn up $dir
-  else
-    svn co $SVN_REPO/$repo_path/$path $dir
-  fi
-  checkrc $? "svn update"
-  popd
 }
 
 # clean_src
