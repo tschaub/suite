@@ -1,10 +1,14 @@
 ; OpenGeo Suite Windows installer creation file
 
+;Requires the following command-line parameters
+;VERSION: "a.b.c"
+;LONGVERSION: "a.b.c.d"
+;EEPROFILE: either "-ee" or blank
+
+
 ; Initial definitions
 !define COMPANYNAME "OpenGeo"
 !define APPNAME "OpenGeo Suite"
-;!define VERSION "a.b.c" ;Call this from command line /DVERSION=a.b.c
-;!define LONGVERSION "a.b.c.d" ;Call this from command line /DLONGVERSION=a.b.c.d
 !define APPNAMEANDVERSION "${APPNAME} ${VERSION}"
 !define SOURCEPATHROOT "..\..\target\win"
 !define STARTMENU_FOLDER "${APPNAME}"
@@ -15,7 +19,7 @@
 Name "${APPNAMEANDVERSION}"
 InstallDir "$PROGRAMFILES\${COMPANYNAME}\${APPNAME}"
 InstallDirRegKey HKLM "Software\${COMPANYNAME}\${APPNAME}" ""
-OutFile "OpenGeoSuite-${VERSION}.exe"
+OutFile "OpenGeoSuite${EEPROFILE}-${VERSION}.exe"
 
 ;Compression options
 CRCCheck on
