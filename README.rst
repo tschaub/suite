@@ -34,9 +34,7 @@ For the imapatient.
 
 #. Initialize submodule dependnecies::
 
-     % git submodule init 
-     % git submodule sync
-     % git submodule update
+     % git submodule update --init --recursive
 
 #. Do a full build::
 
