@@ -48,17 +48,21 @@ function copy_artifacts {
   pushd target/$1
   for x in $artifacts
   do
-    if [ -e opengeosuite${prefix}-*-${x}.zip ]; then
-       echo "copying opengeosuite${prefix}-*-${x}.zip"
-       cp opengeosuite${prefix}-*-${x}.zip $dist/opengeosuite${prefix}-$revision-${x}.zip
-       cp opengeosuite${prefix}-*-${x}.zip $dist/opengeosuite${prefix}-latest-${x}.zip
+    src=opengeosuite${prefix}-*-${x}.zip
+    if [ -e $f ]; then
+       echo "copying $src"
+       dst=opengeosuite${prefix}-$revision-${x}.zip
+       cp $src $dist/$dst
+       ln -sf $dist/$dst $dist/opengeosuite${prefix}-latest-${x}.zip
        let counter=counter+1
     fi
   
-    if [ -e opengeosuite${prefix}-*-${x}.tar.gz ]; then
-      echo "copying opengeosuite${prefix}-*-${x}.tar.gz"
-      cp opengeosuite${prefix}-*-${x}.tar.gz $dist/opengeosuite${prefix}-$revision-${x}.tar.gz
-      cp opengeosuite${prefix}-*-${x}.tar.gz $dist/opengeosuite${prefix}-latest-${x}.tar.gz
+    src=opengeosuite${prefix}-*-${x}.tar.gz
+    if [ -e $src ]; then
+      echo "copying $src"
+      dst=opengeosuite${prefix}-$revision-${x}.tar.gz
+      cp $src $dist/$dst
+      ln -sf $dist/$dst $dist/opengeosuite${prefix}-$revision-${x}.tar.gz
       let counter=counter+1
     fi
   done
@@ -143,25 +147,12 @@ for f in `ls opengeosuite-*-dashboard-*.zip`; do
   mv $f $f2
 done
 
-# strip prefixes from other artifacts
-for a in pgadmin-postgis data-dir; do
-  f=$a.zip
-  f2=$(echo $f|sed 's/opengeosuite-//g'|eval "sed s/-${a}//g"|eval sed "s/^/${a}-/g") 
-  mv $f $f2
-done
-popd
-
-# clear out old artifacts
-pushd $dist
 for x in $artifacts; do
   ls -t | grep "opengeosuite-.*-$x.zip" | tail -n +7 | xargs rm -f
   ls -t | grep "opengeosuite-.*-$x.tar.gz" | tail -n +7 | xargs rm -f
 done
 for x in win32 lin32 lin64 osx; do
   ls -t | grep "dashboard-.*-$x.zip" | tail -n +7 | xargs rm -f
-done
-for x in pgadmin-postgis data-dir; do
-  ls -t | grep "$x.zip" | tail -n +2 | xargs rm -f
 done
 popd
 
