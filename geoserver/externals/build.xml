@@ -32,7 +32,7 @@
      </and>
    </condition>
 
-   <condition property="mvn_settings" value="-s ${mvn.settings}">
+   <condition property="mvn_settings" value="-s ${mvn.settings}" else="">
        <isset property="mvn.settings"/>
    </condition>
 
