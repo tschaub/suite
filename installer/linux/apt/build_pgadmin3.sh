@@ -10,7 +10,7 @@ PGADMIN_POSTGIS=opengeosuite-$REV-pgadmin-postgis.zip
 
 # grab files
 get_file http://wwwmaster.postgresql.org/redir/333/h/pgadmin3/release/v$VERSION/src/$PGADMIN.tar.gz
-get_file $BUILD/$DIST_PATH/$PGADMIN_POSTGIS
+get_file $BUILDS/$DIST_PATH/$PGADMIN_POSTGIS
 
 # unpack files
 unzip files/$PGADMIN_POSTGIS -d pgadmin3/debian
