@@ -1,3 +1,9 @@
+opengeo-watchdog (2.4.4) unstable; urgency=low
+
+  * New upstream release
+
+ -- OpenGeo <inquiry@opengeo.org>  Thu, 1 Dec 2011 14:00:00 -0700
+
 opengeo-watchdog (2.4.3) unstable; urgency=low
 
   * Initial release
