@@ -40,7 +40,7 @@ echo.
 move /y %outfile% "%outpath%"
 
 :: Copy to OpenGeoSuite-latest.exe and cleanup directory if latest
-if %profile%==ee (
+if "%profile%"=="ee" (
   set latestfile=OpenGeoSuite-ee-latest.exe
 ) else (
   set latestfile=OpenGeoSuite-latest.exe
