@@ -66,6 +66,7 @@
               <tasks>
                 <mkdir dir="${build.directory}/resources"/>
                 <copy todir="${build.directory}/resources">
+                  <fileset dir="${basedir}/OpenGeo Dashboard/Resources" includes="**/*" excludes="version.ini"/>
                   <fileset dir="${build.directory}" includes="version.ini"/>
                 </copy>
               </tasks>
