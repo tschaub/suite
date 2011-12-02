@@ -4,12 +4,12 @@ webroot=/var/www/htdocs
 export buildroot
 
 # Versions we are going to continuously integrate...
-geos_version=3.2
-postgis_version=1.5
-proj_version=4.7
-pgsql_version=8.4.4
-pgadmin_version=1.10.3
-wx_version=2.8.11
+geos_version=3.3.1
+postgis_version=1.5.3
+proj_version=4.7.0
+pgsql_version=8.4.9
+pgadmin_version=1.10.5
+wx_version=2.8.12
 openssl_version=0.9.8o
 glib_version=2.24
 gtk_version=2.20
@@ -19,9 +19,9 @@ pkg_version=0.19
 proj_nad=proj-datumgrid-1.5.zip
 
 # Standard paths
-geos_svn=http://svn.osgeo.org/geos/branches
-postgis_svn=http://svn.osgeo.org/postgis/branches
-proj_svn=http://svn.osgeo.org/metacrs/proj/branches
+geos_svn=http://svn.osgeo.org/geos/tags
+postgis_svn=http://svn.osgeo.org/postgis/tags
+proj_svn=http://svn.osgeo.org/metacrs/proj/tags
 
 glib_base_url=http://ftp.gnome.org/pub/gnome/sources
 glib_dir=glib-${glib_version}.1

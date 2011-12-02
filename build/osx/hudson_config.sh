@@ -4,18 +4,18 @@ webroot=/var/www/htdocs
 export buildroot
 
 # Versions we are going to continuously integrate...
-geos_version=3.2
-postgis_version=1.5
-proj_version=4.7
-pgsql_version=8.4.4-1
+geos_version=3.3.1
+postgis_version=1.5.3
+proj_version=4.7.0
+pgsql_version=8.4.9-1
 
 # Special binaries
 proj_nad=proj-datumgrid-1.5.zip
 
 # Standard paths
-geos_svn=http://svn.osgeo.org/geos/branches
-postgis_svn=http://svn.osgeo.org/postgis/branches
-proj_svn=http://svn.osgeo.org/metacrs/proj/branches
+geos_svn=http://svn.osgeo.org/geos/tags
+postgis_svn=http://svn.osgeo.org/postgis/tags
+proj_svn=http://svn.osgeo.org/metacrs/proj/tags
 edb_zip=postgresql-${pgsql_version}-osx-binaries.zip
 edb_url=http://downloads.enterprisedb.com/postgresql/${edb_zip}
 
