@@ -6,7 +6,6 @@ Group: Unspecified
 License: see http://opengeo.org
 Requires(post): bash
 Requires(preun): bash
-Requires: tomcat5
 Patch0: medford_taxlots_datastore.patch
 Patch1: db_properties.patch
 Patch2: logs.patch

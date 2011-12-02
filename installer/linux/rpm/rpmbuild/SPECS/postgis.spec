@@ -9,11 +9,18 @@ Source1:	%{name}.rpmlintrc
 Vendor:         The PostGIS Project
 Packager:       Otto Dassau <dassau@gbd-consult.de>
 URL:            http://postgis.refractions.net/
-BuildRequires:  postgresql84-devel postgresql84 proj-devel proj geos-devel >= 2.1.1
+BuildRequires:  proj-devel proj geos-devel >= 2.1.1
 BuildRequires:  gcc-c++ libxslt-devel dos2unix flex
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
+%if 0%{?centos} == 6
+BuildRequires: postgresql-devel postgresql
+Requires:       postgresql
+Requires:	postgresql-server
+%else
+BuildRequires:  postgresql84-devel postgresql84
 Requires:       postgresql84
 Requires:	postgresql84-server
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
+%endif
 
 %description
 PostGIS adds support for geographic objects to the PostgreSQL object-relational

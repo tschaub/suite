@@ -6,8 +6,17 @@ Group: Applications/Engineering
 License: see http://geoserver.org
 Requires(post): bash
 Requires(preun): bash
-Requires:  unzip, tomcat5, java-1.6.0-openjdk, opengeo-jai, opengeo-suite-data >= 2.4.1
+Requires:  unzip, java-1.6.0-openjdk, opengeo-jai, opengeo-suite-data >= 2.4.1
 Patch: geoserver_webxml.patch
+%if 0%{?centos} == 6
+Requires: tomcat6
+%define TOMCAT tomcat6
+%else
+Requires: tomcat5
+%define TOMCAT tomcat5
+%endif
+%define TOMCAT_HOME /var/lib/%{TOMCAT}
+%define WEBAPPS %{TOMCAT_HOME}/webapps
 
 %define _rpmdir ../
 %define _rpmfilename %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm
@@ -35,21 +44,21 @@ OpenGeo Suite.
 
 %install
    rm -rf $RPM_BUILD_ROOT
-   mkdir -p $RPM_BUILD_ROOT/var/lib/tomcat5/webapps/
-   cp -rp  $RPM_SOURCE_DIR/opengeo-geoserver/geoserver.war  $RPM_BUILD_ROOT/var/lib/tomcat5/webapps
+   mkdir -p $RPM_BUILD_ROOT%{WEBAPPS}
+   cp -rp  $RPM_SOURCE_DIR/opengeo-geoserver/geoserver.war  $RPM_BUILD_ROOT%{WEBAPPS}
    mkdir -p $RPM_BUILD_ROOT/usr/share/opengeo-suite
    cp -rp $RPM_SOURCE_DIR/scripts/geoserver-setup.sh $RPM_BUILD_ROOT/usr/share/opengeo-suite/.
 
 %post
-   if [ ! -e /var/lib/tomcat5/tomcat5.original-settings ]; then
-      cp  /etc/sysconfig/tomcat5 /var/lib/tomcat5/tomcat5.original-settings
-      cat << EOF >> /etc/sysconfig/tomcat5
+   if [ ! -e %{TOMCAT_HOME}/%{TOMCAT}.original-settings ]; then
+      cp  /etc/sysconfig/%{TOMCAT} %{TOMCAT_HOME}/%{TOMCAT}.original-settings
+      cat << EOF >> /etc/sysconfig/%{TOMCAT}
 JAVA_OPTS="-Djava.awt.headless=true -Xms256m -Xmx768m -Xrs -XX:PerfDataSamplingInterval=500 -XX:MaxPermSize=128m"
 GEOEXPLORER_DATA="/usr/share/opengeo-suite-data/geoexplorer_data"
 EOF
    fi
 
-   WEBAPPS=/var/lib/tomcat5/webapps
+   WEBAPPS=%{WEBAPPS}
    APP=$WEBAPPS/geoserver
    TMP=/tmp/opengeo-geoserver
 
@@ -69,27 +78,27 @@ EOF
      rm -rf $TMP
    fi
 
-   chown tomcat. /var/lib/tomcat5/webapps/*.war
-   chkconfig tomcat5 on
-   service tomcat5 restart
+   chown tomcat. %{WEBAPPS}/*.war
+   chkconfig %{TOMCAT} on
+   service %{TOMCAT} restart
 
    echo ""
    echo "NOTICE: Please run /usr/share/opengeo-suite/geoserver-setup.sh to complete this installation."
    echo ""
 
 %preun
-   APP=/var/lib/tomcat5/webapps/geoserver
+   APP=%{WEBAPPS}/geoserver
 
    # $1 == 1 means upgrade, on upgrade don't remove webapp as we want to 
    # preserve certain files, namely web.xml
    if [ "$1" == "0" ]; then
 
      if [ -e $APP ]; then
-       service tomcat5 stop
+       service %{TOMCAT} stop
        rm -rf  $APP.war $APP
      fi
 
-     service tomcat5 restart
+     service %{TOMCAT} restart
    fi
 
 %postun
@@ -100,6 +109,6 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-/var/lib/tomcat5/webapps/geoserver.war
+%{WEBAPPS}/geoserver.war
 /usr/share/opengeo-suite/geoserver-setup.sh
 

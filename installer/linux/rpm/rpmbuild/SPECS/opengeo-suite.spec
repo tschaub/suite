@@ -9,6 +9,9 @@ Requires(preun): bash
 Requires: opengeo-postgis >= 2.4.1, opengeo-geoserver >= 2.4.4, opengeo-docs >= 2.4.4
 Patch: geoexplorer_webxml.patch
 
+# the current patch will fail under newer rpmbuild package which
+# uses fuzz 0 - this implies the patch needs rediffing - hack for now
+%define _default_patch_fuzz 2
 %define _rpmdir ../
 %define _rpmfilename %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm
 %define _unpackaged_files_terminate_build 0

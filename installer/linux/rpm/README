@@ -13,6 +13,10 @@ Install wxGTK:
   yum install gtk+ gtk+-devel libjpeg-devel libpng-devel libtiff-devel
   yum install ORBit2 SDL GConf2 gstreamer gstreamer-plugins-base libGLU libGLU-devel gtk2-devel desktop-file-utils openssl-devel
 
+And additional deps:
+  
+  yum install wget 
+
 Grab wxGTK rpms from http://download.fedora.redhat.com/pub/epel/5/i386/ :
 
     wxBase-2.8.11-2.el5.i386.rpm

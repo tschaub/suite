@@ -6,7 +6,7 @@ Group: System Environment/Libraries
 License: see copyright
 Requires(post): bash
 Requires(preun): bash
-Requires: tomcat5, java-1.6.0-openjdk
+Requires: java-1.6.0-openjdk
 
 %define _rpmdir ../
 %define _rpmfilename %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm
