@@ -1,6 +1,6 @@
 Summary:        Geographic Information Systems Extensions to PostgreSQL
 Name:           postgis
-Version:        1.5.2
+Version:        1.5.3
 Release:        1
 License:        GPL v2
 Group:          Applications/Databases
