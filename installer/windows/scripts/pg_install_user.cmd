@@ -23,7 +23,7 @@ if not errorlevel 0 (
 
 :: Create user database
 
-"%pg_bin_dir%\createuser" --createdb --superuser %USERNAME% >> "%pg_log%" >nul
+"%pg_bin_dir%\createuser" --createdb --superuser "%USERNAME%" >> "%pg_log%" >nul
 
 :: Any errors?
 if not errorlevel 0 (
@@ -31,7 +31,7 @@ if not errorlevel 0 (
   goto End
 )
 
-"%pg_bin_dir%\createdb" --owner=%USERNAME% --template=template_postgis %USERNAME% >> "%pg_log%" >nul
+"%pg_bin_dir%\createdb" --owner="%USERNAME%" --template=template_postgis "%USERNAME%" >> "%pg_log%" >nul
 :: Any errors?
 if not errorlevel 0 (
   echo There was an error while attempting to create user.

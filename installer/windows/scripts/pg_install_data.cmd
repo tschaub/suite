@@ -14,14 +14,14 @@ set PGPORT=%pg_port%
 set pgdatalist=%TEMP%\pg_data.txt
 
 :: Create the Medford Database
-call "%pg_bin_dir%\createdb" --owner=%USERNAME% --template=template_postgis medford 
+call "%pg_bin_dir%\createdb" --owner="%USERNAME%" --template=template_postgis medford 
 if not errorlevel 0 (
   echo There was an error while creating the Medford database.
   goto Fail
 )
 
 :: Create the GeoServer/Analytics Database
-call "%pg_bin_dir%\createdb" --owner=%USERNAME% --template=template_postgis geoserver 
+call "%pg_bin_dir%\createdb" --owner="%USERNAME%" --template=template_postgis geoserver 
 if not errorlevel 0 (
   echo There was an error while creating the GeoServer database.
   goto Fail
@@ -33,7 +33,7 @@ dir /b "%pg_data_load_dir%" > "%pgdatalist%"
 :: Schema files first
 for /f "tokens=* delims= " %%a in ('findstr _schema "%pgdatalist%"') do (
   echo Loading file: %%a
-  "%pg_bin_dir%\psql" -f "%pg_data_load_dir%\%%a" -d medford -U %USERNAME% >> "%pg_log%" >nul
+  "%pg_bin_dir%\psql" -f "%pg_data_load_dir%\%%a" -d medford -U "%USERNAME%" >> "%pg_log%" >nul
 )
 if not errorlevel 0 (
   echo There was an error while loading Medford data tables.
@@ -42,7 +42,7 @@ if not errorlevel 0 (
 :: Non-schema files next
 for /f "tokens=* delims= " %%a in ('findstr /vi _schema "%pgdatalist%"') do (
   echo Loading file: %%a
-  "%pg_bin_dir%\psql" -f "%pg_data_load_dir%\%%a" -d medford -U %USERNAME% >> "%pg_log%" >nul
+  "%pg_bin_dir%\psql" -f "%pg_data_load_dir%\%%a" -d medford -U "%USERNAME%" >> "%pg_log%" >nul
 )
 if not errorlevel 0 (
   echo There was an error while loading Medford data tables.
