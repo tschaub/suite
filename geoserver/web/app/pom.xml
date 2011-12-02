@@ -32,6 +32,10 @@
     </dependency>
     <dependency>
       <groupId>org.geoserver.extension</groupId>
+      <artifactId>web-wps</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.geoserver.extension</groupId>
       <artifactId>h2</artifactId>
     </dependency>
     <dependency>

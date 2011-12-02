@@ -776,6 +776,9 @@ Section "Documentation" SectionDocs
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\PostGIS Documentation.lnk" \
 		         "$INSTDIR\webapps\opengeo-docs\postgis\index.html" \
                  "" "$INSTDIR\icons\postgis.ico" 0
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoServer Documentation.lnk" \
+		         "$INSTDIR\webapps\opengeo-docs\geoserver\index.html" \
+                 "" "$INSTDIR\icons\geoserver.ico" 0
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoExplorer Documentation.lnk" \
 		         "$INSTDIR\webapps\opengeo-docs\geoexplorer\index.html" \
                  "" "$INSTDIR\icons\geoexplorer.ico" 0
@@ -788,8 +791,8 @@ Section "Documentation" SectionDocs
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\GeoWebCache Documentation.lnk" \
 		         "$INSTDIR\webapps\opengeo-docs\geoserver\geowebcache\index.html" \
                  "" "$INSTDIR\icons\geowebcache.ico" 0
-  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\Getting Started.lnk" \
-		         "$INSTDIR\webapps\opengeo-docs\gettingstarted\index.html" \
+  CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Documentation\User Manual.lnk" \
+		         "$INSTDIR\webapps\opengeo-docs\usermanual\index.html" \
                  "" "$INSTDIR\icons\opengeo.ico" 0
 
 SectionEnd
