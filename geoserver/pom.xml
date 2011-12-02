@@ -56,6 +56,11 @@
    </dependency>
    <dependency>
     <groupId>org.geoserver.extension</groupId>
+    <artifactId>web-wps</artifactId>
+    <version>${gs.version}</version>
+   </dependency>
+   <dependency>
+    <groupId>org.geoserver.extension</groupId>
     <artifactId>control-flow</artifactId>
     <version>${gs.version}</version>
    </dependency>
