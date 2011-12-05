@@ -1,7 +1,7 @@
 OpenGeo Suite README
 ====================
 
-These instructions how to build the OpenGeo Suite platform indepenent 
+These instructions how to build the OpenGeo Suite platform independent 
 components. It does not include PostGIS. 
 
 Prerequisites
@@ -36,18 +36,16 @@ If you build GeoTools, GeoServer, or GeoWebCache with maven locally for other   
 Build Environment
 -----------------
 
-.. note::
-
-   If you don't build GeoTools, GeoServer, or GeoWebCache locally on a regular 
-   basis you can skip this section.
+If you don't build GeoTools, GeoServer, or GeoWebCache locally on a regular 
+basis you can skip this section.
 
 The suite builds its own internal versions of many components like GeoTools and 
-GeoServer. To keep these builds separate it is recommened that you set up an 
+GeoServer. To keep these builds separate it is recommended that you set up an 
 virtual environment for the suite build. 
 
 Tools like `virtualenv <http://pypi.python.org/pypi/virtualenv>`_ and `virtualenvwrapper <http://www.doughellmann.com/projects/virtualenvwrapper/>`_
-are useful for creating virtual environments with configuration specific to a   particular project. It is recommened that you set up a  "virtualenv" 
-specifically for the suite. In that virtualenv you can configure custom settingsfor maven, etc...
+are useful for creating virtual environments with configuration specific to a   particular project. It is recommended that you set up a  "virtualenv" 
+specifically for the suite. In that virtualenv you can configure custom settings for maven, etc...
 
 Maven Setup
 -----------
@@ -56,11 +54,9 @@ Due to the fact that GeoServer depends on GeoTools and GeoWebCache via
 SNAPSHOT versions, Maven must be configured to not download SNAPSHOT versions 
 from any online repositories that publish GeoTools and GeoWebCache artifacts.
 
-.. note::
-
-   If you don't build GeoServer, GeoTools, or GeoWebCache locally for other 
-   projects then you can skip teh part in ``settings.xml`` about a custom 
-   repository.
+If you don't build GeoServer, GeoTools, or GeoWebCache locally for other 
+projects then you can skip the part in ``settings.xml`` about a custom 
+repository.
 
 Set up a custom ``settings.xml`` file::
 
@@ -161,7 +157,7 @@ Custom Build Flags
 ^^^^^^^^^^^^^^^^^^
 
 Each of these externals is built with a separate maven process so 
-flags such as -o (offline) are not propagated. To propogate custom flags to the
+flags such as -o (offline) are not propagated. To propagate custom flags to the
 respective build commands specific properties must be set.
 
 * ``gs.flags`` - GeoServer build flags
@@ -182,16 +178,12 @@ contain many modules rebuilding all previously built modules is onerous. The
 Offline Builds
 ^^^^^^^^^^^^^^
 
-Offline builds are useful in projects like the suite and its dependants that 
+Offline builds are useful in projects like the suite and its dependents that 
 contain SNAPSHOT dependencies. However as mentioned above because the externals
 are built with a separate maven command, the offline switch will not be 
-propogated. The ``-Doffline`` flag is used to signal to the respective builds
+propagated. The ``-Doffline`` flag is used to signal to the respective builds
 that offline mode should be used::
 
   % mvn clean install -Dfull -Doffline
-
-
-
-
 
 
