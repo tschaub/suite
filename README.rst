@@ -10,35 +10,28 @@ Prerequisites
 The following software packages are required to build the suite.
 
 * `Java Development Kit (JDK) <http://www.oracle.com/technetwork/java/javase/downloads/index-jdk5-jsp-142662.html>`_ - 1.5+
-* `Apache Maven <http://maven.apache.org/download.html>`_ - 2.2.1+
+* `Apache Maven <http://maven.apache.org/download.html>`_ - 2.2.1+ (not 3.x)
 * `JSTools <https://github.com/whitmo/jstools>`_ - Latest
-* `Sphinx <http://sphinx.pocoo.org/>`_ - 1.0+
+* `Sphinx <http://sphinx.pocoo.org/>`_ - 1.0+ (the full build requires LaTeX support)
 * `Git <http://git-scm.com/>`_ - Recent
 
 Quickstart
 ----------
 
-For the imapatient.
-
-.. note::
-
-   If you build GeoTools, GeoServer, or GeoWebCache with maven locally for other   projects you should skip this quickstart and follow the entire set of 
-   instructions.
-
-#. Download `settings.xml <https://raw.github.com/opengeo/suite/master/build/settings.xml>`_
+If you build GeoTools, GeoServer, or GeoWebCache with maven locally for other   projects you should skip this quickstart and follow the entire set of instructions.
 
 #. Clone the repository:: 
 
      % git clone git://github.com/opengeo/suite.git suite
      % cd suite
 
-#. Initialize submodule dependnecies::
+#. Initialize submodule dependencies::
 
      % git submodule update --init --recursive
 
 #. Do a full build::
 
-     % mvn -s /path/to/settings.xml clean install -Dfull
+     % mvn clean install -Dfull
 
 Build Environment
 -----------------
