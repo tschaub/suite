@@ -4,7 +4,7 @@
 
 build_info
 
-VER=1.8.0
+VER=1.8.4
 PGADMIN=pgadmin3-$VER
 PGADMIN_POSTGIS=opengeosuite-$REV-pgadmin-postgis.zip
 
