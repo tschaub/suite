@@ -11,6 +11,14 @@ function log() {
   echo "[`date '+%m/%d/%Y %H:%M:%S'`] $1"
 }
 
+# activates the virtual environment for the specific account 
+# init_ec2_env <account>
+function init_ec2_env() {
+  pushd $HOME/.ec2/aws-suite-$1 > /dev/null
+  . activate
+  popd > /dev/null
+}
+
 # check_ec2_tools
 function check_ec2_tools() {
   ec2-version
@@ -71,6 +79,14 @@ ec2_volume_status() {
 ec2_image_status() {
   if [ ! -z $1 ]; then
     status=`ec2-describe-images $1 | grep IMAGE | cut -f 5`
+  fi
+  echo -n $status
+}
+
+# ec2_instance_status <instance-id>
+ec2_instance_status() {
+  if [ ! -z $1 ]; then
+    status=`ec2-describe-instances $1 | grep INSTANCE | cut -f 6`
   fi
   echo -n $status
 }

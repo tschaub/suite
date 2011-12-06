@@ -32,9 +32,7 @@ if [ ! -z $PRODUCT_ID ] && [ -z $PRODUCT_NAME ]; then
 fi
 
 # initialize ec2 api stuff
-pushd $HOME/.ec2/aws-suite-$ACCOUNT > /dev/null
-. activate
-popd > /dev/null
+init_ec2_env $ACCOUNT
 
 # get the ami version
 . functions
