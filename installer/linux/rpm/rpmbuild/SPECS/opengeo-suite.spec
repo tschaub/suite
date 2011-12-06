@@ -6,7 +6,7 @@ Group: Applications/Engineering
 License: see http://opengeo.org
 Requires(post): bash
 Requires(preun): bash
-Requires: opengeo-postgis >= 2.4.1, opengeo-geoserver >= 2.4.4, opengeo-docs >= 2.4.4
+Requires: opengeo-postgis >= 2.4.4, opengeo-geoserver >= 2.4.4, opengeo-docs >= 2.4.4
 Patch: geoexplorer_webxml.patch
 
 # the current patch will fail under newer rpmbuild package which

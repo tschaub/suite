@@ -1,3 +1,9 @@
+opengeo-postgis (2.4.4) unstable; urgency=low
+
+  *  New upstream postgis release, 1.5.3
+  
+ -- OpenGeo <inquiry@opengeo.org>  Mon, 5 Dec 2011 15:00:00 -0700
+
 opengeo-postgis (2.4.1) unstable; urgency=low
 
   *  Dealing with install/uninstall that require password for postgres account

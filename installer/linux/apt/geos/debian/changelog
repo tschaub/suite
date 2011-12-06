@@ -1,3 +1,9 @@
+geos (3.3.1-1+opengeo) unstable; urgency=low
+
+  * New upstream release.
+
+ -- OpenGeo <inquiry@opengeo.org>  Mon, 05 Dec 2011 15:00:00 -0700
+
 geos (3.2.2-1) unstable; urgency=low
 
   * New upstream release.

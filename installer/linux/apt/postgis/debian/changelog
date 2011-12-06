@@ -1,3 +1,9 @@
+postgis (1.5.3-1+opengeo) unstable; urgency=low
+
+  * New upstream release, postgis 1.5.3
+
+ -- OpenGeo <inquiry@opengeo.org>  Mon, 05 Dev 2011 15:00:00 -0700
+
 postgis (1.5.2-1) unstable; urgency=low
 
   * New upstream release, with a few bug fixes.
