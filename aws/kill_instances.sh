@@ -4,6 +4,16 @@ set -x
 
 . functions
 
+ACC=$1
+if [ -z $ACC ]; then
+  ACC=$ACCOUNT
+fi
+
+if [ -z "$ACC" ]; then
+  echo "No account specified"
+  exit 1
+fi
+
 init_ec2_env $ACCOUNT
 
 # go through each running instance
