@@ -13,7 +13,7 @@ Vcs-Svn: svn://svn.debian.org/svn/pkg-grass/packages/geos/trunk
 Package: libgeos-dev
 Section: libdevel
 Architecture: any
-Depends: libgeos-3.2.2 (= ${binary:Version}), libgeos-c1 (= ${binary:Version})
+Depends: libgeos-3.3.1 (= ${binary:Version}), libgeos-c1 (= ${binary:Version})
 Suggests: libgdal-doc
 Description: Geometry engine for GIS - Development files
  GEOS provides a spatial object model and fundamental geometric
@@ -44,7 +44,7 @@ Description: Geometry engine for Geographic Information Systems - C Library
  This package contains the C library. A C++ library is provided
  by the libgeos* package.
 
-Package: libgeos-3.2.2
+Package: libgeos-3.3.1
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
