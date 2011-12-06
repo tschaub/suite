@@ -14,7 +14,7 @@ if [ -z "$ACC" ]; then
   exit 1
 fi
 
-init_ec2_env $ACCOUNT
+init_ec2_env $ACC
 
 # go through each running instance
 for id in `ec2-describe-instances | grep "^INSTANCE" | cut -f 2` ;do
@@ -23,7 +23,7 @@ for id in `ec2-describe-instances | grep "^INSTANCE" | cut -f 2` ;do
     # check for a tag
     ec2-describe-instances  | grep "^TAG" | grep "$id" | grep "persist"
     if [ $? != 0 ]; then
-      echo "killing instance $id"
+      echo "killing instance $id in account $ACC"
       ec2-terminate-instances $id
     fi
   fi
