@@ -102,7 +102,7 @@ the OpenGeo Suite.
     fi
   fi
 
-  chown tomcat. /usr/share/opengeo-suite-data -R
+  chown -R tomcat /usr/share/opengeo-suite-data
 
 
 %preun

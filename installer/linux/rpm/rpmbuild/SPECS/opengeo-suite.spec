@@ -82,7 +82,7 @@ components.  It is comprised of the following core components:
      ln -sf $DOCS $WEBAPPS/opengeo-docs
    fi
 
-   chown tomcat. /var/lib/tomcat5/webapps/*.war
+   chown tomcat /var/lib/tomcat5/webapps/*.war
    chkconfig tomcat5 on
    service tomcat5 restart
 

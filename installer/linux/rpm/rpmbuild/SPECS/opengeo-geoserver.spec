@@ -78,7 +78,7 @@ EOF
      rm -rf $TMP
    fi
 
-   chown tomcat. %{WEBAPPS}/*.war
+   chown tomcat %{WEBAPPS}/*.war
    chkconfig %{TOMCAT} on
    service %{TOMCAT} restart
 
