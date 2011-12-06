@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Debian GIS Project <pkg-grass-devel@lists.alioth.debian.org>
 Uploaders: Stephen Frost <sfrost@debian.org>, Francesco Paolo Lovergine <frankie@debian.org>
 Build-Depends: debhelper (>= 7), autotools-dev, flex, bison, postgresql-server-dev-8.4,
- libgeos-dev (>= 3.3.1), libproj-dev (>= 4.7.0), libssl-dev, xsltproc, docbook, docbook-xsl, libpg-java, 
+ libgeos-dev (>= 3.1.1), libproj-dev (>= 4.5.0), libssl-dev, xsltproc, docbook, docbook-xsl, libpg-java, 
  default-jdk, fastjar, libjts-java (>= 1.7), dpatch, imagemagick, libcunit1-dev, dblatex, libxml2-dev,
  libgtk2.0-dev
 Standards-Version: 3.8.4
