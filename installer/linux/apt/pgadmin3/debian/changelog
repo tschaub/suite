@@ -1,3 +1,9 @@
+pgadmin3 (1.10.5-1+opengeo) lucid-proposed; urgency=low
+
+  * New upstream pgadmin release, 1.10.5
+
+ -- OpenGeo <inqiry@opengeo.org>  Mon, 05 Dec 2011 13:00:00 -0700
+
 pgadmin3 (1.10.2-1build1+opengeo) lucid-proposed; urgency=low
 
   * OpenGeo specific branding and settings.ini
