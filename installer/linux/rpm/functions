@@ -10,7 +10,7 @@ if [ "$REV" == "" ]; then
   REV=latest
 fi
 
-BRANC=$GIT_BRANCH
+BRANCH=$GIT_BRANCH
 
 PACKAGE=`echo $0 | sed 's#^.*build_##g' | sed 's#\.sh##g'`
 RPM_BUILD_ROOT=`pwd`/rpmbuild
@@ -54,8 +54,8 @@ function get_file() {
      mkdir files
      checkrc $? "mkdir files"
   fi
-
-  if [ "$2" != "" ] ||  [ ! -e files/$file ]; then
+  overwrite=${OVERWRITE:-$2}
+  if [ "$overwrite" != "no" ] ||  [ ! -e files/$file ]; then
      wget $url
      checkrc $? "downloading $url"
 
