@@ -13,6 +13,7 @@
   <!-- 
     wicket ui stuff
    -->
+  <!--
   <bean id="imporDataMenuPage" class="org.geoserver.web.MenuPageInfo">
     <property name="id" value="importData" />
     <property name="category" ref="dataCategory"/>
@@ -22,7 +23,7 @@
     <property name="order" value="6"/>
     <property name="icon" value="map_add.png"/>
   </bean>
-  
+  -->
   <!--
    rest bindings
     -->

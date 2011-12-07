@@ -3,7 +3,6 @@
 
 <beans>
     
-  <!--
   <bean id="importerMenuPage" class="org.geoserver.web.MenuPageInfo">
     <property name="id" value="importer" />
     <property name="category" ref="dataCategory"/>
@@ -13,7 +12,6 @@
     <property name="order" value="6"/>
     <property name="icon" value="../map_add.png"/>
   </bean>
-  -->
 
   <!-- the import thread pool manager -->
   <bean id="importerPool" class="org.geoserver.importer.ImporterThreadManager" />
