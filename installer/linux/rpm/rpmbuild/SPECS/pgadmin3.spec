@@ -13,7 +13,12 @@ Group:		Applications/Databases
 URL:		http://www.pgadmin.org/
 Source:		pgadmin3-%{version}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires: wxGTK2-devel wxGTK2-stc wxGTK2-xrc postgresql84-devel desktop-file-utils openssl-devel libxml2-devel libxslt-devel
+BuildRequires: desktop-file-utils openssl-devel libxml2-devel libxslt-devel
+%if 0%{?centos} == 6
+BuildRequires: wxGTK-devel postgresql-devel 
+%else
+BuildRequires: wxGTK2-devel wxGTK2-stc wxGTK2-xrc postgresql84-devel
+%endif
 
 %define beta 1
 %{?beta:%define __os_install_post /usr/lib/rpm/brp-compress}
