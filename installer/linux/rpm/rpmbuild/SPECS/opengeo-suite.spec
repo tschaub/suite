@@ -9,6 +9,12 @@ Requires(preun): bash
 Requires: opengeo-postgis >= 2.4.4, opengeo-geoserver >= 2.4.4, opengeo-docs >= 2.4.4
 Patch: geoexplorer_webxml.patch
 
+%if 0%{?centos} == 6
+%define TOMCAT tomcat6
+%else
+%define TOMCAT tomcat5 
+%endif
+
 # the current patch will fail under newer rpmbuild package which
 # uses fuzz 0 - this implies the patch needs rediffing - hack for now
 %define _default_patch_fuzz 2
@@ -41,17 +47,17 @@ components.  It is comprised of the following core components:
 %install
    rm -rf $RPM_BUILD_ROOT
    mkdir -p $RPM_BUILD_ROOT/usr/share/opengeo-suite
-   mkdir -p $RPM_BUILD_ROOT/var/lib/tomcat5/webapps
+   mkdir -p $RPM_BUILD_ROOT/var/lib/%{TOMCAT}/webapps
 
-   cp -rp $RPM_SOURCE_DIR/opengeo-suite/dashboard.war $RPM_BUILD_ROOT/var/lib/tomcat5/webapps/.
-   cp -rp $RPM_SOURCE_DIR/opengeo-suite/geoeditor.war $RPM_BUILD_ROOT/var/lib/tomcat5/webapps/.
-   cp -rp $RPM_SOURCE_DIR/opengeo-suite/geowebcache.war $RPM_BUILD_ROOT/var/lib/tomcat5/webapps/.
-   cp -rp $RPM_SOURCE_DIR/opengeo-suite/recipes.war $RPM_BUILD_ROOT/var/lib/tomcat5/webapps/.
-   cp -rp $RPM_SOURCE_DIR/opengeo-suite/geoexplorer.war $RPM_BUILD_ROOT/var/lib/tomcat5/webapps/.
+   cp -rp $RPM_SOURCE_DIR/opengeo-suite/dashboard.war $RPM_BUILD_ROOT/var/lib/%{TOMCAT}/webapps/.
+   cp -rp $RPM_SOURCE_DIR/opengeo-suite/geoeditor.war $RPM_BUILD_ROOT/var/lib/%{TOMCAT}/webapps/.
+   cp -rp $RPM_SOURCE_DIR/opengeo-suite/geowebcache.war $RPM_BUILD_ROOT/var/lib/%{TOMCAT}/webapps/.
+   cp -rp $RPM_SOURCE_DIR/opengeo-suite/recipes.war $RPM_BUILD_ROOT/var/lib/%{TOMCAT}/webapps/.
+   cp -rp $RPM_SOURCE_DIR/opengeo-suite/geoexplorer.war $RPM_BUILD_ROOT/var/lib/%{TOMCAT}/webapps/.
 
 %post
    # check for upgrade, if so preserve geoexp web.xml
-   WEBAPPS=/var/lib/tomcat5/webapps
+   WEBAPPS=/var/lib/%{TOMCAT}/webapps
    GXP=$WEBAPPS/geoexplorer
    TMP=/tmp/opengeo-geoexplorer
 
@@ -82,17 +88,17 @@ components.  It is comprised of the following core components:
      ln -sf $DOCS $WEBAPPS/opengeo-docs
    fi
 
-   chown tomcat /var/lib/tomcat5/webapps/*.war
-   chkconfig tomcat5 on
-   service tomcat5 restart
+   chown tomcat /var/lib/%{TOMCAT}/webapps/*.war
+   chkconfig %{TOMCAT} on
+   service %{TOMCAT} restart
 
 %preun
 
   # $1 == 1 means upgrade, on upgrade don't remove the webapps
   if [ "$1" == "0" ]; then
-    service tomcat5 stop
+    service %{TOMCAT} stop
 
-    WEBAPPS=/var/lib/tomcat5/webapps
+    WEBAPPS=/var/lib/%{TOMCAT}/webapps
     APPS="dashboard geoeditor geoexplorer geowebcache recipes"
     for APP in $APPS; do
       if [ -e $WEBAPPS/$APP ]; then
@@ -104,7 +110,7 @@ components.  It is comprised of the following core components:
       unlink $WEBAPPS/opengeo-docs
     fi
 
-    service tomcat5 restart
+    service %{TOMCAT} restart
   fi
 
 %postun
@@ -113,8 +119,8 @@ components.  It is comprised of the following core components:
 
 %files
 %defattr(-,root,root,-)
-/var/lib/tomcat5/webapps/dashboard.war
-/var/lib/tomcat5/webapps/geoeditor.war
-/var/lib/tomcat5/webapps/geoexplorer.war
-/var/lib/tomcat5/webapps/geowebcache.war
-/var/lib/tomcat5/webapps/recipes.war
+/var/lib/%{TOMCAT}/webapps/dashboard.war
+/var/lib/%{TOMCAT}/webapps/geoeditor.war
+/var/lib/%{TOMCAT}/webapps/geoexplorer.war
+/var/lib/%{TOMCAT}/webapps/geowebcache.war
+/var/lib/%{TOMCAT}/webapps/recipes.war
