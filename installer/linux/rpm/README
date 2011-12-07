@@ -17,7 +17,9 @@ And additional deps:
   
   yum install wget 
 
-Grab wxGTK rpms from http://download.fedora.redhat.com/pub/epel/5/i386/ :
+wxGTK packages are needed to build pgadmin3. These dependencies vary a bit
+between Centos5 and 6. For the Centos5 deps, grab wxGTK rpms from 
+http://download.fedora.redhat.com/pub/epel/5/i386/ :
 
     wxBase-2.8.11-2.el5.i386.rpm
     wxGTK-2.8.11-2.el5.i386.rpm
@@ -25,6 +27,15 @@ Grab wxGTK rpms from http://download.fedora.redhat.com/pub/epel/5/i386/ :
     wxGTK-gl-2.8.11-2.el5.i386.rpm  
     bakefile-0.2.8-3.el5.i386.rpm
     python-empy-3.3-5.el5.noarch.rpm
+
+For Centos6, get the epel-release meta package from here:
+http://download.fedora.redhat.com/pub/epel/6 and install it:
+
+    rpm -Uvh epel-release*rpm
+
+Then install wxGTK-devel:
+
+    yum install wxGTK-devel
 
 Create a file .rpmmacros in the home directory of the user who will build the
 packages. Do *NOT* build as them as root. The file should have the following
