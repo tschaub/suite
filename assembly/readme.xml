@@ -4,19 +4,30 @@
     <format>zip</format>
     <format>tar.gz</format>
   </formats>
+  <fileSets>
+    <fileSet>
+      <directory>docs/install/windows/target/latex</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>README-windows.pdf</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>docs/install/mac/target/latex</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>README-mac.pdf</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>docs/install/linux/target/latex</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>README-linux.pdf</include>
+      </includes>
+    </fileSet>
+  </fileSets>
   <files>
-    <file>
-      <source>docs/install/windows/target/latex/README-windows.pdf</source>
-      <outputDirectory>/</outputDirectory>
-    </file>
-    <file>
-      <source>docs/install/mac/target/latex/README-mac.pdf</source>
-      <outputDirectory>/</outputDirectory>
-    </file>
-    <file>
-      <source>docs/install/linux/target/text/README-linux.txt</source>
-      <outputDirectory>/</outputDirectory>
-    </file>
     <file>
       <source>target/version.ini</source>
       <outputDirectory>/</outputDirectory>
