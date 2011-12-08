@@ -6,6 +6,7 @@
     </description>
 
     <property name="repo" location="externals/geoexplorer"/>
+    <property name="ringo" location="${repo}/externals/ringojs-fork"/>
     
     <!-- setup maven command, use mvn.exec if passed in, if not fall back 
          to either mvn.bat or mvn based on platform -->
@@ -25,19 +26,19 @@
     </condition>
 
     <target name="compile">
-        <exec executable="${mvn_exec}" dir="${repo}/externals/ringojs" failonerror="true">
+        <exec executable="${mvn_exec}" dir="${ringo}" failonerror="true">
            <arg line="-Dmaven.test.skip ${mvn_settings} clean install"/>
         </exec>
-        <jar jarfile="${repo}/externals/ringojs/run.jar"
-            basedir="${repo}/externals/ringojs/target/classes"
+        <jar jarfile="${ringo}/run.jar"
+            basedir="${ringo}/target/classes"
             includes="**/tools/launcher/**"
-            manifest="${repo}/externals/ringojs/src/org/ringojs/tools/launcher/manifest.txt"/>
-        <jar jarfile="${repo}/externals/ringojs/lib/ringo.jar">
-            <fileset dir="${repo}/externals/ringojs/target/classes"/>
-            <fileset dir="${repo}/externals/ringojs" includes="modules/**"/>
-            <fileset dir="${repo}/externals/ringojs/src" excludes="**/*.java,**/package.html"/>
+            manifest="${ringo}/src/org/ringojs/tools/launcher/manifest.txt"/>
+        <jar jarfile="${ringo}/lib/ringo.jar">
+            <fileset dir="${ringo}/target/classes"/>
+            <fileset dir="${ringo}" includes="modules/**"/>
+            <fileset dir="${ringo}/src" excludes="**/*.java,**/package.html"/>
         </jar>
-        <copy todir="${repo}/externals/ringojs/lib" flatten="true" includeEmptyDirs="false">
+        <copy todir="${ringo}/lib" flatten="true" includeEmptyDirs="false">
             <fileset dir="${repo}/lib"/>
         </copy>
         <ant dir="${repo}" target="postcompile"/>
