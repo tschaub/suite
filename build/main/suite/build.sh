@@ -46,7 +46,7 @@ function copy_artifacts {
     prefix=-$2
   fi
 
-  pushd target/$1
+  pushd target/$2
   for x in $artifacts
   do
     src=opengeosuite${prefix}-*-${x}.zip
