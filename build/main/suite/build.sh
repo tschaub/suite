@@ -35,14 +35,15 @@ function profile_rebuild {
 
 #
 # function to copy over build artifacts
-# copy_artifacts [profile]
+# copy_artifacts <alias> [profile]
 #
 function copy_artifacts {
+  local aliaas=$1
   local prefix=""
   local counter=0
 
-  if [ ! -z $1 ]; then
-    prefix=-$1
+  if [ ! -z $2 ]; then
+    prefix=-$2
   fi
 
   pushd target/$1
@@ -53,7 +54,7 @@ function copy_artifacts {
        echo "copying $src"
        dst=opengeosuite${prefix}-$revision-${x}.zip
        cp $src $dist/$dst
-       ln -sf $dist/$dst $dist/opengeosuite${prefix}-latest-${x}.zip
+       ln -sf $dist/$dst $dist/opengeosuite${prefix}-${aliaas}-${x}.zip
        let counter=counter+1
     fi
   
@@ -77,7 +78,14 @@ function copy_artifacts {
 
 set -x
 
-[ "$ARCHIVE" = "true" ] && DIST_PATH="archived" || DIST_PATH="latest"
+if [ -z "$DIST_PATH" ]; then
+  DIST_PATH="latest"
+fi
+
+ALIAS=$REV
+if [ "$ALIAS" == "HEAD" ]; then
+  ALIAS="latest"
+fi
 
 dist=/var/www/suite/$DIST_PATH
 if [ ! -e $dist ]; then
@@ -90,6 +98,8 @@ artifacts="bin win mac ext war war-geoserver war-geoexplorer war-geoeditor war-g
 # set up the maven repository for this particular branch/tag/etc...
 MVN_SETTINGS_TEMPLATE=`pwd`/repo/build/settings.xml
 pushd maven
+
+# TODO: remove teh maven repo logic and just use a single maven repo
 MVN_REPO=latest
 if [ ! -d $MVN_REPO ]; then
   echo "Creating new maven repository at `pwd`/$MVN_REPO"
@@ -109,14 +119,14 @@ git checkout $REV
 # extract the revision number
 revision=`git log --format=format:%H | head -n 1`
 if [ "x$revision" == "x" ]; then
-  echo "failed to get revision number from svn info"
+  echo "failed to get revision number from git info"
   exit 1
 fi
 
 # only use first seven chars
 revision=${revision:0:7}
 
-echo "building $revision with maven settings $MVN_SETTINGS"
+echo "building $revision ($REV) with maven settings $MVN_SETTINGS"
 
 # perform a full build
 $MVN -s $MVN_SETTINGS -Dfull -Dmvn.exec=$MVN -Dmvn.settings=$MVN_SETTINGS -Dbuild.revision=$revision -Dbuild.date=$BUILD_ID $BUILD_FLAGS clean install
@@ -135,8 +145,8 @@ profile_rebuild ee
 #profile_rebuild cloud
 
 # copy the new artifacts into place
-copy_artifacts
-copy_artifacts ee
+copy_artifacts $ALIAS
+copy_artifacts $ALIAS ee
 #copy_artifacts cloud
 
 
@@ -158,7 +168,7 @@ popd
 
 # start_remote_job <url> <name> <profile>
 function start_remote_job() {
-   curl -k --connect-timeout 10 "$1/buildWithParameters?DIST_PATH=${DIST_PATH}&REVISION=${revision}&PROFILE=$3"
+   curl -k --connect-timeout 10 "$1/buildWithParameters?DIST_PATH=${DIST_PATH}&REVISION=${revision}&ALIAS=${ALIAS}&PROFILE=$3"
    checkrv $? "trigger $2 $3 with ${DIST_PATH} r${revision}"
 }
 

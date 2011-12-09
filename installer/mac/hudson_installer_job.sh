@@ -13,14 +13,15 @@
 #     cd repo/installer/mac
 #     bash hudson_installer_job.sh $DIST_PATH $REVISION $PROFILE
 
-if [ $# -lt 2 ]; then
-  echo "Usage: $0 <dist_path> <revision> [profile]"
+if [ $# -lt 3 ]; then
+  echo "Usage: $0 <dist_path> <revision> <alias> [profile]"
   exit 1
 fi
 
 DIST_PATH=$1
 REVISION=$2
-PROFILE=$3
+ALIAS=$3
+PROFILE=$4
 
 DIST_DIR=/Library/WebServer/Documents/suite/$DIST_PATH
 if [ ! -e $DIST_DIR ]; then
@@ -53,6 +54,4 @@ find $DIST_DIR -maxdepth 1 -name 'OpenGeoSuite*.md5' -mtime +6 -exec rm {} \;
 find $DIST_DIR -maxdepth 1 -type l -exec rm {} \;
 
 # Symlink new version
-if  [ $DIST_PATH = "latest" ]; then
-  ln -s $CUR_FILE $DIST_DIR/OpenGeoSuite${pro}-latest.dmg
-fi
+ln -s $CUR_FILE $DIST_DIR/OpenGeoSuite${pro}-${ALIAS}.dmg
