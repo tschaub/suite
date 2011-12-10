@@ -6,7 +6,7 @@
 :: hudson.bat %dist_path% %revision% %alias% %profile%
 :: See Usage at bottom
 if "x%2"=="x" goto Usage
-if not "x%4"=="x" goto Usage
+if not "x%5"=="x" goto Usage
 set dist_path=%1
 set revision=%2
 set alias=%3
@@ -77,7 +77,7 @@ echo.
 echo This program requires following parameters:
 echo.
 echo Usage:
-echo   hudson.bat dist_path revision [profile]
+echo   hudson.bat dist_path revision alias [profile]
 echo.
 exit /b 1
 
