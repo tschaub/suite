@@ -51,7 +51,7 @@ find $DIST_DIR -maxdepth 1 -name 'OpenGeoSuite*.dmg' -mtime +6 -exec rm {} \;
 find $DIST_DIR -maxdepth 1 -name 'OpenGeoSuite*.md5' -mtime +6 -exec rm {} \;
 
 # Remove old symlinks
-find $DIST_DIR -maxdepth 1 -type l -exec rm {} \;
+find $DIST_DIR -maxdepth 1 -name "OpenGeoSuite${pro}-${ALIAS}.dmg" -type l -exec rm {} \;
 
 # Symlink new version
 ln -s $CUR_FILE $DIST_DIR/OpenGeoSuite${pro}-${ALIAS}.dmg
