@@ -115,6 +115,7 @@ export MAVEN_OPTS=-Xmx256m
 # checkout the requested revision to build
 cd repo
 git checkout $REV
+git pull origin $REV
 
 # extract the revision number
 revision=`git log --format=format:%H | head -n 1`
