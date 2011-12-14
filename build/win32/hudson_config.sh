@@ -23,6 +23,11 @@ if [ ! -d $buildroot ]; then
   mkdir $buildroot
 fi
 
+# Ensure the local build dir is ready
+if [ ! -d build ]; then
+  mkdir build
+fi
+
 # setup proper gnu environemnt
 source /etc/profile
 cd $WORKSPACE
