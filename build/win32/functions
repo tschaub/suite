@@ -1,0 +1,73 @@
+BUILDS=http://suite.opengeo.org/builds
+
+if [ "$DIST_PATH" == "" ]; then
+  DIST_PATH=latest
+fi
+if [ "$REV" == "" ]; then
+  REV=latest
+fi
+
+BRANCH=${GIT_BRANCH}
+
+# build_info <package>
+function build_info() {
+  local pkg=$1
+  if [ "$pkg" != "" ]; then
+     name=$PACKAGE
+  fi
+  echo "Building $pkg from $BRANCH at revision $REV ($DIST_PATH)"
+}
+
+# checkrc <code> <message>
+function checkrc() {
+  if [ "$1" != 0 ]; then
+    echo "$2 failed returning $1"
+    exit 1
+  fi
+}
+
+# get_file <url> [overwrite]
+function get_file() {
+  local url=$1
+  local file=`echo $url | sed 's#http://##g' | xargs basename`
+
+  if [ ! -d files ]; then
+     mkdir files
+     checkrc $? "mkdir files"
+  fi
+
+  if [ "$2" != "" ] ||  [ ! -e files/$file ]; then
+     wget $url
+     checkrc $? "downloading $url"
+
+     mv $file files
+     checkrc $? "mv $file files"
+  fi
+}
+
+# get_svn <repo_path> <dir> <path>
+function get_svn() {
+  local repo_path=$1
+  local dir=$2
+  local path=$3
+
+  if [ ! -d svn ]; then
+    mkdir svn
+    checkrc $? "mkdir svn"
+  fi
+
+  if [ ! -d svn/$repo_path ]; then
+    mkdir -p svn/$repo_path
+    checkrc $? "mkdir svn/$repo_path"
+  fi
+
+  pushd svn/$repo_path
+  if [ -d $dir ]; then 
+    svn up $dir
+  else 
+    svn co $SVN_REPO/$repo_path/$path $dir
+  fi
+  checkrc $? "svn update"
+  popd
+}
+

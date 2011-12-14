@@ -1,0 +1,12 @@
+diff -ru libxml2-2.7.6/testThreads.c libxml2-2.7.6_patched//testThreads.c
+--- libxml2-2.7.6/testThreads.c	2011-12-11 20:26:37 -0800
++++ libxml2-2.7.6_patched//testThreads.c	2011-12-11 20:26:49 -0800
+@@ -107,7 +107,7 @@
+ 
+ 	for (i = 0; i < num_threads; i++) {
+ 	    results[i] = NULL;
+-	    tid[i] = (pthread_t) -1;
++	    //tid[i] = (pthread_t) -1;
+ 	}
+ 
+ 	for (i = 0; i < num_threads; i++) {
