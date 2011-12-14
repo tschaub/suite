@@ -9,6 +9,7 @@ geos_version=3.3.1
 postgis_version=1.5.3
 proj_version=4.7.0
 pgsql_version=8.4.9
+libxml2_version=2.7.6
 
 # Special binaries
 proj_nad=proj-datumgrid-1.5.zip
