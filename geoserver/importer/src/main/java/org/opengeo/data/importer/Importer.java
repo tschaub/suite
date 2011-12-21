@@ -181,7 +181,11 @@ public class Importer implements InitializingBean, DisposableBean {
                         //handle the left overs, each file gets its own task
                         for (List<FileData> files : map.values()) {
                             for (FileData file : files) {
-                                createTask(file, context, null);
+                                if (file.getFormat() != null) {
+                                    createTask(file, context, null);
+                                } else {
+                                    LOGGER.info("ignoring " + file.getName() + ", no format detected");
+                                }
                             }
                         }
 
