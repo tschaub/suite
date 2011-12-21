@@ -1,9 +1,9 @@
 [submodule "geoserver/externals/geotools"]
 	path = geoserver/externals/geotools
-	url = git://github.com/geotools/geotools.git
+	url = git://github.com/opengeo/geotools.git
 [submodule "geoserver/externals/geoserver"]
 	path = geoserver/externals/geoserver
-	url = git://github.com/geoserver/geoserver.git
+	url = git://github.com/opengeo/geoserver.git
 [submodule "geoserver/externals/geowebcache"]
 	path = geoserver/externals/geowebcache
 	url = git://github.com/GeoWebCache/geowebcache.git
