@@ -46,7 +46,11 @@ public class ImportResource extends AbstractResource {
 
     @Override
     public void handleGet() {
-        getResponse().setEntity(getFormatGet().toRepresentation(lookupContext(true, false)));
+        DataFormat formatGet = getFormatGet();
+        if (formatGet == null) {
+            formatGet = new ImportContextJSONFormat();
+        }
+        getResponse().setEntity(formatGet.toRepresentation(lookupContext(true, false)));
     }
 
     @Override
