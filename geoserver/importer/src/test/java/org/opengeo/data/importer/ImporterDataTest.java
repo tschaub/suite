@@ -46,6 +46,27 @@ public class ImporterDataTest extends ImporterTestSupport {
         runChecks("archsites");
     }
 
+    
+    public void testImportShapefilesWithExtraFiles() throws Exception {
+        File dir = tmpDir();
+        unpack("shape/archsites_epsg_prj.zip", dir);
+        
+        // make some 'extra' files
+        new File(dir,"archsites_epsg_prj.sbn").createNewFile();
+        new File(dir,"archsites_epsg_prj.sbx").createNewFile();
+        new File(dir,"archsites_epsg_prj.shp.xml").createNewFile();
+        
+        ImportContext context = importer.createContext(new Directory(dir));
+        
+        assertEquals(1, context.getTasks().size());
+        
+        ImportTask task = context.getTasks().get(0);
+        assertEquals(ImportTask.State.READY, task.getState());
+        
+        assertEquals(ImportItem.State.READY, task.getItems().get(0).getState());
+        assertEquals("archsites", task.getItems().get(0).getLayer().getResource().getName());
+    }
+    
     public void testImportShapefiles() throws Exception {
         File dir = tmpDir();
         unpack("shape/archsites_epsg_prj.zip", dir);
