@@ -106,6 +106,11 @@ the ``mvn`` command::
 
   % alias mvn="mvn -s /path/to/settings.xml"
 
+*Note*: If using a custom ``settings.xml``, the settings must be passed into 
+the GeoServer externals build during a full build. This is done by::
+
+  % mvn clean install -Dfull -Dmvn.settings=/path/to/settings.xml
+
 Repository Setup
 ----------------
 
