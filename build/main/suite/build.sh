@@ -54,18 +54,16 @@ function copy_artifacts {
        echo "copying $src"
        dst=opengeosuite${prefix}-$revision-${x}.zip
        cp $src $dist/$dst
-       ln -sf $dist/$dst $dist/opengeosuite${prefix}-${aliaas}-${x}.zip
+
+       link=$dist/opengeosuite${prefix}-${aliaas}-${x}.zip
+       if [ -e $link ]; then
+         unlink $link
+       fi
+
+       ln -sf $dist/$dst $link
        let counter=counter+1
     fi
   
-    src=opengeosuite${prefix}-*-${x}.tar.gz
-    if [ -e $src ]; then
-      echo "copying $src"
-      dst=opengeosuite${prefix}-$revision-${x}.tar.gz
-      cp $src $dist/$dst
-      ln -sf $dist/$dst $dist/opengeosuite${prefix}-$revision-${x}.tar.gz
-      let counter=counter+1
-    fi
   done
 
   popd
@@ -93,7 +91,7 @@ if [ ! -e $dist ]; then
 fi
 echo "dist: $dist"
 
-artifacts="bin win mac ext war war-geoserver war-geoexplorer war-geoeditor war-geowebcache war-geoserver-jboss doc analytics control-flow importer readme dashboard-win32 dashboard-lin32 dashboard-lin64 dashboard-osx pgadmin-postgis data-dir"
+artifacts="bin win mac ext war war-geoserver war-geoexplorer war-geoeditor war-geowebcache war-geoserver-jboss doc analytics control-flow readme dashboard-win32dashboard-osx pgadmin-postgis data-dir"
 
 # set up the maven repository for this particular branch/tag/etc...
 MVN_SETTINGS_TEMPLATE=`pwd`/repo/build/settings.xml
@@ -158,13 +156,26 @@ for f in `ls opengeosuite-*-dashboard-*.zip`; do
   mv $f $f2
 done
 
-for x in $artifacts; do
-  ls -t | grep "opengeosuite-.*-$x.zip" | tail -n +7 | xargs rm -f
-  ls -t | grep "opengeosuite-.*-$x.tar.gz" | tail -n +7 | xargs rm -f
-done
-for x in win32 lin32 lin64 osx; do
-  ls -t | grep "dashboard-.*-$x.zip" | tail -n +7 | xargs rm -f
-done
+if [ "$DIST_PATH" == "latest" ]; then
+  # only keep around last two builds 
+  for x in $artifacts; do
+    ls -lt | grep -v "^l" | grep "opengeosuite-.*-$x.zip" | tail -n +2 | xargs rm -f
+    #ls -t | grep "opengeosuite-.*-$x.tar.gz" | tail -n +7 | xargs rm -f
+  done
+  for x in win32 osx; do
+    ls -lt | grep -v "^l" | grep "dashboard-.*-$x.zip" | tail -n +2 | xargs rm -f
+  done
+else 
+  if [ "$DIST_PATH" == "stable" ]; then
+    # only keep around builds that are less than 2 weeks old
+    for x in $artifacts; do
+      find . -name "opengeosuite-*-.zip" -mtime +14 -exec rm -f {} \;
+    done
+    for x in win32 osx; do
+      find . -name "dashboard-*-$x.zip" -mtime +14 -exec rm -f {} \;
+    done
+  fi
+fi
 popd
 
 # start_remote_job <url> <name> <profile>

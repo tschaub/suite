@@ -33,9 +33,7 @@
 
     <antcall target="dashboard-osx"/>
     <antcall target="dashboard-win32"/>
-    <antcall target="dashboard-lin32"/>
     <tstamp/>
-    <antcall target="dashboard-lin64"/>
 
     <!-- postgis medford data -->
     <delete dir="pgdata"/>
@@ -86,45 +84,6 @@
         <fileset dir="../dashboard/OpenGeo Dashboard"
                  includes="CHANGELOG.txt,LICENSE.txt,manifest,tiapp.xml,timanifest"/>
     </copy-->
-  </target>
-
-  <target name="dashboard-lin32"> 
-    <!-- Dashboard Linux32 -->
-    <get src="${data}/dashboard-${db.ver}-lin32.zip" dest="dashboard-${db.ver}-lin32.zip" usetimestamp="yes"/>
-    <delete dir="dashboard-${db.ver}-lin32"/>
-    <exec executable="unzip" failonerror="true">
-        <arg value="dashboard-${db.ver}-lin32.zip"/>
-    </exec>
-    <!--copy todir="dashboard-${db.ver}-lin32/OpenGeo Dashboard/Resources">
-        <fileset dir="../dashboard/target/resources">
-            <exclude name="**/.svn/"/>
-            <exclude name="**/.svn*"/>
-        </fileset>
-    </copy>
-    <copy todir="dashboard-${db.ver}-lin32/OpenGeo Dashboard/">
-        <fileset dir="../dashboard/OpenGeo Dashboard"
-                 includes="CHANGELOG.txt,LICENSE.txt,manifest,tiapp.xml,timanifest"/>
-    </copy-->
-  </target>
-
-  <target name="dashboard-lin64">
-    <!-- Dashboard Linux64 -->
-    <get src="${data}/dashboard-${db.ver}-lin64.zip" dest="dashboard-${db.ver}-lin64.zip" usetimestamp="yes"/>
-    <delete dir="dashboard-${db.ver}-lin64"/>
-    <exec executable="unzip" failonerror="true">
-        <arg value="dashboard-${db.ver}-lin64.zip"/>
-    </exec>
-    <!--copy todir="dashboard-${db.ver}-lin64/OpenGeo Dashboard/Resources">
-        <fileset dir="../dashboard/target/resources">
-            <exclude name="**/.svn/"/>
-            <exclude name="**/.svn*"/>
-        </fileset>
-    </copy>
-    <copy todir="dashboard-${db.ver}-lin64/OpenGeo Dashboard/">
-        <fileset dir="../dashboard/OpenGeo Dashboard"
-                 includes="CHANGELOG.txt,LICENSE.txt,manifest,tiapp.xml,timanifest"/>
-    </copy-->
-
   </target>
 
   <target name="opengeo-docs-war">
