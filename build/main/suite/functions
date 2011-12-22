@@ -1,0 +1,74 @@
+
+#
+# Utility function to check return values on commands
+#
+function checkrv {
+  if [ $1 -gt 0 ]; then
+    echo "$2 failed with return value $1"
+    exit 1
+  else
+    echo "$2 succeeded return value $1"
+  fi
+}
+
+# init_dist_path <dist_path>
+function init_dist_path {
+  if [ -z "$1" ]; then
+    echo -n "latest"
+  else
+    echo -n "$1"
+  fi
+}
+
+# init_mvn_repo <name>
+function init_mvn_repo {
+  # set up the maven repository for this particular branch/tag/etc...
+  local MVN_REPO=$1
+  local MVN_SETTINGS_TEMPLATE=$WORKSPACE/repo/build/settings.xml
+
+  pushd $WORKSPACE/maven > /dev/null
+
+  local MVN_SETTINGS=`pwd`/$MVN_REPO/settings.xml 
+  if [ ! -d $MVN_REPO ]; then
+    echo "Creating new maven repository at `pwd`/$MVN_REPO"
+    mkdir -p $MVN_REPO
+    sed "s#@PATH@#`pwd`/$MVN_REPO/repo#g" $MVN_SETTINGS_TEMPLATE | sed 's#<\!--\(localRepository>.*</localRepository\)-->#<\1>#g' > $MVN_SETTINGS
+    cp -R repo-template $MVN_REPO/repo
+  fi
+  popd > /dev/null
+  echo -n $MVN_SETTINGS
+}
+
+# get_rev <path>
+function get_rev {
+  local rev=`git log --format=format:%H $1 | head -n 1`
+  if [ "x$rev" == "x" ]; then
+    echo "failed to get revision number from git info"
+    exit 1
+  fi
+
+  echo -n $rev
+}
+
+# get_last_built_rev <name>
+function get_last_built_rev {
+  local REVDIR=$WORKSPACE/revs
+
+  if [ ! -e $REVDIR ]; then
+    mkdir $REVDIR
+  fi
+
+  pushd $REVDIR > /dev/null
+  local REV="" 
+  if [ -e $1 ]; then 
+    REV=`cat $1`
+  fi
+  popd > /dev/null
+
+  echo -n $REV
+}
+
+# set_last_built_rev <name> <rev>
+function set_last_built_rev {
+  echo "$2" > $WORKSPACE/revs/$1
+}

@@ -1,16 +1,7 @@
 #!/bin/bash
 
-#
-# Utility function to check return values on commands
-#
-function checkrv {
-  if [ $1 -gt 0 ]; then
-    echo "$2 failed with return value $1"
-    exit 1
-  else
-    echo "$2 succeeded return value $1"
-  fi
-}
+# load common functions
+. "$( cd "$( dirname "$0" )" && pwd )"/functions 
 
 #
 # function to rebuild with a specific profile
@@ -76,9 +67,9 @@ function copy_artifacts {
 
 set -x
 
-if [ -z "$DIST_PATH" ]; then
-  DIST_PATH="latest"
-fi
+DIST_PATH=`init_dist_path`
+#DIST_PATH=`init_dist_path $DIST_PATH`
+#TODO: fix dist_path logic and how it relates to maven repo, etc...
 
 ALIAS=$REV
 if [ "$ALIAS" == "HEAD" ]; then
@@ -94,33 +85,18 @@ echo "dist: $dist"
 artifacts="bin win mac ext war war-geoserver war-geoexplorer war-geoeditor war-geowebcache war-geoserver-jboss doc analytics control-flow readme dashboard-win32dashboard-osx pgadmin-postgis data-dir"
 
 # set up the maven repository for this particular branch/tag/etc...
-MVN_SETTINGS_TEMPLATE=`pwd`/repo/build/settings.xml
-pushd maven
-
-# TODO: remove teh maven repo logic and just use a single maven repo
-MVN_REPO=latest
-if [ ! -d $MVN_REPO ]; then
-  echo "Creating new maven repository at `pwd`/$MVN_REPO"
-  mkdir -p $MVN_REPO
-  sed "s#@PATH@#`pwd`/$MVN_REPO/repo#g" $MVN_SETTINGS_TEMPLATE | sed 's#<\!--\(localRepository>.*</localRepository\)-->#<\1>#g' > $MVN_REPO/settings.xml
-  cp -R repo-template $MVN_REPO/repo
-fi
-popd
-
-MVN_SETTINGS=`pwd`/maven/$MVN_REPO/settings.xml
+MVN_SETTINGS=`init_mvn_repo $DIST_PATH`
 export MAVEN_OPTS=-Xmx256m
 
 # checkout the requested revision to build
 cd repo
-git checkout $REV
-git pull origin $REV
+if [ ! -z $REV ]; then
+  git checkout $REV
+  git pull origin $REV
+fi
 
 # extract the revision number
-revision=`git log --format=format:%H | head -n 1`
-if [ "x$revision" == "x" ]; then
-  echo "failed to get revision number from git info"
-  exit 1
-fi
+revision=`get_rev .`
 
 # only use first seven chars
 revision=${revision:0:7}
@@ -128,7 +104,8 @@ revision=${revision:0:7}
 echo "building $revision ($REV) with maven settings $MVN_SETTINGS"
 
 # perform a full build
-$MVN -s $MVN_SETTINGS -Dfull -Dmvn.exec=$MVN -Dmvn.settings=$MVN_SETTINGS -Dbuild.revision=$revision -Dbuild.date=$BUILD_ID $BUILD_FLAGS clean install
+#$MVN -s $MVN_SETTINGS -Dfull -Dmvn.exec=$MVN -Dmvn.settings=$MVN_SETTINGS -Dbuild.revision=$revision -Dbuild.date=$BUILD_ID $BUILD_FLAGS clean install
+$MVN -s $MVN_SETTINGS -Dmvn.exec=$MVN -Dmvn.settings=$MVN_SETTINGS -Dbuild.revision=$revision -Dbuild.date=$BUILD_ID $BUILD_FLAGS clean install
 checkrv $? "maven install"
 
 $MVN -o -s $MVN_SETTINGS assembly:attached
