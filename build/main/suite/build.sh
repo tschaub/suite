@@ -82,7 +82,7 @@ if [ ! -e $dist ]; then
 fi
 echo "dist: $dist"
 
-artifacts="bin win mac ext war war-geoserver war-geoexplorer war-geoeditor war-geowebcache war-geoserver-jboss doc analytics control-flow readme dashboard-win32dashboard-osx pgadmin-postgis data-dir"
+artifacts="bin win mac ext war war-geoserver war-geoexplorer war-geoeditor war-geowebcache war-geoserver-jboss doc analytics control-flow readme dashboard-win32 dashboard-osx pgadmin-postgis data-dir"
 
 # set up the maven repository for this particular branch/tag/etc...
 MVN_SETTINGS=`init_mvn_repo $DIST_PATH`
