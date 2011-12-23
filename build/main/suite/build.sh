@@ -67,9 +67,7 @@ function copy_artifacts {
 
 set -x
 
-DIST_PATH=`init_dist_path`
-#DIST_PATH=`init_dist_path $DIST_PATH`
-#TODO: fix dist_path logic and how it relates to maven repo, etc...
+DIST_PATH=`init_dist_path $DIST_PATH`
 
 ALIAS=$REV
 if [ "$ALIAS" == "HEAD" ]; then
@@ -85,7 +83,8 @@ echo "dist: $dist"
 artifacts="bin win mac ext war war-geoserver war-geoexplorer war-geoeditor war-geowebcache war-geoserver-jboss doc analytics control-flow readme dashboard-win32 dashboard-osx pgadmin-postgis data-dir"
 
 # set up the maven repository for this particular branch/tag/etc...
-MVN_SETTINGS=`init_mvn_repo $DIST_PATH`
+#TODO: fix dist_path logic and how it relates to maven repo, etc...
+MVN_SETTINGS=`init_mvn_repo latest`
 export MAVEN_OPTS=-Xmx256m
 
 # checkout the requested revision to build
@@ -93,6 +92,7 @@ cd repo
 if [ ! -z $REV ]; then
   git checkout $REV
   git pull origin $REV
+  git submodule update --init --recursive
 fi
 
 # extract the revision number
