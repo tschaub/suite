@@ -148,7 +148,6 @@ public class Importer implements InitializingBean, DisposableBean {
 
                     // if no target store specified group the directory into pieces that can be 
                     // processed as a single tasl
-                    boolean handled = false;
                     if (targetStore == null) {
                         //group the contents of the directory by format
                         Map<DataFormat,List<FileData>> map = new HashMap<DataFormat,List<FileData>>();
@@ -181,11 +180,7 @@ public class Importer implements InitializingBean, DisposableBean {
                         //handle the left overs, each file gets its own task
                         for (List<FileData> files : map.values()) {
                             for (FileData file : files) {
-                                if (file.getFormat() != null) {
-                                    createTask(file, context, null);
-                                } else {
-                                    LOGGER.info("ignoring " + file.getName() + ", no format detected");
-                                }
+                                createTask(file, context, null);
                             }
                         }
 
