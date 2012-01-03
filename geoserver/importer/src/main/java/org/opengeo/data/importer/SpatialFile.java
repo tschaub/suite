@@ -54,13 +54,24 @@ public class SpatialFile extends FileData {
         //round up all the files with the same name
         suppFiles = new ArrayList();
         prjFile = null;
+        final String baseName = getBaseName(file.getName());
+        
         for (File f : file.getParentFile().listFiles()) {
             if (f.equals(file)) {
                 continue;
             }
-
-            if (getBaseName(f.getName()).equals(getBaseName(file.getName()))) {
-                if ("prj".equalsIgnoreCase(getExtension(f.getName()))) {
+            
+            String bn = getBaseName(f.getName());
+            String ext = getExtension(f.getName());
+            
+            // make sure we catch the .shp.xml auxillary file
+            // getBaseName will return the .shp extension the first time around
+            if ("xml".equals(ext)) {
+                bn = getBaseName(bn);
+            }
+            
+            if (bn.equals(baseName)) {
+                if ("prj".equalsIgnoreCase(ext)) {
                     prjFile = f;
                 }
                 else {
@@ -75,7 +86,7 @@ public class SpatialFile extends FileData {
         //fix the prj file (match to official epsg wkt)
         fixPrjFile();
     }
-
+    
     public void fixPrjFile() throws IOException {
         CoordinateReferenceSystem crs = readPrjToCRS();
         if (crs == null) {
