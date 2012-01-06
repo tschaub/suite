@@ -15,6 +15,7 @@ import org.geoserver.rest.RestletException;
 import org.geoserver.rest.format.DataFormat;
 import org.geoserver.rest.format.StreamDataFormat;
 import org.opengeo.data.importer.ImportContext;
+import org.opengeo.data.importer.ImportFilter;
 import org.opengeo.data.importer.Importer;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -98,10 +99,15 @@ public class ImportResource extends AbstractResource {
         if (obj instanceof ImportContext) {
             //run an existing import
             try {
+                Form query = getRequest().getResourceRef().getQueryAsForm();
                 context = (ImportContext) obj;
-                importer.run(context);
-                // @todo revisit - if errors occur, they are logged. A second request
-                // is required to verify success
+                if (query.getNames().contains("async")) {
+                    importer.runAsync(context, ImportFilter.ALL);
+                } else {
+                    importer.run(context);
+                    // @todo revisit - if errors occur, they are logged. A second request
+                    // is required to verify success
+                }
                 getResponse().setStatus(Status.SUCCESS_NO_CONTENT);
             } catch (Exception e) {
                 throw new RestletException("Error occured executing import", Status.SERVER_ERROR_INTERNAL, e);

@@ -209,11 +209,15 @@ public class ImportJSONIO {
         // @todo don't know why catalog isn't set here, thought this was set during load from BDBImportStore
         layer.getResource().setCatalog(importer.getCatalog());
         
+        String itemHREF = page.rootURI(String.format("/imports/%d/tasks/%d/items/%d", 
+              task.getContext().getId(), task.getId(), id));
+        
         json.object()
           .key("id").value(id)
-          .key("href").value(page.rootURI(String.format("/imports/%d/tasks/%d/items/%d", 
-              task.getContext().getId(), task.getId(), id)))
+          .key("href").value(itemHREF)
           .key("state").value(item.getState())
+          .key("progress").value(itemHREF + "/progress")
+          .key("originalName").value(item.getOriginalName())
           .key("resource").value(toJSON(layer.getResource()))
           .key("layer").value(toJSON(layer));
         if (item.getError() != null) {

@@ -17,6 +17,8 @@ import org.geoserver.rest.AbstractResource;
 import org.geoserver.rest.RestletException;
 import org.geoserver.rest.format.DataFormat;
 import org.geoserver.rest.format.StreamDataFormat;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.opengeo.data.importer.ImportContext;
 import org.opengeo.data.importer.ImportItem;
 import org.opengeo.data.importer.ImportTask;
@@ -26,6 +28,8 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
 import org.restlet.data.Status;
+import org.restlet.ext.json.JsonRepresentation;
+import org.restlet.resource.Representation;
 
 /**
  * REST resource for /imports/<import>/tasks/<task>/items[/<id>]
@@ -48,7 +52,30 @@ public class ItemResource extends AbstractResource {
 
     @Override
     public void handleGet() {
-        getResponse().setEntity(getFormatGet().toRepresentation(lookupItem(true)));
+        if (getRequest().getResourceRef().getLastSegment().equals("progress")) {
+            getResponse().setEntity(createProgressRepresentation());
+        } else {
+            getResponse().setEntity(getFormatGet().toRepresentation(lookupItem(true)));
+        }
+    }
+    
+    private Representation createProgressRepresentation() {
+        JSONObject progress = new JSONObject();
+        long imprt = Long.parseLong(getAttribute("import"));
+        ImportItem inProgress = importer.getCurrentlyProcessingItem(imprt);
+        try {
+            if (inProgress != null) {
+                progress.put("progress", inProgress.getNumberProcessed());
+                progress.put("total", inProgress.getTotalToProcess());
+                progress.put("state", inProgress.getState().toString());
+            } else {
+                ImportItem item = (ImportItem) lookupItem(false);
+                progress.put("state", item.getState().toString());
+            }
+        } catch (JSONException jex) {
+            throw new RestletException("Internal Error", Status.SERVER_ERROR_INTERNAL, jex);
+        }
+        return new JsonRepresentation(progress);
     }
 
     @Override

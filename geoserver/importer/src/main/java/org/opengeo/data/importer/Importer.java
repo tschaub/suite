@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -69,11 +70,17 @@ public class Importer implements InitializingBean, DisposableBean {
 
     /** job queue */
     JobQueue jobs = new JobQueue();
+    
+    ConcurrentHashMap<Long,ImportItem> currentlyProcessing = new ConcurrentHashMap<Long, ImportItem>();
 
     public Importer(Catalog catalog) {
         this.catalog = catalog;
         this.contextStore = new BDBImportStore(this);
         this.styleGen = new StyleGenerator(catalog);
+    }
+    
+    public ImportItem getCurrentlyProcessingItem(long contextId) {
+        return currentlyProcessing.get(new Long(contextId));
     }
 
     public void afterPropertiesSet() throws Exception {
@@ -500,6 +507,7 @@ public class Importer implements InitializingBean, DisposableBean {
             DataFormat format = task.getData().getFormat();
             if (format instanceof VectorFormat) {
                 try {
+                    currentlyProcessing.put(task.getContext().getId(), item);
                     loadIntoDataStore(item, (DataStoreInfo)task.getStore(), (VectorFormat) format, (VectorTransformChain) tx);
                     if (task.getUpdateMode() == null) {
                         addToCatalog(item, task);
@@ -510,6 +518,8 @@ public class Importer implements InitializingBean, DisposableBean {
                     item.setError(e);
                     item.setState(ImportItem.State.ERROR);
                     continue;
+                } finally {
+                    currentlyProcessing.remove(task.getContext().getId());
                 }
             }
             else {
@@ -564,15 +574,16 @@ public class Importer implements InitializingBean, DisposableBean {
             //find a unique type name in the target store
             featureTypeName = findUniqueNativeFeatureTypeName(featureType, store);
             if (!featureTypeName.equals(featureType.getTypeName())) {
+                //update the metadata
+                item.setOriginalName(featureType.getTypeName());
+                item.getLayer().getResource().setName(featureTypeName);
+                item.getLayer().getResource().setNativeName(featureTypeName);
+                
                 //retype
                 SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
                 typeBuilder.setName(featureTypeName);
                 typeBuilder.addAll(featureType.getAttributeDescriptors());
                 featureType = typeBuilder.buildFeatureType();
-
-                //update the metadata
-                item.getLayer().getResource().setName(featureTypeName);
-                item.getLayer().getResource().setNativeName(featureTypeName);
             }
 
             // @todo HACK remove this at some point when timezone issues are fixed
@@ -616,11 +627,17 @@ public class Importer implements InitializingBean, DisposableBean {
         
         // @todo need better way to communicate to client
         int skipped = 0;
+        int cnt = 0;
+        // metrics
+        long startTime = System.currentTimeMillis();
         item.clearImportMessages();
         
+        item.setTotalToProcess(format.getFeatureCount(item.getTask().getData(), item));
+        
+        LOGGER.info("begining import");
         try {
             writer = dataStore.getFeatureWriterAppend(featureTypeName, transaction);
-
+            
             while(reader.hasNext()) {
                 SimpleFeature feature = (SimpleFeature) reader.next();
                 SimpleFeature next = (SimpleFeature) writer.next();
@@ -640,43 +657,27 @@ public class Importer implements InitializingBean, DisposableBean {
                 } else {
                     writer.write();
                 }
+                item.setNumberProcessed(++cnt);
             }
             transaction.commit();
             if (skipped > 0) {
                 item.addImportMessage(Level.WARNING,skipped + " features were skipped.");
             }
+            LOGGER.info("load to target took " + (System.currentTimeMillis() - startTime));
         } 
         catch (Exception e) {
             error = e;
-        } finally {
-            // try to cleanup, but if an error occurs here and one hasn't already been set, set the error
-            try {
-                transaction.close();
-            } catch (IOException e) {
-                if (error != null) {
-                    error = e;
-                }
-                LOGGER.log(Level.WARNING, "Error closing transaction",e);
-            }
-            if (writer != null) {
-                try {
-                    writer.close();
-                } catch (IOException e) {
-                    if (error != null) {
-                        error = e;
-                    }
-                    LOGGER.log(Level.WARNING, "Error closing writer",e);
-                }
-            }
-        }
+        } 
+        // no finally block, there is too much to do
+        
         if (error != null) {
             // all sub exceptions in this catch block should be logged, not thrown
             // as the triggering exception will be thrown
-            
+
             //failure, rollback transaction
             try {
                 transaction.rollback();
-            } catch (IOException e1) {
+            } catch (Exception e1) {
                 LOGGER.log(Level.WARNING, "Error rolling back transaction",e1);
             }
 
@@ -687,15 +688,47 @@ public class Importer implements InitializingBean, DisposableBean {
                 LOGGER.log(Level.WARNING, "Error dropping schema in rollback",e1);
             }
         }
-        // do this last in case we have to drop the schema
+
+        // try to cleanup, but if an error occurs here and one hasn't already been set, set the error
         try {
-            format.dispose(reader, item);
-        } catch (IOException e) {
+            transaction.close();
+        } catch (Exception e) {
             if (error != null) {
                 error = e;
             }
+            LOGGER.log(Level.WARNING, "Error closing transaction",e);
+        }
+        if (writer != null) {
+            try {
+                writer.close();
+            } catch (Exception e) {
+                if (error != null) {
+                    error = e;
+                }
+                LOGGER.log(Level.WARNING, "Error closing writer",e);
+            }
+        }
+
+        // @revisit - when this gets disposed, any following uses seem to
+        // have a problem where later users of the dataStore get an NPE 
+        // since the dataStore gets cached by the ResourcePool but is in a 
+        // closed state???
+        
+        // do this last in case we have to drop the schema
+//        try {
+//            dataStore.dispose();
+//        } catch (Exception e) {
+//            LOGGER.log(Level.WARNING, "Error closing dataStore",e);
+//        }
+        try {    
+            format.dispose(reader, item);
+            // @hack catch _all_ Exceptions here - occassionally closing a shapefile
+            // seems to result in an IllegalArgumentException related to not
+            // holding the lock...
+        } catch (Exception e) {
             LOGGER.log(Level.WARNING, "Error closing reader",e);
         }
+        
         // finally, throw any error
         if (error != null) {
             throw error;
