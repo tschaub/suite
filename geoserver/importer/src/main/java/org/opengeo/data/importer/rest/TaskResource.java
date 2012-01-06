@@ -155,8 +155,6 @@ public class TaskResource extends AbstractResource {
     }
 
     public void handlePut() {
-        getLogger().info("Handling PUT of " + getRequest().getEntity().getMediaType());
-
         if (getRequest().getEntity().getMediaType().equals(MediaType.APPLICATION_JSON)) {
             handleTaskPut();
         } else {
