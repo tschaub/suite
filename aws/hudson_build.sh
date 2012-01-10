@@ -37,7 +37,7 @@ fi
 init_ec2_env $ACCOUNT
 
 # get the ami version
-ver=`get_ami_version $REPO_PATH`
+ver=`get_ami_version $VER`
 
 if [ ! -z $PRODUCT_ID ]; then
   prod="-pi $PRODUCT_ID -pn $PRODUCT_NAME"
