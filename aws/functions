@@ -96,7 +96,6 @@ get_ami_version() {
   local ver=$1
   if [ "latest" != $1 ]; then
     ver=$( echo $1|sed 's#.*/##g' )
-  else
   fi
   echo $ver
 }
