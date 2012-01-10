@@ -31,11 +31,12 @@ if [ ! -z $PRODUCT_ID ] && [ -z $PRODUCT_NAME ]; then
   exit 1
 fi
 
+. functions
+
 # initialize ec2 api stuff
 init_ec2_env $ACCOUNT
 
 # get the ami version
-. functions
 ver=`get_ami_version $REPO_PATH`
 
 if [ ! -z $PRODUCT_ID ]; then
