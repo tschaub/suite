@@ -1,6 +1,6 @@
 Name: opengeo-suite-data
 Version: 2.4.1
-Release: 1
+Release: 2
 Summary: Sample geospatial data required for use with the OpenGeo Suite.
 Group: Unspecified
 License: see http://opengeo.org
@@ -9,6 +9,11 @@ Requires(preun): bash
 Patch0: medford_taxlots_datastore.patch
 Patch1: db_properties.patch
 Patch2: logs.patch
+%if 0%{?centos} == 6
+Requires: tomcat6
+%else
+Requires: tomcat5
+%endif
 
 %define _rpmdir ../ 
 %define _rpmfilename %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm 
