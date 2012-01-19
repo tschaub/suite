@@ -88,10 +88,16 @@ public class Directory extends FileData {
                     continue;
                 }
                 if (f.isDirectory()) {
-                    Directory d = new Directory(f);
-                    d.prepare();
-                    
-                    files.add(d);
+                    // @hacky - ignore __MACOSX
+                    // this could probably be dealt with in a better way elsewhere
+                    // like by having Directory ignore the contents since they
+                    // are all hidden files anyway
+                    if (!"__MACOSX".equals(f.getName())) {
+                        Directory d = new Directory(f);
+                        d.prepare();
+
+                        files.add(d);
+                    }
                     //q.push(f);
                     continue;
                 }
