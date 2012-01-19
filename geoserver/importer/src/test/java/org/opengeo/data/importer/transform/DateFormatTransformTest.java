@@ -2,9 +2,14 @@ package org.opengeo.data.importer.transform;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
-import junit.framework.TestCase;
-import net.sf.json.JSONObject;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.TimeZone;
 
 /**
  *
@@ -14,13 +19,49 @@ public class DateFormatTransformTest extends TransformTestSupport {
     
     public DateFormatTransformTest() {
     }
+    
+    public void testExtents() throws Exception {
+        // this is mostly a verification of the extents of the builtin date parsing
+        String NOT_USED = null;
+        DateFormatTransform transform = new DateFormatTransform("not used", NOT_USED);
+        
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.clear();
+        cal.setTimeZone(TimeZone.getTimeZone("GMT"));
+        
+        int minYear = -292269052; // this is the text value
+        Date parsed = transform.parseDate("" + minYear);
+        cal.setTime(parsed);
+
+        // the real value is the minYear - 1 since 0BC == 1AD
+        assertEquals(minYear - 1, - cal.get(Calendar.YEAR));
+        assertEquals(GregorianCalendar.BC,cal.get(Calendar.ERA));
+        
+        cal.setTimeInMillis(Long.MAX_VALUE);
+        int maxYear = cal.get(Calendar.YEAR);
+        parsed = transform.parseDate("" + maxYear);
+        cal.setTime(parsed);
+        assertEquals(maxYear, cal.get(Calendar.YEAR));
+        assertEquals(GregorianCalendar.AD, cal.get(Calendar.ERA));
+    }
 
     public void testTransformSuccess() throws ParseException {
         String NOT_USED = null;
         DateFormatTransform transform = new DateFormatTransform("not used", NOT_USED);
 
         Date now = new Date();
-        for (String f : DateFormatTransform.PATTERNS) {
+        
+        // make a big shuffled list of patterns to ensure caching of last pattern
+        // doesn't cause any problems
+        List<String> patterns = new ArrayList<String>();
+        patterns.addAll(Arrays.asList(DateFormatTransform.PATTERNS));
+        patterns.addAll(Arrays.asList(DateFormatTransform.PATTERNS));
+        patterns.addAll(Arrays.asList(DateFormatTransform.PATTERNS));
+        patterns.addAll(Arrays.asList(DateFormatTransform.PATTERNS));
+        patterns.addAll(Arrays.asList(DateFormatTransform.PATTERNS));
+        Collections.shuffle(patterns);
+        
+        for (String f : patterns) {
             SimpleDateFormat fmt = new SimpleDateFormat(f);
             fmt.setTimeZone(DateFormatTransform.UTC_TZ);
             Date expected = fmt.parse(fmt.format(now));
