@@ -6,6 +6,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.geoserver.catalog.CatalogBuilder;
 import org.geoserver.catalog.CoverageInfo;
@@ -17,6 +19,8 @@ import org.geoserver.rest.AbstractResource;
 import org.geoserver.rest.RestletException;
 import org.geoserver.rest.format.DataFormat;
 import org.geoserver.rest.format.StreamDataFormat;
+import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.referencing.CRS;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.opengeo.data.importer.ImportContext;
@@ -24,6 +28,9 @@ import org.opengeo.data.importer.ImportItem;
 import org.opengeo.data.importer.ImportTask;
 import org.opengeo.data.importer.Importer;
 import org.opengeo.data.importer.transform.TransformChain;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.NoSuchAuthorityCodeException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
@@ -112,6 +119,24 @@ public class ItemResource extends AbstractResource {
             // @endhack
             cb.updateLayer(orig.getLayer(), l);
         }
+        
+        // validate SRS - an invalid one will destroy capabilities doc and make
+        // the layer totally broken in UI
+        CoordinateReferenceSystem newRefSystem = null;
+        if (r instanceof FeatureTypeInfo) {
+            String srs = ((FeatureTypeInfo) r).getSRS();
+            if (srs != null) {
+                try {
+                    newRefSystem = CRS.decode(srs);
+                } catch (NoSuchAuthorityCodeException ex) {
+                    String msg = "Invalid SRS " + srs;
+                    getLogger().warning(msg + " in PUT request");
+                    throw ImportJSONIO.badRequest(msg);
+                } catch (FactoryException ex) {
+                    throw new RestletException("Error with referencing",Status.SERVER_ERROR_INTERNAL,ex);
+                }
+            }
+        }
 
         //update the resource
         if (r != null) {
@@ -123,12 +148,24 @@ public class ItemResource extends AbstractResource {
             }
         }
         
+        // have to do this after updating the original
+        if (newRefSystem != null) {
+            try {
+                ReferencedEnvelope nativeBounds = cb.getNativeBounds(resource);
+                resource.setLatLonBoundingBox(cb.getLatLonBounds(nativeBounds, newRefSystem));
+            } catch (IOException ex) {
+                throw new RestletException("Error with bounds computation",Status.SERVER_ERROR_INTERNAL,ex);
+            }
+        }
+        
         if (chain != null) {
             orig.setTransform(chain);
         }
 
         //notify the importer that the item has changed
         importer.changed(orig);
+        
+        getResponse().setStatus(Status.SUCCESS_ACCEPTED);
     }
 
     public boolean allowDelete() {

@@ -29,6 +29,7 @@ import org.geoserver.catalog.StoreInfo;
 import org.geoserver.config.util.XStreamPersister;
 import org.geoserver.config.util.XStreamPersisterFactory;
 import org.geoserver.rest.PageInfo;
+import org.geoserver.rest.RestletException;
 import org.opengeo.data.importer.Database;
 import org.opengeo.data.importer.Directory;
 import org.opengeo.data.importer.FileData;
@@ -40,6 +41,8 @@ import org.opengeo.data.importer.Importer;
 import org.opengeo.data.importer.SpatialFile;
 import org.opengeo.data.importer.Table;
 import org.opengeo.data.importer.transform.*;
+import org.restlet.data.Status;
+import org.restlet.ext.json.JsonRepresentation;
 
 /**
  * Utility class for reading/writing import/tasks/etc... to/from JSON.
@@ -550,6 +553,15 @@ public class ImportJSONIO {
             throw new IOException("Serializaiton of " + transform.getClass() + " not implemented");
         }
         json.endObject();
+    }
+    
+    static RestletException badRequest(String error) {
+        JSONObject errorResponse = new JSONObject();
+        JSONArray errors = new JSONArray();
+        errors.add(error);
+        errorResponse.put("errors", errors);
+        JsonRepresentation rep = new JsonRepresentation(errorResponse.toString());
+        return new RestletException(rep, Status.CLIENT_ERROR_BAD_REQUEST);
     }
 
     public static class FlushableJSONBuilder extends JSONBuilder {
