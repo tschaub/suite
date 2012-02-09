@@ -122,7 +122,8 @@ public class TaskResource extends AbstractResource {
     private ImportTask handleMultiPartFormUpload() {
         ImportTask newTask;
         DiskFileItemFactory factory = new DiskFileItemFactory();
-        factory.setSizeThreshold(102400000);
+        // @revisit - this appears to be causing OOME
+        //factory.setSizeThreshold(102400000);
 
         RestletFileUpload upload = new RestletFileUpload(factory);
         List<FileItem> items = null;
