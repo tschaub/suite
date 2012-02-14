@@ -128,7 +128,7 @@ public class RESTDataTest extends ImporterTestSupport {
     void putItem(int imp, int task, int item, String json) throws Exception {
         MockHttpServletResponse resp = putAsServletResponse(
             String.format("/rest/imports/%d/tasks/%d/items/%d", imp, task, item), json, "application/json");
-        assertEquals(200, resp.getStatusCode());
+        assertEquals(202, resp.getStatusCode());
     }
 
     int postNewTaskAsMultiPartForm(int imp, String data) throws Exception {
