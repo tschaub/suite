@@ -17,8 +17,12 @@ import org.opengeo.data.importer.ImporterTestSupport;
 
 import com.mockrunner.mock.web.MockHttpServletRequest;
 import com.mockrunner.mock.web.MockHttpServletResponse;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -57,16 +61,58 @@ public class TaskResourceTest extends ImporterTestSupport {
         getCatalog().add(postgis);
         try {
             jdbcStore = (JDBCDataStore) postgis.getDataStore(null);
-            jdbcStore.getConnection(Transaction.AUTO_COMMIT).createStatement().execute("drop table if exists archsites");
         } catch (IOException ioe) {
             LOGGER.log(Level.WARNING,"Could not initialize postgis db",ioe);
         }
+    }
+    
+    private Integer putZip(String path) throws Exception {
+        File file = new File(path);
+        InputStream stream;
+        if (file.exists()) {
+            stream = new FileInputStream(file);
+        } else {
+            stream = ImporterTestSupport.class.getResourceAsStream("../test-data/" + path);
+        }
+        MockHttpServletResponse resp = postAsServletResponse("/rest/imports", "");
+        assertEquals(201, resp.getStatusCode());
+        assertNotNull(resp.getHeader("Location"));
+
+        String[] split = resp.getHeader("Location").split("/");
+        Integer id = Integer.parseInt(split[split.length-1]);
+        ImportContext context = importer.getContext(id);
+
+        MockHttpServletRequest req = createRequest("/rest/imports/" + id + "/tasks/" + file.getName());
+        req.setContentType("application/zip");
+        req.addHeader("Content-Type","application/zip");
+        req.setMethod("PUT");
+        req.setBodyContent(org.apache.commons.io.IOUtils.toByteArray(stream));
+        resp = dispatch(req);
+        
+        context = importer.getContext(context.getId());
+        assertNull(context.getData());
+        assertEquals(1, context.getTasks().size());
+
+        ImportTask task = context.getTasks().get(0);
+        assertTrue(task.getData() instanceof Directory);
+        assertEquals(ImportTask.State.READY, task.getState());
+        
+        return id;
     }
 
     public void testUploadToPostGIS() throws Exception {
         if (jdbcStore == null) return;
         
-        testPostMultiPartFormData();
+        String zip = "shape/archsites_epsg_prj.zip";
+        File file = new File(zip);
+        String[] nameext = file.getName().split("\\.");
+        Connection conn = jdbcStore.getConnection(Transaction.AUTO_COMMIT);
+        String sql = "drop table if exists \"" + nameext[0] + "\"";
+        Statement stmt = conn.createStatement();
+        stmt.execute(sql);
+        stmt.close();
+        conn.close();
+        Integer id = putZip(zip);
         
         JSONObjectBuilder builder = new JSONObjectBuilder();
         builder.object().key("task").object()
@@ -82,7 +128,7 @@ public class TaskResourceTest extends ImporterTestSupport {
                 
         String payload = builder.buildObject().toString();
         
-        MockHttpServletResponse resp = putAsServletResponse("/rest/imports/0/tasks/0", payload, "application/json");
+        MockHttpServletResponse resp = putAsServletResponse("/rest/imports/" + id + "/tasks/0", payload, "application/json");
         assertEquals(204,resp.getStatusCode());
         
         // @todo formalize and extract this test
@@ -90,11 +136,11 @@ public class TaskResourceTest extends ImporterTestSupport {
         context.getTasks().get(0).getItems().get(0).getTransform().add(new CreateIndexTransform("CAT_ID"));
         importer.changed(context);
         
-        resp = postAsServletResponse("/rest/imports/0","","application/text");        
+        resp = postAsServletResponse("/rest/imports/" + id,"","application/text");
         assertEquals(204,resp.getStatusCode());
         
         // ensure item ran successfully
-        JSONObject json = (JSONObject) getAsJSON("/rest/imports/0/tasks/0/items/0");
+        JSONObject json = (JSONObject) getAsJSON("/rest/imports/" + id + "/tasks/0/items/0");
         json = json.getJSONObject("item");
         assertEquals("COMPLETE",json.get("state"));
         
