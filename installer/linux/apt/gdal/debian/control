@@ -1,0 +1,36 @@
+Source: gdal
+Priority: extra
+Maintainer: Michael Weisman <mweisman@opengeo.org>
+Build-Depends: debhelper (>= 7), autotools-dev, swig, libgeos-dev (>= 3.0.0), libpq-dev, ant
+Standards-Version: 3.8.3
+Section: libs
+Homepage: http://www.gdal.org/
+
+Package: libgdal
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libgeos-3.3.1, swig
+Description: The Geospatial Data Abstraction Library (GDAL)
+ The Geospatial Data Abstraction Library (GDAL) is a unifying C/C++ API for 
+ accessing raster geospatial data, and currently includes formats like 
+ GeoTIFF, Erdas Imagine, Arc/Info Binary, CEOS, DTED, GXF, and SDTS. It is 
+ intended to provide efficient access, suitable for use in viewer 
+ applications, and also attempts to preserve coordinate systems and 
+ metadata.
+
+Package: libgdal-dev
+Section: libdevel
+Architecture: any
+Depends: libgdal (= ${binary:Version})
+Description: Headers for Geospatial Data Abstraction Library
+ This package contains the header files, static libraries and development
+ documentation for gdal. If you like to develop programs using gdal,
+ you will need to install gdal-devel.
+
+Package: gdal-mrsid
+Section: science
+Architecture: any
+Depends: libgdal (= ${binary:Version})
+Homepage: http://www.gdal.org/gdal_utilities.html
+Description: MrSID Plugin for the Geospatial Data Abstraction Library
+ A plugin for GDAL that provides read only access to MrSID files

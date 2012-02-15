@@ -1,0 +1,62 @@
+Source: gdal
+Priority: extra
+Maintainer: Michael Weisman <mweisman@opengeo.org>
+Build-Depends: debhelper (>= 7), autotools-dev, swig, libgeos-dev (>= 3.0.0), libpq-dev
+Standards-Version: 3.8.3
+Section: libs
+Homepage: http://www.gdal.org/
+
+Package: libgdal1-@VERSION@
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: The Geospatial Data Abstraction Library (GDAL)
+ The Geospatial Data Abstraction Library (GDAL) is a unifying C/C++ API for 
+ accessing raster geospatial data, and currently includes formats like 
+ GeoTIFF, Erdas Imagine, Arc/Info Binary, CEOS, DTED, GXF, and SDTS. It is 
+ intended to provide efficient access, suitable for use in viewer 
+ applications, and also attempts to preserve coordinate systems and 
+ metadata. Perl, C, and C++ interfaces are available.
+
+Package: libgdal1-dev
+Section: libdevel
+Architecture: any
+Depends: libgdal1-1.8.1 (= ${binary:Version})
+Description: Headers for gdal
+ This package contains the header files, static libraries and development
+ documentation for gdal. If you like to develop programs using gdal,
+ you will need to install gdal-devel.
+
+Package: gdal-bin
+Section: science
+Architecture: any
+Depends: ${shlibs:Depends}
+Homepage: http://www.gdal.org/gdal_utilities.html
+Description: Geospatial Data Abstraction Library - Utility programs
+ GDAL is a translator library for raster geospatial data formats.
+ As a library, it presents a single abstract data model to the
+ calling application for all supported formats. The related OGR
+ library (which lives within the GDAL source tree) provides
+ a similar capability for simple features vector data.
+ .
+ GDAL supports 40+ popular data formats, including commonly used
+ ones (GeoTIFF, JPEG, PNG and more) as well as the ones used in
+ GIS and remote sensing software packages (ERDAS Imagine,
+ ESRI Arc/Info, ENVI, PCI Geomatics). Also supported many remote
+ sensing and scientific data distribution formats such as HDF,
+ EOS FAST, NOAA L1B, NetCDF, FITS.
+ .
+ OGR library supports popular vector formats like ESRI Shapefile,
+ TIGER data, S57, MapInfo File, DGN, GML and more.
+ .
+ This package contains utility programs, based on GDAL/OGR library,
+ namely gdal_translate, gdalinfo, gdaladdo, gdalwarp, ogr2ogr, ogrinfo,
+ ogrtindex.
+
+Package: gdal-mrsid
+Section: science
+Architecture: any
+Depends: ${shlibs:Depends}
+Homepage: http://www.gdal.org/gdal_utilities.html
+Description: Geospatial Data Abstraction Library - MrSID Plugin
+ A plugin for GDAL that provides read only access to MrSID files
