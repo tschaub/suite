@@ -408,6 +408,23 @@ public class Importer implements InitializingBean, DisposableBean {
 
         //check if the task is complete, ie all items are complete
         task.updateState();
+        
+        if (task.getState() == ImportTask.State.COMPLETE && !task.isDirect()) {
+            if (task.getData() instanceof Directory) {
+                try {
+                    ((Directory) task.getData()).archive(getArchiveFile(task));
+                } catch (Exception ioe) {
+                    // this is not a critical operation, so don't make the whole thing fail
+                    LOGGER.log(Level.WARNING, "Error archiving", ioe);
+                }
+            }
+        }
+    }
+    
+    public File getArchiveFile(ImportTask task) throws IOException {
+        String archiveName = "import-" + task.getContext().getId() + "-" + task.getId() + ".zip";
+        File dir = getCatalog().getResourceLoader().findOrCreateDirectory("uploads","archives");
+        return new File(dir, archiveName);
     }
     
     public void changed(ImportContext context) {
