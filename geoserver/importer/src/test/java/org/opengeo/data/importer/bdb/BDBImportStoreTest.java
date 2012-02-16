@@ -2,32 +2,12 @@ package org.opengeo.data.importer.bdb;
 
 import java.io.File;
 import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import org.geoserver.catalog.LayerInfo;
-import org.geoserver.platform.GeoServerResourceLoader;
 import org.opengeo.data.importer.Directory;
 import org.opengeo.data.importer.ImportContext;
 import org.opengeo.data.importer.ImportStore.ImportVisitor;
-import org.opengeo.data.importer.ImportTask;
+import org.opengeo.data.importer.Importer;
 import org.opengeo.data.importer.ImporterTestSupport;
 
-import com.sleepycat.bind.EntryBinding;
-import com.sleepycat.bind.serial.SerialBinding;
-import com.sleepycat.bind.serial.StoredClassCatalog;
-import com.sleepycat.collections.StoredList;
-import com.sleepycat.collections.StoredMap;
-import com.sleepycat.je.CacheMode;
-import com.sleepycat.je.Database;
-import com.sleepycat.je.DatabaseConfig;
-import com.sleepycat.je.DatabaseEntry;
-import com.sleepycat.je.Durability;
-import com.sleepycat.je.Environment;
-import com.sleepycat.je.EnvironmentConfig;
-import com.sleepycat.je.LockMode;
-
-import junit.framework.TestCase;
 
 public class BDBImportStoreTest extends ImporterTestSupport {
 
@@ -39,6 +19,40 @@ public class BDBImportStoreTest extends ImporterTestSupport {
         
         store = new BDBImportStore(importer);
         store.init();
+    }
+    
+    // in order to test this, run once, then change the serialVersionUID of ImportContext2
+    public void testSerialVersionUIDChange() throws Exception {
+        Importer imp =  new Importer(null) {
+
+            @Override
+            public File getImportRoot() {
+                File root = new File("target");
+                root.mkdirs();
+                return root;
+            }
+            
+        };
+        ImportContext ctx = new ImportContext2();
+        ctx.setState(ImportContext.State.PENDING);
+        ctx.setUser("fooboo");
+        store = new BDBImportStore(imp);
+        store.init();
+        store.add(ctx);
+        
+        Iterator<ImportContext> iterator = store.iterator();
+        while (iterator.hasNext()) {
+            ctx = iterator.next();
+            assertEquals("fooboo", ctx.getUser());
+        }
+        
+        store.add(ctx);
+        
+        store.destroy();
+    }
+    
+    public static class ImportContext2 extends ImportContext {
+        private static final long serialVersionUID = 12345;
     }
 
     public void testAdd() throws Exception {
