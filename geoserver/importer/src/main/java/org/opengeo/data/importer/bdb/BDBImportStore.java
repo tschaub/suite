@@ -28,11 +28,13 @@ import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
 import com.sleepycat.je.Sequence;
 import com.sleepycat.je.SequenceConfig;
+import java.util.logging.Logger;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.collections.iterators.FilterIterator;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.StoreInfo;
 import org.geoserver.catalog.impl.StoreInfoImpl;
+import org.geotools.util.logging.Logging;
 
 /**
  * Import store implementation based on Berkley DB Java Edition.
@@ -40,6 +42,8 @@ import org.geoserver.catalog.impl.StoreInfoImpl;
  * @author Justin Deoliveira, OpenGeo
  */
 public class BDBImportStore implements ImportStore {
+    
+    static Logger LOGGER = Logging.getLogger(Importer.class);
 
     Importer importer;
 
@@ -86,6 +90,27 @@ public class BDBImportStore implements ImportStore {
         classDb = env.openDatabase(null, "classes", dbConfig);
         classCatalog = new StoredClassCatalog(classDb);
         importBinding = new SerialBinding<ImportContext>(classCatalog, ImportContext.class);
+        
+        // check for potential class incompatibilities and attempt recovery
+        try {
+            iterator().next();
+        } catch (RuntimeException re) {
+            if (re.getCause() instanceof java.io.InvalidClassException) {
+                LOGGER.warning("Attempting database recovery related to class changes: " + re.getCause().getMessage());
+                // wipe out the catalog
+                classCatalog.close();
+                classDb.close();
+                env.removeDatabase(null, "classes");
+                // and the import db
+                db.close();
+                env.removeDatabase(null, "imports");
+                // reopen
+                db = env.openDatabase(null, "imports", dbConfig);
+                classDb = env.openDatabase(null, "classes", dbConfig);
+                classCatalog = new StoredClassCatalog(classDb);
+                importBinding = new SerialBinding<ImportContext>(classCatalog, ImportContext.class);
+            }
+        }
     }
 
     public ImportContext get(long id) {
