@@ -1,10 +1,16 @@
 package org.opengeo.data.importer.rest;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -21,10 +27,7 @@ import org.opengeo.data.importer.Directory;
 import org.opengeo.data.importer.ImportContext;
 import org.opengeo.data.importer.ImportTask;
 import org.opengeo.data.importer.Importer;
-import org.restlet.data.MediaType;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
-import org.restlet.data.Status;
+import org.restlet.data.*;
 import org.restlet.ext.fileupload.RestletFileUpload;
 
 /**
@@ -67,11 +70,11 @@ public class TaskResource extends AbstractResource {
         getLogger().info("Handling POST of " + getRequest().getEntity().getMediaType());
         //file posted from form
         MediaType mimeType = getRequest().getEntity().getMediaType(); 
-        if (mimeType.equals(MediaType.MULTIPART_FORM_DATA, true)) {
+        if (MediaType.MULTIPART_FORM_DATA.equals(mimeType, true)) {
             newTask = handleMultiPartFormUpload();
         }
-        else {
-            // nothing
+        else if (MediaType.APPLICATION_WWW_FORM.equals(mimeType, true)) {
+            newTask = handleFormPost();
         }
 
         if (newTask == null) {
@@ -251,6 +254,44 @@ public class TaskResource extends AbstractResource {
         } else {
             throw new RestletException("Can only set target to existing datastore", Status.CLIENT_ERROR_BAD_REQUEST);
         }
+    }
+
+    private ImportTask handleFormPost() {
+        Form form = getRequest().getEntityAsForm();
+        String url = form.getFirstValue("url", null);
+        if (url == null) {
+            throw new RestletException("Invalid request", Status.CLIENT_ERROR_BAD_REQUEST);
+        }
+        URL location = null;
+        try {
+            location = new URL(url);
+        } catch (MalformedURLException ex) {
+            getLogger().warning("invalid URL specified in upload : " + url);
+        }
+        // @todo handling remote URL implies asynchronous processing at this stage
+        if (location == null || !location.getProtocol().equalsIgnoreCase("file")) {
+            throw new RestletException("Invalid url in request", Status.CLIENT_ERROR_BAD_REQUEST);
+        }
+        File file;
+        try {
+            file = new File(location.toURI().getPath());
+        } catch (URISyntaxException ex) {
+            throw new RuntimeException("Unexpected exception", ex);
+        }
+        
+        Directory dir;
+        if (file.isDirectory()) {
+            dir = new Directory(file);
+        } else {
+            dir = new Directory(file.getParentFile());
+            try {
+                dir.unpack(file);
+            } catch (IOException ioe) {
+                getLogger().log(Level.WARNING, "Error unpacking " + file.getAbsolutePath(), ioe);
+                throw new RestletException("Possible invalid file", Status.SERVER_ERROR_INTERNAL);
+            }
+        }
+        return new ImportTask(dir);
     }
 
     class ImportTaskJSONFormat extends StreamDataFormat {
