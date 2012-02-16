@@ -388,7 +388,15 @@ public class ImportJSONIO {
             transform = new IntegerFieldToDateTransform(json.getString("field"));
         } else if ("CreateIndexTransform".equalsIgnoreCase(type)) {
             transform = new CreateIndexTransform(json.getString("field"));
-        } 
+        } else if ("AttributeRemapTransform".equalsIgnoreCase(type)) {
+            Class clazz;
+            try {
+                clazz = Class.forName( json.getString("target") );
+            } catch (ClassNotFoundException cnfe) {
+                throw new RuntimeException("unable to locate target class " + json.getString("target"));
+            }
+            transform = new AttributeRemapTransform(json.getString("field"), clazz);
+        }
         else {
             throw new RuntimeException("parsing of " + type + " not implemented");
         }
@@ -549,6 +557,10 @@ public class ImportJSONIO {
         } else if (transform instanceof CreateIndexTransform) {
             CreateIndexTransform df = (CreateIndexTransform) transform;
             json.key("field").value(df.getField());
+        } else if (transform.getClass() == AttributeRemapTransform.class) {
+            AttributeRemapTransform art = (AttributeRemapTransform) transform;
+            json.key("field").value(art.getField());
+            json.key("target").value(art.getType().getName());
         } else {
             throw new IOException("Serializaiton of " + transform.getClass() + " not implemented");
         }
