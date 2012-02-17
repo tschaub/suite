@@ -541,13 +541,6 @@ SectionGroup "Extensions" SectionGSExt
 
   SectionEnd
 
-  Section "GDAL" SectionGSGDAL
-
-    SetOutPath "$INSTDIR\jre\bin"
-    File /a "${SOURCEPATHROOT}\gdal\*.*"
-
-  SectionEnd
-
   Section /o "Oracle" SectionGSOracle
 
     SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
@@ -784,7 +777,6 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGS} "Installs GeoServer, a spatial data server."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSExt} "Includes GeoServer Extensions."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSArcSDE} "Adds support for ArcSDE databases.  Requires additional ArcSDE files."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSGDAL} "Adds support for GDAL image formats."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSOracle} "Adds support for Oracle databases.  Requires additional Oracle files."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGWC} "Includes GeoWebCache, a tile cache server."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGX} "Installs GeoExplorer, a graphical map composer."
