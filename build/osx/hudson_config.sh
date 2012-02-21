@@ -4,6 +4,7 @@ webroot=/var/www/htdocs
 export buildroot
 
 # Versions we are going to continuously integrate...
+gdal_version=1.8.1
 geos_version=3.3.1
 postgis_version=1.5.3
 proj_version=4.7.0
@@ -13,6 +14,7 @@ pgsql_version=8.4.9-1
 proj_nad=proj-datumgrid-1.5.zip
 
 # Standard paths
+gdal_svn=http://svn.osgeo.org/gdal/tags
 geos_svn=http://svn.osgeo.org/geos/tags
 postgis_svn=http://svn.osgeo.org/postgis/tags
 proj_svn=http://svn.osgeo.org/metacrs/proj/tags
