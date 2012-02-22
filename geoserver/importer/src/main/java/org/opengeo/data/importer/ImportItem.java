@@ -62,6 +62,12 @@ public class ImportItem implements Serializable {
      */
     transient Map<Object,Object> metadata;
     
+    String originalName;
+    
+    transient volatile int totalToProcess;
+    
+    transient volatile int numberProcessed;
+    
     List<LogRecord> importMessages = new ArrayList<LogRecord>();
 
     public ImportItem() {
@@ -149,6 +155,30 @@ public class ImportItem implements Serializable {
         return retval;
     }
 
+    public String getOriginalName() {
+        return originalName == null ? layer.getResource().getNativeName() : originalName;
+    }
+
+    public void setOriginalName(String originalName) {
+        this.originalName = originalName;
+    }
+    
+    public int getNumberProcessed() {
+        return numberProcessed;
+    }
+
+    public void setNumberProcessed(int numberProcessed) {
+        this.numberProcessed = numberProcessed;
+    }
+
+    public int getTotalToProcess() {
+        return totalToProcess;
+    }
+
+    public void setTotalToProcess(int totalToProcess) {
+        this.totalToProcess = totalToProcess;
+    }
+    
     @Override
     public int hashCode() {
         final int prime = 31;

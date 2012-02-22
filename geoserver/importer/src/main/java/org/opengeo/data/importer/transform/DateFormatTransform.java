@@ -14,6 +14,7 @@ import org.opengis.feature.simple.SimpleFeature;
 
 /**
  * Transform that converts a non date attribute in a date attribute.
+ * This class is not thread-safe.
  *
  * @author Justin Deoliveira, OpenGeo
  *
@@ -38,6 +39,7 @@ public class DateFormatTransform extends AttributeRemapTransform {
     transient ParsePosition pos;
     SimpleDateFormat dateFormat;
     transient SimpleDateFormat lastFormat;
+    transient SimpleDateFormat[] patterns;
 
     public DateFormatTransform(String field, String datePattern) {
         init(field,datePattern);
@@ -60,6 +62,12 @@ public class DateFormatTransform extends AttributeRemapTransform {
     
     public final void init() {
         pos = new ParsePosition(0);
+        patterns = new SimpleDateFormat[PATTERNS.length];
+        for (int i = 0; i < PATTERNS.length; i++) {
+            SimpleDateFormat format = new SimpleDateFormat(PATTERNS[i], Locale.CANADA);
+            format.setTimeZone(UTC_TZ);
+            patterns[i] = format;
+        }
     }
 
     public SimpleDateFormat getDateFormat() {
@@ -106,23 +114,19 @@ public class DateFormatTransform extends AttributeRemapTransform {
     Date parseDate(String value) throws ParseException {
         Date parsed = null;
         
-
+        // if a format was provided, use it
         if (dateFormat != null) {
             parsed = parseDate(dateFormat, value);
         }
 
+        // fall back to others
         if (parsed == null) {
+            // optimization to use last working pattern
             if (lastFormat != null) {
                 parsed = parseDate(lastFormat, value);
             }
-            for (int i = 0; i < PATTERNS.length && parsed == null; i++) {
-                // rebuild formats at each parse, date formats are not thread safe
-                
-                // an optimization for mixed format dates could be to lazy cache formats
-                // for large datasets, swapping these out could become expensive
-                SimpleDateFormat format = new SimpleDateFormat(PATTERNS[i], Locale.CANADA);
-                format.setTimeZone(UTC_TZ);
-                parsed = parseDate(format, value);
+            for (int i = 0; i < patterns.length && parsed == null; i++) {
+                parsed = parseDate(patterns[i], value);
             }
         }
         if (parsed != null) {

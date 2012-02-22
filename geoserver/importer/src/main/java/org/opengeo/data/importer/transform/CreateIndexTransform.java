@@ -1,6 +1,7 @@
 package org.opengeo.data.importer.transform;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import org.geoserver.catalog.DataStoreInfo;
@@ -43,24 +44,25 @@ public class CreateIndexTransform extends AbstractVectorTransform implements Pos
     }
     
     private void createIndex(ImportItem item, JDBCDataStore store) throws Exception {
+        Connection conn = null;
+        Statement stmt = null;
+        Exception error = null;
+        String sql = null;
         try {
-            //@todo another way to do this??
-            //if ("PostGISDialect".equals(store.getSQLDialect().getClass().getSimpleName())) {
-                Connection conn = null;
-                Statement stmt = null;
-                try {
-                    conn = store.getConnection(Transaction.AUTO_COMMIT);
-                    stmt = conn.createStatement();
-                    String tableName = item.getLayer().getResource().getNativeName();
-                    String indexName = "\"" + tableName + "_" + field + "\"";
-                    stmt.execute("CREATE INDEX " + indexName + " ON " + tableName + "(\"" + field + "\")");
-                } finally {
-                    store.closeSafe(stmt);
-                    store.closeSafe(conn);
-                }
-            //}
+            conn = store.getConnection(Transaction.AUTO_COMMIT);
+            stmt = conn.createStatement();
+            String tableName = item.getLayer().getResource().getNativeName();
+            String indexName = "\"" + tableName + "_" + field + "\"";
+            sql = "CREATE INDEX " + indexName + " ON \"" + tableName + "\" (\"" + field + "\")";
+            stmt.execute(sql);
+        } catch (SQLException sqle) {
+            error = sqle;
         } finally {
-            store.dispose();
+            store.closeSafe(stmt);
+            store.closeSafe(conn);
+        }
+        if (error != null) {
+            throw new Exception("Error creating index, SQL was : " + sql,error);
         }
     }
     

@@ -87,6 +87,12 @@
           </key>
           <value>importItemFinder</value>
         </entry>
+        <entry>
+          <key>
+            <value>/imports/{import}/tasks/{task}/items/{item}/progress</value>
+          </key>
+          <value>importItemFinder</value>
+        </entry>
       </map>
     </property>
   </bean>

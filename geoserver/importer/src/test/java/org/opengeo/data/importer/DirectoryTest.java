@@ -38,6 +38,43 @@ public class DirectoryTest extends ImporterTestSupport {
         assertTrue(exts.isEmpty());
     }
     
+    public void testShapefileWithMacOSXDirectory() throws Exception {
+        File dir = unpack("shape/archsites_epsg_prj.zip");
+        
+        File osxDir = new File(dir,"__MACOSX");
+        osxDir.mkdir();
+        new File(osxDir, ".archsites.shp").createNewFile();
+        new File(osxDir, ".archsites.dbf").createNewFile();
+        new File(osxDir, ".archsites.prj").createNewFile();
+        
+        Directory d = new Directory(dir);
+        d.prepare();
+        
+        assertNotNull(d.getFormat());
+        assertEquals(DataStoreFormat.class, d.getFormat().getClass());
+        List<FileData> files = d.getFiles();
+        assertEquals(1, files.size());
+        assertEquals(DataStoreFormat.class, files.get(0).getFormat().getClass());
+    }
+    
+    public void testShapefileWithExtraFiles() throws Exception {
+        File dir = unpack("shape/archsites_epsg_prj.zip");
+        
+        // 'extra' files
+        new File(dir, "archsites.shp.xml").createNewFile();
+        new File(dir, "archsites.sbx").createNewFile();
+        new File(dir, "archsites.sbn").createNewFile();
+        
+        Directory d = new Directory(dir);
+        d.prepare();
+        
+        assertNotNull(d.getFormat());
+        assertEquals(DataStoreFormat.class, d.getFormat().getClass());
+        List<FileData> files = d.getFiles();
+        assertEquals(1, files.size());
+        assertEquals(DataStoreFormat.class, files.get(0).getFormat().getClass());
+    }
+    
     public void testMultipleSpatialFile() throws Exception {
         File dir = unpack("shape/archsites_epsg_prj.zip");
         unpack("shape/bugsites_esri_prj.tar.gz", dir);

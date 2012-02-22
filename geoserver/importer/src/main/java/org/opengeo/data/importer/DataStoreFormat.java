@@ -36,6 +36,8 @@ import org.opengis.feature.type.FeatureType;
  *
  */
 public class DataStoreFormat extends VectorFormat {
+    
+    private static final long serialVersionUID = 1L;
 
     private Class<? extends DataStoreFactorySpi> dataStoreFactoryClass;
     private transient volatile DataStoreFactorySpi dataStoreFactory;
@@ -126,26 +128,41 @@ public class DataStoreFormat extends VectorFormat {
             dataStore.dispose();
         }
     }
+    
+    private DataStore getDataStore(ImportData data, ImportItem item) throws IOException {
+        DataStore dataStore = (DataStore) item.getMetadata().get(DataStore.class);
+        if (dataStore == null) {
+            dataStore = createDataStore(data);
+
+            //store in order to later dispose
+            //TODO: come up with a better scheme for caching the datastore
+            item.getMetadata().put(DataStore.class, dataStore);
+        }
+        return dataStore;
+    }
 
     @Override
     public FeatureReader read(ImportData data, ImportItem item) throws IOException {
-        DataStore dataStore = createDataStore(data);
-
-        //store in order to later dispose
-        //TODO: come up with a better scheme for caching the datastore
-        item.getMetadata().put(DataStore.class, dataStore);
-        FeatureReader reader = dataStore.getFeatureReader(
-            new Query(item.getLayer().getResource().getNativeName()), Transaction.AUTO_COMMIT);
+        FeatureReader reader = getDataStore(data, item).getFeatureReader(
+            new Query(item.getOriginalName()), Transaction.AUTO_COMMIT);
         return reader;
     }
 
+    @Override
     public void dispose(FeatureReader reader, ImportItem item) throws IOException {
         reader.close();
 
         if (item.getMetadata().containsKey(DataStore.class)) {
             DataStore dataStore = (DataStore) item.getMetadata().get(DataStore.class);
             dataStore.dispose();
+            item.getMetadata().remove(DataStore.class);
         }
+    }
+
+    @Override
+    public int getFeatureCount(ImportData data, ImportItem item) throws IOException {
+        SimpleFeatureSource featureSource = getDataStore(data, item).getFeatureSource(item.getOriginalName());
+        return featureSource.getCount(Query.ALL);
     }
     
     public DataStore createDataStore(ImportData data) throws IOException {

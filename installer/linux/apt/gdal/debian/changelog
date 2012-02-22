@@ -1,0 +1,5 @@
+gdal (1.8.1-1) unstable; urgency=low
+
+  * Initial OpenGeo release
+
+ -- Michael Weisman <mweisman@opengeo.org>  Mon, 13 Feb 2012 23:14:14 +0000

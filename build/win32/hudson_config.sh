@@ -6,6 +6,7 @@ gtkroot=/c/opt/gtk+-bundle_2.16.6
 
 # Versions we are going to continuously integrate...
 geos_version=3.3.1
+gdal_version=1.8.1
 postgis_version=1.5.3
 proj_version=4.7.0
 pgsql_version=8.4.9
@@ -31,7 +32,7 @@ fi
 
 # setup proper gnu environemnt
 source /etc/profile
-cd $WORKSPACE
+cd "$WORKSPACE"
 
 # load common functions
 source functions

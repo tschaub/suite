@@ -46,15 +46,14 @@ public class ImporterDataTest extends ImporterTestSupport {
         runChecks("archsites");
     }
 
-    
     public void testImportShapefilesWithExtraFiles() throws Exception {
         File dir = tmpDir();
         unpack("shape/archsites_epsg_prj.zip", dir);
         
         // make some 'extra' files
-        new File(dir,"archsites_epsg_prj.sbn").createNewFile();
-        new File(dir,"archsites_epsg_prj.sbx").createNewFile();
-        new File(dir,"archsites_epsg_prj.shp.xml").createNewFile();
+        new File(dir,"archsites.sbn").createNewFile();
+        new File(dir,"archsites.sbx").createNewFile();
+        new File(dir,"archsites.shp.xml").createNewFile();
         
         ImportContext context = importer.createContext(new Directory(dir));
         
@@ -131,9 +130,6 @@ public class ImporterDataTest extends ImporterTestSupport {
     }
  
     public void testImportUnknownFile() throws Exception {
-        //JD: disabling for now, TODO: ask ischnieder about this
-        if (true) return;
-        
         File dir = unpack("gml/states_wfs11.xml.gz");
 
         ImportContext context = importer.createContext(new Directory(dir)); 

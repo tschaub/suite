@@ -93,10 +93,8 @@ ec2_instance_status() {
 
 # get_version <repo_path>
 get_ami_version() {
-  local ver=""
-  if [ "trunk" == $1 ]; then
-    ver="latest"
-  else
+  local ver=$1
+  if [ "latest" != $1 ]; then
     ver=$( echo $1|sed 's#.*/##g' )
   fi
   echo $ver
