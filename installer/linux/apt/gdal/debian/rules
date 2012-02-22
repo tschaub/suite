@@ -21,7 +21,7 @@ config.status:
 	--mandir=\$${prefix}/share/man \
 	--infodir=\$${prefix}/share/info $(CONFFLAGS)
 	# java.opt uses standard Windows JAVA_HOME path. Change this to Ubuntu default java
-	@sed -i 's:^JAVA_HOME.*:JAVA_HOME=/usr/lib/jvm/default-java:' swig/java/java.opt
+	@sed -i 's:^JAVA_HOME.*:JAVA_HOME=/usr/lib/jvm/jdk1.5.0_22:' swig/java/java.opt
 
 build: config.status
 	$(MAKE) $(MAKEFLAGS) -j16
