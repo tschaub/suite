@@ -47,6 +47,10 @@ function copy_artifacts {
        cp $src $dist/$dst
 
        link=$dist/opengeosuite${prefix}-${aliaas}-${x}.zip
+       if [ "$(echo $x | grep 'dashboard')" == $x ]; then
+          y=`echo $x | sed 's/dashboard-//g'` 
+          link=$dist/dashboard${prefix}-${alisas}-${y}.zip
+       fi
        if [ -e $link ]; then
          unlink $link
        fi
@@ -127,25 +131,25 @@ copy_artifacts $ALIAS ee
 
 # copy the dashboard artifacts into place
 pushd $dist
-for f in `ls opengeosuite-*-dashboard-*.zip`; do
-  f2=$(echo $f|sed 's/opengeosuite-//g'|sed 's/-dashboard//g'|sed 's/^/dashboard-/g') 
-  mv $f $f2
-done
+#for f in `ls opengeosuite-*-dashboard-*.zip`; do
+#  f2=$(echo $f|sed 's/opengeosuite-//g'|sed 's/-dashboard//g'|sed 's/^/dashboard-/g') 
+#  mv $f $f2
+#done
 
 if [ -z "$KEEP_OLD_ARTIFACTS" ]; then
 if [ "$DIST_PATH" == "latest" ]; then
   # only keep around last two builds 
   for x in $artifacts; do
     echo "Removing old $x artifacts:"
-    ls -lt | grep -v "^l" | grep "opengeosuite-.*-$x.zip" | cut -d ' ' -f 8 | tail -n +2 
-    ls -lt | grep -v "^l" | grep "opengeosuite-.*-$x.zip" | cut -d ' ' -f 8 | tail -n +2 | xargs rm -f
+    ls -lt | grep -v "^l" | grep "opengeosuite-.*-$x.zip" | cut -d ' ' -f 8 | tail -n +3 
+    ls -lt | grep -v "^l" | grep "opengeosuite-.*-$x.zip" | cut -d ' ' -f 8 | tail -n +3 | xargs rm -f
     
     #ls -t | grep "opengeosuite-.*-$x.tar.gz" | tail -n +7 | xargs rm -f
   done
   for x in win32 osx; do
     echo "Removing old dashboard $x artifacts:"
-    ls -lt | grep -v "^l" | grep "dashboard-.*-$x.zip" | cut -d ' ' -f 8 tail -n +2 
-    ls -lt | grep -v "^l" | grep "dashboard-.*-$x.zip" | cut -d ' ' -f 8 tail -n +2 | xargs rm -f
+    ls -lt | grep -v "^l" | grep "dashboard-.*-$x.zip" | cut -d ' ' -f 8 tail -n +3 
+    ls -lt | grep -v "^l" | grep "dashboard-.*-$x.zip" | cut -d ' ' -f 8 tail -n +3 | xargs rm -f
   done
 else 
   if [ "$DIST_PATH" == "stable" ]; then
