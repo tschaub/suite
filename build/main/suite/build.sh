@@ -49,7 +49,7 @@ function copy_artifacts {
        link=$dist/opengeosuite${prefix}-${aliaas}-${x}.zip
        if [ "$(echo $x | grep 'dashboard')" == $x ]; then
           y=`echo $x | sed 's/dashboard-//g'` 
-          link=$dist/dashboard${prefix}-${alisas}-${y}.zip
+          link=$dist/dashboard${prefix}-${aliaas}-${y}.zip
        fi
        if [ -e $link ]; then
          unlink $link
