@@ -59,7 +59,7 @@
     <dependency>
       <groupId>org.gdal</groupId>
       <artifactId>gdal</artifactId>
-      <version>1.8.1</versoin>
+      <version>1.8.1</version>
     </dependency>
     
     <!-- opengeo specific stuff -->
