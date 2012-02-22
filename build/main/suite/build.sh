@@ -131,10 +131,10 @@ copy_artifacts $ALIAS ee
 
 # copy the dashboard artifacts into place
 pushd $dist
-#for f in `ls opengeosuite-*-dashboard-*.zip`; do
-#  f2=$(echo $f|sed 's/opengeosuite-//g'|sed 's/-dashboard//g'|sed 's/^/dashboard-/g') 
-#  mv $f $f2
-#done
+for f in `ls opengeosuite-*-dashboard-*.zip`; do
+  f2=$(echo $f|sed 's/opengeosuite-//g'|sed 's/-dashboard//g'|sed 's/^/dashboard-/g') 
+  ln -sf $f $f2
+done
 
 if [ -z "$KEEP_OLD_ARTIFACTS" ]; then
 if [ "$DIST_PATH" == "latest" ]; then
