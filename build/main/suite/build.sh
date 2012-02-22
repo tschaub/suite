@@ -132,6 +132,7 @@ for f in `ls opengeosuite-*-dashboard-*.zip`; do
   mv $f $f2
 done
 
+if [ -z "$KEEP_OLD_ARTIFACTS" ]; then
 if [ "$DIST_PATH" == "latest" ]; then
   # only keep around last two builds 
   for x in $artifacts; do
@@ -156,6 +157,7 @@ else
       find . -name "dashboard-*-$x.zip" -mtime +14 -exec rm -f {} \;
     done
   fi
+fi
 fi
 popd
 
