@@ -74,7 +74,7 @@ g++ -g frmts/mrsid/*.cpp -shared -o gdal_MrSID.so \
 
 # Java SWIG bindings
 cd swig/java
-sed -i 's:^JAVA_HOME.*:JAVA_HOME=/usr/lib/jvm/java:' java.opt
+sed -i 's:^JAVA_HOME.*:JAVA_HOME=$JAVA_HOME:' java.opt
 make %{?_smp_mflags}
 
 %install
