@@ -20,9 +20,10 @@ pro=$(echo $PROFILE|sed 's/\(.\{1,\}\)/\1-/g')
 dashboard_version=1.0.0
 pgsql_version=8.4
 
-dashboard_url=http://suite.opengeo.org/builds/${DIST_PATH}/dashboard-${id}-osx.zip
-suite_url=http://suite.opengeo.org/builds/${DIST_PATH}/opengeosuite-${pro}${id}-mac.zip
-ext_url=http://suite.opengeo.org/builds/${DIST_PATH}/opengeosuite-${id}-ext.zip
+base_url=http://suite.opengeo.org/builds/${DIST_PATH}/${REVISION}
+dashboard_url=$base_url/${REVISION}/opengeosuite-${pro}${id}-dashboard-osx.zip
+suite_url=$base_url/opengeosuite-${pro}${id}-mac.zip
+ext_url=${base_url}/opengeosuite-${id}-ext.zip
 pgsql_url=http://suite.opengeo.org/osxbuilds/postgis-osx.zip
 
 export PATH=$PATH:/usr/local/bin
