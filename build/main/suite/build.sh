@@ -135,10 +135,15 @@ done
 if [ "$DIST_PATH" == "latest" ]; then
   # only keep around last two builds 
   for x in $artifacts; do
+    echo "Removing old $x artifacts:"
+    ls -lt | grep -v "^l" | grep "opengeosuite-.*-$x.zip" | cut -d ' ' -f 8 | tail -n +2 
     ls -lt | grep -v "^l" | grep "opengeosuite-.*-$x.zip" | cut -d ' ' -f 8 | tail -n +2 | xargs rm -f
+    
     #ls -t | grep "opengeosuite-.*-$x.tar.gz" | tail -n +7 | xargs rm -f
   done
   for x in win32 osx; do
+    echo "Removing old dashboard $x artifacts:"
+    ls -lt | grep -v "^l" | grep "dashboard-.*-$x.zip" | cut -d ' ' -f 8 tail -n +2 
     ls -lt | grep -v "^l" | grep "dashboard-.*-$x.zip" | cut -d ' ' -f 8 tail -n +2 | xargs rm -f
   done
 else 
