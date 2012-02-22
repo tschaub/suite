@@ -17,9 +17,9 @@ ANALYTICS=opengeosuite-ee-$REV-analytics.zip
 CFLOW=opengeosuite-$REV-control-flow.zip
 DATA_DIR=opengeosuite-$REV-data-dir.zip
 
-get_file $BUILDS/$DIST_PATH/$ANALYTICS yes
-get_file $BUILDS/$DIST_PATH/$CFLOW yes
-get_file $BUILDS/$DIST_PATH/$DATA_DIR yes
+get_file $BUILDS/$DIST_PATH/$REV/$ANALYTICS yes
+get_file $BUILDS/$DIST_PATH/$REV/$CFLOW yes
+get_file $BUILDS/$DIST_PATH/$REV/$DATA_DIR yes
 
 # clean out old files
 rm -rf opengeo-suite-ee/*.jar

@@ -7,7 +7,7 @@ build_info
 WARS=opengeosuite-$REV-war.zip
 
 # grab files
-get_file $BUILDS/$DIST_PATH/$WARS yes
+get_file $BUILDS/$DIST_PATH/$REV/$WARS yes
 
 # clean out old files
 clean_src

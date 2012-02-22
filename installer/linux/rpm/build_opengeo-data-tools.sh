@@ -15,7 +15,7 @@ function unpack_jars() {
 # grab files
 IMPORTER=opengeosuite-ee-$REV-importer.zip
 
-get_file $BUILDS/$DIST_PATH/$IMPORTER yes
+get_file $BUILDS/$DIST_PATH/$REV/$IMPORTER yes
 
 # clean out old files
 clean_src
