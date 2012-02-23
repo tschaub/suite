@@ -277,7 +277,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                             autoEl: {
                                 tag: "div",
                                 html: og.util.loadSync("app/markup/pref/main.html")
-                            },
+                            }
                         }]
                     }]
                 }, {
@@ -443,7 +443,7 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
                 title: "GeoServer",
                 defaults: { 
                     width: 250,
-                    allowBlank: false,
+                    allowBlank: false
                 },
                 items: [{ 
                     xtype: 'textfield',
@@ -1088,6 +1088,6 @@ og.Dashboard = Ext.extend(Ext.util.Observable, {
         // }
         // this.messageBox.el.addClass("app-msg-"+cls);
         // this.messageBox.el.dom.innerHTML = msg;
-    }, 
+    }
 
 });
