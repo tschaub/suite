@@ -25,7 +25,6 @@ function profile_rebuild {
 }
 
 set -x
-set -e
 
 DIST_PATH=`init_dist_path $DIST_PATH`
 
@@ -43,7 +42,12 @@ export MAVEN_OPTS=-Xmx256m
 cd repo
 if [ ! -z $REV ]; then
   git checkout $REV
-  git pull origin $REV
+
+  # if this rev is a tag don't pull
+  if [ "$( git tag | grep $REV )" != $REV ]; then
+     git pull origin $REV
+  fi
+
   git submodule update --init --recursive
 fi
 
