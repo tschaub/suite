@@ -25,7 +25,6 @@ function profile_rebuild {
 }
 
 set -x
-set -e
 
 DIST_PATH=`init_dist_path $DIST_PATH`
 
