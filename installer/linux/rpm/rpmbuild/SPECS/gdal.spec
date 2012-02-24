@@ -90,6 +90,7 @@ mkdir -p %{buildroot}/%{lib_dir}/gdalplugins
 cp gdal_MrSID.so %{buildroot}/%{lib_dir}/gdalplugins/
 cp $MRSID_ROOT/lib/libltidsdk.so* %{buildroot}/%{lib_dir}
 cp swig/java/*.so %{buildroot}/%{lib_dir}
+cp swig/java/gdal.jar %{buildroot}/%{lib_dir}
 
 %clean
 rm -rf %{buildroot}
@@ -102,3 +103,4 @@ rm -rf %{buildroot}
 %{_bindir}/*
 %{_datadir}/gdal/
 %{_libdir}/lib*
+%{_libdir}/gdal.jar
