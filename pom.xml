@@ -148,7 +148,7 @@
      <plugin>
        <artifactId>maven-assembly-plugin</artifactId>
        <configuration>
-         <finalName>opengeosuite-${project.version}</finalName>
+         <finalName>opengeosuite-${build.revision}</finalName>
          <descriptors>
            <descriptor>assembly/bin.xml</descriptor>
            <descriptor>assembly/win.xml</descriptor>
@@ -223,7 +223,7 @@
        <plugin>
          <artifactId>maven-assembly-plugin</artifactId>
          <configuration>
-           <finalName>opengeosuite-ee-${project.version}</finalName>
+           <finalName>opengeosuite-ee-${build.revision}</finalName>
            <descriptors>
              <descriptor>assembly/bin.xml</descriptor>
              <descriptor>assembly/win.xml</descriptor>
@@ -290,5 +290,6 @@
    <ant.version>1.6.5</ant.version>
    <dashboard.version>1.0.0</dashboard.version>
    <build.profile></build.profile>
+   <build.revision>${project.version}</build.revision>
  </properties>
 </project>

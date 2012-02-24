@@ -16,8 +16,8 @@ function unpack_jars() {
 ANALYTICS=opengeosuite-ee-$REV-analytics.zip
 CFLOW=opengeosuite-$REV-control-flow.zip
 
-get_file $BUILDS/$DIST_PATH/$ANALYTICS yes
-get_file $BUILDS/$DIST_PATH/$CFLOW yes
+get_file $BUILDS/$DIST_PATH/$REV/$ANALYTICS yes
+get_file $BUILDS/$DIST_PATH/$REV/$CFLOW yes
 
 # clean out old files
 clean_src

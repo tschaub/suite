@@ -18,7 +18,7 @@ set profile=%3
 rd /s /q ..\..\target\ >nul 2>nul
 
 :: Assemble artifact base URL
-set url=http://suite.opengeo.org/builds/%dist_path%
+set url=http://suite.opengeo.org/builds/%dist_path%/%revision%
 
 :: Generate id string (for file names)
 if "x%profile%"=="x" (
@@ -29,7 +29,7 @@ if "x%profile%"=="x" (
 
 :: File names
 set mainzip=opengeosuite-%id%-win.zip
-set dashzip=dashboard-%id%-win32.zip
+set dashzip=opengeosuite-%id%-dashboard-win32.zip
 
 :: Get the maven artifacts 
 echo Downloading %url%/%mainzip% ...
