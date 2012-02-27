@@ -8,7 +8,7 @@
  <groupId>org.opengeo</groupId>
  <artifactId>suite</artifactId>
  <packaging>pom</packaging>
- <version>2.4-SNAPSHOT</version>
+ <version>2.4.4</version>
  <name>OpenGeo Suite</name>
 
  <organization>
@@ -148,7 +148,7 @@
      <plugin>
        <artifactId>maven-assembly-plugin</artifactId>
        <configuration>
-         <finalName>opengeosuite-${project.version}</finalName>
+         <finalName>opengeosuite-${build.revision}</finalName>
          <descriptors>
            <descriptor>assembly/bin.xml</descriptor>
            <descriptor>assembly/win.xml</descriptor>
@@ -223,7 +223,7 @@
        <plugin>
          <artifactId>maven-assembly-plugin</artifactId>
          <configuration>
-           <finalName>opengeosuite-ee-${project.version}</finalName>
+           <finalName>opengeosuite-ee-${build.revision}</finalName>
            <descriptors>
              <descriptor>assembly/bin.xml</descriptor>
              <descriptor>assembly/win.xml</descriptor>
@@ -283,12 +283,13 @@
  </distributionManagement>
 
  <properties>
-   <gs.version>2.1.3</gs.version>
-   <gt.version>2.7.4</gt.version>
-   <gwc.version>1.3-RC2</gwc.version>
+   <gs.version>2.1-SNAPSHOT</gs.version>
+   <gt.version>2.7-SNAPSHOT</gt.version>
+   <gwc.version>1.3-SNAPSHOT</gwc.version>
    <jetty.version>6.1.8</jetty.version>
    <ant.version>1.6.5</ant.version>
    <dashboard.version>1.0.0</dashboard.version>
    <build.profile></build.profile>
+   <build.revision>${project.version}</build.revision>
  </properties>
 </project>

@@ -10,7 +10,7 @@ PGADMIN_POSTGIS=opengeosuite-$REV-pgadmin-postgis.zip
 
 # grab files
 get_file http://data.opengeo.org/suite/$PGADMIN.tar.gz
-get_file $BUILDS/$DIST_PATH/$PGADMIN_POSTGIS
+get_file $BUILDS/$DIST_PATH/$REV/$PGADMIN_POSTGIS
 
 # unpack files
 unzip files/$PGADMIN_POSTGIS -d pgadmin3/debian

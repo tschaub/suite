@@ -65,15 +65,11 @@ Var OldStartMenu
 ;Var CommonAppData
 ;Var DataDirPath
 ;Var FolderName
-;Var SDEPath
-;Var SDEPathTemp
-;Var SDEPathCheck
+
 Var SDECheckBox
 Var SDECheckBoxPrior
 Var OracleCheckBox
 Var OracleCheckBoxPrior
-;Var SDEPathHWND
-;Var BrowseSDEHWND
 
 ;Version Information (Version tab for EXE properties)
 VIProductVersion ${LONGVERSION}
@@ -86,10 +82,6 @@ VIAddVersionKey FileVersion "${VERSION}"
 VIAddVersionKey Comments "http://opengeo.org"
 
 ; Page headers for pages
-;LangString TEXT_ARCSDE_TITLE ${LANG_ENGLISH} "ArcSDE Libraries"
-;LangString TEXT_ARCSDE_SUBTITLE ${LANG_ENGLISH} "Link to your existing ArcSDE libraries."
-;LangString TEXT_ORACLE_TITLE ${LANG_ENGLISH} "Oracle Libraries"
-;LangString TEXT_ORACLE_SUBTITLE ${LANG_ENGLISH} "Link to your existing Oracle libraries."
 LangString TEXT_READY_TITLE ${LANG_ENGLISH} "Ready to Install"
 LangString TEXT_READY_SUBTITLE ${LANG_ENGLISH} "OpenGeo Suite is ready to be installed."
 
@@ -156,10 +148,6 @@ Page custom PriorInstall                                      ; Check to see if 
 !insertmacro MUI_PAGE_DIRECTORY                               ; Where to install
 !insertmacro MUI_PAGE_STARTMENU Application $STARTMENU_FOLDER ; Start menu location
 !insertmacro MUI_PAGE_COMPONENTS                              ; List of stuff to install
-;Page custom GetSDE                                            ; Look for existing ArcSDE library
-;Page custom SDE SDELeave                                      ; Set the ArcSDE Path
-;Page custom GetOracle                                        ; Look for existing Oracle library
-;Page custom Oracle OracleLeave                               ; Set the Oracle Path
 Page custom Ready
 !insertmacro MUI_PAGE_INSTFILES                               ; Actually do the install
 !insertmacro MUI_PAGE_FINISH                                  ; Done
@@ -177,12 +165,8 @@ Page custom Ready
 !insertmacro MUI_RESERVEFILE_LANGDLL
 
 
-
-
 ; Startup tasks
 Function .onInit
-
-
 
   ; Init vars
   StrCpy $SDECheckBoxPrior 0
@@ -322,152 +306,6 @@ Function PriorInstall
 
 FunctionEnd
 
-
-; Calls path function only if it hasn't called it before
-/*
-Function GetSDE
-
-  ; Skip if box unchecked
-  StrCmp $SDECheckBox 1 0 Skip
-
-  ; as this function been run before?
-  StrCmp $SDEPath "" 0 Skip 
-  ClearErrors
-  ReadRegStr $0 HKLM "SOFTWARE\ESRI\ArcInfo\ArcSDE\8.0\ArcSDE Java SDK" "InstallDir"
-  IfErrors NoSDE
-  StrCpy $0 $0 -1 ; remove trailing slash
-  IfFileExists "$0\arcsde\lib" 0 NoSDE
-  StrCpy $SDEPath "$0\arcsde\lib"
-  IfFileExists "$SDEPath\jsde*.jar" 0 NoSDE
-  IfFileExists "$SDEPath\jpe*.jar" Success NoSDE
-
-  NoSDE:
-  StrCpy $SDEPath ""
-
-  Success: 
-  ClearErrors
-  StrCpy $0 ""
-
-  Skip:  
-
-FunctionEnd
-*/
-
-/*
-Function SDE
-
-  ; Skip if box unchecked
-  StrCmp $SDECheckBox 1 0 Skip
-
-  !insertmacro MUI_HEADER_TEXT "$(TEXT_ARCSDE_TITLE)" "$(TEXT_ARCSDE_SUBTITLE)"
-
-  StrCpy $SDEPathTemp $SDEPath
-
-  Call SDEPathValidInit
-  Pop $8
-
-  nsDialogs::Create 1018
-
-  ; ${NSD_Create*} x y width height text
-  ${NSD_CreateLabel} 0 0 100% 48u "You have elected to install the GeoServer ArcSDE extension.  GeoServer requires libraries from an existing ArcSDE installation to proceed.  The files required are named jsde*.jar and jpe*.jar. $\r$\n$\r$\nPlease select the path to your ArcSDE Java SDK library path or click Back to unselect the ArcSDE extension."
-
-  ${NSD_CreateDirRequest} 0 70u 240u 13u $SDEPathTemp
-  Pop $SDEPathHWND
-  ${NSD_OnChange} $SDEPathHWND SDEPathValid
-  Pop $9
-
-  ${NSD_CreateBrowseButton} 242u 70u 50u 13u "Browse..."
-  Pop $BrowseSDEHWND
-  ${NSD_OnClick} $BrowseSDEHWND BrowseSDE
-
-  ${NSD_CreateLabel} 0 86u 100% 12u " "
-  Pop $SDEPathCheck
-
-  ${If} $8 == "validSDE"
-    ${NSD_SetText} $SDEPathCheck "This path contains a valid ArcSDE library"
-    GetDlgItem $0 $HWNDPARENT 1 ; Next
-    EnableWindow $0 1 ; Turns on
-  ${EndIf}
-  ${If} $8 == "novalidSDE"
-    ${NSD_SetText} $SDEPathCheck "This path does not contain a valid ArcSDE library"
-    GetDlgItem $0 $HWNDPARENT 1 ; Next
-    EnableWindow $0 0 ; Turns off
-  ${EndIf}
-   
-  nsDialogs::Show
-
-  Skip:  
-
-FunctionEnd
-*/
-
-; Runs when page is initialized
-/*
-Function SDEPathValidInit
-
-    IfFileExists "$SDEPath\jsde*.jar" 0 Errors
-    IfFileExists "$SDEPath\jpe*.jar" NoErrors Errors
-
-    NoErrors:
-    StrCpy $8 "validSDE"
-    Goto End
-
-    Errors:
-    StrCpy $8 "novalidSDE"
-    
-    End:
-    Push $8
-
-FunctionEnd
-*/
-
-; Runs in real time
-/*
-Function SDEPathValid
-
-  Pop $8
-  ${NSD_GetText} $8 $SDEPathTemp
-
-    IfFileExists "$SDEPathTemp\jsde*.jar" 0 Errors
-    IfFileExists "$SDEPathTemp\jpe*.jar" NoErrors Errors
-
-  NoErrors:
-    ${NSD_SetText} $SDEPathCheck "This path contains a valid ArcSDE library"
-    GetDlgItem $0 $HWNDPARENT 1 ; Next
-    EnableWindow $0 1 ; Enable
-  Goto End
-
-  Errors:
-    ${NSD_SetText} $SDEPathCheck "This path does not contain a valid ArcSDE library"
-    GetDlgItem $0 $HWNDPARENT 1 ; Next
-    EnableWindow $0 0 ; Disable
-
-  End:
-    StrCpy $8 ""
-    ClearErrors
-
-FunctionEnd
-*/
-
-; Brings up folder dialog
-/*
-Function BrowseSDE
-
-  nsDialogs::SelectFolderDialog "Please select the location of your ArcSDE library..." $PROGRAMFILES
-  Pop $1
-  ${NSD_SetText} $SDEPathHWND $1
-    
-FunctionEnd
-*/
-
-; When done, set variable permanently
-/*
-Function SDELeave
-
-  StrCpy $SDEPath $SDEPathTemp
-
-FunctionEnd
-*/
 
 
 ; Custom page, last page before install
@@ -699,16 +537,7 @@ SectionGroup "Extensions" SectionGSExt
   Section /o "ArcSDE" SectionGSArcSDE
 
   SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
-  ;CopyFiles /SILENT /FILESONLY $SDEPath\jsde*.jar "$INSTDIR\webapps\geoserver\WEB-INF\lib"
-  ;CopyFiles /SILENT /FILESONLY $SDEPath\jpe*.jar "$INSTDIR\webapps\geoserver\WEB-INF\lib"
   File /a "${SOURCEPATHROOT}\extension\arcsde\*.*"
-
-  SectionEnd
-
-  Section "GDAL" SectionGSGDAL
-
-    SetOutPath "$INSTDIR\jre\bin"
-    File /a "${SOURCEPATHROOT}\gdal\*.*"
 
   SectionEnd
 
@@ -724,7 +553,6 @@ SectionGroupEnd
 ; This MUST go after the Extensions section (so that the vars are defined)
 Function .onSelChange
 
-  ;Sets $SDECheckBox to 1 if component is checked
   SectionGetFlags ${SectionGSArcSDE} $SDECheckBox
 
   StrCmp $SDECheckBox 1 0 Oracle
@@ -733,7 +561,6 @@ Function .onSelChange
 
   Oracle:
 
-  ;Sets $OracleCheckBox to 1 if component is checked
   SectionGetFlags ${SectionGSOracle} $OracleCheckBox
 
   StrCmp $OracleCheckBox 1 0 End
@@ -950,7 +777,6 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGS} "Installs GeoServer, a spatial data server."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSExt} "Includes GeoServer Extensions."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSArcSDE} "Adds support for ArcSDE databases.  Requires additional ArcSDE files."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSGDAL} "Adds support for GDAL image formats."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSOracle} "Adds support for Oracle databases.  Requires additional Oracle files."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGWC} "Includes GeoWebCache, a tile cache server."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGX} "Installs GeoExplorer, a graphical map composer."

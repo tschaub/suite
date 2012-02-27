@@ -6,7 +6,7 @@ build_info
 
 # grab files
 DATA_DIR=opengeosuite-$REV-data-dir.zip
-get_file $BUILDS/$DIST_PATH/$DATA_DIR yes
+get_file $BUILDS/$DIST_PATH/$REV/$DATA_DIR yes
 
 # clean out old files
 clean_src

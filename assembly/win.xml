@@ -122,10 +122,10 @@
       <directory>assembly/jre-win/jre</directory>
       <outputDirectory>jre</outputDirectory>
     </fileSet>
-    <fileSet>
+    <!--fileSet>
       <directory>assembly/gdal-win</directory>
       <outputDirectory>gdal</outputDirectory>
-    </fileSet>
+    </fileSet-->
     <fileSet>
       <directory>assembly/postgres-win/pgsql</directory>
       <outputDirectory>pgsql/8.4</outputDirectory>

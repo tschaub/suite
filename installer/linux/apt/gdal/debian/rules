@@ -1,0 +1,87 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+include /usr/share/dpatch/dpatch.make
+
+VER = $(shell cat VERSION)
+# For some reason referencing environment varibales as $(VAR)
+# seems to be failing. Below is a roundabout way of grabbing
+# the MRSID_ROOT variable.
+MRSID_ROOT=$(CURDIR)/Raster_DSDK
+
+debian/control:
+	@sed -e 's/@VERSION@/$(VER)/' debian/control.in > $@
+
+config.status:
+	dh_testdir
+	CFLAGS="$(CFLAGS)" ./configure \
+	--host=$(DEB_HOST_GNU_TYPE) \
+	--build=$(DEB_BUILD_GNU_TYPE) \
+	--prefix=/usr \
+	--mandir=\$${prefix}/share/man \
+	--infodir=\$${prefix}/share/info $(CONFFLAGS)
+	# java.opt uses standard Windows JAVA_HOME path. Change this to Ubuntu default java
+	@sed -i 's:^JAVA_HOME.*:JAVA_HOME=/usr/lib/jvm/jdk1.5.0_22:' swig/java/java.opt
+
+build: config.status
+	$(MAKE) $(MAKEFLAGS) -j16
+	# Build Java SWIG bindings
+	(cd swig/java; $(MAKE))
+	# MrSID Support
+	g++ -g frmts/mrsid/*.cpp -shared -o gdal_MrSID.so \
+	-DOGR_ENABLED -D_REENTRANT -DMRSID_J2K -fPIC -DPIC \
+	-Ifrmts/gtiff/libgeotiff/ -Igcore -Iogr -Iport -I$(MRSID_ROOT)/include \
+	-L$(MRSID_ROOT)/lib -L.libs \
+	-lgdal -lltidsdk -lpthread -ldl
+
+install:
+	dh_testdir
+	dh_testroot
+	dh_prep -s
+	dh_installdirs -s
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
+	# Install java SWIG library
+	cp $(CURDIR)/swig/java/*.so $(CURDIR)/debian/tmp/usr/lib
+	# MrSID Support
+	mkdir -p $(CURDIR)/debian/tmp/usr/lib/gdalplugins/
+	cp $(CURDIR)/gdal_MrSID.so $(CURDIR)/debian/tmp/usr/lib/gdalplugins/
+	cp $(MRSID_ROOT)/lib/libltidsdk.so* $(CURDIR)/debian/tmp/usr/lib/
+	dh_install -s --sourcedir=debian/tmp
+clean:
+	dh_testdir
+	dh_testroot
+	[ ! -f Makefile ] || $(MAKE) distclean
+	[ -f config.sub.bak ] && mv config.sub.bak config.sub || true
+	[ -f config.guess.bak ] && mv config.guess.bak config.guess || true
+	dh_clean
+
+# Must not depend on anything. This is to be called by
+# binary-arch/binary-indep
+# in another 'make' thread.
+binary-common:
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs
+	dh_installdocs
+	dh_installexamples
+	dh_installman
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_makeshlibs -V
+	dh_installdeb
+	dh_shlibdeps
+	for i in $$(grep ^Package: debian/control|cut -d' ' -f2); do \
+			echo "gdal:Version=$(VER)" >> $$i.substvars; \
+	done
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+# Build architecture dependant packages using the common target.
+binary-arch: build install
+	$(MAKE) -f debian/rules DH_OPTIONS=-a binary-common
+
+binary: binary-arch
+.PHONY: debian/control install clean binary-common binary-arch binary

@@ -11,9 +11,9 @@
     <delete dir="jre-win"/>
     <unzip src="jre-win.zip" dest="jre-win" overwrite="false"/>
 
-    <get src="${data}/suite-gdal-1.4.5-win.zip" dest="gdal-win.zip" usetimestamp="yes"/>
+    <!--get src="${data}/suite-gdal-1.4.5-win.zip" dest="gdal-win.zip" usetimestamp="yes"/>
     <delete dir="gdal-win"/>
-    <unzip src="gdal-win.zip" dest="gdal-win" overwrite="false"/>
+    <unzip src="gdal-win.zip" dest="gdal-win" overwrite="false"/-->
 
     <!-- Windows PostgreSQL / PostGIS -->
     <!-- http://downloads.enterprisedb.com/postgresql/postgresql-8.4.9-1-windows-binaries.zip -->

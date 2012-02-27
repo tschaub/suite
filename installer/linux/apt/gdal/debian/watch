@@ -1,0 +1,2 @@
+version=1
+http://download.osgeo.org/gdal/gdal-([\d\.]+)\.tar\.gz	debian	uupdate
