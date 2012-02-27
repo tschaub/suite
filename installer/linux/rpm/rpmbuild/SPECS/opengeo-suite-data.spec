@@ -9,7 +9,7 @@ Requires(preun): bash
 Patch0: medford_taxlots_datastore.patch
 Patch1: db_properties.patch
 Patch2: logs.patch
-%if 0%{?centos} == 6
+%if 0%{?el6}
 Requires: tomcat6
 %else
 Requires: tomcat5
