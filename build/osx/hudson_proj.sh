@@ -7,7 +7,7 @@ d=`dirname $0`
 source ${d}/hudson_config.sh
 
 function usage() {
-  echo "Usage: $0 <srcdir> <destdir>"
+  echo "Usage: $0 <destdir>"
   exit 1
 }
 
@@ -15,13 +15,23 @@ if [ $# -lt 1 ]; then
   usage
 fi
 
-srcdir=$1
+srcdir=$PWD/files/proj
 
-if [ "x$2" = "x" ]; then
+if [ "x$1" = "x" ]; then
   destdir=$webroot
 else
-  destdir=$2
+  destdir=$1
 fi
+
+# Get the PROJ source
+get_file $proj_url
+
+# Clean up anything from a previous build and extract the sources into place
+pushd files
+rm -rf proj
+tar jxvf proj-${proj_version}.tar.gz
+mv proj-${proj_version} proj
+popd
 
 if [ ! -d $srcdir ]; then
   echo "Source directory is missing."
@@ -38,7 +48,6 @@ pushd nad
 unzip -o ${buildroot}/${proj_nad}
 popd
 
-./autogen.sh
 export CXX=g++-4.0 
 export CC=gcc-4.0 
 export CXXFLAGS="-O2 -arch i386 -arch ppc -mmacosx-version-min=10.4"

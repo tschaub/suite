@@ -11,18 +11,18 @@ popd
 # Load versions
 source ${d}/hudson_config.sh
 
-function usage() {
-  echo "Usage: $0 <srcdir>"
-  exit 1
-}
+srcdir=files/postgis
 
-# Check for one argument
-if [ $# -lt 1 ]; then
-  usage
-fi
+# Get the PostGIS source
+get_file $postgis_url
 
-# Enter source directory
-srcdir=$1
+# Clean up anything from a previous build and extract the sources into place
+pushd files
+rm -rf postgie
+tar zxvf postgis-${postgis_version}.tar.gz
+mv postgis-${postgis_version} postgis
+popd
+
 if [ ! -d $srcdir ]; then
   echo "Source directory is missing."
   exit 1

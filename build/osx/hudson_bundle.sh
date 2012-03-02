@@ -7,7 +7,7 @@ d=`dirname $0`
 source ${d}/hudson_config.sh
 
 function usage() {
-  echo "Usage: $0 <srcdir>"
+  echo "Usage: $0 <destdir>"
   exit 1
 }
 
@@ -18,19 +18,18 @@ fi
 
 workdir=`pwd`
 
-srcdir=$1
-if [ "x$2" = "x" ]; then
+if [ "x$1" = "x" ]; then
   destdir=$webroot
 else
-  destdir=$2
+  destdir=$1
 fi
 
 # Enter source directory
-if [ ! -d $srcdir ]; then
-  exit 1
-else
-  pushd $srcdir
-fi
+#if [ ! -d $srcdir ]; then
+#  exit 1
+#else
+#  pushd $srcdir
+#fi
 
 # Check for the existence of the GTK environment
 if [ ! -d $HOME/gtk ]; then

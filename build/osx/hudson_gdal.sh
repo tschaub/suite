@@ -7,7 +7,7 @@ d=`dirname $0`
 source ${d}/hudson_config.sh
 
 function usage() {
-  echo "Usage: $0 <srcdir> <destdir>"
+  echo "Usage: $0 <destdir>"
   exit 1
 }
 
@@ -15,14 +15,24 @@ if [ $# -lt 1 ]; then
     usage
 fi
 
-srcdir=$1
+srcdir=$PWD/files/gdal
 
-if [ "x$2" = "x" ]; then
+if [ "x$1" = "x" ]; then
   destdir=$webroot
 else
-  destdir=$2
+  destdir=$1
 fi
- 
+
+# Get the GDAL source
+get_file $gdal_url
+
+# Clean up anything from a previous build and extract the sources into place
+pushd files
+rm -rf gdal
+tar zxvf gdal-${gdal_version}.tar.gz
+mv gdal-${gdal_version} gdal
+popd
+
 if [ ! -d $srcdir ]; then
   echo "Source directory is missing."
   exit 1
@@ -30,7 +40,6 @@ else
   pushd $srcdir
 fi
 
-./autogen.sh
 # Need to build with the prefix set to the actual suite install path for plugins to work
 install_prefix=/opt/opengeo/gdal
 export CXXFLAGS="-O2 -arch i386 -arch x86_64 -mmacosx-version-min=10.4" 
