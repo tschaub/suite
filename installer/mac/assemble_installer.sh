@@ -243,7 +243,7 @@ getfile $gdal_url binaries/gdal.zip
 if [ -d binaries/gdal ]; then
   rm -rf binaries/gdal
 fi
-unzip -j -o binaries/gdal.zip -d binaries/gdal
+unzip -o binaries/gdal.zip -d binaries/gdal
 checkrv $? "GDAL unzip"
 if [ -d "./build/GDAL.pkg" ]; then
   find "./build/GDAL.pkg" -type f -exec chmod 664 {} ';'
