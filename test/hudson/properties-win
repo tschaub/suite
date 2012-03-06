@@ -1,0 +1,6 @@
+TOMCAT_ROOT=C:\\java\\apache-tomcat-6.0.29
+JBOSS_ROOT=C:\\java\\jboss-5.1.0.GA
+JMETER_ROOT=C:\\java\\jakarta-jmeter-2.4
+HOME=/home/Administrator
+export JAVA_HOME=C:\\java\\jdk-1.6
+export EC2_HOME=${HOME}/ec2-api-tools

@@ -1,0 +1,36 @@
+* install firefox
+* install java jdk 1.6 
+* set JAVA_HOME and PATH
+* install tomcat 6 as service
+* install apache httpd
+* configure tomcat and apache to run on startup
+* configure apache proxy:
+<Proxy *>
+   Order allow,deny
+   Allow from all
+</Proxy>
+
+ProxyRequests Off
+ProxyPreserveHost On
+
+ProxyPass /hudson/ http://localhost:8080/hudson/
+ProxyPassReverse /hudson/ http://localhost:8080/hudson/
+
+ProxyPass /geoserver/ http://localhost:9090/geoserver/
+ProxyPassReverse /geoserver/ http://localhost:9090/geoserver/
+
+* install svn command line client
+* install mingw and msys
+* install wget and curl
+* install openssh (mingw-get)
+* install hudson
+* install join and parameterized trigger hudson plugins
+* install postgres + postgis
+
+* add postgres binaries to PATH
+* download http://data.opengeo.org/suite/medford_taxlots.zip
+* setup medford database
+* download tomcat 6 and jboss 5.1.0 
+* configure tomcat and jboss to run on port 9090
+* install apache jmeter
+* install jython in jmeter lib
