@@ -1,0 +1,57 @@
+#!/bin/bash
+
+source ${TEST_ROOT}/hudson/properties-${NODE_ID}
+source ${TEST_ROOT}/hudson/functions
+
+function start_jboss() {
+   cwd="`pwd`" && cd "${JBOSS_ROOT}/bin"
+   BUILD_ID=dontkillme start run.bat
+   cd "$cwd"
+}
+
+function stop_jboss() {
+  cwd="`pwd`" && cd ${JBOSS_ROOT}/bin
+  start shutdown.bat -S
+  cd "$cwd"
+}
+
+function init_jboss() {
+  cwd="`pwd`" && cd ${JBOSS_ROOT}/server/default/deploy
+  rm -rf geoserver.war
+  mkdir geoserver.war && cd geoserver.war
+  jar xvf /tmp/geoserver.war 
+  cd "$cwd"
+}
+
+# ensure jboss not running
+stop_jboss
+check_appserver 1
+if [ "$?" != "0" ]; then
+  echo "JBoss did not stop, exiting"
+  exit 1
+fi
+
+# download the war file
+get_war opengeosuite-trunk-latest-war-geoserver-jboss.tar.gz
+if [ ! -e /tmp/geoserver.war ]; then
+  echo "Could not obtain geoserver.war, exiting"
+  exit 1
+fi
+
+# deploy the warfile and start tomcat
+init_jboss
+start_jboss
+check_appserver 0 500
+if [ "$?" != "0" ]; then
+  echo "JBoss did not start, exiting"
+  exit 1
+fi
+
+# run the tests suite
+run_test
+result=$?
+
+# shut down jboss
+stop_jboss
+
+exit $result

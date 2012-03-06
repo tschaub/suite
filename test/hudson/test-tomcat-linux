@@ -1,0 +1,59 @@
+#!/bin/bash
+
+source ${TEST_ROOT}/hudson/properties-${NODE_ID}
+source ${TEST_ROOT}/hudson/functions
+
+function start_tomcat() {
+   cwd="`pwd`" && cd "${TOMCAT_ROOT}"
+   BUILD_ID=dontkillme ./bin/startup.sh
+   cd "$cwd"
+}
+
+function stop_tomcat() {
+  cwd="`pwd`" && cd "${TOMCAT_ROOT}"
+  ./bin/kill.sh  
+  cd "$cwd"
+}
+
+function init_tomcat() {
+  cwd="`pwd`" && cd "${TOMCAT_ROOT}/webapps"
+  rm -rf geoserver geoserver.war
+  cp /tmp/geoserver.war .
+  cd "$cwd"
+}
+
+# ensure tomcat not running
+echo "Ensuring Tomcat not running"
+stop_tomcat
+check_appserver 1
+if [ "$?" != "0" ]; then
+  echo "Tomcat did not stop, exiting"
+  exit 1
+fi
+
+# download the war file
+echo "Downloading geoserver war file"
+get_war
+if [ ! -e /tmp/geoserver.war ]; then
+  echo "Could not obtain geoserver.war, exiting"
+  exit 1
+fi
+
+# deploy the warfile and start tomcat
+echo "deploying geoserver and starting Tomcat"
+init_tomcat
+start_tomcat
+check_appserver 0 60
+if [ "$?" != "0" ]; then
+  echo "Tomcat did not start, exiting"
+  exit 1
+fi
+
+# run the tests suite
+run_test
+result=$?
+
+# shut down tomcat
+stop_tomcat
+
+exit $result

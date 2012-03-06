@@ -1,0 +1,6 @@
+#!/bin/bash
+
+source ${TEST_ROOT}/hudson/properties-${NODE_ID}
+source ${TEST_ROOT}/hudson/functions
+
+shutdown $CLIENT_TOKEN $SHUTDOWN
