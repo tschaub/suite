@@ -36,6 +36,7 @@ install_prefix=/opt/opengeo/gdal
 export CXXFLAGS="-O2 -arch i386 -arch x86_64 -mmacosx-version-min=10.4" 
 export CFLAGS="-O2 -arch i386 -arch x86_64 -mmacosx-version-min=10.4" 
 export ARCHFLAGS="-arch x86_64 -arch i386"
+export LDFLAGS=${ARCHFLAGS}
 ./configure --prefix=${install_prefix} --with-curl=/usr/bin/curl-config
 make clean && make all
 # Make sure the Java SWIG wrapper can find our java headers
