@@ -75,7 +75,7 @@ Var OracleCheckBoxPrior
 VIProductVersion ${LONGVERSION}
 VIAddVersionKey ProductName "${APPNAME}"
 VIAddVersionKey CompanyName "OpenGeo"
-VIAddVersionKey LegalCopyright "Copyright (c) 2009 - 2011 OpenGeo"
+VIAddVersionKey LegalCopyright "Copyright (c) 2009 - 2012 OpenGeo"
 VIAddVersionKey FileDescription "OpenGeo Suite Installer"
 VIAddVersionKey ProductVersion "${LONGVERSION}"
 VIAddVersionKey FileVersion "${VERSION}"
