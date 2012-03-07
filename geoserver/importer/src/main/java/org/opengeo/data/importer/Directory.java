@@ -1,9 +1,6 @@
 package org.opengeo.data.importer;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -12,9 +9,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import org.apache.commons.fileupload.FileItem;
 import org.geoserver.data.util.IOUtils;
 import org.geotools.util.logging.Logging;
+import org.h2.store.fs.FileObjectOutputStream;
 
 public class Directory extends FileData {
 
@@ -293,6 +293,27 @@ public class Directory extends FileData {
             LOGGER.warning("Possible invalid file uploaded to " + dest.getAbsolutePath());
             throw e;
         }
+    }
+    
+    public void archive(File output) throws IOException {
+        File archiveDir = output.getAbsoluteFile().getParentFile();
+        String outputName = output.getName().replace(".zip","");
+        int id = 0;
+        while (output.exists()) {
+            output = new File(archiveDir, outputName + id + ".zip");
+            id++;
+        }
+        ZipOutputStream zout = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(output)));
+        try {
+            IOUtils.zipDirectory(file, zout, null);
+        } catch (Exception ex) {
+            output.delete();
+            if (ex instanceof IOException) throw (IOException) ex;
+            throw (IOException) new IOException("Error archiving").initCause(ex);
+        } finally {
+            zout.close();
+        }
+        cleanup();
     }
 
     @Override

@@ -13,6 +13,10 @@ import org.opengeo.data.importer.ImporterTestSupport;
 import org.opengeo.data.importer.SpatialFile;
 
 import com.mockrunner.mock.web.MockHttpServletResponse;
+import java.io.InputStream;
+import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.opengeo.data.importer.*;
+import org.restlet.data.Status;
 
 public class ItemResourceTest extends ImporterTestSupport {
 
@@ -47,8 +51,25 @@ public class ItemResourceTest extends ImporterTestSupport {
         assertEquals(0, item.getInt("id"));
         assertTrue(item.getString("href").endsWith("/imports/0/tasks/0/items/0"));
     }
+    
+    private String createSRSJSON(String srs) {
+        return "{" + 
+          "\"resource\": {" + 
+            "\"featureType\":   {" + 
+               "\"srs\": \"" + srs + "\"" +
+             "}" + 
+           "}" + 
+        "}";
+    }
+    
+    private void verifyInvalidCRSErrorResponse(MockHttpServletResponse resp) {
+        assertEquals(Status.CLIENT_ERROR_BAD_REQUEST.getCode(), resp.getStatusCode());
+        JSONObject errorResponse = JSONObject.fromObject(resp.getOutputStreamContent());
+        JSONArray errors = errorResponse.getJSONArray("errors");
+        assertTrue(errors.get(0).toString().startsWith("Invalid SRS"));
+    }
 
-    public void testPutItem() throws Exception {
+    public void testPutItemSRS() throws Exception {
         File dir = unpack("shape/archsites_no_crs.zip");
         importer.createContext(new SpatialFile(new File(dir, "archsites.shp")));
 
@@ -57,16 +78,20 @@ public class ItemResourceTest extends ImporterTestSupport {
         assertEquals("NO_CRS", item.get("state"));
         assertFalse(item.getJSONObject("resource").getJSONObject("featureType").containsKey("srs"));
 
-        //String 
-        String s = "{" + 
-          "\"resource\": {" + 
-            "\"featureType\":   {" + 
-               "\"srs\": \"EPSG:26713\"" +
-             "}" + 
-           "}" + 
-        "}";
-
-        put("/rest/imports/1/tasks/0/items/0", s, "application/json");
+        // verify invalid SRS handling
+        String srsRequest = createSRSJSON("26713");
+        MockHttpServletResponse resp = putAsServletResponse("/rest/imports/1/tasks/0/items/0", srsRequest, "application/json");
+        verifyInvalidCRSErrorResponse(resp);
+        srsRequest = createSRSJSON("EPSG:9838275");
+        resp = putAsServletResponse("/rest/imports/1/tasks/0/items/0", srsRequest, "application/json");
+        verifyInvalidCRSErrorResponse(resp);
+        
+        srsRequest = createSRSJSON("EPSG:26713");
+        put("/rest/imports/1/tasks/0/items/0", srsRequest, "application/json");
+        
+        ImportContext context = importer.getContext(1);
+        ReferencedEnvelope latLonBoundingBox = context.getTasks().get(0).getItems().get(0).getLayer().getResource().getLatLonBoundingBox();
+        assertNotNull(latLonBoundingBox);
 
         json = (JSONObject) getAsJSON("/rest/imports/1/tasks/0/items/0");
         item = json.getJSONObject("item");

@@ -90,6 +90,7 @@ public class ImportResource extends AbstractResource {
                 }
             }
         }
+        getResponse().setStatus(Status.SUCCESS_NO_CONTENT);
     }
     
     @Override
