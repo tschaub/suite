@@ -1,3 +1,12 @@
+opengeo-geoserver (2.4.5) unstable; urgency=low
+
+  * New upstream release based on GeoServer 2.1.3+ (rev 16767)
+  * JDBC datastore session startup/teardown sql comments
+  * PNG encoding, support for paletted images with alpha
+  * Bug fixes
+
+ -- OpenGeo <inquiry@opengeo.org>  Thu, 8 Mar 2012 16:00:00 -0700
+
 opengeo-geoserver (2.4.4) unstable; urgency=low
 
   * New upstream release based on GeoServer 2.1.2+

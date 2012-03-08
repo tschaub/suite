@@ -1,3 +1,10 @@
+opengeo-suite (2.4.5) unstable; urgency=low
+
+  * New upstream release
+  * added welcome-file-list to dashboard web.xml
+
+ -- OpenGeo <inquiry@opengeo.org>  Thu, 8 Mar 2012 16:00:00 -0700
+
 opengeo-suite (2.4.4) unstable; urgency=low
 
   * New upstream release
