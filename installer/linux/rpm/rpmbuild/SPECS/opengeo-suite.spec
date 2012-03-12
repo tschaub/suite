@@ -63,6 +63,9 @@ components.  It is comprised of the following core components:
 
    if [ -d $GXP ]; then
      # upgrade, perserve the old web.xml
+     if [ -e $TMP ]; then
+       rm -rf $TMP
+     fi
      mkdir $TMP
      cp $GXP/WEB-INF/web.xml $TMP
    fi

@@ -39,6 +39,9 @@ case "$1" in
     # if this is upgrade, perserve old geoexplorer web.xml
     if [ -e $GXP/WEB-INF/web.xml ]; then
       UPGRADE="yes"
+      if [ -e $TMP ]; then
+        rm -rf $TMP
+      fi
       mkdir $TMP
       cp $GXP/WEB-INF/web.xml $TMP
     fi
