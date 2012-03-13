@@ -41,9 +41,12 @@ echo "opengeo-postgis opengeo_postgis/configure_postgis select false " | sudo de
 check_rc $? "debconf-set-selections"
 
 # install the sun jdk
-sudo apt-get -y install sun-java6-jdk
-check_rc $? "apt-get -y install sun-java6-jdk" 
-update-java-alternatives -s java-6-sun
+# JD: disabling, the sun jdk is no longer distributed in the canonical repo, 
+# will have to stick with openjdk for now
+sudo apt-get -y install openjdk-6-jdk
+#sudo apt-get -y install sun-java6-jdk
+#check_rc $? "apt-get -y install sun-java6-jdk" 
+#update-java-alternatives -s java-6-sun
 
 # install the suite
 sudo apt-get -y install opengeo-suite
