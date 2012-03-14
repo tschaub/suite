@@ -77,7 +77,9 @@
 							<key>Imported Package</key>
 							<true/>
 							<key>Package Path</key>
-							<string>/Users/mw/opengeo/suite/installer/mac/build/GDAL.pkg</string>
+							<string>build/GDAL.pkg</string>
+							<key>Package Path Type</key>
+							<integer>2</integer>
 						</dict>
 						<key>Plugins</key>
 						<dict>
@@ -132,14 +134,7 @@
 							<key>Additional Resources</key>
 							<dict>
 								<key>International</key>
-								<array>
-									<dict>
-										<key>Path</key>
-										<string>/Users/mw/opengeo/suite/installer/mac/build/GDAL.pkg/Contents/Resources/background</string>
-										<key>Status</key>
-										<true/>
-									</dict>
-								</array>
+								<array/>
 							</dict>
 							<key>Installation Scripts</key>
 							<dict>
