@@ -45,11 +45,29 @@ nmake -f makefile.vc
 
 checkrc $? "GDAL build"
 
+pushd $PWD/swig/
+
+# Make sure the call to ant is quoted so an ant in C:\Program Files executes properly
+sed -i -e 's:$(ANT_HOME)\\bin\\ant:\"$(ANT_HOME)\\bin\\ant\":' java/makefile.vc
+
+nmake -f makefile.vc java
+
+checkrc $? "GDAL Java bindings build"
+
+popd
+
 rm -rf ${buildroot}/gdal
 mkdir ${buildroot}/gdal
 nmake -f makefile.vc devinstall
 # Install MrSID SDK
 cp /c/build/mrsid_sdk/lib/lti_dsdk*.dll ${buildroot}/gdal/bin
+# Install the Java bindings
+cp swig/java/*.dll ${buildroot}/gdal/bin
+cp swig/java/gdal.jar ${buildroot}/gdal/bin/gdal-1.8.1.jar
+
 checkrc $? "GDAL install"
 
 popd
+
+# Zip the gdal binaries and copy them to the server
+zip -r /c/Program\ Files/Apache\ Software\ Foundation/Apache2.2/htdocs/winbuilds/gdal-win.zip /c/build/gdal
