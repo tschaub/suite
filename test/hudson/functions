@@ -1,0 +1,118 @@
+#!/bin/bash
+
+function download_file() {
+  if [ "$1" == "" ]; then
+     return 1
+  fi
+
+  file=/tmp/$1
+  if [ -e $file ]; then 
+     rm -rf $file
+  fi
+
+  url=http://suite.opengeo.org/builds/trunk/$1
+  wget $url -O $file
+}	
+
+function get_war() {
+  rm -rf /tmp/geoserver.war
+
+  tgz=opengeosuite-trunk-latest-war-geoserver.tar.gz
+  if [ "$1" != "" ]; then
+   tgz=$1
+  fi
+  download_file $tgz
+
+  if [ ! -e /tmp/$tgz ]; then
+    echo "No file /tmp/$tgz"
+    return 1
+  fi
+
+  cwd="`pwd`" && cd /tmp
+  rm -rf work
+  mkdir work
+  tar xzvf $tgz -C work
+  war=`find work -name geoserver.war`
+  if [ ! -e $war ]; then
+     echo "No file $war"
+     return 1
+  fi
+
+  mv $war /tmp
+  cd "$cwd"
+}
+
+# check_appserver [0=online,1=offline] <iterations>
+function check_appserver() {
+  r=$1
+  n=10
+  if [ "$2" != "" ]; then
+    n=$2
+  fi
+  
+  for (( i = 0 ; i < n; i++ )); do
+     url=http://localhost:9090/geoserver/openlayers/img/west-mini.png
+     echo "pinging $url"
+     wget $url -t 1 -O /dev/null &> /dev/null
+
+     x=$?
+     echo "return $x"
+     if [ $r -eq 0 ] && [ $x -eq 0 ]; then
+        return 0
+     else
+        if [ $r -gt 0 ] && [ $x -gt 0 ]; then
+           return 0
+        fi
+     fi
+     sleep 1
+  done
+
+  return 1
+}
+
+function run_test() {
+  cwd=`pwd` && cd ${TEST_ROOT}/basic
+  rm assertions
+  rm -rf responses/*
+
+  ${JMETER_ROOT}/bin/jmeter -n -p jmeter.properties -t basic.jmx
+  nerr=`cat assertions | wc -l`
+  if [ "$nerr" != "0" ]; then
+     cat assertions
+     return 1
+  fi
+  return 0
+}
+
+#shutdown [CLIENT_TOKEN] [SHUTDOWN]
+function shutdown() {
+  CLIENT_TOKEN=$1
+  if [ "$CLIENT_TOKEN" == "" ]; then
+     CLIENT_TOKEN="none"
+  fi
+  SHUTDOWN=$2
+  if [ "$SHUTDOWN" == "" ]; then
+     SHUTDOWN="false"
+  fi
+
+  if [ "$CLIENT_TOKEN" != "none" ] && [ "$SHUTDOWN" == "true" ]; then
+
+    SSH_OPTS="-i ${HOME}/.ssh/id_rsa_tomcat -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+    scp $SSH_OPTS tomcat@gridlock.opengeo.org:/home/tomcat/.ec2/pk-* /tmp
+    scp $SSH_OPTS tomcat@gridlock.opengeo.org:/home/tomcat/.ec2/cert-* /tmp
+
+    export EC2_PRIVATE_KEY=/tmp/pk-PISUFPUN445RP3HBFC4VUG2V44LJJ7N2.pem
+    export EC2_CERT=/tmp/cert-PISUFPUN445RP3HBFC4VUG2V44LJJ7N2.pem
+
+    # get the image id
+    export EC2_HOME=${EC2_HOME}
+    INSTANCE=`${EC2_HOME}/bin/ec2-describe-instances -F client-token=$CLIENT_TOKEN | grep "^INSTANCE" | cut -f 2`
+    if [ "$INSTANCE" != "" ]; then
+       echo "Terminating instance $INSTANCE"
+       ${EC2_HOME}/bin/ec2-terminate-instances $INSTANCE
+    else
+       echo "No instance found for client token $CLIENT_TOKEN"
+    fi
+  fi
+
+}

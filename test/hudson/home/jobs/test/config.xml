@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <logRotator>
+    <daysToKeep>-1</daysToKeep>
+    <numToKeep>2</numToKeep>
+    <artifactDaysToKeep>-1</artifactDaysToKeep>
+    <artifactNumToKeep>-1</artifactNumToKeep>
+  </logRotator>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>CLIENT_TOKEN</name>
+          <description>The client token that was used to start the amazon ami.</description>
+          <defaultValue>none</defaultValue>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>SHUTDOWN</name>
+          <description>Flag determining whether the ami should shutdown after the test run.</description>
+          <defaultValue>true</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers class="vector"/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders/>
+  <publishers>
+    <hudson.tasks.BuildTrigger>
+      <childProjects>bootstrap, test-jboss, test-tomcat</childProjects>
+      <threshold>
+        <name>SUCCESS</name>
+        <ordinal>0</ordinal>
+        <color>BLUE</color>
+      </threshold>
+    </hudson.tasks.BuildTrigger>
+    <join.JoinTrigger>
+      <joinProjects></joinProjects>
+      <joinPublishers>
+        <hudson.plugins.parameterizedtrigger.BuildTrigger>
+          <configs>
+            <hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+              <configs>
+                <hudson.plugins.parameterizedtrigger.CurrentBuildParameters/>
+              </configs>
+              <projects>shutdown</projects>
+              <condition>SUCCESS</condition>
+            </hudson.plugins.parameterizedtrigger.BuildTriggerConfig>
+          </configs>
+        </hudson.plugins.parameterizedtrigger.BuildTrigger>
+      </joinPublishers>
+      <evenIfDownstreamUnstable>false</evenIfDownstreamUnstable>
+    </join.JoinTrigger>
+  </publishers>
+  <buildWrappers/>
+</project>
