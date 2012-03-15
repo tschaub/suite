@@ -70,15 +70,15 @@ unzip -o %dashzip% -d ..\..\target\win\
 del %dashzip%
 ren "..\..\target\win\OpenGeo Dashboard" dashboard
 unzip -o %gdal_zip% -d gdal
-move tmp\gdal\c\build\gdal\bin\gdal18.dll ..\..\target\win\jre\bin
-move tmp\gdal\c\build\gdal\bin\gdalconstjni.dll ..\..\target\win\jre\bin
-move tmp\gdal\c\build\gdal\bin\gdaljni.dll ..\..\target\win\jre\bin
-move tmp\gdal\c\build\gdal\bin\ogrjni.dll ..\..\target\win\jre\bin
-move tmp\gdal\c\build\gdal\bin\osrjni.dll ..\..\target\win\jre\bin
-move tmp\gdal\c\build\gdal\bin\lti_dsdk.dll ..\..\target\win\jre\bin
-move tmp\gdal\c\build\gdal\bin\lti_dsdk_cdll.dll ..\..\target\win\jre\bin
-move tmp\gdal\c\build\gdal\bin\gdalplugins ..\..\target\win\jre\bin
-move tmp\gdal\c\build\gdal\bin\gdal-1.8.1.jar ..\..\target\win\webapps\geoserver\WEB-INF\lib
+move gdal\c\build\gdal\bin\gdal18.dll ..\..\target\win\jre\bin
+move gdal\c\build\gdal\bin\gdalconstjni.dll ..\..\target\win\jre\bin
+move gdal\c\build\gdal\bin\gdaljni.dll ..\..\target\win\jre\bin
+move gdal\c\build\gdal\bin\ogrjni.dll ..\..\target\win\jre\bin
+move gdal\c\build\gdal\bin\osrjni.dll ..\..\target\win\jre\bin
+move gdal\c\build\gdal\bin\lti_dsdk.dll ..\..\target\win\jre\bin
+move gdal\c\build\gdal\bin\lti_dsdk_cdll.dll ..\..\target\win\jre\bin
+move gdal\c\build\gdal\bin\gdalplugins ..\..\target\win\jre\bin
+move gdal\c\build\gdal\bin\gdal-1.8.1.jar ..\..\target\win\webapps\geoserver\WEB-INF\lib
 rd /s /q gdal
 del %gdal_zip%
 
