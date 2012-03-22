@@ -11,7 +11,7 @@ fi
 
 # start_remote_job <url> <name>
 function start_remote_job() {
-   curl -k --connect-timeout 10 "$1/buildWithParameters?DIST_PATH=${REPO}&REVISION=${REV}&REPO=${REPO}"
+   curl -k --connect-timeout 10 "$1/buildWithParameters?DIST_PATH=${DIST_PATH}&REVISION=${REV}&REPO=${REPO}"
    checkrv $? "trigger $2 with ${DIST_PATH} r${revision}"
 }
 
