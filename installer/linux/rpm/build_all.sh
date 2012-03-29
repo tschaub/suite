@@ -3,7 +3,11 @@
 . functions
 
 # Clean out last night's nightly build if we're building into unstable
-ARCH=`uname -m`
+if [ `uname -m` == "i686" ]; then
+   ARCH="i386"
+elif [ `uname -m` == "x86_64"]; then
+   ARCH="x86_64"
+fi
 
 # TODO: Make the distro and version dynamic
 if [ "$REPO" == "unstable" ]; then
