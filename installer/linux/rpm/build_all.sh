@@ -2,9 +2,6 @@
 
 . functions
 
-# source distribution information
-. /etc/lsb-release
-
 # Clean out last night's nightly build if we're building into unstable
 ARCH=`uname -m`
 
