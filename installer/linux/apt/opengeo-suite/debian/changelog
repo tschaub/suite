@@ -1,3 +1,18 @@
+opengeo-suite (2.4.6) unstable; urgency=low
+
+  * New upstream release
+  * Geoexplorer fixes:
+    > Latest from gxp (remove API key management)
+    > Removing API key management
+    > Making tree scrollable, and adding border to match map.
+    > Latest from gxp (fixes OSM and Mapbox sources)
+    > Don't persist tools and don't apply persisted tools any more.
+    > Using console warnings/errors instead of exceptions.
+    > Backwards compatibility for map configurations.
+    > Fixing Save Map and Export Map issues.
+    > Fixing Bing resolution issue.
+
+ -- OpenGeo <inquiry@opengeo.org>  Thu, 8 Mar 2012 16:00:00 -0700
 opengeo-suite (2.4.5) unstable; urgency=low
 
   * New upstream release

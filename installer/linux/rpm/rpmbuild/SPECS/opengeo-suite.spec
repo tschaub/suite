@@ -1,5 +1,5 @@
 Name: opengeo-suite
-Version: 2.4.5
+Version: 2.4.6
 Release: 1
 Summary: A full geospatial software stack that allows you to allows you to easily compose, style, and publish data and maps.
 Group: Applications/Engineering
