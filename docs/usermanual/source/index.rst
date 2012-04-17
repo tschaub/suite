@@ -8,4 +8,5 @@ Welcome to the OpenGeo Suite!  The OpenGeo Suite is a full geospatial software s
 
    installation/index
    gettingstarted/index
+   analytics/index
    tutorials/index
