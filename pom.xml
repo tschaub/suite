@@ -292,5 +292,4 @@
    <build.profile></build.profile>
    <build.revision>${project.version}</build.revision>
  </properties>
-
 </project>
