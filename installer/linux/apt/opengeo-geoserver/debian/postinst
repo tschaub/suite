@@ -115,24 +115,33 @@ case "$1" in
 
     # don't totally blow away the old exploded war, save the web.xml since it
     # has configuration in it
-    if [ -e $WEBAPPS/geoserver ]; then
+    APP=$WEBAPPS/geoserver
+    if [ -e $APP ]; then
 
       # old lib jars are deleted by preinst
 
       # back up the old web.xml
       TMP=/tmp/opengeo-geoserver
-      mkdir $TMP; cp $WEBAPPS/geoserver/WEB-INF/web.xml $TMP;
+      mkdir $TMP; cp $APP/WEB-INF/web.xml $TMP;
 
       # unpack the new war
       unpack_war
 
       # restore old web.xml
-      cp $TMP/web.xml $WEBAPPS/geoserver/WEB-INF
+      cp $TMP/web.xml $APP/WEB-INF
 
       rm -rf $TMP
     else
       # not there, treat as regular install
       unpack_war
+    fi
+
+    if [ -e /usr/lib/gdal.jar ]; then
+      cp /usr/lib/gdal.jar $APP/WEB-INF/lib/gdal-1.8.1.jar
+    else
+      echo ""
+      echo "/usr/lib/gdal.jar not found, geoserver extended raster support will be disabled"
+      echo ""
     fi
 
     # TODO: check if tomcat was actually running before we installed
