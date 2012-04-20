@@ -20,6 +20,10 @@ rd /s /q ..\..\target\ >nul 2>nul
 :: Assemble artifact base URL
 set url=http://suite.opengeo.org/builds/%dist_path%/%revision%
 
+:: GDAL binaries
+set gdal_zip=gdal-win.zip
+set gdal_bin=http://suite.opengeo.org/winbuilds/%gdal_zip%
+
 :: Generate id string (for file names)
 if "x%profile%"=="x" (
   set id=%revision%
@@ -48,6 +52,15 @@ if not exist %dashzip% (
   )
 )
 
+:: Get the GDAL bindings
+echo Downloading %gdal_bin% ...
+if not exist %gdal_zip% (
+  wget %gdal_bin% >nul 2>nul || (
+    echo Error: File not found
+    exit /b 1
+  )
+)
+
 :: Put artifacts in place
 mkdir ..\..\target\win 2>nul
 unzip -o %mainzip% -d ..\..\target\win
@@ -56,6 +69,18 @@ rd /s /q ..\..\target\win\dashboard
 unzip -o %dashzip% -d ..\..\target\win\
 del %dashzip%
 ren "..\..\target\win\OpenGeo Dashboard" dashboard
+unzip -o %gdal_zip% -d gdal
+move gdal\c\build\gdal\bin\gdal18.dll ..\..\target\win\jre\bin
+move gdal\c\build\gdal\bin\gdalconstjni.dll ..\..\target\win\jre\bin
+move gdal\c\build\gdal\bin\gdaljni.dll ..\..\target\win\jre\bin
+move gdal\c\build\gdal\bin\ogrjni.dll ..\..\target\win\jre\bin
+move gdal\c\build\gdal\bin\osrjni.dll ..\..\target\win\jre\bin
+move gdal\c\build\gdal\bin\lti_dsdk.dll ..\..\target\win\jre\bin
+move gdal\c\build\gdal\bin\lti_dsdk_cdll.dll ..\..\target\win\jre\bin
+move gdal\c\build\gdal\bin\gdalplugins ..\..\target\win\jre\bin
+move gdal\c\build\gdal\bin\gdal-1.8.1.jar ..\..\target\win\webapps\geoserver\WEB-INF\lib
+rd /s /q gdal
+del %gdal_zip%
 
 :: Get version number
 :: Example: "2.1.2" or "2.3-SNAPSHOT"

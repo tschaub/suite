@@ -78,15 +78,15 @@ PYDIR   =	"C:\Software\Python24"
 
 # Set the location of your SWIG installation
 !IFNDEF SWIG
-SWIG = swig.exe
+SWIG = c:\swig\swig.exe
 !ENDIF
 
 # SWIG Java settings
 !IFNDEF JAVA_HOME
-JAVA_HOME = c:\j2sdk1.4.2_12
+JAVA_HOME = c:\java
 !ENDIF
 !IFNDEF ANT_HOME
-ANT_HOME=c:\programmi\apache-ant-1.7.0
+ANT_HOME=c:\ant
 !ENDIF
 JAVADOC=$(JAVA_HOME)\bin\javadoc
 JAVAC=$(JAVA_HOME)\bin\javac

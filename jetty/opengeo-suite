@@ -35,7 +35,13 @@ fi
 
 CLASSPATH=og-jetty.jar:jetty-start.jar:lib/ini4j-0.5.1.jar:lib/log4j-1.2.14.jar:lib/commons-logging-1.0.jar:lib/slf4j-jcl-1.0.1.jar
 VMOPTS="-Xms128m -Xmx512m -XX:MaxPermSize=128m"
-OPTS="-Dslf4j=false -cp $CLASSPATH"
+OPTS="-Dslf4j=false -cp $CLASSPATH -Djava.library.path=/opt/opengeo/gdal/lib"
+
+# GDAL support on Darwin/OS X requires some extra environment vars
+if [[ `uname` == 'Darwin' ]]; then
+  OPTS+="  -Djava.library.path=/opt/opengeo/gdal/lib"
+  export DYLD_LIBRARY_PATH=/opt/opengeo/gdal/lib
+fi
 
 # Check for PostGIS script in Linux and OSX locations
 POSTGIS="../pgsql/8.4/scripts/postgis"

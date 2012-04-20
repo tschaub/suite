@@ -14,13 +14,12 @@ pgsql_version=8.4.9-1
 proj_nad=proj-datumgrid-1.5.zip
 
 # Standard paths
-gdal_svn=http://svn.osgeo.org/gdal/tags
-geos_svn=http://svn.osgeo.org/geos/tags
-postgis_svn=http://svn.osgeo.org/postgis/tags
-proj_svn=http://svn.osgeo.org/metacrs/proj/tags
+gdal_url=http://download.osgeo.org/gdal/gdal-${gdal_version}.tar.gz
+geos_url=http://download.osgeo.org/geos/geos-${geos_version}.tar.bz2
+postgis_url=http://www.postgis.org/download/postgis-${postgis_version}.tar.gz
+proj_url=http://download.osgeo.org/proj/proj-${proj_version}.tar.gz
 edb_zip=postgresql-${pgsql_version}-osx-binaries.zip
-edb_url=http://downloads.enterprisedb.com/postgresql/${edb_zip}
-
+edb_url=http://get.enterprisedb.com/postgresql/${edb_zip}
 
 # Ensure the buildroot is ready
 if [ ! -d $buildroot ]; then
@@ -36,3 +35,21 @@ function checkrv {
   fi
 }
 
+# get_file <url> [overwrite]
+function get_file() {
+  local url=$1
+  local file=`echo $url | sed 's#http://##g' | xargs basename`
+
+  if [ ! -d files ]; then
+     mkdir files
+     checkrv $? "mkdir files"
+  fi
+
+  if [ "$2" != "" ] ||  [ ! -e files/$file ]; then
+     curl -O $url
+     checkrv $? "downloading $url"
+
+     mv $file files
+     checkrv $? "mv $file files"
+  fi
+}

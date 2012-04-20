@@ -70,6 +70,8 @@ Var SDECheckBox
 Var SDECheckBoxPrior
 Var OracleCheckBox
 Var OracleCheckBoxPrior
+Var MrSIDCheckBox
+Var MrSIDCheckBoxPrior
 
 ;Version Information (Version tab for EXE properties)
 VIProductVersion ${LONGVERSION}
@@ -171,6 +173,7 @@ Function .onInit
   ; Init vars
   StrCpy $SDECheckBoxPrior 0
   StrCpy $OracleCheckBoxPrior 0
+  StrCpy $MrSIDCheckBoxPrior 0
 
   IfSilent SilentSkip
 
@@ -530,6 +533,24 @@ Section "GeoEditor" SectionGE
 
 SectionEnd
 
+
+Section "GDAL" SectionGDAL
+
+  SectionIn RO ; mandatory
+  SetOverwrite on
+
+  !insertmacro DisplayImage "graphics\slide_1_suite.bmp"
+
+  SetOutPath "$INSTDIR\jre\bin"
+  File /r "${SOURCEPATHROOT}\jre\bin\gdal18.dll"
+  File /r "${SOURCEPATHROOT}\jre\bin\gdalconstjni.dll"
+  File /r "${SOURCEPATHROOT}\jre\bin\gdaljni.dll"
+  File /r "${SOURCEPATHROOT}\jre\bin\ogrjni.dll"
+  File /r "${SOURCEPATHROOT}\jre\bin\osrjni.dll"
+  File /r "${SOURCEPATHROOT}\webapps\geoserver\WEB-INF\lib\gdal-1.8.1.jar"
+
+SectionEnd
+
 SectionGroupEnd
 
 SectionGroup "Extensions" SectionGSExt
@@ -545,6 +566,15 @@ SectionGroup "Extensions" SectionGSExt
 
     SetOutPath "$INSTDIR\webapps\geoserver\WEB-INF\lib"
     File /a "${SOURCEPATHROOT}\extension\oracle\*.*"
+
+  SectionEnd
+  
+  Section /o "MrSID" SectionGSMrSID
+
+    SetOutPath "$INSTDIR\jre\bin"
+    File /r "${SOURCEPATHROOT}\jre\bin\lti_dsdk.dll"
+    File /r "${SOURCEPATHROOT}\jre\bin\lti_dsdk_cdll.dll"
+    File /r "${SOURCEPATHROOT}\jre\bin\gdalplugins\"
 
   SectionEnd
 
@@ -563,15 +593,24 @@ Function .onSelChange
 
   SectionGetFlags ${SectionGSOracle} $OracleCheckBox
 
-  StrCmp $OracleCheckBox 1 0 End
-    StrCmp $OracleCheckBoxPrior 0 0 End
+  StrCmp $OracleCheckBox 1 0 MrSID
+    StrCmp $OracleCheckBoxPrior 0 0 MrSID
       MessageBox MB_ICONEXCLAMATION|MB_OK "You have elected to install the optional Oracle Spatial extension.  In order for this functionality to be activated, the Oracle JDBC driver will need to be manually copied from your Oracle installation.  The file required is:$\r$\n$\r$\n     ojdbc*.jar$\r$\n$\r$\nThis file must be copied to the following folder:$\r$\n$\r$\n     $INSTDIR\webapps\geoserver\WEB-INF\lib"
+
+  MrSID:
+  
+  SectionGetFlags ${SectionGSMrSID} $MrSIDCheckBox
+
+  StrCmp $MrSIDCheckBox 1 0 End
+    StrCmp $MrSIDCheckBoxPrior 0 0 End
+      MessageBox MB_ICONEXCLAMATION|MB_OK "You have elected to install the optional MrSID Support extension."
 
   End:
 
   ; This is to set a flag so both displays don't show at once
   StrCpy $SDECheckBoxPrior $SDECheckBox 
   StrCpy $OracleCheckBoxPrior $OracleCheckBox
+  StrCpy $MrSIDCheckBoxPrior $MrSIDCheckBox
 
 FunctionEnd
 
@@ -691,6 +730,12 @@ Section "-Dashboard" SectionDashboard ;dash means hidden
   SetOutPath "$INSTDIR\dashboard"
   File /a "misc\vcredist_x86.exe"
   ExecWait '"$INSTDIR\dashboard\vcredist_x86.exe" /q'
+  
+  ; We also need the MSVCRT 2010 library since GDAL needs to be built with
+  ; Visual Studio on Windows.
+  SetOutPath "$INSTDIR\dashboard"
+  File /a "misc\vcredist_x86_2010.exe"
+  ExecWait '"$INSTDIR\dashboard\vcredist_x86_2010.exe" /q'
 
 SectionEnd
 
@@ -778,10 +823,12 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSExt} "Includes GeoServer Extensions."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSArcSDE} "Adds support for ArcSDE databases.  Requires additional ArcSDE files."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSOracle} "Adds support for Oracle databases.  Requires additional Oracle files."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGSMrSID} "Installs support for MrSID Datastores"
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGWC} "Includes GeoWebCache, a tile cache server."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGX} "Installs GeoExplorer, a graphical map composer."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionStyler} "Installs Styler, a graphical map style editor."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionGE} "Installs GeoEditor, a graphical map editor."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SectionGDAL} "Installs GDAL, a spatial data reading library."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionDocs} "Includes full documentation for all applications."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionDashboard} "Installs the OpenGeo Suite Dashboard for access to all components."
   !insertmacro MUI_DESCRIPTION_TEXT ${SectionApps} "Installs a place for users to put their applications."
