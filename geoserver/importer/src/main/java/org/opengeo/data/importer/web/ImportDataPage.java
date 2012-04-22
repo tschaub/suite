@@ -39,6 +39,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.time.Duration;
 import org.geoserver.catalog.Catalog;
 import org.geoserver.catalog.NamespaceInfo;
@@ -144,8 +145,8 @@ public class ImportDataPage extends GeoServerBasePage {
         //store chooser
         //store = new StoreModel(catalog.getDefaultDataStore((WorkspaceInfo) workspace.getObject()));
         store = new StoreModel(null);
-        storeChoice = 
-            new DropDownChoice("store", store, new StoresModel(workspace), new StoreChoiceRenderer());
+        storeChoice = new DropDownChoice("store", store, new StoresModel(
+            new PropertyModel<WorkspaceInfo>(this, "workspace.object")), new StoreChoiceRenderer());
         storeChoice.setOutputMarkupId(true);
 //        storeChoice.setEnabled(false);
 //        storeChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
@@ -190,7 +191,7 @@ public class ImportDataPage extends GeoServerBasePage {
                             
                             catalog.add( ws );
                             catalog.add( ns );
-                            
+
                             return true;
                         } catch(Exception e) {
                             e.printStackTrace();
@@ -204,6 +205,7 @@ public class ImportDataPage extends GeoServerBasePage {
                         workspace = new WorkspaceDetachableModel(catalog.getWorkspaceByName(wsName));
                         workspaceChoice.setModel(workspace);
                         target.addComponent(workspaceChoice);
+                        target.addComponent(storeChoice);
                     }
                     
                     @Override
