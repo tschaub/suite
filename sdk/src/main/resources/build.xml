@@ -38,22 +38,28 @@
 
         <mkdir dir="${app.path}"/>
         <copy todir="${app.path}">
-            <fileset dir="skeleton"/>
+            <fileset dir="src/main/resources/client"/>
         </copy>
     </target>
 
     <target name="debug" depends="checkpath">
         <fail message="Directory '${app.path}' doesn't exist." unless="${app.path.exists}"/>
 
-        <java jar="lib/ringojs/run.jar" fork="true">
+        <java classname="org.ringojs.tools.launcher.Main" failonerror="true" fork="true">
+            <classpath>
+                <fileset dir="lib">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
             <sysproperty key="app.static" path="${app.path}"/>
             <sysproperty key="app.debug" value="1"/>
             <sysproperty key="app.proxy.geoserver" value="${app.proxy.geoserver}"/>
-            <sysproperty key="ringo.home" path="lib/ringojs"/>
+            <sysproperty key="ringo.home" path="."/>
             <sysproperty key="ringo.modulepath" path="lib"/>
-            <arg path="server/main.js"/>
+            <arg path="src/main/resources/server/main.js"/>
             <arg line="-p ${app.port}"/>
         </java>
+
     </target>
     
     <target name="build" depends="checkpath">
@@ -62,7 +68,7 @@
         <mkdir dir="build/${app.name}"/>
         
         <copy todir="build/${app.name}">
-            <fileset dir="webapp"/>
+            <fileset dir="src/main/webapp"/>
             <filterset>
                 <filter token="APP_NAME" value="${app.name}"/>
             </filterset>
@@ -87,12 +93,18 @@
         
         <!-- build app js -->
         <mkdir dir="build/${app.name}/lib"/>
-        <java jar="lib/ringojs/run.jar" fork="true" failonerror="true">
-            <sysproperty key="ringo.home" path="lib/ringojs"/>
+        <java classname="org.ringojs.tools.launcher.Main" failonerror="true">
+            <classpath>
+                <fileset dir="lib">
+                    <include name="**/*.jar"/>
+                </fileset>
+            </classpath>
+            <sysproperty key="ringo.home" path="."/>
+            <sysproperty key="ringo.modulepath" path="lib"/>
             <arg path="lib/buildkit/lib/buildkit/build.js"/>
             <arg line="-o build/${app.name}/lib ${app.path}/buildjs.cfg"/>
         </java>
-        
+
         <!-- copy additional app resources -->
         <copy todir="build/${app.name}/theme">
             <fileset dir="${app.path}/theme"/>
